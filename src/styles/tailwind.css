@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[type="text"],
+input:where(:not([type])),
+[type="email"],
+[type="url"],
+[type="password"],
+[type="number"],
+[type="date"],
+[type="datetime-local"],
+[type="month"],
+[type="search"],
+[type="tel"],
+[type="time"],
+[type="week"],
+[multiple],
+textarea,
+select {
+  appearance: none;
+  background-color: transparent;
+  border-color: unset;
+  border-width: 0;
+  border-radius: unset;
+  padding: unset;
+  font-size: unset;
+  line-height: unset;
+}
+
+/* Override default focus colors for tailwindcss-forms https://github.com/tailwindlabs/tailwindcss-forms */
+[type="text"]:focus,
+[type="email"]:focus,
+[type="url"]:focus,
+[type="password"]:focus,
+[type="number"]:focus,
+[type="date"]:focus,
+[type="search"]:focus,
+[type="checkbox"]:focus,
+[type="radio"]:focus,
+[multiple]:focus,
+textarea:focus,
+select:focus {
+  --tw-ring-color: transparent;
+  border-color: transparent;
+}
+
+li:focus-visible {
+  outline: none;
+}
+li:hover {
+  cursor: pointer;
+}
+@layer components {
+  /*-------------------------------------
+  Container CSS
+--------------------------------------*/
+  .container-xs {
+    @apply w-full mx-auto px-5 max-w-[1376px];
+  }
+  .container-fluid {
+    @apply w-full mx-auto max-w-[1920px];
+  }
+
+  @media (max-width: 768px) {
+    .container-xs {
+      @apply px-4;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container-xs {
+      @apply px-3;
+    }
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}

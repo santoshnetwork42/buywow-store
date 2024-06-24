@@ -1,0 +1,84 @@
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/OutfitRegular.ttf");
+  font-family: "Outfit";
+  font-weight: 400;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/OutfitBold.ttf");
+  font-family: "Outfit";
+  font-weight: 700;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/OutfitMedium.ttf");
+  font-family: "Outfit";
+  font-weight: 500;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/OutfitLight.ttf");
+  font-family: "Outfit";
+  font-weight: 300;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/OutfitSemiBold.ttf");
+  font-family: "Outfit";
+  font-weight: 600;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/TapromRegular.ttf");
+  font-family: "Taprom";
+  font-weight: 400;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/InterTightBold.ttf");
+  font-family: "Inter Tight";
+  font-weight: 700;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/InterSemiBold.ttf");
+  font-family: "Inter";
+  font-weight: 600;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/MontserratSemiBold.ttf");
+  font-family: "Montserrat";
+  font-weight: 600;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/InterRegular.ttf");
+  font-family: "Inter";
+  font-weight: 400;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/InterTightRegular.ttf");
+  font-family: "Inter Tight";
+  font-weight: 400;
+}
+@font-face {
+  font-display: swap;
+  font-style: normal;
+  src: url("/fonts/InterTightSemiBold.ttf");
+  font-family: "Inter Tight";
+  font-weight: 600;
+}
