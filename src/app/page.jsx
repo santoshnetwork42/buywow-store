@@ -7,14 +7,18 @@ import VideoSection from "@/components/partials/Home/VideoSection";
 import WowFeatures from "@/components/partials/Home/WowFeatures";
 import React from "react";
 import NewLaunchSection from "@/components/partials/Home/NewLaunchSection";
-import OfferCarousal from "@/components/features/Carousal/OfferCarousal";
+import OfferCarousal from "@/components/features/Carousel/OfferCarousel";
 import ConcernSection from "@/components/partials/Home/ConcernSection";
 import BestSellerSection from "@/components/partials/Home/BestSellerSection";
 import CustomerReviewSection from "@/components/partials/Home/CustomerReviewSection";
 import BlogSection from "@/components/partials/Home/BlogSection";
 import DeliveryInfoSection from "@/components/common/partials/DeliveryInfoSection";
 import ProductCategories from "@/components/partials/Home/ProductCategory";
-import { bestSellerData, introCarousalData, productCategoryItems } from "@/data/homeData";
+import {
+  bestSellerData,
+  introCarousalData,
+  productCategoryItems,
+} from "@/data/homeData";
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",

@@ -3,7 +3,7 @@
 
 import { Button, Heading } from "@/components/common";
 import React from "react";
-import ProductCarousal from "@/components/features/Carousal/ProductCarousal";
+import ProductCarousal from "@/components/features/Carousel/ProductCarousel";
 import TabComponent from "@/components/common/partials/TabComponent";
 
 const BestSellerSection = ({ title, categories, products }) => {
@@ -18,7 +18,8 @@ const BestSellerSection = ({ title, categories, products }) => {
         <Heading
           size="heading6xl"
           as="h1"
-          className="capitalize text-[24px] sm:text-[28px] lg:text-[32px]">
+          className="capitalize text-[24px] sm:text-[28px] lg:text-[32px]"
+        >
           {title}
         </Heading>
         <TabComponent
