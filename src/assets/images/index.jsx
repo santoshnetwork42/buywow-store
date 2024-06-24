@@ -1,5 +1,5 @@
-import { CloseSVG } from "./close";
-import { SearchSVG } from "./search";
-import { MenuSVG } from "./menu";
-import { UserSVG } from "./user";
+import { CloseSVG } from "@/assets/images/user";
+import { SearchSVG } from "@/assets/images/user";
+import { MenuSVG } from "@/assets/images/user";
+import { UserSVG } from "@/assets/images/user";
 export { CloseSVG, SearchSVG, MenuSVG, UserSVG };
