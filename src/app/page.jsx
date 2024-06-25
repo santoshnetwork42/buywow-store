@@ -85,6 +85,7 @@ const Home = () => {
           {/* tabbed product section */}
           <TabProductSection {...tabProductData} />
         </div>
+
         {/* brand statement section */}
         {/* <ShopBannerBT /> */}
         {/* <div className="container-xs flex flex-col items-center gap-12 md:p-5"> */}

@@ -6,16 +6,10 @@ import Link from "next/link";
 import React from "react";
 
 export default function ShopBanner({
-  desktopImageUrl,
-  mobileImageUrl,
+  desktop,
+  mobile,
   linkUrl,
   altText = "Shop banner",
-  desktopWidth = 1440,
-  desktopHeight = 310,
-  desktopAspectRatio = "aspect-[1440/310]",
-  mobileWidth = 576,
-  mobileHeight = 288,
-  mobileAspectRatio = "aspect-[375/187]",
   breakpoint = 576,
   ...props
 }) {
@@ -26,16 +20,16 @@ export default function ShopBanner({
   const imageProps =
     width > breakpoint
       ? {
-          src: desktopImageUrl,
-          width: desktopWidth,
-          height: desktopHeight,
-          className: `w-full object-contain ${desktopAspectRatio}`,
+          src: desktop.desktopImageUrl,
+          width: desktop.width,
+          height: desktop.height,
+          className: `w-full object-cover ${desktop.aspectRatio}`,
         }
       : {
-          src: mobileImageUrl,
-          width: mobileWidth,
-          height: mobileHeight,
-          className: `w-full object-contain ${mobileAspectRatio}`,
+          src: mobile.mobileImageUrl,
+          width: mobile.width,
+          height: mobile.height,
+          className: `w-full object-cover ${mobile.aspectRatio}`,
         };
 
   return (
