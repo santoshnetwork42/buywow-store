@@ -102,19 +102,19 @@ export const newLaunchData = {
 };
 
 export const shopBannerData = {
-  desktopImageUrl: "img_testimonial_banner.png",
-  mobileImageUrl: "img_testimonial_banner_mobile.png",
   linkUrl: "/shop/summer-collection",
   altText: "Shop banner",
   desktop: {
     width: 1440,
     height: 310,
     aspectRatio: "aspect-[1440/310]",
+    desktopImageUrl: "img_testimonial_banner.png",
   },
   mobile: {
     width: 576,
     height: 288,
     aspectRatio: "aspect-[375/187]",
+    mobileImageUrl: "img_testimonial_banner_mobile.png",
   },
   breakpoint: 576,
 };
