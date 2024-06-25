@@ -17,20 +17,22 @@ const TabComponent = ({
       className={className}
       selectedTabClassName={selectedTabClassName}
       selectedTabPanelClassName={selectedTabPanelClassName}>
-      <TabList className="flex flex-wrap gap-5">
-        {tabData.map((item, index) => (
-          <Tab
-            key={index}
-            className={`px-4 py-[5px] text-base font-light capitalize ${tabClassName}`}>
-            {item.label}
-          </Tab>
-        ))}
-      </TabList>
+      <div className="w-full [text-align:-webkit-center] overflow-x-auto no-scrollbar">
+        <TabList className="flex w-max gap-1 sm:gap-3 lg:gap-5">
+          {tabData.map((item, index) => (
+            <Tab
+              key={index}
+              className={`px-2 py-1 sm:px-3 md:px-4 md:py-[6px] text-sm md:text-base font-light capitalize ${tabClassName}`}>
+              {item.label}
+            </Tab>
+          ))}
+        </TabList>
+      </div>
       <div className="flex flex-col w-full">
         {tabData.map((item, index) => (
           <TabPanel
             key={`tab-panel-${index}`}
-            className="w-full overflow-x-auto no-scrollbar">
+            className="w-full overflow-y-visible overflow-x-auto no-scrollbar">
             {renderContent(item.content, index)}
           </TabPanel>
         ))}

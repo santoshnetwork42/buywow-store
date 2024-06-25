@@ -16,8 +16,14 @@ import DeliveryInfoSection from "@/components/common/partials/DeliveryInfoSectio
 import ProductCategories from "@/components/partials/Home/ProductCategory";
 import {
   bestSellerData,
+  concernSectionData,
   introCarousalData,
+  newLaunchData,
+  offersData,
   productCategoryItems,
+  shopBannerData,
+  shopCategoriesData,
+  shopIngredientsData,
 } from "@/data/homeData";
 
 export const metadata = {
@@ -44,30 +50,39 @@ const Home = () => {
         {/* features list section */}
         <WowFeatures />
 
-        <div className="container-xs">
+        <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* new launches section */}
           <BestSellerSection
             title={bestSellerData.title}
             categories={bestSellerData.categories}
             products={bestSellerData.products}
           />
+
           {/* ingredients section */}
-          {/* <ShopIngredients /> */}
+          <ShopIngredients shopIngredientsData={shopIngredientsData} />
+
           {/* offers section */}
-          {/* <OfferCarousal /> */}
+          <OfferCarousal offers={offersData} />
+
           {/* concerns section */}
-          {/* <ConcernSection /> */}
+          <ConcernSection sectionData={concernSectionData} />
+
           {/* featured products section */}
-          {/* <NewLaunchSection /> */}
+          <NewLaunchSection newLaunchData={newLaunchData} />
         </div>
+
         {/* testimonials section */}
-        {/* <ShopBanner /> */}
-        {/* <div className="container-xs flex flex-col items-center gap-12 md:p-5"> */}
-        {/* categories section */}
-        {/* <ShopCategories /> */}
-        {/* tabbed product section */}
-        {/* <BestSellerSection /> */}
-        {/* </div> */}
+        <ShopBanner
+          {...shopBannerData}
+          className="my-8 sm:my-10 lg:my-12"
+        />
+
+        <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
+          {/* categories section */}
+          <ShopCategories sectionData={shopCategoriesData} />
+          {/* tabbed product section */}
+          {/* <BestSellerSection /> */}
+        </div>
         {/* brand statement section */}
         {/* <ShopBannerBT /> */}
         {/* <div className="container-xs flex flex-col items-center gap-12 md:p-5"> */}

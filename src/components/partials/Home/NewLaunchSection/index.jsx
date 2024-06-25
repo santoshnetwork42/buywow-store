@@ -6,7 +6,7 @@ import React, { Suspense } from "react";
 import ProductCarousal from "@/components/features/Carousel/ProductCarousel";
 // import AutoHomepageWireframeProductCard from "@/components/AutoHomepageWireframeProductCard";
 
-const NewLaunchSection = () => {
+const NewLaunchSection = ({ newLaunchData }) => {
   const [sliderState, setSliderState] = React.useState(0);
   const sliderRef = React.useRef(null);
 
@@ -16,27 +16,9 @@ const NewLaunchSection = () => {
         Shop new launches
       </Heading>
       <div className="mx-auto flex w-full max-w-[1324px] gap-3 md:mx-0 md:flex-col">
-        <Slider
-          autoPlay
-          autoPlayInterval={2000}
-          responsive={{
-            0: { items: 1 },
-            551: { items: 1 },
-            1051: { items: 4 },
-          }}
-          disableDotsControls
-          activeIndex={sliderState}
-          onSlideChanged={(e) => {
-            setSliderState(e?.item);
-          }}
-          ref={sliderRef}
-          items={[...Array(12)].map(() => (
-            <React.Fragment key={Math.random()}>
-              <div className="px-1.5">
-                <div className="bg-white-a700_01" />
-              </div>
-            </React.Fragment>
-          ))}
+        <ProductCarousal
+          products={newLaunchData.productsData}
+          className={"w-full"}
         />
       </div>
       <div className="flex items-center justify-between gap-5 self-stretch md:flex-col">

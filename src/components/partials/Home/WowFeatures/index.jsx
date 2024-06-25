@@ -44,7 +44,7 @@ export default function WowFeatures({ ...props }) {
   return (
     <div
       {...props}
-      className={`${props.className} max-w-[1200px] flex mt-[22px] sm:mt-7 mb-[28px] lg:my-8 justify-evenly sm:justify-center sm:w-[90%] md:w-[80%] xl:w-[73%] w-full lg:gap-8`}>
+      className={`${props.className} flex mt-[22px] sm:mt-7 mb-[28px] lg:my-8 justify-evenly sm:justify-center sm:w-[90%] xl:w-[80%] w-full lg:gap-8`}>
       {data.map((d, index) => (
         <div
           key={"featuresList" + index}

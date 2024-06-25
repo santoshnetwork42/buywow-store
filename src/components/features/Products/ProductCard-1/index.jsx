@@ -15,7 +15,7 @@ export default function ProductCard({
 }) {
   return (
     <div
-      className={`flex flex-col justify-start gap-3 p-2 shadow-xs rounded-lg ${className}`}
+      className={`flex flex-col self-stretch justify-start gap-2 md:gap-3 p-2 shadow-xs rounded-lg ${className}`}
       {...props}>
       <div className="rounded-lg overflow-hidden">
         <Img
@@ -43,12 +43,12 @@ export default function ProductCard({
           <Heading
             size="heading2xl"
             as="h5"
-            className="capitalize w-full truncate line-clamp-1">
+            className="capitalize w-full line-clamp-2 leading-5">
             {title}
           </Heading>
           <Text
             as="p"
-            className="w-full !font-light line-clamp-2 leading-[130%]">
+            className="w-full text-[11px] !font-light line-clamp-3 leading-[130%]">
             {benefits}
           </Text>
         </div>
@@ -76,7 +76,7 @@ export default function ProductCard({
               </Text>
             </div>
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-[6px] md:gap-2">
                 <Heading
                   size="headingxl"
                   as="h6"
@@ -89,13 +89,18 @@ export default function ProductCard({
                   {pricing.original}
                 </Text>
               </div>
-              <div className="flex h-[23px] min-w-[62px] flex-row items-center justify-center rounded-sm bg-lime-50 px-2 text-center text-xs capitalize text-black-900">
+              <div className="hidden md:flex h-[23px] min-w-[62px] flex-row items-center justify-center rounded-sm bg-lime-50 px-2 text-center text-xs capitalize text-black-900">
                 {pricing.discount}% OFF
               </div>
+              <Button
+                className="flex md:hidden ml-auto text-sm flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-3 py-1 text-center font-medium text-white-a700_01"
+                onClick={onAddToCart}>
+                Add
+              </Button>
             </div>
           </div>
           <Button
-            className="flex h-[35px] min-w-[66px] flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-4 text-center text-lg font-medium text-white-a700_01"
+            className="hidden md:flex h-[35px] min-w-[66px] flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-4 text-center text-lg font-medium text-white-a700_01"
             onClick={onAddToCart}>
             Add
           </Button>

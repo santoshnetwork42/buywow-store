@@ -56,10 +56,10 @@ li:hover {
   Container CSS
 --------------------------------------*/
   .container-xs {
-    @apply w-full mx-auto px-5 max-w-[1376px];
+    @apply w-full mx-auto px-5;
   }
   .container-fluid {
-    @apply w-full mx-auto max-w-[1920px];
+    @apply w-full mx-auto;
   }
 
   @media (max-width: 768px) {
