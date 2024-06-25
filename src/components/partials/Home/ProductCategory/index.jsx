@@ -12,7 +12,7 @@ const ProductCategory = ({ image, label }) => (
         alt={label}
         width={56}
         height={56}
-        className="w-14 h-14 object-cover"
+        className="w-14 h-14 object-contain"
       />
     </div>
     <Text

@@ -23,7 +23,7 @@ export default function ProductCard({
           width={image.width}
           height={image.height}
           alt={image.alt || "Product image"}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
         />
       </div>
       <div className="ml-[5px] flex flex-wrap gap-[5px]">

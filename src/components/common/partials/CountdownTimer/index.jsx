@@ -27,7 +27,7 @@ const CountdownTimer = ({ days, hours, minutes, seconds, flashSaleDiscount }) =>
           width={16}
           height={16}
           alt="sale image"
-          className="h-[16px] w-[16px] object-cover"
+          className="h-[16px] w-[16px] object-contain"
         />
         <Text
           as="p"

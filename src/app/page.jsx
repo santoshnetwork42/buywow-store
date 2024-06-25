@@ -24,7 +24,9 @@ import {
   shopBannerData,
   shopCategoriesData,
   shopIngredientsData,
+  tabProductData,
 } from "@/data/homeData";
+import TabProductSection from "@/components/partials/Home/TabProductSection";
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -81,7 +83,7 @@ const Home = () => {
           {/* categories section */}
           <ShopCategories sectionData={shopCategoriesData} />
           {/* tabbed product section */}
-          {/* <BestSellerSection /> */}
+          <TabProductSection {...tabProductData} />
         </div>
         {/* brand statement section */}
         {/* <ShopBannerBT /> */}

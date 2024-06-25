@@ -45,7 +45,7 @@ const CustomerReviewSection = () => {
                 width={27}
                 height={28}
                 alt="right arrow"
-                className="h-[28px] w-[27px] object-cover"
+                className="h-[28px] w-[27px] object-contain"
               />
             </div>
           </div>

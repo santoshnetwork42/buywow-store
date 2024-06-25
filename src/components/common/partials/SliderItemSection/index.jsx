@@ -60,7 +60,7 @@ const SliderItem = ({
           width={width}
           height={height}
           alt={`${title} image`}
-          className={`w-full object-contain ${aspectRatio}`}
+          className={`w-full ${aspectRatio}`}
         />
       </div>
       <Text

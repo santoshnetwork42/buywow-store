@@ -31,7 +31,7 @@ export default function IntroCarousal({ carousalData, ...props }) {
             width={1440}
             height={496}
             alt={`hero image ${index}`}
-            className="w-full object-cover"
+            className="w-full object-contain"
           />
         ) : (
           <Img
@@ -39,7 +39,7 @@ export default function IntroCarousal({ carousalData, ...props }) {
             width={376}
             height={148}
             alt={`hero image ${index}`}
-            className="w-full object-cover aspect-[376/148]"
+            className="w-full object-contain aspect-[376/148]"
           />
         )}
       </div>

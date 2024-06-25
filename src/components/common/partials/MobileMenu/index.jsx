@@ -24,7 +24,7 @@ const MobileMenuItem = ({ item, closeMenu }) => {
           <Text
             size="text3xl"
             as="p"
-            className={`capitalize !font-semibold`}>
+            className={`capitalize !text-base !font-semibold`}>
             {item.text}
           </Text>
           <Img
@@ -54,7 +54,7 @@ const MobileMenuItem = ({ item, closeMenu }) => {
                   <Text
                     size="textxl"
                     as="p"
-                    className="capitalize !font-light">
+                    className="capitalize !text-sm !font-light">
                     {subItem.text}
                   </Text>
                 </Link>
@@ -74,7 +74,7 @@ const MobileMenuItem = ({ item, closeMenu }) => {
       <Text
         size="text3xl"
         as="p"
-        className="capitalize !font-semibold">
+        className="capitalize !text-base !font-semibold">
         {item.text}
       </Text>
     </Link>
