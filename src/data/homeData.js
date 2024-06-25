@@ -6,7 +6,6 @@ export const productCategoryItems = [
   { image: "com-image.png", label: "Combo Box" },
   { image: "serum-image.png", label: "Serum" },
   { image: "shampoo-image.png", label: "Shampoo" },
-  { image: "com-image.png", label: "Combo Box" },
 ];
 
 export const introCarousalData = [
@@ -40,4 +39,86 @@ export const bestSellerData = {
     "skin care": productData,
     fragrances: productData,
   },
+};
+
+export const shopIngredientsData = {
+  title: "shop by ingredients",
+  ingredients: [
+    { image: "img_shop_ingredient_onion.png", caption: "Onion" },
+    { image: "img_shop_ingredient_onion.png", caption: "Tomato" },
+    { image: "img_shop_ingredient_onion.png", caption: "Potato" },
+    { image: "img_shop_ingredient_onion.png", caption: "Carrot" },
+    { image: "img_shop_ingredient_onion.png", caption: "Cucumber" },
+    { image: "img_shop_ingredient_onion.png", caption: "Garlic" },
+    { image: "img_shop_ingredient_onion.png", caption: "Pepper" },
+    { image: "img_shop_ingredient_onion.png", caption: "Broccoli" },
+    { image: "img_shop_ingredient_onion.png", caption: "Broccoli" },
+    { image: "img_shop_ingredient_onion.png", caption: "Broccoli" },
+  ],
+};
+
+export const offersData = [
+  {
+    desktopImage: "img_offer_banner.png",
+    mobileImage: "img_offer_banner_mob.png",
+    label: "Offer 1",
+    linkUrl: "/offer1",
+  },
+  {
+    desktopImage: "img_offer_banner.png",
+    mobileImage: "img_offer_banner_mob.png",
+    label: "Offer 2",
+    linkUrl: "/offer2",
+  },
+  {
+    desktopImage: "img_offer_banner.png",
+    mobileImage: "img_offer_banner_mob.png",
+    label: "Offer 3",
+    linkUrl: "/offer3",
+  },
+  // ... more offers
+];
+
+export const concernSectionData = {
+  title: "Shop by Concern",
+  items: [
+    { image: "img_image_2004_1.png", title: "Hair Fall", link: "/concern/hair-fall" },
+    { image: "img_image_2004_1.png", title: "Dry Skin", link: "/concern/dry-skin" },
+    { image: "img_image_2004_1.png", title: "Acne", link: "/concern/acne" },
+    { image: "img_image_2004_1.png", title: "Aging", link: "/concern/aging" },
+    { image: "img_image_2004_1.png", title: "Pigmentation", link: "/concern/pigmentation" },
+    { image: "img_image_2004_1.png", title: "Pigmentation1", link: "/concern/pigmentation" },
+    { image: "img_image_2004_1.png", title: "Pigmentation2", link: "/concern/pigmentation" },
+    { image: "img_image_2004_1.png", title: "Pigmentation3", link: "/concern/pigmentation" },
+    { image: "img_image_2004_1.png", title: "Pigmentation4", link: "/concern/pigmentation" },
+    { image: "img_image_2004_1.png", title: "Pigmentation5", link: "/concern/pigmentation" },
+  ],
+};
+
+export const newLaunchData = {
+  title: "Shop New Launches",
+  productsData: productData,
+  viewAllLinkUrl: "/new-launches",
+};
+
+export const shopBannerData = {
+  desktopImageUrl: "img_testimonial_banner.png",
+  mobileImageUrl: "img_testimonial_banner_mobile.png",
+  linkUrl: "/shop/summer-collection",
+  altText: "Summer Collection Banner",
+};
+
+export const shopCategoriesData = {
+  title: "Shop by Categories",
+  items: [
+    { image: "img_image_2054.png", title: "Hair Care", link: "/concern/hair-fall" },
+    { image: "img_image_2055.png", title: "skin care", link: "/concern/dry-skin" },
+    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
+    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
+    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
+    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
+    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
+    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
+    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
+  ],
 };

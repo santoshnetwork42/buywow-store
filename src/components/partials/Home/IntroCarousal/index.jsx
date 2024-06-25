@@ -39,7 +39,7 @@ export default function IntroCarousal({ carousalData, ...props }) {
             width={376}
             height={148}
             alt={`hero image ${index}`}
-            className="w-full object-cover aspect-[574/349]"
+            className="w-full object-cover aspect-[376/148]"
           />
         )}
       </div>
@@ -52,7 +52,7 @@ export default function IntroCarousal({ carousalData, ...props }) {
       <div
         {...props}
         className={`${props.className} relative`}>
-        <div className="Group623 flex w-full">
+        <div className="intro-carousal-container flex w-full">
           <SliderDot
             items={items}
             sliderState={sliderState}

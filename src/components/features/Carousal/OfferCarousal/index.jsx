@@ -1,21 +1,50 @@
-// import AutoHomepageWireframeOfferdetails from "@/components/AutoHomepageWireframeOfferdetails";
-import React, { Suspense } from "react";
+"use client";
 
-const OfferCarousal = () => {
+import React from "react";
+import { Img } from "@/components/common";
+import Link from "next/link";
+import { useDeviceWidth } from "@/utils/useDeviceWidth";
+import SliderDot from "../../Slider/SliderDot";
+
+const OfferCarousel = ({ offers }) => {
+  const width = useDeviceWidth();
+
+  if (!width) return;
+  if (!offers || offers.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="self-stretch">
-      <div className="flex gap-5 md:flex-col">
-        <Suspense fallback={<div>Loading feed...</div>}>
-          {[...Array(2)].map((d, index) => (
-            <div
-              key={"categoryList" + index}
-              className="bg-[url(/images/img_frame_1400005916.png)]"
-            />
-          ))}
-        </Suspense>
+    <section className="w-full overflow-x-auto no-scrollbar">
+      <div className="flex w-max gap-2 sm:gap-3 md:gap-4 lg:gap-5">
+        {offers.map((offer, index) => (
+          <div
+            key={`offer-${index}`}
+            className="offer-item">
+            <Link href={offer.linkUrl}>
+              {width > 768 ? (
+                <Img
+                  src={offer.desktopImage}
+                  alt={offer.label}
+                  width={650}
+                  height={166}
+                  className="object-contain max-w-[650px] w-[85vw] md:w-[50vw] lg:w-[46vw]"
+                />
+              ) : (
+                <Img
+                  src={offer.mobileImage}
+                  alt={offer.label}
+                  width={298}
+                  height={120}
+                  className="object-contain w-[85vw] sm:w-[48vw] lg:w-[46vw]"
+                />
+              )}
+            </Link>
+          </div>
+        ))}
       </div>
-    </div>
+    </section>
   );
 };
 
-export default OfferCarousal;
+export default OfferCarousel;
