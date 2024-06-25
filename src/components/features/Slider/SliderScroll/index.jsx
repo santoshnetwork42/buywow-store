@@ -94,7 +94,7 @@ const SliderComponent = ({ items, className, ...props }) => {
                 width={27}
                 height={28}
                 alt="Next slide"
-                className="h-[20px] w-[20px] md:h-6 md:w-6 lg:h-7 lg:w-7 object-cover cursor-pointer"
+                className="h-[20px] w-[20px] md:h-6 md:w-6 lg:h-7 lg:w-7 object-contain cursor-pointer"
                 onClick={() => scrollByItem(1)}
               />
             </div>

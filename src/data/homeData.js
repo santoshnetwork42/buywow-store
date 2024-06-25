@@ -45,8 +45,8 @@ export const shopIngredientsData = {
   title: "shop by ingredients",
   ingredients: [
     { image: "img_shop_ingredient_onion.png", caption: "Onion" },
-    { image: "img_shop_ingredient_onion.png", caption: "Tomato" },
-    { image: "img_shop_ingredient_onion.png", caption: "Potato" },
+    { image: "img_shop_ingredient_lemon.png", caption: "Tomato" },
+    { image: "img_shop_ingredient_elovera.png", caption: "Potato" },
     { image: "img_shop_ingredient_onion.png", caption: "Carrot" },
     { image: "img_shop_ingredient_onion.png", caption: "Cucumber" },
     { image: "img_shop_ingredient_onion.png", caption: "Garlic" },
@@ -83,8 +83,8 @@ export const concernSectionData = {
   title: "Shop by Concern",
   items: [
     { image: "img_image_2004_1.png", title: "Hair Fall", link: "/concern/hair-fall" },
-    { image: "img_image_2004_1.png", title: "Dry Skin", link: "/concern/dry-skin" },
-    { image: "img_image_2004_1.png", title: "Acne", link: "/concern/acne" },
+    { image: "img_image_2004_2.png", title: "Dry Skin", link: "/concern/dry-skin" },
+    { image: "img_image_2004_3.png", title: "Acne", link: "/concern/acne" },
     { image: "img_image_2004_1.png", title: "Aging", link: "/concern/aging" },
     { image: "img_image_2004_1.png", title: "Pigmentation", link: "/concern/pigmentation" },
     { image: "img_image_2004_1.png", title: "Pigmentation1", link: "/concern/pigmentation" },
@@ -105,7 +105,18 @@ export const shopBannerData = {
   desktopImageUrl: "img_testimonial_banner.png",
   mobileImageUrl: "img_testimonial_banner_mobile.png",
   linkUrl: "/shop/summer-collection",
-  altText: "Summer Collection Banner",
+  altText: "Shop banner",
+  desktop: {
+    width: 1440,
+    height: 310,
+    aspectRatio: "aspect-[1440/310]",
+  },
+  mobile: {
+    width: 576,
+    height: 288,
+    aspectRatio: "aspect-[375/187]",
+  },
+  breakpoint: 576,
 };
 
 export const shopCategoriesData = {
@@ -121,4 +132,16 @@ export const shopCategoriesData = {
     { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
     { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
   ],
+};
+
+export const tabProductData = {
+  title: "Pick the right kit for you",
+  categories: ["dandruff", "skin brightening", "acne", "hairfall", "pigmentation"],
+  products: {
+    dandruff: productData,
+    "skin brightening": productData,
+    acne: productData,
+    hairfall: productData,
+    pigmentation: productData,
+  },
 };
