@@ -18,21 +18,13 @@ const SliderItemSection = ({ sectionData, ItemComponent }) => {
   const renderItems = () => {
     if (width >= 576) {
       return items.map((item, index) => (
-        <ItemComponent
-          key={`item-${index}`}
-          {...item}
-        />
+        <ItemComponent key={`item-${index}`} {...item} />
       ));
     } else {
       return Array.from({ length: Math.ceil(items.length / 2) }, (_, index) => (
-        <div
-          key={`item-group-${index}`}
-          className="flex flex-col gap-5">
+        <div key={`item-group-${index}`} className="flex flex-col gap-5">
           {items.slice(index * 2, index * 2 + 2).map((item, subIndex) => (
-            <ItemComponent
-              key={`item-${index}-${subIndex}`}
-              {...item}
-            />
+            <ItemComponent key={`item-${index}-${subIndex}`} {...item} />
           ))}
         </div>
       ));
@@ -42,16 +34,10 @@ const SliderItemSection = ({ sectionData, ItemComponent }) => {
   return (
     <section className="self-stretch">
       <div className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5">
-        <Heading
-          size="heading6xl"
-          as="h1"
-          className="capitalize">
+        <Heading size="heading6xl" as="h1" className="capitalize">
           {title}
         </Heading>
-        <SliderComponent
-          items={renderItems()}
-          className="w-full"
-        />
+        <SliderComponent items={renderItems()} className="w-full" />
       </div>
     </section>
   );
@@ -74,13 +60,14 @@ const SliderItem = ({
           width={width}
           height={height}
           alt={`${title} image`}
-          className={`w-full object-cover ${aspectRatio}`}
+          className={`w-full object-contain ${aspectRatio}`}
         />
       </div>
       <Text
         size="text5xl"
         as="h2"
-        className="capitalize font-medium md:font-normal mt-1 sm:mt-2 lg:mt-3 border-b w-fit m-auto border-b-black-900 truncate line-clamp-1">
+        className="capitalize font-medium md:font-normal mt-1 sm:mt-2 lg:mt-3 border-b w-fit m-auto border-b-black-900 truncate line-clamp-1"
+      >
         {title}
       </Text>
     </Link>
