@@ -101,7 +101,7 @@ export const newLaunchData = {
   viewAllLinkUrl: "/new-launches",
 };
 
-export const shopBannerData = {
+export const testimonialBannerData = {
   linkUrl: "/shop/summer-collection",
   altText: "Shop banner",
   desktop: {
@@ -144,4 +144,22 @@ export const tabProductData = {
     hairfall: productData,
     pigmentation: productData,
   },
+};
+
+export const portfolioBannerData = {
+  linkUrl: "/shop/summer-collection",
+  altText: "Shop banner",
+  desktop: {
+    width: 1440,
+    height: 284,
+    aspectRatio: "aspect-[1440/284]",
+    desktopImageUrl: "img_portfolio_banner.png",
+  },
+  mobile: {
+    width: 576,
+    height: 598,
+    aspectRatio: "aspect-[376/392]",
+    mobileImageUrl: "img_portfolio_banner_mobile.png",
+  },
+  breakpoint: 576,
 };

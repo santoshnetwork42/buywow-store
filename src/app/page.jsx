@@ -1,6 +1,5 @@
 import IntroCarousal from "@/components/partials/Home/IntroCarousal";
 import ShopBanner from "@/components/partials/Home/ShopBanner";
-import ShopBannerBT from "@/components/partials/Home/ShopBannerBT";
 import ShopCategories from "@/components/partials/Home/ShopCategories";
 import ShopIngredients from "@/components/partials/Home/ShopIngredients";
 import VideoSection from "@/components/partials/Home/VideoSection";
@@ -20,11 +19,12 @@ import {
   introCarousalData,
   newLaunchData,
   offersData,
+  portfolioBannerData,
   productCategoryItems,
-  shopBannerData,
   shopCategoriesData,
   shopIngredientsData,
   tabProductData,
+  testimonialBannerData,
 } from "@/data/homeData";
 import TabProductSection from "@/components/partials/Home/TabProductSection";
 
@@ -75,7 +75,7 @@ const Home = () => {
 
         {/* testimonials section */}
         <ShopBanner
-          {...shopBannerData}
+          {...testimonialBannerData}
           className="my-8 sm:my-10 lg:my-12"
         />
 
@@ -87,17 +87,21 @@ const Home = () => {
         </div>
 
         {/* brand statement section */}
-        {/* <ShopBannerBT /> */}
-        {/* <div className="container-xs flex flex-col items-center gap-12 md:p-5"> */}
-        {/* customer reviews section */}
-        {/* <CustomerReviewSection /> */}
-        {/* blog section */}
-        {/* <BlogSection /> */}
-        {/* instagram feed section */}
-        {/* <VideoSection /> */}
-        {/* value proposition section */}
-        {/* <DeliveryInfoSection className="w-[64%]" /> */}
-        {/* </div> */}
+        <ShopBanner
+          {...portfolioBannerData}
+          className="my-8 sm:my-10 lg:my-12"
+        />
+
+        <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
+          {/* customer reviews section */}
+          <CustomerReviewSection />
+          {/* blog section */}
+          {/* <BlogSection /> */}
+          {/* instagram feed section */}
+          {/* <VideoSection /> */}
+          {/* value proposition section */}
+          {/* <DeliveryInfoSection className="w-[64%]" /> */}
+        </div>
       </div>
     </>
   );

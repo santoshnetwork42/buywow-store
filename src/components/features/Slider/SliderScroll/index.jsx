@@ -72,7 +72,7 @@ const SliderComponent = ({ items, className, ...props }) => {
             }}
           />
         </div>
-        <div className="relative m-auto flex mx-4 sm:mx-8 md:mx-12 lg:mx-20">
+        <div className="relative m-auto flex mx-4 sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
           <div className="flex w-full items-center justify-center gap-[15px]">
             <Text
               size="text3xl"

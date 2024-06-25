@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ProductCard from "@/components/features/Products/ProductCard";
+import ProductCard from "@/components/features/Card/ProductCard";
 import SliderComponent from "@/components/features/Slider/SliderScroll";
 
 const ProductCarousel = ({ products, className, ...props }) => {
@@ -13,7 +13,13 @@ const ProductCarousel = ({ products, className, ...props }) => {
     />
   ));
 
-  return <SliderComponent items={items} className={className} {...props} />;
+  return (
+    <SliderComponent
+      items={items}
+      className={className}
+      {...props}
+    />
+  );
 };
 
 export default ProductCarousel;

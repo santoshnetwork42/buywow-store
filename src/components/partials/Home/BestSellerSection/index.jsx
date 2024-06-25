@@ -13,7 +13,7 @@ const BestSellerSection = ({ title, categories, products }) => {
   }));
 
   return (
-    <div className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5">
+    <div className="flex flex-col items-center gap-4 md:gap-2">
       <Heading
         size="heading6xl"
         as="h1"
