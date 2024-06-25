@@ -9,7 +9,8 @@ export const productData = [
     },
     features: ["oily hair", "dandruff", "oily hair", "dandruff"],
     title: "Apple Cider Vinegar Shampoo",
-    benefits: "Reduces scalp irritation | Restores natural shine | Smoothens hair",
+    benefits:
+      "Reduces scalp irritation | Restores natural shine | Smoothens hair",
     rating: 4.5,
     reviewCount: 398,
     pricing: {
@@ -48,7 +49,8 @@ export const productData = [
     sku: "HERB-OIL-002",
     weight: "100ml",
     ingredients: ["Bhringraj", "Amla", "Coconut Oil", "Brahmi"],
-    instructions: "Apply to scalp and hair, leave overnight, and wash in the morning.",
+    instructions:
+      "Apply to scalp and hair, leave overnight, and wash in the morning.",
     tags: ["organic", "vegan", "cruelty-free"],
   },
   {
@@ -74,7 +76,8 @@ export const productData = [
     sku: "ALOE-COND-003",
     weight: "200ml",
     ingredients: ["Aloe Vera", "Shea Butter", "Jojoba Oil", "Vitamin B5"],
-    instructions: "Apply to clean, wet hair, leave for 2-3 minutes, and rinse thoroughly.",
+    instructions:
+      "Apply to clean, wet hair, leave for 2-3 minutes, and rinse thoroughly.",
     tags: ["natural", "vegan", "paraben-free"],
   },
   {

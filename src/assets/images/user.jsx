@@ -1,6 +1,10 @@
 import React from "react";
 
-export const UserSVG = ({ fillColor = "#292D32", className = "", ...props }) => {
+export const UserSVG = ({
+  fillColor = "#292D32",
+  className = "",
+  ...props
+}) => {
   return (
     <svg
       fill="none"
@@ -9,7 +13,8 @@ export const UserSVG = ({ fillColor = "#292D32", className = "", ...props }) => 
       {...props}
       height={props?.width || 24}
       width={props?.height || 24}
-      viewBox="0 0 24 24">
+      viewBox="0 0 24 24"
+    >
       <path
         d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
         stroke={fillColor}

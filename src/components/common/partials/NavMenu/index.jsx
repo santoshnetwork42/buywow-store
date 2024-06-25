@@ -9,21 +9,19 @@ export default function NavMenu({ menuItems }) {
         <div className="flex flex-col gap-3">
           {menuItems.map((item, itemIndex) =>
             item.link ? (
-              <Link
-                key={itemIndex}
-                href={item.link}
-                className="self-center">
-                <Text className="!text-black-600 !font-opensans text-base font-normal max-w-28 truncate">
+              <Link key={itemIndex} href={item.link} className="self-center">
+                <Text className="!text-black-600 max-w-28 truncate !font-opensans text-base font-normal">
                   {item.text}
                 </Text>
               </Link>
             ) : (
               <Text
                 key={itemIndex}
-                className="!text-black-600 self-center !font-opensans text-base font-normal">
+                className="!text-black-600 self-center !font-opensans text-base font-normal"
+              >
                 {item.text}
               </Text>
-            )
+            ),
           )}
         </div>
       </div>

@@ -6,7 +6,7 @@ export default function Footer({ ...props }) {
   return (
     <footer
       {...props}
-      className={`${props.className} flex self-stretch justify-center items-center py-6 bg-blue_gray-300_01`}
+      className={`${props.className} flex items-center justify-center self-stretch bg-blue_gray-300_01 py-6`}
     >
       <div className="container-xs flex flex-wrap items-start justify-between gap-5 px-10">
         <div className="flex w-[18%] flex-col items-start gap-[50px]">

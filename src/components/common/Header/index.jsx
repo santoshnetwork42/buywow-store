@@ -46,12 +46,10 @@ export default function Header({ ...props }) {
         <li
           key={index}
           onMouseLeave={() => toggleMenu(index)}
-          onMouseEnter={() => toggleMenu(index)}>
+          onMouseEnter={() => toggleMenu(index)}
+        >
           <div className="flex cursor-pointer items-center gap-1 pt-px">
-            <Text
-              size="text2xl"
-              as="p"
-              className="capitalize">
+            <Text size="text2xl" as="p" className="capitalize">
               {item.text}
             </Text>
             <Img
@@ -69,10 +67,7 @@ export default function Header({ ...props }) {
       return (
         <li key={index}>
           <Link href={item.link}>
-            <Text
-              size="text2xl"
-              as="p"
-              className="capitalize">
+            <Text size="text2xl" as="p" className="capitalize">
               {item.text}
             </Text>
           </Link>
@@ -85,9 +80,9 @@ export default function Header({ ...props }) {
     <header className={`${props.className} relative`}>
       <div className="flex justify-center self-stretch border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
         <div className="container-xs flex justify-center">
-          <div className="flex flex-wrap md:flex-nowrap w-full items-center justify-between gap-x-5 gap-y-2.5">
+          <div className="flex w-full flex-wrap items-center justify-between gap-x-5 gap-y-2.5 md:flex-nowrap">
             {/* Logo and mobile menu button */}
-            <div className="flex-shrink-0 flex items-center gap-5">
+            <div className="flex flex-shrink-0 items-center gap-5">
               <div className="mt-2 lg:hidden">
                 <MenuSVG
                   onClick={openMobileMenu}
@@ -96,9 +91,7 @@ export default function Header({ ...props }) {
                   fillColor="#000000ff"
                 />
               </div>
-              <Link
-                href="/"
-                className="">
+              <Link href="/" className="">
                 <Img
                   src="img_header_logo.png"
                   width={163}
@@ -110,16 +103,14 @@ export default function Header({ ...props }) {
             </div>
 
             {/* Desktop menu items */}
-            <ul className="hidden lg:flex items-start lg:gap-3 xl:gap-5">
+            <ul className="hidden items-start lg:flex lg:gap-3 xl:gap-5">
               {mainMenuItems.map(renderMenuItem)}
             </ul>
 
             {/* Search, user, and cart icons */}
-            <div className="flex max-w-[370px] flex-grow items-center justify-end lg:justify-center gap-4 lg:gap-3 xl:gap-5">
-              <SearchBar className="hidden md:flex max-w-[284px]" />
-              <Link
-                href="#"
-                className="flex-shrink-0">
+            <div className="flex max-w-[370px] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
+              <SearchBar className="hidden max-w-[284px] md:flex" />
+              <Link href="#" className="flex-shrink-0">
                 <Img
                   src="img_user.svg"
                   width={24}
@@ -128,9 +119,7 @@ export default function Header({ ...props }) {
                   className="h-[24px] w-[24px]"
                 />
               </Link>
-              <Link
-                href="#"
-                className="flex-shrink-0">
+              <Link href="#" className="flex-shrink-0">
                 <Img
                   src="img_bag.svg"
                   width={22}

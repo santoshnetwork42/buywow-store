@@ -39,7 +39,7 @@ const Home = () => {
   return (
     <>
       {/* main content section */}
-      <div className="flex flex-col container-fluid w-full items-center mb-12">
+      <div className="container-fluid mb-12 flex w-full flex-col items-center">
         {/* categories section */}
         <ProductCategories categories={productCategoryItems} />
 
@@ -94,7 +94,7 @@ const Home = () => {
 
         <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* customer reviews section */}
-          <CustomerReviewSection />
+          {/* <CustomerReviewSection /> */}
           {/* blog section */}
           {/* <BlogSection /> */}
           {/* instagram feed section */}

@@ -28,7 +28,15 @@ export const introCarousalData = [
 
 export const bestSellerData = {
   title: "Our best sellers",
-  categories: ["all", "facewash", "shampoo", "hair oil", "serum", "skin care", "fragrances"],
+  categories: [
+    "all",
+    "facewash",
+    "shampoo",
+    "hair oil",
+    "serum",
+    "skin care",
+    "fragrances",
+  ],
   products: {
     all: productData,
     // Add more products for 'all' category
@@ -82,16 +90,48 @@ export const offersData = [
 export const concernSectionData = {
   title: "Shop by Concern",
   items: [
-    { image: "img_image_2004_1.png", title: "Hair Fall", link: "/concern/hair-fall" },
-    { image: "img_image_2004_2.png", title: "Dry Skin", link: "/concern/dry-skin" },
+    {
+      image: "img_image_2004_1.png",
+      title: "Hair Fall",
+      link: "/concern/hair-fall",
+    },
+    {
+      image: "img_image_2004_2.png",
+      title: "Dry Skin",
+      link: "/concern/dry-skin",
+    },
     { image: "img_image_2004_3.png", title: "Acne", link: "/concern/acne" },
     { image: "img_image_2004_1.png", title: "Aging", link: "/concern/aging" },
-    { image: "img_image_2004_1.png", title: "Pigmentation", link: "/concern/pigmentation" },
-    { image: "img_image_2004_1.png", title: "Pigmentation1", link: "/concern/pigmentation" },
-    { image: "img_image_2004_1.png", title: "Pigmentation2", link: "/concern/pigmentation" },
-    { image: "img_image_2004_1.png", title: "Pigmentation3", link: "/concern/pigmentation" },
-    { image: "img_image_2004_1.png", title: "Pigmentation4", link: "/concern/pigmentation" },
-    { image: "img_image_2004_1.png", title: "Pigmentation5", link: "/concern/pigmentation" },
+    {
+      image: "img_image_2004_1.png",
+      title: "Pigmentation",
+      link: "/concern/pigmentation",
+    },
+    {
+      image: "img_image_2004_1.png",
+      title: "Pigmentation1",
+      link: "/concern/pigmentation",
+    },
+    {
+      image: "img_image_2004_1.png",
+      title: "Pigmentation2",
+      link: "/concern/pigmentation",
+    },
+    {
+      image: "img_image_2004_1.png",
+      title: "Pigmentation3",
+      link: "/concern/pigmentation",
+    },
+    {
+      image: "img_image_2004_1.png",
+      title: "Pigmentation4",
+      link: "/concern/pigmentation",
+    },
+    {
+      image: "img_image_2004_1.png",
+      title: "Pigmentation5",
+      link: "/concern/pigmentation",
+    },
   ],
 };
 
@@ -122,21 +162,63 @@ export const testimonialBannerData = {
 export const shopCategoriesData = {
   title: "Shop by Categories",
   items: [
-    { image: "img_image_2054.png", title: "Hair Care", link: "/concern/hair-fall" },
-    { image: "img_image_2055.png", title: "skin care", link: "/concern/dry-skin" },
-    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
-    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
-    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
-    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
-    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
-    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
-    { image: "img_image_2056.png", title: "bath & body", link: "/concern/acne" },
+    {
+      image: "img_image_2054.png",
+      title: "Hair Care",
+      link: "/concern/hair-fall",
+    },
+    {
+      image: "img_image_2055.png",
+      title: "skin care",
+      link: "/concern/dry-skin",
+    },
+    {
+      image: "img_image_2056.png",
+      title: "bath & body",
+      link: "/concern/acne",
+    },
+    {
+      image: "img_image_2056.png",
+      title: "bath & body",
+      link: "/concern/acne",
+    },
+    {
+      image: "img_image_2056.png",
+      title: "bath & body",
+      link: "/concern/acne",
+    },
+    {
+      image: "img_image_2056.png",
+      title: "bath & body",
+      link: "/concern/acne",
+    },
+    {
+      image: "img_image_2056.png",
+      title: "bath & body",
+      link: "/concern/acne",
+    },
+    {
+      image: "img_image_2056.png",
+      title: "bath & body",
+      link: "/concern/acne",
+    },
+    {
+      image: "img_image_2056.png",
+      title: "bath & body",
+      link: "/concern/acne",
+    },
   ],
 };
 
 export const tabProductData = {
   title: "Pick the right kit for you",
-  categories: ["dandruff", "skin brightening", "acne", "hairfall", "pigmentation"],
+  categories: [
+    "dandruff",
+    "skin brightening",
+    "acne",
+    "hairfall",
+    "pigmentation",
+  ],
   products: {
     dandruff: productData,
     "skin brightening": productData,

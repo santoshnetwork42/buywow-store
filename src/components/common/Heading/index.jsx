@@ -18,13 +18,20 @@ const sizes = {
   heading8xl: "text-[52px] font-semibold",
 };
 
-const Heading = ({ children, className = "", size = "headinglg", as, ...restProps }) => {
+const Heading = ({
+  children,
+  className = "",
+  size = "headinglg",
+  as,
+  ...restProps
+}) => {
   const Component = as || "h6";
 
   return (
     <Component
-      className={`text-black-900 font-outfit ${sizes[size]} ${className} `}
-      {...restProps}>
+      className={`font-outfit text-black-900 ${sizes[size]} ${className} `}
+      {...restProps}
+    >
       {children}
     </Component>
   );

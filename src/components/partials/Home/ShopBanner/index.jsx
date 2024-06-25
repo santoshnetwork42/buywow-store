@@ -33,14 +33,9 @@ export default function ShopBanner({
         };
 
   return (
-    <div
-      {...props}
-      className={`${props.className} self-stretch`}>
+    <div {...props} className={`${props.className} self-stretch`}>
       <Link href={linkUrl || "#"}>
-        <Img
-          {...imageProps}
-          alt={altText}
-        />
+        <Img {...imageProps} alt={altText} />
       </Link>
     </div>
   );

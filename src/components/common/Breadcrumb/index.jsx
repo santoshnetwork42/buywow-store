@@ -5,7 +5,7 @@ export default function Breadcrumb({ ...props }) {
   return (
     <div
       {...props}
-      className={`${props.className} flex items-center md:p-5 container-xs`}
+      className={`${props.className} container-xs flex items-center md:p-5`}
     >
       <Heading
         size="headingmd"

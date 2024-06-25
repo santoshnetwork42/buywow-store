@@ -14,9 +14,7 @@ export default function CustomerReviewCard({
   ...props
 }) {
   return (
-    <div
-      {...props}
-      className={`${props.className} flex flex-col w-full gap-3`}>
+    <div {...props} className={`${props.className} flex w-full flex-col gap-3`}>
       <Img
         src={productimage}
         width={426}
@@ -25,23 +23,18 @@ export default function CustomerReviewCard({
         className="h-[250px] w-full object-cover"
       />
       <div className="flex flex-col items-start gap-2.5 self-stretch">
-        <Text
-          size="text3xl"
-          as="p"
-          className="!font-medium">
+        <Text size="text3xl" as="p" className="!font-medium">
           {useragetext}
         </Text>
-        <Text
-          size="text3xl"
-          as="p"
-          className="w-full leading-[140%]">
+        <Text size="text3xl" as="p" className="w-full leading-[140%]">
           {userreviewtext}
         </Text>
         <div className="flex items-center justify-between gap-5 self-stretch">
           <Text
             size="text3xl"
             as="p"
-            className="w-[38%] !font-medium leading-[140%]">
+            className="w-[38%] !font-medium leading-[140%]"
+          >
             <span className="text-sm font-normal text-black-900">
               <>
                 Concern:
@@ -61,22 +54,18 @@ export default function CustomerReviewCard({
               />
             </div>
             <div className="flex flex-1 flex-col items-start gap-[5px]">
-              <Text
-                as="p"
-                className="!font-medium">
+              <Text as="p" className="!font-medium">
                 {productnametext}
               </Text>
               <div className="flex items-end self-stretch">
                 <Heading
                   size="headingmd"
                   as="p"
-                  className="!font-semibold capitalize">
+                  className="!font-semibold capitalize"
+                >
                   {currentpricetext}
                 </Heading>
-                <Text
-                  size="textlg"
-                  as="p"
-                  className="capitalize line-through">
+                <Text size="textlg" as="p" className="capitalize line-through">
                   {originalpricetext}
                 </Text>
                 <Button className="ml-6 flex h-[22px] min-w-[47px] flex-row items-center justify-center rounded-[11px] bg-yellow-900 px-3 text-center text-xs font-medium capitalize text-white-a700_01">

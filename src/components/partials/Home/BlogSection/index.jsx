@@ -11,7 +11,8 @@ const BlogSection = () => {
         <Heading
           size="heading6xl"
           as="h2"
-          className="capitalize sm:text-[28px]">
+          className="capitalize sm:text-[28px]"
+        >
           explore blogs
         </Heading>
         <div className="flex flex-col items-center gap-6 self-stretch">

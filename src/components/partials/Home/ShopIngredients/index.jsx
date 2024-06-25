@@ -8,7 +8,8 @@ import React from "react";
 const IngredientItem = ({ ingredient, index }) => (
   <div
     key={`ingredient-${index}`}
-    className="w-[154px] md:w-full max-w-[248px] relative rounded-lg overflow-hidden">
+    className="relative flex h-[54px] w-[154px] max-w-[248px] items-center justify-center overflow-visible rounded-lg md:h-auto md:max-h-[76px] md:w-full"
+  >
     <Img
       src={ingredient.image}
       width={248}
@@ -27,8 +28,8 @@ export default function ShopIngredients({ shopIngredientsData, ...props }) {
   const renderIngredients = () => {
     if (width >= 768) {
       return (
-        <div className="w-full overflow-x-auto no-scrollbar">
-          <div className="grid grid-cols-5 w-max md:w-fit m-auto justify-center gap-[5px] sm:gap-3 lg:gap-5 self-stretch">
+        <div className="no-scrollbar w-full overflow-x-auto">
+          <div className="m-auto grid w-max grid-cols-5 justify-center gap-[5px] self-stretch sm:gap-3 md:w-fit lg:gap-5">
             {shopIngredientsData.ingredients.map((ingredient, index) => (
               <IngredientItem
                 key={index}
@@ -48,7 +49,8 @@ export default function ShopIngredients({ shopIngredientsData, ...props }) {
             (_, index) => (
               <div
                 key={`ingredient-group-${index}`}
-                className="flex flex-col gap-[5px] sm:gap-3 lg:gap-5">
+                className="flex flex-col items-center justify-center gap-[5px] sm:gap-3 lg:gap-5"
+              >
                 {shopIngredientsData.ingredients
                   .slice(index * 2, index * 2 + 2)
                   .map((ingredient, subIndex) => (
@@ -59,7 +61,7 @@ export default function ShopIngredients({ shopIngredientsData, ...props }) {
                     />
                   ))}
               </div>
-            )
+            ),
           )}
         />
       );
@@ -69,11 +71,9 @@ export default function ShopIngredients({ shopIngredientsData, ...props }) {
   return (
     <div
       {...props}
-      className={`${props.className} flex flex-col self-stretch items-center justify-center gap-4 lg:gap-5`}>
-      <Heading
-        size="heading6xl"
-        as="h1"
-        className="capitalize">
+      className={`${props.className} flex flex-col items-center justify-center gap-4 self-stretch lg:gap-5`}
+    >
+      <Heading size="heading6xl" as="h1" className="capitalize">
         {shopIngredientsData.title}
       </Heading>
       {renderIngredients()}

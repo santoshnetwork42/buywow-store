@@ -11,25 +11,13 @@ function RootLayout({ children }) {
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0"
-        />
-        <meta
-          name="theme-color"
-          content="#000000"
-        />
-        <link
-          rel="manifest"
-          href="/manifest.json"
-        />
-        <link
-          rel="icon"
-          href="/favicon.ico"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <div className="w-full min-h-screen flex flex-col bg-white-a700">
+        <div className="flex min-h-screen w-full flex-col bg-white-a700">
           <AnnouncementBar
             leftText="Free Shipping On Orders Above ₹999"
             centerContent={{

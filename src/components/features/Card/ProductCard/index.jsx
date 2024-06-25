@@ -15,15 +15,16 @@ export default function ProductCard({
 }) {
   return (
     <div
-      className={`flex flex-col self-stretch justify-start gap-2 md:gap-3 p-2 shadow-xs rounded-lg ${className}`}
-      {...props}>
-      <div className="rounded-lg overflow-hidden">
+      className={`flex flex-col justify-start gap-2 self-stretch rounded-lg p-2 shadow-xs md:gap-3 ${className}`}
+      {...props}
+    >
+      <div className="overflow-hidden rounded-lg">
         <Img
           src={image.src}
           width={image.width}
           height={image.height}
           alt={image.alt || "Product image"}
-          className="w-full h-full object-contain"
+          className="h-full w-full object-contain"
         />
       </div>
       <div className="ml-[5px] flex flex-wrap gap-[5px]">
@@ -33,22 +34,25 @@ export default function ProductCard({
             as="p"
             className={`flex items-center justify-center rounded-[5px] px-2.5 py-[3px] capitalize ${
               index % 2 === 0 ? "bg-gray-100" : "bg-deep_orange-50"
-            }`}>
+            }`}
+          >
             {feature}
           </Text>
         ))}
       </div>
-      <div className="mb-[5px] flex-1 ml-[5px] flex flex-col gap-2">
+      <div className="mb-[5px] ml-[5px] flex flex-1 flex-col gap-2">
         <div className="flex flex-1 flex-col">
           <Heading
             size="heading2xl"
             as="h5"
-            className="capitalize w-full line-clamp-2 leading-5">
+            className="line-clamp-2 w-full capitalize leading-5"
+          >
             {title}
           </Heading>
           <Text
             as="p"
-            className="w-full text-[11px] !font-light line-clamp-3 leading-[130%]">
+            className="line-clamp-3 w-full text-[11px] !font-light leading-[130%]"
+          >
             {benefits}
           </Text>
         </div>
@@ -63,45 +67,38 @@ export default function ProductCard({
                   alt="Rating stars"
                   className="h-[16px] w-[16px] rounded-[1px]"
                 />
-                <Text
-                  as="p"
-                  className="capitalize">
+                <Text as="p" className="capitalize">
                   {rating}
                 </Text>
               </div>
-              <Text
-                as="p"
-                className="capitalize">
+              <Text as="p" className="capitalize">
                 ({reviewCount} reviews)
               </Text>
             </div>
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-[6px] md:gap-2">
-                <Heading
-                  size="headingxl"
-                  as="h6"
-                  className="capitalize">
+                <Heading size="headingxl" as="h6" className="capitalize">
                   {pricing.current}
                 </Heading>
-                <Text
-                  as="p"
-                  className="capitalize line-through">
+                <Text as="p" className="capitalize line-through">
                   {pricing.original}
                 </Text>
               </div>
-              <div className="hidden md:flex h-[23px] min-w-[62px] flex-row items-center justify-center rounded-sm bg-lime-50 px-2 text-center text-xs capitalize text-black-900">
+              <div className="hidden h-[23px] min-w-[62px] flex-row items-center justify-center rounded-sm bg-lime-50 px-2 text-center text-xs capitalize text-black-900 md:flex">
                 {pricing.discount}% OFF
               </div>
               <Button
-                className="flex md:hidden ml-auto text-sm flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-3 py-1 text-center font-medium text-white-a700_01"
-                onClick={onAddToCart}>
+                className="ml-auto flex flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-3 py-1 text-center text-sm font-medium text-white-a700_01 md:hidden"
+                onClick={onAddToCart}
+              >
                 Add
               </Button>
             </div>
           </div>
           <Button
-            className="hidden md:flex h-[35px] min-w-[66px] flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-4 text-center text-lg font-medium text-white-a700_01"
-            onClick={onAddToCart}>
+            className="hidden h-[35px] min-w-[66px] flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-4 text-center text-lg font-medium text-white-a700_01 md:flex"
+            onClick={onAddToCart}
+          >
             Add
           </Button>
         </div>

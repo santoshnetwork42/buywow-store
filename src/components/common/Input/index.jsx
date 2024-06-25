@@ -19,7 +19,7 @@ const Input = React.forwardRef(
 
       ...restProps
     },
-    ref
+    ref,
   ) => {
     return (
       <label className={`${className}`}>
@@ -36,7 +36,7 @@ const Input = React.forwardRef(
         {!!suffix && suffix}
       </label>
     );
-  }
+  },
 );
 
 Input.propTypes = {

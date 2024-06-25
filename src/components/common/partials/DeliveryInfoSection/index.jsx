@@ -16,7 +16,8 @@ export default function DeliveryInfoSection({
   return (
     <div
       {...props}
-      className={`${props.className} flex md:flex-col justify-between items-center md:w-full gap-5`}>
+      className={`${props.className} flex items-center justify-between gap-5 md:w-full md:flex-col`}
+    >
       <div className="flex w-full items-center justify-center gap-3">
         <div className="flex flex-col items-center justify-center rounded-[29px] bg-blue-50 p-[7px]">
           <Img
@@ -33,11 +34,7 @@ export default function DeliveryInfoSection({
       </div>
       <div className="flex w-full items-center justify-center gap-3">
         <Button className="flex h-[59px] w-[59px] items-center justify-center rounded-[29px] bg-blue-50 px-[11px]">
-          <Img
-            src="img_group_1400002325.png"
-            width={36}
-            height={36}
-          />
+          <Img src="img_group_1400002325.png" width={36} height={36} />
         </Button>
         <Text className="w-[73%] text-base font-normal leading-[132%] sm:w-[73%] sm:text-[13px]">
           {freeshippingtext}
@@ -45,11 +42,7 @@ export default function DeliveryInfoSection({
       </div>
       <div className="flex w-full items-center justify-center gap-3">
         <Button className="flex h-[59px] w-[59px] items-center justify-center rounded-[29px] bg-blue-50 px-[11px]">
-          <Img
-            src="img_group_1400002326.png"
-            width={36}
-            height={36}
-          />
+          <Img src="img_group_1400002326.png" width={36} height={36} />
         </Button>
         <Text className="w-[73%] text-base font-normal leading-[132%] sm:w-[73%] sm:text-[13px]">
           {returnpolicytext}

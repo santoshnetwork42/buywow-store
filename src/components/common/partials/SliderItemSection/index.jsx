@@ -54,7 +54,7 @@ const SliderItem = ({
 }) => (
   <div className={className}>
     <Link href={link || "#"}>
-      <div className="w-full rounded sm:rounded-md lg:rounded-lg overflow-hidden">
+      <div className="w-full overflow-hidden rounded sm:rounded-md lg:rounded-lg">
         <Img
           src={image}
           width={width}
@@ -66,7 +66,7 @@ const SliderItem = ({
       <Text
         size="text5xl"
         as="h2"
-        className="capitalize font-medium md:font-normal mt-1 sm:mt-2 lg:mt-3 border-b w-fit m-auto border-b-black-900 truncate line-clamp-1"
+        className="m-auto mt-1 line-clamp-1 w-fit truncate border-b border-b-black-900 font-medium capitalize sm:mt-2 md:font-normal lg:mt-3"
       >
         {title}
       </Text>

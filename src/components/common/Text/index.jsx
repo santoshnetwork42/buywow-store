@@ -14,13 +14,20 @@ const sizes = {
   text9xl: "text-[56px] font-normal not-italic",
 };
 
-const Text = ({ children, className = "", as, size = "textxl", ...restProps }) => {
+const Text = ({
+  children,
+  className = "",
+  as,
+  size = "textxl",
+  ...restProps
+}) => {
   const Component = as || "p";
 
   return (
     <Component
-      className={`text-black-900 font-outfit ${className} ${sizes[size]}`}
-      {...restProps}>
+      className={`font-outfit text-black-900 ${className} ${sizes[size]}`}
+      {...restProps}
+    >
       {children}
     </Component>
   );

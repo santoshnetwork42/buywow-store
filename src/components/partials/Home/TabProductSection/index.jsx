@@ -14,21 +14,15 @@ const TabProductSection = ({ title, categories, products }) => {
 
   return (
     <div className="flex flex-col items-center gap-4 md:gap-3">
-      <Heading
-        size="heading6xl"
-        as="h1"
-        className="capitalize">
+      <Heading size="heading6xl" as="h1" className="capitalize">
         {title}
       </Heading>
       <TabComponent
         tabData={tabData}
         renderContent={(content, index) => (
-          <ProductCarousal
-            products={content}
-            className={"w-full"}
-          />
+          <ProductCarousal products={content} className={"w-full"} />
         )}
-        className="flex flex-col w-full items-center gap-3 sm:gap-4 lg:gap-5"
+        className="flex w-full flex-col items-center gap-3 sm:gap-4 lg:gap-5"
         selectedTabClassName="!text-black-900 font-sm md:font-base font-normal bg-amber-200 rounded-full"
         selectedTabPanelClassName="relative tab-panel--selected"
         tabClassName="text-black-900"
