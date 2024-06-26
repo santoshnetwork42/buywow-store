@@ -27,12 +27,12 @@ export default function ProductCard({
           className="h-full w-full object-contain"
         />
       </div>
-      <div className="ml-[5px] flex flex-wrap gap-[5px]">
+      <div className="flex flex-wrap gap-[5px] h-12">
         {features.map((feature, index) => (
           <Text
             key={index}
             as="p"
-            className={`flex items-center justify-center rounded-[5px] px-2.5 py-[3px] capitalize ${
+            className={`h-fit flex items-center justify-center rounded-[5px] px-2.5 py-[3px] capitalize ${
               index % 2 === 0 ? "bg-gray-100" : "bg-deep_orange-50"
             }`}
           >
@@ -40,7 +40,7 @@ export default function ProductCard({
           </Text>
         ))}
       </div>
-      <div className="mb-[5px] ml-[5px] flex flex-1 flex-col gap-2">
+      <div className="flex flex-1 flex-col gap-2">
         <div className="flex flex-1 flex-col">
           <Heading
             size="heading2xl"
@@ -88,19 +88,13 @@ export default function ProductCard({
                 {pricing.discount}% OFF
               </div>
               <Button
-                className="ml-auto flex flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-3 py-1 text-center text-sm font-medium text-white-a700_01 md:hidden"
+                className="ml-auto flex flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-3 py-1 text-center text-sm font-medium text-white-a700_01"
                 onClick={onAddToCart}
               >
                 Add
               </Button>
             </div>
           </div>
-          <Button
-            className="hidden h-[35px] min-w-[66px] flex-row items-center justify-center self-end rounded-[17px] bg-yellow-900 px-4 text-center text-lg font-medium text-white-a700_01 md:flex"
-            onClick={onAddToCart}
-          >
-            Add
-          </Button>
         </div>
       </div>
     </div>
