@@ -18,6 +18,7 @@ import {
   blogSectionData,
   concernSectionData,
   customerReviewSectionData,
+  instagramFeedData,
   introCarousalData,
   newLaunchData,
   offersData,
@@ -100,10 +101,12 @@ const Home = () => {
 
           {/* blog section */}
           <BlogSection sectionData={blogSectionData} />
+
           {/* instagram feed section */}
-          {/* <VideoSection /> */}
+          <VideoSection sectionData={instagramFeedData} />
           {/* value proposition section */}
-          {/* <DeliveryInfoSection className="w-[64%]" /> */}
+
+          <DeliveryInfoSection />
         </div>
       </div>
     </>

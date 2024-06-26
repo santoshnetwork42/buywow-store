@@ -402,3 +402,39 @@ export const blogSectionData = {
     // Add more articles as needed
   ],
 };
+
+export const instagramFeedData = {
+  title: "Find us on instagram",
+  buttonText: "@wowskinscienceindia",
+  images: [
+    {
+      id: 1,
+      src: "img_rectangle_26044.png",
+      width: 334,
+      height: 320,
+      alt: "profile image",
+    },
+    {
+      id: 2,
+      src: "img_rectangle_26044_320x318.png",
+      width: 318,
+      height: 320,
+      alt: "forward image",
+    },
+    {
+      id: 3,
+      src: "img_rectangle_26044_1.png",
+      width: 318,
+      height: 320,
+      alt: "image",
+    },
+    {
+      id: 4,
+      src: "img_rectangle_26044_319x318.png",
+      width: 318,
+      height: 319,
+      alt: "rectangle",
+    },
+  ],
+  playButtonIcon: "img_forward.svg",
+};
