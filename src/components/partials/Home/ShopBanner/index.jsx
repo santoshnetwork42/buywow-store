@@ -23,13 +23,13 @@ export default function ShopBanner({
           src: desktop.desktopImageUrl,
           width: desktop.width,
           height: desktop.height,
-          className: `w-full object-cover ${desktop.aspectRatio}`,
+          className: `w-full object-contain ${desktop.aspectRatio}`,
         }
       : {
           src: mobile.mobileImageUrl,
           width: mobile.width,
           height: mobile.height,
-          className: `w-full object-cover ${mobile.aspectRatio}`,
+          className: `w-full object-contain ${mobile.aspectRatio}`,
         };
 
   return (

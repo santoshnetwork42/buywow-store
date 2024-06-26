@@ -47,14 +47,17 @@ const SliderItem = ({
   image,
   title,
   link,
-  className = "max-w-[100px] sm:max-w-[260px] w-full sm:w-[20vw] md:w-[20vw] lg:w-[22vw] xl:w-[20vw] overflow-hidden max-sm:p-[3px]",
+  className = "overflow-hidden",
+  imageClassName = "w-full object-contain",
   width = 260,
   height = 260,
   aspectRatio = "aspect-[260/260]",
 }) => (
   <div className={className}>
     <Link href={link || "#"}>
-      <div className="w-full overflow-hidden rounded sm:rounded-md lg:rounded-lg">
+      <div
+        className={`${imageClassName} w-full overflow-hidden rounded sm:rounded-md lg:rounded-lg`}
+      >
         <Img
           src={image}
           width={width}

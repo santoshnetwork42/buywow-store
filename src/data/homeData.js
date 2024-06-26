@@ -239,9 +239,126 @@ export const portfolioBannerData = {
   },
   mobile: {
     width: 576,
-    height: 598,
-    aspectRatio: "aspect-[376/392]",
+    height: 600,
+    aspectRatio: "aspect-[576/600]",
     mobileImageUrl: "img_portfolio_banner_mobile.png",
   },
   breakpoint: 576,
+};
+
+export const customerReviewSectionData = {
+  title: "Real Reviews From Real Customers",
+  reviews: [
+    {
+      productImage: {
+        desktop: {
+          src: "img_image_2062.png",
+          width: 502,
+          height: 250,
+          aspectRatio: "aspect-[502/250]",
+          alt: "Product Image 1",
+        },
+        mobile: {
+          src: "img_image_2062_mobile.png",
+          width: 320,
+          height: 192,
+          aspectRatio: "aspect-[320/192]",
+          alt: "Product Image 1",
+        },
+      },
+      userInfo: {
+        name: "Trisha",
+        age: 25,
+      },
+      reviewText:
+        "If you're looking for a product that provides deep hydration, look no further. This aloe vera gel has transformed my skin. It keeps my face moisturized and refreshed, even during the driest days.",
+      skinConcerns: ["Dry skin", "Pigmentation"],
+      relatedProduct: {
+        image: {
+          src: "img_rectangle_35.png",
+          width: 44,
+          height: 49,
+          alt: "Aloe Vera Gel",
+        },
+        name: "Apple Cider Vinegar Face Wash Apple Cider Vinegar Face Wash",
+        currentPrice: "₹339",
+        originalPrice: "₹399",
+        addToCartText: "Add",
+      },
+    },
+    {
+      productImage: {
+        desktop: {
+          src: "img_image_2063.png",
+          width: 502,
+          height: 250,
+          aspectRatio: "aspect-[502/250]",
+          alt: "Product Image 1",
+        },
+        mobile: {
+          src: "img_image_2062_mobile.png",
+          width: 320,
+          height: 192,
+          aspectRatio: "aspect-[320/192]",
+          alt: "Product Image 1",
+        },
+      },
+      userInfo: {
+        name: "Trisha",
+        age: 25,
+      },
+      reviewText:
+        "If you're looking for a product that provides deep hydration, look no further. This aloe vera gel has transformed my skin. It keeps my face moisturized and refreshed, even during the driest days.",
+      skinConcerns: ["Dry skin", "Pigmentation"],
+      relatedProduct: {
+        image: {
+          src: "img_rectangle_35.png",
+          width: 44,
+          height: 49,
+          alt: "Aloe Vera Gel",
+        },
+        name: "Pure Aloe Vera Gel",
+        currentPrice: "₹339",
+        originalPrice: "₹399",
+        addToCartText: "Add",
+      },
+    },
+    {
+      productImage: {
+        desktop: {
+          src: "img_image_2062.png",
+          width: 502,
+          height: 250,
+          aspectRatio: "aspect-[502/250]",
+          alt: "Product Image 1",
+        },
+        mobile: {
+          src: "img_image_2062_mobile.png",
+          width: 320,
+          height: 192,
+          aspectRatio: "aspect-[320/192]",
+          alt: "Product Image 1",
+        },
+      },
+      userInfo: {
+        name: "Trisha",
+        age: 25,
+      },
+      reviewText:
+        "If you're looking for a product that provides deep hydration, look no further. This aloe vera gel has transformed my skin. It keeps my face moisturized and refreshed, even during the driest days.",
+      skinConcerns: ["Dry skin", "Pigmentation"],
+      relatedProduct: {
+        image: {
+          src: "img_rectangle_35.png",
+          width: 44,
+          height: 49,
+          alt: "Aloe Vera Gel",
+        },
+        name: "Pure Aloe Vera Gel",
+        currentPrice: "₹339",
+        originalPrice: "₹399",
+        addToCartText: "Add",
+      },
+    },
+  ],
 };

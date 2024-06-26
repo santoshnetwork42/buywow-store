@@ -28,7 +28,7 @@ export default function ShopIngredients({ shopIngredientsData, ...props }) {
   const renderIngredients = () => {
     if (width >= 768) {
       return (
-        <div className="no-scrollbar w-full overflow-x-auto">
+        <div className="no-scrollbar w-full overflow-visible overflow-x-auto">
           <div className="m-auto grid w-max grid-cols-5 justify-center gap-[5px] self-stretch sm:gap-3 md:w-fit lg:gap-5">
             {shopIngredientsData.ingredients.map((ingredient, index) => (
               <IngredientItem

@@ -25,7 +25,7 @@ const Text = ({
 
   return (
     <Component
-      className={`font-outfit text-black-900 ${className} ${sizes[size]}`}
+      className={`font-outfit text-black-900 ${sizes[size]} ${className} `}
       {...restProps}
     >
       {children}

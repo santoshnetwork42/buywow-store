@@ -16,6 +16,7 @@ import ProductCategories from "@/components/partials/Home/ProductCategory";
 import {
   bestSellerData,
   concernSectionData,
+  customerReviewSectionData,
   introCarousalData,
   newLaunchData,
   offersData,
@@ -94,7 +95,7 @@ const Home = () => {
 
         <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* customer reviews section */}
-          {/* <CustomerReviewSection /> */}
+          <CustomerReviewSection sectionData={customerReviewSectionData} />
           {/* blog section */}
           {/* <BlogSection /> */}
           {/* instagram feed section */}

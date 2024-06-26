@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Img, Text } from "@/components/common";
 
-const SliderComponent = ({ items, className, ...props }) => {
+const SliderComponent = ({ items, className, sliderClassName, ...props }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const containerRef = useRef(null);
   const itemRef = useRef(null);
@@ -52,7 +52,9 @@ const SliderComponent = ({ items, className, ...props }) => {
         className="no-scrollbar w-full overflow-x-auto"
         onScroll={handleScroll}
       >
-        <div className="relative mb-3 flex w-max gap-[5px] sm:gap-2 lg:gap-3">
+        <div
+          className={`relative mb-3 flex w-max ${sliderClassName || "gap-[5px] sm:gap-2 lg:gap-3"}`}
+        >
           {items.map((item, index) => (
             <div
               key={index}
