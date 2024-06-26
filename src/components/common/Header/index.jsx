@@ -47,6 +47,7 @@ export default function Header({ ...props }) {
           key={index}
           onMouseLeave={() => toggleMenu(index)}
           onMouseEnter={() => toggleMenu(index)}
+          className="relative"
         >
           <div className="flex cursor-pointer items-center gap-1 pt-px">
             <Text size="text2xl" as="p" className="capitalize">
@@ -57,10 +58,10 @@ export default function Header({ ...props }) {
               width={8}
               height={4}
               alt={`${item.text} arrow`}
-              className="h-[4px] w-[8px]"
+              className="aspect-[8/4] h-auto w-[10px]"
             />
           </div>
-          {openMenus[index] && <NavMenu menuItems={item.submenu} />}
+          <NavMenu menuItems={item.submenu} isOpen={openMenus[index]} />
         </li>
       );
     } else {
