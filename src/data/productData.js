@@ -7,7 +7,12 @@ export const productData = [
       height: 331,
       alt: "Apple Cider Vinegar Shampoo",
     },
-    features: ["oily hair", "dandruff", "oily hair", "long long long long text for testing purpose"],
+    features: [
+      "asasasasasasasksndjknsdfkjdsfj adhkahdkasgdouas fgwuyfdgiysfahsfd",
+      "oily hair",
+      "long long long long",
+      // "Dummy data",
+    ],
     title: "Apple Cider Vinegar Shampoo",
     benefits:
       "Reduces scalp irritation | Restores natural shine | Smoothens hair",
