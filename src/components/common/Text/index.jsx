@@ -1,4 +1,5 @@
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 const sizes = {
   textxs: "text-[6px] font-normal not-italic",
@@ -25,7 +26,7 @@ const Text = ({
 
   return (
     <Component
-      className={`font-outfit text-black-900 ${sizes[size]} ${className} `}
+      className={twMerge("font-outfit text-black-900", sizes[size], className)}
       {...restProps}
     >
       {children}

@@ -362,3 +362,43 @@ export const customerReviewSectionData = {
     },
   ],
 };
+
+export const blogSectionData = {
+  title: "Explore Blogs",
+  buttonText: "Read More",
+  articles: [
+    {
+      id: 1,
+      image: "img_image_2058.png",
+      title: "Leave-In Conditioning: Know It All Know It All",
+      author: "Garima Singh",
+      publishDate: "February 27, 2024",
+      link: "/blog/leave-in-conditioning",
+    },
+    {
+      id: 1,
+      image: "img_image_2058.png",
+      title: "Leave-In Conditioning: Know It All",
+      author: "Garima Singh",
+      publishDate: "February 27, 2024",
+      link: "/blog/leave-in-conditioning",
+    },
+    {
+      id: 1,
+      image: "img_image_2058.png",
+      title: "Leave-In Conditioning: Know It All",
+      author: "Garima Singh",
+      publishDate: "February 27, 2024",
+      link: "/blog/leave-in-conditioning",
+    },
+    {
+      id: 1,
+      image: "img_image_2058.png",
+      title: "Leave-In Conditioning: Know It All",
+      author: "Garima Singh",
+      publishDate: "February 27, 2024",
+      link: "/blog/leave-in-conditioning",
+    },
+    // Add more articles as needed
+  ],
+};

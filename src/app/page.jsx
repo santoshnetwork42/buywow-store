@@ -15,6 +15,7 @@ import DeliveryInfoSection from "@/components/common/partials/DeliveryInfoSectio
 import ProductCategories from "@/components/partials/Home/ProductCategory";
 import {
   bestSellerData,
+  blogSectionData,
   concernSectionData,
   customerReviewSectionData,
   introCarousalData,
@@ -96,8 +97,9 @@ const Home = () => {
         <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* customer reviews section */}
           <CustomerReviewSection sectionData={customerReviewSectionData} />
+
           {/* blog section */}
-          {/* <BlogSection /> */}
+          <BlogSection sectionData={blogSectionData} />
           {/* instagram feed section */}
           {/* <VideoSection /> */}
           {/* value proposition section */}
