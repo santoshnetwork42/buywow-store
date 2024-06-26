@@ -27,12 +27,12 @@ export default function ProductCard({
           className="h-full w-full object-contain"
         />
       </div>
-      <div className="flex h-12 flex-wrap gap-[5px]">
+      <div className="flex h-14 flex-wrap gap-[4px] overflow-hidden">
         {features.map((feature, index) => (
           <Text
             key={index}
             as="p"
-            className={`h-fit truncate rounded-[5px] px-2.5 py-[3px] capitalize ${
+            className={`h-fit w-fit truncate rounded-[5px] px-2.5 py-[3px] capitalize ${
               index % 2 === 0 ? "bg-gray-100" : "bg-deep_orange-50"
             }`}
           >
@@ -40,11 +40,12 @@ export default function ProductCard({
           </Text>
         ))}
       </div>
+
       <div className="flex flex-1 flex-col gap-2">
         <div className="flex flex-1 flex-col">
           <Heading
             size="heading2xl"
-            as="h5"
+            as="h6"
             className="line-clamp-2 w-full capitalize leading-5"
           >
             {title}
