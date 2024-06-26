@@ -1,5 +1,4 @@
 import { Img, Text, Heading } from "@/components/common";
-import Link from "next/link";
 import React from "react";
 
 const CountdownTimer = ({

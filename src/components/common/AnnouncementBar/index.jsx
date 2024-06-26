@@ -1,5 +1,4 @@
-import { Img, Text, Heading } from "@/components/common";
-import Link from "next/link";
+import { Text } from "@/components/common";
 import React from "react";
 import CountdownTimer from "@/components/common/partials/CountdownTimer";
 

@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, Heading, Img, Text, Slider } from "@/components/common";
+import { Button, Heading } from "@/components/common";
 import ProductCarousel from "@/components/features/Carousel/ProductCarousel";
-import React, { Suspense } from "react";
+import React from "react";
 
 const NewLaunchSection = ({ newLaunchData }) => {
   return (

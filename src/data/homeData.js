@@ -438,3 +438,78 @@ export const instagramFeedData = {
   ],
   playButtonIcon: "img_forward.svg",
 };
+
+export const deliveryInfoData = {
+  items: [
+    {
+      id: 1,
+      icon: "img_delivery_1.png",
+      text: (
+        <>
+          Delivery within <br /> 3-5 days
+        </>
+      ),
+    },
+    {
+      id: 2,
+      icon: "img_delivery_2.png",
+      text: (
+        <>
+          Free Shipping on <br />
+          orders above ₹999
+        </>
+      ),
+    },
+    {
+      id: 3,
+      icon: "img_delivery_3.png",
+      text: (
+        <>
+          Easy return and <br />
+          refund policy
+        </>
+      ),
+    },
+  ],
+};
+
+export const productFeaturesData = {
+  features: [
+    {
+      id: 1,
+      icon: "img_wow_feature_1.png",
+      text: (
+        <>
+          Natural <br /> ingredients
+        </>
+      ),
+    },
+    {
+      id: 2,
+      icon: "img_wow_feature_2.png",
+      text: (
+        <>
+          no harsh <br /> chemicals
+        </>
+      ),
+    },
+    {
+      id: 3,
+      icon: "img_wow_feature_3.png",
+      text: (
+        <>
+          dermatologically <br /> tested
+        </>
+      ),
+    },
+    {
+      id: 4,
+      icon: "img_wow_feature_4.png",
+      text: (
+        <>
+          cruelty <br /> free
+        </>
+      ),
+    },
+  ],
+};

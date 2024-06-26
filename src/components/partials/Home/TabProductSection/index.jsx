@@ -1,7 +1,7 @@
 // components/BestSellerSection.jsx
 "use client";
 
-import { Button, Heading } from "@/components/common";
+import { Heading } from "@/components/common";
 import React from "react";
 import ProductCarousal from "@/components/features/Carousel/ProductCarousel";
 import TabComponent from "@/components/common/partials/TabComponent";

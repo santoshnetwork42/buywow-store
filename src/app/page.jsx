@@ -3,7 +3,6 @@ import ShopBanner from "@/components/partials/Home/ShopBanner";
 import ShopCategories from "@/components/partials/Home/ShopCategories";
 import ShopIngredients from "@/components/partials/Home/ShopIngredients";
 import VideoSection from "@/components/partials/Home/VideoSection";
-import WowFeatures from "@/components/partials/Home/WowFeatures";
 import React from "react";
 import NewLaunchSection from "@/components/partials/Home/NewLaunchSection";
 import OfferCarousal from "@/components/features/Carousel/OfferCarousel";
@@ -18,31 +17,33 @@ import {
   blogSectionData,
   concernSectionData,
   customerReviewSectionData,
+  deliveryInfoData,
   instagramFeedData,
   introCarousalData,
   newLaunchData,
   offersData,
   portfolioBannerData,
   productCategoryItems,
+  productFeaturesData,
   shopCategoriesData,
   shopIngredientsData,
   tabProductData,
   testimonialBannerData,
 } from "@/data/homeData";
 import TabProductSection from "@/components/partials/Home/TabProductSection";
+import ProductFeatures from "@/components/partials/Home/ProductFeatures";
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
   description:
     "Revitalize your skin with Vitamin C face wash and natural ingredients. Cruelty-free, dermatologically tested skincare on sale. Free shipping on orders above ₹999.",
-  //ogTitle:'...'
 };
 
 const Home = () => {
   return (
     <>
       {/* main content section */}
-      <div className="container-fluid mb-12 flex w-full flex-col items-center">
+      <div className="container-fluid mb-10 flex w-full flex-col items-center">
         {/* categories section */}
         <ProductCategories categories={productCategoryItems} />
 
@@ -52,8 +53,10 @@ const Home = () => {
           <IntroCarousal carousalData={introCarousalData} />
         </div>
 
-        {/* features list section */}
-        <WowFeatures />
+        <div className="container-xs mb-7 mt-[22px] flex sm:mt-6 md:mt-7 lg:my-8">
+          {/* features list section */}
+          <ProductFeatures features={productFeaturesData.features} />
+        </div>
 
         <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* new launches section */}
@@ -104,9 +107,9 @@ const Home = () => {
 
           {/* instagram feed section */}
           <VideoSection sectionData={instagramFeedData} />
-          {/* value proposition section */}
 
-          <DeliveryInfoSection />
+          {/* value proposition section */}
+          <DeliveryInfoSection data={deliveryInfoData} />
         </div>
       </div>
     </>

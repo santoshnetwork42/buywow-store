@@ -4,7 +4,7 @@ import {
   SliderItem,
   SliderItemSection,
 } from "@/components/common/partials/SliderItemSection";
-import React, { Suspense } from "react";
+import React from "react";
 
 export default function ShopCategories({ sectionData }) {
   const CustomSliderItem = (props) => (
