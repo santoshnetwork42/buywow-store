@@ -14,7 +14,7 @@ const BlogSection = ({ sectionData }) => {
       </Heading>
       <div className="flex w-full flex-col items-center gap-4 sm:gap-5 md:gap-6 lg:gap-7">
         <div className="no-scrollbar w-full overflow-x-auto">
-          <div className="flex w-max gap-3 sm:gap-4 lg:gap-5">
+          <div className="m-auto flex w-max gap-3 sm:gap-4 lg:gap-5">
             {articles.map((article) => (
               <BlogCard
                 key={article.id}

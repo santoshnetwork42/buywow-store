@@ -53,7 +53,7 @@ const SliderComponent = ({ items, className, sliderClassName, ...props }) => {
         onScroll={handleScroll}
       >
         <div
-          className={`relative mb-3 flex w-max ${sliderClassName || "gap-[5px] sm:gap-2 lg:gap-3"}`}
+          className={`relative m-auto mb-3 flex w-max ${sliderClassName || "gap-[5px] sm:gap-2 lg:gap-3"}`}
         >
           {items.map((item, index) => (
             <div

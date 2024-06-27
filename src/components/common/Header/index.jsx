@@ -8,6 +8,7 @@ import NavMenu from "@/components/common/partials/NavMenu";
 import { mainMenuItems } from "@/data/headerData";
 import SearchBar from "@/components/common/partials/SearchBar";
 import MobileMenu from "@/components/common/partials/MobileMenu";
+import { DownArrowIconSVG } from "@/assets/images/downArrow";
 
 export default function Header({ ...props }) {
   const [openMenus, setOpenMenus] = useState({});
@@ -53,13 +54,7 @@ export default function Header({ ...props }) {
             <Text size="text2xl" as="p" className="capitalize">
               {item.text}
             </Text>
-            <Img
-              src="img_arrow_down_black_900.svg"
-              width={8}
-              height={4}
-              alt={`${item.text} arrow`}
-              className="aspect-[8/4] h-auto w-[10px]"
-            />
+            <DownArrowIconSVG />
           </div>
           <NavMenu menuItems={item.submenu} isOpen={openMenus[index]} />
         </li>

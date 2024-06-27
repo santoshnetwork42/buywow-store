@@ -112,26 +112,6 @@ export const concernSectionData = {
       title: "Pigmentation1",
       link: "/concern/pigmentation",
     },
-    {
-      image: "img_image_2004_1.png",
-      title: "Pigmentation2",
-      link: "/concern/pigmentation",
-    },
-    {
-      image: "img_image_2004_1.png",
-      title: "Pigmentation3",
-      link: "/concern/pigmentation",
-    },
-    {
-      image: "img_image_2004_1.png",
-      title: "Pigmentation4",
-      link: "/concern/pigmentation",
-    },
-    {
-      image: "img_image_2004_1.png",
-      title: "Pigmentation5",
-      link: "/concern/pigmentation",
-    },
   ],
 };
 
@@ -171,26 +151,6 @@ export const shopCategoriesData = {
       image: "img_image_2055.png",
       title: "skin care",
       link: "/concern/dry-skin",
-    },
-    {
-      image: "img_image_2056.png",
-      title: "bath & body",
-      link: "/concern/acne",
-    },
-    {
-      image: "img_image_2056.png",
-      title: "bath & body",
-      link: "/concern/acne",
-    },
-    {
-      image: "img_image_2056.png",
-      title: "bath & body",
-      link: "/concern/acne",
-    },
-    {
-      image: "img_image_2056.png",
-      title: "bath & body",
-      link: "/concern/acne",
     },
     {
       image: "img_image_2056.png",

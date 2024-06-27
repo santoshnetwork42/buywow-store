@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Text, Img, Heading } from "@/components/common";
 import { CloseSVG, UserSVG } from "@/assets/images";
+import { DownArrowIconSVG } from "@/assets/images/downArrow";
 
 const MobileMenuItem = ({ item, closeMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +30,7 @@ const MobileMenuItem = ({ item, closeMenu }) => {
           >
             {item.text}
           </Text>
-          <Img
+          {/* <Img
             src="img_arrow_down_black_900.svg"
             width={12}
             height={6}
@@ -37,6 +38,12 @@ const MobileMenuItem = ({ item, closeMenu }) => {
             className={`h-[6px] w-[12px] transition-transform duration-300 ${
               isOpen ? "rotate-180" : ""
             }`}
+          /> */}
+          <DownArrowIconSVG
+            className={`mt-0.5 h-3 w-3 transition-transform duration-300 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+            strokeWidth={1.4}
           />
         </div>
         <div
