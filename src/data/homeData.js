@@ -84,7 +84,6 @@ export const offersData = [
     label: "Offer 3",
     linkUrl: "/offer3",
   },
-  // ... more offers
 ];
 
 export const concernSectionData = {

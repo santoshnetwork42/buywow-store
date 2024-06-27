@@ -43,7 +43,7 @@ const Home = () => {
   return (
     <>
       {/* main content section */}
-      <div className="container-fluid mb-10 flex w-full flex-col items-center">
+      <div className="mb-10 flex w-full flex-col items-center">
         {/* categories section */}
         <ProductCategories categories={productCategoryItems} />
 

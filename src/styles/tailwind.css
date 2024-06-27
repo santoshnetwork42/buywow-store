@@ -58,9 +58,6 @@ li:hover {
   .container-xs {
     @apply mx-auto w-full px-8;
   }
-  .container-fluid {
-    @apply mx-auto w-full;
-  }
 
   @media (max-width: 1200px) {
     .container-xs {

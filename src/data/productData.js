@@ -139,3 +139,9 @@ export const productData = [
     tags: ["natural", "vegan", "cruelty-free"],
   },
 ];
+
+export const breadcrumbItems = [
+  { label: "Home", href: "/" },
+  { label: "Collections", href: "/collections" },
+  { label: "hair care", href: "#" },
+];
