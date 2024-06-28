@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef } from "react";
 import styles from "@/components/features/Modal/Modal.module.scss";
 import { Heading } from "@/components/common";
@@ -7,7 +8,7 @@ const Modal = ({
   title = "",
   description = "",
   isOpen,
-  onClose,
+  onClose = () => {},
   children,
   mobileViewHeight,
   showCloseButtonOutOfBox = false,
