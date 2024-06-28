@@ -26,7 +26,11 @@ const Text = ({
 
   return (
     <Component
-      className={twMerge("font-outfit text-black-900", sizes[size], className)}
+      className={twMerge(
+        "font-outfit leading-[1.25] text-black-900",
+        sizes[size],
+        className,
+      )}
       {...restProps}
     >
       {children}

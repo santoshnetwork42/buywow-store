@@ -4,14 +4,14 @@ import Link from "next/link";
 import { Heading, Text, Img } from "@/components/common";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 
-const FooterSection = ({ section, isOpen, onToggle, isDesktop }) => {
+const FooterSection = ({ section, isOpen, onToggle }) => {
   return (
     <div
-      className={`flex flex-col ${isOpen || isDesktop ? "gap-2 sm:gap-3 md:gap-3 lg:gap-5" : "gap-0"} transition-gap duration-300`}
+      className={`flex flex-col ${isOpen ? "gap-2 sm:gap-3 md:gap-3 lg:gap-5" : "gap-0 lg:gap-5"} transition-gap duration-300`}
     >
       {section.title ? (
         <>
-          <div className={isDesktop ? "hidden" : ""}>
+          <div className="lg:hidden">
             <button
               onClick={onToggle}
               className="flex w-full items-center justify-between"
@@ -29,7 +29,7 @@ const FooterSection = ({ section, isOpen, onToggle, isDesktop }) => {
           </div>
           <Heading
             as="h6"
-            className={`capitalize !text-white-a700_01 ${isDesktop ? "block" : "hidden"}`}
+            className={`hidden capitalize !text-white-a700_01 lg:block`}
           >
             {section.title}
           </Heading>
@@ -37,8 +37,8 @@ const FooterSection = ({ section, isOpen, onToggle, isDesktop }) => {
       ) : null}
       <ul
         className={`flex flex-col gap-1.5 overflow-hidden transition-all duration-300 ease-in-out sm:gap-1.5 lg:gap-2.5 ${
-          isOpen || isDesktop ? "max-h-96" : "max-h-0"
-        } }`}
+          isOpen ? "max-h-96" : "max-h-0 lg:max-h-96"
+        }`}
       >
         {section.links.map((link, linkIndex) => (
           <li

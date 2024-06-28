@@ -39,7 +39,6 @@ export const bestSellerData = {
   ],
   products: {
     all: productData,
-    // Add more products for 'all' category
     facewash: productData,
     shampoo: productData,
     "hair oil": productData,

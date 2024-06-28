@@ -4,14 +4,12 @@
 import React, { useState } from "react";
 import { Heading, Text, Img } from "@/components/common";
 import { footerData } from "@/data/footerData";
-import { useDeviceWidth } from "@/utils/useDeviceWidth";
 import FooterSection from "@/components/common/partials/FooterSection";
 import Link from "next/link";
 
 const Footer = ({ className }) => {
   const data = footerData;
   const [openSections, setOpenSections] = useState({});
-  const width = useDeviceWidth();
 
   const toggleSection = (index) => {
     setOpenSections((prev) => ({
@@ -19,8 +17,6 @@ const Footer = ({ className }) => {
       [index]: !prev[index],
     }));
   };
-
-  const isDesktop = width >= 992;
 
   return (
     <footer
@@ -75,7 +71,6 @@ const Footer = ({ className }) => {
                 section={section}
                 isOpen={openSections[index]}
                 onToggle={() => toggleSection(index)}
-                isDesktop={isDesktop}
               />
             ))}
           </div>

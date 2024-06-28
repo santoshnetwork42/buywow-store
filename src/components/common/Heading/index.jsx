@@ -13,7 +13,7 @@ const sizes = {
   headingxl: "text-base sm:text-lg font-semibold",
   heading2xl: "text-base sm:text-lg lg:text-xl font-semibold",
   heading3xl: "text-[22px] font-bold",
-  heading4xl: "text-2xl font-semibold",
+  heading4xl: "text-[18px] sm:text-[20px] lg:text-[24px] font-semibold",
   heading5xl: "text-[28px] font-semibold",
   heading6xl: "text-[24px] sm:text-[28px] lg:text-[32px] font-semibold",
   heading8xl: "text-[52px] font-semibold",
@@ -30,7 +30,11 @@ const Heading = ({
 
   return (
     <Component
-      className={twMerge("font-outfit text-black-900", sizes[size], className)}
+      className={twMerge(
+        "font-outfit capitalize leading-[1.25] text-black-900",
+        sizes[size],
+        className,
+      )}
       {...restProps}
     >
       {children}
