@@ -11,11 +11,11 @@ import {
 import Breadcrumb from "@/components/common/Breadcrumb";
 import Header from "@/components/common/Header";
 import ProductCard from "@/components/features/Card/ProductCard";
-import AutoHomepageWireframeProductCard from "@/components/partials/CollectionPage/AutoHomepageWireframeProductCard";
-import CollectionMetadata from "@/components/partials/CollectionPage/CollectionMetadata";
-import CollectionPageBanner from "@/components/partials/CollectionPage/CollectionPageBanner";
-import AutoHomepageWireframeKeywords from "@/components/partials/CollectionPage/DeliveryInfoSection";
-import RecentlyViewedSection from "@/components/partials/CollectionPage/RecentlyViewedSection";
+import AutoHomepageWireframeProductCard from "@/components/partials/Collection/AutoHomepageWireframeProductCard";
+import CollectionMetadata from "@/components/partials/Collection/CollectionMetadata";
+import CollectionPageBanner from "@/components/partials/Collection/CollectionPageBanner";
+import AutoHomepageWireframeKeywords from "@/components/partials/Collection/DeliveryInfoSection";
+import RecentlyViewedSection from "@/components/partials/Collection/RecentlyViewedSection";
 import ShopCategories from "@/components/partials/Home/ShopCategories";
 import {
   exploreMoreData,
