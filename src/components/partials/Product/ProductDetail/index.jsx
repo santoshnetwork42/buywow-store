@@ -15,14 +15,11 @@ const ProductDetail = () => {
 
       <div className="order-1 md:order-2">
         <div className="flex flex-col">
-          <Text className="line-clamp-2 font-medium" as="p" size="text4xl">
+          <Text className="line-clamp-2 font-medium" as="p" size="text2xl">
             {productDetail.title}
           </Text>
 
-          <Text
-            as="p"
-            className="line-clamp-3 w-full text-[11px] !font-light leading-[130%]"
-          >
+          <Text as="p" className="line-clamp-3 w-full !font-light" size="texts">
             {productDetail?.benefits}
           </Text>
         </div>

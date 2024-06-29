@@ -9,15 +9,15 @@ const CountdownTimer = ({
   flashSaleDiscount,
 }) => {
   const TimeUnit = ({ value, label }) => (
-    <div className="mx-1 flex flex-1 flex-col items-center rounded-[2px] bg-white-a700_01 px-1 py-0.5">
+    <div className="mx-1 flex flex-1 flex-col items-center gap-1 rounded-[2px] bg-white-a700_01 px-1 py-0.5">
       <Heading
-        size="headings"
+        size="headinglg"
         as="p"
         className="h-[15px] w-[15px] !text-blue_gray-300"
       >
         {value.toString().padStart(2, "0")}
       </Heading>
-      <Text size="texts" as="p">
+      <Text size="textxxs" as="p">
         {label}
       </Text>
     </div>

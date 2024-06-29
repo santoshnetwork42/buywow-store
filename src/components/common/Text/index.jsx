@@ -2,6 +2,7 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 
 const sizes = {
+  textxxs: "text-[10px] font-normal not-italic",
   textxs: "text-xs font-normal not-italic",
   texts: "text-sm font-normal not-italic",
   textbase: "text-base font-normal not-italic",

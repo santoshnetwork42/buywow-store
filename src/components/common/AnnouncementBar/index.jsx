@@ -14,6 +14,7 @@ const AnnouncementBar = ({
         <Text
           as="p"
           className="capitalize !text-white-a700_01 max-lg:hidden lg:w-[28%]"
+          size="texts"
         >
           {leftText}
         </Text>
@@ -24,7 +25,7 @@ const AnnouncementBar = ({
               flashSaleDiscount={flashSaleDiscount}
             />
           ) : (
-            <Text as="p" className="py-0.5 !text-white-a700_01">
+            <Text as="p" className="py-0.5 !text-white-a700_01" size="texts">
               {centerContent.centerText}
             </Text>
           )}
@@ -32,6 +33,7 @@ const AnnouncementBar = ({
         <Text
           as="p"
           className="text-end capitalize !text-white-a700_01 max-lg:hidden lg:w-[28%]"
+          size="texts"
         >
           {rightText}
         </Text>
