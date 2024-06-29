@@ -17,7 +17,7 @@ const CountdownTimer = ({
       >
         {value.toString().padStart(2, "0")}
       </Heading>
-      <Text size="textxs" as="p">
+      <Text size="texts" as="p">
         {label}
       </Text>
     </div>
