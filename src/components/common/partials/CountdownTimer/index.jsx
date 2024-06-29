@@ -33,7 +33,11 @@ const CountdownTimer = ({
           alt="sale image"
           className="h-[16px] w-[16px] object-contain"
         />
-        <Text as="p" className="!text-white-a700_01 max-sm:text-xs">
+        <Text
+          as="p"
+          className="!text-white-a700_01 max-sm:text-xs"
+          size="texts"
+        >
           Flash Sale up to {flashSaleDiscount}% OFF for
         </Text>
       </div>
