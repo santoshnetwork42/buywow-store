@@ -1,5 +1,26 @@
 import { productData } from "@/data/productData";
 
+export const breadcrumbItems = [
+  { label: "Home", href: "/" },
+  { label: "Collections", href: "/collections" },
+  { label: "hair care", href: "#" },
+];
+
+export const bannerData = {
+  link: "/collections/hair-care",
+  desktopImg: {
+    src: "img_collection_banner.png",
+    height: 400,
+    width: 1340,
+  },
+  mobileImg: {
+    src: "img_collection_banner_mobile.png",
+    height: 200,
+    width: 350,
+  },
+  alt: "hair care",
+};
+
 export const recentlyViewedData = {
   title: "Recently Viewed",
   productsData: productData,
@@ -136,5 +157,32 @@ export const metadataData = {
     title: "Shop by Ingredients",
     content:
       "Apple Cider Vinegar | Aloe Vera | Amla | Activated Charcoal | Argan Oil | Coconut | Fragrance | Hemp| Himalayan Rose | Macadamia | Men's Care | Multani Mitti | Niacinamide | Red Onion Black Seed Oil | Retinol | Rice water | Rosemary | Sugarcane | Ubtan Range | Vitamin C",
+  },
+};
+
+export const productCollectionData = {
+  title: "Shop By type",
+  sortOptions: [
+    { value: "highest_rating", label: "Highest Rating" },
+    { value: "lowest_price", label: "Lowest Price" },
+    { value: "highest_price", label: "Highest Price" },
+  ],
+  categories: [
+    "all",
+    "facewash",
+    "shampoo",
+    "hair oil",
+    "serum",
+    "skin care",
+    "fragrances",
+  ],
+  products: {
+    all: productData,
+    facewash: productData,
+    shampoo: productData,
+    "hair oil": productData,
+    serum: productData,
+    "skin care": productData,
+    fragrances: productData,
   },
 };

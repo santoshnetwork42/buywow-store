@@ -15,7 +15,7 @@ export default function ProductCard({
 }) {
   return (
     <div
-      className={`flex flex-col justify-start gap-2 self-stretch rounded-lg p-2 shadow-xs md:gap-3 ${className}`}
+      className={`flex flex-col justify-start gap-2 self-stretch rounded-lg p-[5px] shadow-xs md:gap-3 md:p-2 ${className}`}
       {...props}
     >
       <div className="overflow-hidden rounded-lg">
