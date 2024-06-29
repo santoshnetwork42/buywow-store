@@ -1,38 +1,50 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-const sizes = {
-  textmd: "text-[11px] font-medium",
-  text4xl: "text-[18px] font-medium",
-  text5xl: "text-base sm:text-lg lg:text-xl font-medium",
-  text6xl: "text-2xl font-medium",
-  headingxs: "text-[10px] font-semibold",
-  headings: "text-xs font-bold",
-  headingmd: "text-sm font-bold",
-  headinglg: "text-base font-semibold",
-  headingxl: "text-base sm:text-lg font-semibold",
-  heading2xl: "text-base sm:text-lg lg:text-xl font-semibold",
-  heading3xl: "text-[22px] font-bold",
-  heading4xl: "text-[18px] sm:text-[20px] lg:text-[24px] font-semibold",
-  heading5xl: "text-[28px] font-semibold",
-  heading6xl: "text-[24px] sm:text-[28px] lg:text-[32px] font-semibold",
-  heading8xl: "text-[52px] font-semibold",
+const headingSizes = {
+  xs: "text-xs font-medium",
+  sm: "text-sm font-medium",
+  base: "text-base font-medium",
+  lg: "text-lg font-medium",
+  xl: "text-xl font-medium",
+  "2xl": "text-2xl font-semibold",
+  "3xl": "text-3xl font-semibold",
+  "4xl": "text-4xl font-semibold",
+  "5xl": "text-5xl font-semibold",
+  "6xl": "text-6xl font-semibold",
+};
+
+const responsiveHeadingSizes = {
+  xs: "text-[10px] md:text-xs font-medium",
+  sm: "text-xs md:text-sm font-medium",
+  base: "text-xs sm:text-sm lg:text-base font-medium",
+  lg: "text-sm sm:text-base lg:text-lg font-medium",
+  xl: "text-base sm:text-lg lg:text-xl font-medium",
+  "2xl": "text-lg sm:text-xl lg:text-2xl font-semibold",
+  "3xl": "text-xl sm:text-2xl lg:text-3xl font-semibold",
+  "4xl": "text-2xl sm:text-3xl lg:text-4xl font-semibold",
+  "5xl": "text-3xl sm:text-4xl lg:text-5xl font-semibold",
+  "6xl": "text-4xl sm:text-5xl lg:text-6xl font-semibold",
 };
 
 const Heading = ({
   children,
   className = "",
-  size = "headinglg",
+  size = "lg",
+  responsive = true,
   as,
   ...restProps
 }) => {
-  const Component = as || "h6";
+  const Component = as || "h2";
+  const sizeClasses = responsive
+    ? responsiveHeadingSizes[size]
+    : headingSizes[size];
 
   return (
     <Component
       className={twMerge(
-        "font-outfit capitalize leading-[1.25] text-black-900",
-        sizes[size],
+        sizeClasses,
+        "font-outfit capitalize leading-tight text-gray-900",
         className,
       )}
       {...restProps}

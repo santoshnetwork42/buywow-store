@@ -1,37 +1,49 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-const sizes = {
-  textxxs: "text-[10px] font-normal not-italic",
-  textxs: "text-xs font-normal not-italic",
-  texts: "text-sm font-normal not-italic",
-  textbase: "text-base font-normal not-italic",
-  textlg: "text-lg font-normal not-italic",
-  textxl: "text-xl font-normal not-italic",
-  text2xl: "text-2xl font-normal not-italic",
-  text3xl: "text-3xl font-normal not-italic",
-  text4xl: "text-4xl font-normal not-italic",
-  text5xl: "text-5xl font-normal not-italic",
-  text6xl: "text-6xl font-normal not-italic",
-  text7xl: "text-7xl font-normal not-italic",
-  text8xl: "text-8xl font-normal not-italic",
-  text9xl: "text-9xl font-normal not-italic",
+const textSizes = {
+  xxs: "text-[10px]",
+  xs: "text-xs",
+  sm: "text-sm",
+  base: "text-base",
+  lg: "text-lg",
+  xl: "text-xl",
+  "2xl": "text-2xl",
+  "3xl": "text-3xl",
+  "4xl": "text-4xl",
+  "5xl": "text-5xl",
+  "6xl": "text-6xl",
+};
+
+const responsiveTextSizes = {
+  xs: "text-[10px] md:text-xs",
+  sm: "text-xs md:text-sm",
+  base: "text-xs sm:text-sm lg:text-base",
+  lg: "text-sm sm:text-base lg:text-lg",
+  xl: "text-base sm:text-lg lg:text-xl",
+  "2xl": "text-lg sm:text-xl lg:text-2xl",
+  "3xl": "text-xl sm:text-2xl lg:text-3xl",
+  "4xl": "text-2xl sm:text-3xl lg:text-4xl",
+  "5xl": "text-3xl sm:text-4xl lg:text-5xl",
+  "6xl": "text-4xl sm:text-5xl lg:text-6xl",
 };
 
 const Text = ({
   children,
   className = "",
+  size = "base",
+  responsive = true,
   as,
-  size = "textxl",
   ...restProps
 }) => {
   const Component = as || "p";
+  const sizeClasses = responsive ? responsiveTextSizes[size] : textSizes[size];
 
   return (
     <Component
       className={twMerge(
-        "font-outfit leading-[1.25] text-black-900",
-        sizes[size],
+        sizeClasses,
+        "font-outfit font-normal leading-tight text-gray-900",
         className,
       )}
       {...restProps}
