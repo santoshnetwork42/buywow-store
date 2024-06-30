@@ -23,22 +23,21 @@ const CustomerReviewCard = ({ reviewData, ...props }) => {
         className={`w-full rounded object-contain sm:rounded-md lg:rounded-lg ${imageSource.aspectRatio}`}
       />
       <div className="flex flex-col gap-2 md:gap-3">
-        <Text size="text3xl" as="p" className="!font-medium max-sm:text-sm">
+        <Heading size="base" as="h4" className="text-sm" responsive>
           {userInfo.name}, {userInfo.age} y/o
-        </Text>
-        <Text size="text3xl" as="p" className="w-full !leading-[140%]">
+        </Heading>
+        <Text size="base" as="p" className="w-full" responsive>
           {reviewText}
         </Text>
         <div className="flex items-center justify-between gap-5">
-          <Text size="text3xl" as="p" className="shrink leading-[140%]">
-            <span className="text-xs font-normal text-black-900 lg:text-sm">
+          <div className="shrink">
+            <Text size="sm" as="p" responsive>
               Concern:
-            </span>
-            <br />
-            <span className="text-sm font-medium text-black-900 lg:text-base">
+            </Text>
+            <Heading size="base" as="h5" className="text-sm" responsive>
               {skinConcerns.join(", ")}
-            </span>
-          </Text>
+            </Heading>
+          </div>
           <div className="flex items-center justify-center gap-2 rounded bg-lime-100_01 p-2">
             <div className="flex aspect-square w-[48px] shrink-0 flex-col items-center justify-center rounded bg-white-a700_01 md:aspect-[48/56]">
               <Img
@@ -49,28 +48,20 @@ const CustomerReviewCard = ({ reviewData, ...props }) => {
                 className="rounded-sm object-contain"
               />
             </div>
-            <div className="flex flex-col gap-[6px]">
-              <Text as="p" className="line-clamp-1 !text-sm !font-medium">
+            <div className="flex flex-col gap-1">
+              <Heading as="h5" size="sm" className="line-clamp-1">
                 {relatedProduct.name}
-              </Text>
+              </Heading>
               <div className="flex items-end justify-between gap-4 md:gap-5 lg:gap-6">
                 <div className="flex items-center gap-1">
-                  <Heading
-                    size="headingmd"
-                    as="p"
-                    className="!font-semibold capitalize"
-                  >
+                  <Text size="sm" as="p" className="!font-semibold capitalize">
                     {relatedProduct.currentPrice}
-                  </Heading>
-                  <Text
-                    size="textlg"
-                    as="p"
-                    className="capitalize line-through"
-                  >
+                  </Text>
+                  <Text size="xs" as="p" className="capitalize line-through">
                     {relatedProduct.originalPrice}
                   </Text>
                 </div>
-                <Button className="rounded-full bg-yellow-900 px-3 py-1 text-center text-xs font-medium capitalize text-white-a700_01">
+                <Button className="rounded-full bg-yellow-900 px-3 py-1 text-center text-xs font-medium capitalize text-white-a700_01 sm:text-sm lg:text-sm">
                   {relatedProduct.addToCartText}
                 </Button>
               </div>

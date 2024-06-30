@@ -80,7 +80,12 @@ const SliderComponent = ({ items, className, sliderClassName, ...props }) => {
         </div>
         <div className="relative m-auto mx-4 flex sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
           <div className="flex w-full items-center justify-center gap-[15px]">
-            <Text size="text3xl" as="p" className="!font-medium uppercase">
+            <Text
+              size="base"
+              as="p"
+              className="!font-medium uppercase"
+              responsive
+            >
               {`${currentItem} / ${items.length}`}
             </Text>
             <div className="hidden flex-1 justify-center gap-4 sm:flex">
@@ -89,7 +94,7 @@ const SliderComponent = ({ items, className, sliderClassName, ...props }) => {
                 width={28}
                 height={28}
                 alt="Previous slide"
-                className="h-[20px] w-[20px] cursor-pointer md:h-6 md:w-6 lg:h-7 lg:w-7"
+                className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
                 onClick={() => scrollByItem(-1)}
               />
               <Img
@@ -97,7 +102,7 @@ const SliderComponent = ({ items, className, sliderClassName, ...props }) => {
                 width={27}
                 height={28}
                 alt="Next slide"
-                className="h-[20px] w-[20px] cursor-pointer object-contain md:h-6 md:w-6 lg:h-7 lg:w-7"
+                className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
                 onClick={() => scrollByItem(1)}
               />
             </div>

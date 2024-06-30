@@ -5,7 +5,7 @@ import React from "react";
 
 const Benefits = () => {
   return (
-    <div className="container-xs grid grid-cols-2 gap-2 md:grid-cols-4">
+    <div className="container-main grid grid-cols-2 gap-2 md:grid-cols-4">
       {productBenefits?.map((item) => {
         return (
           <div className="flex h-fit w-auto max-w-72 flex-col items-center justify-between gap-1">

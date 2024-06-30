@@ -1,30 +1,56 @@
-import { Heading } from "@/components/common";
+import { Heading, Text } from "@/components/common";
 
-const CollectionMetadataSection = ({ title, content }) => (
-  <div className="flex flex-col gap-2">
-    <Heading
-      size="text5xl"
-      as="h2"
-      className="!font-inter !font-normal leading-[140%]"
-    >
-      <span className="font-outfit font-semibold text-black-900">{title}</span>
+const CollectionMetadataSection = ({
+  title,
+  content,
+  listTitle,
+  listContent,
+}) => (
+  <div className="flex flex-col">
+    <Heading size="xl" as="h2" className="!leading-[140%]" responsive>
+      {title}
     </Heading>
-    <span className="font-outfit text-black-900">{content}</span>
+    {content && (
+      <Text size="xl" as="p" className="!leading-[140%]" responsive>
+        {content}
+      </Text>
+    )}
+    {listTitle && (
+      <Text
+        size="xl"
+        as="p"
+        className={`${content && "mt-4"} !leading-[140%]`}
+        responsive
+      >
+        {listTitle}
+      </Text>
+    )}
+    {listContent && (
+      <ul className="mt-4 list-disc space-y-0.5 pl-6">
+        {listContent.map((item, index) => (
+          <li key={index}>
+            <Text size="xl" as="p" className="!leading-[140%]" responsive>
+              {item}
+            </Text>
+          </li>
+        ))}
+      </ul>
+    )}
   </div>
 );
 
 // Main component that uses the data object and sub-components
 const CollectionMetadata = ({ metadataData }) => (
-  <div className="container-xs flex flex-col items-center gap-12 p-5">
-    <div className="flex flex-col gap-6 self-stretch">
-      {Object.keys(metadataData).map((key) => (
-        <CollectionMetadataSection
-          key={key}
-          title={metadataData[key].title}
-          content={metadataData[key].content}
-        />
-      ))}
-    </div>
+  <div className="mt-5 flex flex-col gap-6 sm:gap-6 lg:mt-3 lg:gap-8">
+    {Object.entries(metadataData).map(([key, data]) => (
+      <CollectionMetadataSection
+        key={key}
+        title={data.title}
+        content={data.content}
+        listTitle={data.listTitle}
+        listContent={data.listContent}
+      />
+    ))}
   </div>
 );
 

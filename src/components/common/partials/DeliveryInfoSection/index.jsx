@@ -15,8 +15,9 @@ const DeliveryInfoItem = ({ icon, text }) => (
     </div>
     <Text
       as="p"
-      size="text3xl"
+      size="base"
       className="line-clamp-2 w-fit text-center capitalize md:text-left"
+      responsive
     >
       {text}
     </Text>

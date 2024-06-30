@@ -1,10 +1,16 @@
 import Breadcrumb from "@/components/common/Breadcrumb";
+import CollectionMetadata from "@/components/partials/Collection/CollectionMetadata";
 import CollectionPageBanner from "@/components/partials/Collection/CollectionPageBanner";
 import ProductCollectionSection from "@/components/partials/Collection/ProductCollectionSection";
+import RecentlyViewedSection from "@/components/partials/Collection/RecentlyViewedSection";
+import ShopCategories from "@/components/partials/Home/ShopCategories";
 import {
   bannerData,
   breadcrumbItems,
+  exploreMoreData,
+  metadataData,
   productCollectionData,
+  recentlyViewedData,
 } from "@/data/collectionData";
 import React from "react";
 
@@ -19,7 +25,7 @@ const Collections = () => {
     <>
       <div className="mb-10 flex w-full flex-col items-center">
         {/* main navigation header section */}
-        <div className="container-xs mb-7 mt-3 flex flex-col gap-3">
+        <div className="container-main mb-7 mt-3 flex flex-col gap-3">
           {/* breadcrumb section */}
           <Breadcrumb items={breadcrumbItems} />
 
@@ -31,19 +37,23 @@ const Collections = () => {
         </div>
 
         {/* main content section */}
-        <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
+        <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* product category header section */}
           <ProductCollectionSection collectionData={productCollectionData} />
         </div>
 
-        {/* explore more section */}
-        {/* <ShopCategories sectionData={exploreMoreData} /> */}
+        <div className="container-main my-8 w-full bg-lime-50 pb-4 pt-3 sm:my-10 md:pb-5 md:pt-4 lg:my-12">
+          {/* explore more section */}
+          <ShopCategories sectionData={exploreMoreData} />
+        </div>
 
-        {/* recently viewed section */}
-        {/* <RecentlyViewedSection recentlyViewedData={recentlyViewedData} /> */}
+        <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
+          {/* recently viewed section */}
+          <RecentlyViewedSection recentlyViewedData={recentlyViewedData} />
 
-        {/* blog content section */}
-        {/* <CollectionMetadata metadataData={metadataData} /> */}
+          {/* blog content section */}
+          <CollectionMetadata metadataData={metadataData} />
+        </div>
       </div>
     </>
   );

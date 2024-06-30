@@ -14,7 +14,7 @@ const TabProductSection = ({ title, categories, products }) => {
 
   return (
     <div className="flex flex-col items-center gap-4 md:gap-3">
-      <Heading size="heading6xl" as="h1" className="capitalize">
+      <Heading size="heading" as="h1" responsive>
         {title}
       </Heading>
       <TabComponent

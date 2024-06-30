@@ -14,21 +14,17 @@ const BlogCard = ({ article, className, ...props }) => {
           width={434}
           height={228}
           alt={`Article image for ${title}`}
-          className="aspect-[434/228] h-full w-full object-contain"
+          className="aspect-[434/228] w-full object-contain"
         />
         <div className="flex flex-col items-start gap-[7px] self-stretch">
-          <Heading
-            size="heading2xl"
-            as="h5"
-            className="w-full truncate text-lg capitalize"
-          >
+          <Heading size="xl" as="h3" className="w-full truncate" responsive>
             {title}
           </Heading>
           <div className="flex justify-between gap-5 self-stretch">
-            <Text size="text3xl" as="p" className="truncate text-sm capitalize">
+            <Text size="base" as="p" className="truncate text-sm capitalize">
               {author}
             </Text>
-            <Text size="text3xl" as="p" className="truncate text-sm capitalize">
+            <Text size="base" as="p" className="truncate text-sm capitalize">
               {publishDate}
             </Text>
           </div>

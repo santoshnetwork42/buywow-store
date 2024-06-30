@@ -6,7 +6,7 @@ const Button = ({ children, className, leftIcon, rightIcon, ...restProps }) => {
   return (
     <button
       className={twMerge(
-        "flex-row items-center justify-center rounded-full bg-yellow-900 px-4 text-center font-medium text-white-a700_01 sm:text-base lg:text-lg",
+        "flex-row items-center justify-center rounded-full bg-yellow-900 px-4 py-1 text-center font-medium text-white-a700_01 sm:text-base lg:text-lg",
         className,
       )}
       {...restProps}

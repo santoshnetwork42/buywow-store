@@ -13,8 +13,9 @@ const FeatureItem = ({ icon, text }) => (
     />
     <Text
       as="p"
-      size="text3xl"
-      className="line-clamp-2 w-fit whitespace-pre-line text-center capitalize lg:text-left"
+      size="base"
+      className="line-clamp-2 w-fit text-center capitalize lg:text-left"
+      responsive
     >
       {text}
     </Text>

@@ -12,8 +12,8 @@ const CustomerReviewSection = ({ sectionData }) => {
 
   return (
     <section className="self-stretch">
-      <div className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5">
-        <Heading size="heading6xl" as="h1" className="text-center capitalize">
+      <div className="flex flex-col items-center gap-5">
+        <Heading size="heading" as="h1" responsive>
           {title}
         </Heading>
         <SliderComponent

@@ -5,7 +5,7 @@ import React from "react";
 const ProductCategory = ({ image, label }) => (
   <Link
     href="/products"
-    className="flex w-20 flex-grow-0 flex-col items-center"
+    className="flex w-20 grow-0 flex-col items-center gap-1.5"
   >
     <div className="overflow-hidden rounded-full">
       <Img
@@ -13,14 +13,10 @@ const ProductCategory = ({ image, label }) => (
         alt={label}
         width={56}
         height={56}
-        className="h-14 w-14 object-contain"
+        className="aspect-square w-14 object-contain"
       />
     </div>
-    <Text
-      size="textxl"
-      as="span"
-      className="mt-1.5 line-clamp-2 w-[74px] text-center capitalize leading-[18px]"
-    >
+    <Text size="sm" as="span" className="line-clamp-2 text-center capitalize">
       {label}
     </Text>
   </Link>

@@ -16,14 +16,17 @@ export default function NavMenu({ menuItems, isOpen }) {
           {menuItems.map((item, itemIndex) =>
             item.link ? (
               <Link key={itemIndex} href={item.link} className="self-center">
-                <Text className="!text-black-600 max-w-28 truncate text-base font-normal">
+                <Text size="sm" as="p" className="max-w-28 truncate" responsive>
                   {item.text}
                 </Text>
               </Link>
             ) : (
               <Text
                 key={itemIndex}
-                className="!text-black-600 self-center text-base font-normal"
+                size="sm"
+                responsive
+                as="p"
+                className="self-center"
               >
                 {item.text}
               </Text>

@@ -16,6 +16,7 @@ const textSizes = {
 };
 
 const responsiveTextSizes = {
+  xxs: "text-[8px] md:text-[10px]",
   xs: "text-[10px] md:text-xs",
   sm: "text-xs md:text-sm",
   base: "text-xs sm:text-sm lg:text-base",
@@ -32,7 +33,7 @@ const Text = ({
   children,
   className = "",
   size = "base",
-  responsive = true,
+  responsive = false,
   as,
   ...restProps
 }) => {
@@ -43,7 +44,7 @@ const Text = ({
     <Component
       className={twMerge(
         sizeClasses,
-        "font-outfit font-normal leading-tight text-gray-900",
+        "font-outfit font-normal !leading-tight text-gray-900",
         className,
       )}
       {...restProps}

@@ -9,7 +9,7 @@ const BlogSection = ({ sectionData }) => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-5">
-      <Heading size="heading6xl" as="h1" className="text-center capitalize">
+      <Heading size="heading" as="h1" responsive>
         {title}
       </Heading>
       <div className="flex w-full flex-col items-center gap-4 sm:gap-5 md:gap-6 lg:gap-7">
@@ -24,14 +24,8 @@ const BlogSection = ({ sectionData }) => {
             ))}
           </div>
         </div>
-        <Button className="rounded-[24px] bg-yellow-900 px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3">
-          <Heading
-            as="span"
-            size="text5xl"
-            className="capitalize !leading-[125%] text-white-a700_01"
-          >
-            {buttonText}
-          </Heading>
+        <Button className="rounded-full bg-yellow-900 px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3">
+          {buttonText}
         </Button>
       </div>
     </div>

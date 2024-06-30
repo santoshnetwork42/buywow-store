@@ -22,7 +22,7 @@ function RootLayout({ children }) {
             leftText="Free Shipping On Orders Above ₹999"
             centerContent={{
               isTimer: true,
-              centerText: "Free Shipping On Orders Above ₹999",
+              centerText: "Flash Sale up to 60% OFF for",
               days: 1,
               hours: 5,
               minutes: 54,

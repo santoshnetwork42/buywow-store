@@ -24,7 +24,7 @@ const Footer = ({ className }) => {
     >
       <div className="flex w-full flex-col justify-between gap-5 sm:flex-row">
         <div className="flex flex-col gap-7">
-          <div className="flex flex-col gap-[28px]">
+          <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-7">
             <Img
               src={data.logo.src}
               width={data.logo.width}
@@ -32,15 +32,12 @@ const Footer = ({ className }) => {
               alt={data.logo.alt}
               className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
             />
-            <Text
-              as="p"
-              className="text-sm !leading-[130%] !text-white-a700_01"
-            >
+            <Text as="p" size="sm" className="text-white-a700_01">
               {data.description}
             </Text>
           </div>
           <div className="hidden flex-col gap-12 sm:flex">
-            <div className="flex gap-[15px]">
+            <div className="flex gap-3 md:gap-4">
               {data.socialIcons.map((icon, index) => (
                 <Link
                   key={index}
@@ -58,7 +55,7 @@ const Footer = ({ className }) => {
                 </Link>
               ))}
             </div>
-            <Text as="p" className="!text-white-a700_01">
+            <Text as="p" size="sm" className="text-white-a700_01" responsive>
               {data.copyright}
             </Text>
           </div>
@@ -82,7 +79,11 @@ const Footer = ({ className }) => {
                 target={link.target}
                 rel={link.rel}
               >
-                <Heading as="h6" className="capitalize !text-white-a700_01">
+                <Heading
+                  as="h6"
+                  size="base"
+                  className="font-semibold capitalize text-white-a700_01"
+                >
                   {link.text}
                 </Heading>
               </Link>
@@ -90,7 +91,7 @@ const Footer = ({ className }) => {
           </div>
         </div>
         <div className="mt-5 flex items-center justify-between sm:hidden">
-          <div className="flex gap-[15px]">
+          <div className="flex gap-3 md:gap-4">
             {data.socialIcons.map((icon, index) => (
               <Link
                 key={index}
@@ -109,7 +110,7 @@ const Footer = ({ className }) => {
               </Link>
             ))}
           </div>
-          <Text as="p" className="!text-white-a700_01">
+          <Text as="p" size="sm" className="text-white-a700_01" responsive>
             {data.copyright}
           </Text>
         </div>
