@@ -3,7 +3,7 @@ import { productData } from "@/data/productData";
 export const breadcrumbItems = [
   { label: "Home", href: "/" },
   { label: "Collections", href: "/collections" },
-  { label: "hair care", href: "#" },
+  // { label: "hair care", href: "#" },
 ];
 
 export const bannerData = {

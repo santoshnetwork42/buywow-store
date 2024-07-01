@@ -5,6 +5,8 @@ import ProductCard from "@/components/features/Card/ProductCard";
 import SliderComponent from "@/components/features/Slider/SliderScroll";
 
 const ProductCarousel = ({ products, className, ...props }) => {
+  if (!Array.isArray(products)) return null; // Validate if products is an array
+
   const items = products.map((product) => (
     <ProductCard
       key={product.id}

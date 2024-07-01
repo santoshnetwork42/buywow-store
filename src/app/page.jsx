@@ -43,7 +43,7 @@ const Home = () => {
   return (
     <>
       {/* main content section */}
-      <div className="mb-10 flex w-full flex-col items-center">
+      <div className="mb-8 flex w-full flex-col items-center">
         {/* categories section */}
         <ProductCategories categories={productCategoryItems} />
 
@@ -108,7 +108,7 @@ const Home = () => {
           {/* instagram feed section */}
           <VideoSection sectionData={instagramFeedData} />
 
-          {/* value proposition section */}
+          {/* delivery info section */}
           <DeliveryInfoSection data={deliveryInfoData} />
         </div>
       </div>

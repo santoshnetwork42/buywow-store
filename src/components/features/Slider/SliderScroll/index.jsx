@@ -25,7 +25,7 @@ const SliderComponent = ({ items, className, sliderClassName, ...props }) => {
     }
   }, []);
 
-  const scrollbarWidth = 100 / items.length; // Width of the black scrollbar
+  const scrollbarWidth = items.length > 0 ? 100 / items.length : 0; // Width of the black scrollbar
   const scrollbarPosition = (scrollPosition * (100 - scrollbarWidth)) / 100; // Position of the black scrollbar
 
   const currentItem = Math.min(
@@ -95,7 +95,11 @@ const SliderComponent = ({ items, className, sliderClassName, ...props }) => {
                 height={28}
                 alt="Previous slide"
                 className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
-                onClick={() => scrollByItem(-1)}
+                onClick={() => {
+                  if (containerRef.current && itemRef.current) {
+                    scrollByItem(-1);
+                  }
+                }}
               />
               <Img
                 src="img_arrow_right_black_900.png"
@@ -103,7 +107,11 @@ const SliderComponent = ({ items, className, sliderClassName, ...props }) => {
                 height={28}
                 alt="Next slide"
                 className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
-                onClick={() => scrollByItem(1)}
+                onClick={() => {
+                  if (containerRef.current && itemRef.current) {
+                    scrollByItem(1);
+                  }
+                }}
               />
             </div>
           </div>

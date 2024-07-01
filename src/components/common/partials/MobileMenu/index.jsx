@@ -81,7 +81,7 @@ const MobileMenu = ({ isOpen, onClose, menuItems }) => {
     if (isOpen) {
       setIsAnimating(true);
       // Small delay to ensure the initial position is set before animating
-      setTimeout(() => setMenuPosition("0px"), 10);
+      setTimeout(() => setMenuPosition("0px"), 50);
     } else {
       setMenuPosition("-325px");
       const timer = setTimeout(() => {

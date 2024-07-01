@@ -8,8 +8,30 @@ const CustomerReviewCard = ({ reviewData, ...props }) => {
   const width = useDeviceWidth();
   if (!width) return null;
 
+  if (!reviewData) return null;
+
   const { productImage, userInfo, reviewText, skinConcerns, relatedProduct } =
     reviewData;
+
+  if (
+    !productImage ||
+    !userInfo ||
+    !reviewText ||
+    !skinConcerns ||
+    !relatedProduct
+  ) {
+    return null;
+  }
+
+  if (
+    !relatedProduct.image ||
+    !relatedProduct.name ||
+    !relatedProduct.currentPrice ||
+    !relatedProduct.originalPrice ||
+    !relatedProduct.addToCartText
+  ) {
+    return null;
+  }
 
   const imageSource = width < 576 ? productImage.mobile : productImage.desktop;
 
@@ -35,7 +57,9 @@ const CustomerReviewCard = ({ reviewData, ...props }) => {
               Concern:
             </Text>
             <Heading size="base" as="h5" className="text-sm" responsive>
-              {skinConcerns.join(", ")}
+              {Array.isArray(skinConcerns)
+                ? skinConcerns.join(", ")
+                : skinConcerns}
             </Heading>
           </div>
           <div className="flex items-center justify-center gap-2 rounded bg-lime-100_01 p-2">

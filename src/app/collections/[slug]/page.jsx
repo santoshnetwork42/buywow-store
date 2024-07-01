@@ -20,38 +20,38 @@ export const metadata = {
     "Explore our exclusive collection of skin care products designed to nourish and revitalize your skin. Discover natural, cruelty-free, and dermatologically tested products for a radiant complexion. Enjoy free shipping on orders above ₹999.",
 };
 
-const Collections = () => {
+const Collections = ({ params }) => {
   return (
     <>
-      <div className="mb-10 flex w-full flex-col items-center">
-        {/* main navigation header section */}
+      <div className="mb-8 flex w-full flex-col items-center">
+        {/* Main navigation header */}
         <div className="container-main mb-7 mt-3 flex flex-col gap-3">
-          {/* breadcrumb section */}
-          <Breadcrumb items={breadcrumbItems} />
+          {/* Breadcrumb navigation */}
+          <Breadcrumb items={breadcrumbItems} currentPage={params.slug} />
 
-          {/* introductory section */}
+          {/* Introductory section */}
           <CollectionPageBanner
             bannerData={bannerData}
             className="relative sm:-left-1.5 sm:w-[calc(100%+12px)] lg:-left-2.5 lg:w-[calc(100%+20px)]"
           />
         </div>
 
-        {/* main content section */}
+        {/* Main content section */}
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          {/* product category header section */}
+          {/* Product category header */}
           <ProductCollectionSection collectionData={productCollectionData} />
         </div>
 
         <div className="container-main my-8 w-full bg-lime-50 pb-4 pt-3 sm:my-10 md:pb-5 md:pt-4 lg:my-12">
-          {/* explore more section */}
+          {/* Explore more section */}
           <ShopCategories sectionData={exploreMoreData} />
         </div>
 
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          {/* recently viewed section */}
+          {/* Recently viewed section */}
           <RecentlyViewedSection recentlyViewedData={recentlyViewedData} />
 
-          {/* blog content section */}
+          {/* Collection metadata section */}
           <CollectionMetadata metadataData={metadataData} />
         </div>
       </div>

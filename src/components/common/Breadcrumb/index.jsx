@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { Text } from "@/components/common";
 
-export default function Breadcrumb({ items, ...props }) {
+export default function Breadcrumb({ items, currentPage, ...props }) {
   return (
     <div {...props} className={`${props.className} flex items-center`}>
       {items.map((item, index) => (
@@ -11,21 +11,20 @@ export default function Breadcrumb({ items, ...props }) {
             <Text
               as="span"
               size="sm"
-              className={`${
-                index === items.length - 1 ? "font-medium" : "font-light"
-              } capitalize`}
+              className="font-light capitalize"
               responsive
             >
               {item.label}
             </Text>
           </Link>
-          {index < items.length - 1 && (
-            <Text as="span" size="sm" className="font-light" responsive>
-              &nbsp;/&nbsp;
-            </Text>
-          )}
+          <Text as="span" size="sm" className="mx-1 font-light" responsive>
+            /
+          </Text>
         </React.Fragment>
       ))}
+      <Text as="span" size="sm" className="font-medium capitalize" responsive>
+        {currentPage}
+      </Text>
     </div>
   );
 }

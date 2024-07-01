@@ -124,7 +124,7 @@ export default function Header({ ...props }) {
                 className="aspect-square w-[24px] object-contain"
               />
             </Link>
-            <Link href="#" className="flex-shrink-0">
+            <Link href="/my-cart" className="flex-shrink-0">
               <Img
                 src="img_bag.svg"
                 width={22}
