@@ -15,7 +15,7 @@ const Slider = React.forwardRef(
       activeSlideCSS = "scale-75",
       ...props
     },
-    ref
+    ref,
   ) => {
     const isSmall = (index) => {
       if (props?.activeIndex + magnifiedIndex >= items?.length) {
@@ -30,7 +30,9 @@ const Slider = React.forwardRef(
           if (isSmall(index)) {
             return React.cloneElement(child, {
               ...child.props,
-              className: [child.props?.className, activeSlideCSS].filter(Boolean).join(" "),
+              className: [child.props?.className, activeSlideCSS]
+                .filter(Boolean)
+                .join(" "),
             });
           }
           return React.cloneElement(child);
@@ -48,6 +50,6 @@ const Slider = React.forwardRef(
         disableButtonsControls
       />
     );
-  }
+  },
 );
 export { Slider };

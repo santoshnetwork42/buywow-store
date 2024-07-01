@@ -1,6 +1,10 @@
 import React from "react";
 
-export const MenuSVG = ({ fillColor = "#000000", className = "", ...props }) => {
+export const MenuSVG = ({
+  fillColor = "#000000",
+  className = "",
+  ...props
+}) => {
   return (
     <svg
       fill="none"
@@ -9,7 +13,8 @@ export const MenuSVG = ({ fillColor = "#000000", className = "", ...props }) => 
       {...props}
       width={props?.width || 27}
       height={props?.height || 22}
-      viewBox="0 0 27 22">
+      viewBox="0 0 27 22"
+    >
       <path
         d="M18.1207 4.125H1.38555C0.619757 4.125 0 3.81746 0 3.4375C0 3.05754 0.61979 2.75 1.38555 2.75H18.1207C18.8865 2.75 19.5063 3.05754 19.5063 3.4375C19.5063 3.81735 18.8865 4.125 18.121 4.125H18.1207Z"
         fill={fillColor}

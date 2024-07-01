@@ -1,6 +1,10 @@
 import React from "react";
 
-export const CloseSVG = ({ fillColor = "#000000", className = "", ...props }) => {
+export const CloseSVG = ({
+  fillColor = "#000000",
+  className = "",
+  ...props
+}) => {
   return (
     <svg
       fill={fillColor}
@@ -9,7 +13,8 @@ export const CloseSVG = ({ fillColor = "#000000", className = "", ...props }) =>
       {...props}
       height={props?.width || 20}
       width={props?.height || 20}
-      viewBox={`0 0 ${props?.width || 20} ${props?.height || 20}`}>
+      viewBox={`0 0 ${props?.width || 20} ${props?.height || 20}`}
+    >
       <path
         d="M18 6L6 18"
         stroke={fillColor}

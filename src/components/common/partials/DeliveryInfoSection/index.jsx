@@ -1,53 +1,40 @@
-import { Text, Button, Img } from "@/components/common";
+// src/components/DeliveryInfoSection.jsx
+import { Text, Img } from "@/components/common";
 import React from "react";
 
-export default function DeliveryInfoSection({
-  deliverytext = (
-    <>
-      Delivery within
-      <br />
-      3-5 days
-    </>
-  ),
-  freeshippingtext = "Free Shipping on orders above ₹999",
-  returnpolicytext = "Easy return and refund policy",
-  ...props
-}) {
+const DeliveryInfoItem = ({ icon, text }) => (
+  <div className="flex flex-col items-center justify-center gap-1.5 sm:w-1/3 sm:gap-2 md:flex-row md:gap-3 lg:gap-4">
+    <div className="flex max-w-10 rounded-full sm:max-w-12 md:max-w-14 lg:max-w-[60px]">
+      <Img
+        src={icon}
+        width={60}
+        height={60}
+        alt="delivery icon"
+        className="aspect-square h-auto w-full object-contain"
+      />
+    </div>
+    <Text
+      as="p"
+      size="base"
+      className="line-clamp-2 w-fit text-center capitalize md:text-left"
+      responsive
+    >
+      {text}
+    </Text>
+  </div>
+);
+
+const DeliveryInfoSection = ({ data, className, ...props }) => {
   return (
     <div
       {...props}
-      className={`${props.className} flex md:flex-col justify-between items-center md:w-full gap-5`}
+      className={`${className} mx-auto flex w-full items-center justify-around sm:justify-evenly xl:w-[80vw]`}
     >
-      <div className="flex w-full items-center justify-center gap-3">
-        <div className="flex flex-col items-center justify-center rounded-[29px] bg-blue-50 p-[7px]">
-          <Img
-            src="img_image_1959.png"
-            width={44}
-            height={44}
-            alt="product image"
-            className="h-[44px] w-[44px] object-cover"
-          />
-        </div>
-        <Text className="w-[73%] text-base font-normal leading-[132%] sm:w-[73%] sm:text-[13px]">
-          {deliverytext}
-        </Text>
-      </div>
-      <div className="flex w-full items-center justify-center gap-3">
-        <Button className="flex h-[59px] w-[59px] items-center justify-center rounded-[29px] bg-blue-50 px-[11px]">
-          <Img src="img_group_1400002325.png" width={36} height={36} />
-        </Button>
-        <Text className="w-[73%] text-base font-normal leading-[132%] sm:w-[73%] sm:text-[13px]">
-          {freeshippingtext}
-        </Text>
-      </div>
-      <div className="flex w-full items-center justify-center gap-3">
-        <Button className="flex h-[59px] w-[59px] items-center justify-center rounded-[29px] bg-blue-50 px-[11px]">
-          <Img src="img_group_1400002326.png" width={36} height={36} />
-        </Button>
-        <Text className="w-[73%] text-base font-normal leading-[132%] sm:w-[73%] sm:text-[13px]">
-          {returnpolicytext}
-        </Text>
-      </div>
+      {data.items.map((item) => (
+        <DeliveryInfoItem key={item.id} icon={item.icon} text={item.text} />
+      ))}
     </div>
   );
-}
+};
+
+export default DeliveryInfoSection;

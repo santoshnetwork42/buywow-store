@@ -24,24 +24,17 @@ export default function IntroCarousal({ carousalData, ...props }) {
             window.location.href = data.linkUrl;
           }
         }}
-        draggable={false}>
-        {width > 576 ? (
-          <Img
-            src={data.desktopImage}
-            width={1440}
-            height={496}
-            alt={`hero image ${index}`}
-            className="w-full object-cover"
-          />
-        ) : (
-          <Img
-            src={data.mobileImage}
-            width={376}
-            height={148}
-            alt={`hero image ${index}`}
-            className="w-full object-cover aspect-[574/349]"
-          />
-        )}
+        draggable={false}
+      >
+        <Img
+          src={width > 576 ? data.desktopImage : data.mobileImage}
+          width={width > 576 ? 1440 : 376}
+          height={width > 576 ? 496 : 148}
+          alt={`hero image ${index}`}
+          className={`w-full object-contain ${
+            width > 576 ? "aspect-[1440/496]" : "aspect-[376/148]"
+          }`}
+        />
       </div>
     </React.Fragment>
   ));
@@ -49,10 +42,8 @@ export default function IntroCarousal({ carousalData, ...props }) {
   return (
     <>
       {/* hero slider section */}
-      <div
-        {...props}
-        className={`${props.className} relative`}>
-        <div className="Group623 flex w-full">
+      <div {...props} className={`${props.className} relative`}>
+        <div className="intro-carousal-container flex w-full">
           <SliderDot
             items={items}
             sliderState={sliderState}

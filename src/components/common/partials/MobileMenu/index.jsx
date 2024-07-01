@@ -1,8 +1,9 @@
 // components/MobileMenu.js
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Text, Img, Heading } from "@/components/common";
+import { Text, Img, Heading, Button } from "@/components/common";
 import { CloseSVG, UserSVG } from "@/assets/images";
+import { DownArrowIconSVG } from "@/assets/images/downArrow";
 
 const MobileMenuItem = ({ item, closeMenu }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,42 +20,39 @@ const MobileMenuItem = ({ item, closeMenu }) => {
     return (
       <div className="">
         <div
-          className="flex justify-between items-center cursor-pointer pb-3 pt-2 pr-3"
-          onClick={() => setIsOpen(!isOpen)}>
-          <Text
-            size="text3xl"
-            as="p"
-            className={`capitalize !font-semibold`}>
+          className="flex cursor-pointer items-center justify-between pb-3 pr-3 pt-2"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <Heading size="base" as="h4" className="font-semibold">
             {item.text}
-          </Text>
-          <Img
-            src="img_arrow_down_black_900.svg"
-            width={12}
-            height={6}
-            alt={`${item.text} arrow`}
-            className={`h-[6px] w-[12px] transition-transform duration-300 ${
+          </Heading>
+          <DownArrowIconSVG
+            className={`mt-0.5 h-3 w-3 transition-transform duration-300 ${
               isOpen ? "rotate-180" : ""
             }`}
+            strokeWidth={1.4}
           />
         </div>
         <div
           style={{ height: `${height}px` }}
-          className="overflow-hidden transition-all duration-300 ease-in-out">
+          className="overflow-hidden transition-all duration-300 ease-in-out"
+        >
           <ul ref={contentRef}>
             {item.submenu.map((subItem, index) => (
               <li
                 key={index}
                 className={
-                  index !== item.submenu.length - 1 ? "border-b-[0.5px] border-b-gray-300" : ""
-                }>
+                  index !== item.submenu.length - 1
+                    ? "border-b-[0.5px] border-b-gray-300"
+                    : ""
+                }
+              >
                 <Link
-                  className={index === 0 ? "pt-1.5 pb-2.5" : "py-2.5"}
+                  className={index === 0 ? "pb-2.5 pt-1.5" : "py-2.5"}
                   href={subItem.link}
-                  onClick={closeMenu}>
-                  <Text
-                    size="textxl"
-                    as="p"
-                    className="capitalize !font-light">
+                  onClick={closeMenu}
+                >
+                  <Text size="sm" as="p" className="capitalize">
                     {subItem.text}
                   </Text>
                 </Link>
@@ -67,16 +65,10 @@ const MobileMenuItem = ({ item, closeMenu }) => {
   }
 
   return (
-    <Link
-      href={item.link}
-      onClick={closeMenu}
-      className="pb-3 pt-2">
-      <Text
-        size="text3xl"
-        as="p"
-        className="capitalize !font-semibold">
+    <Link href={item.link} onClick={closeMenu} className="pb-3 pt-2">
+      <Heading size="base" as="h4" className="font-semibold">
         {item.text}
-      </Text>
+      </Heading>
     </Link>
   );
 };
@@ -89,7 +81,7 @@ const MobileMenu = ({ isOpen, onClose, menuItems }) => {
     if (isOpen) {
       setIsAnimating(true);
       // Small delay to ensure the initial position is set before animating
-      setTimeout(() => setMenuPosition("0px"), 10);
+      setTimeout(() => setMenuPosition("0px"), 50);
     } else {
       setMenuPosition("-325px");
       const timer = setTimeout(() => {
@@ -103,45 +95,39 @@ const MobileMenu = ({ isOpen, onClose, menuItems }) => {
 
   return (
     <div
-      className={`fixed lg:hidden inset-0 bg-black-900 transition-opacity duration-300 ease-in-out z-50 ${
-        isOpen ? "bg-opacity-20" : "bg-opacity-0 pointer-events-none"
+      className={`fixed inset-0 z-50 bg-black-900 transition-opacity duration-300 ease-in-out lg:hidden ${
+        isOpen ? "bg-opacity-20" : "pointer-events-none bg-opacity-0"
       }`}
-      onClick={onClose}>
+      onClick={onClose}
+    >
       <div
         style={{
           transform: `translateX(${menuPosition})`,
         }}
-        className={`fixed top-0 left-0 h-screen flex flex-col bg-gray-50 transition-transform duration-300 ease-in-out max-w-[325px] w-full shadow-lg overflow-y-auto`}
-        onClick={(e) => e.stopPropagation()}>
+        className={`fixed left-0 top-0 flex h-screen w-full max-w-[326px] flex-col overflow-y-auto bg-gray-50 shadow-lg transition-transform duration-300 ease-in-out`}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
-        <div className="bg-yellow-900 p-4 flex justify-between items-center">
-          <Link
-            href="/"
-            className=""
-            onClick={onClose}>
+        <div className="flex items-center justify-between bg-yellow-900 p-4">
+          <Link href="/" className="" onClick={onClose}>
             <Img
               src="img_header_logo_white.svg"
               width={100}
               height={48}
               alt="logo"
-              className="object-contain"
+              className="aspect-[100/48] w-[100px] object-contain"
             />
           </Link>
-          <div className="flex-1 ml-2.5">
-            <Heading
-              as="h4"
-              size="text4xl"
-              className="text-white-a700_01 mb-px !font-normal">
+          <div className="ml-2.5 flex flex-1 flex-col gap-0.5">
+            <Heading as="h4" size="lg" className="text-white-a700_01">
               Hi Guest
             </Heading>
             <Link
               href="/login"
-              className="flex gap-1 items-center relative"
-              onClick={onClose}>
-              <Text
-                size="text2xl"
-                as="p"
-                className="capitalize text-white-a700_01 !font-light">
+              className="relative flex w-fit items-center gap-1"
+              onClick={onClose}
+            >
+              <Text size="sm" as="p" className="text-white-a700_01">
                 Login
               </Text>
               <Img
@@ -149,49 +135,33 @@ const MobileMenu = ({ isOpen, onClose, menuItems }) => {
                 width={18}
                 height={18}
                 alt={`Login arrow`}
-                className="h-[18px] w-[18px] mt-px"
+                className="aspect-square w-[18px] object-contain"
               />
-              <div className="absolute -bottom-[3px] left-0 w-[55px] h-[0.5px] bg-white-a700_01"></div>
+              <div className="absolute -bottom-[3px] left-0 h-[0.5px] w-[55px] bg-white-a700_01"></div>
             </Link>
           </div>
-          <button
-            onClick={onClose}
-            className="text-white">
-            <CloseSVG
-              height={24}
-              width={24}
-              fillColor="#ffffff"
-            />
-          </button>
+          <Button onClick={onClose}>
+            <CloseSVG height={24} width={24} fillColor="#ffffff" />
+          </Button>
         </div>
 
         {/* Menu Items */}
-        <div className="p-4 flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto p-4">
           <ul className="space-y-4">
             {menuItems.map((item, index) => (
-              <>
-                <li key={index}>
-                  <MobileMenuItem
-                    item={item}
-                    closeMenu={onClose}
-                  />
-                  <div className="h-[0.5px] w-full bg-gray-300" />
-                </li>
-              </>
+              <li key={index}>
+                <MobileMenuItem item={item} closeMenu={onClose} />
+                <div className="h-[0.5px] w-full bg-gray-300" />
+              </li>
             ))}
           </ul>
         </div>
 
         {/* Footer */}
-        <div className="fixed bottom-0 bg-gray-50 left-0 w-full p-4">
-          <Link
-            href="/login"
-            className="flex items-center">
-            <UserSVG className="mr-3" />
-            <Text
-              size="textxl"
-              as="p"
-              className="capitalize !font-light">
+        <div className="fixed bottom-0 left-0 w-full bg-gray-50 p-4">
+          <Link href="/login" className="flex items-center gap-3">
+            <UserSVG />
+            <Text size="sm" as="p" className="capitalize">
               Login / Register
             </Text>
           </Link>

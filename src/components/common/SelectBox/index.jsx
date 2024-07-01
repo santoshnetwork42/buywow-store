@@ -17,7 +17,7 @@ const SelectBox = React.forwardRef(
 
       ...restProps
     },
-    ref
+    ref,
   ) => {
     const [menuPortalTarget, setMenuPortalTarget] = React.useState(null);
 
@@ -81,7 +81,7 @@ const SelectBox = React.forwardRef(
         {children}
       </>
     );
-  }
+  },
 );
 
 SelectBox.propTypes = {

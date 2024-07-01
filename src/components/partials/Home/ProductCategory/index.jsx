@@ -5,20 +5,18 @@ import React from "react";
 const ProductCategory = ({ image, label }) => (
   <Link
     href="/products"
-    className="flex flex-grow-0 w-20 flex-col items-center">
-    <div className="rounded-full overflow-hidden">
+    className="flex w-20 grow-0 flex-col items-center gap-1.5"
+  >
+    <div className="overflow-hidden rounded-full">
       <Img
         src={image}
         alt={label}
         width={56}
         height={56}
-        className="w-14 h-14 object-cover"
+        className="aspect-square w-14 object-contain"
       />
     </div>
-    <Text
-      size="textxl"
-      as="span"
-      className="capitalize text-center mt-1.5 line-clamp-2 w-[74px] leading-[18px]">
+    <Text size="sm" as="span" className="line-clamp-2 text-center capitalize">
       {label}
     </Text>
   </Link>
@@ -26,8 +24,8 @@ const ProductCategory = ({ image, label }) => (
 
 const ProductCategories = ({ categories }) => {
   return (
-    <div className="lg:hidden w-full overflow-x-scroll no-scrollbar">
-      <div className="flex justify-center w-max mx-auto items-start p-3">
+    <div className="no-scrollbar w-full overflow-x-scroll lg:hidden">
+      <div className="mx-auto flex w-max items-start justify-center p-3">
         {categories.map((category, index) => (
           <React.Fragment key={category.label}>
             <ProductCategory {...category} />

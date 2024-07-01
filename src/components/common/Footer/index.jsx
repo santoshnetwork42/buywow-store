@@ -1,391 +1,122 @@
-import { Heading, Text, Img } from "@/components/common";
-import Link from "next/link";
-import React from "react";
+"use client";
 
-export default function Footer({ ...props }) {
+// components/Footer.js
+import React, { useState } from "react";
+import { Heading, Text, Img } from "@/components/common";
+import { footerData } from "@/data/footerData";
+import FooterSection from "@/components/common/partials/FooterSection";
+import Link from "next/link";
+
+const Footer = ({ className }) => {
+  const data = footerData;
+  const [openSections, setOpenSections] = useState({});
+
+  const toggleSection = (index) => {
+    setOpenSections((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
+
   return (
     <footer
-      {...props}
-      className={`${props.className} flex self-stretch justify-center items-center py-6 bg-blue_gray-300_01`}>
-      <div className="container-xs flex flex-col items-start justify-between gap-5 px-10">
-        <div className="flex w-[18%] flex-col items-start gap-[50px]">
-          <div className="flex flex-col gap-[25px] self-stretch">
-            <div className="flex flex-col gap-7">
-              <Img
-                src="img_footer_logo.png"
-                width={201}
-                height={100}
-                alt="footer logo"
-                className="h-[100px] w-[201px] object-contain"
-              />
-              <Text
-                as="p"
-                className="leading-[130%] !text-white-a700_01">
-                <>
-                  Experience WOW Skin Science:
-                  <br />
-                  Pure, safe, and effective products free from harmful ingredients.
-                </>
-              </Text>
-            </div>
-            <div className="flex gap-3.5">
-              <Img
-                src="img_facebook.svg"
-                width={24}
-                height={28}
-                alt="facebook icon"
-                className="h-[28px]"
-              />
-              <Img
-                src="img_facebook.svg"
-                width={21}
-                height={28}
-                alt="facebook icon"
-                className="h-[28px]"
-              />
-              <Img
-                src="img_facebook.svg"
-                width={24}
-                height={28}
-                alt="facebook icon"
-                className="h-[28px]"
-              />
-              <Img
-                src="img_facebook.svg"
-                width={21}
-                height={28}
-                alt="facebook icon"
-                className="h-[28px]"
-              />
-              <Img
-                src="img_facebook.svg"
-                width={27}
-                height={28}
-                alt="facebook icon"
-                className="h-[28px] w-[27px]"
-              />
-            </div>
+      className={`flex bg-blue_gray-300_01 px-5 py-6 sm:px-10 md:px-14 lg:px-16 xl:px-24 ${className}`}
+    >
+      <div className="flex w-full flex-col justify-between gap-5 sm:flex-row">
+        <div className="flex flex-col gap-7">
+          <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-7">
+            <Img
+              src={data.logo.src}
+              width={data.logo.width}
+              height={data.logo.height}
+              alt={data.logo.alt}
+              className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
+            />
+            <Text as="p" size="sm" className="text-white-a700_01">
+              {data.description}
+            </Text>
           </div>
-          <Text
-            as="p"
-            className="!text-white-a700_01">
-            © wowskinsciences2024
-          </Text>
+          <div className="hidden flex-col gap-12 sm:flex">
+            <div className="flex gap-3 md:gap-4">
+              {data.socialIcons.map((icon, index) => (
+                <Link
+                  key={index}
+                  href={icon.href}
+                  target={icon.target}
+                  rel={icon.rel}
+                >
+                  <Img
+                    src={icon.src}
+                    width={icon.width}
+                    height={icon.height}
+                    alt={icon.alt}
+                    className="aspect-square w-6 object-contain"
+                  />
+                </Link>
+              ))}
+            </div>
+            <Text as="p" size="sm" className="text-white-a700_01" responsive>
+              {data.copyright}
+            </Text>
+          </div>
         </div>
-        <div className="flex flex-col w-[57%] items-start justify-between gap-5">
-          <div className="flex flex-col gap-[9px]">
-            <Heading
-              as="h6"
-              className="capitalize !text-white-a700_01">
-              Products
-            </Heading>
-            <ul className="flex flex-col gap-[9px]">
-              <li>
-                <Link
-                  href="facewash"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    facewash
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link href="#">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    hair oil
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="shampoo"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    shampoo
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="serums"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    serums
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="Sunscreen"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    Sunscreen
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link href="#">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    face scrubs
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="conditioner"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    conditioner
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="kids"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    kids
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="nutrition"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    nutrition
-                  </Text>
-                </Link>
-              </li>
-            </ul>
+        <div className="mt-3 flex w-full flex-col gap-3 sm:mt-5 sm:max-w-[50%] md:max-w-[60%] md:flex-row md:justify-around lg:justify-between">
+          <div className="flex flex-col gap-3 md:w-1/2 lg:flex-1 lg:flex-row lg:justify-evenly lg:gap-5">
+            {data.sections.map((section, index) => (
+              <FooterSection
+                key={index}
+                section={section}
+                isOpen={openSections[index]}
+                onToggle={() => toggleSection(index)}
+              />
+            ))}
           </div>
-          <div className="flex flex-col gap-[9px]">
-            <Heading
-              as="h6"
-              className="capitalize !text-white-a700_01">
-              Shop By Ingrdients
-            </Heading>
-            <ul className="flex flex-col gap-[9px]">
-              <li>
-                <Link href="#">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    Vitamin C
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="onion"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    onion
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="rosemary"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    rosemary
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="ubtan"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    ubtan
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="aloevera"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    aloevera
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="hemp"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    hemp
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link href="#">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    green tea
-                  </Text>
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <div className="flex flex-col gap-[9px]">
-            <Heading
-              as="h6"
-              className="!font-intertight !font-bold uppercase !text-white-a700_01">
-              <span className="font-outfit font-semibold text-white-a700_01">Q</span>
-              <span className="font-outfit font-semibold lowercase text-white-a700_01">uick</span>
-              <span className="font-outfit font-semibold text-white-a700_01">&nbsp;L</span>
-              <span className="font-outfit font-semibold lowercase text-white-a700_01">inks</span>
-            </Heading>
-            <ul className="flex flex-col gap-[9px]">
-              <li>
-                <Link href="#">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    Order & Shipping
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link href="#">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    Returns & Refunds
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link href="#">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    Contact Us
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="FAQs"
-                  target="_blank"
-                  rel="noreferrer">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    FAQs
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link href="#">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    Privacy Policy
-                  </Text>
-                </Link>
-              </li>
-              <li>
-                <Link href="#">
-                  <Text
-                    as="p"
-                    className="capitalize !text-white-a700_01">
-                    Terms & Condition
-                  </Text>
-                </Link>
-              </li>
-            </ul>
-          </div>
-          <ul className="flex flex-col items-start gap-[9px]">
-            <li>
+          <div className="flex flex-col gap-3">
+            {data.otherLinks.map((link, index) => (
               <Link
-                href="Kits"
-                target="_blank"
-                rel="noreferrer">
+                key={index}
+                href={link.href}
+                target={link.target}
+                rel={link.rel}
+              >
                 <Heading
                   as="h6"
-                  className="capitalize !text-white-a700_01">
-                  Kits
+                  size="base"
+                  className="font-semibold capitalize text-white-a700_01"
+                >
+                  {link.text}
                 </Heading>
               </Link>
-            </li>
-            <li>
-              <Link href="#">
-                <Heading
-                  as="h6"
-                  className="capitalize !text-white-a700_01">
-                  Trial Packs
-                </Heading>
-              </Link>
-            </li>
-            <li>
+            ))}
+          </div>
+        </div>
+        <div className="mt-5 flex items-center justify-between sm:hidden">
+          <div className="flex gap-3 md:gap-4">
+            {data.socialIcons.map((icon, index) => (
               <Link
-                href="Blogs"
-                target="_blank"
-                rel="noreferrer">
-                <Heading
-                  as="h6"
-                  className="capitalize !text-white-a700_01">
-                  Blogs
-                </Heading>
+                key={index}
+                href={icon.href}
+                target={icon.target}
+                rel={icon.rel}
+              >
+                <Img
+                  key={index}
+                  src={icon.src}
+                  width={icon.width}
+                  height={icon.height}
+                  alt={icon.alt}
+                  className="aspect-square w-6 object-contain"
+                />
               </Link>
-            </li>
-            <li>
-              <Link href="#">
-                <Heading
-                  as="h6"
-                  className="capitalize !text-white-a700_01">
-                  About Us
-                </Heading>
-              </Link>
-            </li>
-          </ul>
+            ))}
+          </div>
+          <Text as="p" size="sm" className="text-white-a700_01" responsive>
+            {data.copyright}
+          </Text>
         </div>
       </div>
     </footer>
   );
-}
+};
+
+export default Footer;

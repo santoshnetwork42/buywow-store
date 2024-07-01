@@ -37,7 +37,7 @@ img {
   -webkit-user-drag: none;
 }
 
-.Group623 .alice-carousel__dots {
+.intro-carousal-container .alice-carousel__dots {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,13 +50,13 @@ img {
 }
 
 @media (max-width: 992px) {
-  .Group623 .alice-carousel__dots {
+  .intro-carousal-container .alice-carousel__dots {
     bottom: 10px;
   }
 }
 
 @media (max-width: 576px) {
-  .Group623 .alice-carousel__dots {
+  .intro-carousal-container .alice-carousel__dots {
     bottom: 2px;
   }
 }

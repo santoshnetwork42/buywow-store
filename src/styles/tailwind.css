@@ -55,21 +55,30 @@ li:hover {
   /*-------------------------------------
   Container CSS
 --------------------------------------*/
-  .container-xs {
-    @apply w-full mx-auto px-5 max-w-[1376px];
+  .container-main {
+    @apply mx-auto w-full px-12;
   }
-  .container-fluid {
-    @apply w-full mx-auto max-w-[1920px];
+
+  @media (max-width: 1200px) {
+    .container-main {
+      @apply px-9;
+    }
+  }
+
+  @media (max-width: 992px) {
+    .container-main {
+      @apply px-7;
+    }
   }
 
   @media (max-width: 768px) {
-    .container-xs {
-      @apply px-4;
+    .container-main {
+      @apply px-5;
     }
   }
 
   @media (max-width: 480px) {
-    .container-xs {
+    .container-main {
       @apply px-3;
     }
   }

@@ -1,57 +1,34 @@
-import { Button, Heading, Img, Text, Slider } from "@/components/common";
-// import AutoHomepageWireframeProductcard2 from "@/components/AutoHomepageWireframeProductcard2";
-import React, { Suspense } from "react";
+import React from "react";
+import { Heading } from "@/components/common";
+import CustomerReviewCard from "@/components/features/Card/CustomerReviewCard";
+import SliderComponent from "@/components/features/Slider/SliderScroll";
 
-const CustomerReviewSection = () => {
+const CustomerReviewSection = ({ sectionData }) => {
+  const { title, reviews } = sectionData;
+
+  if (!reviews || reviews.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="flex flex-col items-center self-stretch rounded-[16px]">
-      <div className="container-xs flex flex-col gap-12 md:p-5">
-        <div className="flex flex-col items-center gap-[45px]">
-          <Heading
-            size="heading6xl"
-            as="h2"
-            className="sm:text-[28px]">
-            Real Reviews From Real Customers
-          </Heading>
-          <div className="flex w-full gap-5 md:flex-col">
-            <Suspense fallback={<div>Loading feed...</div>}>
-              {[...Array(3)].map((d, index) => (
-                <div key={"reviewList" + index} />
-              ))}
-            </Suspense>
-          </div>
-        </div>
-        <div className="flex items-center justify-between gap-5 md:flex-col">
-          <div className="flex w-[83%] rounded-[1px] bg-gray-300_01 md:w-full">
-            <div className="h-[2px] w-[33%] rounded-[1px] bg-black-900" />
-          </div>
-          <div className="flex w-[9%] items-center justify-center gap-[15px] md:w-full">
-            <Text
-              size="text3xl"
-              as="p"
-              className="!text-[16.33px] !font-medium uppercase">
-              1 / 3
-            </Text>
-            <div className="flex flex-1 justify-center gap-4">
-              <Img
-                src="img_arrow_left.svg"
-                width={28}
-                height={28}
-                alt="left arrow"
-                className="h-[28px] w-[28px]"
-              />
-              <Img
-                src="img_arrow_right_black_900.png"
-                width={27}
-                height={28}
-                alt="right arrow"
-                className="h-[28px] w-[27px] object-cover"
-              />
-            </div>
-          </div>
-        </div>
+    <section className="self-stretch">
+      <div className="flex flex-col items-center gap-5">
+        <Heading size="heading" as="h1" responsive>
+          {title}
+        </Heading>
+        <SliderComponent
+          items={reviews.map((review, index) => (
+            <CustomerReviewCard
+              reviewData={review}
+              className="w-full max-w-[320px] gap-3 sm:w-[56vw] sm:max-w-[502px] md:w-[46vw] lg:w-[40vw]"
+              key={`review-${index}`}
+            />
+          ))}
+          className="w-full"
+          sliderClassName="gap-3 sm:gap-4 lg:gap-5"
+        />
       </div>
-    </div>
+    </section>
   );
 };
 
