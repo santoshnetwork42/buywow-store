@@ -18,7 +18,7 @@ const InstagramFeedItem = ({ image, playButtonIcon }) => {
           width={38}
           height={38}
           alt="play button"
-          className={"ml-1 h-full w-full rounded-sm"}
+          className={"ml-1 aspect-square w-full rounded-sm"}
         />
       </Button>
     </div>

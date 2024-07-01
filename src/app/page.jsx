@@ -53,12 +53,12 @@ const Home = () => {
           <IntroCarousal carousalData={introCarousalData} />
         </div>
 
-        <div className="container-xs mb-7 mt-[22px] flex sm:mt-6 md:mt-7 lg:my-8">
+        <div className="container-main mb-7 mt-[22px] flex sm:mt-6 md:mt-7 lg:my-8">
           {/* features list section */}
           <ProductFeatures features={productFeaturesData.features} />
         </div>
 
-        <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
+        <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* new launches section */}
           <BestSellerSection
             title={bestSellerData.title}
@@ -85,7 +85,7 @@ const Home = () => {
           className="my-8 sm:my-10 lg:my-12"
         />
 
-        <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
+        <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* categories section */}
           <ShopCategories sectionData={shopCategoriesData} />
           {/* tabbed product section */}
@@ -98,7 +98,7 @@ const Home = () => {
           className="my-8 sm:my-10 lg:my-12"
         />
 
-        <div className="container-xs flex flex-col gap-8 sm:gap-10 lg:gap-12">
+        <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* customer reviews section */}
           <CustomerReviewSection sectionData={customerReviewSectionData} />
 

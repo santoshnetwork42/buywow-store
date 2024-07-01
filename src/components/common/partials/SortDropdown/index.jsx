@@ -18,7 +18,9 @@ const SortDropdown = ({ options, onOptionChange, className }) => {
         className,
       )}
     >
-      <Text as="p">Sort By:</Text>
+      <Text size="sm" as="p" responsive>
+        Sort By:
+      </Text>
       <SelectBox
         indicator={
           <DownArrowIconSVG
@@ -36,7 +38,7 @@ const SortDropdown = ({ options, onOptionChange, className }) => {
         styles={{
           menu: (provided) => ({
             ...provided,
-            minWidth: "150px",
+            minWidth: "120px",
             width: "max-content",
             right: "0px",
             "@media (max-width: 576px)": {

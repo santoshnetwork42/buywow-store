@@ -1,72 +1,64 @@
 import { Img, Text, Heading } from "@/components/common";
 import React from "react";
 
-const CountdownTimer = ({
-  days,
-  hours,
-  minutes,
-  seconds,
-  flashSaleDiscount,
-}) => {
+const CountdownTimer = ({ days, hours, minutes, seconds, centerText }) => {
   const TimeUnit = ({ value, label }) => (
-    <div className="mx-1 flex flex-1 flex-col items-center gap-1 rounded-[2px] bg-white-a700_01 px-1 py-0.5">
+    <div className="flex flex-col items-center justify-center rounded-[2px] bg-white-a700_01 px-1 py-0.5">
       <Heading
-        size="headingmd"
+        size="sm"
         as="p"
-        className="h-[15px] w-[15px] !text-blue_gray-300"
+        className="font-bold text-blue_gray-300"
+        responsive
       >
         {value.toString().padStart(2, "0")}
       </Heading>
-      <Text size="textxxs" as="p" className="font-light">
+      <Text size="xxs" as="p" responsive>
         {label}
       </Text>
     </div>
   );
 
+  const Separator = () => (
+    <Heading
+      size="sm"
+      as="p"
+      className="mb-1 self-center text-white-a700_01"
+      responsive
+    >
+      :
+    </Heading>
+  );
+
+  const timeUnits = [
+    { value: days, label: "DYS" },
+    { value: hours, label: "HRS" },
+    { value: minutes, label: "MIN" },
+    { value: seconds, label: "SEC" },
+  ];
+
   return (
-    <>
-      <div className="mr-1 flex items-center">
+    <div className="flex items-center gap-2">
+      <div className="flex items-center">
         <Img
           src="img_image_2038.png"
           width={16}
           height={16}
           alt="sale image"
-          className="h-[16px] w-[16px] object-contain"
+          className="aspect-square w-4 object-contain"
         />
-        <Text
-          as="p"
-          className="!text-white-a700_01 max-sm:text-xs"
-          size="texts"
-        >
-          Flash Sale up to {flashSaleDiscount}% OFF for
+        <Text as="p" className="text-white-a700_01" size="sm" responsive>
+          {centerText}
         </Text>
       </div>
-      <TimeUnit value={days} label="DYS" />
-      <Heading
-        size="textmd"
-        as="p"
-        className="mb-1 self-center !text-[11.3px] !text-white-a700_01"
-      >
-        :
-      </Heading>
-      <TimeUnit value={hours} label="HRS" />
-      <Heading
-        size="textmd"
-        as="p"
-        className="mb-1 self-center !text-[11.3px] !text-white-a700_01"
-      >
-        :
-      </Heading>
-      <TimeUnit value={minutes} label="MIN" />
-      <Heading
-        size="textmd"
-        as="p"
-        className="mb-1 self-center !text-[11.3px] !text-white-a700_01"
-      >
-        :
-      </Heading>
-      <TimeUnit value={seconds} label="SEC" />
-    </>
+      <div className="flex items-center gap-[3px]">
+        {timeUnits.map((unit, index) => (
+          <React.Fragment key={unit.label}>
+            <TimeUnit value={unit.value} label={unit.label} />
+            {index < timeUnits.length - 1 && <Separator />}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
   );
 };
 

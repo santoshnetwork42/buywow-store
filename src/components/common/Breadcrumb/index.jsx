@@ -10,15 +10,17 @@ export default function Breadcrumb({ items, ...props }) {
           <Link href={item.href}>
             <Text
               as="span"
+              size="sm"
               className={`${
                 index === items.length - 1 ? "font-medium" : "font-light"
               } capitalize`}
+              responsive
             >
               {item.label}
             </Text>
           </Link>
           {index < items.length - 1 && (
-            <Text as="span" className="font-light capitalize">
+            <Text as="span" size="sm" className="font-light" responsive>
               &nbsp;/&nbsp;
             </Text>
           )}

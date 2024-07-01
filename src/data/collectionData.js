@@ -116,17 +116,63 @@ export const metadataData = {
   onlineProducts: {
     title: "Hair Care Products Online At WOW",
     content:
-      "WOW shows its dedication to haircare by bringing the full range of hair care products to the table to address various concerns. Our range of hair care products includes: Hair shampoo, Hair conditioner, Hair oil, Hair mask, Hair serum, Hair spray, Hair combo kit, Scalp brush.",
+      "WOW shows its dedication to haircare by bringing the full range of hair care products to the table to address various concerns.",
+    listTitle: "Our range of hair care products includes:",
+    listContent: [
+      "Hair shampoo",
+      "Hair conditioner",
+      "Hair oil",
+      "Hair mask",
+      "Hair serum",
+      "Hair spray",
+      "Hair combo kit",
+      "Scalp brush",
+    ],
   },
   hairCareDos: {
     title: "What Are Some Hair Care Do's",
-    content:
-      "To get healthy, bouncy, lustrous hair, you can follow the do's listed below: If your hair is dry, use a suitable hair mask at least once a week. If your scalp is oily, set a hair wash routine and stick to it. It is essential to choose chemical-free shampoos. You can consider WOW's hair shampoo with natural ingredients that are silicone free. You should use a good hair oil that acts on your hair concerns, like dryness, itchiness or dullness. Last, but not least, ensure that you stay hydrated and drink plenty of water throughout the day.",
+    listTitle:
+      "To get healthy, bouncy, lustrous hair, you can follow the do's listed below:",
+    listContent: [
+      "If your hair is dry, use a suitable hair mask at least once a week.",
+      "If your scalp is oily, set a hair wash routine and stick to it.",
+      "Choose chemical-free shampoos. Consider WOW's hair shampoo with natural ingredients that are silicone free.",
+      "Use a good hair oil that acts on your hair concerns, like dryness, itchiness or dullness.",
+      "Ensure that you stay hydrated and drink plenty of water throughout the day.",
+    ],
   },
   keyIngredients: {
     title: "Key Ingredients In Our Hair Care Range",
-    content:
-      "At WOW Skin Sciences, we are committed to bringing the goodness of traditional Indian ingredients that have proven to be beneficial for the hair into our products: Red onion seed oil, Green tea, Apple cider vinegar, Coconut, Tea tree, Moroccan oil, Argan oil, Avocado oil, Castor oil, Rice water, Indian gooseberry, Himalayan rose, Aloe vera, Bhringraj, Oud, Ginger, Hemp, Macadamia nut oil, Almond oil, Charcoal, Mint, Mango, Sugarcane, Sunflower, Wheat and soy.",
+    listTitle:
+      "At WOW Skin Sciences, we are committed to bringing the goodness of traditional Indian ingredients that have proven to be beneficial for the hair into our products:",
+    listContent: [
+      "Red onion seed oil",
+      "Green tea",
+      "Apple cider vinegar",
+      "Coconut",
+      "Tea tree",
+      "Moroccan oil",
+      "Argan oil",
+      "Avocado oil",
+      "Castor oil",
+      "Rice water",
+      "Indian gooseberry",
+      "Himalayan rose",
+      "Aloe vera",
+      "Bhringraj",
+      "Oud",
+      "Ginger",
+      "Hemp",
+      "Macadamia nut oil",
+      "Almond oil",
+      "Charcoal",
+      "Mint",
+      "Mango",
+      "Sugarcane",
+      "Sunflower",
+      "Wheat",
+      "Soy",
+    ],
   },
   bestSellingProducts: {
     title: "Try Out Our Best-Selling Hair Care Products In India",
@@ -177,12 +223,61 @@ export const productCollectionData = {
     "fragrances",
   ],
   products: {
-    all: productData,
-    facewash: productData,
-    shampoo: productData,
-    "hair oil": productData,
-    serum: productData,
-    "skin care": productData,
-    fragrances: productData,
+    all: [...productData, ...productData].map((product, index) => ({
+      ...product,
+      id: `${product.id}_${index}`,
+      pricing: {
+        ...product.pricing,
+        current: `₹${Math.floor(Math.random() * 900) + 100}`,
+      },
+    })),
+    facewash: [...productData, ...productData].map((product, index) => ({
+      ...product,
+      id: `${product.id}_${index}`,
+      pricing: {
+        ...product.pricing,
+        current: `₹${Math.floor(Math.random() * 900) + 100}`,
+      },
+    })),
+    shampoo: [...productData, ...productData].map((product, index) => ({
+      ...product,
+      id: `${product.id}_${index}`,
+      pricing: {
+        ...product.pricing,
+        current: `₹${Math.floor(Math.random() * 900) + 100}`,
+      },
+    })),
+    "hair oil": [...productData, ...productData].map((product, index) => ({
+      ...product,
+      id: `${product.id}_${index}`,
+      pricing: {
+        ...product.pricing,
+        current: `₹${Math.floor(Math.random() * 900) + 100}`,
+      },
+    })),
+    serum: [...productData, ...productData].map((product, index) => ({
+      ...product,
+      id: `${product.id}_${index}`,
+      pricing: {
+        ...product.pricing,
+        current: `₹${Math.floor(Math.random() * 900) + 100}`,
+      },
+    })),
+    "skin care": [...productData, ...productData].map((product, index) => ({
+      ...product,
+      id: `${product.id}_${index}`,
+      pricing: {
+        ...product.pricing,
+        current: `₹${Math.floor(Math.random() * 900) + 100}`,
+      },
+    })),
+    fragrances: [...productData, ...productData].map((product, index) => ({
+      ...product,
+      id: `${product.id}_${index}`,
+      pricing: {
+        ...product.pricing,
+        current: `₹${Math.floor(Math.random() * 900) + 100}`,
+      },
+    })),
   },
 };

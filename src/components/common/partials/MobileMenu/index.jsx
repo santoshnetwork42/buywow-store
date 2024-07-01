@@ -1,7 +1,7 @@
 // components/MobileMenu.js
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Text, Img, Heading } from "@/components/common";
+import { Text, Img, Heading, Button } from "@/components/common";
 import { CloseSVG, UserSVG } from "@/assets/images";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 
@@ -23,22 +23,9 @@ const MobileMenuItem = ({ item, closeMenu }) => {
           className="flex cursor-pointer items-center justify-between pb-3 pr-3 pt-2"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <Text
-            size="text3xl"
-            as="p"
-            className={`!text-base !font-semibold capitalize`}
-          >
+          <Heading size="base" as="h4" className="font-semibold">
             {item.text}
-          </Text>
-          {/* <Img
-            src="img_arrow_down_black_900.svg"
-            width={12}
-            height={6}
-            alt={`${item.text} arrow`}
-            className={`h-[6px] w-[12px] transition-transform duration-300 ${
-              isOpen ? "rotate-180" : ""
-            }`}
-          /> */}
+          </Heading>
           <DownArrowIconSVG
             className={`mt-0.5 h-3 w-3 transition-transform duration-300 ${
               isOpen ? "rotate-180" : ""
@@ -65,11 +52,7 @@ const MobileMenuItem = ({ item, closeMenu }) => {
                   href={subItem.link}
                   onClick={closeMenu}
                 >
-                  <Text
-                    size="textxl"
-                    as="p"
-                    className="!text-sm !font-light capitalize"
-                  >
+                  <Text size="sm" as="p" className="capitalize">
                     {subItem.text}
                   </Text>
                 </Link>
@@ -83,13 +66,9 @@ const MobileMenuItem = ({ item, closeMenu }) => {
 
   return (
     <Link href={item.link} onClick={closeMenu} className="pb-3 pt-2">
-      <Text
-        size="text3xl"
-        as="p"
-        className="!text-base !font-semibold capitalize"
-      >
+      <Heading size="base" as="h4" className="font-semibold">
         {item.text}
-      </Text>
+      </Heading>
     </Link>
   );
 };
@@ -125,7 +104,7 @@ const MobileMenu = ({ isOpen, onClose, menuItems }) => {
         style={{
           transform: `translateX(${menuPosition})`,
         }}
-        className={`fixed left-0 top-0 flex h-screen w-full max-w-[325px] flex-col overflow-y-auto bg-gray-50 shadow-lg transition-transform duration-300 ease-in-out`}
+        className={`fixed left-0 top-0 flex h-screen w-full max-w-[326px] flex-col overflow-y-auto bg-gray-50 shadow-lg transition-transform duration-300 ease-in-out`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -136,27 +115,19 @@ const MobileMenu = ({ isOpen, onClose, menuItems }) => {
               width={100}
               height={48}
               alt="logo"
-              className="object-contain"
+              className="aspect-[100/48] w-[100px] object-contain"
             />
           </Link>
-          <div className="ml-2.5 flex-1">
-            <Heading
-              as="h4"
-              size="text4xl"
-              className="mb-px !font-normal text-white-a700_01"
-            >
+          <div className="ml-2.5 flex flex-1 flex-col gap-0.5">
+            <Heading as="h4" size="lg" className="text-white-a700_01">
               Hi Guest
             </Heading>
             <Link
               href="/login"
-              className="relative flex items-center gap-1"
+              className="relative flex w-fit items-center gap-1"
               onClick={onClose}
             >
-              <Text
-                size="text2xl"
-                as="p"
-                className="!font-light capitalize text-white-a700_01"
-              >
+              <Text size="sm" as="p" className="text-white-a700_01">
                 Login
               </Text>
               <Img
@@ -164,35 +135,33 @@ const MobileMenu = ({ isOpen, onClose, menuItems }) => {
                 width={18}
                 height={18}
                 alt={`Login arrow`}
-                className="mt-px h-[18px] w-[18px]"
+                className="aspect-square w-[18px] object-contain"
               />
               <div className="absolute -bottom-[3px] left-0 h-[0.5px] w-[55px] bg-white-a700_01"></div>
             </Link>
           </div>
-          <button onClick={onClose} className="text-white">
+          <Button onClick={onClose}>
             <CloseSVG height={24} width={24} fillColor="#ffffff" />
-          </button>
+          </Button>
         </div>
 
         {/* Menu Items */}
         <div className="flex-1 overflow-y-auto p-4">
           <ul className="space-y-4">
             {menuItems.map((item, index) => (
-              <>
-                <li key={index}>
-                  <MobileMenuItem item={item} closeMenu={onClose} />
-                  <div className="h-[0.5px] w-full bg-gray-300" />
-                </li>
-              </>
+              <li key={index}>
+                <MobileMenuItem item={item} closeMenu={onClose} />
+                <div className="h-[0.5px] w-full bg-gray-300" />
+              </li>
             ))}
           </ul>
         </div>
 
         {/* Footer */}
         <div className="fixed bottom-0 left-0 w-full bg-gray-50 p-4">
-          <Link href="/login" className="flex items-center">
-            <UserSVG className="mr-3" />
-            <Text size="textxl" as="p" className="!font-light capitalize">
+          <Link href="/login" className="flex items-center gap-3">
+            <UserSVG />
+            <Text size="sm" as="p" className="capitalize">
               Login / Register
             </Text>
           </Link>

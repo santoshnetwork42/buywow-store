@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
-import { Heading } from "@/components/common";
+import { Heading, Text } from "@/components/common";
 import ProductCard from "@/components/features/Card/ProductCard";
 import SortDropdown from "../../../common/partials/SortDropdown";
 
@@ -37,11 +37,11 @@ const ProductCollectionSection = ({ collectionData, className }) => {
 
   return (
     <Tabs
-      className={`flex flex-col gap-5 sm:gap-6 lg:gap-7 ${className}`}
+      className={`flex flex-col ${className}`}
       selectedTabClassName="bg-blue-50 border-blue-50 font-normal"
     >
-      <div className="grid grid-cols-[1fr_auto] gap-4 sm:gap-5 lg:grid-cols-[auto_1fr_auto] xl:gap-8">
-        <Heading as="h2" size="heading4xl" className="shrink-0 lg:order-1">
+      <div className="mb-5 grid grid-cols-[1fr_auto] items-center gap-4 sm:mb-6 sm:gap-5 lg:mb-7 lg:grid-cols-[auto_1fr_auto] xl:gap-8">
+        <Heading as="h2" size="2xl" className="shrink-0 lg:order-1" responsive>
           {collectionData.title}
         </Heading>
         <SortDropdown
@@ -57,7 +57,14 @@ const ProductCollectionSection = ({ collectionData, className }) => {
                 className="w-max rounded-full border-[0.5px] border-lime-100 px-2 py-1 text-sm font-light capitalize !leading-[1.25] md:border md:px-3 md:py-1.5 md:text-base"
                 onClick={() => setActiveCategory(category)}
               >
-                {category}
+                <Text
+                  size="base"
+                  as="p"
+                  className="text-sm font-light capitalize"
+                  responsive
+                >
+                  {category}
+                </Text>
               </Tab>
             ))}
           </TabList>
@@ -66,9 +73,13 @@ const ProductCollectionSection = ({ collectionData, className }) => {
 
       {collectionData.categories.map((category, index) => (
         <TabPanel key={index}>
-          <div className="grid grid-cols-2 gap-x-1 gap-y-6 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:grid-cols-4 lg:gap-x-3">
+          <div className="flex flex-wrap justify-center gap-x-1 gap-y-6 sm:gap-x-2 md:gap-y-7 lg:gap-x-3">
             {sortProducts(collectionData.products[category]).map((product) => (
-              <ProductCard key={product.id} {...product} />
+              <ProductCard
+                className="w-full max-w-[min(356px,calc(50%-2px))] basis-auto sm:max-w-[min(356px,calc(50%-4px))] md:max-w-[min(356px,calc(33%-4px))] lg:max-w-[min(356px,calc(33%-6px))] xl:max-w-[min(356px,calc(25%-10px))]"
+                key={product.id}
+                {...product}
+              />
             ))}
           </div>
         </TabPanel>

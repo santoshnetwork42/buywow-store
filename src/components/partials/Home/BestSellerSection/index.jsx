@@ -1,7 +1,7 @@
 // components/BestSellerSection.jsx
 "use client";
 
-import { Button, Heading } from "@/components/common";
+import { Heading } from "@/components/common";
 import React from "react";
 import ProductCarousal from "@/components/features/Carousel/ProductCarousel";
 import TabComponent from "@/components/common/partials/TabComponent";
@@ -13,8 +13,8 @@ const BestSellerSection = ({ title, categories, products }) => {
   }));
 
   return (
-    <div className="flex flex-col items-center gap-4 md:gap-2">
-      <Heading size="heading6xl" as="h1" className="capitalize">
+    <div className="flex flex-col items-center gap-3 md:gap-2">
+      <Heading size="heading" as="h1" responsive>
         {title}
       </Heading>
       <TabComponent
@@ -23,8 +23,8 @@ const BestSellerSection = ({ title, categories, products }) => {
           <ProductCarousal products={content} className={"w-full"} />
         )}
         className="flex w-full flex-col items-center gap-3 sm:gap-4 lg:gap-5"
-        selectedTabClassName="!text-black-900 font-normal bg-amber-200 rounded-full"
-        selectedTabPanelClassName="relative tab-panel--selected"
+        selectedTabClassName="text-black-900 font-normal bg-amber-200 rounded-full"
+        selectedTabPanelClassName="relative"
         tabClassName="text-black-900"
       />
     </div>

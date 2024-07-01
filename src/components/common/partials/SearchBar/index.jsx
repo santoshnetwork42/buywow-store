@@ -28,11 +28,11 @@ const SearchBar = ({ className = "" }) => {
             width={24}
             height={24}
             alt="search"
-            className="h-[24px] w-[24px] cursor-pointer"
+            className="aspect-square w-[24px] cursor-pointer object-contain"
           />
         )
       }
-      className={`h-[40px] w-full flex-grow items-center justify-center gap-5 rounded-[20px] border border-solid border-gray-300_01 bg-lime-50_01 px-4 text-xs font-light text-gray-700_02 ${className}`}
+      className={`flex-grow items-center gap-3 rounded-[20px] border border-solid border-gray-300_01 bg-lime-50_01 px-4 py-2 text-sm font-light text-gray-700_02 ${className}`}
     />
   );
 };

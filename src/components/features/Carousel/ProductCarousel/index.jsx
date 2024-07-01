@@ -9,7 +9,7 @@ const ProductCarousel = ({ products, className, ...props }) => {
     <ProductCard
       key={product.id}
       {...product}
-      className="w-[45vw] max-w-[326px] bg-white-a700_01 sm:w-[40vw] md:w-[34vw] lg:w-[27vw] xl:w-[24vw]"
+      className="w-[45vw] max-w-[356px] bg-white-a700_01 sm:w-[40vw] md:w-[34vw] lg:w-[27vw] xl:w-[24vw]"
     />
   ));
 

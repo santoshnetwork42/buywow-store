@@ -73,7 +73,7 @@ export default function ShopIngredients({ shopIngredientsData, ...props }) {
       {...props}
       className={`${props.className} flex flex-col items-center justify-center gap-4 self-stretch lg:gap-5`}
     >
-      <Heading size="heading6xl" as="h1" className="capitalize">
+      <Heading size="heading" as="h1" responsive>
         {shopIngredientsData.title}
       </Heading>
       {renderIngredients()}

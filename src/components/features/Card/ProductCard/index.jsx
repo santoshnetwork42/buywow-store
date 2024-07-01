@@ -16,25 +16,26 @@ export default function ProductCard({
   return (
     <div
       className={`flex flex-col justify-start gap-2 self-stretch rounded-lg p-[5px] shadow-xs md:gap-3 md:p-2 ${className}`}
-      {...props}
     >
-      <div className="overflow-hidden rounded-lg">
+      <div className="overflow-hidden rounded-lg bg-lime-50 p-0.5 sm:p-1 md:p-2 lg:p-3 xl:p-4">
         <Img
           src={image.src}
-          width={image.width}
-          height={image.height}
+          width={274}
+          height={274}
           alt={image.alt || "Product image"}
-          className="h-full w-full object-contain"
+          className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
         />
       </div>
-      <div className="flex h-14 flex-wrap gap-[4px] overflow-hidden">
+      <div className="flex h-12 flex-wrap gap-[4px] overflow-hidden md:h-[52px]">
         {features.map((feature, index) => (
           <Text
             key={index}
             as="p"
+            size="sm"
             className={`h-fit w-fit truncate rounded-[5px] px-2.5 py-[3px] capitalize ${
               index % 2 === 0 ? "bg-gray-100" : "bg-deep_orange-50"
             }`}
+            responsive
           >
             {feature}
           </Text>
@@ -43,16 +44,14 @@ export default function ProductCard({
 
       <div className="flex flex-1 flex-col gap-2">
         <div className="flex flex-1 flex-col">
-          <Heading
-            size="heading2xl"
-            as="h6"
-            className="line-clamp-2 w-full capitalize leading-5"
-          >
+          <Heading size="xl" as="h3" className="line-clamp-2 w-full" responsive>
             {title}
           </Heading>
           <Text
             as="p"
-            className="line-clamp-3 w-full text-[11px] !font-light leading-[130%]"
+            size="sm"
+            className="line-clamp-3 w-full font-light"
+            responsive
           >
             {benefits}
           </Text>
@@ -65,32 +64,36 @@ export default function ProductCard({
                 width={16}
                 height={16}
                 alt="Rating stars"
-                className="h-[16px] w-[16px] rounded-[1px]"
+                className="aspect-square w-[12px] sm:w-[14px] lg:w-[16px]"
               />
-              <Text as="p" className="capitalize">
+              <Text as="p" size="sm" className="capitalize" responsive>
                 {rating}
               </Text>
             </div>
-            <Text as="p" className="capitalize">
+            <Text as="p" size="sm" className="capitalize" responsive>
               ({reviewCount} reviews)
             </Text>
           </div>
-          <div className="flex flex-1 justify-between gap-[7px]">
+          <div className="flex flex-1 justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-[6px] md:gap-2">
-                <Heading size="headingxl" as="h6" className="capitalize">
+              <div className="flex items-center gap-1 md:gap-2">
+                <Heading size="lg" as="h4" className="text-base" responsive>
                   {pricing.current}
                 </Heading>
-                <Text as="p" className="capitalize line-through">
+                <Text
+                  as="p"
+                  size="sm"
+                  className="font-light capitalize line-through"
+                >
                   {pricing.original}
                 </Text>
               </div>
-              <div className="hidden h-[23px] min-w-[62px] flex-row items-center justify-center rounded-sm bg-lime-50 px-2 text-center text-xs capitalize text-black-900 md:flex">
+              <div className="hidden h-6 min-w-[62px] flex-row items-center justify-center rounded-sm bg-lime-50 px-2 text-center text-xs capitalize text-black-900 md:flex">
                 {pricing.discount}% OFF
               </div>
             </div>
             <Button
-              className="text-sm sm:px-3 sm:py-1 lg:px-4 lg:py-1"
+              className="py-1 text-sm sm:px-3 lg:px-4"
               onClick={onAddToCart}
             >
               Add

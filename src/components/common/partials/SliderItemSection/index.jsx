@@ -34,7 +34,7 @@ const SliderItemSection = ({ sectionData, ItemComponent }) => {
   return (
     <section className="self-stretch">
       <div className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5">
-        <Heading size="heading6xl" as="h1" className="capitalize">
+        <Heading size="heading" as="h1" responsive>
           {title}
         </Heading>
         <SliderComponent items={renderItems()} className="w-full" />
@@ -66,13 +66,14 @@ const SliderItem = ({
           className={`w-full object-contain ${aspectRatio}`}
         />
       </div>
-      <Text
-        size="text5xl"
-        as="h2"
-        className="m-auto mt-1 line-clamp-1 w-fit truncate border-b border-b-black-900 font-medium capitalize sm:mt-2 md:font-normal lg:mt-3"
+      <Heading
+        size="xl"
+        as="h3"
+        className="m-auto mt-1 line-clamp-1 w-fit truncate border-b border-b-black-900 pb-1 capitalize sm:mt-2 lg:mt-3"
+        responsive
       >
         {title}
-      </Text>
+      </Heading>
     </Link>
   </div>
 );
