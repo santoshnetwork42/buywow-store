@@ -7,13 +7,12 @@ export default function ProductTable({ cartItems, totalItems, subtotal }) {
     <table className="w-full border-collapse">
       <thead>
         <tr className="border-b border-t">
-          <th className="px-5 py-2 text-left md:px-6">
+          <th className="py-2 pl-5 text-left md:pl-6">
             <Text size="sm" as="p" className="text-blue_gray-400" responsive>
               PRODUCT
             </Text>
           </th>
-          <th />
-          <th className="px-4 py-2 text-left font-normal text-blue_gray-400">
+          <th className="w-[30%] py-2 text-left font-normal text-blue_gray-400">
             <Text size="sm" as="p" className="text-blue_gray-400" responsive>
               PRICE
             </Text>
@@ -23,62 +22,87 @@ export default function ProductTable({ cartItems, totalItems, subtotal }) {
       <tbody>
         {cartItems.map((item) => (
           <tr key={item.id} className="border-b">
-            <td className="px-4 py-4">
-              <div className="flex items-center">
+            <td className="py-2.5 text-left sm:py-3 md:py-4 lg:pl-4 xl:pl-6">
+              <div className="flex items-center gap-2 sm:gap-4 md:gap-5 lg:gap-8 xl:gap-10">
                 <Img
                   src={item.image}
                   alt={item.name}
                   width={124}
                   height={124}
-                  className="mr-4 aspect-[65/77] h-24 w-24 rounded-lg object-cover md:aspect-square"
+                  className="aspect-[65/77] w-16 rounded-lg object-contain md:aspect-square md:w-24"
                 />
-                <div>
-                  <Text size="text3xl" as="p" className="!font-medium">
-                    {item.name}
-                  </Text>
-                  <Text as="p">Size: {item.size}</Text>
-                  <div className="mt-2 flex items-center">
-                    <div className="flex items-center rounded-md border">
-                      <Button className="bg-lime-50 px-3 py-1">-</Button>
+                <div className="flex h-16 flex-1 flex-col justify-between md:h-24">
+                  <div>
+                    <Heading size="base" as="h4" responsive>
+                      {item.name}
+                    </Heading>
+                    <Text size="sm" as="p" responsive>
+                      Size: {item.size}
+                    </Text>
+                  </div>
+                  <div className="flex items-center">
+                    <div className="flex items-center overflow-hidden rounded-md border">
+                      <Button className="h-7 rounded-none bg-lime-50 px-[10px] py-0 text-black-900">
+                        -
+                      </Button>
                       <Text as="span" className="px-3 py-1">
                         {item.quantity || 1}
                       </Text>
-                      <Button className="bg-lime-50 px-3 py-1">+</Button>
+                      <Button className="h-7 rounded-none bg-lime-50 px-[10px] py-0 text-black-900">
+                        +
+                      </Button>
                     </div>
-                    <Button className="ml-2 rounded-md border p-1">
-                      <Img src="img_thumbs_up.svg" width={10} height={14} />
+                    <Button className="ml-2 rounded-md border bg-transparent px-2 py-[7px]">
+                      <Img
+                        src="img_thumbs_up.svg"
+                        width={10}
+                        height={14}
+                        className="aspect-[10/14] w-[10px] object-contain"
+                      />
                     </Button>
                   </div>
                 </div>
               </div>
             </td>
-            <td className="px-4 py-4 text-right">
-              <div>
-                <Heading as="h2" className="inline">
-                  ₹{item.price}
-                </Heading>
-                <Text as="span" className="ml-2 line-through">
-                  ₹{item.originalPrice}
+            <td className="py-2.5 text-left sm:py-3 md:py-4">
+              <div className="flex h-16 flex-col gap-1 md:h-24">
+                <div className="flex items-center gap-2">
+                  <Heading as="h4" size="base" className="text-sm" responsive>
+                    ₹{item.price}
+                  </Heading>
+                  <Text as="span" size="sm" className="line-through" responsive>
+                    ₹{item.originalPrice}
+                  </Text>
+                </div>
+                <Text
+                  size="sm"
+                  as="p"
+                  className="w-fit rounded-md bg-lime-50 px-2 py-0.5"
+                  responsive
+                >
+                  {item.discount} Off
                 </Text>
               </div>
-              <Text
-                size="textlg"
-                as="p"
-                className="mt-1 inline-block rounded-md bg-lime-50 px-2 py-1"
-              >
-                {item.discount} Off
-              </Text>
             </td>
           </tr>
         ))}
       </tbody>
       <tfoot>
         <tr>
-          <td className="px-4 py-4">
-            <Heading as="h3">{totalItems} Items</Heading>
+          <td className="px-4 py-2 text-left sm:py-3 lg:py-4">
+            <Heading
+              size="lg"
+              as="h3"
+              className="ml-14 font-semibold sm:ml-16 md:ml-[102px] lg:ml-32 xl:ml-36"
+              responsive
+            >
+              {totalItems} Items
+            </Heading>
           </td>
-          <td className="px-4 py-4 text-right">
-            <Heading as="h4">₹{subtotal}</Heading>
+          <td className="py-2 text-left sm:py-3 lg:py-4">
+            <Heading size="lg" as="h4" className="font-semibold" responsive>
+              ₹{subtotal}
+            </Heading>
           </td>
         </tr>
       </tfoot>

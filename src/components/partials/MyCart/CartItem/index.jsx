@@ -11,7 +11,7 @@ export default function CartItem({ product }) {
             width={124}
             height={124}
             alt="product thumbnail"
-            className="h-[124px] w-[124px] object-cover"
+            className="h-[124px] w-[124px] object-contain"
           />
           <div className="flex w-[51%] flex-col gap-[55px] sm:gap-[27px]">
             <div className="flex flex-col items-start gap-[3px]">

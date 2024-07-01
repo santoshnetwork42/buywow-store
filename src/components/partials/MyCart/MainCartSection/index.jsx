@@ -1,7 +1,7 @@
 // components/MyCart/MainCartSection.jsx
 import React from "react";
-import ShippingProgress from "../ShippingProgress";
-import ProductTable from "../ProductTable";
+import ShippingProgress from "@/components/partials/MyCart/ShippingProgress";
+import ProductTable from "@/components/partials/MyCart/ProductTable";
 
 export default function MainCartSection({ cartData }) {
   return (
