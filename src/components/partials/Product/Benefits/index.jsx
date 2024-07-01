@@ -12,7 +12,7 @@ const Benefits = () => {
         </Heading>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2 py-2 md:grid-cols-4">
         {productBenefits?.map((item) => {
           return (
             <div className="flex h-fit w-auto max-w-72 flex-col items-center justify-between gap-1">
