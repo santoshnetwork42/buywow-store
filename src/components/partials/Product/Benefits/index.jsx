@@ -19,11 +19,11 @@ const Benefits = () => {
               <Text
                 as="p"
                 className="line-clamp-2 text-center font-medium"
-                size="textsm"
+                size="base"
               >
                 {item.title}
               </Text>
-              <Text as="p" className="line-clamp-3 text-center" size="textlg">
+              <Text as="p" className="line-clamp-3 text-center" size="sm">
                 {item.description}
               </Text>
             </div>

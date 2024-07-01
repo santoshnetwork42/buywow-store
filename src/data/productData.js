@@ -295,3 +295,29 @@ export const productData = [
     ],
   },
 ];
+
+export const productBenefits = [
+  {
+    image: "benefits_1.svg",
+    title: "Combat Hair Fall with Nature's Best",
+    description:
+      "Fight hair fall with our Onion Black Seed Hair Oil for stronger, healthier growth.",
+  },
+  {
+    image: "benefits_2.svg",
+    title: "Unveil Lustrous, Frizz-Free Hair",
+    description:
+      "Fight frizz & dullness with our onion hair oil for shine, softness, & manageability.",
+  },
+  {
+    image: "benefits_3.svg",
+    title: "Revitalize Your Scalp",
+    description:
+      "Nourish your scalp with our non-greasy, hexane-free formula for improved hair growth.",
+  },
+  {
+    image: "benefits_4.svg",
+    title: "Versatility for All Hair Types",
+    description: "For all hair types, promoting healthier, stronger hair.",
+  },
+];
