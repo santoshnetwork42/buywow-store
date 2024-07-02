@@ -4,6 +4,8 @@ import { IndiaMapIcon, StarIcon, VehicleIcon } from "@/assets/svg/icons";
 import { Button, Text } from "@/components/common";
 import { productData } from "@/data/productData";
 import React from "react";
+import HighLights from "@/components/partials/Product/HighLights";
+import MetaData from "@/components/partials/Product/MetaData";
 
 const ProductDetails = () => {
   const productDetail = productData[0];
@@ -102,6 +104,11 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+        {/* Highlights */}
+        <HighLights />
+
+        {/* MetaData */}
+        <MetaData />
       </div>
     </div>
   );
