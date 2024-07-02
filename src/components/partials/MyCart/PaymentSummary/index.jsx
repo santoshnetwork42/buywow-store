@@ -3,84 +3,70 @@ import { Heading, Text, Img, Button } from "@/components/common";
 
 export default function PaymentSummary({ summary, cashback }) {
   return (
-    <div className="flex flex-col items-start gap-[11px]">
-      <div className="flex items-center justify-center self-stretch rounded-lg bg-blue-50 p-1.5 shadow-sm">
+    <div className="flex flex-col gap-4">
+      <div className="flex w-[calc(100%+24px)] flex-1 -translate-x-3 items-center justify-center gap-0.5 bg-blue-50 px-2 py-1.5 shadow-sm sm:w-[calc(100%+40px)] sm:-translate-x-5 md:w-full md:translate-x-0 md:rounded-lg">
         <Img
           src="img_image_2037.png"
           width={24}
           height={24}
           alt="cashback icon"
-          className="h-[24px] w-[24px] object-cover"
+          className="aspect-square w-[24px] object-cover"
         />
-        <Text size="text3xl" as="p">
+        <Text size="base" as="p">
           You will earn {cashback} cashback with this order.
         </Text>
       </div>
-      <Heading size="text5xl" as="h5">
-        Payment Summary
-      </Heading>
-      <div className="flex flex-col gap-[9px] self-stretch">
-        <div className="flex flex-col gap-[7px]">
-          <div className="flex flex-wrap justify-between gap-5">
-            <Heading
-              size="headingxl"
-              as="h6"
-              className="!font-markpro !font-bold uppercase"
-            >
-              <span className="font-outfit font-normal text-black-900">S</span>
-              <span className="font-outfit font-normal lowercase text-black-900">
-                ubTOTAL
-              </span>
-            </Heading>
-            <Text size="text4xl" as="p" className="uppercase">
+      <div className="flex flex-col gap-2">
+        <Heading size="xl" as="h3" responsive>
+          Payment Summary
+        </Heading>
+        <div className="flex flex-col gap-1 md:gap-2">
+          <div className="flex items-center justify-between">
+            <Text size="lg" as="p" className="capitalize" responsive>
+              Subtotal
+            </Text>
+            <Text size="lg" as="p" className="capitalize" responsive>
               ₹{summary.subtotal}
             </Text>
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-5">
-            <Text size="text4xl" as="p" className="capitalize">
+          <div className="flex items-center justify-between">
+            <Text size="lg" as="p" className="capitalize" responsive>
               Shipping
             </Text>
-            <Text size="text4xl" as="p" className="uppercase">
+            <Text size="lg" as="p" className="capitalize" responsive>
               ₹{summary.shipping}
             </Text>
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-5">
-            <Text size="text4xl" as="p" className="capitalize">
+          <div className="flex items-center justify-between">
+            <Text size="lg" as="p" className="capitalize" responsive>
               savings
             </Text>
-            <Text size="text4xl" as="p" className="uppercase">
+            <Text size="lg" as="p" className="capitalize" responsive>
               ₹{summary.savings}
             </Text>
           </div>
         </div>
         <div className="h-px bg-black-900" />
-        <div className="flex items-start justify-between gap-5">
-          <div className="flex flex-col items-start">
-            <Heading
-              size="heading2xl"
-              as="h5"
-              className="!font-markpro !font-bold uppercase"
-            >
-              <span className="font-outfit font-semibold text-black-900">
-                T
-              </span>
-              <span className="font-outfit font-semibold lowercase text-black-900">
-                OTAL
-              </span>
+        <div className="flex flex-col">
+          <div className="flex justify-between">
+            <Heading size="xl" as="h3" responsive>
+              Total
             </Heading>
-            <Text size="textlg" as="p" className="!text-gray-700_01">
-              Inclusive of all taxes
-            </Text>
+            <Heading size="xl" as="h3" responsive>
+              ₹{summary.total}
+            </Heading>
           </div>
-          <Heading size="heading2xl" as="h5" className="uppercase">
-            ₹{summary.total}
-          </Heading>
+          <Text size="xs" as="span" className="text-[#696969]">
+            Inclusive of all taxes
+          </Text>
         </div>
-        <div className="flex flex-col items-center gap-3">
-          <Button className="flex h-[62px] w-full flex-row items-center justify-center rounded-[31px] bg-yellow-900 px-[35px] text-center font-inter text-2xl font-semibold lowercase text-white-a700_01 sm:px-5 md:text-[22px]">
-            CHECKOUT
+        <div className="mt-1 flex flex-col items-center gap-2.5">
+          <Button className="flex w-full items-center justify-center rounded-full py-2 md:py-3">
+            <Heading size="2xl" as="h2" className="text-white-a700_01">
+              Checkout
+            </Heading>
           </Button>
-          <Text size="text3xl" as="p">
+          <Text size="base" as="p" className="text-sm" responsive>
             Estimated delivery within 3-5 days
           </Text>
         </div>
