@@ -1,7 +1,7 @@
 // data/myCartData.js
 export const myCartData = {
   itemCount: 1,
-  amountAwayFromFreeShipping: 676,
+  freeShippingThreshold: 1000,
   cartItems: [
     {
       id: 1,
@@ -99,9 +99,9 @@ export const myCartData = {
   ],
   cashback: 14.86,
   paymentSummary: {
-    subtotal: 351,
+    subtotal: 523,
     shipping: 149,
     savings: 276,
-    total: 500,
+    total: 672,
   },
 };
