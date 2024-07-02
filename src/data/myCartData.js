@@ -34,8 +34,8 @@ export const myCartData = {
     },
     {
       image: "img_offer_2.png",
-      heading: "coupons & offers",
-      subtext: "Apply now and save extra!",
+      heading: "become a member",
+      subtext: "Get FREE shipping on every orders",
       textColor: "text-black-900",
       bgColor: "bg-deep_orange-50_03",
     },

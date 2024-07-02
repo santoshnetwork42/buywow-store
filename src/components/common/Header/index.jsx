@@ -3,7 +3,7 @@
 import { MenuSVG } from "@/assets/images";
 import { Img, Text } from "@/components/common";
 import Link from "next/link";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import NavMenu from "@/components/common/partials/NavMenu";
 import { mainMenuItems } from "@/data/headerData";
 import SearchBar from "@/components/common/partials/SearchBar";
@@ -21,25 +21,8 @@ export default function Header({ ...props }) {
     }));
   };
 
-  const openMobileMenu = () => {
-    setMobileMenuOpen(true);
-  };
-
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
-
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [mobileMenuOpen]);
+  const openMobileMenu = () => setMobileMenuOpen(true);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   const renderMenuItem = (item, index) => {
     if (item.submenu) {

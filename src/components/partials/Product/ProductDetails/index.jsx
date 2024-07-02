@@ -1,14 +1,12 @@
 "use client"; // added this just for static data as of now - "productData"
 
-import { IndiaMapIcon, StarIcon, VehicelIcon } from "@/assets/svg/icons";
+import { IndiaMapIcon, StarIcon, VehicleIcon } from "@/assets/svg/icons";
 import { Button, Text } from "@/components/common";
 import { productData } from "@/data/productData";
 import React from "react";
-import HighLights from "@/components/partials/Product/HighLights";
 
-const ProductDetail = () => {
+const ProductDetails = () => {
   const productDetail = productData[0];
-  console.log("productDetail :>> ", productDetail);
   return (
     <div className="container-main grid grid-cols-1 gap-3 md:grid-cols-2">
       <div className="order-2 bg-red-500 md:order-1 md:row-span-2">
@@ -91,7 +89,7 @@ const ProductDetail = () => {
           <Button className="w-full py-4 sm:py-2">Add To Cart</Button>
           <div className="flex justify-evenly gap-4">
             <div className="flex items-center gap-1">
-              <VehicelIcon size={30} />
+              <VehicleIcon size={30} />
               <Text as="p" size="sm" responsive={false}>
                 Ships within 1-2 days
               </Text>
@@ -104,14 +102,9 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-
-        {/* Highlights */}
-        <HighLights />
-
-        {/* Product MetaData */}
       </div>
     </div>
   );
 };
 
-export default ProductDetail;
+export default ProductDetails;

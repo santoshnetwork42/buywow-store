@@ -31,7 +31,7 @@ export const StarIcon = ({ size = 30, color = "#FAB73B" }) => {
   );
 };
 
-export const VehicelIcon = ({ size = 20, color = "#000000" }) => {
+export const VehicleIcon = ({ size = 20, color = "#000000" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

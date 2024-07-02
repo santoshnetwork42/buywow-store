@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Heading, Img, Text } from "@/components/common";
 import SliderComponent from "@/components/features/Slider/SliderScroll";
-import { useDeviceWidth } from "@/utils/useDeviceWidth";
+import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 
 const SliderItemSection = ({ sectionData, ItemComponent }) => {
   const width = useDeviceWidth();

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useDeviceWidth } from "@/utils/useDeviceWidth";
+import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 import { Img } from "@/components/common";
 import SliderDot from "@/components/features/Slider/SliderDot";
 

@@ -2,7 +2,7 @@
 
 import { Heading, Img } from "@/components/common";
 import SliderComponent from "@/components/features/Slider/SliderScroll";
-import { useDeviceWidth } from "@/utils/useDeviceWidth";
+import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 import React from "react";
 
 const IngredientItem = ({ ingredient, index }) => (

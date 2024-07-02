@@ -1,7 +1,7 @@
 "use client";
 
 import { Img } from "@/components/common";
-import { useDeviceWidth } from "@/utils/useDeviceWidth";
+import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 import Link from "next/link";
 import React from "react";
 

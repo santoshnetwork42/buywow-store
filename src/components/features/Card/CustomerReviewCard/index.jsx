@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button, Text, Heading, Img } from "@/components/common";
-import { useDeviceWidth } from "@/utils/useDeviceWidth";
+import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 
 const CustomerReviewCard = ({ reviewData, ...props }) => {
   const width = useDeviceWidth();
