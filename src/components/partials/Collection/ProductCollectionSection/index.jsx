@@ -38,7 +38,7 @@ const ProductCollectionSection = ({ collectionData, className }) => {
   return (
     <Tabs
       className={`flex flex-col ${className}`}
-      selectedTabClassName="bg-blue-50 border-blue-50 font-normal"
+      selectedTabClassName="bg-blue-50 !border-blue-50 font-normal"
     >
       <div className="mb-5 grid grid-cols-[1fr_auto] items-center gap-4 sm:mb-6 sm:gap-5 lg:mb-7 lg:grid-cols-[auto_1fr_auto] xl:gap-8">
         <Heading as="h2" size="2xl" className="shrink-0 lg:order-1" responsive>
@@ -57,14 +57,7 @@ const ProductCollectionSection = ({ collectionData, className }) => {
                 className="w-max rounded-full border-[0.5px] border-lime-100 px-2 py-1 text-sm font-light capitalize !leading-[1.25] md:border md:px-3 md:py-1.5 md:text-base"
                 onClick={() => setActiveCategory(category)}
               >
-                <Text
-                  size="base"
-                  as="p"
-                  className="text-sm font-light capitalize"
-                  responsive
-                >
-                  {category}
-                </Text>
+                {category}
               </Tab>
             ))}
           </TabList>

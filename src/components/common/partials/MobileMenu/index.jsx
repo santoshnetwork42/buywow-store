@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { Text, Img, Heading, Button } from "@/components/common";
 import { CloseSVG, UserSVG } from "@/assets/images";
-import Sidebar from "@/components/common/Sidebar";
+import Sidebar from "@/components/common/Drawer";
 import MobileMenuItem from "@/components/common/partials/MobileMenuItem";
 
 const MobileMenu = ({ isOpen, onClose, menuItems }) => {
