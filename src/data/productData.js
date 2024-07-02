@@ -7,6 +7,13 @@ export const productData = [
       height: 331,
       alt: "Apple Cider Vinegar Shampoo",
     },
+    highLights: [
+      { image: "benefits_1.svg", title: "paraben free" },
+      { image: "benefits_2.svg", title: "sulfate free" },
+      { image: "benefits_3.svg", title: "cruelty free" },
+      { image: "benefits_1.svg", title: "clinically tested" },
+      { image: "benefits_4.svg", title: "100% vegan" },
+    ],
     features: [
       "Cleanses and clarifies hair and scalp",
       "Balances pH levels",
