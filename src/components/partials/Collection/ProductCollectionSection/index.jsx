@@ -39,6 +39,7 @@ const ProductCollectionSection = ({ collectionData, className }) => {
     <Tabs
       className={`flex flex-col ${className}`}
       selectedTabClassName="bg-blue-50 !border-blue-50 font-normal"
+      selectedTabPanelClassName="relative tab-panel--selected"
     >
       <div className="mb-5 grid grid-cols-[1fr_auto] items-center gap-4 sm:mb-6 sm:gap-5 lg:mb-7 lg:grid-cols-[auto_1fr_auto] xl:gap-8">
         <Heading as="h2" size="2xl" className="shrink-0 lg:order-1" responsive>
@@ -69,7 +70,7 @@ const ProductCollectionSection = ({ collectionData, className }) => {
           <div className="flex flex-wrap justify-center gap-x-1 gap-y-6 sm:gap-x-2 md:gap-y-7 lg:gap-x-3">
             {sortProducts(collectionData.products[category]).map((product) => (
               <ProductCard
-                className="w-full max-w-[min(356px,calc(50%-2px))] basis-auto sm:max-w-[min(356px,calc(50%-4px))] md:max-w-[min(356px,calc(33%-4px))] lg:max-w-[min(356px,calc(33%-6px))] xl:max-w-[min(356px,calc(25%-10px))]"
+                className="w-[calc(50%-4px)] max-w-[356px] md:w-[calc(33%-6px)] xl:w-[calc(25%-10px)]"
                 key={product.id}
                 {...product}
               />

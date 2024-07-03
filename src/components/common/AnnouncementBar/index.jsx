@@ -1,6 +1,5 @@
 import { Text } from "@/components/common";
-import React from "react";
-import CountdownTimer from "@/components/common/partials/CountdownTimer";
+import FlipClock from "@/components/common/partials/FlipClock";
 
 const AnnouncementBar = ({ leftText, centerContent, rightText }) => {
   return (
@@ -15,7 +14,10 @@ const AnnouncementBar = ({ leftText, centerContent, rightText }) => {
         </Text>
         <div className="m-auto flex w-auto shrink-0 items-center justify-center">
           {centerContent.isTimer === true ? (
-            <CountdownTimer {...centerContent} />
+            <FlipClock
+              targetDate={centerContent.targetDate}
+              centerText={centerContent.centerText}
+            />
           ) : (
             <Text as="p" className="py-0.5 text-white-a700_01" size="sm">
               {centerContent.centerText}

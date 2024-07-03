@@ -1,4 +1,4 @@
-import IntroCarousal from "@/components/partials/Home/IntroCarousal";
+import IntroCarousal from "@/components/common/partials/IntroCarousal";
 import ShopBanner from "@/components/partials/Home/ShopBanner";
 import ShopCategories from "@/components/partials/Home/ShopCategories";
 import ShopIngredients from "@/components/partials/Home/ShopIngredients";
@@ -7,7 +7,6 @@ import React from "react";
 import NewLaunchSection from "@/components/partials/Home/NewLaunchSection";
 import OfferCarousal from "@/components/features/Carousel/OfferCarousel";
 import ConcernSection from "@/components/partials/Home/ConcernSection";
-import BestSellerSection from "@/components/partials/Home/BestSellerSection";
 import CustomerReviewSection from "@/components/partials/Home/CustomerReviewSection";
 import BlogSection from "@/components/partials/Home/BlogSection";
 import DeliveryInfoSection from "@/components/common/partials/DeliveryInfoSection";
@@ -59,8 +58,8 @@ const Home = () => {
         </div>
 
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          {/* new launches section */}
-          <BestSellerSection
+          {/* new launches tabbed product section */}
+          <TabProductSection
             title={bestSellerData.title}
             categories={bestSellerData.categories}
             products={bestSellerData.products}

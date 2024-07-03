@@ -13,16 +13,22 @@ export const introCarousalData = [
     desktopImage: "img_hero_section.png",
     mobileImage: "img_hero_section_mob.png",
     linkUrl: "/products1",
+    desktopDimensions: { width: 1440, height: 496 },
+    mobileDimensions: { width: 376, height: 148 },
   },
   {
     desktopImage: "img_hero_section.png",
     mobileImage: "img_hero_section_mob.png",
     linkUrl: "/products2",
+    desktopDimensions: { width: 1440, height: 496 },
+    mobileDimensions: { width: 376, height: 148 },
   },
   {
     desktopImage: "img_hero_section.png",
     mobileImage: "img_hero_section_mob.png",
     linkUrl: "/products3",
+    desktopDimensions: { width: 1440, height: 496 },
+    mobileDimensions: { width: 376, height: 148 },
   },
 ];
 
