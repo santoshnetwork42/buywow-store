@@ -41,73 +41,71 @@ export const metadata = {
 const Home = () => {
   return (
     <>
-      {/* main content section */}
+      {/* Main Content Section */}
       <div className="mb-8 flex w-full flex-col items-center">
-        {/* categories section */}
+        {/* Product Categories Display */}
         <ProductCategories categories={productCategoryItems} />
 
-        {/* promo section */}
-        <div className="self-stretch">
-          {/* hero slider section */}
-          <IntroCarousal carousalData={introCarousalData} />
-        </div>
+        {/* Promotional Carousal Section */}
+        <IntroCarousal className="w-full" carousalData={introCarousalData} />
 
-        <div className="container-main mb-7 mt-[22px] flex sm:mt-6 md:mt-7 lg:my-8">
-          {/* features list section */}
-          <ProductFeatures features={productFeaturesData.features} />
-        </div>
+        {/* Product Features List */}
+        <ProductFeatures
+          className="container-main mb-7 mt-[22px] sm:mt-6 md:mt-7 lg:my-8"
+          features={productFeaturesData.features}
+        />
 
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          {/* new launches tabbed product section */}
+          {/* New Launches Tabbed Product Section */}
           <TabProductSection
             title={bestSellerData.title}
             categories={bestSellerData.categories}
             products={bestSellerData.products}
           />
 
-          {/* ingredients section */}
+          {/* Ingredients Section */}
           <ShopIngredients shopIngredientsData={shopIngredientsData} />
 
-          {/* offers section */}
+          {/* Offers Section */}
           <OfferCarousal offers={offersData} />
 
-          {/* concerns section */}
+          {/* Concerns Section */}
           <ConcernSection sectionData={concernSectionData} />
 
-          {/* featured products section */}
+          {/* Featured Products Section */}
           <NewLaunchSection newLaunchData={newLaunchData} />
         </div>
 
-        {/* testimonials section */}
+        {/* Testimonials Section */}
         <ShopBanner
           {...testimonialBannerData}
           className="my-8 sm:my-10 lg:my-12"
         />
 
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          {/* categories section */}
+          {/* Shop Categories Section */}
           <ShopCategories sectionData={shopCategoriesData} />
-          {/* tabbed product section */}
+          {/* Tabbed Product Section */}
           <TabProductSection {...tabProductData} />
         </div>
 
-        {/* brand statement section */}
+        {/* Brand Statement Section */}
         <ShopBanner
           {...portfolioBannerData}
           className="my-8 sm:my-10 lg:my-12"
         />
 
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          {/* customer reviews section */}
+          {/* Customer Reviews Section */}
           <CustomerReviewSection sectionData={customerReviewSectionData} />
 
-          {/* blog section */}
+          {/* Blog Section */}
           <BlogSection sectionData={blogSectionData} />
 
-          {/* instagram feed section */}
+          {/* Instagram Feed Section */}
           <VideoSection sectionData={instagramFeedData} />
 
-          {/* delivery info section */}
+          {/* Delivery Information Section */}
           <DeliveryInfoSection data={deliveryInfoData} />
         </div>
       </div>
