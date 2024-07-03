@@ -23,10 +23,7 @@ function RootLayout({ children }) {
             centerContent={{
               isTimer: true,
               centerText: "Flash Sale up to 60% OFF for",
-              days: 1,
-              hours: 5,
-              minutes: 54,
-              seconds: 24,
+              targetDate: "2024-08-05T00:00:00",
             }}
             rightText="100% Refund on returns"
             flashSaleDiscount={60}

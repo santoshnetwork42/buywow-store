@@ -408,3 +408,45 @@ export const productBenefits = [
     description: "For all hair types, promoting healthier, stronger hair.",
   },
 ];
+
+export const watchUsData = {
+  title: "Watch Us In Action",
+  images: [
+    {
+      id: 1,
+      src: "img_rectangle_26044.png",
+      width: 334,
+      height: 320,
+      alt: "profile image",
+    },
+    {
+      id: 2,
+      src: "img_rectangle_26044_320x318.png",
+      width: 318,
+      height: 320,
+      alt: "forward image",
+    },
+    {
+      id: 3,
+      src: "img_rectangle_26044_1.png",
+      width: 318,
+      height: 320,
+      alt: "image",
+    },
+    {
+      id: 4,
+      src: "img_rectangle_26044_319x318.png",
+      width: 318,
+      height: 319,
+      alt: "rectangle",
+    },
+    {
+      id: 5,
+      src: "img_rectangle_26044.png",
+      width: 334,
+      height: 320,
+      alt: "profile image",
+    },
+  ],
+  playButtonIcon: "img_forward.svg",
+};

@@ -24,7 +24,10 @@ const VideoSection = ({ sectionData, className, ...props }) => {
                 key={image.id}
                 image={image}
                 playButtonIcon={playButtonIcon}
-                index={index}
+                imgClassName="aspect-[334/320]"
+                imgHeight={320}
+                imgWidth={334}
+                className="relative w-[70vw] max-w-[250px] overflow-hidden rounded-lg sm:w-[42vw] sm:max-w-[334px] md:w-[36vw] lg:w-[30vw]"
               />
             ))}
           </div>

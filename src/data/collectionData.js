@@ -21,6 +21,30 @@ export const bannerData = {
   alt: "hair care",
 };
 
+export const introCollectionPageCarousalData = [
+  {
+    desktopImage: "img_collection_banner.png",
+    mobileImage: "img_collection_banner_mobile.png",
+    linkUrl: "/collections/hair-care",
+    desktopDimensions: { width: 1340, height: 400 },
+    mobileDimensions: { width: 350, height: 200 },
+  },
+  // {
+  //   desktopImage: "img_hero_section.png",
+  //   mobileImage: "img_hero_section_mob.png",
+  //   linkUrl: "/products2",
+  //   desktopDimensions: { width: 1340, height: 400 },
+  //   mobileDimensions: { width: 350, height: 200 },
+  // },
+  // {
+  //   desktopImage: "img_hero_section.png",
+  //   mobileImage: "img_hero_section_mob.png",
+  //   linkUrl: "/products3",
+  //   desktopDimensions: { width: 1340, height: 400 },
+  //   mobileDimensions: { width: 350, height: 200 },
+  // },
+];
+
 export const recentlyViewedData = {
   title: "Recently Viewed",
   productsData: productData,

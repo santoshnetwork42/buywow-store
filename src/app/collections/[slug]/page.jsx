@@ -1,13 +1,13 @@
 import Breadcrumb from "@/components/common/Breadcrumb";
 import CollectionMetadata from "@/components/partials/Collection/CollectionMetadata";
-import CollectionPageBanner from "@/components/partials/Collection/CollectionPageBanner";
 import ProductCollectionSection from "@/components/partials/Collection/ProductCollectionSection";
 import RecentlyViewedSection from "@/components/partials/Collection/RecentlyViewedSection";
+import IntroCarousal from "@/components/common/partials/IntroCarousal";
 import ShopCategories from "@/components/partials/Home/ShopCategories";
 import {
-  bannerData,
   breadcrumbItems,
   exploreMoreData,
+  introCollectionPageCarousalData,
   metadataData,
   productCollectionData,
   recentlyViewedData,
@@ -30,8 +30,12 @@ const Collections = ({ params }) => {
           <Breadcrumb items={breadcrumbItems} currentPage={params.slug} />
 
           {/* Introductory section */}
-          <CollectionPageBanner
+          {/* <CollectionPageBanner
             bannerData={bannerData}
+            className="relative sm:-left-1.5 sm:w-[calc(100%+12px)] lg:-left-2.5 lg:w-[calc(100%+20px)]"
+          /> */}
+          <IntroCarousal
+            carousalData={introCollectionPageCarousalData}
             className="relative sm:-left-1.5 sm:w-[calc(100%+12px)] lg:-left-2.5 lg:w-[calc(100%+20px)]"
           />
         </div>
