@@ -11,7 +11,7 @@ const MetaData = () => {
   const { metaData } = productData[0];
   const { productDescription, ingredients, howToUse, faqs } = metaData;
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       {/* ProductDescription Section*/}
       <Description productDescription={productDescription} />
 

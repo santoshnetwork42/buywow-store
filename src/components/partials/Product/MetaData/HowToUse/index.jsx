@@ -7,7 +7,7 @@ const HowToUse = ({ howToUse }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="flex w-full flex-col gap-3">
+    <div className="flex w-full flex-col">
       <div
         className="flex w-full cursor-pointer items-center justify-between"
         onClick={() => setIsOpen(!isOpen)}
@@ -28,7 +28,7 @@ const HowToUse = ({ howToUse }) => {
       </div>
       <ul
         className={`flex flex-col gap-1.5 overflow-hidden transition-all duration-300 ease-in-out sm:gap-2 lg:gap-2.5 ${
-          isOpen ? "max-h-96" : "max-h-0"
+          isOpen ? "max-h-96 py-3" : "max-h-0"
         }`}
       >
         {!!howToUse.steps &&
