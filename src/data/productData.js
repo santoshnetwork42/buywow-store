@@ -116,6 +116,11 @@ export const productData = [
             answer:
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ad minim veniam.",
           },
+          {
+            question: "New fresh Question?",
+            answer:
+              "Answer to this question is written seeeee thissssss Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ad minim veniam.",
+          },
         ],
       },
     },
