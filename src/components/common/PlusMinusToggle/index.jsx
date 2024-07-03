@@ -1,6 +1,4 @@
-"use client";
-import React, { useState } from "react";
-import { Text } from "@/components/common";
+import React from "react";
 
 const PlusMinusToggle = ({ open }) => {
   return (
