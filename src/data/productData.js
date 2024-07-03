@@ -64,6 +64,61 @@ export const productData = [
       "dermatologically tested",
       "hypoallergenic",
     ],
+    metaData: {
+      productDescription: {
+        image: "dummy_1.png",
+        title: "Product Description",
+        description:
+          "Transform your hair with WOW Skin Science Onion Black Seed Hair Oil. Say goodbye to hair fall and hello to vibrant, resilient locks. Featuring a luxurious concoction of 7 cold-pressed oils, our hair oil ensures",
+      },
+      ingredients: {
+        image: "dummy_2.png",
+        title: "Ingredients",
+        data: [
+          {
+            image: "dummy_3.png",
+            description:
+              "Onion Seed Oil strengthens and prevents hair breakage.",
+          },
+          {
+            image: "dummy_4.png",
+            description: "black seed oil anti oxidant and soothes the scalp.",
+          },
+          {
+            image: "dummy_3.png",
+            description: "Castor oil supports new hair growth.",
+          },
+          {
+            image: "dummy_2.png",
+            description: "jojoba oil provides moisturization to hair.",
+          },
+          {
+            image: "dummy_1.png",
+            description: "olive oil promotes healthy hair growth.",
+          },
+        ],
+      },
+      howToUse: {
+        image: "dummy_1.png",
+        title: "How to use",
+        steps: [
+          "Part your hair and squeeze enough amount of oil onto your palm.",
+          "Massage gently with your fingertips in circular motion to help it penetrate deeper. Sit back and let the nourishment work.",
+          "Part your hair and squeeze enough amount of oil onto your palm. Massage gently with your fingertips in circular motion to help it penetrate deeper. Sit back and let the nourishment work.",
+        ],
+      },
+      faqs: {
+        image: "dummy_3.png",
+        title: "FAQs",
+        data: [
+          {
+            question: "Lorem ipsum dolor sit amet?",
+            answer:
+              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ad minim veniam.",
+          },
+        ],
+      },
+    },
   },
   {
     id: "prod_002",
