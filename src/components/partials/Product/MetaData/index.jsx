@@ -5,6 +5,7 @@ import React from "react";
 import Description from "@/components/partials/Product/MetaData/Description";
 import Ingredients from "@/components/partials/Product/MetaData/Ingredients";
 import HowToUse from "./HowToUse";
+import Divider from "@/components/common/Divider";
 
 const MetaData = () => {
   const { metaData } = productData[0];
@@ -14,11 +15,21 @@ const MetaData = () => {
       {/* ProductDescription Section*/}
       <Description productDescription={productDescription} />
 
+      {!!ingredients && (
+        <Divider className="mb-3 h-[0.05rem] w-full bg-gray-300" />
+      )}
+
       {/* Ingredients Section */}
       <Ingredients ingredients={ingredients} />
 
+      {!!howToUse && (
+        <Divider className="mb-3 h-[0.05rem] w-full bg-gray-300" />
+      )}
+
       {/* How to use Section */}
       <HowToUse howToUse={howToUse} />
+
+      {!!faqs && <Divider className="mb-3 h-[0.05rem] w-full bg-gray-300" />}
     </div>
   );
 };
