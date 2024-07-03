@@ -146,8 +146,28 @@ export const productData = [
     title: "Herbal Hair Oil for Intense Nourishment and Growth",
     benefits:
       "Stimulates hair follicles | Deep conditions hair | Reduces scalp inflammation | Prevents split ends | Improves blood circulation | Balances scalp oils | Protects from environmental damage | Enhances hair volume",
-    rating: 1.0,
-    reviewCount: 1,
+    rating: 4.3,
+    reviewCount: 45,
+    reviews: [
+      {
+        rating: 4,
+        title: "I have been buying this for over 2 Years",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      },
+      {
+        rating: 1.4,
+        title: "I have been buying this for over 2 Years",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      },
+      {
+        rating: 2.8,
+        title: "I have been buying this for over 2 Years",
+        description:
+          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      },
+    ],
     pricing: {
       current: "₹9999",
       original: "₹10000",
