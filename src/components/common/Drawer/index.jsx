@@ -3,7 +3,7 @@
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import React, { useEffect, useState } from "react";
 
-const Sidebar = ({
+const Drawer = ({
   isOpen,
   onClose,
   children,
@@ -55,4 +55,4 @@ const Sidebar = ({
   );
 };
 
-export default Sidebar;
+export default Drawer;

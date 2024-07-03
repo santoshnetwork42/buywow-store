@@ -1,13 +1,26 @@
 // components/MyCart/OfferItem.jsx
 import React, { useState } from "react";
 import { Button, Heading, Img, Text } from "@/components/common";
-import OfferSidebar from "../OfferSidebar";
+import OfferSidebar from "@/components/partials/MyCart/OfferSidebar";
 
 export default function OfferItem({ offer }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
 
   const openSidebar = () => setIsSidebarOpen(true);
   const closeSidebar = () => setIsSidebarOpen(false);
+
+  const handleApplyCoupon = (code) => {
+    setAppliedCoupon(code);
+    // Add logic to apply the coupon to the cart
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    // Add logic to remove the coupon from the cart
+  };
+
+  if (!offer) return null;
 
   return (
     <>
@@ -52,7 +65,10 @@ export default function OfferItem({ offer }) {
       <OfferSidebar
         isOpen={isSidebarOpen}
         onClose={closeSidebar}
-        offer={offer}
+        coupons={offer.coupons}
+        appliedCoupon={appliedCoupon}
+        onApplyCoupon={handleApplyCoupon}
+        onRemoveCoupon={handleRemoveCoupon}
       />
     </>
   );
