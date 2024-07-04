@@ -464,3 +464,18 @@ export const productEffectivenessData = {
     },
   },
 };
+
+export const productHighlightsData = [
+  {
+    src: "img_product_highlight_1.png",
+    alt: "Image 1 description",
+  },
+  {
+    src: "img_product_highlight_2.png",
+    alt: "Image 2 description",
+  },
+  {
+    src: "img_product_highlight_3.png",
+    alt: "Image 3 description",
+  },
+];

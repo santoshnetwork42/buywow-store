@@ -10,7 +10,9 @@ import MetaData from "@/components/partials/Product/MetaData";
 const ProductDetails = ({ className }) => {
   const productDetail = productData[0];
   return (
-    <div className={`grid grid-cols-1 gap-3 md:grid-cols-2 ${className}`}>
+    <div
+      className={`container-main grid grid-cols-1 gap-3 md:grid-cols-2 ${className}`}
+    >
       <div className="order-2 bg-red-500 md:order-1 md:row-span-2">
         <p>First Column Content</p>
       </div>

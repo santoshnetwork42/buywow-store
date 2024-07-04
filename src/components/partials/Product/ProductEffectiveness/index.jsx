@@ -1,14 +1,14 @@
 import { Heading, Img } from "@/components/common";
 import React from "react";
 
-const ProductEffectivenessImageSection = ({ data, className, ...props }) => {
+const ProductEffectiveness = ({ data, className, ...props }) => {
   const { title, img } = data;
   return (
     <div
       className={`container-main flex w-full max-w-[1120px] flex-col gap-5 px-4 sm:gap-6 lg:gap-7 ${className}`}
       {...props}
     >
-      <Heading as="h4" size="2xl" className="text-center" >
+      <Heading size="heading" as="h1" responsive>
         {title}
       </Heading>
       <div className="flex w-full flex-col items-center justify-center gap-9 sm:gap-10 md:flex-row md:gap-12 lg:gap-16">
@@ -35,4 +35,4 @@ const ProductEffectivenessImageSection = ({ data, className, ...props }) => {
   );
 };
 
-export default ProductEffectivenessImageSection;
+export default ProductEffectiveness;
