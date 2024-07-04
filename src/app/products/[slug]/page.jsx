@@ -8,6 +8,7 @@ import WatchUs from "@/components/partials/Product/WatchUs";
 import {
   productEffectivenessData,
   productHighlightsData,
+  productKeyIngredientsData,
   watchUsData,
 } from "@/data/productData";
 import React from "react";
@@ -33,7 +34,7 @@ const ProductPage = () => {
         <ProductHighlights data={productHighlightsData} />
 
         {/* Product Key Ingredients Section */}
-        <ProductKeyIngredients />
+        <ProductKeyIngredients data={productKeyIngredientsData} />
 
         {/* Reviews Section */}
         <Reviews />
