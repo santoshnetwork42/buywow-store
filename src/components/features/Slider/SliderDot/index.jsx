@@ -1,10 +1,16 @@
 import React from "react";
 import { Slider } from "@/components/common";
 
-const SliderDot = ({ items, sliderState, setSliderState, sliderRef }) => {
+const SliderDot = ({
+  items,
+  sliderState,
+  setSliderState,
+  sliderRef,
+  autoPlay = true,
+}) => {
   return (
     <Slider
-      autoPlay
+      autoPlay={autoPlay}
       autoPlayInterval={2000}
       responsive={{
         0: { items: 1 },

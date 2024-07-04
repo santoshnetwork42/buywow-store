@@ -24,6 +24,17 @@ export const productData = [
       "Reduces hair breakage",
       "Soothes itchy scalp",
     ],
+    imageList: [
+      "pdp_7.png",
+      "pdp_6.png",
+      "pdp_5.png",
+      "pdp_4.png",
+      "pdp_3.png",
+      "pdp_2.png",
+      "pdp_5.png",
+      "pdp_4.png",
+      "pdp_3.png",
+    ],
     title: "Apple Cider Vinegar Shampoo for Deep Cleansing and Shine",
     benefits:
       "Reduces scalp irritation | Restores natural shine | Smoothens hair | Balances scalp pH | Removes excess oil and buildup | Stimulates hair growth | Prevents hair loss | Improves hair texture",
