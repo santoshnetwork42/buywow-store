@@ -10,7 +10,7 @@ const WatchUs = ({ data, className, ...props }) => {
       className={`container-main flex w-full flex-col items-center justify-center gap-4 bg-lime-50 pb-4 pt-3 md:gap-5 md:pb-5 md:pt-4 ${className}`}
       {...props}
     >
-      <Heading size="3xl" as="h2" className="lg:text-[28px]" responsive>
+      <Heading size="heading" as="h1" responsive>
         {title}
       </Heading>
       <div className="no-scrollbar w-full overflow-x-auto">

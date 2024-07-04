@@ -28,7 +28,7 @@ const responsiveHeadingSizes = {
   "5xl": "text-3xl sm:text-4xl lg:text-5xl font-semibold",
   "6xl": "text-4xl sm:text-5xl lg:text-6xl font-semibold",
   heading:
-    "text-[24px] sm:text-[28px] lg:text-[32px] font-semibold text-center",
+    "text-[24px] sm:text-[26px] md:text-[28px] lg:text-[30px] xl:text-[32px] font-semibold text-center",
 };
 
 const Heading = ({

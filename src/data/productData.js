@@ -479,3 +479,25 @@ export const productHighlightsData = [
     alt: "Image 3 description",
   },
 ];
+
+export const productKeyIngredientsData = {
+  title: "Key Ingredients",
+  keyIngredient: {
+    desktopImage: {
+      src: "img_product_key_ingredient.png",
+      alt: "Product Main Ingredient Image",
+    },
+    mobileImage: {
+      src: "img_product_key_ingredient_mobile.png",
+      alt: "Product Main Ingredient Mobile Image",
+    },
+  },
+  additionalIngredients: [
+    { caption: "Castor Oil", image: "castor-oil-image.png" },
+    { caption: "Moroccan Argan Oil", image: "argan-oil-image.png" },
+    { caption: "Olive Oil", image: "olive-oil-image.png" },
+    { caption: "Jojoba Oil", image: "jojoba-oil-image.png" },
+    { caption: "Sweet Almond Oil", image: "almond-oil-image.png" },
+    { caption: "Coconut Oil", image: "coconut-oil-image.png" },
+  ],
+};
