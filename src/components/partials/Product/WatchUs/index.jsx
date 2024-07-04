@@ -8,7 +8,7 @@ const WatchUs = ({ data, className, ...props }) => {
   return (
     <div className={`w-full bg-lime-50 ${className}`} {...props}>
       <div className="container-main flex flex-col items-center justify-center gap-4 pb-4 pt-3 md:gap-5 md:pb-5 md:pt-4">
-        <Heading size="3xl" as="h2" className="lg:text-[28px]" responsive>
+        <Heading size="2xl" as="h4" className="text-center">
           {title}
         </Heading>
         <div className="no-scrollbar w-full overflow-x-auto">

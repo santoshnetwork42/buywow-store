@@ -8,7 +8,7 @@ const ProductEffectivenessImageSection = ({ data, className, ...props }) => {
       className={`container-main flex w-full max-w-[1120px] flex-col gap-5 px-4 sm:gap-6 lg:gap-7 ${className}`}
       {...props}
     >
-      <Heading size="heading" as="h1" responsive>
+      <Heading as="h4" size="2xl" className="text-center" >
         {title}
       </Heading>
       <div className="flex w-full flex-col items-center justify-center gap-9 sm:gap-10 md:flex-row md:gap-12 lg:gap-16">
