@@ -450,3 +450,17 @@ export const watchUsData = {
   ],
   playButtonIcon: "img_forward.svg",
 };
+
+export const productEffectivenessData = {
+  title: "Clinically proven to reduce hairfall",
+  img: {
+    image1: {
+      src: "img_product_effectiveness_1.png",
+      alt: "Image 1 description",
+    },
+    image2: {
+      src: "img_product_effectiveness_2.png",
+      alt: "Image 2 description",
+    },
+  },
+};
