@@ -8,7 +8,6 @@ import Divider from "@/components/common/Divider";
 const Reviews = () => {
   const product = productData[1];
 
-  console.log("product.rating :>> ", product.rating);
   return (
     <div className="container-main flex flex-col items-center justify-center">
       <Heading as="h4" size="2xl" className="font-semibold">
@@ -33,8 +32,8 @@ const Reviews = () => {
           </div>
         </div>
         <div className="hidden h-20 w-[1px] bg-gray-800 md:block"></div>
-        <div className="flex flex-col gap-1.5">
-          <RatingBar starCount={5} percentage={85} />
+        <div className="flex w-full max-w-[24rem] flex-col gap-1.5 md:max-w-[22rem]">
+          <RatingBar starCount={5} percentage={80} />
           <RatingBar starCount={4} percentage={70} />
           <RatingBar starCount={3} percentage={12} />
           <RatingBar starCount={2} percentage={0} />
