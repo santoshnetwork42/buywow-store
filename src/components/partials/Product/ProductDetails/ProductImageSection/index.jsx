@@ -32,7 +32,7 @@ const ProductImageSection = ({ imageList }) => {
   const items = imageList.map((data, index) => (
     <div
       key={index}
-      className={`w-full flex-shrink-0 transform transition-transform duration-500 ${
+      className={`w-full transform transition-transform duration-500 ${
         currentIndex === index ? "translate-x-0" : `translate-x-full`
       }`}
       style={{ display: currentIndex === index ? "block" : "none" }}
@@ -72,12 +72,12 @@ const ProductImageSection = ({ imageList }) => {
 
   return (
     <div className="flex max-h-[34rem] items-center justify-center">
-      <div className="hidden max-h-[34rem] flex-col gap-2 overflow-scroll py-2 sm:flex sm:w-[25%] md:w-[20%]">
+      <div className="no-scrollbar hidden max-h-[34rem] shrink-0 flex-col gap-2 overflow-scroll py-2 sm:flex sm:w-[20%] md:w-[25%] lg:w-[20%]">
         {thumbnailItems}
       </div>
       <div className="flex flex-col items-center justify-center">
         <div className="flex w-full gap-2 overflow-hidden py-2">{items}</div>
-        <div className="mt-4 flex space-x-2">
+        <div className="mt-4 flex space-x-2 sm:hidden">
           {imageList.map((_, index) => (
             <div
               key={index}
