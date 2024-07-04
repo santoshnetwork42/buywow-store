@@ -10,7 +10,7 @@ const Reviews = () => {
 
   return (
     <div className="container-main flex flex-col items-center justify-center">
-      <Heading as="h4" size="2xl" className="font-semibold">
+      <Heading size="heading" as="h1" responsive>
         Our Happy Customers
       </Heading>
       <div className="flex w-full flex-col items-center justify-center gap-6 py-4 md:flex-row">
