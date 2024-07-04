@@ -52,7 +52,9 @@ const ProductImageSection = ({ imageList }) => {
     <div
       key={index}
       className={`cursor-pointer border p-1 ${
-        currentIndex === index ? "border-blue-500" : "border-transparent"
+        currentIndex === index
+          ? "border-blue-500 transition-all duration-300"
+          : "border-transparent"
       }`}
       ref={(el) => (thumbnailRefs.current[index] = el)}
       onClick={() => handleDotClick(index)}
@@ -81,7 +83,9 @@ const ProductImageSection = ({ imageList }) => {
               key={index}
               onClick={() => handleDotClick(index)}
               className={`h-2 w-2 cursor-pointer rounded-full ${
-                currentIndex === index ? "bg-gray-800" : "bg-gray-400"
+                currentIndex === index
+                  ? "w-4 bg-gray-800 transition-all duration-300"
+                  : "bg-gray-400 transition-all duration-300"
               }`}
             />
           ))}
