@@ -1,65 +1,68 @@
 "use client";
-
-import React, { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
+import { useRippleEffect } from "@/hooks/useRippleEffect";
 
-const Button = ({ children, className, leftIcon, rightIcon, ...restProps }) => {
-  const buttonRef = useRef(null);
+const Button = ({
+  children,
+  className,
+  leftIcon,
+  rightIcon,
+  variant = "primary",
+  size = "medium",
+  fullWidth = false,
+  enableRipple = true,
+  ...restProps
+}) => {
+  const buttonRef = useRippleEffect(enableRipple);
 
-  useEffect(() => {
-    const button = buttonRef.current;
-    if (!button) return;
+  const baseClasses =
+    "relative flex items-center justify-center overflow-hidden rounded-full font-medium transition-colors duration-200";
 
-    const rippleEffect = (event) => {
-      const btn = event.currentTarget;
+  const variantClasses = {
+    primary: "bg-yellow-900 text-white-a700_01 hover:bg-[#bf6b1f]",
+    secondary: "bg-white text-black-900 ",
+    outlined:
+      "bg-transparent border border-yellow-900 text-yellow-900 hover:bg-yellow-50",
+  };
 
-      const circle = document.createElement("span");
-      const diameter = Math.max(btn.clientWidth, btn.clientHeight);
-      const radius = diameter / 2;
+  const sizeClasses = {
+    small: "px-3 py-1 text-sm",
+    medium: "px-4 py-2 text-base",
+    large: "px-6 py-3 text-lg",
+  };
 
-      circle.style.width = circle.style.height = `${diameter}px`;
-      circle.style.left = `${event.clientX - btn.getBoundingClientRect().left - radius}px`;
-      circle.style.top = `${event.clientY - btn.getBoundingClientRect().top - radius}px`;
-      circle.classList.add("ripple");
-
-      const ripple = btn.getElementsByClassName("ripple")[0];
-
-      if (ripple) {
-        ripple.remove();
-      }
-
-      btn.appendChild(circle);
-    };
-
-    button.addEventListener("click", rippleEffect);
-
-    return () => {
-      button.removeEventListener("click", rippleEffect);
-    };
-  }, []);
+  const classes = twMerge(
+    baseClasses,
+    variantClasses[variant],
+    sizeClasses[size],
+    fullWidth ? "w-full" : "",
+    className,
+  );
 
   return (
-    <button
-      ref={buttonRef}
-      className={twMerge(
-        "relative flex-row items-center justify-center overflow-hidden rounded-full bg-yellow-900 px-4 py-1 text-center font-medium text-white-a700_01 sm:text-base lg:text-lg",
-        className,
-      )}
-      {...restProps}
-    >
-      {!!leftIcon && leftIcon}
+    <button ref={buttonRef} className={classes} {...restProps}>
+      {leftIcon && <span className="mr-2">{leftIcon}</span>}
       {children}
-      {!!rightIcon && rightIcon}
+      {rightIcon && <span className="ml-2">{rightIcon}</span>}
     </button>
   );
 };
 
 Button.propTypes = {
   className: PropTypes.string,
-  children: PropTypes.node,
+  children: PropTypes.node.isRequired,
   leftIcon: PropTypes.node,
   rightIcon: PropTypes.node,
+  variant: PropTypes.oneOf(["primary", "secondary", "outlined"]),
+  size: PropTypes.oneOf(["small", "medium", "large"]),
+  fullWidth: PropTypes.bool,
+};
+
+Button.defaultProps = {
+  variant: "primary",
+  size: "medium",
+  fullWidth: false,
 };
 
 export { Button };

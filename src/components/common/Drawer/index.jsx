@@ -1,7 +1,7 @@
 "use client";
 
+import React, { useRef, useEffect, useState } from "react";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
-import React, { useEffect, useState } from "react";
 
 const Drawer = ({
   isOpen,
@@ -10,26 +10,38 @@ const Drawer = ({
   position = "left",
   width = "326px",
   className = "",
+  enableOutsideClick = true,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
-  const [sidebarPosition, setSidebarPosition] = useState(
+  const [drawerPosition, setDrawerPosition] = useState(
     position === "left" ? `-${width}` : width,
   );
+  const drawerRef = useRef(null);
 
   useBodyScrollLock(isOpen);
 
   useEffect(() => {
     if (isOpen) {
       setIsAnimating(true);
-      setTimeout(() => setSidebarPosition("0px"), 50);
+      setTimeout(() => setDrawerPosition("0px"), 50);
     } else {
-      setSidebarPosition(position === "left" ? `-${width}` : width);
+      setDrawerPosition(position === "left" ? `-${width}` : width);
       const timer = setTimeout(() => {
         setIsAnimating(false);
       }, 300);
       return () => clearTimeout(timer);
     }
   }, [isOpen, position, width]);
+
+  const handleClickOutside = (event) => {
+    if (
+      enableOutsideClick &&
+      drawerRef.current &&
+      !drawerRef.current.contains(event.target)
+    ) {
+      onClose();
+    }
+  };
 
   if (!isOpen && !isAnimating) return null;
 
@@ -38,11 +50,12 @@ const Drawer = ({
       className={`fixed inset-0 z-50 bg-black-900 transition-opacity duration-300 ease-in-out ${className} ${
         isOpen ? "bg-opacity-20" : "pointer-events-none bg-opacity-0"
       }`}
-      onClick={onClose}
+      onClick={handleClickOutside}
     >
       <div
+        ref={drawerRef}
         style={{
-          transform: `translateX(${sidebarPosition})`,
+          transform: `translateX(${drawerPosition})`,
           [position]: 0,
           maxWidth: width,
         }}
