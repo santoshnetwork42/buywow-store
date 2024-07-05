@@ -9,6 +9,7 @@ const ProductImageSection = ({ imageList }) => {
 
   const imageRefs = useRef([]);
   const thumbnailRefs = useRef([]);
+  const observerRef = useRef(null);
 
   useEffect(() => {
     if (thumbnailRefs.current[currentIndex]) {
@@ -20,14 +21,56 @@ const ProductImageSection = ({ imageList }) => {
     }
   }, [currentIndex]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = imageRefs.current.indexOf(entry.target);
+              if (index !== -1) {
+                setCurrentIndex(index);
+              }
+            }
+          });
+        },
+        { threshold: 0.5 }, // Adjust threshold as needed
+      );
+
+      imageRefs.current.forEach((ref) => {
+        if (ref) observerRef.current.observe(ref);
+      });
+
+      return () => {
+        if (observerRef.current) observerRef.current.disconnect();
+      };
+    }, 500);
+  }, [imageList]);
+
   const width = useDeviceWidth();
   if (!width) return;
-
   const isDesktop = width > 576;
   const dimensions = isDesktop
     ? { width: 620, height: 480 }
     : { width: 351, height: 303 };
 
+  const items = imageList.map((data, index) => (
+    <div
+      key={index}
+      className={`w-full shrink-0 snap-center transition-opacity duration-500 sm:shrink ${currentIndex === index ? "sm:block" : "sm:hidden"}`}
+      ref={(el) => (imageRefs.current[index] = el)}
+    >
+      <Img
+        src={data}
+        width={dimensions.width}
+        height={dimensions.height}
+        alt={`hero image ${index}`}
+        className="aspect-square w-full object-contain"
+      />
+    </div>
+  ));
   const handleDotClick = (index) => {
     setCurrentIndex(index);
     if (imageRefs.current[index]) {
@@ -50,22 +93,6 @@ const ProductImageSection = ({ imageList }) => {
       setCurrentIndex(currentIndex + 1);
     }
   };
-
-  const items = imageList.map((data, index) => (
-    <div
-      key={index}
-      className={`w-full shrink-0 snap-center transition-opacity duration-500 sm:shrink ${currentIndex === index ? "sm:block" : "sm:hidden"}`}
-      ref={(el) => (imageRefs.current[index] = el)}
-    >
-      <Img
-        src={data}
-        width={dimensions.width}
-        height={dimensions.height}
-        alt={`hero image ${index}`}
-        className="aspect-square w-full object-contain"
-      />
-    </div>
-  ));
 
   const thumbnailItems = imageList.map((data, index) => (
     <div
