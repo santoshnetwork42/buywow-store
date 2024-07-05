@@ -7,7 +7,9 @@ import React, { useState, useRef, useEffect } from "react";
 const ProductImageSection = ({ imageList }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const imageRefs = useRef([]);
   const thumbnailRefs = useRef([]);
+
   useEffect(() => {
     if (thumbnailRefs.current[currentIndex]) {
       thumbnailRefs.current[currentIndex].scrollIntoView({
@@ -28,6 +30,13 @@ const ProductImageSection = ({ imageList }) => {
 
   const handleDotClick = (index) => {
     setCurrentIndex(index);
+    if (imageRefs.current[index]) {
+      imageRefs.current[index].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }
   };
 
   const handlePrevClick = () => {
@@ -45,10 +54,8 @@ const ProductImageSection = ({ imageList }) => {
   const items = imageList.map((data, index) => (
     <div
       key={index}
-      className={`w-full transition-opacity duration-500`}
-      style={{
-        display: currentIndex === index ? "block" : "none",
-      }}
+      className={`w-full shrink-0 snap-center transition-opacity duration-500 sm:shrink ${currentIndex === index ? "sm:block" : "sm:hidden"}`}
+      ref={(el) => (imageRefs.current[index] = el)}
     >
       <Img
         src={data}
@@ -87,7 +94,12 @@ const ProductImageSection = ({ imageList }) => {
         {thumbnailItems}
       </div>
       <div className="relative flex flex-col items-center justify-center">
-        <div className="flex w-full gap-2 overflow-hidden py-2">{items}</div>
+        <div
+          className="no-scrollbar flex w-full gap-2 overflow-scroll py-2 sm:overflow-hidden"
+          style={{ scrollSnapType: "x mandatory" }}
+        >
+          {items}
+        </div>
         <div className="absolute left-0">
           <Button
             className="hidden border border-gray-500 bg-transparent px-4 text-gray-800 shadow shadow-stone-300 hover:bg-transparent sm:block"
