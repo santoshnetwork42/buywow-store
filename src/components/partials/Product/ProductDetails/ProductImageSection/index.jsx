@@ -1,4 +1,6 @@
-import { Img } from "@/components/common";
+"use client";
+
+import { Button, Img } from "@/components/common";
 import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 import React, { useState, useRef, useEffect } from "react";
 
@@ -23,27 +25,37 @@ const ProductImageSection = ({ imageList }) => {
   const dimensions = isDesktop
     ? { width: 620, height: 480 }
     : { width: 351, height: 303 };
-  const aspectRatio = `${dimensions.width} / ${dimensions.height}`;
 
   const handleDotClick = (index) => {
     setCurrentIndex(index);
   };
 
+  const handlePrevClick = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentIndex < imageList.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
   const items = imageList.map((data, index) => (
     <div
       key={index}
-      className={`w-full transform transition-transform duration-500 ${
-        currentIndex === index ? "translate-x-0" : `translate-x-full`
-      }`}
-      style={{ display: currentIndex === index ? "block" : "none" }}
+      className={`w-full transition-opacity duration-500`}
+      style={{
+        display: currentIndex === index ? "block" : "none",
+      }}
     >
       <Img
         src={data}
         width={dimensions.width}
         height={dimensions.height}
         alt={`hero image ${index}`}
-        className="w-full object-contain"
-        style={{ aspectRatio }}
+        className="aspect-square w-full object-contain"
       />
     </div>
   ));
@@ -64,19 +76,34 @@ const ProductImageSection = ({ imageList }) => {
         width={351}
         height={303}
         alt={`thumbnail image ${index}`}
-        style={{ aspectRatio: "351 / 303" }}
         className="aspect-square w-full object-contain"
       />
     </div>
   ));
 
   return (
-    <div className="flex max-h-[34rem] items-center justify-center">
-      <div className="no-scrollbar hidden max-h-[34rem] shrink-0 flex-col gap-2 overflow-scroll py-2 sm:flex sm:w-[20%] md:w-[25%] lg:w-[20%]">
+    <div className="flex max-h-[34rem] items-center justify-center gap-2">
+      <div className="no-scrollbar hidden max-h-[32rem] shrink-0 flex-col gap-2 overflow-scroll py-2 sm:flex sm:w-[18%] md:w-[25%] lg:w-[18%]">
         {thumbnailItems}
       </div>
-      <div className="flex flex-col items-center justify-center">
+      <div className="relative flex flex-col items-center justify-center">
         <div className="flex w-full gap-2 overflow-hidden py-2">{items}</div>
+        <div className="absolute left-0">
+          <Button
+            className="hidden border border-gray-500 bg-transparent px-3 text-gray-800 sm:block"
+            onClick={handlePrevClick}
+          >
+            L
+          </Button>
+        </div>
+        <div className="absolute right-0">
+          <Button
+            className="hidden border border-gray-500 bg-transparent px-3 text-gray-800 sm:block"
+            onClick={handleNextClick}
+          >
+            R
+          </Button>
+        </div>
         <div className="mt-4 flex space-x-2 sm:hidden">
           {imageList.map((_, index) => (
             <div

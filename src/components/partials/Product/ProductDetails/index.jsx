@@ -12,7 +12,7 @@ const ProductDetails = ({ className }) => {
   const productDetail = productData[0];
   return (
     <div
-      className={`container-main grid grid-cols-1 gap-3 md:grid-cols-2 ${className}`}
+      className={`container-main grid grid-cols-1 gap-6 md:grid-cols-2 ${className}`}
     >
       <div className="order-2 h-fit md:order-1 md:row-span-2">
         <ProductImageSection imageList={productDetail.imageList} />
