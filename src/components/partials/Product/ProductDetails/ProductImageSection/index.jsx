@@ -3,6 +3,7 @@
 import { Button, Img } from "@/components/common";
 import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 import React, { useState, useRef, useEffect } from "react";
+import styles from "@/components/partials/Product/ProductDetails/ProductImageSection/ProductImageSection.module.scss";
 
 const ProductImageSection = ({ imageList }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,7 +60,7 @@ const ProductImageSection = ({ imageList }) => {
   const items = imageList.map((data, index) => (
     <div
       key={index}
-      className={`w-full shrink-0 snap-center transition-opacity duration-500 sm:shrink ${currentIndex === index ? "sm:block" : "sm:hidden"}`}
+      className={`w-full shrink-0 snap-center rounded-lg border border-gray-300 transition-opacity duration-500 sm:shrink ${currentIndex === index ? "sm:block" : "sm:hidden"} ${styles.productImageShadow}`}
       ref={(el) => (imageRefs.current[index] = el)}
     >
       <Img
@@ -67,7 +68,7 @@ const ProductImageSection = ({ imageList }) => {
         width={dimensions.width}
         height={dimensions.height}
         alt={`hero image ${index}`}
-        className="aspect-square w-full object-contain"
+        className="aspect-square w-full rounded-lg object-contain"
       />
     </div>
   ));
@@ -99,7 +100,7 @@ const ProductImageSection = ({ imageList }) => {
       key={index}
       className={`cursor-pointer border p-1 ${
         currentIndex === index
-          ? "border-blue-500 transition-all duration-300"
+          ? "rounded-lg border-blue-500 transition-all duration-300"
           : "border-transparent"
       }`}
       ref={(el) => (thumbnailRefs.current[index] = el)}
@@ -110,7 +111,7 @@ const ProductImageSection = ({ imageList }) => {
         width={351}
         height={303}
         alt={`thumbnail image ${index}`}
-        className="aspect-square w-full object-contain"
+        className="aspect-square w-full rounded-lg object-contain"
       />
     </div>
   ));
@@ -122,8 +123,7 @@ const ProductImageSection = ({ imageList }) => {
       </div>
       <div className="relative flex flex-col items-center justify-center">
         <div
-          className="no-scrollbar flex w-full gap-2 overflow-scroll py-2 sm:overflow-hidden"
-          style={{ scrollSnapType: "x mandatory" }}
+          className={`no-scrollbar flex w-full gap-2 overflow-scroll py-2 sm:overflow-hidden ${styles.scrollSnap}`}
         >
           {items}
         </div>
