@@ -90,16 +90,18 @@ const ProductImageSection = ({ imageList }) => {
         <div className="flex w-full gap-2 overflow-hidden py-2">{items}</div>
         <div className="absolute left-0">
           <Button
-            className="hidden border border-gray-500 bg-transparent px-3 text-gray-800 sm:block"
+            className="hidden border border-gray-500 bg-transparent px-4 text-gray-800 shadow shadow-stone-300 hover:bg-transparent sm:block"
             onClick={handlePrevClick}
+            enableRipple={false}
           >
             L
           </Button>
         </div>
         <div className="absolute right-0">
           <Button
-            className="hidden border border-gray-500 bg-transparent px-3 text-gray-800 sm:block"
+            className="hidden border border-gray-500 bg-transparent px-4 text-gray-800 shadow shadow-stone-300 hover:bg-transparent sm:block"
             onClick={handleNextClick}
+            enableRipple={false}
           >
             R
           </Button>
