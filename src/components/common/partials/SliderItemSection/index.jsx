@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Heading, Img, Text } from "@/components/common";
+import { Heading, Img } from "@/components/common";
 import SliderComponent from "@/components/features/Slider/SliderScroll";
 import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 

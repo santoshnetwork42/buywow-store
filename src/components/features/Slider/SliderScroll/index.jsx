@@ -1,124 +1,199 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 import { Img, Text } from "@/components/common";
 
-const SliderComponent = ({ items, className, sliderClassName, ...props }) => {
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const containerRef = useRef(null);
-  const itemRef = useRef(null);
+const SliderComponent = React.memo(
+  ({
+    items,
+    className,
+    sliderClassName,
+    renderItem,
+    showCounter = true,
+    showControls = true,
+    snapType = "mandatory",
+    snapAlign = "center",
+    snapAlways = true,
+    ...props
+  }) => {
+    const [scrollPosition, setScrollPosition] = useState(0);
+    const [currentItem, setCurrentItem] = useState(1);
+    const [visibleItems, setVisibleItems] = useState(1);
+    const containerRef = useRef(null);
+    const itemRef = useRef(null);
+    const width = useDeviceWidth();
 
-  const handleScroll = () => {
-    if (containerRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-      const maxScroll = scrollWidth - clientWidth;
-      const scrollPercentage = (scrollLeft / maxScroll) * 100;
-      setScrollPosition(scrollPercentage);
-    }
-  };
+    const calculateVisibleItems = useCallback(() => {
+      if (containerRef.current && itemRef.current && width) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const itemWidth = itemRef.current.offsetWidth;
+        const calculatedVisibleItems = Math.floor(containerWidth / itemWidth);
+        setVisibleItems(Math.max(1, calculatedVisibleItems));
+      }
+    }, [width]);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-      return () => container.removeEventListener("scroll", handleScroll);
-    }
-  }, []);
+    const handleScroll = useCallback(() => {
+      if (containerRef.current && itemRef.current && width) {
+        const { scrollLeft, clientWidth } = containerRef.current;
+        const itemWidth = itemRef.current.offsetWidth;
+        const centerPosition = scrollLeft + clientWidth / 2;
+        const currentGroupIndex = Math.floor(centerPosition / itemWidth);
 
-  const scrollbarWidth = items.length > 0 ? 100 / items.length : 0; // Width of the black scrollbar
-  const scrollbarPosition = (scrollPosition * (100 - scrollbarWidth)) / 100; // Position of the black scrollbar
+        const totalGroups = Math.ceil(items.length / visibleItems);
+        const lastGroupTotalItems = items.length % visibleItems || visibleItems;
 
-  const currentItem = Math.min(
-    Math.ceil((scrollPosition / 100) * items.length) + 1,
-    items.length,
-  );
+        const isLastGroupVisible =
+          scrollLeft + clientWidth >=
+          (totalGroups - 1) * itemWidth +
+            (itemWidth * lastGroupTotalItems) / visibleItems;
 
-  const scrollByItem = (direction) => {
-    if (containerRef.current && itemRef.current) {
-      const itemWidth =
-        itemRef.current.clientWidth +
-        parseInt(getComputedStyle(itemRef.current).marginRight);
-      containerRef.current.scrollBy({
-        left: direction * itemWidth,
-        behavior: "smooth",
-      });
-    }
-  };
+        setCurrentItem(
+          isLastGroupVisible ? totalGroups : currentGroupIndex + 1,
+        );
 
-  return (
-    <div className={`${className}`} {...props}>
-      <div
-        ref={containerRef}
-        className="no-scrollbar w-full overflow-x-auto"
-        onScroll={handleScroll}
-      >
+        const scrollWidth = containerRef.current.scrollWidth - clientWidth;
+        const scrollPercentage = (scrollLeft / scrollWidth) * 100;
+        setScrollPosition(scrollPercentage);
+      }
+    }, [items.length, visibleItems, width]);
+
+    useEffect(() => {
+      const container = containerRef.current;
+      if (container) {
+        container.addEventListener("scroll", handleScroll);
+        return () => container.removeEventListener("scroll", handleScroll);
+      }
+    }, [handleScroll]);
+
+    useEffect(() => {
+      calculateVisibleItems();
+      window.addEventListener("resize", calculateVisibleItems);
+      return () => window.removeEventListener("resize", calculateVisibleItems);
+    }, [calculateVisibleItems]);
+
+    const chunks = useCallback((arr, size) => {
+      return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+        arr.slice(i * size, i * size + size),
+      );
+    }, []);
+
+    const groupedItems = useMemo(
+      () => chunks(items, visibleItems),
+      [items, visibleItems, chunks],
+    );
+
+    const scrollbarWidth = useMemo(
+      () => (groupedItems.length > 0 ? (100 / items.length) * visibleItems : 0),
+      [groupedItems.length, items.length, visibleItems],
+    );
+
+    const scrollbarPosition = useMemo(
+      () => (scrollPosition * (100 - scrollbarWidth)) / 100,
+      [scrollPosition, scrollbarWidth],
+    );
+
+    const scrollByItem = useCallback((direction) => {
+      if (containerRef.current && itemRef.current) {
+        const itemWidth = itemRef.current.offsetWidth;
+        containerRef.current.scrollBy({
+          left: direction * itemWidth,
+          behavior: "smooth",
+        });
+      }
+    }, []);
+
+    if (!width) return null;
+
+    return (
+      <div className={`${className}`} {...props}>
         <div
-          className={`relative m-auto mb-3 flex w-max ${sliderClassName || "gap-[5px] sm:gap-2 lg:gap-3"}`}
+          ref={containerRef}
+          className={`no-scrollbar w-full overflow-x-auto ${groupedItems.length > 1 && (showControls || showCounter) && "pb-3"} ${
+            snapType !== "none" ? `snap-x snap-${snapType}` : ""
+          }`}
+          onScroll={handleScroll}
         >
-          {items.map((item, index) => (
-            <div
-              key={index}
-              ref={index === 0 ? itemRef : null}
-              className="flex"
-            >
-              {item}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-2 flex w-full items-center md:mt-3">
-        <div className="relative h-[2px] flex-1 rounded-xl bg-gray-300_01">
           <div
-            className="absolute top-0 h-[2px] bg-black-900"
-            style={{
-              width: `${scrollbarWidth}%`,
-              left: `${scrollbarPosition}%`,
-              transition: "left 0.1s ease-out",
-            }}
-          />
-        </div>
-        <div className="relative m-auto mx-4 flex sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
-          <div className="flex w-full items-center justify-center gap-[15px]">
-            <Text
-              size="base"
-              as="p"
-              className="!font-medium uppercase"
-              responsive
-            >
-              {`${currentItem} / ${items.length}`}
-            </Text>
-            <div className="hidden flex-1 justify-center gap-4 sm:flex">
-              <Img
-                src="img_arrow_left.svg"
-                width={28}
-                height={28}
-                alt="Previous slide"
-                className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
-                onClick={() => {
-                  if (containerRef.current && itemRef.current) {
-                    scrollByItem(-1);
-                  }
-                }}
-              />
-              <Img
-                src="img_arrow_right_black_900.png"
-                width={27}
-                height={28}
-                alt="Next slide"
-                className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
-                onClick={() => {
-                  if (containerRef.current && itemRef.current) {
-                    scrollByItem(1);
-                  }
-                }}
-              />
-            </div>
+            className={`relative m-auto flex w-max ${sliderClassName || "gap-[5px] sm:gap-2 lg:gap-3"}`}
+          >
+            {groupedItems.map((group, groupIndex) => (
+              <div
+                key={groupIndex}
+                ref={groupIndex === 0 ? itemRef : null}
+                className={`flex ${
+                  snapType !== "none"
+                    ? `snap-${snapAlign} ${snapAlways ? "snap-always" : ""}`
+                    : ""
+                } ${sliderClassName || "gap-[5px] sm:gap-2 lg:gap-3"}`}
+              >
+                {group.map((item, itemIndex) =>
+                  renderItem ? renderItem(item, itemIndex) : item,
+                )}
+              </div>
+            ))}
           </div>
         </div>
+
+        {groupedItems.length > 1 && (showControls || showCounter) && (
+          <div className="mt-2 flex w-full items-center md:mt-3">
+            <div className="relative h-[2px] flex-1 overflow-x-hidden rounded-xl bg-gray-300_01">
+              <div
+                className="absolute top-0 h-[2px] bg-black-900"
+                style={{
+                  width: `${scrollbarWidth}%`,
+                  left: `${scrollbarPosition}%`,
+                  transition: "left 0.1s ease-out",
+                }}
+              />
+            </div>
+            <div className="relative m-auto mx-4 flex sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
+              <div className="flex w-full items-center justify-center gap-2 sm:gap-3 lg:gap-4 xl:gap-5">
+                {showCounter && (
+                  <Text
+                    size="base"
+                    as="p"
+                    className="text-sm !font-medium uppercase"
+                    responsive
+                  >
+                    {`${currentItem} / ${groupedItems.length}`}
+                  </Text>
+                )}
+                {showControls && (
+                  <div className="flex flex-1 justify-center gap-2 sm:gap-3 lg:gap-4">
+                    <Img
+                      src="img_arrow_left.svg"
+                      width={28}
+                      height={28}
+                      alt="Previous slide"
+                      className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
+                      onClick={() => scrollByItem(-1)}
+                    />
+                    <Img
+                      src="img_arrow_right_black_900.png"
+                      width={28}
+                      height={28}
+                      alt="Next slide"
+                      className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
+                      onClick={() => scrollByItem(1)}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-    </div>
-  );
-};
+    );
+  },
+);
+
+SliderComponent.displayName = "SliderComponent";
 
 export default SliderComponent;

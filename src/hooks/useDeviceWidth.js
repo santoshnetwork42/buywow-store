@@ -1,20 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export const useDeviceWidth = () => {
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(window.innerWidth);
+
+  const handleResize = useCallback(() => {
+    setWidth(window.innerWidth);
+  }, []);
 
   useEffect(() => {
-    const handleResize = () => setWidth(window.innerWidth);
-
-    // Set the initial width
-    setWidth(window.innerWidth);
-
-    // Add event listener
     window.addEventListener("resize", handleResize);
 
     // Cleanup function
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [handleResize]);
 
   return width;
 };

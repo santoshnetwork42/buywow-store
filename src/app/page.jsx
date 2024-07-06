@@ -85,6 +85,7 @@ const Home = () => {
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
           {/* Shop Categories Section */}
           <ShopCategories sectionData={shopCategoriesData} />
+
           {/* Tabbed Product Section */}
           <TabProductSection {...tabProductData} />
         </div>

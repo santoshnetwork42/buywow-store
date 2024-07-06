@@ -116,6 +116,11 @@ export const concernSectionData = {
       title: "Pigmentation1",
       link: "/concern/pigmentation",
     },
+    {
+      image: "img_image_2004_1.png",
+      title: "Pigmentation1",
+      link: "/concern/pigmentation",
+    },
   ],
 };
 

@@ -59,10 +59,4 @@ Button.propTypes = {
   fullWidth: PropTypes.bool,
 };
 
-Button.defaultProps = {
-  variant: "primary",
-  size: "medium",
-  fullWidth: false,
-};
-
 export { Button };

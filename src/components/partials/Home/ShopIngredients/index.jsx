@@ -44,6 +44,10 @@ export default function ShopIngredients({ shopIngredientsData, ...props }) {
       return (
         <SliderComponent
           className="w-full"
+          breakpoints={{
+            default: 2,
+            sm: 3,
+          }}
           items={Array.from(
             { length: Math.ceil(shopIngredientsData.ingredients.length / 2) },
             (_, index) => (

@@ -1,10 +1,25 @@
 // src/components/VideoSection.jsx
+"use client";
+
+import React from "react";
 import { Button, Heading } from "@/components/common";
 import InstagramFeedItem from "@/components/features/Card/InstagramFeedCard";
-import React from "react";
+import SliderComponent from "@/components/features/Slider/SliderScroll";
 
 const VideoSection = ({ sectionData, className, ...props }) => {
   const { title, buttonText, images, playButtonIcon } = sectionData;
+
+  const renderInstagramFeedItem = (image) => (
+    <InstagramFeedItem
+      key={image.id}
+      image={image}
+      playButtonIcon={playButtonIcon}
+      imgClassName="aspect-[334/320]"
+      imgHeight={320}
+      imgWidth={334}
+      className="relative w-[70vw] max-w-[250px] overflow-hidden rounded-lg sm:w-[42vw] sm:max-w-[334px] md:w-[36vw] lg:w-[30vw]"
+    />
+  );
 
   return (
     <div {...props} className={className}>
@@ -17,21 +32,17 @@ const VideoSection = ({ sectionData, className, ...props }) => {
             {buttonText}
           </Button>
         </div>
-        <div className="no-scrollbar w-full overflow-x-auto">
-          <div className="m-auto flex w-max gap-3 md:gap-4">
-            {images.map((image, index) => (
-              <InstagramFeedItem
-                key={image.id}
-                image={image}
-                playButtonIcon={playButtonIcon}
-                imgClassName="aspect-[334/320]"
-                imgHeight={320}
-                imgWidth={334}
-                className="relative w-[70vw] max-w-[250px] overflow-hidden rounded-lg sm:w-[42vw] sm:max-w-[334px] md:w-[36vw] lg:w-[30vw]"
-              />
-            ))}
-          </div>
-        </div>
+        <SliderComponent
+          items={images}
+          renderItem={renderInstagramFeedItem}
+          className="w-full"
+          sliderClassName="gap-3 md:gap-4"
+          showCounter={false}
+          showControls={false}
+          snapType="mandatory"
+          snapAlign="center"
+          snapAlways={true}
+        />
       </div>
     </div>
   );
