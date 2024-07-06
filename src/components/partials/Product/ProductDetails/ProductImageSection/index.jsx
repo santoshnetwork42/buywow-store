@@ -1,11 +1,17 @@
-import { Img } from "@/components/common";
+"use client";
+
+import { Button, Img } from "@/components/common";
 import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 import React, { useState, useRef, useEffect } from "react";
+import styles from "@/components/partials/Product/ProductDetails/ProductImageSection/ProductImageSection.module.scss";
 
 const ProductImageSection = ({ imageList }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const imageRefs = useRef([]);
   const thumbnailRefs = useRef([]);
+  const observerRef = useRef(null);
+
   useEffect(() => {
     if (thumbnailRefs.current[currentIndex]) {
       thumbnailRefs.current[currentIndex].scrollIntoView({
@@ -16,44 +22,85 @@ const ProductImageSection = ({ imageList }) => {
     }
   }, [currentIndex]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const index = imageRefs.current.indexOf(entry.target);
+              if (index !== -1) {
+                setCurrentIndex(index);
+              }
+            }
+          });
+        },
+        { threshold: 0.5 }, // Adjust threshold as needed
+      );
+
+      imageRefs.current.forEach((ref) => {
+        if (ref) observerRef.current.observe(ref);
+      });
+
+      return () => {
+        if (observerRef.current) observerRef.current.disconnect();
+      };
+    }, 500);
+  }, [imageList]);
+
   const width = useDeviceWidth();
   if (!width) return;
-
   const isDesktop = width > 576;
   const dimensions = isDesktop
     ? { width: 620, height: 480 }
     : { width: 351, height: 303 };
-  const aspectRatio = `${dimensions.width} / ${dimensions.height}`;
-
-  const handleDotClick = (index) => {
-    setCurrentIndex(index);
-  };
 
   const items = imageList.map((data, index) => (
     <div
       key={index}
-      className={`w-full transform transition-transform duration-500 ${
-        currentIndex === index ? "translate-x-0" : `translate-x-full`
-      }`}
-      style={{ display: currentIndex === index ? "block" : "none" }}
+      className={`w-full shrink-0 snap-center rounded-lg border border-gray-300 transition-opacity duration-500 sm:shrink ${currentIndex === index ? "sm:block" : "sm:hidden"} ${styles.productImageShadow}`}
+      ref={(el) => (imageRefs.current[index] = el)}
     >
       <Img
         src={data}
         width={dimensions.width}
         height={dimensions.height}
         alt={`hero image ${index}`}
-        className="w-full object-contain"
-        style={{ aspectRatio }}
+        className="aspect-square w-full rounded-lg object-contain"
       />
     </div>
   ));
+  const handleDotClick = (index) => {
+    setCurrentIndex(index);
+    if (imageRefs.current[index]) {
+      imageRefs.current[index].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }
+  };
+
+  const handlePrevClick = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentIndex < imageList.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
 
   const thumbnailItems = imageList.map((data, index) => (
     <div
       key={index}
       className={`cursor-pointer border p-1 ${
         currentIndex === index
-          ? "border-blue-500 transition-all duration-300"
+          ? "rounded-lg border-blue-500 transition-all duration-300"
           : "border-transparent"
       }`}
       ref={(el) => (thumbnailRefs.current[index] = el)}
@@ -64,19 +111,40 @@ const ProductImageSection = ({ imageList }) => {
         width={351}
         height={303}
         alt={`thumbnail image ${index}`}
-        style={{ aspectRatio: "351 / 303" }}
-        className="aspect-square w-full object-contain"
+        className="aspect-square w-full rounded-lg object-contain"
       />
     </div>
   ));
 
   return (
-    <div className="flex max-h-[34rem] items-center justify-center">
-      <div className="no-scrollbar hidden max-h-[34rem] shrink-0 flex-col gap-2 overflow-scroll py-2 sm:flex sm:w-[20%] md:w-[25%] lg:w-[20%]">
+    <div className="flex max-h-[34rem] items-center justify-center gap-2">
+      <div className="no-scrollbar hidden max-h-[32rem] shrink-0 flex-col gap-2 overflow-scroll py-2 sm:flex sm:w-[18%] md:w-[25%] lg:w-[18%]">
         {thumbnailItems}
       </div>
-      <div className="flex flex-col items-center justify-center">
-        <div className="flex w-full gap-2 overflow-hidden py-2">{items}</div>
+      <div className="relative flex flex-col items-center justify-center">
+        <div
+          className={`no-scrollbar flex w-full gap-2 overflow-scroll py-2 sm:overflow-hidden ${styles.scrollSnap}`}
+        >
+          {items}
+        </div>
+        <div className="absolute left-0">
+          <Button
+            className="hidden border border-gray-500 bg-transparent px-4 text-gray-800 shadow shadow-stone-300 hover:bg-transparent sm:block"
+            onClick={handlePrevClick}
+            enableRipple={false}
+          >
+            L
+          </Button>
+        </div>
+        <div className="absolute right-0">
+          <Button
+            className="hidden border border-gray-500 bg-transparent px-4 text-gray-800 shadow shadow-stone-300 hover:bg-transparent sm:block"
+            onClick={handleNextClick}
+            enableRipple={false}
+          >
+            R
+          </Button>
+        </div>
         <div className="mt-4 flex space-x-2 sm:hidden">
           {imageList.map((_, index) => (
             <div
