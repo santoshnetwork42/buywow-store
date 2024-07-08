@@ -31,6 +31,8 @@ import {
 } from "@/data/homeData";
 import TabProductSection from "@/components/partials/Home/TabProductSection";
 import ProductFeatures from "@/components/partials/Home/ProductFeatures";
+import createApolloClient from "@/utils/strapi";
+import { gql } from "@apollo/client";
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -38,7 +40,87 @@ export const metadata = {
     "Revitalize your skin with Vitamin C face wash and natural ingredients. Cruelty-free, dermatologically tested skincare on sale. Free shipping on orders above ₹999.",
 };
 
-const Home = () => {
+const Home = async () => {
+  const resp = await createApolloClient().query({
+    query: gql`
+      query TestQuery {
+        pages {
+          data {
+            attributes {
+              pageType
+              slug
+              blocks {
+                # ... on ComponentCommonWowBenefits {
+                #   benefit{
+                #     caption
+                #   }
+                # }
+                # ... on ComponentCarouselHeroSection {
+                #   banner {
+                #     webImage {
+                #       data {
+                #         attributes {
+                #           url
+                #         }
+                #       }
+                #     }
+                #     mWebImage {
+                #       data {
+                #         attributes {
+                #           url
+                #         }
+                #       }
+                #     }
+                #   }
+                # }
+                # ...on ComponentCommonFeaturedProducts{
+                #   products{
+                #     data{
+                #       attributes{
+                #         slug
+                #         tags{
+                #           data{
+                #             attributes{
+                #               title
+                #             }
+                #           }
+                #         }
+                #       }
+                #     }
+                #   }
+                # }
+                ... on ComponentCommonProductsByTags {
+                  __typename
+                  title
+                  button {
+                    cta
+                    label
+                  }
+                  tags {
+                    data {
+                      attributes {
+                        title
+                        products {
+                          data {
+                            attributes {
+                              slug
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+  });
+
+  console.log("resp :>> ", resp?.data?.pages?.data[0]?.attributes?.blocks);
+  
   return (
     <>
       {/* Main Content Section */}
