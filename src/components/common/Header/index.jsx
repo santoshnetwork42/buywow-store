@@ -1,7 +1,7 @@
 "use client";
 
 import { MenuSVG } from "@/assets/images";
-import { Img, Text } from "@/components/common";
+import { Button, Img, Input, Text } from "@/components/common";
 import Link from "next/link";
 import React, { useState } from "react";
 import NavMenu from "@/components/common/partials/NavMenu";
@@ -9,16 +9,23 @@ import { mainMenuItems } from "@/data/headerData";
 import SearchBar from "@/components/common/partials/SearchBar";
 import MobileMenu from "@/components/common/partials/MobileMenu";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import Modal from "@/components/features/Modal";
+import { LoaderIcon } from "@/assets/svg/icons";
 
 export default function Header({ ...props }) {
   const [openMenus, setOpenMenus] = useState({});
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   const toggleMenu = (index) => {
     setOpenMenus((prev) => ({
       ...prev,
       [index]: !prev[index],
     }));
+  };
+
+  const onAuthClose = () => {
+    setIsAuthOpen(false);
   };
 
   const openMobileMenu = () => setMobileMenuOpen(true);
@@ -98,7 +105,11 @@ export default function Header({ ...props }) {
           {/* Search, user, and cart icons */}
           <div className="flex max-w-[370px] shrink-[10] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
             <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
-            <Link href="#" className="flex-shrink-0">
+            <Link
+              href="#"
+              className="flex-shrink-0"
+              onClick={() => setIsAuthOpen(true)}
+            >
               <Img
                 src="img_user.svg"
                 width={24}
@@ -129,6 +140,26 @@ export default function Header({ ...props }) {
         onClose={closeMobileMenu}
         menuItems={mainMenuItems}
       />
+
+      {/* Auth Modal */}
+      <Modal
+        isOpen={isAuthOpen}
+        onClose={onAuthClose}
+        showMobileView
+        title="Signup"
+        enableOutsideClick
+      >
+        <div className="flex flex-col items-center gap-3 px-8 py-4">
+          <Input
+            placeholder="Enter Mobile Number"
+            className="flex flex-grow rounded-full border p-2"
+            prefix="+91"
+          />
+          <Button disabled loader loaderClass="ml-2">
+            <div className="flex items-center justify-center">Get OTP </div>
+          </Button>
+        </div>
+      </Modal>
     </header>
   );
 }

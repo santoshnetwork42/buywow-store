@@ -33,7 +33,7 @@ const Modal = ({
   };
 
   return (
-    <div className={`${isOpen ? styles.fadeIn : styles.fadeOut} z-[999]`}>
+    <div className={`${isOpen ? styles.fadeIn : styles.fadeOut} fixed z-[999]`}>
       {isOpen && (
         <div
           onClick={handleClickOutside}

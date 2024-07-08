@@ -29,7 +29,7 @@ const Input = React.forwardRef(
       <label className={`${className}`}>
         {!!label && label}
         {required && <span className="input-required">*</span>}
-        <div className="flex w-full items-center justify-center">
+        <div className="flex w-full items-center justify-center gap-2">
           {!!prefix && prefix}
           <input
             ref={ref}
