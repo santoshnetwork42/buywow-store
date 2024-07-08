@@ -216,12 +216,12 @@ export const portfolioBannerData = {
 };
 
 export const customerReviewSectionData = {
-  title: "Real Reviews From Real Customers",
+  title: "Amazing Products, Amazing Results",
   reviews: [
     {
       productImage: {
         desktop: {
-          src: "img_image_2062.png",
+          src: "img_customer_review.png",
           width: 502,
           height: 250,
           aspectRatio: "aspect-[502/250]",
@@ -236,12 +236,12 @@ export const customerReviewSectionData = {
         },
       },
       userInfo: {
-        name: "Trisha",
-        age: 25,
+        name: "Sophie",
+        age: 28,
       },
       reviewText:
-        "If you're looking for a product that provides deep hydration, look no further. This aloe vera gel has transformed my skin. It keeps my face moisturized and refreshed, even during the driest days.",
-      skinConcerns: ["Dry skin", "Pigmentation"],
+        "I have never seen such amazing results before. This product has truly transformed my skin. It keeps my face glowing and healthy, even during the harshest weather.",
+      skinConcerns: ["Dry skin", "Wrinkles"],
       relatedProduct: {
         image: {
           src: "img_rectangle_35.png",
@@ -249,16 +249,16 @@ export const customerReviewSectionData = {
           height: 49,
           alt: "Aloe Vera Gel",
         },
-        name: "Apple Cider Vinegar Face Wash Apple Cider Vinegar Face Wash",
-        currentPrice: "₹339",
-        originalPrice: "₹399",
+        name: "Hyaluronic Acid Serum",
+        currentPrice: "₹499",
+        originalPrice: "₹599",
         addToCartText: "Add",
       },
     },
     {
       productImage: {
         desktop: {
-          src: "img_image_2063.png",
+          src: "img_image_206.png",
           width: 502,
           height: 250,
           aspectRatio: "aspect-[502/250]",
@@ -273,12 +273,12 @@ export const customerReviewSectionData = {
         },
       },
       userInfo: {
-        name: "Trisha",
-        age: 25,
+        name: "Emma",
+        age: 30,
       },
       reviewText:
-        "If you're looking for a product that provides deep hydration, look no further. This aloe vera gel has transformed my skin. It keeps my face moisturized and refreshed, even during the driest days.",
-      skinConcerns: ["Dry skin", "Pigmentation"],
+        "This product is a game-changer. It has made my skin feel so smooth and radiant. I can't imagine my skincare routine without it now.",
+      skinConcerns: ["Oily skin", "Acne"],
       relatedProduct: {
         image: {
           src: "img_rectangle_35.png",
@@ -286,20 +286,20 @@ export const customerReviewSectionData = {
           height: 49,
           alt: "Aloe Vera Gel",
         },
-        name: "Pure Aloe Vera Gel",
-        currentPrice: "₹339",
-        originalPrice: "₹399",
+        name: "Vitamin C Serum",
+        currentPrice: "₹449",
+        originalPrice: "₹549",
         addToCartText: "Add",
       },
     },
     {
       productImage: {
         desktop: {
-          src: "img_image_2062.png",
+          src: "img_customer_review.png",
           width: 502,
           height: 250,
           aspectRatio: "aspect-[502/250]",
-          alt: "Product Image 1",
+          alt: "Product Image 3",
         },
         mobile: {
           src: "img_image_2062_mobile.png",
@@ -310,12 +310,12 @@ export const customerReviewSectionData = {
         },
       },
       userInfo: {
-        name: "Trisha",
-        age: 25,
+        name: "Olivia",
+        age: 35,
       },
       reviewText:
-        "If you're looking for a product that provides deep hydration, look no further. This aloe vera gel has transformed my skin. It keeps my face moisturized and refreshed, even during the driest days.",
-      skinConcerns: ["Dry skin", "Pigmentation"],
+        "I am in love with this product. It has completely transformed my skin texture. My skin feels so hydrated and youthful after using it.",
+      skinConcerns: ["Combination skin", "Dark spots"],
       relatedProduct: {
         image: {
           src: "img_rectangle_35.png",
@@ -323,9 +323,9 @@ export const customerReviewSectionData = {
           height: 49,
           alt: "Aloe Vera Gel",
         },
-        name: "Pure Aloe Vera Gel",
-        currentPrice: "₹339",
-        originalPrice: "₹399",
+        name: "Retinol Serum",
+        currentPrice: "₹599",
+        originalPrice: "₹699",
         addToCartText: "Add",
       },
     },
@@ -368,7 +368,6 @@ export const blogSectionData = {
       publishDate: "February 27, 2024",
       link: "/blog/leave-in-conditioning",
     },
-    // Add more articles as needed
   ],
 };
 

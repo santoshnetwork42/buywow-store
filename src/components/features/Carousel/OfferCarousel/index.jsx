@@ -8,8 +8,8 @@ import SliderComponent from "@/components/features/Slider/SliderScroll";
 
 const OfferCarousel = ({ offers }) => {
   const width = useDeviceWidth();
-
   if (!width) return null;
+
   if (!offers || offers.length === 0) {
     return null;
   }
@@ -36,13 +36,9 @@ const OfferCarousel = ({ offers }) => {
     <SliderComponent
       items={offers}
       renderItem={renderOfferItem}
-      className="w-full"
       sliderClassName="gap-2 sm:gap-3 md:gap-4 lg:gap-5"
       showCounter={false}
       showControls={false}
-      snapType="mandatory"
-      snapAlign="center"
-      snapAlways={true}
     />
   );
 };

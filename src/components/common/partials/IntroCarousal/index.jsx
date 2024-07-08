@@ -9,8 +9,8 @@ export default function IntroCarousal({ carousalData, ...props }) {
   const [sliderState, setSliderState] = React.useState(0);
   const [isDragging, setIsDragging] = React.useState(false);
   const sliderRef = React.useRef(null);
-  const width = useDeviceWidth();
 
+  const width = useDeviceWidth();
   if (!width) return;
 
   const items = carousalData.map((data, index) => {

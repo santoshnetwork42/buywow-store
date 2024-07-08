@@ -35,13 +35,9 @@ const VideoSection = ({ sectionData, className, ...props }) => {
         <SliderComponent
           items={images}
           renderItem={renderInstagramFeedItem}
-          className="w-full"
           sliderClassName="gap-3 md:gap-4"
           showCounter={false}
           showControls={false}
-          snapType="mandatory"
-          snapAlign="center"
-          snapAlways={true}
         />
       </div>
     </div>

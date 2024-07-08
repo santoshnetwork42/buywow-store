@@ -14,7 +14,6 @@ export default function ShopBanner({
   ...props
 }) {
   const width = useDeviceWidth();
-
   if (!width) return null;
 
   const imageProps =

@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 import { Img, Text } from "@/components/common";
+import { twMerge } from "tailwind-merge";
 
 const SliderComponent = React.memo(
   ({
@@ -16,10 +17,11 @@ const SliderComponent = React.memo(
     className,
     sliderClassName,
     renderItem,
+    tag,
     showCounter = true,
     showControls = true,
-    snapType = "mandatory",
-    snapAlign = "center",
+    snapType = "snap-mandatory",
+    snapAlign = "snap-center",
     snapAlways = true,
     ...props
   }) => {
@@ -109,19 +111,19 @@ const SliderComponent = React.memo(
       }
     }, []);
 
-    if (!width) return null;
+    tag && console.log(tag, width);
 
     return (
-      <div className={`${className}`} {...props}>
+      <div className={`${className} w-full`} {...props}>
         <div
           ref={containerRef}
           className={`no-scrollbar w-full overflow-x-auto ${groupedItems.length > 1 && (showControls || showCounter) && "pb-3"} ${
-            snapType !== "none" ? `snap-x snap-${snapType}` : ""
+            snapType !== "none" ? `snap-x ${snapType}` : ""
           }`}
           onScroll={handleScroll}
         >
           <div
-            className={`relative m-auto flex w-max ${sliderClassName || "gap-[5px] sm:gap-2 lg:gap-3"}`}
+            className={`relative m-auto flex w-max ${twMerge("gap-[5px] sm:gap-2 lg:gap-3", sliderClassName)}`}
           >
             {groupedItems.map((group, groupIndex) => (
               <div
@@ -129,12 +131,14 @@ const SliderComponent = React.memo(
                 ref={groupIndex === 0 ? itemRef : null}
                 className={`flex ${
                   snapType !== "none"
-                    ? `snap-${snapAlign} ${snapAlways ? "snap-always" : ""}`
+                    ? `${snapAlign} ${snapAlways ? "snap-always" : ""}`
                     : ""
                 } ${sliderClassName || "gap-[5px] sm:gap-2 lg:gap-3"}`}
               >
                 {group.map((item, itemIndex) =>
-                  renderItem ? renderItem(item, itemIndex) : item,
+                  renderItem
+                    ? renderItem(item, `${groupIndex}-${itemIndex}`)
+                    : item,
                 )}
               </div>
             ))}

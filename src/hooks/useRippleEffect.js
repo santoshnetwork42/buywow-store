@@ -29,7 +29,7 @@ export const useRippleEffect = (enableRipple) => {
     return () => {
       element.removeEventListener("click", rippleEffect);
     };
-  }, []);
+  }, [enableRipple]);
 
   return elementRef;
 };

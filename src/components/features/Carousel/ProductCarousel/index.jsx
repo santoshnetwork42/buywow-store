@@ -21,11 +21,6 @@ const ProductCarousel = ({ products, className, ...props }) => {
       renderItem={renderItem}
       className={className}
       sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
-      showCounter={true}
-      showControls={true}
-      snapType="mandatory"
-      snapAlign="center"
-      snapAlways={true}
       {...props}
     />
   );

@@ -44,7 +44,10 @@ const Reviews = () => {
         {!!product?.reviews &&
           product.reviews.map((item, index) => {
             return (
-              <div className="flex w-full flex-col flex-wrap justify-between gap-4 md:flex-row">
+              <div
+                key={`review-${index}`}
+                className="flex w-full flex-col flex-wrap justify-between gap-4 md:flex-row"
+              >
                 <Divider className="h-[0.05rem] w-full bg-gray-300" />
                 <div className="flex w-full flex-col md:max-w-[70%]">
                   <div className="flex flex-col gap-2">

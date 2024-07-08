@@ -13,26 +13,6 @@ const CustomerReviewCard = ({ reviewData, ...props }) => {
   const { productImage, userInfo, reviewText, skinConcerns, relatedProduct } =
     reviewData;
 
-  if (
-    !productImage ||
-    !userInfo ||
-    !reviewText ||
-    !skinConcerns ||
-    !relatedProduct
-  ) {
-    return null;
-  }
-
-  if (
-    !relatedProduct.image ||
-    !relatedProduct.name ||
-    !relatedProduct.currentPrice ||
-    !relatedProduct.originalPrice ||
-    !relatedProduct.addToCartText
-  ) {
-    return null;
-  }
-
   const imageSource = width < 576 ? productImage.mobile : productImage.desktop;
 
   return (
@@ -42,13 +22,18 @@ const CustomerReviewCard = ({ reviewData, ...props }) => {
         width={imageSource.width}
         height={imageSource.height}
         alt={productImage.alt}
-        className={`w-full rounded object-contain sm:rounded-md lg:rounded-lg ${imageSource.aspectRatio}`}
+        className={`aspect-[320/192] w-full rounded object-contain sm:aspect-[502/250] sm:rounded-md lg:rounded-lg`}
       />
-      <div className="flex flex-col gap-2 md:gap-3">
+      <div className="flex flex-1 flex-col gap-2 md:gap-3">
         <Heading size="base" as="h4" className="text-sm" responsive>
-          {userInfo.name}, {userInfo.age} y/o
+          {imageSource.src}, {userInfo.age} y/o
         </Heading>
-        <Text size="base" as="p" className="w-full" responsive>
+        <Text
+          size="base"
+          as="p"
+          className="line-clamp-3 w-full flex-1"
+          responsive
+        >
           {reviewText}
         </Text>
         <div className="flex items-center justify-between gap-5">

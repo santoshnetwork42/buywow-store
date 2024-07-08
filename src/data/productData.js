@@ -923,6 +923,13 @@ export const watchUsData = {
       height: 320,
       alt: "profile image",
     },
+    {
+      id: 6,
+      src: "img_rectangle_26044_319x318.png",
+      width: 318,
+      height: 319,
+      alt: "rectangle",
+    },
   ],
   playButtonIcon: "img_forward.svg",
 };

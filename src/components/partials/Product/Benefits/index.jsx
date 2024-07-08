@@ -13,9 +13,12 @@ const Benefits = ({ className, ...props }) => {
         Benefits
       </Heading>
       <div className="grid grid-cols-2 gap-x-4 gap-y-6 py-2 sm:gap-x-6 md:grid-cols-4 md:gap-x-7 lg:gap-x-8 xl:gap-x-9">
-        {productBenefits?.map((item) => {
+        {productBenefits?.map((item, index) => {
           return (
-            <div className="flex max-w-72 flex-col items-center">
+            <div
+              key={`benefit-${index}`}
+              className="flex max-w-72 flex-col items-center"
+            >
               <Img
                 src={item.image}
                 width={100}

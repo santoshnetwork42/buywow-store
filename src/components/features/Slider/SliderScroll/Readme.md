@@ -44,6 +44,7 @@ const ExamplePage = () => {
         showControls
         snapType="mandatory"
         snapAlign="center"
+        snapAlways=true
         className="my-slider"
         sliderClassName="my-slider-inner"
       />

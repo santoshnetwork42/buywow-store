@@ -32,9 +32,10 @@ const Ingredients = ({ ingredients }) => {
         }`}
       >
         {!!ingredients.data &&
-          ingredients.data.map((item) => {
+          ingredients.data.map((item, index) => {
             return (
               <IngredientsData
+                key={`ingredient-${index}`}
                 image={item.image}
                 description={item.description}
               />

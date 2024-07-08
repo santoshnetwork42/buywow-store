@@ -19,25 +19,25 @@ const ProductPage = () => {
       {/* Main Content Section */}
       <div className="mb-8 mt-3 flex w-full flex-col items-center gap-8 sm:gap-10 md:mt-4 lg:gap-12">
         {/* Product Details Section */}
-        <ProductDetails />
+        {/* <ProductDetails /> */}
 
         {/* Watch Us Section */}
         <WatchUs data={watchUsData} />
 
         {/* Product Effectiveness Image Section */}
-        <ProductEffectiveness data={productEffectivenessData} />
+        {/* <ProductEffectiveness data={productEffectivenessData} /> */}
 
         {/* Benefits Section */}
-        <Benefits />
+        {/* <Benefits /> */}
 
         {/* Product Highlights Section */}
-        <ProductHighlights data={productHighlightsData} />
+        {/* <ProductHighlights data={productHighlightsData} /> */}
 
         {/* Product Key Ingredients Section */}
-        <ProductKeyIngredients data={productKeyIngredientsData} />
+        {/* <ProductKeyIngredients data={productKeyIngredientsData} /> */}
 
         {/* Reviews Section */}
-        <Reviews />
+        {/* <Reviews /> */}
       </div>
     </>
   );

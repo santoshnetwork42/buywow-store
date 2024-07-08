@@ -24,13 +24,9 @@ const BlogSection = ({ sectionData }) => {
               article={article}
             />
           )}
-          className="w-full"
           sliderClassName="gap-3 sm:gap-4 lg:gap-5"
           showCounter={false}
           showControls={false}
-          snapType="mandatory"
-          snapAlign="center"
-          snapAlways={true}
         />
         <Button className="rounded-full bg-yellow-900 px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3">
           {buttonText}

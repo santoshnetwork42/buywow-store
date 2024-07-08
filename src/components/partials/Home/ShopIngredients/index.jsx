@@ -22,7 +22,6 @@ const IngredientItem = ({ ingredient, index }) => (
 
 export default function ShopIngredients({ shopIngredientsData, ...props }) {
   const width = useDeviceWidth();
-
   if (!width) return null;
 
   const renderIngredients = () => {
@@ -43,11 +42,6 @@ export default function ShopIngredients({ shopIngredientsData, ...props }) {
     } else {
       return (
         <SliderComponent
-          className="w-full"
-          breakpoints={{
-            default: 2,
-            sm: 3,
-          }}
           items={Array.from(
             { length: Math.ceil(shopIngredientsData.ingredients.length / 2) },
             (_, index) => (

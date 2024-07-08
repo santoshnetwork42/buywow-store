@@ -9,6 +9,7 @@ import { useDeviceWidth } from "@/hooks/useDeviceWidth";
 const SliderItemSection = ({ sectionData, ItemComponent }) => {
   const width = useDeviceWidth();
   if (!width) return null;
+
   if (!sectionData || !sectionData.items || sectionData.items.length === 0) {
     return null;
   }
@@ -37,7 +38,7 @@ const SliderItemSection = ({ sectionData, ItemComponent }) => {
         <Heading size="heading" as="h1" responsive>
           {title}
         </Heading>
-        <SliderComponent items={renderItems()} className="w-full" />
+        <SliderComponent items={renderItems()} />
       </div>
     </section>
   );

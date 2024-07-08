@@ -34,7 +34,10 @@ const HowToUse = ({ howToUse }) => {
         {!!howToUse.steps &&
           howToUse.steps.map((item, index) => {
             return (
-              <div className="flex items-center gap-2 md:pl-9">
+              <div
+                key={`how-to-use-${index}`}
+                className="flex items-center gap-2 md:pl-9"
+              >
                 <div className="flex items-center self-start">
                   <Text as="p" size="sm" className="min-w-max">
                     Step {index + 1} :

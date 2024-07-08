@@ -7,9 +7,12 @@ const HighLights = () => {
   const { highLights } = productData[0];
   return (
     <div className="flex justify-evenly">
-      {highLights?.map((item) => {
+      {highLights?.map((item, index) => {
         return (
-          <div className="flex h-fit w-auto max-w-12 flex-col items-center justify-between gap-1">
+          <div
+            key={`highlights-${index}`}
+            className="flex h-fit w-auto max-w-12 flex-col items-center justify-between gap-1"
+          >
             <Img
               src={item.image}
               width={30}

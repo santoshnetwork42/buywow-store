@@ -52,6 +52,7 @@ const ProductImageSection = ({ imageList }) => {
 
   const width = useDeviceWidth();
   if (!width) return;
+
   const isDesktop = width > 576;
   const dimensions = isDesktop
     ? { width: 620, height: 480 }
