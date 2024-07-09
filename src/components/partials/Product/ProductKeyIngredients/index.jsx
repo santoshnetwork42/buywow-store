@@ -1,7 +1,7 @@
 "use client";
 
 import { Heading, Img } from "@/components/common";
-import { useDeviceWidth } from "@/hooks/useDeviceWidth";
+import { useDeviceWidth } from "@/utils/hooks/useDeviceWidth";
 import React from "react";
 
 const ProductKeyIngredients = ({ data, className, ...props }) => {

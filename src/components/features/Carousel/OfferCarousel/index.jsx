@@ -3,7 +3,7 @@
 import React from "react";
 import { Img } from "@/components/common";
 import Link from "next/link";
-import { useDeviceWidth } from "@/hooks/useDeviceWidth";
+import { useDeviceWidth } from "@/utils/hooks/useDeviceWidth";
 import SliderComponent from "@/components/features/Slider/SliderScroll";
 
 const OfferCarousel = ({ offers }) => {

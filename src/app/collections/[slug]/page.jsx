@@ -11,7 +11,7 @@ import {
   metadataData,
   productCollectionData,
   recentlyViewedData,
-} from "@/data/collectionData";
+} from "@/utils/data/collectionData";
 import React from "react";
 
 export const metadata = {

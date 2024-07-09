@@ -5,7 +5,7 @@ import { Button, Img, Input, Text } from "@/components/common";
 import Link from "next/link";
 import React, { useState } from "react";
 import NavMenu from "@/components/common/partials/NavMenu";
-import { mainMenuItems } from "@/data/headerData";
+import { mainMenuItems } from "@/utils/data/headerData";
 import SearchBar from "@/components/common/partials/SearchBar";
 import MobileMenu from "@/components/common/partials/MobileMenu";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";

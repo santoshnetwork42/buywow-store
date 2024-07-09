@@ -10,7 +10,7 @@ import {
   productHighlightsData,
   productKeyIngredientsData,
   watchUsData,
-} from "@/data/productData";
+} from "@/utils/data/productData";
 import React from "react";
 
 const ProductPage = () => {

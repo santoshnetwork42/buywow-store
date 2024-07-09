@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Img } from "@/components/common";
-import { useDeviceWidth } from "@/hooks/useDeviceWidth";
+import { useDeviceWidth } from "@/utils/hooks/useDeviceWidth";
 import React, { useState, useRef, useEffect } from "react";
 import styles from "@/components/partials/Product/ProductDetails/ProductImageSection/ProductImageSection.module.scss";
 

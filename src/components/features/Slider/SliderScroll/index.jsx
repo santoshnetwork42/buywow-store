@@ -7,7 +7,7 @@ import React, {
   useCallback,
   useMemo,
 } from "react";
-import { useDeviceWidth } from "@/hooks/useDeviceWidth";
+import { useDeviceWidth } from "@/utils/hooks/useDeviceWidth";
 import { Img, Text } from "@/components/common";
 import { twMerge } from "tailwind-merge";
 

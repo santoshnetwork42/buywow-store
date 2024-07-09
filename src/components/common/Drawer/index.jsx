@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
-import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { useBodyScrollLock } from "@/utils/hooks/useBodyScrollLock";
 
 const Drawer = ({
   isOpen,
