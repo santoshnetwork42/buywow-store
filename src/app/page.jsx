@@ -42,11 +42,11 @@ export const metadata = {
 };
 
 const Home = async () => {
-  const resp = await getClient().query({
-    query: testQuery,
-  });
+  // const resp = await getClient().query({
+  //   query: testQuery,
+  // });
 
-  console.log("resp :>> ", resp?.data.pages.data);
+  // console.log("resp :>> ", resp?.data.pages.data);
 
   return (
     <>
