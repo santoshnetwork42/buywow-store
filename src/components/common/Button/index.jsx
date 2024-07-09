@@ -1,7 +1,7 @@
 "use client";
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
-import { useRippleEffect } from "@/hooks/useRippleEffect";
+import { useRippleEffect } from "@/utils/hooks/useRippleEffect";
 import { LoaderIcon } from "@/assets/svg/icons";
 
 const Button = ({

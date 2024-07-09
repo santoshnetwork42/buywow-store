@@ -3,7 +3,7 @@
 // components/Footer.js
 import React, { useState } from "react";
 import { Heading, Text, Img } from "@/components/common";
-import { footerData } from "@/data/footerData";
+import { footerData } from "@/utils/data/footerData";
 import FooterSection from "@/components/common/partials/FooterSection";
 import Link from "next/link";
 

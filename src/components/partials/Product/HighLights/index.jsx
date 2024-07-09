@@ -1,6 +1,6 @@
 "use client";
 import { Img, Text } from "@/components/common";
-import { productData } from "@/data/productData";
+import { productData } from "@/utils/data/productData";
 import React from "react";
 
 const HighLights = () => {

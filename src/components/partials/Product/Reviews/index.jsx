@@ -1,5 +1,5 @@
 import { Button, Heading, Img, Text } from "@/components/common";
-import { productData } from "@/data/productData";
+import { productData } from "@/utils/data/productData";
 import React from "react";
 import RatingBar from "@/components/partials/Product/Reviews/RatingBar";
 import ReviewStars from "./ReviewStars";

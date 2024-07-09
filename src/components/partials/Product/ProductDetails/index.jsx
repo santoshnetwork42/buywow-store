@@ -2,7 +2,7 @@
 
 import { IndiaMapIcon, StarIcon, VehicleIcon } from "@/assets/svg/icons";
 import { Button, Text } from "@/components/common";
-import { productData } from "@/data/productData";
+import { productData } from "@/utils/data/productData";
 import React from "react";
 import HighLights from "@/components/partials/Product/HighLights";
 import MetaData from "@/components/partials/Product/MetaData";

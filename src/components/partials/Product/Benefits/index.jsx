@@ -1,6 +1,6 @@
 "use client";
 import { Heading, Img, Text } from "@/components/common";
-import { productBenefits } from "@/data/productData";
+import { productBenefits } from "@/utils/data/productData";
 import React from "react";
 
 const Benefits = ({ className, ...props }) => {

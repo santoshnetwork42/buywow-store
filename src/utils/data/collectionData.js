@@ -1,4 +1,4 @@
-import { productData } from "@/data/productData";
+import { productData } from "@/utils/data/productData";
 
 export const breadcrumbItems = [
   { label: "Home", href: "/" },
