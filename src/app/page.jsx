@@ -31,7 +31,6 @@ import {
 } from "@/utils/data/homeData";
 import TabProductSection from "@/components/partials/Home/TabProductSection";
 import ProductFeatures from "@/components/partials/Home/ProductFeatures";
-import { gql } from "@apollo/client";
 import { getClient } from "@/lib/client";
 import { testQuery } from "@/utils/graphql/queries";
 

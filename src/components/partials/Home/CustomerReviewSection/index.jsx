@@ -13,7 +13,6 @@ const CustomerReviewSection = ({ sectionData }) => {
   }
 
   const renderItem = (review, index) => {
-    console.log(review.productImage.desktop.src);
     return (
       <CustomerReviewCard
         reviewData={review}

@@ -11,3 +11,49 @@ export const testQuery = gql`
     }
   }
 `;
+
+export const navbar = gql`
+  query Navbar {
+    navbar {
+      data {
+        attributes {
+          logo {
+            data {
+              attributes {
+                url
+                alternativeText
+              }
+            }
+          }
+          VIPMembershipLogo {
+            data {
+              attributes {
+                alternativeText
+                url
+              }
+            }
+          }
+          mWebMenuLogo {
+            data {
+              attributes {
+                alternativeText
+                url
+              }
+            }
+          }
+          menu {
+            id
+            title
+            slug
+
+            subMenu {
+              id
+              title
+              slug
+            }
+          }
+        }
+      }
+    }
+  }
+`;

@@ -5,56 +5,43 @@ import { Button, Img, Input, Text } from "@/components/common";
 import Link from "next/link";
 import React, { useState } from "react";
 import NavMenu from "@/components/common/partials/NavMenu";
-import { mainMenuItems } from "@/utils/data/headerData";
 import SearchBar from "@/components/common/partials/SearchBar";
 import MobileMenu from "@/components/common/partials/MobileMenu";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 import Modal from "@/components/features/Modal";
-import { LoaderIcon } from "@/assets/svg/icons";
 
-export default function Header({ ...props }) {
-  const [openMenus, setOpenMenus] = useState({});
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+export default function Header({ data, ...props }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
-  const toggleMenu = (index) => {
-    setOpenMenus((prev) => ({
-      ...prev,
-      [index]: !prev[index],
-    }));
-  };
+  const { logo, VIPMembershipLogo, mWebMenuLogo, menu } = data.data.attributes;
 
   const onAuthClose = () => {
     setIsAuthOpen(false);
   };
 
-  const openMobileMenu = () => setMobileMenuOpen(true);
-  const closeMobileMenu = () => setMobileMenuOpen(false);
+  const openMobileMenu = () => setIsMobileMenuOpen(true);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   const renderMenuItem = (item, index) => {
-    if (item.submenu) {
+    if (item.subMenu.length > 0) {
       return (
-        <li
-          key={index}
-          onMouseLeave={() => toggleMenu(index)}
-          onMouseEnter={() => toggleMenu(index)}
-          className="relative"
-        >
+        <li key={item.id || index} className="group relative">
           <div className="flex cursor-pointer items-center gap-1">
             <Text size="base" as="p" className="capitalize" responsive>
-              {item.text}
+              {item.title}
             </Text>
             <DownArrowIconSVG />
           </div>
-          <NavMenu menuItems={item.submenu} isOpen={openMenus[index]} />
+          <NavMenu menuItems={item.subMenu} />
         </li>
       );
     } else {
       return (
-        <li key={index}>
-          <Link href={item.link}>
+        <li key={item.id || index}>
+          <Link href={item.slug}>
             <Text size="base" as="p" className="capitalize" responsive>
-              {item.text}
+              {item.title}
             </Text>
           </Link>
         </li>
@@ -79,18 +66,20 @@ export default function Header({ ...props }) {
             <Link href="/">
               <div className="flex items-center gap-1">
                 <Img
-                  src="img_wow_logo.png"
+                  src={logo.data.attributes.url}
                   width={86}
                   height={48}
-                  alt="logo"
+                  alt={logo.data.attributes.alternativeText}
+                  isStatic
                   className="aspect-[86/48] w-[86px] object-contain"
                 />
                 <div className="h-[35px] w-[0.5px] bg-gray-300_01" />
                 <Img
-                  src="img_vip_member_logo.svg"
+                  src={VIPMembershipLogo.data.attributes.url}
                   width={70}
                   height={28}
-                  alt="logo"
+                  alt={VIPMembershipLogo.data.attributes.alternativeText}
+                  isStatic
                   className="aspect-[70/28] w-[70px] object-contain"
                 />
               </div>
@@ -98,8 +87,8 @@ export default function Header({ ...props }) {
           </div>
 
           {/* Desktop menu items */}
-          <ul className="hidden lg:flex lg:gap-3 xl:gap-5">
-            {mainMenuItems.map(renderMenuItem)}
+          <ul className="hidden flex-wrap gap-y-2 lg:flex lg:gap-x-3 xl:gap-x-5">
+            {menu.map(renderMenuItem)}
           </ul>
 
           {/* Search, user, and cart icons */}
@@ -136,9 +125,10 @@ export default function Header({ ...props }) {
 
       {/* Mobile Menu */}
       <MobileMenu
-        isOpen={mobileMenuOpen}
+        isOpen={isMobileMenuOpen}
         onClose={closeMobileMenu}
-        menuItems={mainMenuItems}
+        menu={menu}
+        logo={mWebMenuLogo}
       />
 
       {/* Auth Modal */}

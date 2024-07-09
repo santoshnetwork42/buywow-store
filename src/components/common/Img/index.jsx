@@ -8,7 +8,7 @@ const BASE_URL = process.env.BASE_PATH || "/images/";
 const Img = ({
   className,
   src = "defaultNoData.png",
-  alt = "testImg",
+  alt = "Img",
   isStatic = false,
   ...restProps
 }) => {

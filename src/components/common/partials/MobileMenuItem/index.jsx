@@ -14,7 +14,7 @@ const MobileMenuItem = ({ item, closeMenu }) => {
     }
   }, [isOpen]);
 
-  if (item.submenu) {
+  if (item.subMenu.length > 0) {
     return (
       <div className="">
         <div
@@ -22,7 +22,7 @@ const MobileMenuItem = ({ item, closeMenu }) => {
           onClick={() => setIsOpen(!isOpen)}
         >
           <Heading size="base" as="h4" className="font-semibold">
-            {item.text}
+            {item.title}
           </Heading>
           <DownArrowIconSVG
             className={`mt-0.5 h-3 w-3 transition-transform duration-300 ${
@@ -36,22 +36,22 @@ const MobileMenuItem = ({ item, closeMenu }) => {
           className="overflow-hidden transition-all duration-300 ease-in-out"
         >
           <ul ref={contentRef}>
-            {item.submenu.map((subItem, index) => (
+            {item.subMenu.map((subItem, index) => (
               <li
-                key={index}
+                key={subItem.id || index}
                 className={
-                  index !== item.submenu.length - 1
+                  index !== item.subMenu.length - 1
                     ? "border-b-[0.5px] border-b-gray-300"
                     : ""
                 }
               >
                 <Link
                   className={index === 0 ? "pb-2.5 pt-1.5" : "py-2.5"}
-                  href={subItem.link}
+                  href={subItem.slug}
                   onClick={closeMenu}
                 >
                   <Text size="sm" as="p" className="capitalize">
-                    {subItem.text}
+                    {subItem.title}
                   </Text>
                 </Link>
               </li>
@@ -63,9 +63,9 @@ const MobileMenuItem = ({ item, closeMenu }) => {
   }
 
   return (
-    <Link href={item.link} onClick={closeMenu} className="pb-3 pt-2">
+    <Link href={item.slug} onClick={closeMenu} className="pb-3 pt-2">
       <Heading size="base" as="h4" className="font-semibold">
-        {item.text}
+        {item.title}
       </Heading>
     </Link>
   );

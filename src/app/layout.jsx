@@ -7,8 +7,22 @@ import Footer from "@/components/common/Footer";
 import AnnouncementBar from "@/components/common/AnnouncementBar";
 import { Provider } from "@/store/Provider";
 import { ApolloWrapper } from "@/lib/apollo-provider";
+import { getClient } from "@/lib/client";
+import { navbar } from "@/utils/graphql/queries";
 
-function RootLayout({ children }) {
+async function RootLayout({ children }) {
+  const client = getClient();
+  const {
+    data: { navbar: navData },
+  } = await client.query({
+    query: navbar,
+    context: {
+      fetchOptions: {
+        next: { revalidate: 900 },
+      },
+    },
+  });
+
   return (
     <html lang="en">
       <head>
@@ -32,7 +46,7 @@ function RootLayout({ children }) {
                 rightText="100% Refund on returns"
                 flashSaleDiscount={60}
               />
-              <Header />
+              <Header data={navData} />
               <div className="flex-1">{children}</div>
               <Footer />
             </div>
