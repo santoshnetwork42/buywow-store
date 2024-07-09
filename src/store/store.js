@@ -2,19 +2,21 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import { persistReducer } from "redux-persist";
 import { signupSlice } from "@/store/slices/signup/signupSlice";
+import { userSlice } from "@/store/slices/user/userSlice";
 import storage from "redux-persist/lib/storage";
 import rootSaga from "./sagas";
 import persistStore from "redux-persist/es/persistStore";
 
 const rootReducer = combineReducers({
   [signupSlice.name]: signupSlice.reducer,
+  [userSlice.name]: userSlice.reducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
 
 const persistConfig = {
   key: "wow",
-  whitelist: ["signup"],
+  whitelist: ["signup", "user"],
   storage,
 };
 

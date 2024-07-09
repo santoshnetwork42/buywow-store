@@ -1,0 +1,21 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+export const initialState = {
+  user: {
+    id: null,
+    phone: null,
+  },
+};
+
+export const userSlice = createSlice({
+  name: "user",
+  initialState,
+  reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+  },
+});
+
+export const { setConfirmationStatus } = userSlice.actions;
+export default userSlice.reducer;

@@ -11,8 +11,11 @@ import MobileMenu from "@/components/common/partials/MobileMenu";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 import Modal from "@/components/features/Modal";
 import { LoaderIcon } from "@/assets/svg/icons";
+import { signupSagaActions } from "@/store/sagas/sagaActions/signup.actions";
+import { useDispatch } from "react-redux";
 
 export default function Header({ ...props }) {
+  const dispatch = useDispatch();
   const [openMenus, setOpenMenus] = useState({});
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -155,7 +158,19 @@ export default function Header({ ...props }) {
             className="flex flex-grow rounded-full border p-2"
             prefix="+91"
           />
-          <Button disabled loader loaderClass="ml-2">
+          <Button
+            // disabled
+            // loader
+            // loaderClass="ml-2"
+            onClick={() => {
+              dispatch({
+                type: signupSagaActions.CREATE_AWS_ACCOUNT,
+                payload: {
+                  phone: "9909772852",
+                },
+              });
+            }}
+          >
             <div className="flex items-center justify-center">Get OTP </div>
           </Button>
         </div>

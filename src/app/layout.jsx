@@ -7,6 +7,15 @@ import Footer from "@/components/common/Footer";
 import AnnouncementBar from "@/components/common/AnnouncementBar";
 import { Provider } from "@/store/Provider";
 import { ApolloWrapper } from "@/lib/apollo-provider";
+import { Amplify } from "aws-amplify";
+import awsExport from "../../aws-exports";
+import { AWS_CLIENT_ID } from "../../config";
+
+Amplify.configure({
+  ...awsExport,
+  ssr: true,
+  aws_user_pools_web_client_id: AWS_CLIENT_ID,
+});
 
 function RootLayout({ children }) {
   return (
