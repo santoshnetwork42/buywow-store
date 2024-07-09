@@ -11,8 +11,8 @@ import MobileMenu from "@/components/common/partials/MobileMenu";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 import Modal from "@/components/features/Modal";
 import { LoaderIcon } from "@/assets/svg/icons";
-import { signupSagaActions } from "@/store/sagas/sagaActions/signup.actions";
 import { useDispatch } from "react-redux";
+import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 
 export default function Header({ ...props }) {
   const dispatch = useDispatch();
@@ -163,12 +163,18 @@ export default function Header({ ...props }) {
             // loader
             // loaderClass="ml-2"
             onClick={() => {
-              dispatch({
-                type: signupSagaActions.CREATE_AWS_ACCOUNT,
-                payload: {
-                  phone: "9909772852",
-                },
-              });
+              // dispatch({
+              //   type: authSagaActions.CREATE_AWS_ACCOUNT,
+              //   payload: {
+              //     phone: "9909772852",
+              //   },
+              // });
+              // dispatch({
+              //   type: authSagaActions.SIGNIN_AWS_ACCOUNT,
+              //   payload: {
+              //     phone: "+919909772852",
+              //   },
+              // });
             }}
           >
             <div className="flex items-center justify-center">Get OTP </div>

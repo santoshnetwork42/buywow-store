@@ -28,3 +28,30 @@ export const signupWithAws = async (phone) => {
     return error;
   }
 };
+
+export const signinWithAws = async (phone) => {
+  try {
+    const cu = await signIn({
+      username: phone,
+      options: {
+        authFlowType: "CUSTOM_WITHOUT_SRP",
+      },
+    });
+    return cu;
+  } catch (error) {
+    console.log("error", error);
+    return error;
+  }
+};
+
+export const resendCode = async (phone) => {
+  try {
+    const data = await resendSignUpCode({
+      username: phone,
+    });
+    return data;
+  } catch (error) {
+    console.log("error", error);
+    return error;
+  }
+};
