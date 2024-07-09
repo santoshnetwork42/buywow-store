@@ -31,8 +31,6 @@ import {
 } from "@/utils/data/homeData";
 import TabProductSection from "@/components/partials/Home/TabProductSection";
 import ProductFeatures from "@/components/partials/Home/ProductFeatures";
-import { getClient } from "@/lib/client";
-import { testQuery } from "@/utils/graphql/queries";
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -41,12 +39,6 @@ export const metadata = {
 };
 
 const Home = async () => {
-  // const resp = await getClient().query({
-  //   query: testQuery,
-  // });
-
-  // console.log("resp :>> ", resp?.data.pages.data);
-
   return (
     <>
       {/* Main Content Section */}

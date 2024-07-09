@@ -7,7 +7,6 @@ import Sidebar from "@/components/common/Drawer";
 import MobileMenuItem from "@/components/common/partials/MobileMenuItem";
 
 const MobileMenu = ({ isOpen, onClose, menu, logo }) => {
-  console.log(logo.data.attributes.url);
   return (
     <Sidebar
       isOpen={isOpen}
