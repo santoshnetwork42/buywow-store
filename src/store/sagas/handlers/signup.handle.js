@@ -1,5 +1,5 @@
 import { call } from "redux-saga/effects";
-import { signupWithAws } from "@/store/sagas/requests/onboarding.request";
+import { signupWithAws } from "@/store/sagas/requests/signup.request";
 
 export function* createAwsAccount(action) {
   try {
