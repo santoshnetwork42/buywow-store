@@ -1,0 +1,4 @@
+export const authSagaActions = {
+  CREATE_AWS_ACCOUNT: "CREATE_AWS_ACCOUNT",
+  SIGNIN_AWS_ACCOUNT: "SIGNIN_AWS_ACCOUNT",
+};

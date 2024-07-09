@@ -9,8 +9,11 @@ import SearchBar from "@/components/common/partials/SearchBar";
 import MobileMenu from "@/components/common/partials/MobileMenu";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 import Modal from "@/components/features/Modal";
+import { useDispatch } from "react-redux";
+import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 
 export default function Header({ data, ...props }) {
+  const dispatch = useDispatch();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
@@ -145,7 +148,25 @@ export default function Header({ data, ...props }) {
             className="flex flex-grow rounded-full border p-2"
             prefix="+91"
           />
-          <Button disabled loader loaderClass="ml-2">
+          <Button
+            // disabled
+            // loader
+            // loaderClass="ml-2"
+            onClick={() => {
+              // dispatch({
+              //   type: authSagaActions.CREATE_AWS_ACCOUNT,
+              //   payload: {
+              //     phone: "9909772852",
+              //   },
+              // });
+              // dispatch({
+              //   type: authSagaActions.SIGNIN_AWS_ACCOUNT,
+              //   payload: {
+              //     phone: "+919909772852",
+              //   },
+              // });
+            }}
+          >
             <div className="flex items-center justify-center">Get OTP </div>
           </Button>
         </div>
