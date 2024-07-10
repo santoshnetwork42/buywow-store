@@ -10,3 +10,8 @@ export function generateRandomString(length) {
 
   return result;
 }
+
+export function validatePhoneNumber(phoneNumber) {
+  const pattern = /^\d{10}$/;
+  return pattern.test(phoneNumber);
+}

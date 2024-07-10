@@ -9,26 +9,22 @@ import { mainMenuItems } from "@/utils/data/headerData";
 import SearchBar from "@/components/common/partials/SearchBar";
 import MobileMenu from "@/components/common/partials/MobileMenu";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
-import Modal from "@/components/features/Modal";
 import { LoaderIcon } from "@/assets/svg/icons";
+import Passwordless from "../Passwordless";
 import { useDispatch } from "react-redux";
-import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
+import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 
 export default function Header({ ...props }) {
   const dispatch = useDispatch();
+
   const [openMenus, setOpenMenus] = useState({});
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   const toggleMenu = (index) => {
     setOpenMenus((prev) => ({
       ...prev,
       [index]: !prev[index],
     }));
-  };
-
-  const onAuthClose = () => {
-    setIsAuthOpen(false);
   };
 
   const openMobileMenu = () => setMobileMenuOpen(true);
@@ -111,7 +107,15 @@ export default function Header({ ...props }) {
             <Link
               href="#"
               className="flex-shrink-0"
-              onClick={() => setIsAuthOpen(true)}
+              onClick={() => {
+                console.log("reached");
+                dispatch({
+                  type: modalSagaActions.SET_PASSWORDLESS_MODAL,
+                  payload: {
+                    isPasswordlessOpen: true,
+                  },
+                });
+              }}
             >
               <Img
                 src="img_user.svg"
@@ -144,43 +148,8 @@ export default function Header({ ...props }) {
         menuItems={mainMenuItems}
       />
 
-      {/* Auth Modal */}
-      <Modal
-        isOpen={isAuthOpen}
-        onClose={onAuthClose}
-        showMobileView
-        title="Signup"
-        enableOutsideClick
-      >
-        <div className="flex flex-col items-center gap-3 px-8 py-4">
-          <Input
-            placeholder="Enter Mobile Number"
-            className="flex flex-grow rounded-full border p-2"
-            prefix="+91"
-          />
-          <Button
-            // disabled
-            // loader
-            // loaderClass="ml-2"
-            onClick={() => {
-              // dispatch({
-              //   type: authSagaActions.CREATE_AWS_ACCOUNT,
-              //   payload: {
-              //     phone: "9909772852",
-              //   },
-              // });
-              // dispatch({
-              //   type: authSagaActions.SIGNIN_AWS_ACCOUNT,
-              //   payload: {
-              //     phone: "+919909772852",
-              //   },
-              // });
-            }}
-          >
-            <div className="flex items-center justify-center">Get OTP </div>
-          </Button>
-        </div>
-      </Modal>
+      {/* Auth modal */}
+      <Passwordless />
     </header>
   );
 }

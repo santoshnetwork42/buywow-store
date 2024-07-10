@@ -56,7 +56,7 @@ const Modal = ({
                 {title}
               </Heading>
               {enableCloseButton && !showCloseButtonOutOfBox && (
-                <div className={`cursor-pointer`}>
+                <div className={`cursor-pointer`} onClick={onCloseClick}>
                   <CloseIcon color="black" size={28} />
                 </div>
               )}
