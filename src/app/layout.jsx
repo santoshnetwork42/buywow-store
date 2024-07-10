@@ -2,14 +2,16 @@ import React from "react";
 import "@/styles/tailwind.css";
 import "@/styles/index.css";
 import "@/styles/font.css";
+import { Amplify } from "aws-amplify";
+import awsExport from "../../aws-exports";
+import { AWS_CLIENT_ID } from "../../config";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import AnnouncementBar from "@/components/common/AnnouncementBar";
 import { Provider } from "@/store/Provider";
 import { ApolloWrapper } from "@/lib/apollo-provider";
-import { Amplify } from "aws-amplify";
-import awsExport from "../../aws-exports";
-import { AWS_CLIENT_ID } from "../../config";
+import { getClient } from "@/lib/client";
+import { navbar } from "@/utils/graphql/queries";
 
 Amplify.configure({
   ...awsExport,
@@ -17,7 +19,19 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
-function RootLayout({ children }) {
+async function RootLayout({ children }) {
+  const client = getClient();
+  // const {
+  //   data: { navbar: navData },
+  // } = await client.query({
+  //   query: navbar,
+  //   context: {
+  //     fetchOptions: {
+  //       next: { revalidate: 900 },
+  //     },
+  //   },
+  // });
+
   return (
     <html lang="en">
       <head>
@@ -41,7 +55,7 @@ function RootLayout({ children }) {
                 rightText="100% Refund on returns"
                 flashSaleDiscount={60}
               />
-              <Header />
+              <Header data={[]} />
               <div className="flex-1">{children}</div>
               <Footer />
             </div>

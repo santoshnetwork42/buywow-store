@@ -7,17 +7,24 @@ const BASE_URL = process.env.BASE_PATH || "/images/";
 
 const Img = ({
   className,
-  src = "defaultNoData.png",
-  alt = "testImg",
+  src,
+  alt = "Img",
   isStatic = false,
   ...restProps
 }) => {
+  console.log(src);
   const [imgSrc, setImgSrc] = React.useState(src);
 
   return (
     <Image
       className={className}
-      src={isStatic ? imgSrc : BASE_URL + imgSrc}
+      src={
+        src
+          ? isStatic
+            ? imgSrc
+            : BASE_URL + imgSrc
+          : "/images/defaultNoData.png"
+      }
       alt={alt}
       {...restProps}
       onError={() => {

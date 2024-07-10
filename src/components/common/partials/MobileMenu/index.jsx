@@ -6,7 +6,10 @@ import { CloseSVG, UserSVG } from "@/assets/images";
 import Sidebar from "@/components/common/Drawer";
 import MobileMenuItem from "@/components/common/partials/MobileMenuItem";
 
-const MobileMenu = ({ isOpen, onClose, menuItems }) => {
+const MobileMenu = ({ isOpen, onClose, menu, logo }) => {
+  const { url: logoUrl, alternativeText: logoAlternativeText = "logo" } =
+    logo?.data?.attributes || {};
+
   return (
     <Sidebar
       isOpen={isOpen}
@@ -19,10 +22,11 @@ const MobileMenu = ({ isOpen, onClose, menuItems }) => {
       <div className="flex items-center justify-between bg-yellow-900 p-4">
         <Link href="/" className="" onClick={onClose}>
           <Img
-            src="img_header_logo_white.svg"
+            src={logoUrl}
             width={100}
             height={48}
-            alt="logo"
+            alt={logoAlternativeText}
+            isStatic
             className="aspect-[100/48] w-[100px] object-contain"
           />
         </Link>
@@ -56,16 +60,17 @@ const MobileMenu = ({ isOpen, onClose, menuItems }) => {
       {/* Menu Items */}
       <div className="flex-1 overflow-y-auto p-4">
         <ul className="space-y-4">
-          {menuItems.map((item, index) => (
-            <li key={index}>
-              <MobileMenuItem item={item} closeMenu={onClose} />
-              <div className="h-[0.5px] w-full bg-gray-300" />
-            </li>
-          ))}
+          {!!menu?.length &&
+            menu?.map((item, index) => (
+              <li key={item.id || index}>
+                <MobileMenuItem item={item} closeMenu={onClose} />
+                <div className="h-[0.5px] w-full bg-gray-300" />
+              </li>
+            ))}
         </ul>
       </div>
 
-      {/* Footer */}
+      {/* Menu Footer */}
       <div className="fixed bottom-0 left-0 w-full bg-gray-50 p-4">
         <Link href="/login" className="flex items-center gap-3">
           <UserSVG />

@@ -111,8 +111,6 @@ const SliderComponent = React.memo(
       }
     }, []);
 
-    tag && console.log(tag, width);
-
     return (
       <div className={`${className} w-full`} {...props}>
         <div

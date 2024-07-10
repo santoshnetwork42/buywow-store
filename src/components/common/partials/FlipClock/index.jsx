@@ -76,13 +76,6 @@ const FlipClock = ({ targetDate, centerText }) => {
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center">
-        <Img
-          src="img_image_2038.png"
-          width={16}
-          height={16}
-          alt="sale image"
-          className="aspect-square w-4 object-contain"
-        />
         <Text as="p" className="text-white-a700_01" size="sm" responsive>
           {centerText}
         </Text>
