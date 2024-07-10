@@ -1,122 +1,197 @@
 "use client";
 
-// components/Footer.js
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { Heading, Text, Img } from "@/components/common";
-import { footerData } from "@/utils/data/footerData";
-import FooterSection from "@/components/common/partials/FooterSection";
+import FooterMenu from "@/components/common/partials/FooterMenu";
 import Link from "next/link";
+import { extractAttributes } from "@/utils/helpers";
 
-const Footer = ({ className }) => {
-  const data = footerData;
+const SocialLink = React.memo(({ item, index }) => {
+  const { url, alternativeText = "icon" } = extractAttributes(item.image);
+  return (
+    <Link key={item?.id || index} href={item?.link} target="_blank">
+      <Img
+        src={url}
+        width={24}
+        height={24}
+        alt={alternativeText}
+        isStatic
+        className="aspect-square w-6 object-contain"
+      />
+    </Link>
+  );
+});
+
+SocialLink.displayName = "SocialLink";
+
+const FooterLogo = React.memo(({ logoUrl, logoAlternativeText }) => (
+  <Img
+    src={logoUrl}
+    width={200}
+    height={100}
+    alt={logoAlternativeText}
+    isStatic
+    className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
+  />
+));
+
+FooterLogo.displayName = "FooterLogo";
+
+const FooterDescription = React.memo(
+  ({ description }) =>
+    description && (
+      <Text
+        as="div"
+        size="sm"
+        className="text-white-a700_01"
+        dangerouslySetInnerHTML={{ __html: description }}
+      />
+    ),
+);
+
+FooterDescription.displayName = "FooterDescription";
+
+const Copyright = React.memo(
+  ({ copyrightText }) =>
+    copyrightText && (
+      <Text as="p" size="sm" className="text-white-a700_01" responsive>
+        {copyrightText}
+      </Text>
+    ),
+);
+
+Copyright.displayName = "Copyright";
+
+const Footer = React.memo(({ data, ...props }) => {
   const [openSections, setOpenSections] = useState({});
 
-  const toggleSection = (index) => {
+  const {
+    logo,
+    description,
+    socialLinks,
+    copyrightText,
+    collectionMenus,
+    otherLinks,
+  } = useMemo(() => extractAttributes(data), [data]);
+
+  const { url: logoUrl, alternativeText: logoAlternativeText = "logo" } =
+    useMemo(() => extractAttributes(logo), [logo]);
+
+  const menu = useMemo(() => {
+    const prefixSlug = (prefix) => (item) => ({
+      ...item,
+      slug: `${prefix}${item.slug}`,
+    });
+
+    const processSubMenu = (items, prefix) =>
+      items.map((item) => ({
+        ...item,
+        subMenu: item.subMenu?.map(prefixSlug(prefix)),
+      }));
+
+    const hasSubMenu = (item) => item?.subMenu?.length > 0;
+    const noSubMenu = (item) => !hasSubMenu(item);
+
+    return {
+      itemsWithSubMenu: [
+        ...processSubMenu(collectionMenus.filter(hasSubMenu), "/collection/"),
+        ...processSubMenu(otherLinks.filter(hasSubMenu), "/"),
+      ],
+      itemsWithoutSubMenu: [
+        ...collectionMenus.filter(noSubMenu).map(prefixSlug("/collection/")),
+        ...otherLinks.filter(noSubMenu).map(prefixSlug("/")),
+      ],
+    };
+  }, [collectionMenus, otherLinks]);
+
+  const toggleSection = useCallback((index) => {
     setOpenSections((prev) => ({
-      ...prev,
-      [index]: !prev[index],
+      ...(prev[index] ? {} : { [index]: true }),
     }));
-  };
+  }, []);
+
+  const renderSocialLinks = useMemo(
+    () =>
+      socialLinks.length > 0 && (
+        <div className="flex gap-3 md:gap-4">
+          {socialLinks.map((item, index) => (
+            <SocialLink key={item?.id || index} item={item} index={index} />
+          ))}
+        </div>
+      ),
+    [socialLinks],
+  );
+
+  const renderMenuItems = useMemo(
+    () => (
+      <>
+        {menu.itemsWithSubMenu.map((item, index) => (
+          <FooterMenu
+            key={index}
+            item={item}
+            isOpen={openSections[index]}
+            onToggle={() => toggleSection(index)}
+          />
+        ))}
+      </>
+    ),
+    [menu.itemsWithSubMenu, openSections, toggleSection],
+  );
+
+  const renderMenuLinks = useMemo(
+    () => (
+      <>
+        {menu.itemsWithoutSubMenu.map((item, index) => (
+          <Link key={index} href={item?.slug}>
+            <Heading
+              as="h6"
+              size="base"
+              className="font-semibold capitalize text-white-a700_01"
+            >
+              {item?.title}
+            </Heading>
+          </Link>
+        ))}
+      </>
+    ),
+    [menu.itemsWithoutSubMenu],
+  );
 
   return (
     <footer
-      className={`flex bg-blue_gray-300_01 px-5 py-6 sm:px-10 md:px-14 lg:px-16 xl:px-24 ${className}`}
+      className={`flex bg-blue_gray-300_01 px-5 py-6 sm:px-10 md:px-14 lg:px-16 xl:px-24 ${props.className}`}
     >
       <div className="flex w-full flex-col justify-between gap-5 sm:flex-row">
         <div className="flex flex-col gap-7">
           <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-7">
-            <Img
-              src={data.logo.src}
-              width={data.logo.width}
-              height={data.logo.height}
-              alt={data.logo.alt}
-              className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
+            <FooterLogo
+              logoUrl={logoUrl}
+              logoAlternativeText={logoAlternativeText}
             />
-            <Text as="p" size="sm" className="text-white-a700_01">
-              {data.description}
-            </Text>
+            <FooterDescription description={description} />
           </div>
           <div className="hidden flex-col gap-12 sm:flex">
-            <div className="flex gap-3 md:gap-4">
-              {data.socialIcons.map((icon, index) => (
-                <Link
-                  key={index}
-                  href={icon.href}
-                  target={icon.target}
-                  rel={icon.rel}
-                >
-                  <Img
-                    src={icon.src}
-                    width={icon.width}
-                    height={icon.height}
-                    alt={icon.alt}
-                    className="aspect-square w-6 object-contain"
-                  />
-                </Link>
-              ))}
-            </div>
-            <Text as="p" size="sm" className="text-white-a700_01" responsive>
-              {data.copyright}
-            </Text>
+            {renderSocialLinks}
+            <Copyright copyrightText={copyrightText} />
           </div>
         </div>
         <div className="mt-3 flex w-full flex-col gap-3 sm:mt-5 sm:max-w-[50%] md:max-w-[60%] md:flex-row md:justify-around lg:justify-between">
-          <div className="flex flex-col gap-3 md:w-1/2 lg:flex-1 lg:flex-row lg:justify-evenly lg:gap-5">
-            {data.sections.map((section, index) => (
-              <FooterSection
-                key={index}
-                section={section}
-                isOpen={openSections[index]}
-                onToggle={() => toggleSection(index)}
-              />
-            ))}
-          </div>
-          <div className="flex flex-col gap-3">
-            {data.otherLinks.map((link, index) => (
-              <Link
-                key={index}
-                href={link.href}
-                target={link.target}
-                rel={link.rel}
-              >
-                <Heading
-                  as="h6"
-                  size="base"
-                  className="font-semibold capitalize text-white-a700_01"
-                >
-                  {link.text}
-                </Heading>
-              </Link>
-            ))}
-          </div>
+          {collectionMenus && (
+            <div className="flex flex-col gap-3 md:w-1/2 lg:flex-1 lg:flex-row lg:justify-evenly lg:gap-5">
+              {renderMenuItems}
+            </div>
+          )}
+          <div className="flex flex-col gap-3">{renderMenuLinks}</div>
         </div>
         <div className="mt-5 flex items-center justify-between sm:hidden">
-          <div className="flex gap-3 md:gap-4">
-            {data.socialIcons.map((icon, index) => (
-              <Link
-                key={index}
-                href={icon.href}
-                target={icon.target}
-                rel={icon.rel}
-              >
-                <Img
-                  key={index}
-                  src={icon.src}
-                  width={icon.width}
-                  height={icon.height}
-                  alt={icon.alt}
-                  className="aspect-square w-6 object-contain"
-                />
-              </Link>
-            ))}
-          </div>
-          <Text as="p" size="sm" className="text-white-a700_01" responsive>
-            {data.copyright}
-          </Text>
+          {renderSocialLinks}
+          <Copyright copyrightText={copyrightText} />
         </div>
       </div>
     </footer>
   );
-};
+});
+
+Footer.displayName = "Footer";
 
 export default Footer;

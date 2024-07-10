@@ -11,7 +11,7 @@ import AnnouncementBar from "@/components/common/AnnouncementBar";
 import { Provider } from "@/store/Provider";
 import { ApolloWrapper } from "@/lib/apollo-provider";
 import { getClient } from "@/lib/client";
-import { navbar } from "@/utils/graphql/queries";
+import { footer, navbar } from "@/graphql/queries";
 
 Amplify.configure({
   ...awsExport,
@@ -21,16 +21,28 @@ Amplify.configure({
 
 async function RootLayout({ children }) {
   const client = getClient();
-  // const {
-  //   data: { navbar: navData },
-  // } = await client.query({
-  //   query: navbar,
-  //   context: {
-  //     fetchOptions: {
-  //       next: { revalidate: 900 },
-  //     },
-  //   },
-  // });
+
+  const [navResponse, footerResponse] = await Promise.all([
+    client.query({
+      query: navbar,
+      context: {
+        fetchOptions: {
+          next: { revalidate: 0 },
+        },
+      },
+    }),
+    client.query({
+      query: footer,
+      context: {
+        fetchOptions: {
+          next: { revalidate: 0 },
+        },
+      },
+    }),
+  ]);
+
+  const navData = navResponse?.data?.navbar;
+  const footerData = footerResponse?.data?.footer;
 
   return (
     <html lang="en">
@@ -49,15 +61,15 @@ async function RootLayout({ children }) {
                 leftText="Free Shipping On Orders Above ₹999"
                 centerContent={{
                   isTimer: true,
-                  centerText: "Flash Sale up to 60% OFF for",
+                  centerText: "⚡ Flash Sale up to 60% OFF for",
                   targetDate: "2024-08-05T00:00:00",
                 }}
                 rightText="100% Refund on returns"
                 flashSaleDiscount={60}
               />
-              <Header data={[]} />
+              <Header data={navData} />
               <div className="flex-1">{children}</div>
-              <Footer />
+              <Footer data={footerData} />
             </div>
           </ApolloWrapper>
         </Provider>

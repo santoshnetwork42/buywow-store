@@ -1,17 +1,23 @@
 export function generateRandomString(length) {
   const characters =
-    "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let result = "";
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  const array = new Uint8Array(length);
 
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    result += characters.charAt(randomIndex);
-  }
+  crypto.getRandomValues(array);
 
-  return result;
+  return Array.from(array, (x) => characters[x % charactersLength]).join("");
 }
 
 export function validatePhoneNumber(phoneNumber) {
   const pattern = /^\d{10}$/;
   return pattern.test(phoneNumber);
+}
+
+export function extractAttributes(data, defaultValues = {}) {
+  if (!data?.data?.attributes) {
+    return defaultValues;
+  }
+
+  return { ...defaultValues, ...data.data.attributes };
 }

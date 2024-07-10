@@ -8,7 +8,7 @@ import { Button, Input } from "@/components/common";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { validatePhoneNumber } from "@/utils/helpers";
 
-export default function Passwordless({ enableOutsideClick = true }) {
+export default function PasswordLess({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
 
   const [authData, setAuthData] = useState({
@@ -18,7 +18,7 @@ export default function Passwordless({ enableOutsideClick = true }) {
 
   const {
     modal: {
-      passwordLess: { isPasswordlessOpen },
+      passwordLess: { isPasswordLessOpen },
     },
   } = useSelector((state) => state.modal);
 
@@ -26,7 +26,7 @@ export default function Passwordless({ enableOutsideClick = true }) {
     dispatch({
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
       payload: {
-        isPasswordlessOpen: false,
+        isPasswordLessOpen: false,
       },
     });
   };
@@ -68,7 +68,7 @@ export default function Passwordless({ enableOutsideClick = true }) {
 
   return (
     <Modal
-      isOpen={isPasswordlessOpen}
+      isOpen={isPasswordLessOpen}
       onClose={onAuthClose}
       showMobileView
       title="Signup"
