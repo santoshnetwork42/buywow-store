@@ -12,8 +12,8 @@ export default function PasswordLess({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
 
   const [authData, setAuthData] = useState({
-    phone: null,
-    confirmationCode: null,
+    phone: "",
+    confirmationCode: "",
   });
 
   const {
