@@ -12,13 +12,13 @@ export default function Passwordless({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
 
   const [authData, setAuthData] = useState({
-    phone: null,
-    confirmationCode: null,
+    phone: "",
+    confirmationCode: "",
   });
 
   const {
     modal: {
-      passwordLess: { isPasswordlessOpen },
+      passwordLess: { isPasswordlessOpen = false },
     },
   } = useSelector((state) => state.modal);
 
