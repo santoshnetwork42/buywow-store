@@ -58,20 +58,28 @@ export function* signinWithAwsAccount(action) {
 export function* confirmSigninHandler(action) {
   try {
     const { confirmationCode } = action.payload;
+
+    yield put(setAuthLoading(true));
     const user = yield call(() => confirmSignin({ confirmationCode }));
+    yield put(setAuthLoading(false));
 
     yield put(setConfirmationStatus(user?.nextStep?.signInStep));
   } catch (error) {
     console.log("error", error);
+  } finally {
+    yield put(setAuthLoading(false));
   }
 }
 
 export function* confirmSignupHandler(action) {
   try {
     const { username, confirmationCode } = action.payload;
+
+    yield put(setAuthLoading(true));
     const user = yield call(() =>
       confirmSignup({ username, confirmationCode }),
     );
+    yield put(setAuthLoading(false));
 
     if (user?.nextStep?.signUpStep === "COMPLETE_AUTO_SIGN_IN") {
       const res = yield call(() => autoSignin());
@@ -79,6 +87,8 @@ export function* confirmSignupHandler(action) {
     }
   } catch (error) {
     console.log("error", error);
+  } finally {
+    yield put(setAuthLoading(false));
   }
 }
 
