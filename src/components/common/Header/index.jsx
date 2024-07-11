@@ -74,8 +74,13 @@ const Header = React.memo(({ data, ...props }) => {
   const dispatch = useDispatch();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { logo, VIPMembershipLogo, mWebMenuLogo, collectionMenus, otherLinks } =
-    useMemo(() => extractAttributes(data), [data]);
+  const {
+    logo,
+    VIPMembershipLogo,
+    mWebMenuLogo,
+    menus: collectionMenus,
+    otherLinks,
+  } = useMemo(() => extractAttributes(data), [data]);
 
   const { url: logoUrl, alternativeText: logoAlternativeText = "logo" } =
     useMemo(() => extractAttributes(logo), [logo]);

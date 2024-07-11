@@ -70,7 +70,7 @@ const Footer = React.memo(({ data, ...props }) => {
     description,
     socialLinks,
     copyrightText,
-    collectionMenus,
+    menus: collectionMenus,
     otherLinks,
   } = useMemo(() => extractAttributes(data), [data]);
 

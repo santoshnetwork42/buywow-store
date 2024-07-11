@@ -41,7 +41,7 @@ export const navbar = gql`
               }
             }
           }
-          collectionMenus {
+          menus {
             id
             title
             slug
@@ -94,7 +94,7 @@ export const footer = gql`
             }
           }
           copyrightText
-          collectionMenus {
+          menus {
             id
             title
             slug
