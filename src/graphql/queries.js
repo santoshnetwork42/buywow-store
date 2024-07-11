@@ -54,12 +54,7 @@ export const navbar = gql`
           otherLinks {
             id
             title
-            slug
-            subMenu {
-              id
-              title
-              slug
-            }
+            link
           }
         }
       }
