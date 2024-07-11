@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
-  auth: {
-    confirmationStatus: null,
-  },
+  confirmationStatus: null,
+  confirmationCode: null,
+  error: false,
+  loading: false,
 };
 
 export const authSlice = createSlice({
@@ -11,10 +12,19 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setConfirmationStatus: (state, action) => {
-      state.auth.confirmationStatus = action.payload;
+      state.confirmationStatus = action.payload;
+    },
+    setConfirmationCode: (state, action) => {
+      state.confirmationCode = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     },
   },
 });
 
-export const {} = authSlice.actions;
+export const { setConfirmationStatus, setConfirmationCode } = authSlice.actions;
 export default authSlice.reducer;

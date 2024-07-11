@@ -20,15 +20,11 @@ export default function Header({ data, ...props }) {
   const { logo, VIPMembershipLogo, mWebMenuLogo, menu } =
     data?.data?.attributes || {};
 
-  const {
-    url: logoUrl,
-    alternativeText: logoAlternativeText = "logo",
-  } = logo?.data?.attributes || {};
+  const { url: logoUrl, alternativeText: logoAlternativeText = "logo" } =
+    logo?.data?.attributes || {};
 
-  const {
-    url: vipUrl,
-    alternativeText: vipAlternativeText = "logo",
-  } = VIPMembershipLogo?.data?.attributes || {};
+  const { url: vipUrl, alternativeText: vipAlternativeText = "logo" } =
+    VIPMembershipLogo?.data?.attributes || {};
 
   const openMobileMenu = () => setIsMobileMenuOpen(true);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -110,7 +106,6 @@ export default function Header({ data, ...props }) {
               href="#"
               className="flex-shrink-0"
               onClick={() => {
-                console.log("reached");
                 dispatch({
                   type: modalSagaActions.SET_PASSWORDLESS_MODAL,
                   payload: {

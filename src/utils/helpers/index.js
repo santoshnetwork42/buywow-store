@@ -15,3 +15,8 @@ export function validatePhoneNumber(phoneNumber) {
   const pattern = /^\d{10}$/;
   return pattern.test(phoneNumber);
 }
+
+export const addPhonePrefix = (number) => {
+  if (number && !number.includes("+91")) return "+91" + number;
+  return number;
+};

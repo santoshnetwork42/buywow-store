@@ -3,7 +3,6 @@ import { call, put } from "redux-saga/effects";
 
 export function* setPasswordlessModalHandler(action) {
   try {
-    console.log("reached in handler");
     const { isPasswordlessOpen } = action.payload;
     yield put(setPasswordlessModal({ isPasswordlessOpen }));
   } catch (error) {

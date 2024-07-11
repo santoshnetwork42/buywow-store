@@ -12,7 +12,6 @@ const Img = ({
   isStatic = false,
   ...restProps
 }) => {
-  console.log(src);
   const [imgSrc, setImgSrc] = React.useState(src);
 
   return (
