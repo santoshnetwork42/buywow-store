@@ -2,18 +2,18 @@ import { Text } from "@/components/common";
 import Link from "next/link";
 import React from "react";
 
-const MenuItem = React.memo(function MenuItem({ item, linkPrefix }) {
-  return (
-    <Link
-      href={`/${linkPrefix ? linkPrefix + "/" : ""}${item?.slug}`}
-      className="self-center"
-    >
-      <Text size="sm" as="p" className="truncate capitalize" responsive>
-        {item?.title}
-      </Text>
-    </Link>
-  );
-});
+const MenuItem = React.memo(({ item, linkPrefix }) => (
+  <Link
+    href={`/${linkPrefix ? linkPrefix + "/" : ""}${item?.slug}`}
+    className="self-center"
+  >
+    <Text size="sm" as="p" className="truncate capitalize" responsive>
+      {item?.title}
+    </Text>
+  </Link>
+));
+
+MenuItem.displayName = "MenuItem";
 
 function NavMenu({ menuItems, linkPrefix }) {
   return (

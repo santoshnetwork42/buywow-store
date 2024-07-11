@@ -1,25 +1,43 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState, memo } from "react";
 import Link from "next/link";
 import { Text, Heading } from "@/components/common";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 
-const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
+const SubMenuItem = memo(({ subItem, linkPrefix, closeMenu, isLast }) => (
+  <li className={!isLast ? "border-b-[0.5px] border-b-gray-300" : ""}>
+    <Link
+      className={isLast ? "py-2.5" : "pb-2.5 pt-1.5"}
+      href={`/${linkPrefix ? linkPrefix + "/" : ""}${subItem?.slug}`}
+      onClick={closeMenu}
+    >
+      <Text size="sm" as="p" className="capitalize">
+        {subItem?.title}
+      </Text>
+    </Link>
+  </li>
+));
+
+SubMenuItem.displayName = "SubMenuItem";
+
+const MobileMenuItem = memo(({ item, closeMenu, linkPrefix }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [height, setHeight] = useState(0);
   const contentRef = useRef(null);
 
+  const toggleOpen = useCallback(() => setIsOpen((prev) => !prev), []);
+
   useEffect(() => {
     if (contentRef.current) {
-      setHeight(isOpen ? contentRef?.current?.scrollHeight : 0);
+      setHeight(isOpen ? contentRef.current.scrollHeight : 0);
     }
   }, [isOpen]);
 
   if (item?.subMenu?.length > 0) {
     return (
-      <div className="">
+      <div>
         <div
           className="flex cursor-pointer items-center justify-between pb-3 pr-3 pt-2"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={toggleOpen}
         >
           <Heading size="base" as="h4" className="font-semibold">
             {item?.title}
@@ -37,24 +55,13 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
         >
           <ul ref={contentRef}>
             {item?.subMenu.map((subItem, index) => (
-              <li
+              <SubMenuItem
                 key={subItem?.id || index}
-                className={
-                  index !== item?.subMenu?.length - 1
-                    ? "border-b-[0.5px] border-b-gray-300"
-                    : ""
-                }
-              >
-                <Link
-                  className={index === 0 ? "pb-2.5 pt-1.5" : "py-2.5"}
-                  href={`/${linkPrefix ? linkPrefix + "/" : ""}${subItem?.slug}`}
-                  onClick={closeMenu}
-                >
-                  <Text size="sm" as="p" className="capitalize">
-                    {subItem?.title}
-                  </Text>
-                </Link>
-              </li>
+                subItem={subItem}
+                linkPrefix={linkPrefix}
+                closeMenu={closeMenu}
+                isLast={index === item?.subMenu.length - 1}
+              />
             ))}
           </ul>
         </div>
@@ -73,6 +80,8 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
       </Heading>
     </Link>
   );
-};
+});
+
+MobileMenuItem.displayName = "MobileMenuItem";
 
 export default MobileMenuItem;

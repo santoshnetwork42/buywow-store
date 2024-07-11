@@ -142,12 +142,12 @@ const Header = React.memo(({ data, ...props }) => {
           </div>
 
           {(!!collectionMenus?.length || !!otherLinks?.length) && (
-            <ul className="hidden flex-wrap gap-y-2 lg:flex lg:gap-x-3 xl:gap-x-5">
+            <ul className="hidden flex-wrap gap-y-2 lg:flex lg:gap-x-3 xl:gap-x-4 xxl:gap-x-5">
               {menuItems}
             </ul>
           )}
 
-          <div className="flex max-w-[370px] shrink-[10] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
+          <div className="flex max-w-[370px] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
             <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
             <Link
               href="#"
