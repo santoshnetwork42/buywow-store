@@ -188,7 +188,7 @@ export default function PasswordLess({ enableOutsideClick = true }) {
 
   return (
     <Modal
-      isOpen={isPasswordlessOpen}
+      isOpen={isPasswordLessOpen}
       onClose={onAuthClose}
       showMobileView
       title="Signup"

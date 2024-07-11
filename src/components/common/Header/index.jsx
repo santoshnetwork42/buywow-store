@@ -161,7 +161,7 @@ const Header = React.memo(({ data, ...props }) => {
                 dispatch({
                   type: modalSagaActions.SET_PASSWORDLESS_MODAL,
                   payload: {
-                    isPasswordlessOpen: true,
+                    isPasswordLessOpen: true,
                   },
                 });
               }}
