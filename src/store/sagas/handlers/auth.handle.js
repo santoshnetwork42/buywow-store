@@ -7,27 +7,35 @@ import {
   resendSignupCode,
   autoSignin,
 } from "@/store/sagas/requests/auth.request";
-import { setConfirmationStatus } from "@/store/slices/auth/authSlice";
+import {
+  setAuthLoading,
+  setConfirmationStatus,
+} from "@/store/slices/auth/authSlice";
 
 export function* createAwsAccount(action) {
   try {
     const { phone } = action.payload;
+    yield put(setAuthLoading(true));
     const user = yield call(() => signupWithAws({ phone }));
 
     if (user?.nextStep?.signUpStep === "CONFIRM_SIGN_UP") {
+      yield put(setAuthLoading(false));
       yield put(setConfirmationStatus("UNCONFIRMED_SIGNUP"));
     }
   } catch (error) {
     console.log("error", error);
+  } finally {
+    yield put(setAuthLoading(false));
   }
 }
 
 export function* signinWithAwsAccount(action) {
   try {
     const { phone } = action.payload;
-    console.log("phone :>> ", phone);
+
+    yield put(setAuthLoading(true));
     const user = yield call(() => signinWithAws({ phone }));
-    console.log("user :>> ", user);
+    yield put(setAuthLoading(false));
 
     if (user?.nextStep?.signInStep === "CONFIRM_SIGN_UP") {
       const user = yield call(() => resendSignupCode({ phone }));
@@ -42,6 +50,8 @@ export function* signinWithAwsAccount(action) {
     if (error.name === "UserNotFoundException") {
       yield put(setConfirmationStatus("SIGNUP"));
     }
+  } finally {
+    yield put(setAuthLoading(false));
   }
 }
 

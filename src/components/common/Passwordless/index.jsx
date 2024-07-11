@@ -12,7 +12,13 @@ import { getCurrentUser } from "aws-amplify/auth";
 export default function PasswordLess({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
 
-  const { confirmationStatus } = useSelector((state) => state.auth);
+  const { confirmationStatus, loading } = useSelector((state) => state.auth);
+  const {
+    modal: {
+      passwordLess: { isPasswordLessOpen },
+    },
+  } = useSelector((state) => state.modal);
+
   console.log("confirmationStatus :>> ", confirmationStatus);
   const [authData, setAuthData] = useState({
     phone: "",
@@ -49,12 +55,6 @@ export default function PasswordLess({ enableOutsideClick = true }) {
       otpInput.current[index - 1].focus();
     }
   };
-
-  const {
-    modal: {
-      passwordLess: { isPasswordLessOpen },
-    },
-  } = useSelector((state) => state.modal);
 
   const onAuthClose = async () => {
     dispatch({
@@ -151,8 +151,8 @@ export default function PasswordLess({ enableOutsideClick = true }) {
         />
         <Button
           // disabled
-          // loader
-          // loaderClass="ml-2"
+          loader={loading}
+          loaderClass="ml-2"
           onClick={() => {
             signIn();
           }}
@@ -181,7 +181,9 @@ export default function PasswordLess({ enableOutsideClick = true }) {
             />
           ))}
         </div>
-        <Button onClick={submitOTP}>Submit</Button>
+        <Button loader={loading} loaderClass="ml-2" onClick={submitOTP}>
+          Submit
+        </Button>
       </div>
     );
   };
