@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   modal: {
-    passwordLess: { isPasswordlessOpen: false, redirectAfterLogin: false },
+    passwordLess: { isPasswordLessOpen: false, redirectAfterLogin: false },
     cart: { isCartOpen: false },
   },
 };
@@ -14,7 +14,7 @@ export const modalSlice = createSlice({
     setModal: (state, action) => {
       state.modal = action.payload;
     },
-    setPasswordlessModal: (state, action) => {
+    setPasswordLessModal: (state, action) => {
       state.modal.passwordLess = action.payload;
     },
     setCartModal: (state, action) => {
@@ -23,6 +23,6 @@ export const modalSlice = createSlice({
   },
 });
 
-export const { setModal, setPasswordlessModal, setCartModal } =
+export const { setModal, setPasswordLessModal, setCartModal } =
   modalSlice.actions;
 export default modalSlice.reducer;

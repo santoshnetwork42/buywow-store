@@ -1,106 +1,153 @@
 "use client";
 
-import { MenuSVG } from "@/assets/images";
-import { Button, Img, Input, Text } from "@/components/common";
+import React, { useState, useMemo, useCallback } from "react";
+import { useDispatch } from "react-redux";
 import Link from "next/link";
-import React, { useState } from "react";
+import { MenuSVG } from "@/assets/images";
+import { Button, Img, Text } from "@/components/common";
+import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { extractAttributes } from "@/utils/helpers";
 import NavMenu from "@/components/common/partials/NavMenu";
 import SearchBar from "@/components/common/partials/SearchBar";
 import MobileMenu from "@/components/common/partials/MobileMenu";
-import { DownArrowIconSVG } from "@/assets/images/downArrow";
-import Passwordless from "../Passwordless";
-import { useDispatch } from "react-redux";
-import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import PasswordLess from "../PasswordLess";
 
-export default function Header({ data, ...props }) {
+const MenuItem = React.memo(({ item, index, linkPrefix }) => {
+  const key = item?.id || index;
+  const title = (
+    <Text size="base" as="p" className="capitalize" responsive>
+      {item?.title}
+    </Text>
+  );
+
+  if (item?.subMenu?.length > 0) {
+    return (
+      <li key={key} className="group relative">
+        <div className="flex cursor-pointer items-center gap-1">
+          {title}
+          <DownArrowIconSVG />
+        </div>
+        <NavMenu menuItems={item.subMenu} linkPrefix={linkPrefix} />
+      </li>
+    );
+  }
+
+  return (
+    <li key={key}>
+      <Link href={`/${linkPrefix ? linkPrefix + "/" : ""}${item?.slug}`}>
+        {title}
+      </Link>
+    </li>
+  );
+});
+
+MenuItem.displayName = "MenuItem";
+
+const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
+  <Link href="/">
+    <div className="flex items-center gap-1">
+      <Img
+        src={logoUrl}
+        width={86}
+        height={48}
+        alt={logoAlt}
+        isStatic
+        className="aspect-[86/48] w-[86px] object-contain"
+      />
+      <div className="h-[35px] w-[0.5px] bg-gray-300_01" />
+      <Img
+        src={vipUrl}
+        width={70}
+        height={28}
+        alt={vipAlt}
+        isStatic
+        className="aspect-[70/28] w-[70px] object-contain"
+      />
+    </div>
+  </Link>
+));
+
+Logo.displayName = "Logo";
+
+const Header = React.memo(({ data, ...props }) => {
   const dispatch = useDispatch();
-
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { logo, VIPMembershipLogo, mWebMenuLogo, menu } =
-    data?.data?.attributes || {};
+  const { logo, VIPMembershipLogo, mWebMenuLogo, collectionMenus, otherLinks } =
+    useMemo(() => extractAttributes(data), [data]);
 
   const { url: logoUrl, alternativeText: logoAlternativeText = "logo" } =
-    logo?.data?.attributes || {};
+    useMemo(() => extractAttributes(logo), [logo]);
+  const { url: vipUrl, alternativeText: vipAlternativeText = "logo" } = useMemo(
+    () => extractAttributes(VIPMembershipLogo),
+    [VIPMembershipLogo],
+  );
 
-  const { url: vipUrl, alternativeText: vipAlternativeText = "logo" } =
-    VIPMembershipLogo?.data?.attributes || {};
+  const openMobileMenu = useCallback(() => setIsMobileMenuOpen(true), []);
+  const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
 
-  const openMobileMenu = () => setIsMobileMenuOpen(true);
-  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const handlePasswordLessOpen = useCallback(() => {
+    dispatch({
+      type: modalSagaActions.SET_PASSWORDLESS_MODAL,
+      payload: {
+        isPasswordLessOpen: true,
+      },
+    });
+  }, [dispatch]);
 
-  const renderMenuItem = (item, index) => {
-    if (item.subMenu.length > 0) {
-      return (
-        <li key={item.id || index} className="group relative">
-          <div className="flex cursor-pointer items-center gap-1">
-            <Text size="base" as="p" className="capitalize" responsive>
-              {item.title}
-            </Text>
-            <DownArrowIconSVG />
-          </div>
-          <NavMenu menuItems={item.subMenu} />
-        </li>
-      );
-    } else {
-      return (
-        <li key={item.id || index}>
-          <Link href={item.slug}>
-            <Text size="base" as="p" className="capitalize" responsive>
-              {item.title}
-            </Text>
-          </Link>
-        </li>
-      );
-    }
-  };
+  const menuItems = useMemo(
+    () => (
+      <>
+        {collectionMenus.map((item, index) => (
+          <MenuItem
+            key={item.id || index}
+            item={item}
+            index={index}
+            linkPrefix="collections"
+          />
+        ))}
+        {otherLinks.map((item, index) => (
+          <MenuItem
+            key={item.id || index}
+            item={item}
+            index={index}
+            linkPrefix=""
+          />
+        ))}
+      </>
+    ),
+    [collectionMenus, otherLinks],
+  );
 
   return (
     <header className={`${props.className} relative`}>
       <div className="container-main flex border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
         <div className="flex flex-1 flex-wrap items-center justify-between gap-x-5 gap-y-2.5 md:flex-nowrap">
-          {/* Logo and mobile menu button */}
-          <div className="flex flex-shrink-0 items-center gap-5">
-            <div className="mt-2 lg:hidden">
-              <MenuSVG
-                onClick={openMobileMenu}
-                height={24}
-                width={24}
-                fillColor="#000000ff"
-              />
-            </div>
-            <Link href="/">
-              <div className="flex items-center gap-1">
-                <Img
-                  src={logoUrl}
-                  width={86}
-                  height={48}
-                  alt={logoAlternativeText}
-                  isStatic
-                  className="aspect-[86/48] w-[86px] object-contain"
-                />
-                <div className="h-[35px] w-[0.5px] bg-gray-300_01" />
-                <Img
-                  src={vipUrl}
-                  width={70}
-                  height={28}
-                  alt={vipAlternativeText}
-                  isStatic
-                  className="aspect-[70/28] w-[70px] object-contain"
-                />
-              </div>
-            </Link>
+          <div className="flex flex-shrink-0 items-stretch gap-5">
+            <Button
+              size="none"
+              variant="none"
+              className="mt-2 flex-1 lg:hidden"
+              onClick={openMobileMenu}
+            >
+              <MenuSVG height={24} width={24} fillColor="#000000ff" />
+            </Button>
+            <Logo
+              logoUrl={logoUrl}
+              logoAlt={logoAlternativeText}
+              vipUrl={vipUrl}
+              vipAlt={vipAlternativeText}
+            />
           </div>
 
-          {/* Desktop menu items */}
-          {!!menu?.length && (
-            <ul className="hidden flex-wrap gap-y-2 lg:flex lg:gap-x-3 xl:gap-x-5">
-              {menu.map(renderMenuItem)}
+          {(!!collectionMenus?.length || !!otherLinks?.length) && (
+            <ul className="hidden flex-wrap gap-y-2 lg:flex lg:gap-x-3 xl:gap-x-4 xxl:gap-x-5">
+              {menuItems}
             </ul>
           )}
 
-          {/* Search, user, and cart icons */}
-          <div className="flex max-w-[370px] shrink-[10] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
+          <div className="flex max-w-[370px] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
             <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
             <Link
               href="#"
@@ -133,21 +180,23 @@ export default function Header({ data, ...props }) {
             </Link>
           </div>
 
-          {/* Mobile search bar */}
           <SearchBar className="flex w-full md:hidden" />
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <MobileMenu
         isOpen={isMobileMenuOpen}
         onClose={closeMobileMenu}
-        menu={menu}
+        collectionMenus={collectionMenus}
+        otherLinks={otherLinks}
         logo={mWebMenuLogo}
       />
 
-      {/* Auth modal */}
-      <Passwordless />
+      <PasswordLess />
     </header>
   );
-}
+});
+
+Header.displayName = "Header";
+
+export default Header;

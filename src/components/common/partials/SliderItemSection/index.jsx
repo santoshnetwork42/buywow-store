@@ -57,7 +57,7 @@ const SliderItem = ({
   <div className={className}>
     <Link href={link || "#"}>
       <div
-        className={`${imageClassName} w-full overflow-hidden rounded sm:rounded-md lg:rounded-lg`}
+        className={`overflow-hidden rounded sm:rounded-md lg:rounded-lg ${imageClassName}`}
       >
         <Img
           src={image}

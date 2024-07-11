@@ -9,7 +9,7 @@ import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 import { getCurrentUser } from "aws-amplify/auth";
 
-export default function Passwordless({ enableOutsideClick = true }) {
+export default function PasswordLess({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
 
   const { confirmationStatus } = useSelector((state) => state.auth);
@@ -52,7 +52,7 @@ export default function Passwordless({ enableOutsideClick = true }) {
 
   const {
     modal: {
-      passwordLess: { isPasswordlessOpen = false },
+      passwordLess: { isPasswordLessOpen },
     },
   } = useSelector((state) => state.modal);
 
@@ -60,7 +60,7 @@ export default function Passwordless({ enableOutsideClick = true }) {
     dispatch({
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
       payload: {
-        isPasswordlessOpen: false,
+        isPasswordLessOpen: false,
       },
     });
     setAuthData({

@@ -5,13 +5,7 @@ import Image from "next/image";
 
 const BASE_URL = process.env.BASE_PATH || "/images/";
 
-const Img = ({
-  className,
-  src,
-  alt = "Img",
-  isStatic = false,
-  ...restProps
-}) => {
+const Img = ({ className, src, alt, isStatic = false, ...restProps }) => {
   const [imgSrc, setImgSrc] = React.useState(src);
 
   return (
@@ -22,9 +16,9 @@ const Img = ({
           ? isStatic
             ? imgSrc
             : BASE_URL + imgSrc
-          : "/images/defaultNoData.png"
+          : BASE_URL + "defaultNoData.png"
       }
-      alt={alt}
+      alt={alt || "Img"}
       {...restProps}
       onError={() => {
         setImgSrc("defaultNoData.png");
