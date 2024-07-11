@@ -17,14 +17,19 @@ export const authSlice = createSlice({
     setConfirmationCode: (state, action) => {
       state.confirmationCode = action.payload;
     },
-    setError: (state, action) => {
+    setAuthError: (state, action) => {
       state.error = action.payload;
     },
-    setLoading: (state, action) => {
+    setAuthLoading: (state, action) => {
       state.loading = action.payload;
     },
   },
 });
 
-export const { setConfirmationStatus, setConfirmationCode } = authSlice.actions;
+export const {
+  setConfirmationStatus,
+  setConfirmationCode,
+  setAuthLoading,
+  setAuthError,
+} = authSlice.actions;
 export default authSlice.reducer;

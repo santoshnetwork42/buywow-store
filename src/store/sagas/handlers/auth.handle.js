@@ -5,6 +5,7 @@ import {
   confirmSignin,
   confirmSignup,
   resendSignupCode,
+  autoSignin,
 } from "@/store/sagas/requests/auth.request";
 import { setConfirmationStatus } from "@/store/slices/auth/authSlice";
 
@@ -24,10 +25,12 @@ export function* createAwsAccount(action) {
 export function* signinWithAwsAccount(action) {
   try {
     const { phone } = action.payload;
-    const user = yield call(() => signinWithAws(phone));
+    console.log("phone :>> ", phone);
+    const user = yield call(() => signinWithAws({ phone }));
+    console.log("user :>> ", user);
 
     if (user?.nextStep?.signInStep === "CONFIRM_SIGN_UP") {
-      const user = yield call(() => resendSignupCode(phone));
+      const user = yield call(() => resendSignupCode({ phone }));
       if ((user.deliveryMedium = "SMS"))
         yield put(setConfirmationStatus("UNCONFIRMED_SIGNUP"));
     } else if (
@@ -60,7 +63,10 @@ export function* confirmSignupHandler(action) {
       confirmSignup({ username, confirmationCode }),
     );
 
-    yield put(setConfirmationStatus(user?.nextStep?.signInStep));
+    if (user?.nextStep?.signUpStep === "COMPLETE_AUTO_SIGN_IN") {
+      const res = yield call(() => autoSignin());
+      yield put(setConfirmationStatus(res?.nextStep?.signInStep));
+    }
   } catch (error) {
     console.log("error", error);
   }

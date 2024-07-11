@@ -7,6 +7,7 @@ import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 import { Button, Input } from "@/components/common";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
+import { getCurrentUser } from "aws-amplify/auth";
 
 export default function Passwordless({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ export default function Passwordless({ enableOutsideClick = true }) {
     },
   } = useSelector((state) => state.modal);
 
-  const onAuthClose = () => {
+  const onAuthClose = async () => {
     dispatch({
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
       payload: {
@@ -66,11 +67,23 @@ export default function Passwordless({ enableOutsideClick = true }) {
       phone: "",
       confirmationCode: new Array(6).fill(""),
     });
-    //update confirmationStatus state
-    dispatch({
-      type: authSagaActions.SET_CONFIRMATION_STATUS,
-      payload: null,
-    });
+
+    //get curent authenticated user
+    try {
+      const user = await getCurrentUser();
+      if (!user) {
+        //update confirmationStatus state
+        dispatch({
+          type: authSagaActions.SET_CONFIRMATION_STATUS,
+          payload: null,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: authSagaActions.SET_CONFIRMATION_STATUS,
+        payload: null,
+      });
+    }
   };
 
   const handlePhoneChange = (event) => {
@@ -86,6 +99,7 @@ export default function Passwordless({ enableOutsideClick = true }) {
 
   const signIn = () => {
     if (!phoneFormatValidator()) return;
+    console.log("reached here");
     dispatch({
       type: authSagaActions.SIGNIN_AWS_ACCOUNT,
       payload: {

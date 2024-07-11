@@ -5,6 +5,7 @@ import {
   resendSignUpCode,
   confirmSignIn,
   confirmSignUp,
+  autoSignIn,
 } from "aws-amplify/auth";
 import { Amplify } from "aws-amplify";
 import awsExport from "../../../../aws-exports";
@@ -34,7 +35,7 @@ export const signupWithAws = async ({ phone }) => {
   }
 };
 
-export const signinWithAws = async (phone) => {
+export const signinWithAws = async ({ phone }) => {
   try {
     const cu = await signIn({
       username: phone,
@@ -42,18 +43,29 @@ export const signinWithAws = async (phone) => {
         authFlowType: "CUSTOM_WITHOUT_SRP",
       },
     });
+    console.log("cu: ", cu);
     return cu;
   } catch (error) {
     throw error;
   }
 };
 
-export const resendSignupCode = async (phone) => {
+export const resendSignupCode = async ({ phone }) => {
   try {
     const data = await resendSignUpCode({
       username: phone,
     });
     return data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const autoSignin = async () => {
+  try {
+    console.log("reached");
+    const res = await autoSignIn();
+    return res;
   } catch (error) {
     throw error;
   }
