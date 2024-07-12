@@ -114,3 +114,63 @@ export const footer = gql`
     }
   }
 `;
+
+export const landingPage = gql`
+  query LandingPage {
+    landingPage {
+      data {
+        attributes {
+          blocks {
+            __typename
+            ... on ComponentBannerCarousal {
+              carousalBanners {
+                id
+                webImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                    }
+                  }
+                }
+                mWebImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                    }
+                  }
+                }
+                link
+              }
+              autoPlay
+              autoPlayInterval
+            }
+            ... on ComponentBannerBanners {
+              banners {
+                id
+                webImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                    }
+                  }
+                }
+                mWebImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                    }
+                  }
+                }
+                link
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

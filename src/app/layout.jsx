@@ -41,7 +41,7 @@ async function RootLayout({ children }) {
     }),
   ]);
 
-  const navData = navResponse?.data?.navbar;
+  const headerData = navResponse?.data?.navbar;
   const footerData = footerResponse?.data?.footer;
 
   return (
@@ -56,7 +56,7 @@ async function RootLayout({ children }) {
       <body>
         <Provider>
           <ApolloWrapper>
-            <div className="flex min-h-screen w-full flex-col bg-white-a700">
+            <div className="flex min-h-dvh w-full flex-col bg-white-a700">
               <AnnouncementBar
                 leftText="Free Shipping On Orders Above ₹999"
                 centerContent={{
@@ -67,9 +67,9 @@ async function RootLayout({ children }) {
                 rightText="100% Refund on returns"
                 flashSaleDiscount={60}
               />
-              <Header data={navData} />
+              {headerData && <Header data={headerData} />}
               <div className="flex-1">{children}</div>
-              <Footer data={footerData} />
+              {footerData && <Footer data={footerData} />}
             </div>
           </ApolloWrapper>
         </Provider>

@@ -1,36 +1,50 @@
-import IntroCarousal from "@/components/common/partials/IntroCarousal";
-import ShopBanner from "@/components/partials/Home/ShopBanner";
-import ShopCategories from "@/components/partials/Home/ShopCategories";
-import ShopIngredients from "@/components/partials/Home/ShopIngredients";
-import VideoSection from "@/components/partials/Home/VideoSection";
+import dynamic from "next/dynamic";
 import React from "react";
-import NewLaunchSection from "@/components/partials/Home/NewLaunchSection";
-import OfferCarousal from "@/components/features/Carousel/OfferCarousel";
-import ConcernSection from "@/components/partials/Home/ConcernSection";
-import CustomerReviewSection from "@/components/partials/Home/CustomerReviewSection";
-import BlogSection from "@/components/partials/Home/BlogSection";
-import DeliveryInfoSection from "@/components/common/partials/DeliveryInfoSection";
-import ProductCategories from "@/components/partials/Home/ProductCategory";
-import {
-  bestSellerData,
-  blogSectionData,
-  concernSectionData,
-  customerReviewSectionData,
-  deliveryInfoData,
-  instagramFeedData,
-  introCarousalData,
-  newLaunchData,
-  offersData,
-  portfolioBannerData,
-  productCategoryItems,
-  productFeaturesData,
-  shopCategoriesData,
-  shopIngredientsData,
-  tabProductData,
-  testimonialBannerData,
-} from "@/utils/data/homeData";
-import TabProductSection from "@/components/partials/Home/TabProductSection";
-import ProductFeatures from "@/components/partials/Home/ProductFeatures";
+import { getClient } from "@/lib/client";
+import { landingPage } from "@/graphql/queries";
+import { extractAttributes } from "@/utils/helpers";
+
+// Dynamically import components
+const Carousal = dynamic(() => import("@/components/common/partials/Carousel"));
+const ShopBanner = dynamic(
+  () => import("@/components/partials/Home/ShopBanner"),
+);
+const ShopCategories = dynamic(
+  () => import("@/components/partials/Home/ShopCategories"),
+);
+const ShopIngredients = dynamic(
+  () => import("@/components/partials/Home/ShopIngredients"),
+);
+const VideoSection = dynamic(
+  () => import("@/components/partials/Home/VideoSection"),
+);
+const NewLaunchSection = dynamic(
+  () => import("@/components/partials/Home/NewLaunchSection"),
+);
+const OfferCarousal = dynamic(
+  () => import("@/components/features/Carousel/OfferCarousel"),
+);
+const ConcernSection = dynamic(
+  () => import("@/components/partials/Home/ConcernSection"),
+);
+const CustomerReviewSection = dynamic(
+  () => import("@/components/partials/Home/CustomerReviewSection"),
+);
+const BlogSection = dynamic(
+  () => import("@/components/partials/Home/BlogSection"),
+);
+const DeliveryInfoSection = dynamic(
+  () => import("@/components/common/partials/DeliveryInfoSection"),
+);
+const ProductCategories = dynamic(
+  () => import("@/components/partials/Home/ProductCategory"),
+);
+const TabProductSection = dynamic(
+  () => import("@/components/partials/Home/TabProductSection"),
+);
+const ProductFeatures = dynamic(
+  () => import("@/components/partials/Home/ProductFeatures"),
+);
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -38,79 +52,93 @@ export const metadata = {
     "Revitalize your skin with Vitamin C face wash and natural ingredients. Cruelty-free, dermatologically tested skincare on sale. Free shipping on orders above ₹999.",
 };
 
+const renderBlock = (block, index) => {
+  switch (block.__typename) {
+    case "ComponentBannerCarousal":
+      return <Carousal key={index} {...block} />;
+    case "ComponentShopBanner":
+      return <ShopBanner key={index} {...block} />;
+    case "ComponentShopCategories":
+      return <ShopCategories key={index} {...block} />;
+    case "ComponentShopIngredients":
+      return <ShopIngredients key={index} {...block} />;
+    case "ComponentVideoSection":
+      return <VideoSection key={index} {...block} />;
+    case "ComponentNewLaunchSection":
+      return <NewLaunchSection key={index} {...block} />;
+    case "ComponentOfferCarousal":
+      return <OfferCarousal key={index} {...block} />;
+    case "ComponentConcernSection":
+      return <ConcernSection key={index} {...block} />;
+    case "ComponentCustomerReviewSection":
+      return <CustomerReviewSection key={index} {...block} />;
+    case "ComponentBlogSection":
+      return <BlogSection key={index} {...block} />;
+    case "ComponentDeliveryInfoSection":
+      return <DeliveryInfoSection key={index} {...block} />;
+    case "ComponentProductCategories":
+      return <ProductCategories key={index} {...block} />;
+    case "ComponentTabProductSection":
+      return <TabProductSection key={index} {...block} />;
+    case "ComponentProductFeatures":
+      return <ProductFeatures key={index} {...block} />;
+    default:
+      return null;
+  }
+};
+
 const Home = async () => {
-  return (
-    <>
-      {/* Main Content Section */}
-      <div className="mb-8 flex w-full flex-col items-center">
-        {/* Product Categories Display */}
+  const responseData = await getClient().query({
+    query: landingPage,
+    context: {
+      fetchOptions: {
+        next: { revalidate: 0 },
+      },
+    },
+  });
+
+  const { blocks } = extractAttributes(responseData.data.landingPage);
+
+  return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
+};
+export default Home;
+
+{
+  /* <div className="mb-8 flex w-full flex-col items-center">
         <ProductCategories categories={productCategoryItems} />
-
-        {/* Promotional Carousal Section */}
-        <IntroCarousal className="w-full" carousalData={introCarousalData} />
-
-        {/* Product Features List */}
+        <Carousal className="w-full" carousalData={introCarousalData} />
         <ProductFeatures
           className="container-main mb-7 mt-[22px] sm:mt-6 md:mt-7 lg:my-8"
           features={productFeaturesData.features}
         />
-
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          {/* New Launches Tabbed Product Section */}
           <TabProductSection
             title={bestSellerData.title}
             categories={bestSellerData.categories}
             products={bestSellerData.products}
           />
-
-          {/* Ingredients Section */}
           <ShopIngredients shopIngredientsData={shopIngredientsData} />
-
-          {/* Offers Section */}
           <OfferCarousal offers={offersData} />
-
-          {/* Concerns Section */}
           <ConcernSection sectionData={concernSectionData} />
-
-          {/* Featured Products Section */}
           <NewLaunchSection newLaunchData={newLaunchData} />
         </div>
-
-        {/* Testimonials Section */}
         <ShopBanner
           {...testimonialBannerData}
           className="my-8 sm:my-10 lg:my-12"
         />
-
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          {/* Shop Categories Section */}
           <ShopCategories sectionData={shopCategoriesData} />
-
-          {/* Tabbed Product Section */}
           <TabProductSection {...tabProductData} />
         </div>
-
-        {/* Brand Statement Section */}
         <ShopBanner
           {...portfolioBannerData}
           className="my-8 sm:my-10 lg:my-12"
         />
-
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          {/* Customer Reviews Section */}
           <CustomerReviewSection sectionData={customerReviewSectionData} />
-
-          {/* Blog Section */}
           <BlogSection sectionData={blogSectionData} />
-
-          {/* Instagram Feed Section */}
           <VideoSection sectionData={instagramFeedData} />
-
-          {/* Delivery Information Section */}
           <DeliveryInfoSection data={deliveryInfoData} />
         </div>
-      </div>
-    </>
-  );
-};
-export default Home;
+      </div> */
+}
