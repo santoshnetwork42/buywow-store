@@ -52,11 +52,11 @@ const Modal = ({
               </div>
             )}
             <div className={styles.modalHeader}>
-              <Heading as="h5" size="heading2xl" className="">
+              <Heading as="h5" size="xl" className="">
                 {title}
               </Heading>
               {enableCloseButton && !showCloseButtonOutOfBox && (
-                <div className={`cursor-pointer`} onClick={onCloseClick}>
+                <div className={`cursor-pointer`}>
                   <CloseIcon color="black" size={28} />
                 </div>
               )}
