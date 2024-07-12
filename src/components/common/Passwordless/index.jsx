@@ -1,13 +1,14 @@
 "use client";
 
 import Modal from "@/components/features/Modal";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
-import { Button, Input } from "@/components/common";
+import { Button, Input, Text } from "@/components/common";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 import { getCurrentUser } from "aws-amplify/auth";
+import Link from "next/link";
 
 export default function PasswordLess({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
@@ -18,18 +19,33 @@ export default function PasswordLess({ enableOutsideClick = true }) {
       passwordLess: { isPasswordLessOpen },
     },
   } = useSelector((state) => state.modal);
+  const otpInput = useRef([]);
 
   const [authData, setAuthData] = useState({
     phone: "",
     confirmationCode: new Array(6).fill(""),
   });
-  const otpInput = useRef([]);
+  const [countdown, setCountdown] = useState(0);
+
+  useEffect(() => {
+    handleCountDownTime();
+  }, [countdown]);
 
   useEffect(() => {
     if (confirmationStatus === "SIGNUP") {
       signUp();
     }
   }, [confirmationStatus]);
+
+  const handleCountDownTime = () => {
+    console.log("handleCountDownTime :>> ", countdown);
+    let timer;
+    if (countdown > 0) {
+      console.log("here as well");
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  };
 
   const handleChange = (element, index) => {
     if (isNaN(element.value)) return;
@@ -68,21 +84,21 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     });
 
     //get curent authenticated user
-    try {
-      const user = await getCurrentUser();
-      if (!user) {
-        //update confirmationStatus state
-        dispatch({
-          type: authSagaActions.SET_CONFIRMATION_STATUS,
-          payload: null,
-        });
-      }
-    } catch (error) {
-      dispatch({
-        type: authSagaActions.SET_CONFIRMATION_STATUS,
-        payload: null,
-      });
-    }
+    // try {
+    //   const user = await getCurrentUser();
+    //   if (!user) {
+    //     //update confirmationStatus state
+    //     dispatch({
+    //       type: authSagaActions.SET_CONFIRMATION_STATUS,
+    //       payload: null,
+    //     });
+    //   }
+    // } catch (error) {
+    //   dispatch({
+    //     type: authSagaActions.SET_CONFIRMATION_STATUS,
+    //     payload: null,
+    //   });
+    // }
   };
 
   const handlePhoneChange = (event) => {
@@ -98,13 +114,13 @@ export default function PasswordLess({ enableOutsideClick = true }) {
 
   const signIn = () => {
     if (!phoneFormatValidator()) return;
-    console.log("reached here");
     dispatch({
       type: authSagaActions.SIGNIN_AWS_ACCOUNT,
       payload: {
         phone: addPhonePrefix(authData.phone),
       },
     });
+    setCountdown(30);
   };
 
   const signUp = () => {
@@ -115,6 +131,7 @@ export default function PasswordLess({ enableOutsideClick = true }) {
           phone: addPhonePrefix(authData.phone),
         },
       });
+      setCountdown(30);
     }
   };
 
@@ -181,8 +198,24 @@ export default function PasswordLess({ enableOutsideClick = true }) {
           ))}
         </div>
         <Button loader={loading} loaderClass="ml-2" onClick={submitOTP}>
-          Submit
+          Confirm
         </Button>
+        <div className="flex w-full">
+          {!!countdown && (
+            <Text
+              as="p"
+              className="font-light"
+            >{`Didn't receive it? Resend in ${countdown}`}</Text>
+          )}
+          {!countdown && (
+            <Link href="" onClick={() => signIn()}>
+              <Text
+                as="p"
+                className="font-light underline"
+              >{`Didn't get the code? Resend OTP`}</Text>
+            </Link>
+          )}
+        </div>
       </div>
     );
   };
@@ -195,12 +228,12 @@ export default function PasswordLess({ enableOutsideClick = true }) {
       title="Signup"
       enableOutsideClick={enableOutsideClick}
     >
+      {(confirmationStatus === null || confirmationStatus === "DONE") &&
+        firstSignInStep()}
+
       {(confirmationStatus === "UNCONFIRMED_SIGNUP" ||
         confirmationStatus === "UNCONFIRMED_SIGNIN") &&
         secondSignInStep()}
-
-      {(confirmationStatus === null || confirmationStatus === "DONE") &&
-        firstSignInStep()}
     </Modal>
   );
 }

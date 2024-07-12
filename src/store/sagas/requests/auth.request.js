@@ -6,6 +6,7 @@ import {
   confirmSignIn,
   confirmSignUp,
   autoSignIn,
+  signOut,
 } from "aws-amplify/auth";
 import { Amplify } from "aws-amplify";
 import awsExport from "../../../../aws-exports";
@@ -17,7 +18,7 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
-export const signupWithAws = async ({ phone }) => {
+export const signUpWithAwsRequest = async ({ phone }) => {
   try {
     const res = await signUp({
       username: phone,
@@ -35,7 +36,7 @@ export const signupWithAws = async ({ phone }) => {
   }
 };
 
-export const signinWithAws = async ({ phone }) => {
+export const signInWithAwsRequest = async ({ phone }) => {
   try {
     const cu = await signIn({
       username: phone,
@@ -43,14 +44,13 @@ export const signinWithAws = async ({ phone }) => {
         authFlowType: "CUSTOM_WITHOUT_SRP",
       },
     });
-    console.log("cu: ", cu);
     return cu;
   } catch (error) {
     throw error;
   }
 };
 
-export const resendSignupCode = async ({ phone }) => {
+export const resendSignUpCodeRequest = async ({ phone }) => {
   try {
     const data = await resendSignUpCode({
       username: phone,
@@ -61,9 +61,8 @@ export const resendSignupCode = async ({ phone }) => {
   }
 };
 
-export const autoSignin = async () => {
+export const autoSignInRequest = async () => {
   try {
-    console.log("reached");
     const res = await autoSignIn();
     return res;
   } catch (error) {
@@ -71,10 +70,24 @@ export const autoSignin = async () => {
   }
 };
 
-export const confirmSignin = async ({ confirmationCode }) => {
+export const confirmSignInRequest = async ({ confirmationCode }) => {
   try {
     const res = await confirmSignIn({
       challengeResponse: confirmationCode,
+    });
+
+    return res;
+  } catch (error) {
+    console.log("error :>> ", error);
+    throw error;
+  }
+};
+
+export const confirmSignUpRequest = async ({ username, confirmationCode }) => {
+  try {
+    const res = await confirmSignUp({
+      username,
+      confirmationCode,
     });
 
     return res;
@@ -83,13 +96,9 @@ export const confirmSignin = async ({ confirmationCode }) => {
   }
 };
 
-export const confirmSignup = async ({ username, confirmationCode }) => {
+export const signOutRequest = async () => {
   try {
-    const res = await confirmSignUp({
-      username,
-      confirmationCode,
-    });
-
+    const res = await signOut();
     return res;
   } catch (error) {
     throw error;
