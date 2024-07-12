@@ -145,6 +145,7 @@ export const landingPage = gql`
               }
               autoPlay
               autoPlayInterval
+              stopOnInteraction
             }
             ... on ComponentBannerBanners {
               banners {

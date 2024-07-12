@@ -38,7 +38,6 @@ export default function PasswordLess({ enableOutsideClick = true }) {
   }, [confirmationStatus]);
 
   const handleCountDownTime = () => {
-    console.log("handleCountDownTime :>> ", countdown);
     let timer;
     if (countdown > 0) {
       console.log("here as well");

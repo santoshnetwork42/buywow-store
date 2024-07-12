@@ -1,29 +1,31 @@
 "use client";
 
-import React, { useMemo, useCallback, useState, memo, useRef } from "react";
-import { Img, Slider } from "@/components/common";
+import React, { useCallback, useMemo, useState, useEffect } from "react";
+import { Img } from "@/components/common";
 import { extractAttributes } from "@/utils/helpers";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import Link from "next/link";
 
-const CarouselImage = memo(({ webImage, mWebImage, link, onMouseEvents }) => {
+const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
   const {
     url: webImageUrl,
     alternativeText: webImageAlternativeText = "Carousel Banner",
-  } = extractAttributes(webImage);
+  } = useMemo(() => extractAttributes(webImage), [webImage]);
   const {
     url: mWebImageUrl,
     alternativeText: mWebImageAlternativeText = "Carousel Banner",
-  } = extractAttributes(mWebImage);
+  } = useMemo(() => extractAttributes(mWebImage), [mWebImage]);
 
   return (
-    <div
-      className="relative aspect-[376/148] w-full sm:aspect-[1440/496]"
-      {...onMouseEvents(link)}
-      draggable={false}
+    <Link
+      href={link}
+      className="relative aspect-[376/148] flex-[0_0_100%] sm:aspect-[1440/496]"
     >
       <Img
-        src={webImageUrl || mWebImageUrl}
+        src={webImageUrl}
         fill
-        alt={webImageAlternativeText}
+        alt={webImageAlternativeText || "Carousel Banner"}
         priority
         sizes="100%"
         isStatic
@@ -32,92 +34,92 @@ const CarouselImage = memo(({ webImage, mWebImage, link, onMouseEvents }) => {
       <Img
         src={mWebImageUrl || webImageUrl}
         fill
-        alt={mWebImageAlternativeText}
+        alt={mWebImageAlternativeText || "Carousel Banner"}
         priority
         sizes="100%"
         isStatic
         className="block h-full w-full object-cover sm:hidden"
       />
-    </div>
+    </Link>
   );
 });
 
 CarouselImage.displayName = "CarouselImage";
 
-const DotItem = memo(({ isActive }) => (
-  <div
+const DotButton = React.memo(({ selected, onClick }) => (
+  <button
     className={`mr-1.5 inline-block h-1.5 cursor-pointer rounded-[3px] ${
-      isActive ? "w-3 bg-white-a700_01" : "w-1.5 bg-lime-50"
+      selected ? "w-3 bg-white-a700_01" : "w-1.5 bg-lime-50"
     }`}
+    type="button"
+    onClick={onClick}
   />
 ));
 
-DotItem.displayName = "DotItem";
+DotButton.displayName = "DotButton";
 
-const CarouselBanner = memo(
+const CarouselBanner = React.memo(
   ({
-    autoPlay,
+    autoPlay = false,
     autoPlayInterval = 3000,
+    stopOnInteraction = false,
     carousalBanners: banners,
     ...props
   }) => {
-    const [isDragging, setIsDragging] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const handleMouseDown = useCallback(() => setIsDragging(false), []);
-    const handleMouseMove = useCallback(() => setIsDragging(true), []);
-
-    const handleMouseUp = useCallback(
-      (link) => () => {
-        if (!isDragging) {
-          window.location.href = link;
-        }
-      },
-      [isDragging],
+    const [emblaRef, emblaApi] = useEmblaCarousel(
+      { loop: true },
+      autoPlay
+        ? [Autoplay({ delay: autoPlayInterval, stopOnInteraction })]
+        : [],
     );
 
-    const onMouseEvents = useCallback(
-      (link) => ({
-        onMouseDown: handleMouseDown,
-        onMouseMove: handleMouseMove,
-        onMouseUp: handleMouseUp(link),
-      }),
-      [handleMouseDown, handleMouseMove, handleMouseUp],
+    const scrollTo = useCallback(
+      (index) => emblaApi && emblaApi.scrollTo(index),
+      [emblaApi],
     );
 
-    const items = useMemo(
+    const onSelect = useCallback(() => {
+      if (!emblaApi) return;
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    }, [emblaApi]);
+
+    useEffect(() => {
+      if (!emblaApi) return;
+      onSelect();
+      emblaApi.on("select", onSelect);
+      return () => emblaApi.off("select", onSelect);
+    }, [emblaApi, onSelect]);
+
+    const carouselImages = useMemo(
       () =>
         banners.map((banner, index) => (
-          <CarouselImage
-            key={index}
-            {...banner}
-            onMouseEvents={onMouseEvents}
-          />
+          <CarouselImage key={index} {...banner} />
         )),
-      [banners, onMouseEvents],
+      [banners],
     );
 
-    const renderDotsItem = useCallback(
-      ({ isActive }) => <DotItem isActive={isActive} />,
-      [],
+    const dotButtons = useMemo(
+      () =>
+        banners.map((_, index) => (
+          <DotButton
+            key={index}
+            selected={index === selectedIndex}
+            onClick={() => scrollTo(index)}
+          />
+        )),
+      [banners, selectedIndex, scrollTo],
     );
 
     return (
-      <div
-        className={`intro-carousal-container relative w-full ${props.className}`}
-        {...props}
-      >
-        <Slider
-          items={items}
-          autoPlay={autoPlay}
-          autoPlayInterval={autoPlayInterval}
-          infinite={true}
-          renderDotsItem={renderDotsItem}
-          // animationDuration={600}
-          disableDotsControls={false}
-          disableButtonsControls={true}
-          touchTracking={true}
-          mouseTracking={true}
-        />
+      <div className={`relative w-full ${props.className}`} {...props}>
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div className="flex">{carouselImages}</div>
+        </div>
+        <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
+          {dotButtons}
+        </div>
       </div>
     );
   },

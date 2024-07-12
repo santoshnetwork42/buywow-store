@@ -32,49 +32,12 @@ input:focus {
   outline: none;
 }
 
-img {
+/* img {
   user-select: none;
   -webkit-user-drag: none;
-}
+} */
 
-.intro-carousal-container .alice-carousel__dots {
-  width: fit-content;
-  position: absolute;
-  top: auto;
-  bottom: 15px;
-  transform: translateX(-50%);
-  left: 50%;
-  margin: auto;
-}
-
-.alice-carousel__stage {
-  /* transition: opacity 500ms ease !important; */
-}
-
-@media (max-width: 1200px) {
-  .intro-carousal-container .alice-carousel__dots {
-    bottom: 10px;
-  }
-}
-
-@media (max-width: 992px) {
-  .intro-carousal-container .alice-carousel__dots {
-    bottom: 8px;
-  }
-}
-
-@media (max-width: 768px) {
-  .intro-carousal-container .alice-carousel__dots {
-    bottom: 6px;
-  }
-}
-
-@media (max-width: 576px) {
-  .intro-carousal-container .alice-carousel__dots {
-    bottom: 2px;
-  }
-}
-
+/* Reveal effect for tab */
 .tab-panel--selected {
   animation-name: tabPanel;
   animation-duration: 300ms;
@@ -89,10 +52,6 @@ img {
     opacity: 1;
   }
 }
-
-/* .alice-carousel__dots-item {
-  cursor: pointer;
-} */
 
 /* Ripple effect for button */
 span.ripple {
