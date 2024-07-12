@@ -9,11 +9,13 @@ import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
+import { userSagaActions } from "@/store/sagas/sagaActions/user.actions";
 
 export default function PasswordLess({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
 
   const { confirmationStatus, loading } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const {
     modal: {
       passwordLess: { isPasswordLessOpen },
@@ -21,6 +23,7 @@ export default function PasswordLess({ enableOutsideClick = true }) {
   } = useSelector((state) => state.modal);
   const otpInput = useRef([]);
 
+  // console.log("confirmationStatus :>> ", confirmationStatus);
   const [authData, setAuthData] = useState({
     phone: "",
     confirmationCode: new Array(6).fill(""),
@@ -35,12 +38,44 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     if (confirmationStatus === "SIGNUP") {
       signUp();
     }
+    if (confirmationStatus === "DONE") {
+      updateUserState();
+      onAuthClose();
+    }
   }, [confirmationStatus]);
+
+  const updateUserState = async () => {
+    try {
+      const currentUser = await getCurrentUser();
+      const { signInDetails, userId } = currentUser;
+
+      if (user && !user.id) {
+        dispatch({
+          type: userSagaActions.SET_USER,
+          payload: {
+            phone: signInDetails?.loginId,
+            id: userId,
+          },
+        });
+      }
+      if (!currentUser) {
+        //update confirmationStatus state
+        dispatch({
+          type: authSagaActions.SET_CONFIRMATION_STATUS,
+          payload: null,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: authSagaActions.SET_CONFIRMATION_STATUS,
+        payload: null,
+      });
+    }
+  };
 
   const handleCountDownTime = () => {
     let timer;
     if (countdown > 0) {
-      console.log("here as well");
       timer = setTimeout(() => setCountdown(countdown - 1), 1000);
     }
     return () => clearTimeout(timer);
@@ -81,23 +116,7 @@ export default function PasswordLess({ enableOutsideClick = true }) {
       phone: "",
       confirmationCode: new Array(6).fill(""),
     });
-
-    //get curent authenticated user
-    // try {
-    //   const user = await getCurrentUser();
-    //   if (!user) {
-    //     //update confirmationStatus state
-    //     dispatch({
-    //       type: authSagaActions.SET_CONFIRMATION_STATUS,
-    //       payload: null,
-    //     });
-    //   }
-    // } catch (error) {
-    //   dispatch({
-    //     type: authSagaActions.SET_CONFIRMATION_STATUS,
-    //     payload: null,
-    //   });
-    // }
+    await updateUserState();
   };
 
   const handlePhoneChange = (event) => {
