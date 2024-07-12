@@ -1,27 +1,31 @@
 import { all, fork, takeLatest } from "redux-saga/effects";
 import {
-  confirmSigninHandler,
-  createAwsAccount,
-  signinWithAwsAccount,
-  confirmSignupHandler,
+  confirmSignInHandler,
+  createAwsAccountHandler,
+  signInWithAwsAccountHandler,
+  confirmSignUpHandler,
   setConfirmationStatusHandler,
+  signOutHandler,
 } from "@/store/sagas/handlers/auth.handle";
 import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 
 function* createAccount() {
-  yield takeLatest(authSagaActions.CREATE_AWS_ACCOUNT, createAwsAccount);
+  yield takeLatest(authSagaActions.CREATE_AWS_ACCOUNT, createAwsAccountHandler);
 }
 
-function* signin() {
-  yield takeLatest(authSagaActions.SIGNIN_AWS_ACCOUNT, signinWithAwsAccount);
+function* signIn() {
+  yield takeLatest(
+    authSagaActions.SIGNIN_AWS_ACCOUNT,
+    signInWithAwsAccountHandler,
+  );
 }
 
 function* confirmSignIn() {
-  yield takeLatest(authSagaActions.CONFIRM_SIGNIN, confirmSigninHandler);
+  yield takeLatest(authSagaActions.CONFIRM_SIGNIN, confirmSignInHandler);
 }
 
 function* confirmSignUp() {
-  yield takeLatest(authSagaActions.CONFIRM_SIGNUP, confirmSignupHandler);
+  yield takeLatest(authSagaActions.CONFIRM_SIGNUP, confirmSignUpHandler);
 }
 
 function* setConfirmationStatus() {
@@ -31,12 +35,17 @@ function* setConfirmationStatus() {
   );
 }
 
+function* signOut() {
+  yield takeLatest(authSagaActions.SIGNOUT, signOutHandler);
+}
+
 export function* authWatcher() {
   yield all([
     fork(createAccount),
-    fork(signin),
+    fork(signIn),
     fork(confirmSignIn),
     fork(confirmSignUp),
     fork(setConfirmationStatus),
+    fork(signOut),
   ]);
 }
