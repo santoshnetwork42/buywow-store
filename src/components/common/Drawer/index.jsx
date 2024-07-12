@@ -59,7 +59,7 @@ const Drawer = ({
           [position]: 0,
           maxWidth: width,
         }}
-        className={`fixed top-0 flex h-screen w-full flex-col overflow-y-auto bg-gray-50 shadow-lg transition-transform duration-300 ease-in-out`}
+        className={`fixed top-0 flex h-dvh w-full flex-col overflow-y-auto bg-gray-50 shadow-lg transition-transform duration-300 ease-in-out`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}

@@ -19,7 +19,6 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     },
   } = useSelector((state) => state.modal);
 
-  console.log("confirmationStatus :>> ", confirmationStatus);
   const [authData, setAuthData] = useState({
     phone: "",
     confirmationCode: new Array(6).fill(""),

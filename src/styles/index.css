@@ -38,20 +38,34 @@ img {
 }
 
 .intro-carousal-container .alice-carousel__dots {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: fit-content;
   position: absolute;
   top: auto;
   bottom: 15px;
-  left: 0px;
-  right: 0px;
+  transform: translateX(-50%);
+  left: 50%;
   margin: auto;
+}
+
+.alice-carousel__stage {
+  /* transition: opacity 500ms ease !important; */
+}
+
+@media (max-width: 1200px) {
+  .intro-carousal-container .alice-carousel__dots {
+    bottom: 10px;
+  }
 }
 
 @media (max-width: 992px) {
   .intro-carousal-container .alice-carousel__dots {
-    bottom: 10px;
+    bottom: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .intro-carousal-container .alice-carousel__dots {
+    bottom: 6px;
   }
 }
 
@@ -76,9 +90,9 @@ img {
   }
 }
 
-.alice-carousel__dots-item {
+/* .alice-carousel__dots-item {
   cursor: pointer;
-}
+} */
 
 /* Ripple effect for button */
 span.ripple {
