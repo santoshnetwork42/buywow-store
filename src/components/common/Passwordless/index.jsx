@@ -40,6 +40,7 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     }
     if (confirmationStatus === "DONE") {
       updateUserState();
+      onAuthClose();
     }
   }, [confirmationStatus]);
 
@@ -115,6 +116,7 @@ export default function PasswordLess({ enableOutsideClick = true }) {
       phone: "",
       confirmationCode: new Array(6).fill(""),
     });
+    await updateUserState();
   };
 
   const handlePhoneChange = (event) => {
