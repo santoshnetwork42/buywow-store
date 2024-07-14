@@ -41,16 +41,16 @@ const FeatureList = ({ benefits: features, ...props }) => {
   return (
     <div
       style={{
-        maxWidth: getMaxWidth(features.length),
+        maxWidth: getMaxWidth(features?.length),
       }}
-      className={`m mx-auto mb-7 flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full md:mb-8 ${props.className}`}
+      className={`m mx-auto mb-7 flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full md:mb-8 ${props?.className}`}
       {...props}
     >
       {features.map((feature, index) => (
         <FeatureItem
           key={feature?.id || `feature-${index}`}
-          image={feature.image}
-          text={feature.text}
+          image={feature?.image}
+          text={feature?.text}
         />
       ))}
     </div>

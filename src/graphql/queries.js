@@ -183,6 +183,21 @@ export const landingPage = gql`
                 text
               }
             }
+            ... on ComponentCategoriesTrendingCategories {
+              trendingCategoryItems {
+                id
+                slug
+                image {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                    }
+                  }
+                }
+                title
+              }
+            }
           }
         }
       }

@@ -36,8 +36,8 @@ const BlogSection = dynamic(
 const DeliveryInfoSection = dynamic(
   () => import("@/components/common/partials/DeliveryInfoSection"),
 );
-const ProductCategories = dynamic(
-  () => import("@/components/partials/Home/ProductCategory"),
+const TrendingCategories = dynamic(
+  () => import("@/components/blocks/TrendingCategories"),
 );
 const TabProductSection = dynamic(
   () => import("@/components/partials/Home/TabProductSection"),
@@ -74,8 +74,8 @@ const renderBlock = (block, index) => {
       return <BlogSection key={index} {...block} />;
     case "ComponentDeliveryInfoSection":
       return <DeliveryInfoSection key={index} {...block} />;
-    case "ComponentProductCategories":
-      return <ProductCategories key={index} {...block} />;
+    case "ComponentCategoriesTrendingCategories":
+      return <TrendingCategories key={index} {...block} />;
     case "ComponentTabProductSection":
       return <TabProductSection key={index} {...block} />;
     case "ComponentBlocksWowBenefits":
