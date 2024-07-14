@@ -2,8 +2,9 @@
 
 import React from "react";
 import Image from "next/image";
+import { BASE_PATH } from "../../../../config";
 
-const BASE_URL = process.env.BASE_PATH || "/images/";
+const BASE_URL = BASE_PATH || "/images/";
 
 const Img = ({ className, src, alt, isStatic = false, ...restProps }) => {
   const [imgSrc, setImgSrc] = React.useState(src);
@@ -21,7 +22,7 @@ const Img = ({ className, src, alt, isStatic = false, ...restProps }) => {
       alt={alt || "Img"}
       {...restProps}
       onError={() => {
-        setImgSrc("defaultNoData.png");
+        setImgSrc(BASE_URL + "defaultNoData.png");
       }}
     />
   );

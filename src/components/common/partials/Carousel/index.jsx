@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo, useState, useEffect } from "react";
-import { Img } from "@/components/common";
+import { Button, Img } from "@/components/common";
 import { extractAttributes } from "@/utils/helpers";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
@@ -47,18 +47,19 @@ const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
 CarouselImage.displayName = "CarouselImage";
 
 const DotButton = React.memo(({ selected, onClick }) => (
-  <button
-    className={`mr-1.5 inline-block h-1.5 cursor-pointer rounded-[3px] ${
+  <Button
+    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full md:h-1.5 ${
       selected ? "w-3 bg-white-a700_01" : "w-1.5 bg-lime-50"
     }`}
-    type="button"
+    size="none"
+    variant="none"
     onClick={onClick}
   />
 ));
 
 DotButton.displayName = "DotButton";
 
-const CarouselBanner = React.memo(
+const Carousel = React.memo(
   ({
     autoPlay = false,
     autoPlayInterval = 3000,
@@ -113,7 +114,10 @@ const CarouselBanner = React.memo(
     );
 
     return (
-      <div className={`relative w-full ${props.className}`} {...props}>
+      <div
+        className={`relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8 ${props.className}`}
+        {...props}
+      >
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex">{carouselImages}</div>
         </div>
@@ -125,6 +129,6 @@ const CarouselBanner = React.memo(
   },
 );
 
-CarouselBanner.displayName = "CarouselBanner";
+Carousel.displayName = "Carousel";
 
-export default CarouselBanner;
+export default Carousel;

@@ -47,10 +47,9 @@ const Text = ({
         "font-outfit font-normal !leading-tight text-gray-900",
         className,
       )}
+      dangerouslySetInnerHTML={{ __html: children }}
       {...restProps}
-    >
-      {children}
-    </Component>
+    />
   );
 };
 

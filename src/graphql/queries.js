@@ -169,6 +169,20 @@ export const landingPage = gql`
                 link
               }
             }
+            ... on ComponentBlocksWowBenefits {
+              benefits {
+                id
+                image {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                    }
+                  }
+                }
+                text
+              }
+            }
           }
         }
       }

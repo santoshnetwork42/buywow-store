@@ -40,12 +40,9 @@ FooterLogo.displayName = "FooterLogo";
 const FooterDescription = React.memo(
   ({ description }) =>
     description && (
-      <Text
-        as="div"
-        size="sm"
-        className="text-white-a700_01"
-        dangerouslySetInnerHTML={{ __html: description }}
-      />
+      <Text as="div" size="sm" className="text-white-a700_01">
+        {description}
+      </Text>
     ),
 );
 
@@ -144,7 +141,7 @@ const Footer = React.memo(({ data, ...props }) => {
         {menu.itemsWithoutSubMenu.map((item, index) => (
           <Link key={index} href={item?.slug}>
             <Heading
-              as="h6"
+              as="h5"
               size="base"
               className="font-semibold capitalize text-white-a700_01"
             >

@@ -42,9 +42,7 @@ const ProductCategories = dynamic(
 const TabProductSection = dynamic(
   () => import("@/components/partials/Home/TabProductSection"),
 );
-const ProductFeatures = dynamic(
-  () => import("@/components/partials/Home/ProductFeatures"),
-);
+const FeatureList = dynamic(() => import("@/components/blocks/FeatureList"));
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -80,8 +78,8 @@ const renderBlock = (block, index) => {
       return <ProductCategories key={index} {...block} />;
     case "ComponentTabProductSection":
       return <TabProductSection key={index} {...block} />;
-    case "ComponentProductFeatures":
-      return <ProductFeatures key={index} {...block} />;
+    case "ComponentBlocksWowBenefits":
+      return <FeatureList key={index} {...block} />;
     default:
       return null;
   }
