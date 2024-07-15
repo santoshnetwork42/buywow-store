@@ -3,7 +3,7 @@
 import React from "react";
 import { Heading } from "@/components/common";
 import CustomerReviewCard from "@/components/features/Card/CustomerReviewCard";
-import SliderComponent from "@/components/features/Slider/SliderScroll";
+import SliderComponent from "@/components/features/Slider";
 
 const CustomerReviewSection = ({ sectionData }) => {
   const { title, reviews } = sectionData;

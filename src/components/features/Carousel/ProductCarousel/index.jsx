@@ -2,7 +2,7 @@
 
 import React from "react";
 import ProductCard from "@/components/features/Card/ProductCard";
-import SliderComponent from "@/components/features/Slider/SliderScroll";
+import SliderComponent from "@/components/features/Slider";
 
 const ProductCarousel = ({ products, className, ...props }) => {
   if (!Array.isArray(products)) return null;

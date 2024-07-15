@@ -4,7 +4,7 @@
 import React from "react";
 import { Button, Heading } from "@/components/common";
 import BlogCard from "@/components/features/Card/BlogCard";
-import SliderComponent from "@/components/features/Slider/SliderScroll";
+import SliderComponent from "@/components/features/Slider";
 
 const BlogSection = ({ sectionData }) => {
   const { title, buttonText, articles } = sectionData;

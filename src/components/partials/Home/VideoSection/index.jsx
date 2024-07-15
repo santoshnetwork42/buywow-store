@@ -4,7 +4,7 @@
 import React from "react";
 import { Button, Heading } from "@/components/common";
 import InstagramFeedItem from "@/components/features/Card/InstagramFeedCard";
-import SliderComponent from "@/components/features/Slider/SliderScroll";
+import SliderComponent from "@/components/features/Slider";
 
 const VideoSection = ({ sectionData, className, ...props }) => {
   const { title, buttonText, images, playButtonIcon } = sectionData;

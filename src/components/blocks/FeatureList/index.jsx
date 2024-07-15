@@ -43,7 +43,7 @@ const FeatureList = ({ benefits: features, ...props }) => {
       style={{
         maxWidth: getMaxWidth(features?.length),
       }}
-      className={`m mx-auto mb-7 flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full md:mb-8 ${props?.className}`}
+      className={`mx-auto mb-7 flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full md:mb-8 ${props?.className}`}
       {...props}
     >
       {features.map((feature, index) => (

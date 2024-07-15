@@ -1,7 +1,7 @@
 "use client";
 
 import { Heading, Img } from "@/components/common";
-import SliderComponent from "@/components/features/Slider/SliderScroll";
+import SliderComponent from "@/components/features/Slider";
 import { useDeviceWidth } from "@/utils/hooks/useDeviceWidth";
 import React from "react";
 

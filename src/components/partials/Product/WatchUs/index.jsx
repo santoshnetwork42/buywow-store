@@ -2,7 +2,7 @@
 
 import { Heading } from "@/components/common";
 import InstagramFeedItem from "@/components/features/Card/InstagramFeedCard";
-import SliderComponent from "@/components/features/Slider/SliderScroll";
+import SliderComponent from "@/components/features/Slider";
 import React from "react";
 
 const WatchUs = ({ data, className, ...props }) => {

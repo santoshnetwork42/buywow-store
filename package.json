@@ -16,6 +16,7 @@
     "aws-amplify": "^6.4.0",
     "embla-carousel-autoplay": "^8.1.6",
     "embla-carousel-react": "^8.1.6",
+    "embla-carousel-wheel-gestures": "^8.0.1",
     "graphql": "^16.9.0",
     "next": "14.2.4",
     "react": "^18",

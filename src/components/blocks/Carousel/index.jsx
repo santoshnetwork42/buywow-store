@@ -19,7 +19,7 @@ const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
 
   return (
     <Link
-      href={link}
+      href={link || "#"}
       className="relative aspect-[376/148] flex-[0_0_100%] sm:aspect-[1440/496]"
     >
       <Img

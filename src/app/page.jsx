@@ -5,10 +5,8 @@ import { landingPage } from "@/graphql/queries";
 import { extractAttributes } from "@/utils/helpers";
 
 // Dynamically import components
-const Carousal = dynamic(() => import("@/components/common/partials/Carousel"));
-const ShopBanner = dynamic(
-  () => import("@/components/partials/Home/ShopBanner"),
-);
+const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
+const Banner = dynamic(() => import("@/components/blocks/Banner"));
 const ShopCategories = dynamic(
   () => import("@/components/partials/Home/ShopCategories"),
 );
@@ -54,8 +52,8 @@ const renderBlock = (block, index) => {
   switch (block.__typename) {
     case "ComponentBannerCarousal":
       return <Carousal key={index} {...block} />;
-    case "ComponentShopBanner":
-      return <ShopBanner key={index} {...block} />;
+    case "ComponentBannerBanners":
+      return <Banner key={index} {...block} />;
     case "ComponentShopCategories":
       return <ShopCategories key={index} {...block} />;
     case "ComponentShopIngredients":
