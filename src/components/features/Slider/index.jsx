@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { Img, Text } from "@/components/common";
+import { Button, Img, Text } from "@/components/common";
 import { twMerge } from "tailwind-merge";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 
@@ -37,36 +37,57 @@ const SliderButton = React.memo(({ src, alt, onClick }) => (
   />
 ));
 
+const DotButton = React.memo(({ selected, onClick }) => (
+  <Button
+    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full md:h-1.5 ${
+      selected ? "w-2.5 bg-black-900 md:w-3" : "w-1.5 bg-gray-300_01"
+    }`}
+    size="none"
+    variant="none"
+    onClick={onClick}
+  />
+));
+
 const SliderControl = React.memo(
   ({
     showCounter,
     showControls,
+    showDotButtons,
     progressBarStyle,
     counterText,
     scrollPrev,
     scrollNext,
+    dotButtons,
   }) => (
-    <div className="mt-4 flex w-full items-center lg:mt-6">
-      <ProgressBar progressBarStyle={progressBarStyle} />
-      <div className="relative m-auto mx-4 flex sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
-        <div className="flex w-full items-center justify-center gap-2 sm:gap-3 lg:gap-4 xl:gap-5">
-          {showCounter && <Counter counterText={counterText} />}
-          {showControls && (
-            <div className="flex flex-1 justify-center gap-2 sm:gap-3 lg:gap-4">
-              <SliderButton
-                src="img_arrow_left.svg"
-                alt="Previous slide"
-                onClick={scrollPrev}
-              />
-              <SliderButton
-                src="img_arrow_right_black_900.png"
-                alt="Next slide"
-                onClick={scrollNext}
-              />
+    <div
+      className={`${showDotButtons ? "mt-2.5 md:hidden" : "mt-4"} flex w-full items-center lg:mt-6`}
+    >
+      {showDotButtons ? (
+        <div className="flex w-full justify-center">{dotButtons}</div>
+      ) : (
+        <>
+          <ProgressBar progressBarStyle={progressBarStyle} />
+          <div className="relative m-auto mx-4 flex sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
+            <div className="flex w-full items-center justify-center gap-2 sm:gap-3 lg:gap-4 xl:gap-5">
+              {showCounter && <Counter counterText={counterText} />}
+              {showControls && (
+                <div className="flex flex-1 justify-center gap-2 sm:gap-3 lg:gap-4">
+                  <SliderButton
+                    src="img_arrow_left.svg"
+                    alt="Previous slide"
+                    onClick={scrollPrev}
+                  />
+                  <SliderButton
+                    src="img_arrow_right_black_900.png"
+                    alt="Next slide"
+                    onClick={scrollNext}
+                  />
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      </div>
+          </div>
+        </>
+      )}
     </div>
   ),
 );
@@ -79,6 +100,7 @@ const Slider = React.memo(
     sliderItemClassName,
     showCounter = true,
     showControls = true,
+    showDotButtons = false,
     ...props
   }) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -148,6 +170,23 @@ const Slider = React.memo(
       [currentSlide, scrollSnaps.length],
     );
 
+    const scrollTo = useCallback(
+      (index) => emblaApi?.scrollTo(index),
+      [emblaApi],
+    );
+
+    const dotButtons = useMemo(
+      () =>
+        scrollSnaps.map((_, index) => (
+          <DotButton
+            key={index}
+            selected={index === currentSlide}
+            onClick={() => scrollTo(index)}
+          />
+        )),
+      [scrollSnaps, currentSlide, scrollTo],
+    );
+
     return (
       <div className={`${className} w-full`} {...props}>
         <div className="overflow-hidden" ref={emblaRef}>
@@ -163,14 +202,16 @@ const Slider = React.memo(
           </div>
         </div>
 
-        {(showControls || showCounter) && (
+        {(showControls || showCounter || showDotButtons) && (
           <SliderControl
             showCounter={showCounter}
             showControls={showControls}
+            showDotButtons={showDotButtons}
             progressBarStyle={progressBarStyle}
             counterText={counterText}
             scrollPrev={scrollPrev}
             scrollNext={scrollNext}
+            dotButtons={dotButtons}
           />
         )}
       </div>
@@ -183,5 +224,6 @@ SliderControl.displayName = "SliderControl";
 SliderButton.displayName = "SliderButton";
 ProgressBar.displayName = "ProgressBar";
 Counter.displayName = "Counter";
+DotButton.displayName = "DotButton";
 
 export default Slider;

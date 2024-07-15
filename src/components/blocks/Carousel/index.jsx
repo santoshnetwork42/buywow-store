@@ -49,7 +49,7 @@ CarouselImage.displayName = "CarouselImage";
 const DotButton = React.memo(({ selected, onClick }) => (
   <Button
     className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full md:h-1.5 ${
-      selected ? "w-3 bg-white-a700_01" : "w-1.5 bg-lime-50"
+      selected ? "w-2.5 bg-white-a700_01 md:w-3" : "w-1.5 bg-lime-50"
     }`}
     size="none"
     variant="none"

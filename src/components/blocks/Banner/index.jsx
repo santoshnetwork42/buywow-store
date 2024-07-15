@@ -42,8 +42,7 @@ const MultiBanner = React.memo(({ banners }) => {
   return (
     <Slider
       sliderClassName="gap-2 sm:gap-3 md:gap-4 lg:gap-5"
-      showCounter={true}
-      showControls={true}
+      showDotButtons={true}
     >
       {[...banners].map((banner, index) => {
         const { webImage, mWebImage, link } = banner;
