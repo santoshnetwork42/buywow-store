@@ -1,30 +1,40 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
 import { BASE_PATH } from "../../../../config";
+import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
-const BASE_URL = BASE_PATH || "/images/";
+const BASE_URL = BASE_PATH || "/images";
+const DEFAULT_IMAGE = "/images/defaultNoData.png";
 
-const Img = ({ className, src, alt, isStatic = false, ...restProps }) => {
-  const [imgSrc, setImgSrc] = React.useState(src);
+const Img = React.memo(
+  ({ className, src, alt = "Img", isStatic = false, ...restProps }) => {
+    const imgSrc = useMemo(() => {
+      if (!src) return DEFAULT_IMAGE;
+      return isStatic ? src : `${BASE_URL}/${src}`;
+    }, [src, isStatic]);
 
-  return (
-    <Image
-      className={className}
-      src={
-        src
-          ? isStatic
-            ? imgSrc
-            : BASE_URL + imgSrc
-          : BASE_URL + "defaultNoData.png"
-      }
-      alt={alt || "Img"}
-      {...restProps}
-      onError={() => {
-        setImgSrc(BASE_URL + "defaultNoData.png");
-      }}
-    />
-  );
-};
+    const imageLoader = useMemo(() => {
+      if (!isStatic) return undefined;
+      return ({ src, width, quality }) =>
+        getPublicImageURL(encodeURI(src), width, quality);
+    }, [isStatic]);
+
+    if (!src) return null;
+
+    return (
+      <Image
+        className={className}
+        loader={imageLoader}
+        src={imgSrc}
+        alt={alt}
+        {...restProps}
+      />
+    );
+  },
+);
+
+Img.displayName = "Img";
+
 export { Img };

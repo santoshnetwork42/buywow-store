@@ -83,7 +83,10 @@ const Banner = ({ banners, ...props }) => {
   }
 
   return (
-    <div className={`mb-main container-main ${props.className}`} {...props}>
+    <div
+      className={`${banners.length !== 1 && "container-main"} mb-main ${props.className}`}
+      {...props}
+    >
       {banners.length === 1 ? (
         <SingleBanner banner={banners[0]} />
       ) : (
