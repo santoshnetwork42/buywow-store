@@ -64,7 +64,7 @@ const Carousel = React.memo(
     autoPlay = false,
     autoPlayInterval = 3000,
     stopOnInteraction = false,
-    carousalBanners: banners,
+    carousalItems: banners,
     ...props
   }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -95,7 +95,7 @@ const Carousel = React.memo(
 
     const carouselImages = useMemo(
       () =>
-        banners.map((banner, index) => (
+        banners?.map((banner, index) => (
           <CarouselImage key={index} {...banner} />
         )),
       [banners],
@@ -103,7 +103,7 @@ const Carousel = React.memo(
 
     const dotButtons = useMemo(
       () =>
-        banners.map((_, index) => (
+        banners?.map((_, index) => (
           <DotButton
             key={index}
             selected={index === selectedIndex}

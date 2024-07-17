@@ -2,11 +2,13 @@ import React from "react";
 import { Text, Img } from "@/components/common";
 import { extractAttributes } from "@/utils/helpers";
 
-const FeatureItem = React.memo(({ image, text }) => {
+const FeatureItem = React.memo(({ image, text, isWebHorizontal }) => {
   const { url, alternativeText } = extractAttributes(image);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-1 md:flex-row md:gap-2 lg:gap-3 xl:gap-4">
+    <div
+      className={`flex flex-col items-center justify-center gap-1 ${isWebHorizontal && "md:flex-row"} md:gap-2 lg:gap-3 xl:gap-4`}
+    >
       <Img
         src={url}
         width={60}
@@ -18,7 +20,7 @@ const FeatureItem = React.memo(({ image, text }) => {
       <Text
         as="p"
         size="base"
-        className="line-clamp-2 shrink-0 text-center capitalize md:text-left"
+        className={`line-clamp-2 shrink-0 text-center capitalize ${isWebHorizontal && "md:text-left"}`}
         responsive
       >
         {text}
@@ -29,7 +31,11 @@ const FeatureItem = React.memo(({ image, text }) => {
 
 FeatureItem.displayName = "FeatureItem";
 
-const FeatureList = ({ benefits: features, ...props }) => {
+const FeatureList = ({
+  featuredListItems: features,
+  isWebHorizontal,
+  ...props
+}) => {
   const getMaxWidth = (length) => {
     if (length > 4) return "100%";
     if (length > 3) return "88%";
@@ -51,6 +57,7 @@ const FeatureList = ({ benefits: features, ...props }) => {
           key={feature?.id || `feature-${index}`}
           image={feature?.image}
           text={feature?.text}
+          isWebHorizontal={isWebHorizontal}
         />
       ))}
     </div>

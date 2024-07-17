@@ -1,17 +1,5 @@
 import { gql } from "@apollo/client";
 
-export const testQuery = gql`
-  query Test {
-    pages {
-      data {
-        attributes {
-          slug
-        }
-      }
-    }
-  }
-`;
-
 export const navbar = gql`
   query Navbar {
     navbar {
@@ -123,7 +111,7 @@ export const landingPage = gql`
           blocks {
             __typename
             ... on ComponentBannerCarousal {
-              carousalBanners {
+              carousalItems {
                 id
                 webImage {
                   data {
@@ -148,7 +136,7 @@ export const landingPage = gql`
               stopOnInteraction
             }
             ... on ComponentBannerBanners {
-              banners {
+              bannerItems {
                 id
                 webImage {
                   data {
@@ -169,8 +157,8 @@ export const landingPage = gql`
                 link
               }
             }
-            ... on ComponentBlocksWowBenefits {
-              benefits {
+            ... on ComponentBlocksFeaturedList {
+              featuredListItems {
                 id
                 image {
                   data {
@@ -182,6 +170,7 @@ export const landingPage = gql`
                 }
                 text
               }
+              isWebHorizontal
             }
             ... on ComponentCategoriesTrendingCategories {
               trendingCategoryItems {

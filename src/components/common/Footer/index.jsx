@@ -77,7 +77,7 @@ const Footer = React.memo(({ data, ...props }) => {
   const menu = useMemo(() => {
     const prefixSlug = (prefix) => (item) => ({
       ...item,
-      slug: `${prefix}${item.slug}`,
+      slug: `${prefix}${item?.slug}`,
     });
 
     const processSubMenu = (items, prefix) =>
@@ -91,11 +91,11 @@ const Footer = React.memo(({ data, ...props }) => {
 
     return {
       itemsWithSubMenu: [
-        ...processSubMenu(collectionMenus.filter(hasSubMenu), "/collection/"),
+        ...processSubMenu(collectionMenus.filter(hasSubMenu), "/collections/"),
         ...processSubMenu(otherLinks.filter(hasSubMenu), "/"),
       ],
       itemsWithoutSubMenu: [
-        ...collectionMenus.filter(noSubMenu).map(prefixSlug("/collection/")),
+        ...collectionMenus.filter(noSubMenu).map(prefixSlug("/collections/")),
         ...otherLinks.filter(noSubMenu).map(prefixSlug("/")),
       ],
     };

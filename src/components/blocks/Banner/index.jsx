@@ -1,5 +1,3 @@
-"use client";
-
 import { Img } from "@/components/common";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
@@ -30,6 +28,7 @@ const SingleBanner = React.memo(({ banner }) => {
         width={576}
         height={576}
         isStatic
+        test={true}
         className="block h-full w-full object-cover sm:hidden"
       />
     </Link>
@@ -77,7 +76,7 @@ const MultiBanner = React.memo(({ banners }) => {
 
 MultiBanner.displayName = "MultiBanner";
 
-const Banner = ({ banners, ...props }) => {
+const Banner = ({ bannerItems: banners, ...props }) => {
   if (!banners || banners.length === 0) {
     return null;
   }

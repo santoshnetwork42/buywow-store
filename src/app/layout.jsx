@@ -67,9 +67,9 @@ async function RootLayout({ children }) {
                 rightText="100% Refund on returns"
                 flashSaleDiscount={60}
               />
-              {headerData && <Header data={headerData} />}
+              {headerData?.data && <Header data={headerData} />}
               <div className="flex-1">{children}</div>
-              {footerData && <Footer data={footerData} />}
+              {footerData?.data && <Footer data={footerData} />}
             </div>
           </ApolloWrapper>
         </Provider>

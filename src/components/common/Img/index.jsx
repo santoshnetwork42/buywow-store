@@ -9,7 +9,15 @@ const BASE_URL = BASE_PATH || "/images";
 const DEFAULT_IMAGE = "/images/defaultNoData.png";
 
 const Img = React.memo(
-  ({ className, src, alt = "Img", isStatic = false, ...restProps }) => {
+  ({
+    className,
+    src,
+    alt = "Img",
+    isStatic = false,
+    width,
+    test,
+    ...restProps
+  }) => {
     const imgSrc = useMemo(() => {
       if (!src) return DEFAULT_IMAGE;
       return isStatic ? src : `${BASE_URL}/${src}`;
@@ -17,8 +25,12 @@ const Img = React.memo(
 
     const imageLoader = useMemo(() => {
       if (!isStatic) return undefined;
-      return ({ src, width, quality }) =>
-        getPublicImageURL(encodeURI(src), width, quality);
+      return ({ src, width, quality }) => {
+        {
+          // test && console.log(src, width, quality);
+        }
+        return getPublicImageURL(encodeURI(src), width, quality);
+      };
     }, [isStatic]);
 
     if (!src) return null;
@@ -28,7 +40,8 @@ const Img = React.memo(
         className={className}
         loader={imageLoader}
         src={imgSrc}
-        alt={alt}
+        alt={alt || "Img"}
+        width={test ? 576 : width}
         {...restProps}
       />
     );

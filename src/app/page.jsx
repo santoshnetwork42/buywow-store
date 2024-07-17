@@ -76,7 +76,7 @@ const renderBlock = (block, index) => {
       return <TrendingCategories key={index} {...block} />;
     case "ComponentTabProductSection":
       return <TabProductSection key={index} {...block} />;
-    case "ComponentBlocksWowBenefits":
+    case "ComponentBlocksFeaturedList":
       return <FeatureList key={index} {...block} />;
     default:
       return null;
