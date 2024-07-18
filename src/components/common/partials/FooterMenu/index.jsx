@@ -40,9 +40,9 @@ const FooterMenu = ({ item, isOpen, onToggle }) => {
             isOpen ? "max-h-96" : "max-h-0 lg:max-h-96"
           }`}
         >
-          {item?.subMenu.map((item, index) => (
+          {item?.subMenu?.map((item, index) => (
             <li
-              key={item?.id || index}
+              key={index}
               className={
                 item?.title ? "transition-all duration-300 ease-in-out" : ""
               }

@@ -96,7 +96,7 @@ const Carousel = React.memo(
     const carouselImages = useMemo(
       () =>
         banners?.map((banner, index) => (
-          <CarouselImage key={index} {...banner} />
+          <CarouselImage key={`carousel-image-${index}`} {...banner} />
         )),
       [banners],
     );
@@ -105,7 +105,7 @@ const Carousel = React.memo(
       () =>
         banners?.map((_, index) => (
           <DotButton
-            key={index}
+            key={`dot-button-${index}`}
             selected={index === selectedIndex}
             onClick={() => scrollTo(index)}
           />

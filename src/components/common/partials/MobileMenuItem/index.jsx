@@ -54,9 +54,9 @@ const MobileMenuItem = memo(({ item, closeMenu, linkPrefix }) => {
           className="overflow-hidden transition-all duration-300 ease-in-out"
         >
           <ul ref={contentRef}>
-            {item?.subMenu.map((subItem, index) => (
+            {item?.subMenu?.map((subItem, index) => (
               <SubMenuItem
-                key={subItem?.id || index}
+                key={`sub-menu-item-${index}`}
                 subItem={subItem}
                 linkPrefix={linkPrefix}
                 closeMenu={closeMenu}

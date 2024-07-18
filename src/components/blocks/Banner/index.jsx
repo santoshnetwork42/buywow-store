@@ -43,7 +43,7 @@ const MultiBanner = React.memo(({ banners }) => {
       sliderClassName="gap-2 sm:gap-3 md:gap-4 lg:gap-5"
       showDotButtons={true}
     >
-      {[...banners].map((banner, index) => {
+      {[...banners]?.map((banner, index) => {
         const { webImage, mWebImage, link } = banner;
         const { url: webImageUrl, alternativeText: webImageAlternativeText } =
           extractAttributes(webImage);
@@ -77,16 +77,16 @@ const MultiBanner = React.memo(({ banners }) => {
 MultiBanner.displayName = "MultiBanner";
 
 const Banner = ({ bannerItems: banners, ...props }) => {
-  if (!banners || banners.length === 0) {
+  if (!banners || banners?.length === 0) {
     return null;
   }
 
   return (
     <div
-      className={`${banners.length !== 1 && "container-main"} mb-main ${props.className}`}
+      className={`${banners?.length !== 1 && "container-main"} mb-main ${props?.className}`}
       {...props}
     >
-      {banners.length === 1 ? (
+      {banners?.length === 1 ? (
         <SingleBanner banner={banners[0]} />
       ) : (
         <MultiBanner banners={banners} />

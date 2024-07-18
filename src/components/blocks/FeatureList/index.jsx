@@ -54,7 +54,7 @@ const FeatureList = ({
     >
       {features.map((feature, index) => (
         <FeatureItem
-          key={feature?.id || `feature-${index}`}
+          key={`feature-${index}`}
           image={feature?.image}
           text={feature?.text}
           isWebHorizontal={isWebHorizontal}

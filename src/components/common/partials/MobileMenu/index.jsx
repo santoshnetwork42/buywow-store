@@ -53,8 +53,8 @@ HeaderSection.displayName = "HeaderSection";
 
 const MenuList = React.memo(({ items, closeMenu, linkPrefix }) => (
   <>
-    {items.map((item, index) => (
-      <li key={item.id || index}>
+    {items?.map((item, index) => (
+      <li key={`menu-item-${index}`}>
         <MobileMenuItem
           item={item}
           closeMenu={closeMenu}

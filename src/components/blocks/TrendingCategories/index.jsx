@@ -47,7 +47,7 @@ const TrendingCategories = ({
       <div className="mx-auto flex w-max items-start justify-center p-3">
         {categories.map((category, index) => (
           <CategoryItem
-            key={category.id || `category-${index}`}
+            key={`category-${index}`}
             title={category?.title}
             image={category?.image}
             link={category?.slug}

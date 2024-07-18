@@ -179,7 +179,7 @@ const Slider = React.memo(
       () =>
         scrollSnaps.map((_, index) => (
           <DotButton
-            key={index}
+            key={`dot-button-${index}`}
             selected={index === currentSlide}
             onClick={() => scrollTo(index)}
           />
@@ -193,8 +193,8 @@ const Slider = React.memo(
           <div className={twMerge("flex", sliderClassName)}>
             {React.Children.map(children, (child, index) => (
               <div
-                key={index}
-                className={twMerge("w-full", sliderItemClassName)}
+                key={`slider-item-${index}`}
+                className={twMerge(sliderItemClassName)}
               >
                 {child}
               </div>

@@ -7,11 +7,15 @@ import { extractAttributes } from "@/utils/helpers";
 // Dynamically import components
 const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
 const Banner = dynamic(() => import("@/components/blocks/Banner"));
+const TrendingCategories = dynamic(
+  () => import("@/components/blocks/TrendingCategories"),
+);
+const FeatureList = dynamic(() => import("@/components/blocks/FeatureList"));
+const IngredientCategories = dynamic(
+  () => import("@/components/blocks/IngredientCategories"),
+);
 const ShopCategories = dynamic(
   () => import("@/components/partials/Home/ShopCategories"),
-);
-const ShopIngredients = dynamic(
-  () => import("@/components/partials/Home/ShopIngredients"),
 );
 const VideoSection = dynamic(
   () => import("@/components/partials/Home/VideoSection"),
@@ -34,13 +38,10 @@ const BlogSection = dynamic(
 const DeliveryInfoSection = dynamic(
   () => import("@/components/common/partials/DeliveryInfoSection"),
 );
-const TrendingCategories = dynamic(
-  () => import("@/components/blocks/TrendingCategories"),
-);
+
 const TabProductSection = dynamic(
   () => import("@/components/partials/Home/TabProductSection"),
 );
-const FeatureList = dynamic(() => import("@/components/blocks/FeatureList"));
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -56,8 +57,8 @@ const renderBlock = (block, index) => {
       return <Banner key={index} {...block} />;
     case "ComponentShopCategories":
       return <ShopCategories key={index} {...block} />;
-    case "ComponentShopIngredients":
-      return <ShopIngredients key={index} {...block} />;
+    case "ComponentCategoriesIngredientCategories":
+      return <IngredientCategories key={index} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} {...block} />;
     case "ComponentNewLaunchSection":

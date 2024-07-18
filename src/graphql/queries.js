@@ -133,7 +133,6 @@ export const landingPage = gql`
               }
               autoPlay
               autoPlayInterval
-              stopOnInteraction
             }
             ... on ComponentBannerBanners {
               bannerItems {
@@ -185,6 +184,20 @@ export const landingPage = gql`
                   }
                 }
                 title
+              }
+            }
+            ... on ComponentCategoriesIngredientCategories {
+              title
+              ingredientCategoryItems {
+                slug
+                image {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                    }
+                  }
+                }
               }
             }
           }

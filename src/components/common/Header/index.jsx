@@ -110,17 +110,17 @@ const Header = React.memo(({ data, ...props }) => {
   const menuItems = useMemo(
     () => (
       <>
-        {collectionMenus.map((item, index) => (
+        {collectionMenus?.map((item, index) => (
           <MenuItem
-            key={item.id || index}
+            key={`menu-${index}`}
             item={item}
             index={index}
             linkPrefix="collections"
           />
         ))}
-        {otherLinks.map((item, index) => (
+        {otherLinks?.map((item, index) => (
           <MenuItem
-            key={item.id || index}
+            key={`menu-${index}`}
             item={item}
             index={index}
             linkPrefix=""

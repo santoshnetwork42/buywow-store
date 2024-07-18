@@ -81,7 +81,7 @@ const Footer = React.memo(({ data, ...props }) => {
     });
 
     const processSubMenu = (items, prefix) =>
-      items.map((item) => ({
+      items?.map((item) => ({
         ...item,
         subMenu: item.subMenu?.map(prefixSlug(prefix)),
       }));
@@ -95,8 +95,8 @@ const Footer = React.memo(({ data, ...props }) => {
         ...processSubMenu(otherLinks.filter(hasSubMenu), "/"),
       ],
       itemsWithoutSubMenu: [
-        ...collectionMenus.filter(noSubMenu).map(prefixSlug("/collections/")),
-        ...otherLinks.filter(noSubMenu).map(prefixSlug("/")),
+        ...collectionMenus?.filter(noSubMenu)?.map(prefixSlug("/collections/")),
+        ...otherLinks?.filter(noSubMenu)?.map(prefixSlug("/")),
       ],
     };
   }, [collectionMenus, otherLinks]);
@@ -111,8 +111,12 @@ const Footer = React.memo(({ data, ...props }) => {
     () =>
       socialLinks.length > 0 && (
         <div className="flex gap-3 md:gap-4">
-          {socialLinks.map((item, index) => (
-            <SocialLink key={item?.id || index} item={item} index={index} />
+          {socialLinks?.map((item, index) => (
+            <SocialLink
+              key={`social-link-${index}`}
+              item={item}
+              index={index}
+            />
           ))}
         </div>
       ),
@@ -122,9 +126,9 @@ const Footer = React.memo(({ data, ...props }) => {
   const renderMenuItems = useMemo(
     () => (
       <>
-        {menu.itemsWithSubMenu.map((item, index) => (
+        {menu.itemsWithSubMenu?.map((item, index) => (
           <FooterMenu
-            key={index}
+            key={`footer-menu-${index}`}
             item={item}
             isOpen={openSections[index]}
             onToggle={() => toggleSection(index)}
@@ -138,8 +142,8 @@ const Footer = React.memo(({ data, ...props }) => {
   const renderMenuLinks = useMemo(
     () => (
       <>
-        {menu.itemsWithoutSubMenu.map((item, index) => (
-          <Link key={index} href={item?.slug}>
+        {menu.itemsWithoutSubMenu?.map((item, index) => (
+          <Link key={`footer-menu-link-${index}`} href={item?.slug}>
             <Heading
               as="h5"
               size="base"

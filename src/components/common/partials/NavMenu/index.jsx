@@ -20,9 +20,9 @@ function NavMenu({ menuItems, linkPrefix }) {
     <div className="invisible absolute left-1/2 z-[99] w-fit min-w-28 -translate-x-1/2 translate-y-3 pt-3 opacity-0 transition-[opacity,transform,visibility] duration-300 ease-in-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
       <div className="w-full rounded bg-white-a700_01 p-3 shadow">
         <div className="flex flex-col gap-3">
-          {menuItems.map((item, index) => (
+          {menuItems?.map((item, index) => (
             <MenuItem
-              key={item?.id || index}
+              key={`menu-item-${index}`}
               item={item}
               linkPrefix={linkPrefix}
             />
