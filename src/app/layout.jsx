@@ -11,7 +11,7 @@ import AnnouncementBar from "@/components/common/AnnouncementBar";
 import { Provider } from "@/store/Provider";
 import { ApolloWrapper } from "@/lib/apollo-provider";
 import { getClient } from "@/lib/client";
-import { footer, navbar } from "@/graphql/queries";
+import { footer, navbar } from "@/graphql/strapi/queries";
 
 Amplify.configure({
   ...awsExport,
