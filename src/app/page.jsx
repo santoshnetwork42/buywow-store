@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import React from "react";
 import { getClient } from "@/lib/client";
-import { landingPage } from "@/graphql/queries";
+import { landingPage } from "@/graphql/strapi/queries";
 import { extractAttributes } from "@/utils/helpers";
 
 // Dynamically import components
