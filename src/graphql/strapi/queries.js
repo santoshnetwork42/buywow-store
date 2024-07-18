@@ -200,6 +200,42 @@ export const landingPage = gql`
                 }
               }
             }
+            ... on ComponentBlocksFeaturedProducts {
+              id
+              title
+              button {
+                text
+                slug
+              }
+              products {
+                data {
+                  attributes {
+                    slug
+                    imageBgColor
+                    offerTag {
+                      showOfferTag
+                      bgColor
+                    }
+                    promotionTag {
+                      data {
+                        attributes {
+                          tag
+                          bgColor
+                        }
+                      }
+                    }
+                    productBenefitTags {
+                      data {
+                        attributes {
+                          tag
+                          bgColor
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

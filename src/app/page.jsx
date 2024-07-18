@@ -1,8 +1,8 @@
 import dynamic from "next/dynamic";
 import React from "react";
-import { getClient } from "@/lib/client";
-import { landingPage } from "@/graphql/strapi/queries";
 import { extractAttributes } from "@/utils/helpers";
+import { searchCMSProductsAPI } from "@/lib/appSyncAPIs";
+import { landingPageCMSAPI } from "@/lib/strapiAPIs";
 
 // Dynamically import components
 const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
@@ -79,24 +79,25 @@ const renderBlock = (block, index) => {
       return <TabProductSection key={index} {...block} />;
     case "ComponentBlocksFeaturedList":
       return <FeatureList key={index} {...block} />;
+    case "ComponentBlocksFeaturedProducts":
+      return <></>;
     default:
       return null;
   }
 };
 
 const Home = async () => {
-  const responseData = await getClient().query({
-    query: landingPage,
-    context: {
-      fetchOptions: {
-        next: { revalidate: 0 },
-      },
-    },
-  });
+  const responseData = await landingPageCMSAPI();
 
-  const { blocks } = extractAttributes(responseData.data.landingPage);
+  //pass "productSlugs" fetched from CMS -> input to searchCMSProductsAPI
+  //shift this call in "featuredProducts...." component
+  const products = await searchCMSProductsAPI();
 
-  return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
+  const { blocks } = extractAttributes(responseData?.data?.landingPage);
+
+  if (!!blocks?.length) {
+    return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
+  }
 };
 export default Home;
 
