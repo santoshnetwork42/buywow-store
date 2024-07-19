@@ -3,3 +3,4 @@ export const STRAPI_API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL;
 export const AWS_CLIENT_ID = process.env.NEXT_PUBLIC_AWS_CLIENT_ID;
 export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH;
 export const MEDIA_BASE_URL = process.env.NEXT_PUBLIC_MEDIA_BASE_URL;
+export const STORE_ID = process.env.NEXT_PUBLIC_STORE_ID;
