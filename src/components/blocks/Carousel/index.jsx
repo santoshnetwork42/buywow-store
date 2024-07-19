@@ -3,54 +3,64 @@
 import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { Button, Img } from "@/components/common";
 import { extractAttributes } from "@/utils/helpers";
-import useEmblaCarousel from "embla-carousel-react";
-import Autoplay from "embla-carousel-autoplay";
+import Flickity from "react-flickity-component";
 import Link from "next/link";
 
-const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
-  const {
-    url: webImageUrl,
-    alternativeText: webImageAlternativeText = "Carousel Banner",
-  } = useMemo(() => extractAttributes(webImage), [webImage]);
-  const {
-    url: mWebImageUrl,
-    alternativeText: mWebImageAlternativeText = "Carousel Banner",
-  } = useMemo(() => extractAttributes(mWebImage), [mWebImage]);
+const CarouselImage = React.memo(
+  ({ webImage, mWebImage, link, isDragging }) => {
+    const {
+      url: webImageUrl,
+      alternativeText: webImageAlternativeText = "Carousel Banner",
+    } = useMemo(() => extractAttributes(webImage), [webImage]);
+    const {
+      url: mWebImageUrl,
+      alternativeText: mWebImageAlternativeText = "Carousel Banner",
+    } = useMemo(() => extractAttributes(mWebImage), [mWebImage]);
 
-  return (
-    <Link
-      href={link || "#"}
-      className="relative aspect-[376/148] flex-[0_0_100%] sm:aspect-[1440/496]"
-    >
-      <Img
-        src={webImageUrl}
-        fill
-        alt={webImageAlternativeText || "Carousel Banner"}
-        priority
-        sizes="100%"
-        isStatic
-        className="hidden h-auto w-full object-cover sm:block"
-      />
-      <Img
-        src={mWebImageUrl || webImageUrl}
-        fill
-        alt={mWebImageAlternativeText || "Carousel Banner"}
-        priority
-        sizes="100%"
-        isStatic
-        className="block h-full w-full object-cover sm:hidden"
-      />
-    </Link>
-  );
-});
+    const preventClickDuringDrag = useCallback(
+      (event) => {
+        if (isDragging) {
+          event.preventDefault();
+        }
+      },
+      [isDragging],
+    );
+
+    return (
+      <Link
+        href={link || "#"}
+        className="relative aspect-[376/148] w-full flex-[0_0_100%] sm:aspect-[1440/496]"
+        onClick={preventClickDuringDrag}
+        style={{ pointerEvents: isDragging ? "none" : "auto" }}
+      >
+        <Img
+          src={webImageUrl}
+          fill
+          alt={webImageAlternativeText || "Carousel Banner"}
+          priority
+          sizes="100%"
+          isStatic
+          className="hidden h-auto w-full object-cover sm:block"
+        />
+        <Img
+          src={mWebImageUrl || webImageUrl}
+          fill
+          alt={mWebImageAlternativeText || "Carousel Banner"}
+          priority
+          sizes="100%"
+          isStatic
+          className="block h-full w-full object-cover sm:hidden"
+        />
+      </Link>
+    );
+  },
+);
 
 CarouselImage.displayName = "CarouselImage";
 
 const DotButton = React.memo(({ selected, onClick }) => (
   <Button
-    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full md:h-1.5 ${
-      selected ? "w-2.5 bg-white-a700_01 md:w-3" : "w-1.5 bg-lime-50"
-    }`}
+    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full transition-all duration-300 ease-in-out md:h-1.5 ${selected ? "w-2.5 bg-white-a700_01 md:w-3" : "w-1.5 bg-lime-50 hover:bg-lime-100"} `}
     size="none"
     variant="none"
     onClick={onClick}
@@ -63,42 +73,69 @@ const Carousel = React.memo(
   ({
     autoPlay = false,
     autoPlayInterval = 3000,
-    stopOnInteraction = false,
     carousalItems: banners,
     ...props
   }) => {
+    const [flickityInstance, setFlickityInstance] = useState(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
 
-    const [emblaRef, emblaApi] = useEmblaCarousel(
-      { loop: true },
-      autoPlay
-        ? [Autoplay({ delay: autoPlayInterval, stopOnInteraction })]
-        : [],
+    const flickityOptions = useMemo(
+      () => ({
+        wrapAround: true,
+        pageDots: false,
+        prevNextButtons: false,
+        autoPlay: autoPlay ? autoPlayInterval : false,
+        pauseAutoPlayOnHover: false,
+        draggable: ">1",
+      }),
+      [autoPlay, autoPlayInterval],
     );
 
     const scrollTo = useCallback(
-      (index) => emblaApi && emblaApi.scrollTo(index),
-      [emblaApi],
+      (index) => {
+        flickityInstance?.select(index);
+      },
+      [flickityInstance],
     );
 
     const onSelect = useCallback(() => {
-      if (!emblaApi) return;
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-    }, [emblaApi]);
+      if (!flickityInstance) return;
+      setSelectedIndex(flickityInstance.selectedIndex);
+    }, [flickityInstance]);
+
+    const handleDragStart = useCallback(() => {
+      setIsDragging(true);
+    }, []);
+
+    const handleDragEnd = useCallback(() => {
+      setTimeout(() => setIsDragging(false), 100);
+    }, []);
 
     useEffect(() => {
-      if (!emblaApi) return;
-      onSelect();
-      emblaApi.on("select", onSelect);
-      return () => emblaApi.off("select", onSelect);
-    }, [emblaApi, onSelect]);
+      if (!flickityInstance) return;
+
+      flickityInstance.on("select", onSelect);
+      flickityInstance.on("dragStart", handleDragStart);
+      flickityInstance.on("dragEnd", handleDragEnd);
+
+      return () => {
+        flickityInstance.off("select", onSelect);
+        flickityInstance.off("dragStart", handleDragStart);
+        flickityInstance.off("dragEnd", handleDragEnd);
+      };
+    }, [flickityInstance, onSelect, handleDragStart, handleDragEnd]);
 
     const carouselImages = useMemo(
       () =>
         banners?.map((banner, index) => (
-          <CarouselImage key={`carousel-image-${index}`} {...banner} />
+          <CarouselImage
+            key={`carousel-image-${index}`}
+            isDragging={isDragging}
+            {...banner}
+          />
         )),
-      [banners],
+      [banners, isDragging],
     );
 
     const dotButtons = useMemo(
@@ -118,12 +155,19 @@ const Carousel = React.memo(
         className={`relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8 ${props.className}`}
         {...props}
       >
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex">{carouselImages}</div>
-        </div>
-        <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
-          {dotButtons}
-        </div>
+        <Flickity
+          elementType={"div"}
+          options={flickityOptions}
+          disableImagesLoaded={false}
+          flickityRef={(c) => setFlickityInstance(c)}
+        >
+          {carouselImages}
+        </Flickity>
+        {banners.length > 1 && (
+          <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
+            {dotButtons}
+          </div>
+        )}
       </div>
     );
   },

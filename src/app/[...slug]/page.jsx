@@ -84,21 +84,36 @@ const renderBlock = (block, index) => {
   }
 };
 
-const Page = async () => {
-  const responseData = await getClient().query({
-    query: landingPage,
-    context: {
-      fetchOptions: {
-        next: { revalidate: 0 },
-      },
-    },
-  });
+// export const dynamicParams = false;
 
-  const { blocks } = responseData.data.pages.data[0].attributes;
+export function generateStaticParams() {
+  return [
+    // { slug: [] },
+    { slug: ["a"] },
+    { slug: ["a", "1"] },
+    { slug: ["b", "2"] },
+    { slug: ["c", "3"] },
+  ];
+}
 
-  if (!blocks || blocks.length === 0) return null;
+const Page = async ({ params }) => {
+  console.log(params);
+  // const responseData = await getClient().query({
+  //   query: landingPage,
+  //   context: {
+  //     fetchOptions: {
+  //       next: { revalidate: 0 },
+  //     },
+  //   },
+  // });
 
-  return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
+  // const { blocks } = extractAttributes(responseData.data.landingPage);
+
+  // if (!blocks || blocks.length === 0) return null;
+
+  // return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
+
+  return <div className="">WOW {Object.values(params).join(" ")} </div>;
 };
 export default Page;
 

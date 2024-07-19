@@ -105,7 +105,7 @@ export const footer = gql`
 
 export const landingPage = gql`
   query LandingPage {
-    landingPage {
+    pages(filters: { slugId: { eq: "index" } }) {
       data {
         attributes {
           blocks {

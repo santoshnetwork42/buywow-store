@@ -39,18 +39,19 @@ SingleBanner.displayName = "SingleBanner";
 
 const MultiBanner = React.memo(({ banners }) => {
   return (
-    <Slider
-      sliderClassName="gap-2 sm:gap-3 md:gap-4 lg:gap-5"
-      showDotButtons={true}
-    >
-      {[...banners]?.map((banner, index) => {
+    <Slider showDotButtons={true}>
+      {banners?.map((banner, index) => {
         const { webImage, mWebImage, link } = banner;
         const { url: webImageUrl, alternativeText: webImageAlternativeText } =
           extractAttributes(webImage);
         const { url: mWebImageUrl, alternativeText: mWebImageAlternativeText } =
           extractAttributes(mWebImage);
         return (
-          <Link href={link || "#"} key={`banner-${index}`}>
+          <Link
+            href={link || "#"}
+            className={`mr-2 sm:mr-3 md:mr-4 lg:mr-5 ${index === banners.length - 1 && "!mr-0"}`}
+            key={`banner-${index}`}
+          >
             <Img
               src={webImageUrl || mWebImageUrl}
               alt={webImageAlternativeText || "Promo Banner"}

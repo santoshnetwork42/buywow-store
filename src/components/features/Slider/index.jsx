@@ -1,28 +1,24 @@
 "use client";
 
 import React, { useState, useCallback, useEffect, useMemo } from "react";
-import useEmblaCarousel from "embla-carousel-react";
 import { Button, Img, Text } from "@/components/common";
 import { twMerge } from "tailwind-merge";
-import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+import Flickity from "react-flickity-component";
 
-const ProgressBar = React.memo(({ progressBarStyle }) => (
+const ProgressBar = React.memo(({ style }) => (
   <div className="relative h-[2px] flex-1 overflow-x-hidden rounded-xl bg-gray-300_01">
-    <div
-      className="absolute top-0 h-[2px] bg-black-900"
-      style={progressBarStyle}
-    />
+    <div className="absolute top-0 h-[2px] bg-black-900" style={style} />
   </div>
 ));
 
-const Counter = React.memo(({ counterText }) => (
+const Counter = React.memo(({ text }) => (
   <Text
     size="base"
     as="p"
     className="text-sm !font-medium uppercase"
     responsive
   >
-    {counterText}
+    {text}
   </Text>
 ));
 
@@ -37,17 +33,20 @@ const SliderButton = React.memo(({ src, alt, onClick }) => (
   />
 ));
 
-const DotButton = React.memo(({ selected, onClick }) => (
+const DotButton = React.memo(({ isSelected, onClick }) => (
   <Button
-    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full md:h-1.5 ${
-      selected ? "w-2.5 bg-black-900 md:w-3" : "w-1.5 bg-gray-300_01"
-    }`}
+    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full transition-all duration-300 ease-in-out md:h-1.5 ${
+      isSelected
+        ? "w-2.5 bg-black-900 md:w-3"
+        : "w-1.5 bg-gray-300_01 hover:bg-gray-400"
+    } `}
     size="none"
     variant="none"
     onClick={onClick}
   />
 ));
 
+DotButton.displayName = "DotButton";
 const SliderControl = React.memo(
   ({
     showCounter,
@@ -55,32 +54,37 @@ const SliderControl = React.memo(
     showDotButtons,
     progressBarStyle,
     counterText,
-    scrollPrev,
-    scrollNext,
+    onPrevClick,
+    onNextClick,
     dotButtons,
+    className,
   }) => (
     <div
-      className={`${showDotButtons ? "mt-2.5 md:hidden" : "mt-4"} flex w-full items-center lg:mt-6`}
+      className={twMerge(
+        `flex w-full items-center lg:mt-6`,
+        showDotButtons ? "mt-2.5 md:hidden" : "mt-4",
+        className,
+      )}
     >
       {showDotButtons ? (
         <div className="flex w-full justify-center">{dotButtons}</div>
       ) : (
         <>
-          <ProgressBar progressBarStyle={progressBarStyle} />
+          <ProgressBar style={progressBarStyle} />
           <div className="relative m-auto mx-4 flex sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
             <div className="flex w-full items-center justify-center gap-2 sm:gap-3 lg:gap-4 xl:gap-5">
-              {showCounter && <Counter counterText={counterText} />}
+              {showCounter && <Counter text={counterText} />}
               {showControls && (
                 <div className="flex flex-1 justify-center gap-2 sm:gap-3 lg:gap-4">
                   <SliderButton
                     src="img_arrow_left.svg"
                     alt="Previous slide"
-                    onClick={scrollPrev}
+                    onClick={onPrevClick}
                   />
                   <SliderButton
                     src="img_arrow_right_black_900.png"
                     alt="Next slide"
-                    onClick={scrollNext}
+                    onClick={onNextClick}
                   />
                 </div>
               )}
@@ -98,122 +102,163 @@ const Slider = React.memo(
     className,
     sliderClassName,
     sliderItemClassName,
+    controlContainerClassName,
     showCounter = true,
     showControls = true,
     showDotButtons = false,
     ...props
   }) => {
-    const [emblaRef, emblaApi] = useEmblaCarousel(
-      {
-        loop: false,
-        slidesToScroll: "auto",
-        align: "center",
-      },
-      [WheelGesturesPlugin()],
+    const [flickityInstance, setFlickityInstance] = useState(null);
+    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+    const [scrollPercentage, setScrollPercentage] = useState(0);
+    const [totalSlides, setTotalSlides] = useState(0);
+    const [isAllSlidesVisible, setIsAllSlidesVisible] = useState(false);
+    const [scrollbarWidth, setScrollbarWidth] = useState(0);
+    const [isDragging, setIsDragging] = useState(false);
+
+    const flickityOptions = useMemo(
+      () => ({
+        cellAlign: "center",
+        contain: true,
+        wrapAround: false,
+        pageDots: false,
+        groupCells: true,
+        prevNextButtons: false,
+        draggable: ">1",
+      }),
+      [],
     );
 
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [scrollProgress, setScrollProgress] = useState(0);
-    const [scrollSnaps, setScrollSnaps] = useState([]);
+    const handleSelect = useCallback(() => {
+      if (!flickityInstance) return;
+      const width =
+        (flickityInstance.size.width * 100) / flickityInstance.slideableWidth;
+      setScrollbarWidth(width);
+      setCurrentSlideIndex(flickityInstance.selectedIndex);
+      setTotalSlides(flickityInstance.slides.length);
+      setIsAllSlidesVisible(flickityInstance.slides.length <= 1);
+    }, [flickityInstance]);
 
-    const scrollbarWidth = useMemo(() => {
-      if (!emblaApi) return 0;
-      const { scrollWidth, clientWidth } = emblaApi.containerNode();
-      return (clientWidth * 100) / scrollWidth;
-    }, [emblaApi]);
+    const handleScroll = useCallback(
+      (progress) => {
+        if (!flickityInstance) return;
+        const maxScroll = 100 - scrollbarWidth;
+        setScrollPercentage(progress * maxScroll);
+      },
+      [flickityInstance, scrollbarWidth],
+    );
 
-    const onSelect = useCallback(() => {
-      if (!emblaApi) return;
-      setCurrentSlide(emblaApi.selectedScrollSnap());
-    }, [emblaApi]);
+    const handleDragStart = useCallback(() => {
+      setIsDragging(true);
+    }, []);
 
-    const onScroll = useCallback(() => {
-      if (!emblaApi) return;
-      const scrollPercentage =
-        emblaApi.scrollProgress() * (100 - scrollbarWidth);
-      setScrollProgress(scrollPercentage);
-    }, [emblaApi, scrollbarWidth]);
+    const handleDragEnd = useCallback(() => {
+      setTimeout(() => setIsDragging(false), 100);
+    }, []);
 
     useEffect(() => {
-      if (!emblaApi) return;
+      if (!flickityInstance) return;
 
-      const handleReInit = () => setScrollSnaps(emblaApi.scrollSnapList());
-
-      onSelect();
-      onScroll();
-      handleReInit();
-
-      emblaApi.on("select", onSelect);
-      emblaApi.on("scroll", onScroll);
-      emblaApi.on("reInit", handleReInit);
+      flickityInstance.on("select", handleSelect);
+      flickityInstance.on("scroll", handleScroll);
+      flickityInstance.on("dragStart", handleDragStart);
+      flickityInstance.on("dragEnd", handleDragEnd);
 
       return () => {
-        emblaApi.off("select", onSelect);
-        emblaApi.off("scroll", onScroll);
-        emblaApi.off("reInit", handleReInit);
+        flickityInstance.off("select", handleSelect);
+        flickityInstance.off("scroll", handleScroll);
+        flickityInstance.off("dragStart", handleDragStart);
+        flickityInstance.off("dragEnd", handleDragEnd);
       };
-    }, [emblaApi, onSelect, onScroll]);
+    }, [
+      flickityInstance,
+      handleSelect,
+      handleScroll,
+      handleDragStart,
+      handleDragEnd,
+    ]);
 
-    const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-    const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
-
-    const progressBarStyle = useMemo(
-      () => ({
-        left: `${scrollProgress}%`,
-        width: `${scrollbarWidth}%`,
-      }),
-      [scrollProgress, scrollbarWidth],
+    const preventClickDuringDrag = useCallback(
+      (event) => {
+        if (isDragging) {
+          event.preventDefault();
+        }
+      },
+      [isDragging],
     );
 
+    const scrollPrev = useCallback(
+      () => flickityInstance?.previous(),
+      [flickityInstance],
+    );
+    const scrollNext = useCallback(
+      () => flickityInstance?.next(),
+      [flickityInstance],
+    );
+
+    const progressBarStyle = useMemo(() => {
+      return {
+        left: `${scrollPercentage}%`,
+        width: `${scrollbarWidth}%`,
+      };
+    }, [scrollPercentage, scrollbarWidth]);
+
     const counterText = useMemo(
-      () => `${currentSlide + 1} / ${scrollSnaps.length}`,
-      [currentSlide, scrollSnaps.length],
+      () => `${currentSlideIndex + 1} / ${totalSlides}`,
+      [currentSlideIndex, totalSlides],
     );
 
     const scrollTo = useCallback(
-      (index) => emblaApi?.scrollTo(index),
-      [emblaApi],
+      (index) => flickityInstance?.select(index),
+      [flickityInstance],
     );
 
     const dotButtons = useMemo(
       () =>
-        scrollSnaps.map((_, index) => (
+        Array.from({ length: totalSlides }, (_, index) => (
           <DotButton
             key={`dot-button-${index}`}
-            selected={index === currentSlide}
+            isSelected={index === currentSlideIndex}
             onClick={() => scrollTo(index)}
           />
         )),
-      [scrollSnaps, currentSlide, scrollTo],
+      [totalSlides, currentSlideIndex, scrollTo],
     );
 
     return (
-      <div className={`${className} w-full`} {...props}>
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className={twMerge("flex", sliderClassName)}>
-            {React.Children.map(children, (child, index) => (
-              <div
-                key={`slider-item-${index}`}
-                className={twMerge(sliderItemClassName)}
-              >
-                {child}
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className={`w-full ${className}`} {...props}>
+        <Flickity
+          elementType="div"
+          options={flickityOptions}
+          flickityRef={setFlickityInstance}
+          className={sliderClassName}
+        >
+          {React.Children.map(children, (child, index) => (
+            <div
+              key={`carousel-slide-${index}`}
+              className={sliderItemClassName}
+              style={{ pointerEvents: isDragging ? "none" : "auto" }}
+              onClick={preventClickDuringDrag}
+            >
+              {child}
+            </div>
+          ))}
+        </Flickity>
 
-        {(showControls || showCounter || showDotButtons) && (
-          <SliderControl
-            showCounter={showCounter}
-            showControls={showControls}
-            showDotButtons={showDotButtons}
-            progressBarStyle={progressBarStyle}
-            counterText={counterText}
-            scrollPrev={scrollPrev}
-            scrollNext={scrollNext}
-            dotButtons={dotButtons}
-          />
-        )}
+        {!isAllSlidesVisible &&
+          (showControls || showCounter || showDotButtons) && (
+            <SliderControl
+              showCounter={showCounter}
+              showControls={showControls}
+              showDotButtons={showDotButtons}
+              progressBarStyle={progressBarStyle}
+              counterText={counterText}
+              onPrevClick={scrollPrev}
+              onNextClick={scrollNext}
+              dotButtons={dotButtons}
+              className={controlContainerClassName}
+            />
+          )}
       </div>
     );
   },
