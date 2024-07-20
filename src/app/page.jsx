@@ -97,9 +97,7 @@ const Page = async () => {
 
   if (!blocks || blocks.length === 0) return null;
 
-  if (!!blocks?.length) {
-    return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
-  }
+  return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
 };
 export default Page;
 

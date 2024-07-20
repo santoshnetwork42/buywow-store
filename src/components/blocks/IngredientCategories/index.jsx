@@ -47,7 +47,7 @@ export default function IngredientCategories({
       {...props}
     >
       <SectionHeading title={title} />
-      <Slider controlContainerClassName="md:hidden">
+      <Slider controlsContainerClassName="md:hidden">
         {ingredientGroups.map((group, index) => (
           <div
             key={`group-${index}`}

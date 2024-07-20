@@ -101,11 +101,13 @@ const Slider = React.memo(
     children,
     className,
     sliderClassName,
-    sliderItemClassName,
-    controlContainerClassName,
+    slideClassName,
+    controlsContainerClassName,
+    slideAlign = "center",
     showCounter = true,
     showControls = true,
     showDotButtons = false,
+    enableDragOnSingleSlide = false,
     ...props
   }) => {
     const [flickityInstance, setFlickityInstance] = useState(null);
@@ -118,15 +120,15 @@ const Slider = React.memo(
 
     const flickityOptions = useMemo(
       () => ({
-        cellAlign: "center",
+        cellAlign: slideAlign,
         contain: true,
         wrapAround: false,
         pageDots: false,
         groupCells: true,
         prevNextButtons: false,
-        draggable: ">1",
+        draggable: !enableDragOnSingleSlide && ">1",
       }),
-      [],
+      [slideAlign, enableDragOnSingleSlide],
     );
 
     const handleSelect = useCallback(() => {
@@ -236,7 +238,7 @@ const Slider = React.memo(
           {React.Children.map(children, (child, index) => (
             <div
               key={`carousel-slide-${index}`}
-              className={sliderItemClassName}
+              className={slideClassName}
               style={{ pointerEvents: isDragging ? "none" : "auto" }}
               onClick={preventClickDuringDrag}
             >
@@ -256,7 +258,7 @@ const Slider = React.memo(
               onPrevClick={scrollPrev}
               onNextClick={scrollNext}
               dotButtons={dotButtons}
-              className={controlContainerClassName}
+              className={controlsContainerClassName}
             />
           )}
       </div>
