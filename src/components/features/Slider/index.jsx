@@ -126,7 +126,7 @@ const Slider = React.memo(
         pageDots: false,
         groupCells: true,
         prevNextButtons: false,
-        draggable: !enableDragOnSingleSlide && ">1",
+        draggable: enableDragOnSingleSlide ? true : ">1",
       }),
       [slideAlign, enableDragOnSingleSlide],
     );

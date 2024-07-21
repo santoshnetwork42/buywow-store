@@ -150,6 +150,8 @@ const Carousel = React.memo(
       [banners, selectedIndex, scrollTo],
     );
 
+    if (!banners?.length) return null;
+
     return (
       <div
         className={`relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8 ${props.className}`}

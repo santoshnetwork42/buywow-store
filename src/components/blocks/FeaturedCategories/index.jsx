@@ -1,7 +1,7 @@
 import React from "react";
+import Link from "next/link";
 import SectionHeading from "@/components/common/partials/SectionHeading";
 import Slider from "@/components/features/Slider";
-import Link from "next/link";
 import { Heading, Img } from "@/components/common";
 import { extractAttributes } from "@/utils/helpers";
 
@@ -9,19 +9,25 @@ const CategoryItem = React.memo(({ category, size }) => {
   const { image, slug, title } = category;
   const { url, alternativeText } = extractAttributes(image);
 
+  const imageSize = size === "SMALL" ? 260 : 396;
+  const imageHeight = size === "SMALL" ? 260 : 470;
+  const aspectRatio = size === "SMALL" ? "aspect-square" : "aspect-[396/470]";
+
+  const linkClassName =
+    size === "SMALL"
+      ? "w-[28vw] sm:max-w-[260px] sm:w-[26vw] md:w-[24vw] lg:w-[22vw] xl:w-[20vw]"
+      : "w-[30vw] sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]";
+
   return (
-    <Link
-      href={`/collections/${slug}` || "#"}
-      className={`w-[30vw] ${size === "SMALL" ? "max-w-[260px] sm:w-[26vw] md:w-[24vw] lg:w-[22vw] xl:w-[20vw]" : "sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]"}`}
-    >
+    <Link href={`/collections/${slug}` || "#"} className={linkClassName}>
       <div className="overflow-hidden rounded sm:rounded-md lg:rounded-lg">
         <Img
           src={url}
-          width={size === "SMALL" ? 260 : 396}
-          height={size === "SMALL" ? 260 : 470}
+          width={imageSize}
+          height={imageHeight}
           alt={alternativeText || `${slug} Image`}
           isStatic
-          className={`w-full object-contain ${size === "SMALL" ? "aspect-square" : "aspect-[396/470]"}`}
+          className={`w-full object-contain ${aspectRatio}`}
         />
       </div>
       <Heading
@@ -38,22 +44,47 @@ const CategoryItem = React.memo(({ category, size }) => {
 
 CategoryItem.displayName = "CategoryItem";
 
-const ConcernSection = React.memo(
-  ({ title, featuredCategoryItems, featuredItemSize: size = "SMALL" }) => {
-    if (!featuredCategoryItems || featuredCategoryItems.length === 0)
-      return null;
+const FeaturedCategories = React.memo(
+  ({
+    title,
+    featuredCategoryItems: categories,
+    featuredItemSize: itemSize = "SMALL",
+  }) => {
+    const sliderClassName = `slider-gap-2 ${
+      itemSize === "SMALL"
+        ? "md:slider-gap-2.5"
+        : "sm:slider-gap-3 md:slider-gap-4 lg:slider-gap-5"
+    }`;
+
+    if (!categories?.length) return null;
 
     return (
-      <div className="container-main mb-main">
+      <div className="container-main mb-main flex flex-col items-center justify-center">
         <SectionHeading title={title} />
-        <Slider
-          sliderClassName={`slider-gap-2 ${size === "SMALL" ? "md:slider-gap-2.5" : "sm:slider-gap-3 md:slider-gap-4 lg:slider-gap-5"}`}
-        >
-          {featuredCategoryItems.map((category, index) => (
+        <Slider className="sm:hidden" sliderClassName={sliderClassName}>
+          {categories.reduce((acc, category, index, arr) => {
+            if (index % 2 === 0) {
+              acc.push(
+                <div
+                  key={`group-${index}`}
+                  className="flex flex-col max-sm:gap-y-6"
+                >
+                  <CategoryItem category={category} size={itemSize} />
+                  {arr[index + 1] && (
+                    <CategoryItem category={arr[index + 1]} size={itemSize} />
+                  )}
+                </div>,
+              );
+            }
+            return acc;
+          }, [])}
+        </Slider>
+        <Slider className="hidden sm:block" sliderClassName={sliderClassName}>
+          {categories.map((category, index) => (
             <CategoryItem
               key={`category-${index}`}
               category={category}
-              size={size}
+              size={itemSize}
             />
           ))}
         </Slider>
@@ -62,6 +93,6 @@ const ConcernSection = React.memo(
   },
 );
 
-ConcernSection.displayName = "ConcernSection";
+FeaturedCategories.displayName = "FeaturedCategories";
 
-export default ConcernSection;
+export default FeaturedCategories;

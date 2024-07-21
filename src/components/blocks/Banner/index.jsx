@@ -77,9 +77,7 @@ const MultiBanner = React.memo(({ banners }) => {
 MultiBanner.displayName = "MultiBanner";
 
 const Banner = ({ bannerItems: banners, ...props }) => {
-  if (!banners || banners?.length === 0) {
-    return null;
-  }
+  if (!banners?.length) return null;
 
   return (
     <div

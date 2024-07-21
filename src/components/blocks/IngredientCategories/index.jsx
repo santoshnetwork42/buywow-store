@@ -1,17 +1,18 @@
+import React from "react";
+import Link from "next/link";
 import { Img } from "@/components/common";
 import SectionHeading from "@/components/common/partials/SectionHeading";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
-import Link from "next/link";
-import React from "react";
 
 const IngredientItem = React.memo(({ ingredient }) => {
   const { slug, image } = ingredient;
   const { url, alternativeText } = extractAttributes(image);
+
   return (
     <Link
       href={`/collections/${slug}` || "#"}
-      className={`w-40 cursor-pointer sm:w-48 md:w-56 lg:w-60 xl:w-64`}
+      className="w-40 cursor-pointer sm:w-48 md:w-56 lg:w-60 xl:w-64"
     >
       <Img
         src={url}
@@ -27,44 +28,43 @@ const IngredientItem = React.memo(({ ingredient }) => {
 
 IngredientItem.displayName = "IngredientItem";
 
-export default function IngredientCategories({
-  title,
-  ingredientCategoryItems: ingredients,
-  ...props
-}) {
-  if (!ingredients || ingredients.length === 0) {
-    return null;
-  }
+const IngredientCategories = React.memo(
+  ({ title, ingredientCategoryItems: ingredients }) => {
+    const ingredientGroups = ingredients.reduce((acc, _, index) => {
+      if (index % 2 === 0) {
+        acc.push(ingredients.slice(index, index + 2));
+      }
+      return acc;
+    }, []);
 
-  const ingredientGroups = [];
-  for (let i = 0; i < ingredients.length; i += 2) {
-    ingredientGroups.push(ingredients.slice(i, i + 2));
-  }
+    if (!ingredients?.length) return null;
 
-  return (
-    <div
-      className={`container-main mb-main flex flex-col items-center justify-center ${props.className}`}
-      {...props}
-    >
-      <SectionHeading title={title} />
-      <Slider
-        controlsContainerClassName="md:hidden"
-        sliderClassName="slider-gap-1.5 sm:slider-gap-3 md:slider-gap-4 lg:slider-gap-5"
-      >
-        {ingredientGroups.map((group, index) => (
-          <div
-            key={`group-${index}`}
-            className={`flex h-full flex-col gap-y-1.5 sm:gap-y-3 md:gap-y-4 lg:gap-y-5`}
-          >
-            {group.map((ingredient, subIndex) => (
-              <IngredientItem
-                key={`ingredient-${index}-${subIndex}`}
-                ingredient={ingredient}
-              />
-            ))}
-          </div>
-        ))}
-      </Slider>
-    </div>
-  );
-}
+    return (
+      <div className="container-main mb-main flex flex-col items-center justify-center">
+        <SectionHeading title={title} />
+        <Slider
+          controlsContainerClassName="md:hidden"
+          sliderClassName="slider-gap-1.5 sm:slider-gap-3 md:slider-gap-4 lg:slider-gap-5"
+        >
+          {ingredientGroups.map((group, index) => (
+            <div
+              key={`group-${index}`}
+              className="flex h-full flex-col gap-y-1.5 sm:gap-y-3 md:gap-y-4 lg:gap-y-5"
+            >
+              {group.map((ingredient, subIndex) => (
+                <IngredientItem
+                  key={`ingredient-${index}-${subIndex}}`}
+                  ingredient={ingredient}
+                />
+              ))}
+            </div>
+          ))}
+        </Slider>
+      </div>
+    );
+  },
+);
+
+IngredientCategories.displayName = "IngredientCategories";
+
+export default IngredientCategories;

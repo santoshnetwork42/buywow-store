@@ -35,15 +35,11 @@ const CategoryItem = React.memo(({ image, title, link }) => {
 
 CategoryItem.displayName = "CategoryItem";
 
-const TrendingCategories = ({
-  trendingCategoryItems: categories,
-  ...props
-}) => {
+const TrendingCategories = ({ trendingCategoryItems: categories }) => {
+  if (!categories?.length) return null;
+
   return (
-    <div
-      className={`no-scrollbar w-full overflow-x-scroll lg:hidden ${props.className}`}
-      {...props}
-    >
+    <div className="no-scrollbar w-full overflow-x-scroll lg:hidden">
       <div className="mx-auto flex w-max items-start justify-center p-3">
         {categories.map((category, index) => (
           <CategoryItem

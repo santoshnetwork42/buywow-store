@@ -36,7 +36,7 @@ const FeaturedList = ({
   isWebHorizontal,
   ...props
 }) => {
-  if (!features || features.length === 0) return null;
+  if (!features?.length) return null;
 
   const getMaxWidth = (length) => {
     if (length > 4) return "100%";
@@ -51,8 +51,7 @@ const FeaturedList = ({
       style={{
         maxWidth: getMaxWidth(features?.length),
       }}
-      className={`mx-auto mb-7 flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full md:mb-8 ${props?.className}`}
-      {...props}
+      className="mx-auto mb-7 flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full md:mb-8"
     >
       {features.map((feature, index) => (
         <FeaturedItem
