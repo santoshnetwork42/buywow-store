@@ -51,6 +51,7 @@ li:focus-visible {
 li:hover {
   cursor: pointer;
 }
+
 @layer components {
   /*-------------------------------------
   Container CSS
@@ -61,6 +62,34 @@ li:hover {
 
   .mb-main {
     @apply mb-8 sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12;
+  }
+
+  .slider-gap-1 .flickity-slider {
+    @apply space-x-1;
+  }
+
+  .slider-gap-1\.5 .flickity-slider {
+    @apply space-x-1.5;
+  }
+
+  .slider-gap-2 .flickity-slider {
+    @apply space-x-2;
+  }
+
+  .slider-gap-2\.5 .flickity-slider {
+    @apply space-x-2.5;
+  }
+
+  .slider-gap-3 .flickity-slider {
+    @apply space-x-3;
+  }
+
+  .slider-gap-4 .flickity-slider {
+    @apply space-x-4;
+  }
+
+  .slider-gap-5 .flickity-slider {
+    @apply space-x-5;
   }
 }
 

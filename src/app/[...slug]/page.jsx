@@ -10,7 +10,7 @@ const Banner = dynamic(() => import("@/components/blocks/Banner"));
 const TrendingCategories = dynamic(
   () => import("@/components/blocks/TrendingCategories"),
 );
-const FeatureList = dynamic(() => import("@/components/blocks/FeatureList"));
+const FeatureList = dynamic(() => import("@/components/blocks/FeaturedList"));
 const IngredientCategories = dynamic(
   () => import("@/components/blocks/IngredientCategories"),
 );
@@ -26,8 +26,8 @@ const NewLaunchSection = dynamic(
 const OfferCarousal = dynamic(
   () => import("@/components/features/Carousel/OfferCarousel"),
 );
-const ConcernSection = dynamic(
-  () => import("@/components/partials/Home/ConcernSection"),
+const FeaturedCategories = dynamic(
+  () => import("@/components/blocks/FeaturedCategories"),
 );
 const CustomerReviewSection = dynamic(
   () => import("@/components/partials/Home/CustomerReviewSection"),
@@ -65,8 +65,8 @@ const renderBlock = (block, index) => {
       return <NewLaunchSection key={index} {...block} />;
     case "ComponentOfferCarousal":
       return <OfferCarousal key={index} {...block} />;
-    case "ComponentConcernSection":
-      return <ConcernSection key={index} {...block} />;
+    case "ComponentFeaturedCategories":
+      return <FeaturedCategories key={index} {...block} />;
     case "ComponentCustomerReviewSection":
       return <CustomerReviewSection key={index} {...block} />;
     case "ComponentBlogSection":
@@ -133,7 +133,7 @@ export default Page;
           />
           <ShopIngredients shopIngredientsData={shopIngredientsData} />
           <OfferCarousal offers={offersData} />
-          <ConcernSection sectionData={concernSectionData} />
+          <FeaturedCategories sectionData={FeaturedCategoriesData} />
           <NewLaunchSection newLaunchData={newLaunchData} />
         </div>
         <ShopBanner

@@ -2,7 +2,7 @@ import React from "react";
 import { Text, Img } from "@/components/common";
 import { extractAttributes } from "@/utils/helpers";
 
-const FeatureItem = React.memo(({ image, text, isWebHorizontal }) => {
+const FeaturedItem = React.memo(({ image, text, isWebHorizontal }) => {
   const { url, alternativeText } = extractAttributes(image);
 
   return (
@@ -29,13 +29,15 @@ const FeatureItem = React.memo(({ image, text, isWebHorizontal }) => {
   );
 });
 
-FeatureItem.displayName = "FeatureItem";
+FeaturedItem.displayName = "FeaturedItem";
 
-const FeatureList = ({
+const FeaturedList = ({
   featuredListItems: features,
   isWebHorizontal,
   ...props
 }) => {
+  if (!features || features.length === 0) return null;
+
   const getMaxWidth = (length) => {
     if (length > 4) return "100%";
     if (length > 3) return "88%";
@@ -53,7 +55,7 @@ const FeatureList = ({
       {...props}
     >
       {features.map((feature, index) => (
-        <FeatureItem
+        <FeaturedItem
           key={`feature-${index}`}
           image={feature?.image}
           text={feature?.text}
@@ -64,4 +66,4 @@ const FeatureList = ({
   );
 };
 
-export default FeatureList;
+export default FeaturedList;

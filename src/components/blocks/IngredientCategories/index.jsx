@@ -10,7 +10,7 @@ const IngredientItem = React.memo(({ ingredient }) => {
   const { url, alternativeText } = extractAttributes(image);
   return (
     <Link
-      href={`/collections/${slug}`}
+      href={`/collections/${slug}` || "#"}
       className={`w-40 cursor-pointer sm:w-48 md:w-56 lg:w-60 xl:w-64`}
     >
       <Img
@@ -43,15 +43,18 @@ export default function IngredientCategories({
 
   return (
     <div
-      className={`container-main mb-8 flex flex-col items-center justify-center sm:mb-9 md:mb-10 lg:mb-11 xl:mb-12 ${props.className}`}
+      className={`container-main mb-main flex flex-col items-center justify-center ${props.className}`}
       {...props}
     >
       <SectionHeading title={title} />
-      <Slider controlsContainerClassName="md:hidden">
+      <Slider
+        controlsContainerClassName="md:hidden"
+        sliderClassName="slider-gap-1.5 sm:slider-gap-3 md:slider-gap-4 lg:slider-gap-5"
+      >
         {ingredientGroups.map((group, index) => (
           <div
             key={`group-${index}`}
-            className={`mr-1.5 flex h-full flex-col gap-y-1.5 sm:mr-3 sm:gap-y-3 md:mr-4 md:gap-y-4 lg:mr-5 lg:gap-y-5 ${index === ingredientGroups.length - 1 && "!mr-0"}`}
+            className={`flex h-full flex-col gap-y-1.5 sm:gap-y-3 md:gap-y-4 lg:gap-y-5`}
           >
             {group.map((ingredient, subIndex) => (
               <IngredientItem

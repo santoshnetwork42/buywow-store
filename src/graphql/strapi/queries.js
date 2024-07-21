@@ -174,7 +174,7 @@ export const landingPage = gql`
             ... on ComponentCategoriesFeaturedCategories {
               id
               title
-              festuredItemSize: size
+              featuredItemSize: size
               featuredCategoryItems {
                 id
                 image {

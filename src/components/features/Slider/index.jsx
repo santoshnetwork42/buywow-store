@@ -234,6 +234,7 @@ const Slider = React.memo(
           options={flickityOptions}
           flickityRef={setFlickityInstance}
           className={sliderClassName}
+          static
         >
           {React.Children.map(children, (child, index) => (
             <div

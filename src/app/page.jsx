@@ -10,9 +10,12 @@ const Banner = dynamic(() => import("@/components/blocks/Banner"));
 const TrendingCategories = dynamic(
   () => import("@/components/blocks/TrendingCategories"),
 );
-const FeatureList = dynamic(() => import("@/components/blocks/FeatureList"));
+const FeaturedList = dynamic(() => import("@/components/blocks/FeaturedList"));
 const IngredientCategories = dynamic(
   () => import("@/components/blocks/IngredientCategories"),
+);
+const FeaturedCategories = dynamic(
+  () => import("@/components/blocks/FeaturedCategories"),
 );
 const ShopCategories = dynamic(
   () => import("@/components/partials/Home/ShopCategories"),
@@ -25,9 +28,6 @@ const NewLaunchSection = dynamic(
 );
 const OfferCarousal = dynamic(
   () => import("@/components/features/Carousel/OfferCarousel"),
-);
-const ConcernSection = dynamic(
-  () => import("@/components/partials/Home/ConcernSection"),
 );
 const CustomerReviewSection = dynamic(
   () => import("@/components/partials/Home/CustomerReviewSection"),
@@ -55,32 +55,32 @@ const renderBlock = (block, index) => {
       return <Carousal key={index} {...block} />;
     case "ComponentBannerBanners":
       return <Banner key={index} {...block} />;
-    case "ComponentShopCategories":
-      return <ShopCategories key={index} {...block} />;
+    case "ComponentCategoriesTrendingCategories":
+      return <TrendingCategories key={index} {...block} />;
+    case "ComponentBlocksFeaturedList":
+      return <FeaturedList key={index} {...block} />;
     case "ComponentCategoriesIngredientCategories":
       return <IngredientCategories key={index} {...block} />;
+    case "ComponentCategoriesFeaturedCategories":
+      return <FeaturedCategories key={index} {...block} />;
+    case "ComponentShopCategories":
+      return <ShopCategories key={index} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} {...block} />;
     case "ComponentNewLaunchSection":
       return <NewLaunchSection key={index} {...block} />;
     case "ComponentOfferCarousal":
       return <OfferCarousal key={index} {...block} />;
-    case "ComponentConcernSection":
-      return <ConcernSection key={index} {...block} />;
     case "ComponentCustomerReviewSection":
       return <CustomerReviewSection key={index} {...block} />;
     case "ComponentBlogSection":
       return <BlogSection key={index} {...block} />;
     case "ComponentDeliveryInfoSection":
       return <DeliveryInfoSection key={index} {...block} />;
-    case "ComponentCategoriesTrendingCategories":
-      return <TrendingCategories key={index} {...block} />;
     case "ComponentTabProductSection":
       return <TabProductSection key={index} {...block} />;
-    case "ComponentBlocksFeaturedList":
-      return <FeatureList key={index} {...block} />;
     case "ComponentBlocksFeaturedProducts":
-      return <></>;
+      return <div key={index}></div>;
     default:
       return null;
   }
