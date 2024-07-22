@@ -30,7 +30,7 @@ const FeaturedCategories = dynamic(
   () => import("@/components/blocks/FeaturedCategories"),
 );
 const CustomerReviewSection = dynamic(
-  () => import("@/components/partials/Home/CustomerReviewSection"),
+  () => import("@/components/blocks/TestimonialSection"),
 );
 const BlogSection = dynamic(
   () => import("@/components/partials/Home/BlogSection"),

@@ -16,7 +16,7 @@ const CategoryItem = React.memo(({ category, size }) => {
   const linkClassName =
     size === "SMALL"
       ? "w-[28vw] sm:max-w-[260px] sm:w-[26vw] md:w-[24vw] lg:w-[22vw] xl:w-[20vw]"
-      : "w-[30vw] sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]";
+      : "w-[calc(33vw-12px)] sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]";
 
   return (
     <Link href={`/collections/${slug}` || "#"} className={linkClassName}>

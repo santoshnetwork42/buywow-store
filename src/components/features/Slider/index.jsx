@@ -116,7 +116,6 @@ const Slider = React.memo(
     const [totalSlides, setTotalSlides] = useState(0);
     const [isAllSlidesVisible, setIsAllSlidesVisible] = useState(false);
     const [scrollbarWidth, setScrollbarWidth] = useState(0);
-    const [isDragging, setIsDragging] = useState(false);
 
     const flickityOptions = useMemo(
       () => ({
@@ -150,44 +149,17 @@ const Slider = React.memo(
       [flickityInstance, scrollbarWidth],
     );
 
-    const handleDragStart = useCallback(() => {
-      setIsDragging(true);
-    }, []);
-
-    const handleDragEnd = useCallback(() => {
-      setTimeout(() => setIsDragging(false), 100);
-    }, []);
-
     useEffect(() => {
       if (!flickityInstance) return;
 
       flickityInstance.on("select", handleSelect);
       flickityInstance.on("scroll", handleScroll);
-      flickityInstance.on("dragStart", handleDragStart);
-      flickityInstance.on("dragEnd", handleDragEnd);
 
       return () => {
         flickityInstance.off("select", handleSelect);
         flickityInstance.off("scroll", handleScroll);
-        flickityInstance.off("dragStart", handleDragStart);
-        flickityInstance.off("dragEnd", handleDragEnd);
       };
-    }, [
-      flickityInstance,
-      handleSelect,
-      handleScroll,
-      handleDragStart,
-      handleDragEnd,
-    ]);
-
-    const preventClickDuringDrag = useCallback(
-      (event) => {
-        if (isDragging) {
-          event.preventDefault();
-        }
-      },
-      [isDragging],
-    );
+    }, [flickityInstance, handleSelect, handleScroll]);
 
     const scrollPrev = useCallback(
       () => flickityInstance?.previous(),
@@ -233,15 +205,13 @@ const Slider = React.memo(
           elementType="div"
           options={flickityOptions}
           flickityRef={setFlickityInstance}
-          className={sliderClassName}
+          className={`${sliderClassName} slider-no-drag`}
           static
         >
           {React.Children.map(children, (child, index) => (
             <div
               key={`carousel-slide-${index}`}
-              className={slideClassName}
-              style={{ pointerEvents: isDragging ? "none" : "auto" }}
-              onClick={preventClickDuringDrag}
+              className={`${slideClassName} cursor-auto select-text`}
             >
               {child}
             </div>

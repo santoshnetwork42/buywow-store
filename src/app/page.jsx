@@ -17,6 +17,9 @@ const IngredientCategories = dynamic(
 const FeaturedCategories = dynamic(
   () => import("@/components/blocks/FeaturedCategories"),
 );
+const TestimonialSection = dynamic(
+  () => import("@/components/blocks/TestimonialSection"),
+);
 const ShopCategories = dynamic(
   () => import("@/components/partials/Home/ShopCategories"),
 );
@@ -28,9 +31,6 @@ const NewLaunchSection = dynamic(
 );
 const OfferCarousal = dynamic(
   () => import("@/components/features/Carousel/OfferCarousel"),
-);
-const CustomerReviewSection = dynamic(
-  () => import("@/components/partials/Home/CustomerReviewSection"),
 );
 const BlogSection = dynamic(
   () => import("@/components/partials/Home/BlogSection"),
@@ -63,6 +63,8 @@ const renderBlock = (block, index) => {
       return <IngredientCategories key={index} {...block} />;
     case "ComponentCategoriesFeaturedCategories":
       return <FeaturedCategories key={index} {...block} />;
+    case "ComponentBlocksTestimonialSection":
+      return <TestimonialSection key={index} {...block} />;
     case "ComponentShopCategories":
       return <ShopCategories key={index} {...block} />;
     case "ComponentVideoSection":
@@ -71,8 +73,6 @@ const renderBlock = (block, index) => {
       return <NewLaunchSection key={index} {...block} />;
     case "ComponentOfferCarousal":
       return <OfferCarousal key={index} {...block} />;
-    case "ComponentCustomerReviewSection":
-      return <CustomerReviewSection key={index} {...block} />;
     case "ComponentBlogSection":
       return <BlogSection key={index} {...block} />;
     case "ComponentDeliveryInfoSection":
@@ -133,7 +133,7 @@ export default Page;
           className="my-8 sm:my-10 lg:my-12"
         />
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          <CustomerReviewSection sectionData={customerReviewSectionData} />
+          <TestimonialSection sectionData={TestimonialSectionData} />
           <BlogSection sectionData={blogSectionData} />
           <VideoSection sectionData={instagramFeedData} />
           <DeliveryInfoSection data={deliveryInfoData} />

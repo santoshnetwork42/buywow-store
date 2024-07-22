@@ -21,10 +21,9 @@ const FeaturedItem = React.memo(({ image, text, isWebHorizontal }) => {
         as="p"
         size="base"
         className={`line-clamp-2 shrink-0 text-center capitalize ${isWebHorizontal && "md:text-left"}`}
+        dangerouslySetInnerHTML={{ __html: text }}
         responsive
-      >
-        {text}
-      </Text>
+      />
     </div>
   );
 });

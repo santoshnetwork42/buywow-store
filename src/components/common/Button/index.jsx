@@ -1,4 +1,5 @@
 "use client";
+
 import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
 import { useRippleEffect } from "@/utils/hooks/useRippleEffect";
@@ -9,8 +10,8 @@ const Button = ({
   className,
   leftIcon,
   rightIcon,
-  variant = "primary",
-  size = "medium",
+  variant = "none",
+  size = "none",
   fullWidth = false,
   enableRipple = true,
   loader = false,
