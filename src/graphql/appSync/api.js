@@ -105,6 +105,12 @@ export const searchCMSProducts = /* GraphQL */ `
   }
 `;
 
+export const getPageBySlug = /* GraphQL */ `
+  query GetPageBySlug($pageType: String!, $slug: String!, $storeId: String!) {
+    getPageBySlug(pageType: $pageType, slug: $slug, storeId: $storeId)
+  }
+`;
+
 // NEW APIs
 // ==================================================
 

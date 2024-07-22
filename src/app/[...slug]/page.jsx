@@ -1,8 +1,7 @@
 import dynamic from "next/dynamic";
-import React from "react";
-import { getClient } from "@/lib/client";
-import { landingPage } from "@/graphql/strapi/queries";
-import { extractAttributes } from "@/utils/helpers";
+import React, { cache } from "react";
+import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
+import { landingPageCMSAPI } from "@/lib/strapiAPIs";
 
 // Dynamically import components
 const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
@@ -10,9 +9,15 @@ const Banner = dynamic(() => import("@/components/blocks/Banner"));
 const TrendingCategories = dynamic(
   () => import("@/components/blocks/TrendingCategories"),
 );
-const FeatureList = dynamic(() => import("@/components/blocks/FeaturedList"));
+const FeaturedList = dynamic(() => import("@/components/blocks/FeaturedList"));
 const IngredientCategories = dynamic(
   () => import("@/components/blocks/IngredientCategories"),
+);
+const FeaturedCategories = dynamic(
+  () => import("@/components/blocks/FeaturedCategories"),
+);
+const TestimonialSection = dynamic(
+  () => import("@/components/blocks/TestimonialSection"),
 );
 const ShopCategories = dynamic(
   () => import("@/components/partials/Home/ShopCategories"),
@@ -26,19 +31,12 @@ const NewLaunchSection = dynamic(
 const OfferCarousal = dynamic(
   () => import("@/components/features/Carousel/OfferCarousel"),
 );
-const FeaturedCategories = dynamic(
-  () => import("@/components/blocks/FeaturedCategories"),
-);
-const CustomerReviewSection = dynamic(
-  () => import("@/components/blocks/TestimonialSection"),
-);
 const BlogSection = dynamic(
   () => import("@/components/partials/Home/BlogSection"),
 );
 const DeliveryInfoSection = dynamic(
   () => import("@/components/common/partials/DeliveryInfoSection"),
 );
-
 const TabProductSection = dynamic(
   () => import("@/components/partials/Home/TabProductSection"),
 );
@@ -55,67 +53,62 @@ const renderBlock = (block, index) => {
       return <Carousal key={index} {...block} />;
     case "ComponentBannerBanners":
       return <Banner key={index} {...block} />;
-    case "ComponentShopCategories":
-      return <ShopCategories key={index} {...block} />;
+    case "ComponentCategoriesTrendingCategories":
+      return <TrendingCategories key={index} {...block} />;
+    case "ComponentBlocksFeaturedList":
+      return <FeaturedList key={index} {...block} />;
     case "ComponentCategoriesIngredientCategories":
       return <IngredientCategories key={index} {...block} />;
+    case "ComponentCategoriesFeaturedCategories":
+      return <FeaturedCategories key={index} {...block} />;
+    case "ComponentBlocksTestimonialSection":
+      return <TestimonialSection key={index} {...block} />;
+    case "ComponentShopCategories":
+      return <ShopCategories key={index} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} {...block} />;
-    case "ComponentNewLaunchSection":
+    case "ComponentBlocksFeaturedProducts":
       return <NewLaunchSection key={index} {...block} />;
     case "ComponentOfferCarousal":
       return <OfferCarousal key={index} {...block} />;
-    case "ComponentFeaturedCategories":
-      return <FeaturedCategories key={index} {...block} />;
-    case "ComponentCustomerReviewSection":
-      return <CustomerReviewSection key={index} {...block} />;
     case "ComponentBlogSection":
       return <BlogSection key={index} {...block} />;
     case "ComponentDeliveryInfoSection":
       return <DeliveryInfoSection key={index} {...block} />;
-    case "ComponentCategoriesTrendingCategories":
-      return <TrendingCategories key={index} {...block} />;
     case "ComponentTabProductSection":
       return <TabProductSection key={index} {...block} />;
-    case "ComponentBlocksFeaturedList":
-      return <FeatureList key={index} {...block} />;
+    case "ComponentBlocksFeaturedProducts":
+      return <div key={index}></div>;
     default:
       return null;
   }
 };
 
-// export const dynamicParams = false;
+const getPageData = cache(async (slug) => {
+  const response = await getPageBySlugAPI(slug);
+  return response || {};
+});
 
-export function generateStaticParams() {
-  return [
-    // { slug: [] },
-    { slug: ["a"] },
-    { slug: ["a", "1"] },
-    { slug: ["b", "2"] },
-    { slug: ["c", "3"] },
-  ];
+export default async function Page({ params }) {
+  try {
+    console.log(params);
+    const responseData = await landingPageCMSAPI();
+
+    const { blocks } = responseData?.data?.pages.data[0].attributes;
+    // const pageData = await getPageData("index");
+    // console.log(blocks);
+    // const { blocks } = pageData || {};
+
+    if (!blocks?.length) return null;
+
+    return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
+  } catch (error) {
+    console.error(error);
+    return <p>Something went wrong...</p>;
+  }
 }
 
-const Page = async ({ params }) => {
-  console.log(params);
-  // const responseData = await getClient().query({
-  //   query: landingPage,
-  //   context: {
-  //     fetchOptions: {
-  //       next: { revalidate: 0 },
-  //     },
-  //   },
-  // });
-
-  // const { blocks } = extractAttributes(responseData.data.landingPage);
-
-  // if (!blocks || blocks.length === 0) return null;
-
-  // return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
-
-  return <div className="">WOW {Object.values(params).join(" ")} </div>;
-};
-export default Page;
+export const revalidate = 3600;
 
 {
   /* <div className="mb-8 flex w-full flex-col items-center">
@@ -133,7 +126,7 @@ export default Page;
           />
           <ShopIngredients shopIngredientsData={shopIngredientsData} />
           <OfferCarousal offers={offersData} />
-          <FeaturedCategories sectionData={FeaturedCategoriesData} />
+          <ConcernSection sectionData={concernSectionData} />
           <NewLaunchSection newLaunchData={newLaunchData} />
         </div>
         <ShopBanner
@@ -149,7 +142,7 @@ export default Page;
           className="my-8 sm:my-10 lg:my-12"
         />
         <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          <CustomerReviewSection sectionData={customerReviewSectionData} />
+          <TestimonialSection sectionData={TestimonialSectionData} />
           <BlogSection sectionData={blogSectionData} />
           <VideoSection sectionData={instagramFeedData} />
           <DeliveryInfoSection data={deliveryInfoData} />

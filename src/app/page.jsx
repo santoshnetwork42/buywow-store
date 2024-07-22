@@ -1,8 +1,10 @@
 import dynamic from "next/dynamic";
-import React from "react";
-import { extractAttributes } from "@/utils/helpers";
-import { searchCMSProductsAPI } from "@/lib/appSyncAPIs";
+import React, { cache } from "react";
+import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import { landingPageCMSAPI } from "@/lib/strapiAPIs";
+import { unstable_cache } from "next/cache";
+
+export const revalidate = 3600;
 
 // Dynamically import components
 const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
@@ -38,7 +40,6 @@ const BlogSection = dynamic(
 const DeliveryInfoSection = dynamic(
   () => import("@/components/common/partials/DeliveryInfoSection"),
 );
-
 const TabProductSection = dynamic(
   () => import("@/components/partials/Home/TabProductSection"),
 );
@@ -69,7 +70,7 @@ const renderBlock = (block, index) => {
       return <ShopCategories key={index} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} {...block} />;
-    case "ComponentNewLaunchSection":
+    case "ComponentBlocksFeaturedProducts":
       return <NewLaunchSection key={index} {...block} />;
     case "ComponentOfferCarousal":
       return <OfferCarousal key={index} {...block} />;
@@ -86,20 +87,28 @@ const renderBlock = (block, index) => {
   }
 };
 
-const Page = async () => {
-  const responseData = await landingPageCMSAPI();
+const getPageData = unstable_cache(
+  async (slug) => getPageBySlugAPI(slug),
+  ["home_pageData"],
+  { revalidate: 3600 },
+);
 
-  //pass "productSlugs" fetched from CMS -> input to searchCMSProductsAPI
-  //shift this call in "featuredProducts...." component
-  const products = await searchCMSProductsAPI();
+export default async function Page() {
+  try {
+    // const responseData = await landingPageCMSAPI();
+    // const { blocks } = responseData?.data?.pages.data[0].attributes;
 
-  const { blocks } = responseData?.data?.pages.data[0].attributes;
+    const pageData = await getPageData("index");
+    const { blocks } = pageData || {};
 
-  if (!blocks || blocks.length === 0) return null;
+    if (!blocks?.length) return null;
 
-  return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
-};
-export default Page;
+    return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
+  } catch (error) {
+    console.error(error);
+    return <p>Something went wrong...</p>;
+  }
+}
 
 {
   /* <div className="mb-8 flex w-full flex-col items-center">

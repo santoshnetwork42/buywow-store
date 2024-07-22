@@ -5,6 +5,7 @@ import ProductCarousel from "@/components/features/Carousel/ProductCarousel";
 import React from "react";
 
 const NewLaunchSection = ({ newLaunchData }) => {
+  if (!newLaunchData) return null;
   return (
     <div className="flex flex-col items-center gap-3 sm:gap-4 lg:gap-5">
       <Heading size="heading" as="h1" responsive>

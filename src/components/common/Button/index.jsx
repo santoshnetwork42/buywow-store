@@ -17,6 +17,7 @@ const Button = ({
   loader = false,
   loaderClass = "",
   disabled = false,
+  onClick,
   ...restProps
 }) => {
   const buttonRef = useRippleEffect(enableRipple && !disabled && !loader);
@@ -48,8 +49,23 @@ const Button = ({
     className,
   );
 
+  const handleClick = (e) => {
+    if (disabled || loader) {
+      e.preventDefault();
+      e.stopPropagation();
+    } else if (onClick) {
+      onClick(e);
+    }
+  };
+
   return (
-    <button ref={buttonRef} className={classes} {...restProps}>
+    <button
+      ref={buttonRef}
+      className={classes}
+      onClick={handleClick}
+      disabled={disabled || loader}
+      {...restProps}
+    >
       {leftIcon && <span className="mr-2">{leftIcon}</span>}
       {children}
       {loader && (
@@ -67,9 +83,14 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
   leftIcon: PropTypes.node,
   rightIcon: PropTypes.node,
-  variant: PropTypes.oneOf(["primary", "secondary", "outlined"]),
-  size: PropTypes.oneOf(["small", "medium", "large"]),
+  variant: PropTypes.oneOf(["primary", "secondary", "outlined", "none"]),
+  size: PropTypes.oneOf(["small", "medium", "large", "none"]),
   fullWidth: PropTypes.bool,
+  enableRipple: PropTypes.bool,
+  loader: PropTypes.bool,
+  loaderClass: PropTypes.string,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export { Button };

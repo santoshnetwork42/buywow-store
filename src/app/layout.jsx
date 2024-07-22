@@ -19,6 +19,8 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
+export const revalidate = 3600;
+
 async function RootLayout({ children }) {
   const client = getClient();
 
@@ -27,7 +29,7 @@ async function RootLayout({ children }) {
       query: navbar,
       context: {
         fetchOptions: {
-          next: { revalidate: 0 },
+          next: { revalidate: 10 },
         },
       },
     }),
@@ -35,7 +37,7 @@ async function RootLayout({ children }) {
       query: footer,
       context: {
         fetchOptions: {
-          next: { revalidate: 0 },
+          next: { revalidate: 10 },
         },
       },
     }),

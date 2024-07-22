@@ -206,7 +206,7 @@ const Slider = React.memo(
           options={flickityOptions}
           flickityRef={setFlickityInstance}
           className={`${sliderClassName} slider-no-drag`}
-          static
+          // static
         >
           {React.Children.map(children, (child, index) => (
             <div
