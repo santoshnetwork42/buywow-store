@@ -1,36 +1,37 @@
 import { generateClient } from "aws-amplify/api";
-import { getPageBySlug, searchCMSProducts } from "@/graphql/appSync/api";
+import {
+  getNavbarAndFooter,
+  getPageBySlug,
+  searchCMSProducts,
+} from "@/graphql/appSync/api";
 import { STORE_ID } from "../../config";
-import { cache } from "react";
 
 const client = generateClient();
 
-export const searchCMSProductsAPI = cache(
-  async (
-    productSlugs = [
-      "brightening-vitamin-c-foaming-face-wash-with-built-in-brush",
-    ],
-  ) => {
-    try {
-      const response = await client.graphql({
-        query: searchCMSProducts,
-        authMode: "apiKey",
-        variables: {
-          storeId: STORE_ID,
-          products: productSlugs,
-        },
-      });
+export const searchCMSProductsAPI = async (
+  productSlugs = [
+    "brightening-vitamin-c-foaming-face-wash-with-built-in-brush",
+  ],
+) => {
+  try {
+    const response = await client.graphql({
+      query: searchCMSProducts,
+      authMode: "apiKey",
+      variables: {
+        storeId: STORE_ID,
+        products: productSlugs,
+      },
+    });
 
-      const products = response?.data?.searchCMSProducts?.items || [];
-      return products;
-    } catch (err) {
-      console.error(err);
-      return null;
-    }
-  },
-);
+    const products = response?.data?.searchCMSProducts?.items || [];
+    return products;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
 
-export const getPageBySlugAPI = cache(async (slugId) => {
+export const getPageBySlugAPI = async (slugId) => {
   try {
     const response = await client.graphql({
       query: getPageBySlug,
@@ -47,4 +48,21 @@ export const getPageBySlugAPI = cache(async (slugId) => {
     console.error(err);
     return null;
   }
-});
+};
+
+export const getNavbarAndFooterAPI = async () => {
+  try {
+    const response = await client.graphql({
+      query: getNavbarAndFooter,
+      authMode: "apiKey",
+      variables: {
+        storeId: STORE_ID,
+      },
+    });
+
+    return JSON.parse(response?.data?.getNavbarAndFooter || "{}");
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};

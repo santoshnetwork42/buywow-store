@@ -35,8 +35,8 @@ const Button = ({
 
   const sizeClasses = {
     small: "px-3 py-1 text-sm",
-    medium: "px-4 py-2 text-base",
-    large: "px-6 py-3 text-lg",
+    medium: "px-3 py-1 md:px-4 md:py-1.5 text-base",
+    large: "px-5 py-2 text-lg",
     none: "",
   };
 

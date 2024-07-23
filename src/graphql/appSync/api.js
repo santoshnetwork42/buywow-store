@@ -111,6 +111,12 @@ export const getPageBySlug = /* GraphQL */ `
   }
 `;
 
+export const getNavbarAndFooter = /* GraphQL */ `
+  query GetNavbarAndFooter($storeId: String!) {
+    getNavbarAndFooter(storeId: $storeId)
+  }
+`;
+
 // NEW APIs
 // ==================================================
 

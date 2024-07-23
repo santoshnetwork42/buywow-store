@@ -20,14 +20,16 @@ const CategoryItem = React.memo(({ category, size }) => {
 
   return (
     <Link href={`/collections/${slug}` || "#"} className={linkClassName}>
-      <div className="overflow-hidden rounded sm:rounded-md lg:rounded-lg">
+      <div
+        className={`overflow-hidden rounded sm:rounded-md lg:rounded-lg ${aspectRatio}`}
+      >
         <Img
           src={url}
           width={imageSize}
           height={imageHeight}
           alt={alternativeText || `${slug} Image`}
           isStatic
-          className={`w-full object-contain ${aspectRatio}`}
+          className="h-auto w-full object-contain"
         />
       </div>
       <Heading
@@ -50,10 +52,8 @@ const FeaturedCategories = React.memo(
     featuredCategoryItems: categories,
     featuredItemSize: itemSize = "SMALL",
   }) => {
-    const sliderClassName = `slider-gap-2 ${
-      itemSize === "SMALL"
-        ? "md:slider-gap-2.5"
-        : "sm:slider-gap-3 md:slider-gap-4 lg:slider-gap-5"
+    const sliderClassName = `gap-2 ${
+      itemSize === "SMALL" ? "md:gap-2.5" : "sm:gap-3 md:gap-4 lg:gap-5"
     }`;
 
     if (!categories?.length) return null;

@@ -7,7 +7,7 @@ export const landingPageCMSAPI = async () => {
       query: landingPage,
       context: {
         fetchOptions: {
-          next: { revalidate: 0 },
+          next: { revalidate: 10 },
         },
       },
     });

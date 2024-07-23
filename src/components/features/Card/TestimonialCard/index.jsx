@@ -25,7 +25,7 @@ const TestimonialCard = React.memo(
       webImageAttrs;
     const { url: mWebImageUrl, alternativeText: mWebImageAlternativeText } =
       mWebImageAttrs;
-    const { slugId, imageBgColor } = productAttrs;
+    const { slug, fetchedProduct } = productAttrs;
 
     if (!webImageAttrs.url || !mWebImageAttrs.url) return null;
 
@@ -79,26 +79,31 @@ const TestimonialCard = React.memo(
 
     return (
       <div
-        className={`flex w-[82vw] max-w-[502px] flex-col gap-2 sm:w-[70vw] md:w-[58vw] md:gap-3 lg:w-[46vw] ${className}`}
+        className={`aspect-[320/192 flex w-[82vw] max-w-[502px] flex-col gap-2 sm:aspect-[502/250] sm:w-[70vw] md:w-[58vw] md:gap-3 lg:w-[46vw] ${className}`}
         {...props}
       >
         <div className="overflow-hidden rounded sm:rounded-md lg:rounded-lg">
-          <Img
-            src={webImageUrl || mWebImageUrl}
-            width={502}
-            height={250}
-            alt={webImageAlternativeText || "Testimonial Image"}
-            isStatic
-            className="aspect-[502/250] h-auto w-full object-contain max-sm:hidden"
-          />
-          <Img
-            src={mWebImageUrl || webImageUrl}
-            width={576}
-            height={346}
-            alt={mWebImageAlternativeText || "Testimonial Image"}
-            isStatic
-            className="aspect-[320/192] h-auto w-full object-contain sm:hidden"
-          />
+          <picture>
+            <source
+              media="(min-width: 576px)"
+              srcSet={webImageUrl}
+              width={502}
+              height={250}
+            />
+            <Img
+              src={mWebImageUrl || webImageUrl}
+              alt={
+                mWebImageAlternativeText ||
+                webImageAlternativeText ||
+                "Testimonial Image"
+              }
+              height={284}
+              width={472}
+              priority
+              isStatic
+              className="h-auto w-full object-contain"
+            />
+          </picture>
         </div>
         <div className="flex flex-1 flex-col gap-2 md:gap-3">
           {renderUserInfo()}
@@ -106,25 +111,22 @@ const TestimonialCard = React.memo(
           <div className="flex items-center justify-between gap-5">
             {renderConcerns()}
             <Link
-              href={`/products/${slugId}`}
+              href={`/products/${slug}`}
               className="flex items-center justify-center gap-2 rounded bg-lime-100_01 p-2"
             >
-              <div
-                className="flex w-12 shrink-0 items-center justify-center overflow-hidden rounded"
-                style={{ backgroundColor: imageBgColor || "#fff" }}
-              >
+              <div className="flex aspect-square w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-white-a700_01 md:aspect-[48/56]">
                 <Img
                   src={webImageAttrs.url}
                   width={48}
                   height={56}
                   alt={webImageAttrs.alternativeText}
                   isStatic
-                  className="aspect-square h-auto w-full object-contain md:aspect-[48/56]"
+                  className="h-auto w-full object-contain"
                 />
               </div>
               <div className="flex flex-col gap-1">
                 <Heading as="h5" size="sm" className="line-clamp-1">
-                  Pure Aloe Vera Gel
+                  {fetchedProduct?.title}
                 </Heading>
                 <div className="flex items-center justify-between gap-4 md:gap-5 lg:gap-6">
                   <div className="flex items-center gap-1">
@@ -134,7 +136,7 @@ const TestimonialCard = React.memo(
                       className="text-sm font-semibold capitalize"
                       responsive
                     >
-                      ₹339
+                      ₹{fetchedProduct?.price}
                     </Text>
                     <Text
                       size="sm"
@@ -142,7 +144,7 @@ const TestimonialCard = React.memo(
                       className="capitalize line-through"
                       responsive
                     >
-                      ₹339
+                      ₹{fetchedProduct?.listingPrice}
                     </Text>
                   </div>
                   <Button

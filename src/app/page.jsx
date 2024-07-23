@@ -1,14 +1,13 @@
 import dynamic from "next/dynamic";
-import React, { cache } from "react";
+import React from "react";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import { landingPageCMSAPI } from "@/lib/strapiAPIs";
 import { unstable_cache } from "next/cache";
 
-export const revalidate = 3600;
-
 // Dynamically import components
 const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
-const Banner = dynamic(() => import("@/components/blocks/Banner"));
+const SingleBanner = dynamic(() => import("@/components/blocks/SingleBanner"));
+const MiniBanners = dynamic(() => import("@/components/blocks/MiniBanners"));
 const TrendingCategories = dynamic(
   () => import("@/components/blocks/TrendingCategories"),
 );
@@ -22,14 +21,17 @@ const FeaturedCategories = dynamic(
 const TestimonialSection = dynamic(
   () => import("@/components/blocks/TestimonialSection"),
 );
+const FeaturedProducts = dynamic(
+  () => import("@/components/blocks/FeaturedProducts"),
+);
+const FeaturedProductsByTab = dynamic(
+  () => import("@/components/blocks/FeaturedProductsByTab"),
+);
 const ShopCategories = dynamic(
   () => import("@/components/partials/Home/ShopCategories"),
 );
 const VideoSection = dynamic(
   () => import("@/components/partials/Home/VideoSection"),
-);
-const NewLaunchSection = dynamic(
-  () => import("@/components/partials/Home/NewLaunchSection"),
 );
 const OfferCarousal = dynamic(
   () => import("@/components/features/Carousel/OfferCarousel"),
@@ -40,9 +42,6 @@ const BlogSection = dynamic(
 const DeliveryInfoSection = dynamic(
   () => import("@/components/common/partials/DeliveryInfoSection"),
 );
-const TabProductSection = dynamic(
-  () => import("@/components/partials/Home/TabProductSection"),
-);
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -51,11 +50,13 @@ export const metadata = {
 };
 
 const renderBlock = (block, index) => {
-  switch (block.__typename) {
+  switch (block?.__typename) {
     case "ComponentBannerCarousal":
       return <Carousal key={index} {...block} />;
-    case "ComponentBannerBanners":
-      return <Banner key={index} {...block} />;
+    case "ComponentBannerSingleBanner":
+      return <SingleBanner key={index} {...block} />;
+    case "ComponentBannerMiniBanners":
+      return <MiniBanners key={index} {...block} />;
     case "ComponentCategoriesTrendingCategories":
       return <TrendingCategories key={index} {...block} />;
     case "ComponentBlocksFeaturedList":
@@ -66,20 +67,20 @@ const renderBlock = (block, index) => {
       return <FeaturedCategories key={index} {...block} />;
     case "ComponentBlocksTestimonialSection":
       return <TestimonialSection key={index} {...block} />;
+    case "ComponentBlocksFeaturedProducts":
+      return <FeaturedProducts key={index} {...block} />;
+    case "ComponentBlocksFeaturedProductsByTab":
+      return <FeaturedProductsByTab key={index} {...block} />;
     case "ComponentShopCategories":
       return <ShopCategories key={index} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} {...block} />;
-    case "ComponentBlocksFeaturedProducts":
-      return <NewLaunchSection key={index} {...block} />;
     case "ComponentOfferCarousal":
       return <OfferCarousal key={index} {...block} />;
     case "ComponentBlogSection":
       return <BlogSection key={index} {...block} />;
     case "ComponentDeliveryInfoSection":
       return <DeliveryInfoSection key={index} {...block} />;
-    case "ComponentTabProductSection":
-      return <TabProductSection key={index} {...block} />;
     case "ComponentBlocksFeaturedProducts":
       return <div key={index}></div>;
     default:
@@ -88,9 +89,9 @@ const renderBlock = (block, index) => {
 };
 
 const getPageData = unstable_cache(
-  async (slug) => getPageBySlugAPI(slug),
+  async (slug) => await getPageBySlugAPI(slug),
   ["home_pageData"],
-  { revalidate: 3600 },
+  { revalidate: 10 },
 );
 
 export default async function Page() {
@@ -100,6 +101,10 @@ export default async function Page() {
 
     const pageData = await getPageData("index");
     const { blocks } = pageData || {};
+
+    console.log(blocks);
+
+    // console.log(blocks);
 
     if (!blocks?.length) return null;
 

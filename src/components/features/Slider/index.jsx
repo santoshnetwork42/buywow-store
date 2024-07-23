@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useCallback, useEffect, useMemo } from "react";
+import useEmblaCarousel from "embla-carousel-react";
 import { Button, Img, Text } from "@/components/common";
 import { twMerge } from "tailwind-merge";
-import Flickity from "react-flickity-component";
 
 const ProgressBar = React.memo(({ style }) => (
   <div className="relative h-[2px] flex-1 overflow-x-hidden rounded-xl bg-gray-300_01">
@@ -46,7 +46,6 @@ const DotButton = React.memo(({ isSelected, onClick }) => (
   />
 ));
 
-DotButton.displayName = "DotButton";
 const SliderControl = React.memo(
   ({
     showCounter,
@@ -59,13 +58,7 @@ const SliderControl = React.memo(
     dotButtons,
     className,
   }) => (
-    <div
-      className={twMerge(
-        `flex w-full items-center lg:mt-6`,
-        showDotButtons ? "mt-2.5 md:hidden" : "mt-4",
-        className,
-      )}
-    >
+    <div className={twMerge(`flex w-full items-center`, className)}>
       {showDotButtons ? (
         <div className="flex w-full justify-center">{dotButtons}</div>
       ) : (
@@ -103,89 +96,100 @@ const Slider = React.memo(
     sliderClassName,
     slideClassName,
     controlsContainerClassName,
-    slideAlign = "center",
     showCounter = true,
     showControls = true,
     showDotButtons = false,
-    enableDragOnSingleSlide = false,
     ...props
   }) => {
-    const [flickityInstance, setFlickityInstance] = useState(null);
-    const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-    const [scrollPercentage, setScrollPercentage] = useState(0);
-    const [totalSlides, setTotalSlides] = useState(0);
-    const [isAllSlidesVisible, setIsAllSlidesVisible] = useState(false);
-    const [scrollbarWidth, setScrollbarWidth] = useState(0);
-
-    const flickityOptions = useMemo(
-      () => ({
-        cellAlign: slideAlign,
-        contain: true,
-        wrapAround: false,
-        pageDots: false,
-        groupCells: true,
-        prevNextButtons: false,
-        draggable: enableDragOnSingleSlide ? true : ">1",
-      }),
-      [slideAlign, enableDragOnSingleSlide],
+    const [emblaRef, emblaApi] = useEmblaCarousel(
+      {
+        loop: false,
+        slidesToScroll: "auto",
+        align: "center",
+        inViewThreshold: 1,
+      },
+      [],
     );
+
+    const [sliderState, setSliderState] = useState({
+      currentSlideIndex: 0,
+      scrollPercentage: 0,
+      totalSlides: 0,
+      isAllSlidesVisible: false,
+      scrollbarWidth: 0,
+    });
+
+    const updateSliderState = useCallback((updates) => {
+      setSliderState((prev) => ({ ...prev, ...updates }));
+    }, []);
+
+    const handleInit = useCallback(() => {
+      if (!emblaApi) return;
+
+      const { scrollWidth, clientWidth } = emblaApi.containerNode();
+      const scrollbarWidth = (clientWidth * 100) / scrollWidth;
+      const totalSlides = emblaApi.scrollSnapList().length;
+      const isAllSlidesVisible = totalSlides <= 1;
+
+      updateSliderState({
+        scrollbarWidth,
+        totalSlides,
+        isAllSlidesVisible,
+        currentSlideIndex: emblaApi.selectedScrollSnap(),
+      });
+    }, [emblaApi, updateSliderState]);
 
     const handleSelect = useCallback(() => {
-      if (!flickityInstance) return;
-      const width =
-        (flickityInstance.size.width * 100) / flickityInstance.slideableWidth;
-      setScrollbarWidth(width);
-      setCurrentSlideIndex(flickityInstance.selectedIndex);
-      setTotalSlides(flickityInstance.slides.length);
-      setIsAllSlidesVisible(flickityInstance.slides.length <= 1);
-    }, [flickityInstance]);
+      if (!emblaApi) return;
+      updateSliderState({ currentSlideIndex: emblaApi.selectedScrollSnap() });
+    }, [emblaApi, updateSliderState]);
 
-    const handleScroll = useCallback(
-      (progress) => {
-        if (!flickityInstance) return;
-        const maxScroll = 100 - scrollbarWidth;
-        setScrollPercentage(progress * maxScroll);
-      },
-      [flickityInstance, scrollbarWidth],
-    );
+    const handleScroll = useCallback(() => {
+      if (!emblaApi) return;
+      const progress = emblaApi.scrollProgress();
+      const maxScroll = 100 - sliderState.scrollbarWidth;
+      const scrollPercentage = progress * maxScroll;
+      updateSliderState({ scrollPercentage });
+    }, [emblaApi, sliderState.scrollbarWidth, updateSliderState]);
 
     useEffect(() => {
-      if (!flickityInstance) return;
+      if (!emblaApi) return;
 
-      flickityInstance.on("select", handleSelect);
-      flickityInstance.on("scroll", handleScroll);
+      handleInit();
+      emblaApi.on("init", handleInit);
+      emblaApi.on("reInit", handleInit);
+      emblaApi.on("select", handleSelect);
+      emblaApi.on("scroll", handleScroll);
 
       return () => {
-        flickityInstance.off("select", handleSelect);
-        flickityInstance.off("scroll", handleScroll);
+        emblaApi.off("init", handleInit);
+        emblaApi.off("reInit", handleInit);
+        emblaApi.off("select", handleSelect);
+        emblaApi.off("scroll", handleScroll);
       };
-    }, [flickityInstance, handleSelect, handleScroll]);
+    }, [emblaApi, handleInit, handleSelect, handleScroll]);
 
-    const scrollPrev = useCallback(
-      () => flickityInstance?.previous(),
-      [flickityInstance],
-    );
-    const scrollNext = useCallback(
-      () => flickityInstance?.next(),
-      [flickityInstance],
-    );
-
-    const progressBarStyle = useMemo(() => {
-      return {
-        left: `${scrollPercentage}%`,
-        width: `${scrollbarWidth}%`,
-      };
-    }, [scrollPercentage, scrollbarWidth]);
-
-    const counterText = useMemo(
-      () => `${currentSlideIndex + 1} / ${totalSlides}`,
-      [currentSlideIndex, totalSlides],
-    );
-
+    const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+    const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
     const scrollTo = useCallback(
-      (index) => flickityInstance?.select(index),
-      [flickityInstance],
+      (index) => emblaApi?.scrollTo(index),
+      [emblaApi],
     );
+
+    const {
+      currentSlideIndex,
+      scrollPercentage,
+      totalSlides,
+      isAllSlidesVisible,
+      scrollbarWidth,
+    } = sliderState;
+
+    const progressBarStyle = {
+      left: `${scrollPercentage}%`,
+      width: `${scrollbarWidth}%`,
+    };
+
+    const counterText = `${currentSlideIndex + 1} / ${totalSlides}`;
 
     const dotButtons = useMemo(
       () =>
@@ -201,22 +205,23 @@ const Slider = React.memo(
 
     return (
       <div className={`w-full ${className}`} {...props}>
-        <Flickity
-          elementType="div"
-          options={flickityOptions}
-          flickityRef={setFlickityInstance}
-          className={`${sliderClassName} slider-no-drag`}
-          // static
-        >
-          {React.Children.map(children, (child, index) => (
-            <div
-              key={`carousel-slide-${index}`}
-              className={`${slideClassName} cursor-auto select-text`}
-            >
-              {child}
-            </div>
-          ))}
-        </Flickity>
+        <div className="overflow-hidden" ref={emblaRef}>
+          <div
+            className={twMerge(
+              "mx-auto flex max-w-fit",
+              showDotButtons
+                ? "mb-2.5 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6"
+                : "mb-4 lg:mb-6",
+              sliderClassName,
+            )}
+          >
+            {React.Children.map(children, (child, index) => (
+              <div key={`carousel-slide-${index}`} className={slideClassName}>
+                {child}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {!isAllSlidesVisible &&
           (showControls || showCounter || showDotButtons) && (

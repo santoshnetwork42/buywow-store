@@ -40,9 +40,12 @@ FooterLogo.displayName = "FooterLogo";
 const FooterDescription = React.memo(
   ({ description }) =>
     description && (
-      <Text as="div" size="sm" className="text-white-a700_01">
-        {description}
-      </Text>
+      <Text
+        as="div"
+        size="sm"
+        className="text-white-a700_01"
+        dangerouslySetInnerHTML={{ __html: description }}
+      />
     ),
 );
 

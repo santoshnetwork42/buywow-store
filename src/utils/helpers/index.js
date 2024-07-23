@@ -26,3 +26,25 @@ export function extractAttributes(data, defaultValues = {}) {
 
   return { ...defaultValues, ...data.data.attributes };
 }
+
+const COLOR_MAP = {
+  WHITE: "bg-white-a700_01",
+  BLUE: "bg-blue-50",
+  DEFAULT: "bg-lime-50",
+};
+
+export const getBgColor = (value) => COLOR_MAP[value] || COLOR_MAP.DEFAULT;
+
+export const getOfferValue = (price, listingPrice) => {
+  if (
+    typeof price !== "number" ||
+    typeof listingPrice !== "number" ||
+    listingPrice === 0 ||
+    price < 0
+  ) {
+    return 0;
+  }
+  const discountAmount = listingPrice - price;
+  const offerPercentage = (discountAmount / listingPrice) * 100;
+  return Math.round(offerPercentage);
+};

@@ -12,7 +12,7 @@ const IngredientItem = React.memo(({ ingredient }) => {
   return (
     <Link
       href={`/collections/${slug}` || "#"}
-      className="w-40 cursor-pointer sm:w-48 md:w-56 lg:w-60 xl:w-64"
+      className="aspect-[248/76] w-40 cursor-pointer sm:w-48 md:w-56 lg:w-60 xl:w-64"
     >
       <Img
         src={url}
@@ -20,7 +20,7 @@ const IngredientItem = React.memo(({ ingredient }) => {
         height={76}
         alt={alternativeText || `${slug} Image`}
         isStatic
-        className="aspect-[248/76] h-full w-full object-cover"
+        className="aspect-[248/76] h-auto w-full object-cover"
       />
     </Link>
   );
@@ -42,10 +42,7 @@ const IngredientCategories = React.memo(
     return (
       <div className="container-main mb-main flex flex-col items-center justify-center">
         <SectionHeading title={title} />
-        <Slider
-          controlsContainerClassName="md:hidden"
-          sliderClassName="slider-gap-1.5 sm:slider-gap-3 md:slider-gap-4 lg:slider-gap-5"
-        >
+        <Slider sliderClassName="gap-1.5 sm:gap-3 md:gap-4 lg:gap-5">
           {ingredientGroups.map((group, index) => (
             <div
               key={`group-${index}`}

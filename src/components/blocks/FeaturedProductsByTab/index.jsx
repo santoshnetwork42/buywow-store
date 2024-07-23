@@ -5,8 +5,9 @@ import React from "react";
 import ProductCarousal from "@/components/features/Carousel/ProductCarousel";
 import TabComponent from "@/components/common/partials/TabComponent";
 
-const TabProductSection = ({ title, categories, products }) => {
-  const tabData = categories.map((category) => ({
+const FeaturedProductsByTab = ({ title, categories, products }) => {
+  if (!categories?.length || !products?.length) return null;
+  const tabData = categories?.map((category) => ({
     label: category,
     content: products[category] || [],
   }));
@@ -30,4 +31,4 @@ const TabProductSection = ({ title, categories, products }) => {
   );
 };
 
-export default TabProductSection;
+export default FeaturedProductsByTab;

@@ -10,7 +10,7 @@ const TestimonialSection = React.memo(
     return (
       <section className="container-main mb-main">
         <SectionHeading title={title} />
-        <Slider sliderClassName="slider-gap-3 sm:slider-gap-4 lg:slider-gap-5">
+        <Slider sliderClassName="gap-3 sm:gap-4 lg:gap-5">
           {testimonials.map((testimonial, index) => {
             const {
               name,
