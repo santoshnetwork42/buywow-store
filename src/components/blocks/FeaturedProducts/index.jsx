@@ -7,8 +7,13 @@ import Slider from "@/components/features/Slider";
 import { getBgColor } from "@/utils/helpers";
 
 const FeaturedProducts = memo(
-  ({ title, featuredProductsBgColor, button, products }) => {
-    if (!products?.data?.length) return null;
+  ({
+    title,
+    featuredProductsBgColor,
+    button,
+    products: { data: products },
+  }) => {
+    if (!Array.isArray(products) || products.length === 0) return null;
 
     const bgColorClass = getBgColor(featuredProductsBgColor);
     const isPaddedColor =
@@ -23,7 +28,7 @@ const FeaturedProducts = memo(
           controlsContainerClassName="mb-2 md:mb-3"
           sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
         >
-          {products.data.map((product, index) => (
+          {products.map((product, index) => (
             <ProductCard
               key={`product-${product.id || index}`}
               className="w-[calc(50vw-16px)] max-w-[356px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"

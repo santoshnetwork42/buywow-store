@@ -33,6 +33,9 @@ const ProductEffectiveness = dynamic(
 const ProductHighlights = dynamic(
   () => import("@/components/blocks/ProductHighlights"),
 );
+const ProductBenefits = dynamic(
+  () => import("@/components/blocks/ProductBenefits"),
+);
 const ShopCategories = dynamic(
   () => import("@/components/partials/Home/ShopCategories"),
 );
@@ -81,6 +84,8 @@ const renderBlock = (block, index) => {
       return <ProductEffectiveness key={index} {...block} />;
     case "ComponentProductProductHighlightImages":
       return <ProductHighlights key={index} {...block} />;
+    case "ComponentProductProductBenefits":
+      return <ProductBenefits key={index} {...block} />;
     case "ComponentShopCategories":
       return <ShopCategories key={index} {...block} />;
     case "ComponentVideoSection":

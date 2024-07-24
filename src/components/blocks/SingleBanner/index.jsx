@@ -13,9 +13,19 @@ const SingleBanner = React.memo(({ banner }) => {
 
   if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
+  const imageUrl = mWebImageAttrs.url || webImageAttrs.url;
+  const imageAlt =
+    mWebImageAttrs.alternativeText ||
+    webImageAttrs.alternativeText ||
+    "Promo Banner";
+  const imageWidth = mWebImageAttrs.width || webImageAttrs.width;
+  const imageHeight = mWebImageAttrs.height || webImageAttrs.height;
+
+  if (!imageUrl || !imageWidth || !imageHeight) return null;
+
   return (
-    <Link href={link || "#"} className="mb-main w-full">
-      <picture>
+    <Link href={link || "#"} className="mb-main block w-full">
+      <picture className="block w-full">
         {webImageAttrs.url && (
           <source
             media="(min-width: 576px)"
@@ -25,17 +35,14 @@ const SingleBanner = React.memo(({ banner }) => {
           />
         )}
         <Img
-          src={mWebImageAttrs.url || webImageAttrs.url}
-          alt={
-            mWebImageAttrs.alternativeText ||
-            webImageAttrs.alternativeText ||
-            "Promo Banner"
-          }
-          width={mWebImageAttrs.width || webImageAttrs.width}
-          height={mWebImageAttrs.height || webImageAttrs.height}
+          src={imageUrl}
+          alt={imageAlt}
+          width={imageWidth}
+          height={imageHeight}
           priority
-          isStatic
           className="h-auto w-full object-contain"
+          isStatic
+          sizes="100vw"
         />
       </picture>
     </Link>
