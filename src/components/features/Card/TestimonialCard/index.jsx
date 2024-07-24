@@ -118,7 +118,7 @@ const TestimonialCard = React.memo(
             >
               <div className="flex aspect-square w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-white-a700_01 md:aspect-[48/56]">
                 <ProductThumbImage
-                  width={48}
+                  width={200}
                   fetchedProduct={fetchedProduct}
                   height={56}
                   alt={webImageAttrs.alternativeText}
