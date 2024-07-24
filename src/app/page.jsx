@@ -42,20 +42,14 @@ const ProductKeyIngredients = dynamic(
 const InfoDropdown = dynamic(
   () => import("@/components/blocks/Accordion/InfoDropdown"),
 );
-const ShopCategories = dynamic(
-  () => import("@/components/partials/Home/ShopCategories"),
+const CollectionLinks = dynamic(
+  () => import("@/components/blocks/CollectionLinks"),
 );
 const VideoSection = dynamic(
   () => import("@/components/partials/Home/VideoSection"),
 );
-const OfferCarousal = dynamic(
-  () => import("@/components/features/Carousel/OfferCarousel"),
-);
 const BlogSection = dynamic(
   () => import("@/components/partials/Home/BlogSection"),
-);
-const DeliveryInfoSection = dynamic(
-  () => import("@/components/common/partials/DeliveryInfoSection"),
 );
 
 export const metadata = {
@@ -96,18 +90,12 @@ const renderBlock = (block, index) => {
       return <ProductKeyIngredients key={index} {...block} />;
     case "ComponentAccordionInfoDropdownSection":
       return <InfoDropdown key={index} {...block} />;
-    case "ComponentShopCategories":
-      return <ShopCategories key={index} {...block} />;
+    case "ComponentBlocksCollectionLinks":
+      return <CollectionLinks key={index} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} {...block} />;
-    case "ComponentOfferCarousal":
-      return <OfferCarousal key={index} {...block} />;
     case "ComponentBlogSection":
       return <BlogSection key={index} {...block} />;
-    case "ComponentDeliveryInfoSection":
-      return <DeliveryInfoSection key={index} {...block} />;
-    case "ComponentBlocksFeaturedProducts":
-      return <div key={index}></div>;
     default:
       return null;
   }
@@ -115,7 +103,7 @@ const renderBlock = (block, index) => {
 
 const getPageData = unstable_cache(
   async (slug) => await getPageBySlugAPI(slug),
-  ["home_pageData"],
+  ["pageData"],
   { revalidate: 10 },
 );
 
@@ -126,8 +114,6 @@ export default async function Page() {
 
     const pageData = await getPageData("index");
     const { blocks } = pageData || {};
-
-    // console.log(blocks);
 
     if (!blocks?.length) return null;
 

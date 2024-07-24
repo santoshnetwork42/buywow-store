@@ -9,15 +9,14 @@ import { getBgColor } from "@/utils/helpers";
 const FeaturedProducts = memo(
   ({
     title,
-    featuredProductsBgColor,
+    featuredProductsBgColor: bgColor,
     button,
     products: { data: products },
   }) => {
     if (!Array.isArray(products) || products.length === 0) return null;
 
-    const bgColorClass = getBgColor(featuredProductsBgColor);
-    const isPaddedColor =
-      featuredProductsBgColor === "LIME" || featuredProductsBgColor === "BLUE";
+    const bgColorClass = getBgColor(bgColor);
+    const isPaddedColor = bgColor === "LIME" || bgColor === "BLUE";
 
     return (
       <div
