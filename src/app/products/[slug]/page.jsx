@@ -1,14 +1,14 @@
-import Benefits from "@/components/partials/Product/Benefits";
-import ProductDetails from "@/components/partials/Product/ProductDetails";
-import ProductEffectiveness from "@/components/partials/Product/ProductEffectiveness";
-import ProductHighlights from "@/components/partials/Product/ProductHighlights";
-import ProductKeyIngredients from "@/components/partials/Product/ProductKeyIngredients";
-import Reviews from "@/components/partials/Product/Reviews";
+// import Benefits from "@/components/partials/Product/Benefits";
+// import ProductDetails from "@/components/partials/Product/ProductDetails";
+// import ProductEffectiveness from "@/components/blocks/ProductEffectivenessImages";
+// import ProductHighlights from "@/components/partials/Product/ProductHighlights";
+// import ProductKeyIngredients from "@/components/partials/Product/ProductKeyIngredients";
+// import Reviews from "@/components/partials/Product/Reviews";
 import WatchUs from "@/components/partials/Product/WatchUs";
 import {
-  productEffectivenessData,
-  productHighlightsData,
-  productKeyIngredientsData,
+  // productEffectivenessData,
+  // productHighlightsData,
+  // productKeyIngredientsData,
   watchUsData,
 } from "@/utils/data/productData";
 import React from "react";
