@@ -29,18 +29,9 @@ const MiniBanners = React.memo(({ miniBannerItems: banners }) => {
           alternativeText: mWebImageAlternativeText,
         } = extractAttributes(mWebImage);
         return (
-          <Link
-            href={link || "#"}
-            key={`banner-${index}`}
-            className="w-[80vw] sm:w-[46vw]"
-          >
-            <picture>
-              <source
-                media="(min-width: 768px)"
-                srcSet={webImageUrl}
-                width={webImageWidth}
-                height={webImageHeight}
-              />
+          <Link href={link || "#"} key={`banner-${index}`}>
+            <picture className="relative block aspect-[298/120] w-[80vw] sm:w-[46vw] md:aspect-[650/166]">
+              <source media="(min-width: 768px)" srcSet={webImageUrl} />
               <Img
                 src={mWebImageUrl || webImageUrl}
                 alt={
@@ -48,8 +39,8 @@ const MiniBanners = React.memo(({ miniBannerItems: banners }) => {
                   webImageAlternativeText ||
                   "Promo Banner"
                 }
-                height={mWebImageHeight}
-                width={mWebImageWidth}
+                fill
+                size="650px"
                 priority
                 isStatic
                 className="h-auto w-full object-contain"

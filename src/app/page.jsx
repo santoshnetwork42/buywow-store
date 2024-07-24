@@ -30,6 +30,9 @@ const FeaturedProductsByTab = dynamic(
 const ProductEffectiveness = dynamic(
   () => import("@/components/blocks/ProductEffectiveness"),
 );
+const ProductHighlights = dynamic(
+  () => import("@/components/blocks/ProductHighlights"),
+);
 const ShopCategories = dynamic(
   () => import("@/components/partials/Home/ShopCategories"),
 );
@@ -76,6 +79,8 @@ const renderBlock = (block, index) => {
       return <FeaturedProductsByTab key={index} {...block} />;
     case "ComponentProductProductEffectivenessImages":
       return <ProductEffectiveness key={index} {...block} />;
+    case "ComponentProductProductHighlightImages":
+      return <ProductHighlights key={index} {...block} />;
     case "ComponentShopCategories":
       return <ShopCategories key={index} {...block} />;
     case "ComponentVideoSection":

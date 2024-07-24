@@ -15,11 +15,8 @@ const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
     useMemo(() => extractAttributes(mWebImage), [mWebImage]);
 
   return (
-    <Link
-      href={link || "#"}
-      className="relative aspect-[376/148] w-full flex-[0_0_100%] sm:aspect-[1440/496]"
-    >
-      <picture>
+    <Link href={link || "#"} className="flex-[0_0_100%]">
+      <picture className="relative block aspect-[376/148] w-full sm:aspect-[1440/496]">
         <source media="(min-width: 576px)" srcSet={webImageUrl} />
         <Img
           src={mWebImageUrl || webImageUrl}
