@@ -36,6 +36,9 @@ const ProductHighlights = dynamic(
 const ProductBenefits = dynamic(
   () => import("@/components/blocks/ProductBenefits"),
 );
+const ProductKeyIngredients = dynamic(
+  () => import("@/components/blocks/ProductKeyIngredients"),
+);
 const ShopCategories = dynamic(
   () => import("@/components/partials/Home/ShopCategories"),
 );
@@ -86,6 +89,8 @@ const renderBlock = (block, index) => {
       return <ProductHighlights key={index} {...block} />;
     case "ComponentProductProductBenefits":
       return <ProductBenefits key={index} {...block} />;
+    case "ComponentProductProductKeyIngredientImages":
+      return <ProductKeyIngredients key={index} {...block} />;
     case "ComponentShopCategories":
       return <ShopCategories key={index} {...block} />;
     case "ComponentVideoSection":
@@ -116,8 +121,6 @@ export default async function Page() {
 
     const pageData = await getPageData("index");
     const { blocks } = pageData || {};
-
-    console.log(blocks);
 
     // console.log(blocks);
 

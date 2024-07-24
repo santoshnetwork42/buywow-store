@@ -30,7 +30,7 @@ const FeaturedProducts = memo(
         >
           {products.map((product, index) => (
             <ProductCard
-              key={`product-${product.id || index}`}
+              key={`product-${index}`}
               className="w-[calc(50vw-16px)] max-w-[356px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
               {...product.attributes}
             />
