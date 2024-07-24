@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import Image from "next/image";
 import { BASE_PATH } from "../../../../config";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
@@ -12,50 +12,47 @@ const Img = React.memo(
   ({
     className,
     src,
-    alt = "Img",
+    alt = "Image",
     isStatic = false,
     width,
-    test,
     addPrefix = false,
     ...restProps
   }) => {
-    const imgSrc = useMemo(() => {
+    const imageSrc = useMemo(() => {
       if (!src) return DEFAULT_IMAGE;
-      return isStatic
-        ? addPrefix
+      if (isStatic) {
+        return addPrefix
           ? getPublicImageURL({
-              key: encodeURI(src),
+              key: src ? encodeURI(src) : "",
               resize: width,
               addPrefix: true,
             })
-          : src
-        : `${BASE_URL}/${src}`;
-    }, [src, isStatic, addPrefix]);
+          : src;
+      }
+      return `${BASE_URL}/${src}`;
+    }, [src, isStatic, addPrefix, width]);
 
-    const imageLoader = useMemo(() => {
-      if (!isStatic) return undefined;
-      return ({ src, width, quality }) => {
-        {
-          // test && console.log(src, width, quality);
-        }
-        // key, resize, quality = 75
+    const imageLoader = useCallback(
+      ({ src, width, quality }) => {
+        if (!isStatic) return src;
         return getPublicImageURL({
-          key: encodeURI(src),
+          key: src ? encodeURI(src) : "",
           resize: width,
-          quality,
+          quality: quality || 75,
         });
-      };
-    }, [isStatic]);
+      },
+      [isStatic],
+    );
 
     if (!src) return null;
 
     return (
       <Image
         className={className}
-        loader={imageLoader}
-        src={imgSrc}
-        alt={alt || "Img"}
-        width={test ? 576 : width}
+        loader={isStatic ? imageLoader : undefined}
+        src={imageSrc}
+        alt={alt || "Image"}
+        width={width}
         {...restProps}
       />
     );

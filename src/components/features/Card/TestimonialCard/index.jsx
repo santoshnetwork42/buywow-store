@@ -121,8 +121,8 @@ const TestimonialCard = React.memo(
                   width={200}
                   fetchedProduct={fetchedProduct}
                   height={56}
-                  alt={webImageAttrs.alternativeText}
                   isStatic
+                  alt={"Product Image"}
                 />
               </div>
               <div className="flex flex-col gap-1">

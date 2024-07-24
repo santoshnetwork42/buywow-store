@@ -28,9 +28,9 @@ export function extractAttributes(data, defaultValues = {}) {
 }
 
 const COLOR_MAP = {
-  WHITE: "bg-white-a700_01",
+  DEFAULT: "bg-white-a700_01",
   BLUE: "bg-blue-50",
-  DEFAULT: "bg-lime-50",
+  LIME: "bg-lime-50",
 };
 
 export const getBgColor = (value) => COLOR_MAP[value] || COLOR_MAP.DEFAULT;

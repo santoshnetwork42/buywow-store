@@ -1,12 +1,14 @@
 import React from "react";
 import { extractAttributes } from "@/utils/helpers";
 import { Img } from "@/components/common";
+import SectionHeading from "@/components/common/partials/SectionHeading";
 
-const ProductHighlights = React.memo(({ images }) => {
+const ProductHighlights = React.memo(({ title, images }) => {
   if (!Array.isArray(images) || images.length === 0) return null;
 
   return (
     <div className="container-main mb-main flex flex-col items-center justify-center">
+      <SectionHeading title={title} />
       {images.map((image, index) => {
         if (!image) return null;
 

@@ -1,6 +1,7 @@
 import React, { memo } from "react";
 import Link from "next/link";
 import { Button, Text, Heading, Img } from "@/components/common";
+import ProductThumbImage from "@/components/common/ProductThumbImage";
 import { getOfferValue } from "@/utils/helpers";
 
 const BenefitTag = memo(({ bgColor, tag }) => (
@@ -77,12 +78,13 @@ const ProductCard = memo(
           className="overflow-hidden rounded-lg p-0.5 sm:p-1 md:p-2 lg:p-3 xl:p-4"
           style={{ backgroundColor: imageBgColor }}
         >
-          <Img
-            src="img_product_1.png"
+          <ProductThumbImage
             width={274}
             height={274}
-            alt={title}
+            fetchedProduct={fetchedProduct}
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
+            isStatic
+            alt="Product Image"
           />
         </div>
         <div className="flex max-h-12 flex-wrap gap-[4px] overflow-hidden md:max-h-[52px]">
