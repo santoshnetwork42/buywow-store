@@ -4,6 +4,7 @@ import React, { useState, useCallback, useEffect, useMemo } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Button, Img, Text } from "@/components/common";
 import { twMerge } from "tailwind-merge";
+import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 
 const ProgressBar = React.memo(({ style }) => (
   <div className="relative h-[2px] flex-1 overflow-x-hidden rounded-xl bg-gray-300_01">

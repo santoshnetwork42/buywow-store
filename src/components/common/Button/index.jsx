@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { twMerge } from "tailwind-merge";
 import { useRippleEffect } from "@/utils/hooks/useRippleEffect";
 import { LoaderIcon } from "@/assets/svg/icons";
+import { useCallback } from "react";
 
 const Button = ({
   children,
@@ -49,14 +50,17 @@ const Button = ({
     className,
   );
 
-  const handleClick = (e) => {
-    if (disabled || loader) {
-      e.preventDefault();
+  const handleClick = useCallback(
+    (e) => {
       e.stopPropagation();
-    } else if (onClick) {
-      onClick(e);
-    }
-  };
+      e.preventDefault();
+
+      if (onClick && !disabled && !loader) {
+        onClick(e);
+      }
+    },
+    [onClick, disabled, loader],
+  );
 
   return (
     <button

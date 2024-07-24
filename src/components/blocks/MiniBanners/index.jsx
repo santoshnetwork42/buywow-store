@@ -1,12 +1,12 @@
 // components/MultiBanner.js
 import React from "react";
 import Link from "next/link";
-import { Img } from "@/components/common";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
+import { Img } from "@/components/common";
 
 const MiniBanners = React.memo(({ miniBannerItems: banners }) => {
-  if (!banners?.length) return null;
+  if (!Array.isArray(banners) || banners.length === 0) return null;
 
   return (
     <Slider
@@ -14,42 +14,30 @@ const MiniBanners = React.memo(({ miniBannerItems: banners }) => {
       className="container-main mb-main"
       sliderClassName="gap-2 sm:gap-3 md:gap-4 lg:gap-5"
     >
-      {banners?.map((banner, index) => {
+      {banners.map((banner, index) => {
+        if (!banner) return null;
+
         const { webImage, mWebImage, link } = banner;
-        const {
-          url: webImageUrl,
-          width: webImageWidth,
-          height: webImageHeight,
-          alternativeText: webImageAlternativeText,
-        } = extractAttributes(webImage);
-        const {
-          url: mWebImageUrl,
-          width: mWebImageWidth,
-          height: mWebImageHeight,
-          alternativeText: mWebImageAlternativeText,
-        } = extractAttributes(mWebImage);
+        const webImageAttrs = extractAttributes(webImage);
+        const mWebImageAttrs = extractAttributes(mWebImage);
+
+        if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
+
         return (
-          <Link
-            href={link || "#"}
-            key={`banner-${index}`}
-            className="w-[80vw] sm:w-[46vw]"
-          >
-            <picture>
-              <source
-                media="(min-width: 768px)"
-                srcSet={webImageUrl}
-                width={webImageWidth}
-                height={webImageHeight}
-              />
+          <Link href={link || "#"} key={`mini-banner-${index}`}>
+            <picture className="relative block aspect-[298/120] w-[80vw] sm:w-[46vw] md:aspect-[650/166]">
+              {webImageAttrs.url && (
+                <source media="(min-width: 768px)" srcSet={webImageAttrs.url} />
+              )}
               <Img
-                src={mWebImageUrl || webImageUrl}
+                src={mWebImageAttrs.url || webImageAttrs.url}
                 alt={
-                  mWebImageAlternativeText ||
-                  webImageAlternativeText ||
-                  "Promo Banner"
+                  mWebImageAttrs.alternativeText ||
+                  webImageAttrs.alternativeText ||
+                  `Promo Banner ${index + 1}`
                 }
-                height={mWebImageHeight}
-                width={mWebImageWidth}
+                fill
+                sizes="(min-width: 768px) 650px, (min-width: 640px) 46vw, 80vw"
                 priority
                 isStatic
                 className="h-auto w-full object-contain"

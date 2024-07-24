@@ -8,26 +8,29 @@ import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";
 
 const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
-  const { url: webImageUrl, alternativeText: webImageAlternativeText } =
-    useMemo(() => extractAttributes(webImage), [webImage]);
+  const webImageAttrs = useMemo(() => extractAttributes(webImage), [webImage]);
+  const mWebImageAttrs = useMemo(
+    () => extractAttributes(mWebImage),
+    [mWebImage],
+  );
 
-  const { url: mWebImageUrl, alternativeText: mWebImageAlternativeText } =
-    useMemo(() => extractAttributes(mWebImage), [mWebImage]);
+  if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
+
+  const imageUrl = mWebImageAttrs.url || webImageAttrs.url;
+  const imageAlt =
+    mWebImageAttrs.alternativeText ||
+    webImageAttrs.alternativeText ||
+    "Carousel Banner";
 
   return (
-    <Link
-      href={link || "#"}
-      className="relative aspect-[376/148] w-full flex-[0_0_100%] sm:aspect-[1440/496]"
-    >
-      <picture>
-        <source media="(min-width: 576px)" srcSet={webImageUrl} />
+    <Link href={link || "#"} className="flex-[0_0_100%]">
+      <picture className="relative block aspect-[376/148] w-full sm:aspect-[1440/496]">
+        {webImageAttrs.url && (
+          <source media="(min-width: 576px)" srcSet={webImageAttrs.url} />
+        )}
         <Img
-          src={mWebImageUrl || webImageUrl}
-          alt={
-            mWebImageAlternativeText ||
-            webImageAlternativeText ||
-            "Carousel Banner"
-          }
+          src={imageUrl}
+          alt={imageAlt}
           priority
           sizes="100vw"
           fill
