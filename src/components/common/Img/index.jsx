@@ -16,12 +16,21 @@ const Img = React.memo(
     isStatic = false,
     width,
     test,
+    addPrefix = false,
     ...restProps
   }) => {
     const imgSrc = useMemo(() => {
       if (!src) return DEFAULT_IMAGE;
-      return isStatic ? src : `${BASE_URL}/${src}`;
-    }, [src, isStatic]);
+      return isStatic
+        ? addPrefix
+          ? getPublicImageURL({
+              key: encodeURI(src),
+              resize: width,
+              addPrefix: true,
+            })
+          : src
+        : `${BASE_URL}/${src}`;
+    }, [src, isStatic, addPrefix]);
 
     const imageLoader = useMemo(() => {
       if (!isStatic) return undefined;
@@ -29,7 +38,12 @@ const Img = React.memo(
         {
           // test && console.log(src, width, quality);
         }
-        return getPublicImageURL(encodeURI(src), width, quality);
+        // key, resize, quality = 75
+        return getPublicImageURL({
+          key: encodeURI(src),
+          resize: width,
+          quality,
+        });
       };
     }, [isStatic]);
 
