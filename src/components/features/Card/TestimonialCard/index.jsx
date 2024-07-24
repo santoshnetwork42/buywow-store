@@ -1,7 +1,9 @@
-import React from "react";
-import { Button, Text, Heading, Img } from "@/components/common";
+import { Button, Heading, Img, Text } from "@/components/common";
+import ProductThumbImage from "@/components/common/ProductThumbImage";
 import { extractAttributes } from "@/utils/helpers";
+
 import Link from "next/link";
+import React from "react";
 
 const TestimonialCard = React.memo(
   ({
@@ -115,13 +117,12 @@ const TestimonialCard = React.memo(
               className="flex items-center justify-center gap-2 rounded bg-lime-100_01 p-2"
             >
               <div className="flex aspect-square w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-white-a700_01 md:aspect-[48/56]">
-                <Img
-                  src={webImageAttrs.url}
-                  width={48}
+                <ProductThumbImage
+                  width={200}
+                  fetchedProduct={fetchedProduct}
                   height={56}
                   alt={webImageAttrs.alternativeText}
                   isStatic
-                  className="h-auto w-full object-contain"
                 />
               </div>
               <div className="flex flex-col gap-1">
