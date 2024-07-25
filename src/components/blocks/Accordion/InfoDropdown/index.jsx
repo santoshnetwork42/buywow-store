@@ -69,7 +69,7 @@ const InfoDropdown = React.memo(
     return (
       <div className={containerClasses}>
         <button
-          className="flex w-full cursor-pointer items-center justify-center gap-3"
+          className="flex w-full cursor-pointer items-center justify-center gap-3 sm:justify-center"
           onClick={toggleOpen}
           aria-expanded={isOpen}
         >
@@ -87,7 +87,7 @@ const InfoDropdown = React.memo(
               <Text
                 size="base"
                 as="p"
-                className="pt-3 text-center sm:pt-4 lg:pt-5"
+                className="pt-3 sm:pt-4 sm:text-center lg:pt-5"
                 responsive
                 dangerouslySetInnerHTML={{ __html: information }}
               />

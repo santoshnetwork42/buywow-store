@@ -45,6 +45,9 @@ const InfoDropdown = dynamic(
 const CollectionLinks = dynamic(
   () => import("@/components/blocks/CollectionLinks"),
 );
+const ProductDetailView = dynamic(
+  () => import("@/components/blocks/ProductDetailView"),
+);
 const VideoSection = dynamic(
   () => import("@/components/partials/Home/VideoSection"),
 );
@@ -92,6 +95,8 @@ const renderBlock = (block, index) => {
       return <InfoDropdown key={index} {...block} />;
     case "ComponentBlocksCollectionLinks":
       return <CollectionLinks key={index} {...block} />;
+    case "ComponentBlocksPdp":
+      return <ProductDetailView key={index} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} {...block} />;
     case "ComponentBlogSection":
@@ -104,7 +109,7 @@ const renderBlock = (block, index) => {
 const getPageData = unstable_cache(
   async (slug) => await getPageBySlugAPI(slug),
   ["pageData"],
-  { revalidate: 10 },
+  { revalidate: 1 },
 );
 
 export default async function Page({ params }) {

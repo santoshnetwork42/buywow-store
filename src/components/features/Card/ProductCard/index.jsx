@@ -12,7 +12,7 @@ const BenefitTag = memo(({ bgColor, tag }) => (
     style={{ backgroundColor: bgColor }}
     responsive
   >
-    {tag + tag}
+    {tag}
   </Text>
 ));
 
@@ -79,8 +79,8 @@ const ProductCard = memo(
           style={{ backgroundColor: imageBgColor }}
         >
           <ProductThumbImage
-            width={274}
-            height={274}
+            width={500}
+            height={550}
             fetchedProduct={fetchedProduct}
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
             isStatic

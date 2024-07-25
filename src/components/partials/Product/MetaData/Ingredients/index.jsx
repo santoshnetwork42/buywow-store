@@ -1,6 +1,6 @@
 "use client";
 import { Img, Text } from "@/components/common";
-import ToggleArrow from "@/components/common/AccordianToggle";
+import ToggleArrow from "@/components/common/AccordionToggle";
 import React, { useState } from "react";
 
 const Ingredients = ({ ingredients }) => {

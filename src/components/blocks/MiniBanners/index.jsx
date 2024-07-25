@@ -13,6 +13,7 @@ const MiniBanners = React.memo(({ miniBannerItems: banners }) => {
       showDotButtons={true}
       className="container-main mb-main"
       sliderClassName="gap-2 sm:gap-3 md:gap-4 lg:gap-5"
+      dragFree={false}
     >
       {banners.map((banner, index) => {
         if (!banner) return null;

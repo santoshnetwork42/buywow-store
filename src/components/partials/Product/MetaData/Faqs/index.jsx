@@ -1,6 +1,6 @@
 "use client";
 import { Img, Text } from "@/components/common";
-import ToggleArrow from "@/components/common/AccordianToggle";
+import ToggleArrow from "@/components/common/AccordionToggle";
 import Divider from "@/components/common/Divider";
 import PlusMinusToggle from "@/components/common/PlusMinusToggle";
 import React, { useState } from "react";

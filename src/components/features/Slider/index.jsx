@@ -100,16 +100,16 @@ const Slider = React.memo(
     showCounter = true,
     showControls = true,
     showDotButtons = false,
+    dragFree = true,
     ...props
   }) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(
       {
-        loop: false,
+        dragFree: dragFree,
         slidesToScroll: "auto",
-        align: "center",
         inViewThreshold: 1,
       },
-      [],
+      [WheelGesturesPlugin()],
     );
 
     const [sliderState, setSliderState] = useState({

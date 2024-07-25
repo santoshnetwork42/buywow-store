@@ -6,7 +6,7 @@ import { productData } from "@/utils/data/productData";
 import React from "react";
 import HighLights from "@/components/partials/Product/HighLights";
 import MetaData from "@/components/partials/Product/MetaData";
-import ProductImageSection from "./ProductImageSection";
+import ProductImageSection from "../../../blocks/ProductDetailView/ProductImageSection";
 
 const ProductDetails = ({ className }) => {
   const productDetail = productData[0];
