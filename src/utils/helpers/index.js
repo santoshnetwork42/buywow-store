@@ -48,3 +48,34 @@ export const getOfferValue = (price, listingPrice) => {
   const offerPercentage = (discountAmount / listingPrice) * 100;
   return Math.round(offerPercentage);
 };
+
+export const getFirstVariant = (product, variantId) => {
+  if (product) {
+    const { variants = {} } = product;
+    const { items = [] } = variants;
+
+    let variant;
+    if (variantId) {
+      variant = items.find((v) => v.id === variantId);
+    }
+
+    if (!variant) {
+      const variantsSortedByPosition = items.sort(
+        (a, b) => a.position - b.position,
+      );
+      variant = variantsSortedByPosition[0];
+      if (variantsSortedByPosition) {
+        for (let index = 0; index < variantsSortedByPosition.length; index++) {
+          const element = variantsSortedByPosition[index];
+          if (element.inventory && element.inventory > 0) {
+            variant = element;
+            break;
+          }
+        }
+      }
+    }
+
+    return variant;
+  }
+  return null;
+};

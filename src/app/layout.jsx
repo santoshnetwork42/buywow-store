@@ -27,7 +27,7 @@ const getNavbarAndFooter = unstable_cache(
 
 async function RootLayout({ children }) {
   const { data } = await getNavbarAndFooter();
-  const { navbar: headerData, footer: footerData } = data;
+  const { navbar: headerData = {}, footer: footerData = {} } = data || {};
 
   return (
     <html lang="en">

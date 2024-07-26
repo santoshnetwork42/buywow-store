@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
-import { useDispatch } from "react-redux";
-import Link from "next/link";
 import { MenuSVG } from "@/assets/images";
-import { Button, Img, Text } from "@/components/common";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
-import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
-import { extractAttributes } from "@/utils/helpers";
+import { Button, Img, Text } from "@/components/common";
+import MobileMenu from "@/components/common/partials/MobileMenu";
 import NavMenu from "@/components/common/partials/NavMenu";
 import SearchBar from "@/components/common/partials/SearchBar";
-import MobileMenu from "@/components/common/partials/MobileMenu";
+import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { extractAttributes } from "@/utils/helpers";
+import Link from "next/link";
+import React, { useCallback, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PasswordLess from "../PasswordLess";
 
 const MenuItem = React.memo(({ item, index, linkPrefix }) => {
@@ -78,6 +78,9 @@ Logo.displayName = "Logo";
 
 const Header = React.memo(({ data, ...props }) => {
   const dispatch = useDispatch();
+  const { data: cartData = [] } = useSelector((state) => state.cart);
+  const totalCartItems = cartData.length;
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const {
@@ -181,13 +184,22 @@ const Header = React.memo(({ data, ...props }) => {
               />
             </Link>
             <Link href="/my-cart" className="flex-shrink-0">
-              <Img
-                src="img_bag.svg"
-                width={22}
-                height={22}
-                alt="bag icon"
-                className="aspect-square w-[22px] object-contain"
-              />
+              <div className="relative">
+                <Img
+                  src="img_bag.svg"
+                  width={22}
+                  height={22}
+                  alt="bag icon"
+                  className="aspect-square w-[22px] object-contain"
+                />
+                {!!totalCartItems && (
+                  <div className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
+                    <Text size="xxs" className="mx-1 text-white-a700_01">
+                      {totalCartItems}
+                    </Text>
+                  </div>
+                )}
+              </div>
             </Link>
           </div>
 

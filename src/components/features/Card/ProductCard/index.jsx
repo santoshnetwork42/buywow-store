@@ -1,8 +1,12 @@
-import React, { memo } from "react";
-import Link from "next/link";
-import { Button, Text, Heading, Img } from "@/components/common";
+"use client";
+
+import { Button, Heading, Img, Text } from "@/components/common";
 import ProductThumbImage from "@/components/common/ProductThumbImage";
+import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getOfferValue } from "@/utils/helpers";
+import Link from "next/link";
+import { memo, useCallback } from "react";
+import { useDispatch } from "react-redux";
 
 const BenefitTag = memo(({ bgColor, tag }) => (
   <Text
@@ -69,6 +73,20 @@ const ProductCard = memo(
     const { listingPrice, price, rating, title, totalRatings, benefits } =
       fetchedProduct;
 
+    const dispatch = useDispatch();
+
+    const addToCartHandler = useCallback(
+      (e) => {
+        dispatch({
+          type: cartSagaActions.ADD_TO_CART,
+          payload: {
+            product: fetchedProduct,
+          },
+        });
+      },
+      [dispatch, fetchedProduct],
+    );
+
     return (
       <Link
         href={`/products/${slug}`}
@@ -120,6 +138,7 @@ const ProductCard = memo(
                 variant="primary"
                 size="medium"
                 className="shrink-0 text-sm md:text-base lg:text-lg"
+                onClick={addToCartHandler}
               >
                 Add
               </Button>
