@@ -24,10 +24,10 @@ const renderBlock = (block, index) => {
       return <AccordionDescription key={index} {...block} />;
     case "ComponentAccordionIngredientsSection":
       return <AccordionIngredients key={index} {...block} />;
-    // case "ComponentAccordionUsageInstructionsSection":
-    //   return <AccordionUsageInstructions key={index} {...block}  />;
-    // case "ComponentAccordionFaQsSection":
-    //   return <AccordionFaQs key={index} {...block}  />;
+    case "ComponentAccordionUsageInstructionsSection":
+      return <AccordionUsageInstructions key={index} {...block} />;
+    case "ComponentAccordionFaQsSection":
+      return <AccordionFaQs key={index} {...block} />;
 
     default:
       return null;

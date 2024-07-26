@@ -1,59 +1,57 @@
-"use client";
-import { Img, Text } from "@/components/common";
-import ToggleArrow from "@/components/common/AccordionToggle";
-import React, { useState } from "react";
+import React, { memo } from "react";
+import { Text } from "@/components/common";
+import Accordion from "@/components/common/Accordion";
+import { extractAttributes } from "@/utils/helpers";
 
-const AccordionUsageInstructions = ({ howToUse }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const InstructionStep = memo(({ index, text }) => (
+  <div className="flex gap-2">
+    <Text as="p" size="sm" className="shrink-0">
+      Step {index + 1}:
+    </Text>
+    <Text as="p" size="sm">
+      {text}
+    </Text>
+  </div>
+));
+
+InstructionStep.displayName = "InstructionStep";
+
+const AccordionUsageInstructions = ({
+  accordionUsageInstructionsTitle,
+  image,
+  usageInstructionItems,
+}) => {
+  if (!accordionUsageInstructionsTitle || !usageInstructionItems) {
+    return null;
+  }
+
+  const { url: accordionImageUrl, alternativeText: accordionImageAlt } =
+    extractAttributes(image) || {};
+
+  if (
+    !Array.isArray(usageInstructionItems) ||
+    usageInstructionItems.length === 0
+  ) {
+    return null;
+  }
 
   return (
-    <div className="flex w-full flex-col">
-      <div
-        className="flex w-full cursor-pointer items-center justify-between"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <div className="flex items-center gap-3">
-          <Img
-            src={howToUse.image}
-            width={26}
-            height={26}
-            alt="logo"
-            className=""
+    <Accordion
+      title={accordionUsageInstructionsTitle}
+      imgUrl={accordionImageUrl}
+      alternativeText={accordionImageAlt}
+    >
+      <div className="flex flex-col gap-2 md:gap-2.5">
+        {usageInstructionItems.map((item, index) => (
+          <InstructionStep
+            key={`instruction-step-${index}`}
+            index={index}
+            text={item?.text}
           />
-          <Text as="p" size="lg" className="font-medium">
-            {howToUse.title}
-          </Text>
-        </div>
-        <ToggleArrow open={isOpen} />
+        ))}
       </div>
-      <ul
-        className={`flex flex-col gap-1.5 overflow-hidden transition-all duration-300 ease-in-out sm:gap-2 lg:gap-2.5 ${
-          isOpen ? "max-h-96 py-3" : "max-h-0"
-        }`}
-      >
-        {!!howToUse.steps &&
-          howToUse.steps.map((item, index) => {
-            return (
-              <div
-                key={`how-to-use-${index}`}
-                className="flex items-center gap-2 md:pl-9"
-              >
-                <div className="flex items-center self-start">
-                  <Text as="p" size="sm" className="min-w-max">
-                    Step {index + 1} :
-                  </Text>
-                </div>
-                <div>
-                  <Text as="p" size="sm" className="line-clamp-3">
-                    {item}
-                  </Text>
-                </div>
-              </div>
-            );
-          })}
-      </ul>
-    </div>
+    </Accordion>
   );
 };
 
-export default AccordionUsageInstructions;
+export default memo(AccordionUsageInstructions);

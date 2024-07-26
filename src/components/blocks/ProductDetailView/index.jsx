@@ -147,7 +147,7 @@ const ProductDetailView = React.memo(({ product: { pdpProduct } }) => {
       </div>
 
       {productDetailView?.length > 0 && (
-        <div className="order-4 md:mt-7">
+        <div className="order-4 mt-3 sm:mt-5 lg:mt-7">
           <ProductDetailViewBlocks blocks={productDetailView} />
         </div>
       )}

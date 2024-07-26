@@ -7,10 +7,10 @@ const PlusMinusToggle = ({ open }) => {
         open ? "open" : ""
       }`}
     >
-      <div className="absolute h-0.5 w-3 origin-center transform bg-gray-500 transition-all duration-300">
+      <div className="absolute h-0.5 w-3 origin-center transform bg-black-900 transition-all duration-300">
         <div
-          className={`absolute h-0.5 w-3 origin-center transform bg-gray-500 transition-all duration-300 ${
-            open ? "" : "rotate-90"
+          className={`absolute h-0.5 w-3 origin-center transform bg-black-900 transition-all duration-300 ${
+            open ? "" : "rotate-[270deg]"
           }`}
         ></div>
       </div>

@@ -148,6 +148,7 @@ const ProductImageSection = React.memo(({ imageList }) => {
             height={480}
             alt={`Product image ${index + 1}`}
             isStatic
+            priority={index === 0}
             className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
             addPrefix
           />

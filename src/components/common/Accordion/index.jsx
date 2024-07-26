@@ -40,8 +40,8 @@ const Accordion = ({ title, imgUrl, alternativeText, children }) => {
       maxHeight: isOpen ? contentHeight : "0px",
       opacity: isOpen ? 1 : 0,
       visibility: isOpen ? "visible" : "hidden",
-      "margin-bottom": isOpen ? "20px" : "0px",
-      "margin-top": isOpen ? "10px" : "0px",
+      marginBottom: isOpen ? "20px" : "0px",
+      marginTop: isOpen ? "10px" : "0px",
     }),
     [isOpen, contentHeight],
   );
@@ -73,7 +73,7 @@ const Accordion = ({ title, imgUrl, alternativeText, children }) => {
         <ToggleArrow open={isOpen} />
       </button>
       <div
-        className="overflow-hidden transition-all duration-300 ease-in-out sm:px-3 md:px-5 lg:px-7"
+        className="overflow-hidden transition-all duration-300 ease-out sm:px-3 md:px-5 lg:px-7"
         style={contentStyle}
       >
         <div ref={contentRef}>{children}</div>

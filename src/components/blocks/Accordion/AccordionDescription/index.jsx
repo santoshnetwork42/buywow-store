@@ -8,11 +8,10 @@ const AccordionDescription = ({
   image,
   description,
 }) => {
-  const { url, alternativeText } = extractAttributes(image);
-  const [isExpanded, setIsExpanded] = useState(true);
+  const { url, alternativeText } = extractAttributes(image) || {};
+  const [isExpanded, setIsExpanded] = useState(false);
   const [showReadMore, setShowReadMore] = useState(false);
   const textRef = useRef(null);
-  const buttonRef = useRef(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -20,30 +19,17 @@ const AccordionDescription = ({
       const lineHeight = parseInt(
         window.getComputedStyle(textRef.current).lineHeight,
       );
-      const height = textRef.current.clientHeight;
+      const height = textRef.current.scrollHeight;
       const shouldShowReadMore = height > lineHeight * 3;
       setShowReadMore(shouldShowReadMore);
       setIsExpanded(!shouldShowReadMore);
 
-      if (shouldShowReadMore && buttonRef.current) {
-        const buttonWidth = buttonRef.current.offsetWidth;
-        const textWidth = textRef.current.offsetWidth;
-        const lastLineWidth = textWidth % lineHeight;
-        const paddingRight = Math.max(buttonWidth - lastLineWidth, 0);
-
-        textRef.current.style.setProperty(
-          "--last-line-padding",
-          `${paddingRight}px`,
-        );
-      }
-
-      // Set the max-height for transition
       containerRef.current.style.setProperty("--max-height", `${height}px`);
     }
   }, [description]);
 
   const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
+    setIsExpanded((prev) => !prev);
   };
 
   return (
@@ -55,15 +41,14 @@ const AccordionDescription = ({
         }`}
       >
         <p
-          className={`text-sm`}
+          className="text-sm"
           ref={textRef}
           dangerouslySetInnerHTML={{ __html: description }}
         />
         {showReadMore && (
           <Button
-            ref={buttonRef}
             onClick={toggleExpand}
-            className="absolute bottom-0 right-0 rounded-none bg-white-a700_01 pl-4 text-sm hover:underline"
+            className="absolute bottom-0 right-0 bg-white-a700_01 pl-4 text-sm hover:underline"
           >
             {isExpanded ? "Read less" : "Read more"}
           </Button>

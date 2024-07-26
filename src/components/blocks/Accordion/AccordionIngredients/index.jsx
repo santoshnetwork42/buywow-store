@@ -14,11 +14,8 @@ const IngredientItem = memo(({ text, subText, imageUrl, imageAlt }) => (
       className="aspect-square h-auto w-6 object-contain"
     />
     <div>
-      <Text as="span" size="sm" className="font-semibold capitalize">
-        {text}
-      </Text>{" "}
       <Text as="span" size="sm">
-        {subText}
+        <span className="font-semibold capitalize">{text}</span> {subText}
       </Text>
     </div>
   </div>
@@ -31,7 +28,7 @@ const AccordionIngredients = ({
   image,
   ingredientItems,
 }) => {
-  if (!accordionIngredientsTitle || !image || !ingredientItems?.data) {
+  if (!accordionIngredientsTitle || !ingredientItems?.data) {
     return null;
   }
 
