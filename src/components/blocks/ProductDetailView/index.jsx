@@ -46,7 +46,7 @@ const ProductDetailView = React.memo(({ product: { pdpProduct } }) => {
   }
 
   return (
-    <div className="container-main mb-main mt-3 grid grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[52%_1fr] md:gap-x-12 md:gap-y-0 lg:gap-x-14 xl:gap-x-16">
+    <div className="container-main mb-main mt-3 grid grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[52%_1fr] md:grid-rows-[auto_1fr] md:gap-x-10 md:gap-y-0 lg:gap-x-12 xl:gap-x-16">
       <div className="order-2 md:order-1 md:row-span-2">
         <ProductImageSection imageList={imageList} />
       </div>
@@ -75,7 +75,7 @@ const ProductDetailView = React.memo(({ product: { pdpProduct } }) => {
         </div>
       </div>
 
-      <div className="order-3 mt-2 flex flex-col gap-3">
+      <div className="order-3 mt-2 flex flex-col">
         <div className="flex items-center justify-between gap-2 sm:gap-3 md:justify-normal md:gap-4 lg:gap-5">
           <div className="flex items-center gap-2">
             <Text as="p" size="xl" className="font-semibold md:text-[22px]">
@@ -113,29 +113,36 @@ const ProductDetailView = React.memo(({ product: { pdpProduct } }) => {
               </div>
             )}
           </div>
-          <Text as="p" size="sm" className="font-light">
+          <Text as="p" size="sm" className="font-light" responsive>
             MRP incl. of all taxes
           </Text>
         </div>
-        <div className="flex flex-col gap-1">
-          <Button className="w-full py-4 sm:py-2">Add To Cart</Button>
-          <div className="flex justify-evenly gap-4">
+        <div className="mt-6 flex flex-col gap-2 md:gap-2.5">
+          <Button className="w-full py-4" variant="primary">
+            <Heading
+              size="xl"
+              as="h3"
+              className="text-lg text-white-a700_01"
+              responsive
+            >
+              Add to cart
+            </Heading>
+          </Button>
+          <div className="flex justify-evenly gap-2">
             <div className="flex items-center gap-1">
-              <VehicleIcon size={30} />
-              <Text as="p" size="sm" responsive={false}>
+              <VehicleIcon size={24} />
+              <Text as="p" size="sm" responsive>
                 Ships within 1-2 days
               </Text>
             </div>
             <div className="flex items-center gap-1">
-              <IndiaMapIcon size={22} />
-              <Text as="p" size="sm" responsive={false}>
+              <IndiaMapIcon size={16} />
+              <Text as="p" size="sm" responsive>
                 Shipping Across india
               </Text>
             </div>
           </div>
         </div>
-        <HighLights />
-        <MetaData />
       </div>
     </div>
   );

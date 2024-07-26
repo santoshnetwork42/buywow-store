@@ -71,10 +71,28 @@ const ProductImageSection = React.memo(({ imageList }) => {
 
   useEffect(() => {
     const setThumbsHeight = () => {
-      const mainImage = document.querySelector(".main-image-container");
+      const mainContainer = document.querySelector(".main-container");
+      const mainImageContainer = document.querySelector(
+        ".main-image-container",
+      );
+      const mainImages = document.querySelectorAll(".main-image");
       const thumbsContainer = document.querySelector(".thumbs-container");
-      if (mainImage && thumbsContainer) {
-        thumbsContainer.style.height = `${mainImage.offsetHeight}px`;
+
+      if (
+        mainContainer &&
+        mainImageContainer &&
+        mainImages.length > 0 &&
+        thumbsContainer
+      ) {
+        const gap = parseInt(window.getComputedStyle(mainContainer).gap);
+        const mainImageWidth =
+          mainContainer.offsetWidth - thumbsContainer.offsetWidth - gap;
+
+        mainImages.forEach((image) => {
+          image.style.width = `${mainImageWidth}px`;
+        });
+
+        thumbsContainer.style.height = `${mainImageContainer.offsetHeight}px`;
       }
     };
 
@@ -125,7 +143,7 @@ const ProductImageSection = React.memo(({ imageList }) => {
             height={480}
             alt={`Product image ${index + 1}`}
             isStatic
-            className="m-auto aspect-square w-[calc(100%-0.5rem)] rounded-lg border object-contain shadow-sm"
+            className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
             addPrefix
           />
         </div>
@@ -150,14 +168,12 @@ const ProductImageSection = React.memo(({ imageList }) => {
   }
 
   return (
-    <div className="flex gap-4">
+    <div className="main-container flex gap-1 sm:gap-2 md:gap-3 lg:gap-4">
       <div
-        className="no-scrollbar min-h-96 w-28 overflow-y-scroll max-sm:hidden"
+        className="no-scrollbar thumbs-container w-20 overflow-y-scroll max-sm:hidden"
         ref={thumbViewportRef}
       >
-        <div className="thumbs-container flex flex-col gap-2">
-          {renderThumbs}
-        </div>
+        <div className="flex h-full flex-col gap-2">{renderThumbs}</div>
       </div>
 
       <div
