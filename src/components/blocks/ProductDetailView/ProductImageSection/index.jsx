@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Button, Img } from "@/components/common";
 
@@ -48,6 +54,10 @@ const ProductImageSection = React.memo(({ imageList }) => {
     axis: "y",
   });
 
+  const mainContainerRef = useRef(null);
+  const mainImageContainerRef = useRef(null);
+  const thumbsContainerRef = useRef(null);
+
   const onThumbClick = useCallback(
     (index) => {
       emblaMainApi?.scrollTo(index);
@@ -62,6 +72,30 @@ const ProductImageSection = React.memo(({ imageList }) => {
     emblaThumbsApi?.scrollTo(newIndex);
   }, [emblaMainApi, emblaThumbsApi]);
 
+  const setThumbsHeight = useCallback(() => {
+    const mainContainer = mainContainerRef.current;
+    const mainImageContainer = mainImageContainerRef.current;
+    const thumbsContainer = thumbsContainerRef.current;
+    const mainImages = mainImageContainer?.querySelectorAll(".main-image");
+
+    if (
+      mainContainer &&
+      mainImageContainer &&
+      mainImages?.length > 0 &&
+      thumbsContainer
+    ) {
+      const gap = parseInt(window.getComputedStyle(mainContainer).gap);
+      const mainImageWidth =
+        mainContainer.offsetWidth - thumbsContainer.offsetWidth - gap;
+
+      mainImages.forEach((image) => {
+        image.style.width = `${mainImageWidth}px`;
+      });
+
+      thumbsContainer.style.height = `${mainImageContainer.offsetHeight}px`;
+    }
+  }, []);
+
   useEffect(() => {
     if (!emblaMainApi) return;
     onSelect();
@@ -70,52 +104,23 @@ const ProductImageSection = React.memo(({ imageList }) => {
   }, [emblaMainApi, onSelect]);
 
   useEffect(() => {
-    const setThumbsHeight = () => {
-      const mainContainer = document.querySelector(".main-container");
-      const mainImageContainer = document.querySelector(
-        ".main-image-container",
-      );
-      const mainImages = document.querySelectorAll(".main-image");
-      const thumbsContainer = document.querySelector(".thumbs-container");
-
-      if (
-        mainContainer &&
-        mainImageContainer &&
-        mainImages.length > 0 &&
-        thumbsContainer
-      ) {
-        const gap = parseInt(window.getComputedStyle(mainContainer).gap);
-        const mainImageWidth =
-          mainContainer.offsetWidth - thumbsContainer.offsetWidth - gap;
-
-        mainImages.forEach((image) => {
-          image.style.width = `${mainImageWidth}px`;
-        });
-
-        thumbsContainer.style.height = `${mainImageContainer.offsetHeight}px`;
-      }
-    };
-
     setThumbsHeight();
     window.addEventListener("resize", setThumbsHeight);
 
     const images = document.querySelectorAll("img");
-    const imageLoadHandler = () => setThumbsHeight();
     images.forEach((img) => {
       if (img.complete) {
         setThumbsHeight();
       } else {
-        img.addEventListener("load", imageLoadHandler);
+        img.addEventListener("load", setThumbsHeight);
       }
     });
 
     return () => {
       window.removeEventListener("resize", setThumbsHeight);
-      images.forEach((img) =>
-        img.removeEventListener("load", imageLoadHandler),
-      );
+      images.forEach((img) => img.removeEventListener("load", setThumbsHeight));
     };
-  }, []);
+  }, [setThumbsHeight]);
 
   const renderThumbs = useMemo(
     () =>
@@ -163,27 +168,43 @@ const ProductImageSection = React.memo(({ imageList }) => {
     [imageList, selectedIndex, onThumbClick],
   );
 
-  if (!imageList || imageList.length === 0) {
-    return null;
-  }
+  if (!imageList?.length) return null;
 
   return (
-    <div className="main-container flex gap-1 sm:gap-2 md:gap-3 lg:gap-4">
-      <div
-        className="no-scrollbar thumbs-container w-20 overflow-y-scroll max-sm:hidden"
-        ref={thumbViewportRef}
-      >
-        <div className="flex h-full flex-col gap-2">{renderThumbs}</div>
+    <div
+      ref={mainContainerRef}
+      className="main-container flex flex-col-reverse gap-1 sm:flex-row sm:gap-2 md:gap-3 lg:gap-4"
+    >
+      <div ref={thumbsContainerRef} className="w-20 max-sm:hidden">
+        <div
+          ref={thumbViewportRef}
+          className="no-scrollbar thumbs-container h-full overflow-y-scroll"
+          role="tablist"
+          aria-label="Product image thumbnails"
+        >
+          <div className="flex h-full flex-col gap-2">{renderThumbs}</div>
+        </div>
       </div>
 
       <div
         className="flex flex-1 flex-col items-center justify-center overflow-hidden md:gap-1"
         ref={mainViewportRef}
       >
-        <div className="main-image-container flex gap-2">
+        <div
+          ref={mainImageContainerRef}
+          className="main-image-container flex gap-2"
+          role="tabpanel"
+          aria-label="Product image gallery"
+        >
           {renderMainImages}
         </div>
-        <div className="mt-4 flex justify-center">{renderDotButtons}</div>
+        <div
+          className="mt-4 flex justify-center"
+          role="tablist"
+          aria-label="Image navigation dots"
+        >
+          {renderDotButtons}
+        </div>
       </div>
     </div>
   );

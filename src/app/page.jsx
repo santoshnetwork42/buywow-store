@@ -120,7 +120,7 @@ export default async function Page() {
     const pageData = await getPageData("index");
     const { blocks } = pageData || {};
 
-    if (!blocks?.length) return null;
+    if (!Array.isArray(blocks) || blocks.length === 0) return null;
 
     return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
   } catch (error) {

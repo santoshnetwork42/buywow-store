@@ -8,6 +8,7 @@ import MetaData from "@/components/partials/Product/MetaData";
 import ProductImageSection from "@/components/blocks/ProductDetailView/ProductImageSection";
 import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
+import ProductDetailViewBlocks from "@/components/partials/Product/ProductDetailViewBlocks";
 
 const ProductDetailView = React.memo(({ product: { pdpProduct } }) => {
   const {
@@ -46,8 +47,8 @@ const ProductDetailView = React.memo(({ product: { pdpProduct } }) => {
   }
 
   return (
-    <div className="container-main mb-main mt-3 grid grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[52%_1fr] md:grid-rows-[auto_1fr] md:gap-x-10 md:gap-y-0 lg:gap-x-12 xl:gap-x-16">
-      <div className="order-2 md:order-1 md:row-span-2">
+    <div className="container-main mb-main mt-3 grid grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[52%_1fr] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:gap-x-12 xl:gap-x-16">
+      <div className="order-2 md:order-1 md:row-span-3">
         <ProductImageSection imageList={imageList} />
       </div>
 
@@ -144,6 +145,12 @@ const ProductDetailView = React.memo(({ product: { pdpProduct } }) => {
           </div>
         </div>
       </div>
+
+      {productDetailView?.length > 0 && (
+        <div className="order-4 md:mt-7">
+          <ProductDetailViewBlocks blocks={productDetailView} />
+        </div>
+      )}
     </div>
   );
 });

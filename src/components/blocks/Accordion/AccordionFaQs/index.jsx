@@ -5,7 +5,7 @@ import Divider from "@/components/common/Divider";
 import PlusMinusToggle from "@/components/common/PlusMinusToggle";
 import React, { useState } from "react";
 
-const Faqs = ({ faqs }) => {
+const AccordionFaQs = ({ faqs }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -77,4 +77,4 @@ const FaqData = ({ question, answer }) => {
     </div>
   );
 };
-export default Faqs;
+export default AccordionFaQs;

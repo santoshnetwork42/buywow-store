@@ -3,7 +3,7 @@ import { Img, Text } from "@/components/common";
 import ToggleArrow from "@/components/common/AccordionToggle";
 import React, { useState } from "react";
 
-const Ingredients = ({ ingredients }) => {
+const AccordionUsageInstructions = ({ howToUse }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -14,14 +14,14 @@ const Ingredients = ({ ingredients }) => {
       >
         <div className="flex items-center gap-3">
           <Img
-            src={ingredients.image}
+            src={howToUse.image}
             width={26}
             height={26}
             alt="logo"
             className=""
           />
           <Text as="p" size="lg" className="font-medium">
-            {ingredients.title}
+            {howToUse.title}
           </Text>
         </div>
         <ToggleArrow open={isOpen} />
@@ -31,14 +31,24 @@ const Ingredients = ({ ingredients }) => {
           isOpen ? "max-h-96 py-3" : "max-h-0"
         }`}
       >
-        {!!ingredients.data &&
-          ingredients.data.map((item, index) => {
+        {!!howToUse.steps &&
+          howToUse.steps.map((item, index) => {
             return (
-              <IngredientsData
-                key={`ingredient-${index}`}
-                image={item.image}
-                description={item.description}
-              />
+              <div
+                key={`how-to-use-${index}`}
+                className="flex items-center gap-2 md:pl-9"
+              >
+                <div className="flex items-center self-start">
+                  <Text as="p" size="sm" className="min-w-max">
+                    Step {index + 1} :
+                  </Text>
+                </div>
+                <div>
+                  <Text as="p" size="sm" className="line-clamp-3">
+                    {item}
+                  </Text>
+                </div>
+              </div>
             );
           })}
       </ul>
@@ -46,16 +56,4 @@ const Ingredients = ({ ingredients }) => {
   );
 };
 
-const IngredientsData = ({ image = "", description = "" }) => {
-  return (
-    <div className="flex items-center gap-2 md:pl-9">
-      <Img src={image} width={22} height={22} alt="logo" className="" />
-      <div className="flex">
-        <Text as="span" size="sm" className="">
-          {description}
-        </Text>
-      </div>
-    </div>
-  );
-};
-export default Ingredients;
+export default AccordionUsageInstructions;
