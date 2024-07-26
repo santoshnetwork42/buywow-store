@@ -4,6 +4,7 @@ import { persistReducer } from "redux-persist";
 import { authSlice } from "@/store/slices/auth/authSlice";
 import { userSlice } from "@/store/slices/user/userSlice";
 import { modalSlice } from "@/store/slices/modal/modalSlice";
+import { cartSlice } from "@/store/slices/cart/cartSlice";
 import storage from "redux-persist/lib/storage";
 import rootSaga from "./sagas";
 import persistStore from "redux-persist/es/persistStore";
@@ -12,13 +13,14 @@ const rootReducer = combineReducers({
   [authSlice.name]: authSlice.reducer,
   [userSlice.name]: userSlice.reducer,
   [modalSlice.name]: modalSlice.reducer,
+  [cartSlice.name]: cartSlice.reducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();
 
 const persistConfig = {
   key: "wow",
-  whitelist: ["auth", "user", "modal"],
+  whitelist: ["auth", "user", "modal", "cart"],
   storage,
 };
 
