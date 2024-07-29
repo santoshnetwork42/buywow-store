@@ -142,7 +142,7 @@ const ProductCard = memo(
           </div>
           <div className="flex flex-col justify-between gap-2">
             <RatingDisplay rating={rating} totalRatings={totalRatings} />
-            <div className="flex flex-1 justify-between">
+            <div className="flex flex-1 justify-between gap-2">
               <PriceDisplay price={price} listingPrice={listingPrice} />
               {!!cartItem && (
                 <Quantity

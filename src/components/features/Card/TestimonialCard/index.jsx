@@ -1,9 +1,8 @@
-import { Button, Heading, Img, Text } from "@/components/common";
-import ProductThumbnail from "@/components/common/ProductThumbnail";
+import { Heading, Img, Text } from "@/components/common";
 import { extractAttributes } from "@/utils/helpers";
 
-import Link from "next/link";
 import React from "react";
+import TestimonialProductCard from "@/components/features/Card/TestimonialProductCard";
 
 const TestimonialCard = React.memo(
   ({
@@ -112,52 +111,7 @@ const TestimonialCard = React.memo(
           {renderDescription()}
           <div className="flex items-center justify-between gap-5">
             {renderConcerns()}
-            <Link
-              href={`/products/${slug}`}
-              className="flex items-center justify-center gap-2 rounded bg-lime-100_01 p-2"
-            >
-              <div className="flex aspect-square w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-white-a700_01 md:aspect-[48/56]">
-                <ProductThumbnail
-                  width={200}
-                  fetchedProduct={fetchedProduct}
-                  height={56}
-                  isStatic
-                  alt={"Product Image"}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <Heading as="h5" size="sm" className="line-clamp-1">
-                  {fetchedProduct?.title}
-                </Heading>
-                <div className="flex items-center justify-between gap-4 md:gap-5 lg:gap-6">
-                  <div className="flex items-center gap-1">
-                    <Text
-                      size="base"
-                      as="p"
-                      className="text-sm font-semibold capitalize"
-                      responsive
-                    >
-                      ₹{fetchedProduct?.price}
-                    </Text>
-                    <Text
-                      size="sm"
-                      as="p"
-                      className="capitalize line-through"
-                      responsive
-                    >
-                      ₹{fetchedProduct?.listingPrice}
-                    </Text>
-                  </div>
-                  <Button
-                    variant="primary"
-                    size="small"
-                    className="text-xs capitalize md:text-sm"
-                  >
-                    add
-                  </Button>
-                </div>
-              </div>
-            </Link>
+            <TestimonialProductCard fetchedProduct={fetchedProduct} />
           </div>
         </div>
       </div>

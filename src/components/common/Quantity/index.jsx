@@ -22,7 +22,7 @@ const Quantity = ({ quantity, cartItem }) => {
         return newQuantity;
       }
       // If maximum quantity is reached, return the previous quantity
-      // and maybe show a message here
+      // and show a message here
       return prevQuantity;
     });
   };
@@ -36,7 +36,7 @@ const Quantity = ({ quantity, cartItem }) => {
       } else {
         // Remove product from cart
         removeFromCart();
-        return minimumOrderQuantity; // or you might want to return 0 here
+        return minimumOrderQuantity;
       }
     });
   };
@@ -74,7 +74,14 @@ const Quantity = ({ quantity, cartItem }) => {
       >
         -
       </Button>
-      <Text as="span" className="px-3 py-1">
+      <Text
+        as="span"
+        className="px-3 py-1"
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
         {cartQuantity}
       </Text>
       <Button
