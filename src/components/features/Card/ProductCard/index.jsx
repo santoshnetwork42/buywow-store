@@ -2,11 +2,12 @@
 
 import { Button, Heading, Img, Text } from "@/components/common";
 import ProductThumbnail from "@/components/common/ProductThumbnail";
+import Quantity from "@/components/common/Quantity";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import { getOfferValue } from "@/utils/helpers";
+import { getOfferValue, getRecordKey } from "@/utils/helpers";
 import Link from "next/link";
-import { memo, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { memo, useCallback, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const BenefitTag = memo(({ bgColor, tag }) => (
   <Text
@@ -58,11 +59,11 @@ const PriceDisplay = memo(({ price, listingPrice }) => (
         ₹{listingPrice}
       </Text>
     </div>
-    {price < listingPrice && (
+    {/* {price < listingPrice && (
       <div className="hidden h-6 min-w-[62px] items-center justify-center rounded-sm bg-lime-50 px-2 text-center text-xs capitalize text-black-900 md:flex">
         {getOfferValue(price, listingPrice)}% OFF
       </div>
-    )}
+    )} */}
   </div>
 ));
 
@@ -70,22 +71,31 @@ PriceDisplay.displayName = "PriceDisplay";
 
 const ProductCard = memo(
   ({ imageBgColor, productBenefitTags, slug, fetchedProduct, className }) => {
+    const dispatch = useDispatch();
+    const cartData = useSelector((state) => state?.cart?.data || []);
+
     const { listingPrice, price, rating, title, totalRatings, benefits } =
       fetchedProduct;
-
-    const dispatch = useDispatch();
 
     const addToCartHandler = useCallback(
       (e) => {
         dispatch({
           type: cartSagaActions.ADD_TO_CART,
           payload: {
-            product: fetchedProduct,
+            product: {
+              ...fetchedProduct,
+              cartQuantity: fetchedProduct.minimumOrderQuantity || 1,
+            },
           },
         });
       },
       [dispatch, fetchedProduct],
     );
+
+    const cartItem = useMemo(() => {
+      const recordKey = getRecordKey(fetchedProduct);
+      return cartData.find((item) => item.recordKey === recordKey);
+    }, [cartData, fetchedProduct]);
 
     return (
       <Link
@@ -134,14 +144,23 @@ const ProductCard = memo(
             <RatingDisplay rating={rating} totalRatings={totalRatings} />
             <div className="flex flex-1 justify-between">
               <PriceDisplay price={price} listingPrice={listingPrice} />
-              <Button
-                variant="primary"
-                size="medium"
-                className="shrink-0 text-sm md:text-base lg:text-lg"
-                onClick={addToCartHandler}
-              >
-                Add
-              </Button>
+              {!!cartItem && (
+                <Quantity
+                  quantity={cartItem.cartQuantity}
+                  cartItem={cartItem}
+                />
+              )}
+
+              {!cartItem && (
+                <Button
+                  variant="primary"
+                  size="medium"
+                  className="shrink-0 text-sm md:text-base lg:text-lg"
+                  onClick={addToCartHandler}
+                >
+                  Add
+                </Button>
+              )}
             </div>
           </div>
         </div>

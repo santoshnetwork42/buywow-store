@@ -49,6 +49,25 @@ export const getOfferValue = (price, listingPrice) => {
   return Math.round(offerPercentage);
 };
 
+export const getRecordKey = (product, variantId) => {
+  const { id } = product;
+  if (variantId) return `${id}-${variantId}`;
+
+  const firstVariant = getFirstVariant(product);
+
+  if (firstVariant) return `${id}-${firstVariant.id}`;
+
+  return id;
+};
+
+export const getUpdatedCart = async (cartList = [], recordKey, payload) => {
+  return await Promise.all(
+    cartList.map((item) =>
+      item.recordKey === recordKey ? { ...item, ...payload } : item,
+    ),
+  );
+};
+
 export const getFirstVariant = (product, variantId) => {
   try {
     if (!product) return null;
@@ -87,7 +106,7 @@ export const getOfferValueWithPercentage = (price, listingPrice) => {
 
 export const getProductSubTotal = (data) => {
   return data.reduce((acc, item) => {
-    const { price, quantity = 1 } = item;
-    return acc + price * quantity;
+    const { price, cartQuantity = 1 } = item;
+    return acc + price * cartQuantity;
   }, 0); // 0 is the initial value
 };

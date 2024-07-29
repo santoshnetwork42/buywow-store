@@ -43,7 +43,11 @@ export function* addToCartHandler(action) {
     if (existingItem) {
       const updatedData = cartState?.data?.map((item) =>
         item.recordKey === recordKey
-          ? { ...item, qty: parseInt(item.qty) + parseInt(tmpProduct.qty) }
+          ? {
+              ...item,
+              cartQuantity:
+                parseInt(item.cartQuantity) + parseInt(tmpProduct.cartQuantity),
+            }
           : item,
       );
 
@@ -52,14 +56,17 @@ export function* addToCartHandler(action) {
       yield put(updateSubTotal(subTotal));
       yield put(setCart([...updatedData]));
     } else {
-      console.log("reached else");
       const currentATC = {
         ...tmpProduct,
         recordKey,
         addedAt: new Date().toISOString(),
       };
 
-      yield put(updateSubTotal(cartState.subTotal + currentATC.price));
+      yield put(
+        updateSubTotal(
+          cartState.subTotal + currentATC.price * currentATC.cartQuantity,
+        ),
+      );
       yield put(setCart([...cartState.data, currentATC]));
     }
   } catch (error) {
@@ -72,22 +79,26 @@ export function* emptyCartHandler() {
   yield put(emptyCart());
 }
 
-export function* removeFromCartHandler(action) {
-  const tmpProduct = { ...action.payload.product };
-  const cartState = yield select((state) => state.cart);
+export function* updateCartHandler(action) {
+  const { data = [] } = action.payload;
+  const subTotal = getProductSubTotal(data);
 
-  const filteredCart = cartState.data.reduce((cartAcc, product) => {
-    if (
+  yield put(updateSubTotal(subTotal));
+  yield put(setCart(data));
+}
+
+export function* removeFromCartHandler(action) {
+  const { product: tmpProduct = {} } = action.payload;
+  const { data: cartData = [] } = yield select((state) => state.cart);
+
+  const filteredCart = cartData.filter(
+    (product) =>
       tmpProduct.recordKey !== product.recordKey &&
-      product.parentRecordKey !== tmpProduct.recordKey
-    ) {
-      cartAcc.push(product);
-    }
-    return cartAcc;
-  }, []);
+      product.parentRecordKey !== tmpProduct.recordKey,
+  );
 
   const subTotal = getProductSubTotal(filteredCart);
-  yield put(updateSubTotal(subTotal));
 
-  yield put(setCart([...filteredCart]));
+  yield put(updateSubTotal(subTotal));
+  yield put(setCart(filteredCart));
 }

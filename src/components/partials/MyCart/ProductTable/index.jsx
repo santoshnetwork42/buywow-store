@@ -1,6 +1,7 @@
 // components/MyCart/ProductTable.jsx
 import { Button, Heading, Img, Text } from "@/components/common";
 import ProductThumbnail from "@/components/common/ProductThumbnail";
+import Quantity from "@/components/common/Quantity";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getOfferValueWithPercentage } from "@/utils/helpers";
 import { useProduct, useProductVariantGroups } from "@wow-star/utils";
@@ -61,23 +62,7 @@ const ProductItem = React.memo(({ item }) => {
               </Text>
             </div>
             <div className="flex items-center">
-              <div className="flex items-center overflow-hidden rounded-md border">
-                <Button
-                  enableRipple={false}
-                  className="h-7 rounded-none bg-lime-50 px-[10px] py-0 text-black-900"
-                >
-                  -
-                </Button>
-                <Text as="span" className="px-3 py-1">
-                  {item.quantity || 1}
-                </Text>
-                <Button
-                  enableRipple={false}
-                  className="h-7 rounded-none bg-lime-50 px-[10px] py-0 text-black-900"
-                >
-                  +
-                </Button>
-              </div>
+              <Quantity quantity={item.cartQuantity} cartItem={item} />
               <Button
                 className="ml-2 rounded-md border bg-transparent px-2 py-[7px]"
                 onClick={removeFromCart}
