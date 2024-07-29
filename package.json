@@ -20,7 +20,7 @@
     "embla-carousel-wheel-gestures": "^8.0.1",
     "graphql": "^16.9.0",
     "next": "14.2.4",
-    "react": "^18",
+    "react": "^18.2.0",
     "react-dom": "^18",
     "react-redux": "^9.1.2",
     "react-select": "^5.8.0",

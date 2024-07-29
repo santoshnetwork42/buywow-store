@@ -105,11 +105,10 @@ export const footer = gql`
 
 export const landingPage = gql`
   query LandingPage {
-    pages(filters: { slugId: { eq: "index" } }) {
+    pages(filters: { slug: { eq: "index" } }) {
       data {
         attributes {
           slug
-          slugId
           type
           blocks {
             __typename
@@ -143,9 +142,37 @@ export const landingPage = gql`
               autoPlay
               autoPlayInterval
             }
-            ... on ComponentBannerBanners {
+            ... on ComponentBannerSingleBanner {
               id
-              bannerItems {
+              banner {
+                id
+                webImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      height
+                      width
+                    }
+                  }
+                }
+                mWebImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      height
+                      width
+                    }
+                  }
+                }
+                link
+                moeText
+              }
+            }
+            ... on ComponentBannerMiniBanners {
+              id
+              miniBannerItems {
                 id
                 webImage {
                   data {
@@ -286,7 +313,7 @@ export const landingPage = gql`
                 data {
                   attributes {
                     slug
-                    slugId
+
                     promotionTag {
                       data {
                         id
@@ -337,7 +364,7 @@ export const landingPage = gql`
                   data {
                     attributes {
                       slug
-                      slugId
+
                       promotionTag {
                         data {
                           id
@@ -375,11 +402,11 @@ export const landingPage = gql`
               id
               product {
                 id
-                product {
+                pdpProduct: product {
                   data {
                     attributes {
                       slug
-                      slugId
+
                       promotionTag {
                         data {
                           id
@@ -405,6 +432,7 @@ export const landingPage = gql`
                         bgColor
                       }
                       productDetailView {
+                        __typename
                         ... on ComponentAccordionDescriptionSection {
                           id
                           accordionDescriptionTitle: title
@@ -519,7 +547,7 @@ export const landingPage = gql`
                               data {
                                 attributes {
                                   slug
-                                  slugId
+
                                   promotionTag {
                                     data {
                                       id
@@ -614,7 +642,7 @@ export const landingPage = gql`
                   data {
                     attributes {
                       slug
-                      slugId
+
                       promotionTag {
                         data {
                           id
@@ -681,7 +709,7 @@ export const landingPage = gql`
                       data {
                         attributes {
                           slug
-                          slugId
+
                           imageBgColor
                         }
                       }
@@ -702,7 +730,7 @@ export const landingPage = gql`
                   data {
                     attributes {
                       slug
-                      slugId
+
                       promotionTag {
                         data {
                           id
@@ -924,12 +952,24 @@ export const landingPage = gql`
               title
               productProductKeyIngredientImagesBgColor: bgColor
               primaryIngredient {
-                data {
-                  attributes {
-                    alternativeText
-                    width
-                    height
-                    url
+                webImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      width
+                      height
+                      url
+                    }
+                  }
+                }
+                mWebImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      width
+                      height
+                      url
+                    }
                   }
                 }
               }
@@ -951,6 +991,13 @@ export const landingPage = gql`
             ... on ComponentProductProductReviews {
               id
               title
+              reviewProduct: product {
+                data {
+                  attributes {
+                    slug
+                  }
+                }
+              }
             }
           }
         }

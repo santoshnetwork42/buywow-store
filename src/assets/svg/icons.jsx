@@ -136,3 +136,44 @@ export const LoaderIcon = ({
     </svg>
   );
 };
+
+export const ArrowIconSVG = ({
+  height = 24,
+  width = 24,
+  className = "",
+  strokeWidth = 2,
+  fillColor = "none",
+  strokeColor = "currentColor",
+  side = "right",
+}) => {
+  const getPath = () => {
+    switch (side) {
+      case "left":
+        return "M15 6L9 12L15 18";
+      case "right":
+        return "M9 6L15 12L9 18";
+      case "top":
+        return "M6 15L12 9L18 15";
+      case "bottom":
+        return "M6 9L12 15L18 9";
+      default:
+        return "M9 6L15 12L9 18";
+    }
+  };
+
+  return (
+    <svg
+      height={height}
+      width={width}
+      className={className}
+      viewBox="0 0 24 24"
+      fill={fillColor}
+      stroke={strokeColor}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d={getPath()} />
+    </svg>
+  );
+};

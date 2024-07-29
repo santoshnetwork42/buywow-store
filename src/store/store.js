@@ -45,7 +45,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const persistConfig = {
   key: "wow",
-  whitelist: ["auth", "user", "modal"],
+  whitelist: ["auth", "user", "modal", "cart"],
   storage,
 };
 

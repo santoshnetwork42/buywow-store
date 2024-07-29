@@ -7,7 +7,7 @@ const BenefitItem = React.memo(({ text, subText, image }) => {
   const { url, alternativeText } = extractAttributes(image);
 
   return (
-    <div className="m-auto flex w-full flex-col items-center">
+    <div className="flex w-full flex-col items-center">
       <Img
         src={url}
         alt={alternativeText}
@@ -54,10 +54,15 @@ const ProductBenefits = ({
         isPaddedColor ? "py-5" : ""
       }`}
     >
-      <SectionHeading title={title} />
-      <div className="grid max-w-[1264px] grid-cols-2 justify-between gap-x-4 gap-y-6 sm:gap-x-5 md:grid-cols-4 md:gap-x-6 lg:gap-x-7 xl:gap-x-8">
+      {title && <SectionHeading title={title} />}
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-6 sm:gap-x-5 md:gap-x-6 lg:gap-x-7 xl:gap-x-8">
         {productBenefitItems.map((item, index) => (
-          <BenefitItem key={`benefit-${index}`} {...item} />
+          <div
+            key={`benefit-${index}`}
+            className="w-[calc(50%-8px)] max-w-72 sm:w-[calc(50%-10px)] md:w-[calc(25%-18px)] lg:w-[calc(25%-21px)] xl:w-[calc(25%-24px)]"
+          >
+            <BenefitItem {...item} />
+          </div>
         ))}
       </div>
     </div>

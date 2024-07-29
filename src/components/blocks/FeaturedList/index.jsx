@@ -2,7 +2,7 @@ import React from "react";
 import { Text, Img } from "@/components/common";
 import { extractAttributes } from "@/utils/helpers";
 
-const FeaturedItem = React.memo(({ image, text, isWebHorizontal }) => {
+const FeaturedItem = React.memo(({ image, text, isWebHorizontal, isInPDP }) => {
   const { url, alternativeText } = extractAttributes(image);
 
   return (
@@ -11,11 +11,11 @@ const FeaturedItem = React.memo(({ image, text, isWebHorizontal }) => {
     >
       <Img
         src={url}
-        width={60}
-        height={60}
+        width={isInPDP ? 42 : 60}
+        height={isInPDP ? 42 : 60}
         alt={alternativeText || "Feature Icon"}
         isStatic
-        className="aspect-square w-full max-w-10 rounded-full object-contain sm:max-w-12 md:max-w-14 lg:max-w-16"
+        className={`aspect-square w-full rounded-full object-contain ${!isInPDP ? "max-w-10 sm:max-w-12 md:max-w-14 lg:max-w-16" : "max-w-12"}`}
       />
       <Text
         as="p"
@@ -33,9 +33,9 @@ FeaturedItem.displayName = "FeaturedItem";
 const FeaturedList = ({
   featuredListItems: features,
   isWebHorizontal,
-  ...props
+  isInPDP = false,
 }) => {
-  if (!features?.length) return null;
+  if (!Array.isArray(features) || features.length === 0) return null;
 
   const getMaxWidth = (length) => {
     if (length > 4) return "100%";
@@ -50,7 +50,7 @@ const FeaturedList = ({
       style={{
         maxWidth: getMaxWidth(features?.length),
       }}
-      className="mx-auto mb-7 flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full md:mb-8"
+      className={`mx-auto flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full ${isInPDP ? "mb-6 md:mb-7" : "mb-7 md:mb-8"}`}
     >
       {features.map((feature, index) => (
         <FeaturedItem
@@ -58,6 +58,7 @@ const FeaturedList = ({
           image={feature?.image}
           text={feature?.text}
           isWebHorizontal={isWebHorizontal}
+          isInPDP={isInPDP}
         />
       ))}
     </div>

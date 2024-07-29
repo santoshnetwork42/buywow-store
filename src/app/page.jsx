@@ -36,20 +36,23 @@ const ProductHighlights = dynamic(
 const ProductBenefits = dynamic(
   () => import("@/components/blocks/ProductBenefits"),
 );
-const ShopCategories = dynamic(
-  () => import("@/components/partials/Home/ShopCategories"),
+const ProductKeyIngredients = dynamic(
+  () => import("@/components/blocks/ProductKeyIngredients"),
+);
+const InfoDropdown = dynamic(
+  () => import("@/components/blocks/Accordion/InfoDropdown"),
+);
+const CollectionLinks = dynamic(
+  () => import("@/components/blocks/CollectionLinks"),
+);
+const ProductDetailView = dynamic(
+  () => import("@/components/blocks/ProductDetailView"),
 );
 const VideoSection = dynamic(
   () => import("@/components/partials/Home/VideoSection"),
 );
-const OfferCarousal = dynamic(
-  () => import("@/components/features/Carousel/OfferCarousel"),
-);
 const BlogSection = dynamic(
   () => import("@/components/partials/Home/BlogSection"),
-);
-const DeliveryInfoSection = dynamic(
-  () => import("@/components/common/partials/DeliveryInfoSection"),
 );
 
 export const metadata = {
@@ -86,18 +89,18 @@ const renderBlock = (block, index) => {
       return <ProductHighlights key={index} {...block} />;
     case "ComponentProductProductBenefits":
       return <ProductBenefits key={index} {...block} />;
-    case "ComponentShopCategories":
-      return <ShopCategories key={index} {...block} />;
+    case "ComponentProductProductKeyIngredientImages":
+      return <ProductKeyIngredients key={index} {...block} />;
+    case "ComponentAccordionInfoDropdownSection":
+      return <InfoDropdown key={index} {...block} />;
+    case "ComponentBlocksCollectionLinks":
+      return <CollectionLinks key={index} {...block} />;
+    case "ComponentBlocksPdp":
+      return <ProductDetailView key={index} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} {...block} />;
-    case "ComponentOfferCarousal":
-      return <OfferCarousal key={index} {...block} />;
     case "ComponentBlogSection":
       return <BlogSection key={index} {...block} />;
-    case "ComponentDeliveryInfoSection":
-      return <DeliveryInfoSection key={index} {...block} />;
-    case "ComponentBlocksFeaturedProducts":
-      return <div key={index}></div>;
     default:
       return null;
   }
@@ -105,8 +108,8 @@ const renderBlock = (block, index) => {
 
 const getPageData = unstable_cache(
   async (slug) => await getPageBySlugAPI(slug),
-  ["home_pageData"],
-  { revalidate: 10 },
+  ["pageData"],
+  { revalidate: 1 },
 );
 
 export default async function Page() {
@@ -117,55 +120,11 @@ export default async function Page() {
     const pageData = await getPageData("index");
     const { blocks } = pageData || {};
 
-    console.log(blocks);
-
-    // console.log(blocks);
-
-    if (!blocks?.length) return null;
+    if (!Array.isArray(blocks) || blocks.length === 0) return null;
 
     return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
   } catch (error) {
     console.error(error);
     return <p>Something went wrong...</p>;
   }
-}
-
-{
-  /* <div className="mb-8 flex w-full flex-col items-center">
-        <ProductCategories categories={productCategoryItems} />
-        <Carousal className="w-full" carousalData={introCarousalData} />
-        <ProductFeatures
-          className="container-main mb-7 mt-[22px] sm:mt-6 md:mt-7 lg:my-8"
-          features={productFeaturesData.features}
-        />
-        <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          <TabProductSection
-            title={bestSellerData.title}
-            categories={bestSellerData.categories}
-            products={bestSellerData.products}
-          />
-          <ShopIngredients shopIngredientsData={shopIngredientsData} />
-          <OfferCarousal offers={offersData} />
-          <ConcernSection sectionData={concernSectionData} />
-          <NewLaunchSection newLaunchData={newLaunchData} />
-        </div>
-        <ShopBanner
-          {...testimonialBannerData}
-          className="my-8 sm:my-10 lg:my-12"
-        />
-        <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          <ShopCategories sectionData={shopCategoriesData} />
-          <TabProductSection {...tabProductData} />
-        </div>
-        <ShopBanner
-          {...portfolioBannerData}
-          className="my-8 sm:my-10 lg:my-12"
-        />
-        <div className="container-main flex flex-col gap-8 sm:gap-10 lg:gap-12">
-          <TestimonialSection sectionData={TestimonialSectionData} />
-          <BlogSection sectionData={blogSectionData} />
-          <VideoSection sectionData={instagramFeedData} />
-          <DeliveryInfoSection data={deliveryInfoData} />
-        </div>
-      </div> */
 }

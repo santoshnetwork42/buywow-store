@@ -1,7 +1,13 @@
-import React, { memo } from "react";
+"use client";
+
+import { Button, Heading, Img, Text } from "@/components/common";
+import ProductThumbnail from "@/components/common/ProductThumbnail";
+import Quantity from "@/components/common/Quantity";
+import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
+import { getOfferValue, getRecordKey } from "@/utils/helpers";
 import Link from "next/link";
-import { Button, Text, Heading, Img } from "@/components/common";
-import { getOfferValue } from "@/utils/helpers";
+import { memo, useCallback, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const BenefitTag = memo(({ bgColor, tag }) => (
   <Text
@@ -11,7 +17,7 @@ const BenefitTag = memo(({ bgColor, tag }) => (
     style={{ backgroundColor: bgColor }}
     responsive
   >
-    {tag + tag}
+    {tag}
   </Text>
 ));
 
@@ -53,11 +59,11 @@ const PriceDisplay = memo(({ price, listingPrice }) => (
         ₹{listingPrice}
       </Text>
     </div>
-    {price < listingPrice && (
+    {/* {price < listingPrice && (
       <div className="hidden h-6 min-w-[62px] items-center justify-center rounded-sm bg-lime-50 px-2 text-center text-xs capitalize text-black-900 md:flex">
         {getOfferValue(price, listingPrice)}% OFF
       </div>
-    )}
+    )} */}
   </div>
 ));
 
@@ -65,8 +71,31 @@ PriceDisplay.displayName = "PriceDisplay";
 
 const ProductCard = memo(
   ({ imageBgColor, productBenefitTags, slug, fetchedProduct, className }) => {
+    const dispatch = useDispatch();
+    const cartData = useSelector((state) => state?.cart?.data || []);
+
     const { listingPrice, price, rating, title, totalRatings, benefits } =
       fetchedProduct;
+
+    const addToCartHandler = useCallback(
+      (e) => {
+        dispatch({
+          type: cartSagaActions.ADD_TO_CART,
+          payload: {
+            product: {
+              ...fetchedProduct,
+              cartQuantity: fetchedProduct.minimumOrderQuantity || 1,
+            },
+          },
+        });
+      },
+      [dispatch, fetchedProduct],
+    );
+
+    const cartItem = useMemo(() => {
+      const recordKey = getRecordKey(fetchedProduct);
+      return cartData.find((item) => item.recordKey === recordKey);
+    }, [cartData, fetchedProduct]);
 
     return (
       <Link
@@ -77,12 +106,13 @@ const ProductCard = memo(
           className="overflow-hidden rounded-lg p-0.5 sm:p-1 md:p-2 lg:p-3 xl:p-4"
           style={{ backgroundColor: imageBgColor }}
         >
-          <Img
-            src="img_product_1.png"
-            width={274}
-            height={274}
-            alt={title}
+          <ProductThumbnail
+            width={500}
+            height={550}
+            fetchedProduct={fetchedProduct}
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
+            isStatic
+            alt="Product Image"
           />
         </div>
         <div className="flex max-h-12 flex-wrap gap-[4px] overflow-hidden md:max-h-[52px]">
@@ -114,13 +144,23 @@ const ProductCard = memo(
             <RatingDisplay rating={rating} totalRatings={totalRatings} />
             <div className="flex flex-1 justify-between">
               <PriceDisplay price={price} listingPrice={listingPrice} />
-              <Button
-                variant="primary"
-                size="medium"
-                className="shrink-0 text-sm md:text-base lg:text-lg"
-              >
-                Add
-              </Button>
+              {!!cartItem && (
+                <Quantity
+                  quantity={cartItem.cartQuantity}
+                  cartItem={cartItem}
+                />
+              )}
+
+              {!cartItem && (
+                <Button
+                  variant="primary"
+                  size="medium"
+                  className="shrink-0 text-sm md:text-base lg:text-lg"
+                  onClick={addToCartHandler}
+                >
+                  Add
+                </Button>
+              )}
             </div>
           </div>
         </div>

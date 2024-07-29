@@ -1,17 +1,17 @@
-import { call, put } from "redux-saga/effects";
 import {
-  signUpWithAwsRequest,
-  signInWithAwsRequest,
+  autoSignInRequest,
   confirmSignInRequest,
   confirmSignUpRequest,
   resendSignUpCodeRequest,
-  autoSignInRequest,
+  signInWithAwsRequest,
   signOutRequest,
+  signUpWithAwsRequest,
 } from "@/store/sagas/requests/auth.request";
 import {
   setAuthLoading,
   setConfirmationStatus,
 } from "@/store/slices/auth/authSlice";
+import { call, put } from "redux-saga/effects";
 
 export function* createAwsAccountHandler(action) {
   try {
