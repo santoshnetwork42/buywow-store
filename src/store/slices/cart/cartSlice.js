@@ -6,6 +6,7 @@ export const initialState = {
   cartId: null,
   isRewardApplied: true,
   isShoppingCartIdLoading: false,
+  subTotal: 0,
 };
 
 export const cartSlice = createSlice({
@@ -15,8 +16,14 @@ export const cartSlice = createSlice({
     setCart: (state, action) => {
       state.data = action.payload;
     },
+    updateSubTotal: (state, action) => {
+      state.subTotal = action.payload;
+    },
+    emptyCart: (state) => {
+      state.initialState = { ...initialState };
+    },
   },
 });
 
-export const { setCart } = cartSlice.actions;
+export const { setCart, updateSubTotal, emptyCart } = cartSlice.actions;
 export default cartSlice.reducer;

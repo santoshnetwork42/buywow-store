@@ -1,12 +1,18 @@
 "use client";
 
 import { Button, Heading, Img, Text } from "@/components/common";
-import ProductThumbImage from "@/components/common/ProductThumbImage";
+import ProductThumbnail from "@/components/common/ProductThumbnail";
+import Quantity from "@/components/common/Quantity";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import { extractAttributes, getOfferValue } from "@/utils/helpers";
+import {
+  extractAttributes,
+  getOfferValue,
+  getRecordKey,
+} from "@/utils/helpers";
+import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 import Link from "next/link";
-import { memo, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { memo, useCallback, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { twMerge } from "tailwind-merge";
 
 const BenefitTag = memo(({ bgColor, tag }) => (
@@ -82,10 +88,14 @@ const ProductCard = memo(
     offerTag,
     className,
   }) => {
-    const { listingPrice, price, rating, title, totalRatings, benefits } =
-      fetchedProduct;
-
     const dispatch = useDispatch();
+    const cartData = useSelector((state) => state?.cart?.data || []);
+
+    const [selectedVariant] = useProductVariantGroups(fetchedProduct);
+    const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
+
+    const { listingPrice, price, rating, title, totalRatings, benefits } =
+      packageProduct;
 
     const addToCartHandler = useCallback(
       (e) => {
@@ -94,12 +104,20 @@ const ProductCard = memo(
         dispatch({
           type: cartSagaActions.ADD_TO_CART,
           payload: {
-            product: fetchedProduct,
+            product: {
+              ...packageProduct,
+              cartQuantity: packageProduct.minimumOrderQuantity || 1,
+            },
           },
         });
       },
-      [dispatch, fetchedProduct],
+      [dispatch, packageProduct],
     );
+
+    const cartItem = useMemo(() => {
+      const recordKey = getRecordKey(packageProduct);
+      return cartData.find((item) => item.recordKey === recordKey);
+    }, [cartData, packageProduct]);
 
     if (!fetchedProduct) return null;
 
@@ -115,10 +133,10 @@ const ProductCard = memo(
           className="relative overflow-hidden rounded-lg p-0.5 sm:p-1 md:p-2 lg:p-3 xl:p-4"
           style={{ backgroundColor: imageBgColor || "#FFFFFF" }}
         >
-          <ProductThumbImage
+          <ProductThumbnail
             width={500}
             height={550}
-            fetchedProduct={fetchedProduct}
+            fetchedProduct={packageProduct}
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
             isStatic
             alt="Product Image"
@@ -180,16 +198,25 @@ const ProductCard = memo(
           </div>
           <div className="flex flex-col justify-between gap-1">
             <RatingDisplay rating={rating} totalRatings={totalRatings} />
-            <div className="flex flex-1 justify-between">
+            <div className="flex flex-1 justify-between gap-2">
               <PriceDisplay price={price} listingPrice={listingPrice} />
-              <Button
-                variant="primary"
-                size="medium"
-                className="shrink-0 text-sm md:text-base lg:text-lg"
-                onClick={addToCartHandler}
-              >
-                Add
-              </Button>
+              {!!cartItem && (
+                <Quantity
+                  quantity={cartItem.cartQuantity}
+                  cartItem={cartItem}
+                />
+              )}
+
+              {!cartItem && (
+                <Button
+                  variant="primary"
+                  size="medium"
+                  className="shrink-0 text-sm md:text-base lg:text-lg"
+                  onClick={addToCartHandler}
+                >
+                  Add
+                </Button>
+              )}
             </div>
           </div>
         </div>

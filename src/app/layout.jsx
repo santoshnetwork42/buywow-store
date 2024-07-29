@@ -22,7 +22,7 @@ Amplify.configure({
 const getNavbarAndFooter = unstable_cache(
   getNavbarAndFooterAPI,
   ["navbar", "footer"],
-  { revalidate: 900 },
+  { revalidate: 1 },
 );
 
 async function RootLayout({ children }) {

@@ -1,5 +1,9 @@
-import { setCart } from "@/store/slices/cart/cartSlice";
-import { getFirstVariant } from "@/utils/helpers";
+import {
+  emptyCart,
+  setCart,
+  updateSubTotal,
+} from "@/store/slices/cart/cartSlice";
+import { getFirstVariant, getProductSubTotal } from "@/utils/helpers";
 import { put, select } from "redux-saga/effects";
 
 export function* addToCartHandler(action) {
@@ -8,10 +12,14 @@ export function* addToCartHandler(action) {
     const variant = getFirstVariant(tmpProduct, tmpProduct.variantId);
 
     if (variant) {
-      tmpProduct.variantId = variant.id;
-      tmpProduct.price = variant.price;
-      tmpProduct.listingPrice = variant.listingPrice;
+      tmpProduct = {
+        ...tmpProduct,
+        variantId: variant.id,
+        price: variant.price,
+        listingPrice: variant.listingPrice,
+      };
     }
+
     let recordKey = tmpProduct.id;
     if (tmpProduct.variantId) {
       recordKey = `${tmpProduct.id}-${tmpProduct.variantId}`;
@@ -27,18 +35,25 @@ export function* addToCartHandler(action) {
       tmpProduct.price = tmpProduct.recommendPrice;
     }
 
-    const state = yield select((state) => state.cart);
-    const existingItem = state.data.find(
+    const cartState = yield select((state) => state.cart);
+    const existingItem = cartState?.data?.find(
       (item) => item.recordKey === recordKey,
     );
 
     if (existingItem) {
-      const updatedData = state.data.map((item) =>
+      const updatedData = cartState?.data?.map((item) =>
         item.recordKey === recordKey
-          ? { ...item, qty: parseInt(item.qty) + parseInt(tmpProduct.qty) }
+          ? {
+              ...item,
+              cartQuantity:
+                parseInt(item.cartQuantity) + parseInt(tmpProduct.cartQuantity),
+            }
           : item,
       );
 
+      const subTotal = getProductSubTotal(updatedData);
+
+      yield put(updateSubTotal(subTotal));
       yield put(setCart([...updatedData]));
     } else {
       const currentATC = {
@@ -47,18 +62,43 @@ export function* addToCartHandler(action) {
         addedAt: new Date().toISOString(),
       };
 
-      yield put(setCart([...state.data, currentATC]));
-
-      // yield put({
-      //   type: "ADD_TO_CART",
-      //   payload: {
-      //     ...state,
-      //     data: [...state.data, currentATC],
-      //   },
-      // });
+      yield put(
+        updateSubTotal(
+          cartState.subTotal + currentATC.price * currentATC.cartQuantity,
+        ),
+      );
+      yield put(setCart([...cartState.data, currentATC]));
     }
   } catch (error) {
     console.log("error", error);
     yield put({ type: "ADD_TO_CART_ERROR", payload: error.message });
   }
+}
+
+export function* emptyCartHandler() {
+  yield put(emptyCart());
+}
+
+export function* updateCartHandler(action) {
+  const { data = [] } = action.payload;
+  const subTotal = getProductSubTotal(data);
+
+  yield put(updateSubTotal(subTotal));
+  yield put(setCart(data));
+}
+
+export function* removeFromCartHandler(action) {
+  const { product: tmpProduct = {} } = action.payload;
+  const { data: cartData = [] } = yield select((state) => state.cart);
+
+  const filteredCart = cartData.filter(
+    (product) =>
+      tmpProduct.recordKey !== product.recordKey &&
+      product.parentRecordKey !== tmpProduct.recordKey,
+  );
+
+  const subTotal = getProductSubTotal(filteredCart);
+
+  yield put(updateSubTotal(subTotal));
+  yield put(setCart(filteredCart));
 }
