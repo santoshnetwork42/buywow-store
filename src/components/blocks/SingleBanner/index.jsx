@@ -4,7 +4,7 @@ import Link from "next/link";
 import { extractAttributes } from "@/utils/helpers";
 import { Img } from "@/components/common";
 
-const SingleBanner = React.memo(({ banner }) => {
+const SingleBanner = React.memo(({ banner, slug }) => {
   if (!banner) return null;
 
   const { webImage, mWebImage, link } = banner;
@@ -24,7 +24,10 @@ const SingleBanner = React.memo(({ banner }) => {
   if (!imageUrl || !imageWidth || !imageHeight) return null;
 
   return (
-    <Link href={link || "#"} className="mb-main block w-full">
+    <Link
+      href={link || "#"}
+      className={`block w-full ${slug?.[slug?.length - 2] === "collections" ? "container-main mb-5 sm:mb-6 lg:mb-7" : "mb-main"}`}
+    >
       <picture className="block w-full">
         {webImageAttrs.url && (
           <source

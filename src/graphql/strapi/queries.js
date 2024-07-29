@@ -105,7 +105,7 @@ export const footer = gql`
 
 export const landingPage = gql`
   query LandingPage {
-    pages(filters: { slug: { eq: "index" } }) {
+    pages(filters: { slug: { eq: "hair-care" } }) {
       data {
         attributes {
           slug
@@ -583,95 +583,6 @@ export const landingPage = gql`
                 }
               }
             }
-            ... on ComponentBlocksProductCollectionByTab {
-              id
-              title
-              defaultCollectionSorting
-              verticalBlogCard {
-                id
-                title
-                image {
-                  data {
-                    attributes {
-                      alternativeText
-                      url
-                      width
-                      height
-                    }
-                  }
-                }
-                button {
-                  id
-                  text
-                  link
-                }
-                bgColor
-                row
-              }
-              horizontalBlogCards {
-                id
-                title
-                image {
-                  data {
-                    attributes {
-                      alternativeText
-                      url
-                      width
-                      height
-                    }
-                  }
-                }
-                button {
-                  id
-                  text
-                  link
-                }
-                bgColor
-                row
-              }
-              productCollectionTabItems {
-                id
-                tab {
-                  data {
-                    attributes {
-                      title
-                    }
-                  }
-                }
-                products {
-                  data {
-                    attributes {
-                      slug
-
-                      promotionTag {
-                        data {
-                          id
-                          attributes {
-                            tag
-                            bgColor
-                          }
-                        }
-                      }
-                      productBenefitTags {
-                        data {
-                          id
-                          attributes {
-                            tag
-                            bgColor
-                          }
-                        }
-                      }
-                      imageBgColor
-                      offerTag {
-                        id
-                        showOfferTag
-                        bgColor
-                      }
-                    }
-                  }
-                }
-              }
-            }
             ... on ComponentBlocksTestimonialSection {
               id
               title
@@ -951,28 +862,7 @@ export const landingPage = gql`
               id
               title
               productProductKeyIngredientImagesBgColor: bgColor
-              primaryIngredient {
-                webImage {
-                  data {
-                    attributes {
-                      alternativeText
-                      width
-                      height
-                      url
-                    }
-                  }
-                }
-                mWebImage {
-                  data {
-                    attributes {
-                      alternativeText
-                      width
-                      height
-                      url
-                    }
-                  }
-                }
-              }
+
               secondaryIngredients {
                 id
                 title
@@ -996,6 +886,98 @@ export const landingPage = gql`
                   attributes {
                     slug
                   }
+                }
+              }
+            }
+            ... on ComponentBlocksProductCollectionByTab {
+              id
+              title
+              defaultCollectionSorting
+              productCollectionTabItems {
+                id
+                tab {
+                  data {
+                    attributes {
+                      title
+                    }
+                  }
+                }
+                products {
+                  data {
+                    attributes {
+                      slug
+                      promotionTag {
+                        data {
+                          attributes {
+                            tag
+                            bgColor
+                          }
+                        }
+                      }
+                      productBenefitTags {
+                        data {
+                          attributes {
+                            tag
+                            bgColor
+                          }
+                        }
+                      }
+                      imageBgColor
+                      offerTag {
+                        id
+                        showOfferTag
+                        bgColor
+                      }
+                    }
+                  }
+                }
+              }
+              verticalBlogSection {
+                id
+                row
+                verticalBlogItem {
+                  id
+                  title
+                  image {
+                    data {
+                      attributes {
+                        alternativeText
+                        url
+                        width
+                        height
+                      }
+                    }
+                  }
+                  button {
+                    id
+                    text
+                    link
+                  }
+                  bgColor
+                }
+              }
+              horizontalBlogSection {
+                id
+                row
+                horizontalBlogItems {
+                  id
+                  title
+                  image {
+                    data {
+                      attributes {
+                        alternativeText
+                        url
+                        width
+                        height
+                      }
+                    }
+                  }
+                  button {
+                    id
+                    text
+                    link
+                  }
+                  bgColor
                 }
               }
             }

@@ -8,7 +8,8 @@ import React, {
   useRef,
 } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { Button, Img } from "@/components/common";
+import { Button, Img, Text } from "@/components/common";
+import { extractAttributes } from "@/utils/helpers";
 
 const Thumb = React.memo(({ isSelected, image, onClick }) => (
   <div
@@ -28,8 +29,6 @@ const Thumb = React.memo(({ isSelected, image, onClick }) => (
   </div>
 ));
 
-Thumb.displayName = "Thumb";
-
 const DotButton = React.memo(({ isSelected, onClick }) => (
   <Button
     className={`mr-1.5 inline-block h-1.5 cursor-pointer rounded-full transition-all duration-300 ease-in-out ${
@@ -41,9 +40,11 @@ const DotButton = React.memo(({ isSelected, onClick }) => (
   />
 ));
 
-DotButton.displayName = "DotButton";
-
-const ProductImageSection = React.memo(({ imageList }) => {
+const ProductImageSection = ({
+  imageList,
+  promotionTag,
+  productBenefitTags,
+}) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mainViewportRef, emblaMainApi] = useEmblaCarousel({
     skipSnaps: false,
@@ -79,29 +80,36 @@ const ProductImageSection = React.memo(({ imageList }) => {
     const mainImages = mainImageContainer?.querySelectorAll(".main-image");
 
     if (
-      mainContainer &&
-      mainImageContainer &&
-      mainImages?.length > 0 &&
-      thumbsContainer
-    ) {
-      const gap = parseInt(window.getComputedStyle(mainContainer).gap);
-      const mainImageWidth =
-        mainContainer.offsetWidth - thumbsContainer.offsetWidth - gap;
+      !mainContainer ||
+      !mainImageContainer ||
+      !mainImages?.length ||
+      !thumbsContainer
+    )
+      return;
 
-      mainImages.forEach((image) => {
-        image.style.width = `${mainImageWidth}px`;
-      });
+    const gap = parseInt(window.getComputedStyle(mainContainer).gap);
+    const mainImageWidth =
+      mainContainer.offsetWidth - thumbsContainer.offsetWidth - gap;
 
-      thumbsContainer.style.height = `${mainImageContainer.offsetHeight}px`;
-    }
+    mainImages.forEach((image) => {
+      image.style.width = `${mainImageWidth}px`;
+    });
+
+    thumbsContainer.style.height = `${mainImageContainer.offsetHeight}px`;
   }, []);
 
   useEffect(() => {
     if (!emblaMainApi) return;
     onSelect();
+    emblaMainApi.scrollTo(0);
+    emblaMainApi.on("reInit", onSelect);
     emblaMainApi.on("select", onSelect);
-    return () => emblaMainApi.off("select", onSelect);
-  }, [emblaMainApi, onSelect]);
+
+    return () => {
+      emblaMainApi.off("select", onSelect);
+      emblaMainApi.off("reInit", onSelect);
+    };
+  }, [emblaMainApi, onSelect, imageList]);
 
   useEffect(() => {
     setThumbsHeight();
@@ -140,11 +148,11 @@ const ProductImageSection = React.memo(({ imageList }) => {
       imageList?.map((image, index) => (
         <div
           key={image?.imageKey || index}
-          className="flex-[0_0_100%] overflow-hidden"
+          className="main-image flex-[0_0_100%] overflow-hidden"
         >
           <Img
             src={image?.imageKey}
-            width={620}
+            width={820}
             height={480}
             alt={`Product image ${index + 1}`}
             isStatic
@@ -152,9 +160,44 @@ const ProductImageSection = React.memo(({ imageList }) => {
             className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
             addPrefix
           />
+          {promotionTag?.data &&
+            index === 0 &&
+            (() => {
+              const { tag, bgColor } = extractAttributes(promotionTag);
+              return (
+                <Text
+                  as="span"
+                  size="base"
+                  className="absolute left-2.5 top-2 z-10 rounded px-2 py-1 text-sm text-white-a700 md:top-2.5 md:px-3"
+                  responsive
+                  style={{ backgroundColor: bgColor || "#DD8434" }}
+                >
+                  {tag}
+                </Text>
+              );
+            })()}
+          {productBenefitTags?.data && (
+            <div className="absolute right-2.5 top-2 z-10 flex flex-col items-end gap-2 md:top-2.5">
+              {productBenefitTags.data.map((benefitTag, index) => {
+                const { tag, bgColor } = benefitTag?.attributes || {};
+                return (
+                  <Text
+                    key={index}
+                    as="span"
+                    size="sm"
+                    className="w-fit rounded px-2 py-1 md:px-3"
+                    responsive
+                    style={{ backgroundColor: bgColor || "#DD8434" }}
+                  >
+                    {tag}
+                  </Text>
+                );
+              })}
+            </div>
+          )}
         </div>
       )),
-    [imageList],
+    [imageList, promotionTag, productBenefitTags],
   );
 
   const renderDotButtons = useMemo(
@@ -186,31 +229,21 @@ const ProductImageSection = React.memo(({ imageList }) => {
           <div className="flex h-full flex-col gap-2">{renderThumbs}</div>
         </div>
       </div>
-
       <div
         className="flex flex-1 flex-col items-center justify-center overflow-hidden md:gap-1"
         ref={mainViewportRef}
       >
-        <div
-          ref={mainImageContainerRef}
-          className="main-image-container flex gap-2"
-          role="tabpanel"
-          aria-label="Product image gallery"
-        >
+        <div ref={mainImageContainerRef} className="flex w-full gap-2">
           {renderMainImages}
         </div>
-        <div
-          className="mt-4 flex justify-center"
-          role="tablist"
-          aria-label="Image navigation dots"
-        >
-          {renderDotButtons}
-        </div>
+        <div className="mt-4 flex justify-center">{renderDotButtons}</div>
       </div>
     </div>
   );
-});
+};
 
+Thumb.displayName = "Thumb";
+DotButton.displayName = "DotButton";
 ProductImageSection.displayName = "ProductImageSection";
 
-export default ProductImageSection;
+export default React.memo(ProductImageSection);

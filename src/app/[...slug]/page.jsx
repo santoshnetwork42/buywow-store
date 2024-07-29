@@ -48,6 +48,10 @@ const CollectionLinks = dynamic(
 const ProductDetailView = dynamic(
   () => import("@/components/blocks/ProductDetailView"),
 );
+const ProductCollectionSection = dynamic(
+  () => import("@/components/blocks/ProductCollectionByTab"),
+);
+const InfoSection = dynamic(() => import("@/components/blocks/InfoSection"));
 const VideoSection = dynamic(
   () => import("@/components/partials/Home/VideoSection"),
 );
@@ -61,46 +65,50 @@ export const metadata = {
     "Revitalize your skin with Vitamin C face wash and natural ingredients. Cruelty-free, dermatologically tested skincare on sale. Free shipping on orders above ₹999.",
 };
 
-const renderBlock = (block, index) => {
+const renderBlock = (block, index, slug) => {
   switch (block?.__typename) {
     case "ComponentBannerCarousal":
-      return <Carousal key={index} {...block} />;
+      return <Carousal key={index} slug={slug} {...block} />;
     case "ComponentBannerSingleBanner":
-      return <SingleBanner key={index} {...block} />;
+      return <SingleBanner key={index} slug={slug} {...block} />;
     case "ComponentBannerMiniBanners":
-      return <MiniBanners key={index} {...block} />;
+      return <MiniBanners key={index} slug={slug} {...block} />;
     case "ComponentCategoriesTrendingCategories":
-      return <TrendingCategories key={index} {...block} />;
+      return <TrendingCategories key={index} slug={slug} {...block} />;
     case "ComponentBlocksFeaturedList":
-      return <FeaturedList key={index} {...block} />;
+      return <FeaturedList key={index} slug={slug} {...block} />;
     case "ComponentCategoriesIngredientCategories":
-      return <IngredientCategories key={index} {...block} />;
+      return <IngredientCategories key={index} slug={slug} {...block} />;
     case "ComponentCategoriesFeaturedCategories":
-      return <FeaturedCategories key={index} {...block} />;
+      return <FeaturedCategories key={index} slug={slug} {...block} />;
     case "ComponentBlocksTestimonialSection":
-      return <TestimonialSection key={index} {...block} />;
+      return <TestimonialSection key={index} slug={slug} {...block} />;
     case "ComponentBlocksFeaturedProducts":
-      return <FeaturedProducts key={index} {...block} />;
+      return <FeaturedProducts key={index} slug={slug} {...block} />;
     case "ComponentBlocksFeaturedProductsByTab":
-      return <FeaturedProductsByTab key={index} {...block} />;
+      return <FeaturedProductsByTab key={index} slug={slug} {...block} />;
     case "ComponentProductProductEffectivenessImages":
-      return <ProductEffectiveness key={index} {...block} />;
+      return <ProductEffectiveness key={index} slug={slug} {...block} />;
     case "ComponentProductProductHighlightImages":
-      return <ProductHighlights key={index} {...block} />;
+      return <ProductHighlights key={index} slug={slug} {...block} />;
     case "ComponentProductProductBenefits":
-      return <ProductBenefits key={index} {...block} />;
+      return <ProductBenefits key={index} slug={slug} {...block} />;
     case "ComponentProductProductKeyIngredientImages":
-      return <ProductKeyIngredients key={index} {...block} />;
+      return <ProductKeyIngredients key={index} slug={slug} {...block} />;
     case "ComponentAccordionInfoDropdownSection":
-      return <InfoDropdown key={index} {...block} />;
+      return <InfoDropdown key={index} slug={slug} {...block} />;
     case "ComponentBlocksCollectionLinks":
-      return <CollectionLinks key={index} {...block} />;
+      return <CollectionLinks key={index} slug={slug} {...block} />;
     case "ComponentBlocksPdp":
-      return <ProductDetailView key={index} {...block} />;
+      return <ProductDetailView key={index} slug={slug} {...block} />;
+    case "ComponentBlocksProductCollectionByTab":
+      return <ProductCollectionSection key={index} slug={slug} {...block} />;
+    case "ComponentBlocksInfoSection":
+      return <InfoSection key={index} slug={slug} {...block} />;
     case "ComponentVideoSection":
-      return <VideoSection key={index} {...block} />;
+      return <VideoSection key={index} slug={slug} {...block} />;
     case "ComponentBlogSection":
-      return <BlogSection key={index} {...block} />;
+      return <BlogSection key={index} slug={slug} {...block} />;
     default:
       return null;
   }
@@ -123,7 +131,7 @@ export default async function Page({ params }) {
 
     if (!blocks?.length) return null;
 
-    return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
+    return <>{blocks.map((block, index) => renderBlock(block, index, slug))}</>;
   } catch (error) {
     console.error(error);
     return <p>Something went wrong...</p>;

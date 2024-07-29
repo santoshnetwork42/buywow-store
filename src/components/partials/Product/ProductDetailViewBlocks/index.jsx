@@ -2,6 +2,9 @@ import React from "react";
 import dynamic from "next/dynamic";
 
 // Dynamically import components
+const UpsellProducts = dynamic(
+  () => import("@/components/partials/Product/UpsellProducts"),
+);
 const FeaturedList = dynamic(() => import("@/components/blocks/FeaturedList"));
 const AccordionDescription = dynamic(
   () => import("@/components/blocks/Accordion/AccordionDescription"),
@@ -18,6 +21,8 @@ const AccordionFaQs = dynamic(
 
 const renderBlock = (block, index) => {
   switch (block?.__typename) {
+    case "ComponentBlocksUpsellProducts":
+      return <UpsellProducts key={index} {...block} isInPDP />;
     case "ComponentBlocksFeaturedList":
       return <FeaturedList key={index} {...block} isInPDP />;
     case "ComponentAccordionDescriptionSection":

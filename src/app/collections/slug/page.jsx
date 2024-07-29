@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/common/Breadcrumb";
-import CollectionMetadata from "@/components/partials/Collection/CollectionMetadata";
+import CollectionMetadata from "@/components/blocks/InfoSection";
 import ProductCollectionSection from "@/components/partials/Collection/ProductCollectionSection";
 import RecentlyViewedSection from "@/components/partials/Collection/RecentlyViewedSection";
 // import IntroCarousal from "@/components/common/partials/Carousal";

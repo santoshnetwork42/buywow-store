@@ -18,7 +18,7 @@ const SortDropdown = ({ options, onOptionChange, className }) => {
         className,
       )}
     >
-      <Text size="sm" as="p" responsive>
+      <Text size="base" as="p" responsive>
         Sort By:
       </Text>
       <SelectBox
@@ -47,9 +47,15 @@ const SortDropdown = ({ options, onOptionChange, className }) => {
           }),
           option: (provided) => ({
             ...provided,
-            fontSize: "14px",
+            fontSize: "16px",
+            padding: "10px 14px",
+            "@media (max-width: 992px)": {
+              fontSize: "14px",
+              padding: "8px 12px",
+            },
             "@media (max-width: 576px)": {
               fontSize: "12px",
+              padding: "6px 10px",
             },
           }),
           control: (provided) => ({
@@ -60,8 +66,12 @@ const SortDropdown = ({ options, onOptionChange, className }) => {
             minHeight: "auto",
             cursor: "pointer",
             width: "100%",
+            fontSize: "16px",
             "&:hover": {
               border: "0 !important",
+            },
+            "@media (max-width: 992px)": {
+              fontSize: "14px",
             },
             "@media (max-width: 576px)": {
               fontSize: "12px",

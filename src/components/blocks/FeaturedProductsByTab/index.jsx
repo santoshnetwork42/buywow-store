@@ -74,7 +74,7 @@ const FeaturedProductsByTab = React.memo(
               {featuredProductsTabItems.map((item, index) => (
                 <Tab
                   key={index}
-                  className="px-2 py-1 text-sm font-light capitalize text-black-900 sm:px-3 md:px-4 md:py-[6px] md:text-base"
+                  className="px-2.5 py-1 text-sm font-light capitalize text-black-900 sm:px-3 md:px-4 md:py-[6px] md:text-base"
                 >
                   {item?.tab?.data?.attributes?.title}
                 </Tab>
