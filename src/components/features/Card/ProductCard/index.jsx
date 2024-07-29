@@ -5,6 +5,7 @@ import ProductThumbnail from "@/components/common/ProductThumbnail";
 import Quantity from "@/components/common/Quantity";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getOfferValue, getRecordKey } from "@/utils/helpers";
+import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 import Link from "next/link";
 import { memo, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -74,8 +75,11 @@ const ProductCard = memo(
     const dispatch = useDispatch();
     const cartData = useSelector((state) => state?.cart?.data || []);
 
+    const [selectedVariant] = useProductVariantGroups(fetchedProduct);
+    const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
+
     const { listingPrice, price, rating, title, totalRatings, benefits } =
-      fetchedProduct;
+      packageProduct;
 
     const addToCartHandler = useCallback(
       (e) => {
@@ -83,19 +87,19 @@ const ProductCard = memo(
           type: cartSagaActions.ADD_TO_CART,
           payload: {
             product: {
-              ...fetchedProduct,
-              cartQuantity: fetchedProduct.minimumOrderQuantity || 1,
+              ...packageProduct,
+              cartQuantity: packageProduct.minimumOrderQuantity || 1,
             },
           },
         });
       },
-      [dispatch, fetchedProduct],
+      [dispatch, packageProduct],
     );
 
     const cartItem = useMemo(() => {
-      const recordKey = getRecordKey(fetchedProduct);
+      const recordKey = getRecordKey(packageProduct);
       return cartData.find((item) => item.recordKey === recordKey);
-    }, [cartData, fetchedProduct]);
+    }, [cartData, packageProduct]);
 
     return (
       <Link
@@ -109,7 +113,7 @@ const ProductCard = memo(
           <ProductThumbnail
             width={500}
             height={550}
-            fetchedProduct={fetchedProduct}
+            fetchedProduct={packageProduct}
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
             isStatic
             alt="Product Image"
