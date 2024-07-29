@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Heading, Img, Text } from "@/components/common";
-import ProductThumbImage from "@/components/common/ProductThumbImage";
+import ProductThumbnail from "@/components/common/ProductThumbnail";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getOfferValue } from "@/utils/helpers";
 import Link from "next/link";
@@ -96,7 +96,7 @@ const ProductCard = memo(
           className="overflow-hidden rounded-lg p-0.5 sm:p-1 md:p-2 lg:p-3 xl:p-4"
           style={{ backgroundColor: imageBgColor }}
         >
-          <ProductThumbImage
+          <ProductThumbnail
             width={500}
             height={550}
             fetchedProduct={fetchedProduct}

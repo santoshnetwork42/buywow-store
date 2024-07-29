@@ -1,5 +1,5 @@
 import { Button, Heading, Img, Text } from "@/components/common";
-import ProductThumbImage from "@/components/common/ProductThumbImage";
+import ProductThumbnail from "@/components/common/ProductThumbnail";
 import { extractAttributes } from "@/utils/helpers";
 
 import Link from "next/link";
@@ -117,7 +117,7 @@ const TestimonialCard = React.memo(
               className="flex items-center justify-center gap-2 rounded bg-lime-100_01 p-2"
             >
               <div className="flex aspect-square w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-white-a700_01 md:aspect-[48/56]">
-                <ProductThumbImage
+                <ProductThumbnail
                   width={200}
                   fetchedProduct={fetchedProduct}
                   height={56}

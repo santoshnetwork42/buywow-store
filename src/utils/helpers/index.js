@@ -50,32 +50,44 @@ export const getOfferValue = (price, listingPrice) => {
 };
 
 export const getFirstVariant = (product, variantId) => {
-  if (product) {
-    const { variants = {} } = product;
-    const { items = [] } = variants;
+  try {
+    if (!product) return null;
 
-    let variant;
+    const { variants: { items = [] } = {} } = product;
+
+    const tempItems = [...items];
+
     if (variantId) {
-      variant = items.find((v) => v.id === variantId);
+      const variantById = items.find((v) => v.id === variantId);
+      if (variantById) return variantById;
     }
 
-    if (!variant) {
-      const variantsSortedByPosition = items.sort(
-        (a, b) => a.position - b.position,
-      );
-      variant = variantsSortedByPosition[0];
-      if (variantsSortedByPosition) {
-        for (let index = 0; index < variantsSortedByPosition.length; index++) {
-          const element = variantsSortedByPosition[index];
-          if (element.inventory && element.inventory > 0) {
-            variant = element;
-            break;
-          }
-        }
-      }
-    }
-
-    return variant;
+    const sortedVariants = tempItems.sort((a, b) => a.position - b.position);
+    return (
+      sortedVariants.find((v) => v.inventory > 0) || sortedVariants[0] || null
+    );
+  } catch (err) {
+    throw err;
   }
-  return null;
+};
+
+export const getOfferValueWithPercentage = (price, listingPrice) => {
+  if (
+    typeof price !== "number" ||
+    typeof listingPrice !== "number" ||
+    listingPrice === 0 ||
+    price < 0
+  ) {
+    return 0;
+  }
+  const discountAmount = listingPrice - price;
+  const offerPercentage = (discountAmount / listingPrice) * 100;
+  return Math.round(offerPercentage);
+};
+
+export const getProductSubTotal = (data) => {
+  return data.reduce((acc, item) => {
+    const { price, quantity = 1 } = item;
+    return acc + price * quantity;
+  }, 0); // 0 is the initial value
 };

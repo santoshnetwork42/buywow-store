@@ -3,7 +3,12 @@ import React, { Suspense } from "react";
 import PaymentSummary from "@/components/partials/MyCart/PaymentSummary";
 import OfferItem from "@/components/partials/MyCart/OfferItem";
 
-export default function CartSidebar({ offers, paymentSummary, cashback }) {
+export default function CartSidebar({
+  offers,
+  paymentSummary,
+  cashback,
+  subTotal,
+}) {
   return (
     <div className="flex w-full flex-col gap-10">
       <div className="flex flex-col gap-3">
@@ -13,7 +18,11 @@ export default function CartSidebar({ offers, paymentSummary, cashback }) {
           ))}
         </Suspense>
       </div>
-      <PaymentSummary summary={paymentSummary} cashback={cashback} />
+      <PaymentSummary
+        summary={paymentSummary}
+        cashback={cashback}
+        subTotal={subTotal}
+      />
     </div>
   );
 }
