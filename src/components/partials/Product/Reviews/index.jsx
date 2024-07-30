@@ -1,18 +1,20 @@
-import { Button, Heading, Img, Text } from "@/components/common";
+"use client";
+
+import { Button, Heading, Img, Text } from "@/components/elements";
 import { productData } from "@/utils/data/productData";
 import React from "react";
 import RatingBar from "@/components/partials/Product/Reviews/RatingBar";
 import ReviewStars from "./ReviewStars";
-import Divider from "@/components/common/Divider";
+import SectionHeading from "@/components/elements/SectionHeading";
 
-const Reviews = () => {
+const Reviews = ({ title, reviewProduct, ...props }) => {
+  // console.log(reviewProduct, title, props);
+  // return null;
   const product = productData[1];
 
   return (
-    <div className="container-main flex flex-col items-center justify-center">
-      <Heading size="heading" as="h1" responsive>
-        Our Happy Customers
-      </Heading>
+    <div className="container-main mb-main flex flex-col items-center justify-center">
+      <SectionHeading title={title} />
       <div className="flex w-full flex-col items-center justify-center gap-6 py-4 md:flex-row">
         <div className="flex flex-col items-center justify-center gap-3">
           <ReviewStars rating={product.rating} />
@@ -48,7 +50,7 @@ const Reviews = () => {
                 key={`review-${index}`}
                 className="flex w-full flex-col flex-wrap justify-between gap-4 md:flex-row"
               >
-                <Divider className="h-[0.05rem] w-full bg-gray-300" />
+                <div className="h-[0.05rem] w-full bg-gray-300" />
                 <div className="flex w-full flex-col md:max-w-[70%]">
                   <div className="flex flex-col gap-2">
                     <ReviewStars rating={item.rating} />
@@ -92,8 +94,10 @@ const Reviews = () => {
               </div>
             );
           })}
-        <Divider className="h-[0.05rem] w-full bg-gray-300" />
-        <Button className="w-fit py-2">Load More</Button>
+        <div className="h-[0.05rem] w-full bg-gray-300" />
+        <Button variant="primary" size="medium" className="">
+          Load More
+        </Button>
       </div>
     </div>
   );

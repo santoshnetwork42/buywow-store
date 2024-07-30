@@ -1,5 +1,5 @@
 "use client";
-import { Text } from "@/components/common";
+import { Text } from "@/components/elements";
 import React from "react";
 
 const RatingBar = ({ starCount = 0, percentage = 0 }) => {

@@ -1,4 +1,4 @@
-import { Heading, Text } from "@/components/common";
+import { Heading, Text } from "@/components/elements";
 
 const InfoSection = ({ information }) => (
   <div className="container-main mb-main flex">

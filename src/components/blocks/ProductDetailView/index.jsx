@@ -2,13 +2,13 @@
 
 import React, { useMemo, useCallback, useState, useEffect } from "react";
 import { IndiaMapIcon, StarIcon, VehicleIcon } from "@/assets/svg/icons";
-import { Button, Heading, Img, Text } from "@/components/common";
+import { Button, Heading, Img, Text } from "@/components/elements";
 import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
 import dynamic from "next/dynamic";
 
 const ProductImageSection = dynamic(
-  () => import("@/components/blocks/ProductDetailView/ProductImageSection"),
+  () => import("@/components/partials/Product/ProductImageSection"),
 );
 const ProductDetailViewBlocks = dynamic(
   () => import("@/components/partials/Product/ProductDetailViewBlocks"),

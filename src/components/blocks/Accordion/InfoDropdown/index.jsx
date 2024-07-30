@@ -7,8 +7,8 @@ import React, {
   useRef,
   useEffect,
 } from "react";
-import { Heading, Text } from "@/components/common";
-import ToggleArrow from "@/components/common/AccordionToggle";
+import { Heading, Text } from "@/components/elements";
+import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import { getBgColor } from "@/utils/helpers";
 
 const InfoDropdown = React.memo(

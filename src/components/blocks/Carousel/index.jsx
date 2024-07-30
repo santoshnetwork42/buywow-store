@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useMemo, useState, useEffect } from "react";
-import { Button, Img } from "@/components/common";
+import { Button, Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";

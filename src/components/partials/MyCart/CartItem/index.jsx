@@ -1,5 +1,5 @@
 // components/MyCart/CartItem.jsx
-import { Img, Text, Heading, Button } from "@/components/common";
+import { Img, Text, Heading, Button } from "@/components/elements";
 
 export default function CartItem({ product }) {
   return (

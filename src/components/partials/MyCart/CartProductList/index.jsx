@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { Button, Heading, Img, Text } from "@/components/common";
-import ProductThumbnail from "@/components/common/ProductThumbnail";
+import { Button, Heading, Img, Text } from "@/components/elements";
+import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import Quantity from "@/components/common/Quantity";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getOfferValueWithPercentage } from "@/utils/helpers";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Text } from "@/components/common";
+import { Button, Text } from "@/components/elements";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
 import { useState, useCallback, useMemo, useEffect } from "react";
@@ -23,7 +23,7 @@ const Quantity = ({ quantity, cartItem }) => {
       if (!cartItem) return;
 
       const recordKey = getRecordKey(cartItem);
-      const updatedCart = await getUpdatedCart(cartList, recordKey, {
+      const updatedCart = getUpdatedCart(cartList, recordKey, {
         cartQuantity: newQuantity,
       });
 

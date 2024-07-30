@@ -1,7 +1,7 @@
 import React from "react";
-import SectionHeading from "@/components/common/partials/SectionHeading";
+import SectionHeading from "@/components/elements/SectionHeading";
 import Slider from "@/components/features/Slider";
-import TestimonialCard from "@/components/features/Card/TestimonialCard";
+import TestimonialCard from "@/components/partials/Card/TestimonialCard";
 
 const TestimonialSection = React.memo(
   ({ title, testimonials: { data: testimonials } }) => {

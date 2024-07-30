@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 import styles from "@/components/features/Modal/Modal.module.scss";
-import { Heading } from "@/components/common";
+import { Heading } from "@/components/elements";
 import { CloseIcon } from "@/assets/svg/icons";
 
 const Modal = ({

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useMemo, useCallback } from "react";
-import SectionHeading from "@/components/common/partials/SectionHeading";
+import SectionHeading from "@/components/elements/SectionHeading";
 import { getBgColor } from "@/utils/helpers";
 import { TabPanel, TabList, Tab, Tabs } from "react-tabs";
 import Slider from "@/components/features/Slider";
-import ProductCard from "@/components/features/Card/ProductCard";
+import ProductCard from "@/components/partials/Card/ProductCard";
 import Link from "next/link";
-import { Heading } from "@/components/common";
+import { Heading } from "@/components/elements";
 
 const FeaturedProductsByTab = React.memo(
   ({

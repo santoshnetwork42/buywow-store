@@ -5,13 +5,12 @@ import "@/styles/font.css";
 import { Amplify } from "aws-amplify";
 import awsExport from "../../aws-exports";
 import { AWS_CLIENT_ID } from "../../config";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
-import AnnouncementBar from "@/components/common/AnnouncementBar";
+import AnnouncementBar from "@/components/blocks/AnnouncementBar";
 import { Provider } from "@/store/Provider";
-import { ApolloWrapper } from "@/lib/apollo-provider";
 import { getNavbarAndFooterAPI } from "@/lib/appSyncAPIs";
 import { unstable_cache } from "next/cache";
+import Header from "@/components/partials/Header";
+import Footer from "@/components/partials/Footer";
 
 Amplify.configure({
   ...awsExport,

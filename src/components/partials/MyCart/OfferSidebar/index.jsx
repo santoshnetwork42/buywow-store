@@ -1,7 +1,7 @@
 // components/MyCart/OfferSidebar.jsx
 import React, { useState } from "react";
-import { Button, Heading, Input, Text } from "@/components/common";
-import Sidebar from "@/components/common/Drawer";
+import { Button, Heading, Input, Text } from "@/components/elements";
+import Sidebar from "@/components/features/Drawer";
 import { CouponItem } from "@/components/partials/MyCart/SubOfferAndCouponItem";
 import { CloseSVG } from "@/assets/images";
 

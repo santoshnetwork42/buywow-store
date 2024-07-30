@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { Button, Heading, Text } from "@/components/common";
+import { Button, Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
-import ProductThumbnail from "@/components/common/ProductThumbnail";
+import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 
 const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   const { fetchedProduct, imageBgColor, slug } = extractAttributes(product);
@@ -29,7 +29,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
           fetchedProduct={fetchedProduct}
         />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-1 flex-col gap-1">
         <div className="flex flex-1 flex-col">
           <Heading
             as="h4"
@@ -45,7 +45,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
           </Text>
         </div>
         <div className="flex justify-between">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 md:gap-2">
             <div className="flex shrink items-center gap-1 md:gap-2">
               <Heading as="span" size="lg" className="text-base" responsive>
                 ₹{price}

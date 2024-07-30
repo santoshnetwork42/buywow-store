@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { Img, Text } from "@/components/common";
-import Accordion from "@/components/common/Accordion";
+import { Img, Text } from "@/components/elements";
+import Accordion from "@/components/features/Accordion";
 import { extractAttributes } from "@/utils/helpers";
 
 const IngredientItem = memo(({ text, subText, imageUrl, imageAlt }) => (

@@ -8,10 +8,10 @@ import React, {
   useEffect,
 } from "react";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
-import { Heading } from "@/components/common";
-import ProductCard from "@/components/features/Card/ProductCard";
-import SortDropdown from "@/components/common/partials/SortDropdown";
-import BlogCard from "@/components/features/Card/BlogCard";
+import { Heading } from "@/components/elements";
+import ProductCard from "@/components/partials/Card/ProductCard";
+import SortDropdown from "@/components/common/SortDropdown";
+import BlogCard from "@/components/partials/Card/BlogCard";
 import Slider from "@/components/features/Slider";
 
 const SORT_OPTIONS = [

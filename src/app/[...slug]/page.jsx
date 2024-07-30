@@ -28,16 +28,16 @@ const FeaturedProductsByTab = dynamic(
   () => import("@/components/blocks/FeaturedProductsByTab"),
 );
 const ProductEffectiveness = dynamic(
-  () => import("@/components/blocks/ProductEffectiveness"),
+  () => import("@/components/blocks/Products/ProductEffectiveness"),
 );
 const ProductHighlights = dynamic(
-  () => import("@/components/blocks/ProductHighlights"),
+  () => import("@/components/blocks/Products/ProductHighlights"),
 );
 const ProductBenefits = dynamic(
-  () => import("@/components/blocks/ProductBenefits"),
+  () => import("@/components/blocks/Products/ProductBenefits"),
 );
 const ProductKeyIngredients = dynamic(
-  () => import("@/components/blocks/ProductKeyIngredients"),
+  () => import("@/components/blocks/Products/ProductKeyIngredients"),
 );
 const InfoDropdown = dynamic(
   () => import("@/components/blocks/Accordion/InfoDropdown"),
@@ -52,11 +52,27 @@ const ProductCollectionSection = dynamic(
   () => import("@/components/blocks/ProductCollectionByTab"),
 );
 const InfoSection = dynamic(() => import("@/components/blocks/InfoSection"));
+const Reviews = dynamic(() => import("@/components/partials/Product/Reviews"));
+const UpsellProducts = dynamic(
+  () => import("@/components/partials/Product/UpsellProducts"),
+);
+const AccordionDescription = dynamic(
+  () => import("@/components/blocks/Accordion/AccordionDescription"),
+);
+const AccordionIngredients = dynamic(
+  () => import("@/components/blocks/Accordion/AccordionIngredients"),
+);
+const AccordionUsageInstructions = dynamic(
+  () => import("@/components/blocks/Accordion/AccordionUsageInstructions"),
+);
+const AccordionFaQs = dynamic(
+  () => import("@/components/blocks/Accordion/AccordionFaQs"),
+);
 const VideoSection = dynamic(
-  () => import("@/components/partials/Home/VideoSection"),
+  () => import("@/components/partials/Others/VideoSection"),
 );
 const BlogSection = dynamic(
-  () => import("@/components/partials/Home/BlogSection"),
+  () => import("@/components/partials/Others/BlogSection"),
 );
 
 export const metadata = {
@@ -105,6 +121,18 @@ const renderBlock = (block, index, slug) => {
       return <ProductCollectionSection key={index} slug={slug} {...block} />;
     case "ComponentBlocksInfoSection":
       return <InfoSection key={index} slug={slug} {...block} />;
+    case "ComponentProductProductReviews":
+      return <Reviews key={index} slug={slug} {...block} />;
+    case "ComponentBlocksUpsellProducts":
+      return <UpsellProducts key={index} slug={slug} {...block} />;
+    case "ComponentAccordionDescriptionSection":
+      return <AccordionDescription key={index} slug={slug} {...block} />;
+    case "ComponentAccordionIngredientsSection":
+      return <AccordionIngredients key={index} slug={slug} {...block} />;
+    case "ComponentAccordionUsageInstructionsSection":
+      return <AccordionUsageInstructions key={index} slug={slug} {...block} />;
+    case "ComponentAccordionFaQsSection":
+      return <AccordionFaQs key={index} slug={slug} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} slug={slug} {...block} />;
     case "ComponentBlogSection":

@@ -1,4 +1,4 @@
-import { Heading } from "@/components/common";
+import { Heading } from "@/components/elements";
 
 export default function CartHeader({ itemCount, className }) {
   return (
