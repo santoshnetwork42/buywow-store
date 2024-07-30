@@ -3,7 +3,7 @@
 import { Button, Text } from "@/components/common";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Quantity = ({ quantity, cartItem }) => {
@@ -13,6 +13,10 @@ const Quantity = ({ quantity, cartItem }) => {
 
   const cartData = useSelector((state) => state.cart);
   const cartList = useMemo(() => cartData?.data || [], [cartData?.data]);
+
+  useEffect(() => {
+    setCartQuantity(quantity);
+  }, [quantity]);
 
   const updateCart = useCallback(
     async (newQuantity) => {

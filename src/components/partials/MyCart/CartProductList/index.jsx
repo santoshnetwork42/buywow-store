@@ -10,10 +10,7 @@ import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 const ProductItem = React.memo(({ item }) => {
   const dispatch = useDispatch();
 
-  const [selectedVariant] = useProductVariantGroups(item);
-  const packageProduct = useProduct(item, selectedVariant?.id);
-
-  const { title = "", price = 0, listingPrice = 0 } = packageProduct ?? {};
+  const { title = "", price = 0, listingPrice = 0 } = item ?? {};
   const showStrikePrice = listingPrice && price < listingPrice;
 
   const discountPercentage = useMemo(() => {

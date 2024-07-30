@@ -107,6 +107,8 @@ const ProductCard = memo(
             product: {
               ...packageProduct,
               cartQuantity: packageProduct.minimumOrderQuantity || 1,
+              imageBgColor,
+              // variantId: selectedVariant?.id,
             },
           },
         });
