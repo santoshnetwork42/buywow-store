@@ -19,7 +19,10 @@ const ProductThumbnail = React.memo(
     }, [thumbImage]);
 
     const mergedClassName = useMemo(() => {
-      return twMerge("object-contain h-auto w-full", className);
+      return twMerge(
+        "object-contain h-auto w-full mix-blend-multiply",
+        className,
+      );
     }, [className]);
 
     if (!imageUrl) {

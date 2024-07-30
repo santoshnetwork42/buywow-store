@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { Button, Heading, Text } from "@/components/common";
-import ProductThumbnail from "@/components/common/ProductThumbImage";
 import Slider from "@/components/features/Slider";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
+import ProductThumbnail from "@/components/common/ProductThumbnail";
 
 const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   const { fetchedProduct, imageBgColor, slug } = extractAttributes(product);

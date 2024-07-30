@@ -1,82 +1,90 @@
 "use client";
+
 import { Button, Text } from "@/components/common";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Quantity = ({ quantity, cartItem }) => {
   const dispatch = useDispatch();
-
-  const { maximumOrderQuantity, minimumOrderQuantity } = cartItem;
+  const { maximumOrderQuantity, minimumOrderQuantity } = cartItem || {};
   const [cartQuantity, setCartQuantity] = useState(quantity);
 
   const cartData = useSelector((state) => state.cart);
-  const cartList = cartData?.data || [];
+  const cartList = useMemo(() => cartData?.data || [], [cartData?.data]);
 
-  const increaseQuantity = () => {
-    setCartQuantity((prevQuantity) => {
-      const newQuantity = prevQuantity + 1;
-      if (newQuantity <= maximumOrderQuantity) {
-        updateCart(newQuantity); // Pass the new quantity to updateCart
-        return newQuantity;
-      }
-      // If maximum quantity is reached, return the previous quantity
-      // and show a message here
-      return prevQuantity;
-    });
-  };
+  const updateCart = useCallback(
+    async (newQuantity) => {
+      if (!cartItem) return;
 
-  const decreaseQuantity = () => {
-    setCartQuantity((prevQuantity) => {
-      const newQuantity = prevQuantity - 1;
-      if (newQuantity >= minimumOrderQuantity) {
-        updateCart(newQuantity);
-        return newQuantity;
-      } else {
-        // Remove product from cart
-        removeFromCart();
-        return minimumOrderQuantity;
-      }
-    });
-  };
+      const recordKey = getRecordKey(cartItem);
+      const updatedCart = await getUpdatedCart(cartList, recordKey, {
+        cartQuantity: newQuantity,
+      });
 
-  const updateCart = async (newQuantity) => {
-    const recordKey = getRecordKey(cartItem);
+      dispatch({
+        type: cartSagaActions.UPDATE_CART,
+        payload: { data: updatedCart },
+      });
+    },
+    [cartItem, cartList, dispatch],
+  );
 
-    const updatedCart = await getUpdatedCart(cartList, recordKey, {
-      cartQuantity: newQuantity,
-    });
+  const removeFromCart = useCallback(() => {
+    if (!cartItem) return;
 
-    dispatch({
-      type: cartSagaActions.UPDATE_CART,
-      payload: {
-        data: updatedCart,
-      },
-    });
-  };
-
-  const removeFromCart = () => {
     dispatch({
       type: cartSagaActions.REMOVE_FROM_CART,
-      payload: {
-        product: cartItem,
-      },
+      payload: { product: cartItem },
     });
-  };
+  }, [cartItem, dispatch]);
+
+  const handleQuantityChange = useCallback(
+    (change) => {
+      setCartQuantity((prevQuantity) => {
+        const newQuantity = prevQuantity + change;
+        if (
+          newQuantity >= minimumOrderQuantity &&
+          newQuantity <= maximumOrderQuantity
+        ) {
+          updateCart(newQuantity);
+          return newQuantity;
+        } else if (newQuantity < minimumOrderQuantity) {
+          removeFromCart();
+          return minimumOrderQuantity;
+        }
+        return prevQuantity;
+      });
+    },
+    [maximumOrderQuantity, minimumOrderQuantity, updateCart, removeFromCart],
+  );
+
+  const increaseQuantity = useCallback(
+    () => handleQuantityChange(1),
+    [handleQuantityChange],
+  );
+  const decreaseQuantity = useCallback(
+    () => handleQuantityChange(-1),
+    [handleQuantityChange],
+  );
+
+  if (!cartItem) return null;
 
   return (
-    <div className="flex items-center overflow-hidden rounded-md border">
+    <div className="flex h-7 items-center overflow-hidden rounded-md border bg-white-a700 md:h-9">
       <Button
         enableRipple={false}
-        className="h-7 rounded-none bg-lime-50 px-[10px] py-0 text-black-900"
+        className="h-full rounded-none bg-lime-50 px-2.5 text-black-900 md:px-3 md:text-lg"
         onClick={decreaseQuantity}
       >
         -
       </Button>
       <Text
         as="span"
-        className="px-3 py-1"
+        size="base"
+        responsive
+        className="px-3 text-sm"
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
@@ -86,7 +94,7 @@ const Quantity = ({ quantity, cartItem }) => {
       </Text>
       <Button
         enableRipple={false}
-        className="h-7 rounded-none bg-lime-50 px-[10px] py-0 text-black-900"
+        className="h-full rounded-none bg-lime-50 px-2.5 text-black-900 md:px-3 md:text-lg"
         onClick={increaseQuantity}
       >
         +
