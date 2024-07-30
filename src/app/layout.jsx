@@ -1,6 +1,7 @@
-import AnnouncementBar from "@/components/common/AnnouncementBar";
-import Footer from "@/components/common/Footer";
-import Header from "@/components/common/Header";
+
+import AnnouncementBar from "@/components/blocks/AnnouncementBar";
+import Footer from "@/components/partials/Footer";
+import Header from "@/components/partials/Header";
 import { getNavbarAndFooterAPI } from "@/lib/appSyncAPIs";
 import { Provider } from "@/store/Provider";
 import "@/styles/font.css";
@@ -11,6 +12,7 @@ import { Amplify } from "aws-amplify";
 import { unstable_cache } from "next/cache";
 import awsExport from "../../aws-exports";
 import { AWS_CLIENT_ID } from "../../config";
+
 
 Amplify.configure({
   ...awsExport,
