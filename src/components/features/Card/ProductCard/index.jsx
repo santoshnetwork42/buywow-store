@@ -113,7 +113,7 @@ const ProductCard = memo(
           },
         });
       },
-      [dispatch, packageProduct],
+      [dispatch, packageProduct, imageBgColor],
     );
 
     const cartItem = useMemo(() => {
