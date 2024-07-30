@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { Button, Heading, Text } from "@/components/common";
+import { Button, Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
-import ProductThumbnail from "@/components/common/ProductThumbnail";
+import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import AddToCart from "@/components/common/ATC";
 
 const UpsellProduct = React.memo(({ product, index, text, subText }) => {
@@ -18,7 +18,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   return (
     <Link
       href={`/product/${slug}`}
-      className="flex h-full w-[76vw] max-w-[344px] gap-3 rounded bg-white-a700 p-2.5 shadow md:p-3"
+      className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded bg-white-a700 p-2.5 shadow md:p-3"
     >
       <div
         className="flex aspect-[74/80] w-[74px] items-center"
@@ -30,7 +30,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
           fetchedProduct={fetchedProduct}
         />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-1 flex-col gap-1">
         <div className="flex flex-1 flex-col">
           <Heading
             as="h4"
@@ -46,7 +46,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
           </Text>
         </div>
         <div className="flex justify-between">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 md:gap-2">
             <div className="flex shrink items-center gap-1 md:gap-2">
               <Heading as="span" size="lg" className="text-base" responsive>
                 ₹{price}
@@ -69,6 +69,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             fetchedProduct={fetchedProduct}
             buttonText={"Add"}
             buttonClass={"shrink-0 px-3 py-1 text-sm"}
+            quantityClassName={"md:min-h-6 grid-cols-[repeat(3,28px)]"}
           />
         </div>
       </div>

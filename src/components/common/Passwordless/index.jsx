@@ -4,7 +4,7 @@ import Modal from "@/components/features/Modal";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
-import { Button, Input, Text } from "@/components/common";
+import { Button, Input, Text } from "@/components/elements";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 import { getCurrentUser } from "aws-amplify/auth";

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { Text, Img } from "@/components/common";
+import { Text, Img } from "@/components/elements";
 
 const ShippingProgress = ({ freeShippingThreshold, cartValue }) => {
   const [animate, setAnimate] = useState(false);

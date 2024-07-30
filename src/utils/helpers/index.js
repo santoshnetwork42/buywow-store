@@ -23,7 +23,6 @@ export function extractAttributes(data, defaultValues = {}) {
   if (!data?.data?.attributes) {
     return defaultValues;
   }
-
   return { ...defaultValues, ...data.data.attributes };
 }
 
@@ -50,63 +49,54 @@ export const getOfferValue = (price, listingPrice) => {
 };
 
 export const getRecordKey = (product, variantId) => {
-  const { id } = product;
-  if (variantId) return `${id}-${variantId}`;
+  if (!product || !product.id) return "";
+  if (variantId) return `${product.id}-${variantId}`;
 
   const firstVariant = getFirstVariant(product);
-
-  if (firstVariant) return `${id}-${firstVariant.id}`;
-
-  return id;
+  return firstVariant ? `${product.id}-${firstVariant.id}` : product.id;
 };
 
-export const getUpdatedCart = async (cartList = [], recordKey, payload) => {
-  return await Promise.all(
-    cartList.map((item) =>
-      item.recordKey === recordKey ? { ...item, ...payload } : item,
-    ),
+export const getUpdatedCart = (cartList = [], recordKey, payload) => {
+  return cartList.map((item) =>
+    item.recordKey === recordKey ? { ...item, ...payload } : item,
   );
 };
 
 export const getFirstVariant = (product, variantId) => {
-  try {
-    if (!product) return null;
+  if (!product || !product.variants || !Array.isArray(product.variants.items))
+    return null;
 
-    const { variants: { items = [] } = {} } = product;
+  const { items = [] } = product.variants;
 
-    const tempItems = [...items];
-
-    if (variantId) {
-      const variantById = items.find((v) => v.id === variantId);
-      if (variantById) return variantById;
-    }
-
-    const sortedVariants = tempItems.sort((a, b) => a.position - b.position);
-    return (
-      sortedVariants.find((v) => v.inventory > 0) || sortedVariants[0] || null
-    );
-  } catch (err) {
-    throw err;
+  if (variantId) {
+    return items.find((v) => v.id === variantId) || null;
   }
+
+  return (
+    items
+      .slice() // Create a shallow copy to avoid mutating the original array
+      .sort((a, b) => (a.position || 0) - (b.position || 0))
+      .find((v) => v.inventory > 0) ||
+    items[0] ||
+    null
+  );
 };
 
 export const getOfferValueWithPercentage = (price, listingPrice) => {
   if (
     typeof price !== "number" ||
     typeof listingPrice !== "number" ||
-    listingPrice === 0 ||
+    listingPrice <= 0 ||
     price < 0
   ) {
     return 0;
   }
-  const discountAmount = listingPrice - price;
-  const offerPercentage = (discountAmount / listingPrice) * 100;
-  return Math.round(offerPercentage);
+  return Math.round(((listingPrice - price) / listingPrice) * 100);
 };
 
 export const getProductSubTotal = (data) => {
-  return data.reduce((acc, item) => {
-    const { price, cartQuantity = 1 } = item;
-    return acc + price * cartQuantity;
-  }, 0); // 0 is the initial value
+  return data.reduce(
+    (acc, { price = 0, cartQuantity = 1 }) => acc + price * cartQuantity,
+    0,
+  );
 };

@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import SectionHeading from "@/components/common/partials/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 import Slider from "@/components/features/Slider";
-import { Heading, Img } from "@/components/common";
+import { Heading, Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 
 const CategoryItem = React.memo(({ category, size }) => {

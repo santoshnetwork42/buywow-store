@@ -40,7 +40,6 @@ const renderBlock = (block, index) => {
 };
 
 const ProductDetailViewBlocks = ({ blocks }) => {
-  // console.log(blocks);
   if (!Array.isArray(blocks) || blocks.length === 0) return null;
 
   return <>{blocks.map((block, index) => renderBlock(block, index))}</>;

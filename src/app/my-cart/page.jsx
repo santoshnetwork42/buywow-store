@@ -2,7 +2,6 @@
 "use client";
 
 import React from "react";
-import DeliveryInfoSection from "@/components/common/partials/DeliveryInfoSection";
 import { deliveryInfoData } from "@/utils/data/homeData";
 import { myCartData } from "@/utils/data/myCartData";
 import MainCartSection from "@/components/partials/MyCart/MainCartSection";
@@ -10,6 +9,7 @@ import CartSidebar from "@/components/partials/MyCart/CartSidebar";
 import CartHeader from "@/components/partials/MyCart/CartHeader";
 import { useSelector } from "react-redux";
 import { getProductSubTotal } from "@/utils/helpers";
+import DeliveryInfoSection from "@/components/partials/Others/DeliveryInfoSection";
 
 export default function MyCart() {
   const cartData = useSelector((state) => state.cart);

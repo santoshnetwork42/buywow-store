@@ -1,4 +1,4 @@
-import { Button, Heading, Text } from "@/components/common";
+import { Button, Heading, Text } from "@/components/elements";
 
 export const CouponItem = ({ coupon, isApplied, onApply, onRemove }) => (
   <div

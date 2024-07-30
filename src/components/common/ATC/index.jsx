@@ -1,15 +1,19 @@
 "use client";
-import { Button } from "@/components/common";
+
 import Quantity from "@/components/common/Quantity";
+import { Button } from "@/components/elements";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getRecordKey } from "@/utils/helpers";
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { twMerge } from "tailwind-merge";
 
 const AddToCart = ({
   fetchedProduct,
+  quantityClassName,
   buttonText,
   buttonClass,
+  buttonSize = "none",
   showGoToCart = false,
 }) => {
   const dispatch = useDispatch();
@@ -36,12 +40,22 @@ const AddToCart = ({
   }, [cartData, fetchedProduct]);
 
   return (
-    <div>
+    <div className="">
       {!!cartItem && (
-        <div className="flex items-center justify-between gap-2">
-          <Quantity quantity={cartItem.cartQuantity} cartItem={cartItem} />
+        <div className="flex w-full justify-between gap-2 sm:gap-3 md:gap-4 lg:gap-5">
+          <div className={`flex ${showGoToCart ? "w-1/3" : "w-auto"}`}>
+            <Quantity
+              quantity={cartItem.cartQuantity}
+              cartItem={cartItem}
+              className={quantityClassName}
+            />
+          </div>
           {showGoToCart && (
-            <Button variant="primary" className="w-full p-4">
+            <Button
+              variant="primary"
+              size={buttonSize}
+              className={twMerge(buttonClass, "w-auto flex-1")}
+            >
               Go to cart
             </Button>
           )}
@@ -51,7 +65,7 @@ const AddToCart = ({
       {!cartItem && (
         <Button
           variant="primary"
-          size="small"
+          size={buttonSize}
           className={buttonClass}
           onClick={addToCartHandler}
         >

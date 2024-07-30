@@ -1,0 +1,93 @@
+import React, { useCallback, useEffect, useRef, useState, memo } from "react";
+import Link from "next/link";
+import { Text, Heading } from "@/components/elements";
+import { DownArrowIconSVG } from "@/assets/images/downArrow";
+
+const SubMenuItem = memo(({ subItem, linkPrefix, closeMenu, isLast }) => {
+  if (!subItem) return null;
+
+  return (
+    <li className={!isLast ? "border-b-[0.5px] border-b-gray-300" : ""}>
+      <Link
+        className={isLast ? "py-2.5" : "pb-2.5 pt-1.5"}
+        href={`/${linkPrefix ? linkPrefix + "/" : ""}${subItem.slug || ""}`}
+        onClick={closeMenu}
+      >
+        <Text size="sm" as="p" className="capitalize">
+          {subItem.title}
+        </Text>
+      </Link>
+    </li>
+  );
+});
+
+SubMenuItem.displayName = "SubMenuItem";
+
+const MobileMenuItem = memo(({ item, closeMenu, linkPrefix }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [height, setHeight] = useState(0);
+  const contentRef = useRef(null);
+
+  const toggleOpen = useCallback(() => setIsOpen((prev) => !prev), []);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setHeight(isOpen ? contentRef.current.scrollHeight : 0);
+    }
+  }, [isOpen]);
+
+  if (!item) return null;
+
+  if (item.subMenu && item.subMenu.length > 0) {
+    return (
+      <div>
+        <div
+          className="flex cursor-pointer items-center justify-between pb-3 pr-3 pt-2"
+          onClick={toggleOpen}
+        >
+          <Heading size="base" as="h4" className="font-semibold">
+            {item.title}
+          </Heading>
+          <DownArrowIconSVG
+            className={`mt-0.5 h-3 w-3 transition-transform duration-300 ${
+              isOpen ? "rotate-180" : ""
+            }`}
+            strokeWidth={1.4}
+          />
+        </div>
+        <div
+          style={{ height: `${height}px` }}
+          className="overflow-hidden transition-all duration-300 ease-in-out"
+        >
+          <ul ref={contentRef}>
+            {item.subMenu.map((subItem, index) => (
+              <SubMenuItem
+                key={`sub-menu-item-${subItem.id || index}`}
+                subItem={subItem}
+                linkPrefix={linkPrefix}
+                closeMenu={closeMenu}
+                isLast={index === item.subMenu.length - 1}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={`/${linkPrefix ? linkPrefix + "/" : ""}${item.slug || ""}`}
+      onClick={closeMenu}
+      className="pb-3 pt-2"
+    >
+      <Heading size="base" as="h4" className="font-semibold">
+        {item.title}
+      </Heading>
+    </Link>
+  );
+});
+
+MobileMenuItem.displayName = "MobileMenuItem";
+
+export default MobileMenuItem;

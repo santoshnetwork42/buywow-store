@@ -1,4 +1,4 @@
-import { Img, Text } from "@/components/common";
+import { Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
 import React from "react";

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowIconSVG } from "@/assets/svg/icons";
-import { Heading } from "@/components/common";
+import { Heading } from "@/components/elements";
 import { getBgColor } from "@/utils/helpers";
 
 const CollectionLink = React.memo(({ text, slug, bgColorClass }) => (

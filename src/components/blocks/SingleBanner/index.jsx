@@ -2,7 +2,7 @@
 import React from "react";
 import Link from "next/link";
 import { extractAttributes } from "@/utils/helpers";
-import { Img } from "@/components/common";
+import { Img } from "@/components/elements";
 
 const SingleBanner = React.memo(({ banner, slug }) => {
   if (!banner) return null;

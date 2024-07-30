@@ -8,9 +8,9 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Text } from "@/components/common";
-import Accordion from "@/components/common/Accordion";
-import PlusMinusToggle from "@/components/common/PlusMinusToggle";
+import { Text } from "@/components/elements";
+import Accordion from "@/components/features/Accordion";
+import PlusMinusToggle from "@/components/features/Accordion/PlusMinusToggle";
 import { extractAttributes } from "@/utils/helpers";
 
 const FaqItem = memo(({ question, answer, showDivider }) => {

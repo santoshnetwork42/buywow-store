@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect, useMemo } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import { Button, Img, Text } from "@/components/common";
+import { Button, Img, Text } from "@/components/elements";
 import { twMerge } from "tailwind-merge";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 

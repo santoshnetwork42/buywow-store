@@ -1,5 +1,5 @@
 // components/MyCart/PaymentSummary.jsx
-import { Heading, Text, Img, Button } from "@/components/common";
+import { Heading, Text, Img, Button } from "@/components/elements";
 
 export default function PaymentSummary({ summary, cashback, subTotal }) {
   return (

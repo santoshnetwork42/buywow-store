@@ -1,6 +1,6 @@
 import React, { memo } from "react";
-import { Text } from "@/components/common";
-import Accordion from "@/components/common/Accordion";
+import { Text } from "@/components/elements";
+import Accordion from "@/components/features/Accordion";
 import { extractAttributes } from "@/utils/helpers";
 
 const InstructionStep = memo(({ index, text }) => (

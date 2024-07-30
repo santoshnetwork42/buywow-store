@@ -1,7 +1,7 @@
 "use client";
 
 import { IndiaMapIcon, StarIcon, VehicleIcon } from "@/assets/svg/icons";
-import { Button, Heading, Img, Text } from "@/components/common";
+import { Button, Heading, Img, Text } from "@/components/elements";
 import AddToCart from "@/components/common/ATC";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
 import { useProduct, useProductVariantGroups } from "@wow-star/utils";
@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 const ProductImageSection = dynamic(
-  () => import("@/components/blocks/ProductDetailView/ProductImageSection"),
+  () => import("@/components/partials/Product/ProductImageSection"),
 );
 const ProductDetailViewBlocks = dynamic(
   () => import("@/components/partials/Product/ProductDetailViewBlocks"),
@@ -279,7 +279,8 @@ const AddToCartSection = React.memo(({ fetchedProduct }) => (
     <AddToCart
       fetchedProduct={fetchedProduct}
       buttonText={"Add To Cart"}
-      buttonClass={"w-full py-4 text-xl"}
+      buttonClass={"w-full py-3 text-xl md:py-4"}
+      quantityClassName={"flex-1"}
       showGoToCart
     />
     <div className="flex justify-evenly gap-2">

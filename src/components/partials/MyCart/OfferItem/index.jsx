@@ -1,6 +1,6 @@
 // components/MyCart/OfferItem.jsx
 import React, { useState } from "react";
-import { Button, Heading, Img, Text } from "@/components/common";
+import { Button, Heading, Img, Text } from "@/components/elements";
 import OfferSidebar from "@/components/partials/MyCart/OfferSidebar";
 
 export default function OfferItem({ offer }) {

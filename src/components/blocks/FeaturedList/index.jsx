@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Img } from "@/components/common";
+import { Text, Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 
 const FeaturedItem = React.memo(({ image, text, isWebHorizontal, isInPDP }) => {

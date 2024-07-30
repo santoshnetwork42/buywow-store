@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
-import { Img } from "@/components/common";
+import { Img } from "@/components/elements";
 
 const MiniBanners = React.memo(({ miniBannerItems: banners }) => {
   if (!Array.isArray(banners) || banners.length === 0) return null;
