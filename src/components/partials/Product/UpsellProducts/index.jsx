@@ -4,6 +4,7 @@ import { Button, Heading, Text } from "@/components/common";
 import Slider from "@/components/features/Slider";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
 import ProductThumbnail from "@/components/common/ProductThumbnail";
+import AddToCart from "@/components/common/ATC";
 
 const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   const { fetchedProduct, imageBgColor, slug } = extractAttributes(product);
@@ -64,14 +65,11 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
               </div>
             )}
           </div>
-          <Button
-            variant="primary"
-            size="none"
-            className="shrink-0 px-3 py-1 text-sm"
-            onClick={(e) => e.preventDefault()}
-          >
-            Add
-          </Button>
+          <AddToCart
+            fetchedProduct={fetchedProduct}
+            buttonText={"Add"}
+            buttonClass={"shrink-0 px-3 py-1 text-sm"}
+          />
         </div>
       </div>
     </Link>

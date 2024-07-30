@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useMemo, useCallback, useState, useEffect } from "react";
 import { IndiaMapIcon, StarIcon, VehicleIcon } from "@/assets/svg/icons";
 import { Button, Heading, Img, Text } from "@/components/common";
-import { useProduct, useProductVariantGroups } from "@wow-star/utils";
+import AddToCart from "@/components/common/ATC";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
+import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 import dynamic from "next/dynamic";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 const ProductImageSection = dynamic(
   () => import("@/components/blocks/ProductDetailView/ProductImageSection"),
@@ -68,11 +69,6 @@ const ProductDetailView = React.memo(({ product }) => {
     return null;
   }, [price, listingPrice, offerTag]);
 
-  const handleAddToCart = useCallback(() => {
-    // Implement add to cart functionality
-    console.log("Add to cart clicked");
-  }, []);
-
   const handleVariantSelect = useCallback((variantId) => {
     setSelectedVariantId(variantId);
   }, []);
@@ -112,7 +108,7 @@ const ProductDetailView = React.memo(({ product }) => {
           selectedVariantId={selectedVariantId}
           onVariantSelect={handleVariantSelect}
         />
-        <AddToCartSection onAddToCart={handleAddToCart} />
+        <AddToCartSection fetchedProduct={packageProduct} />
       </div>
 
       {productDetailView?.length > 0 && (
@@ -278,18 +274,14 @@ const VariantItem = React.memo(
   },
 );
 
-const AddToCartSection = React.memo(({ onAddToCart }) => (
+const AddToCartSection = React.memo(({ fetchedProduct }) => (
   <div className="mt-6 flex flex-col gap-2 md:gap-2.5">
-    <Button className="w-full py-4" variant="primary" onClick={onAddToCart}>
-      <Heading
-        size="xl"
-        as="h3"
-        className="text-lg text-white-a700_01"
-        responsive
-      >
-        Add to cart
-      </Heading>
-    </Button>
+    <AddToCart
+      fetchedProduct={fetchedProduct}
+      buttonText={"Add To Cart"}
+      buttonClass={"w-full py-4 text-xl"}
+      showGoToCart
+    />
     <div className="flex justify-evenly gap-2">
       <div className="flex items-center gap-1">
         <VehicleIcon size={24} />
