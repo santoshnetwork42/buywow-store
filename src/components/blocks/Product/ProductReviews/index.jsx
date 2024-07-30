@@ -3,9 +3,9 @@
 import { Button, Heading, Img, Text } from "@/components/elements";
 import { productData } from "@/utils/data/productData";
 import React from "react";
-import RatingBar from "@/components/partials/Product/Reviews/RatingBar";
-import ReviewStars from "./ReviewStars";
+import ReviewStars from "@/components/blocks/Product/ProductReviews/ReviewStars";
 import SectionHeading from "@/components/common/SectionHeading";
+import RatingBar from "@/components/blocks/Product/ProductReviews/RatingBar";
 
 const Reviews = ({ title, reviewProduct, ...props }) => {
   // console.log(reviewProduct, title, props);
@@ -95,7 +95,7 @@ const Reviews = ({ title, reviewProduct, ...props }) => {
             );
           })}
         <div className="h-[0.05rem] w-full bg-gray-300" />
-        <Button variant="primary" size="medium" className="">
+        <Button variant="primary" size="large" className="">
           Load More
         </Button>
       </div>

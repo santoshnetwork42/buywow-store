@@ -24,7 +24,7 @@ const Button = ({
   const buttonRef = useRippleEffect(enableRipple && !disabled && !loader);
 
   const baseClasses =
-    "relative flex items-center justify-center overflow-hidden capitalize rounded-full font-medium transition-colors duration-200";
+    "relative flex items-center justify-center overflow-hidden capitalize rounded-full font-medium transition-colors duration-200 !leading-tight";
 
   const variantClasses = {
     primary: "bg-yellow-900 text-white-a700_01",

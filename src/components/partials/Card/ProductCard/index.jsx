@@ -81,14 +81,15 @@ const ProductCard = memo(
     fetchedProduct,
     offerTag,
     className,
+    showBenefitTags = true,
   }) => {
     const [selectedVariant] = useProductVariantGroups(fetchedProduct);
     const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
+    if (!fetchedProduct || !packageProduct) return null;
+
     const { listingPrice, price, rating, title, totalRatings, benefits } =
       packageProduct;
-
-    if (!fetchedProduct) return null;
 
     return (
       <Link
@@ -138,11 +139,13 @@ const ProductCard = memo(
           )}
         </div>
 
-        <div className="flex max-h-12 flex-wrap gap-[4px] overflow-hidden md:max-h-[52px]">
-          {productBenefitTags?.data?.map((benefitTag, index) => (
-            <BenefitTag key={index} {...benefitTag.attributes} />
-          ))}
-        </div>
+        {showBenefitTags && (
+          <div className="flex max-h-12 flex-wrap gap-[4px] overflow-hidden md:max-h-[52px]">
+            {productBenefitTags?.data?.map((benefitTag, index) => (
+              <BenefitTag key={index} {...benefitTag.attributes} />
+            ))}
+          </div>
+        )}
 
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex flex-1 flex-col">

@@ -61,7 +61,7 @@ export default function PaymentSummary({ summary, cashback, subTotal }) {
           </Text>
         </div>
         <div className="mt-1 flex flex-col items-center gap-2.5">
-          <Button className="flex w-full items-center justify-center rounded-full py-2 md:py-3">
+          <Button className="w-full" variant="primary" size="large">
             <Heading size="2xl" as="h2" className="text-white-a700_01">
               Checkout
             </Heading>

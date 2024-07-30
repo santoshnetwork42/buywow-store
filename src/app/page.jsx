@@ -28,16 +28,16 @@ const FeaturedProductsByTab = dynamic(
   () => import("@/components/blocks/FeaturedProductsByTab"),
 );
 const ProductEffectiveness = dynamic(
-  () => import("@/components/blocks/Products/ProductEffectiveness"),
+  () => import("@/components/blocks/Product/ProductEffectiveness"),
 );
 const ProductHighlights = dynamic(
-  () => import("@/components/blocks/Products/ProductHighlights"),
+  () => import("@/components/blocks/Product/ProductHighlights"),
 );
 const ProductBenefits = dynamic(
-  () => import("@/components/blocks/Products/ProductBenefits"),
+  () => import("@/components/blocks/Product/ProductBenefits"),
 );
 const ProductKeyIngredients = dynamic(
-  () => import("@/components/blocks/Products/ProductKeyIngredients"),
+  () => import("@/components/blocks/Product/ProductKeyIngredients"),
 );
 const InfoDropdown = dynamic(
   () => import("@/components/blocks/Accordion/InfoDropdown"),
@@ -52,9 +52,11 @@ const ProductCollectionSection = dynamic(
   () => import("@/components/blocks/ProductCollectionByTab"),
 );
 const InfoSection = dynamic(() => import("@/components/blocks/InfoSection"));
-const Reviews = dynamic(() => import("@/components/partials/Product/Reviews"));
+const Reviews = dynamic(
+  () => import("@/components/blocks/Product/ProductReviews"),
+);
 const UpsellProducts = dynamic(
-  () => import("@/components/partials/Product/UpsellProducts"),
+  () => import("@/components/blocks/UpsellProducts"),
 );
 const AccordionDescription = dynamic(
   () => import("@/components/blocks/Accordion/AccordionDescription"),
