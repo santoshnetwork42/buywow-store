@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Img } from "@/components/elements";
-import SectionHeading from "@/components/elements/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
 

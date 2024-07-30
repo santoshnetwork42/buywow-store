@@ -1,7 +1,7 @@
 import React from "react";
 import { extractAttributes } from "@/utils/helpers";
 import { Img } from "@/components/elements";
-import SectionHeading from "@/components/elements/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 
 const ProductHighlights = React.memo(({ title, images }) => {
   if (!Array.isArray(images) || images.length === 0) return null;

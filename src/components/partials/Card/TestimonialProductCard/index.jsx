@@ -52,7 +52,8 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
             <AddToCart
               fetchedProduct={fetchedProduct}
               buttonText={"Add"}
-              buttonClass={"text-xs capitalize md:text-sm"}
+              buttonSize="small"
+              quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] sm:min-h-7 md:min-h-[30px] lg:min-h-8 lg:grid-cols-[repeat(3,36px)]"
             />
           </div>
         </div>

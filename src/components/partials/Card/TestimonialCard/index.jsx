@@ -79,7 +79,7 @@ const TestimonialCard = React.memo(
 
     return (
       <div
-        className={`aspect-[320/192 flex w-[82vw] max-w-[502px] flex-col gap-2 sm:aspect-[502/250] sm:w-[70vw] md:w-[58vw] md:gap-3 lg:w-[46vw] ${className}`}
+        className={`aspect-[320/192 flex w-[82vw] min-w-[324px] max-w-[502px] flex-col gap-2 sm:aspect-[502/250] sm:w-[70vw] md:w-[58vw] md:gap-3 lg:w-[46vw] ${className}`}
         {...props}
       >
         <div className="overflow-hidden rounded sm:rounded-md lg:rounded-lg">

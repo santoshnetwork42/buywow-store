@@ -18,7 +18,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   return (
     <Link
       href={`/product/${slug}`}
-      className="flex h-full w-[76vw] max-w-[344px] gap-3 rounded bg-white-a700 p-2.5 shadow md:p-3"
+      className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded bg-white-a700 p-2.5 shadow md:p-3"
     >
       <div
         className="flex aspect-[74/80] w-[74px] items-center"
@@ -69,6 +69,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             fetchedProduct={fetchedProduct}
             buttonText={"Add"}
             buttonClass={"shrink-0 px-3 py-1 text-sm"}
+            quantityClassName={"md:min-h-6 grid-cols-[repeat(3,28px)]"}
           />
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo, useCallback } from "react";
-import SectionHeading from "@/components/elements/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 import { getBgColor } from "@/utils/helpers";
 import { TabPanel, TabList, Tab, Tabs } from "react-tabs";
 import Slider from "@/components/features/Slider";

@@ -1,7 +1,7 @@
 import { memo } from "react";
 import Link from "next/link";
 import { Heading } from "@/components/elements";
-import SectionHeading from "@/components/elements/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import Slider from "@/components/features/Slider";
 import { getBgColor } from "@/utils/helpers";

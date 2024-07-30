@@ -1,6 +1,6 @@
 import React from "react";
 import { Heading, Img } from "@/components/elements";
-import SectionHeading from "@/components/elements/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 import { extractAttributes, getBgColor } from "@/utils/helpers";
 
 const AdditionalIngredient = React.memo(({ title, image }) => {

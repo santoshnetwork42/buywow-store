@@ -1,6 +1,6 @@
 import React from "react";
 import { Img } from "@/components/elements";
-import SectionHeading from "@/components/elements/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 import { extractAttributes } from "@/utils/helpers";
 
 const ProductEffectiveness = React.memo(({ title, images }) => {

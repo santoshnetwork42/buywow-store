@@ -55,7 +55,11 @@ const ProductItem = React.memo(({ item }) => {
             </Text>
           </div>
           <div className="flex items-center">
-            <Quantity quantity={item.cartQuantity} cartItem={item} />
+            <Quantity
+              quantity={item.cartQuantity}
+              cartItem={item}
+              className="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] lg:min-h-10 lg:grid-cols-[repeat(3,36px)]"
+            />
             <Button
               className="ml-2 h-full rounded-md border bg-transparent px-2 md:px-2.5"
               onClick={handleRemoveFromCart}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Heading, Img, Text } from "@/components/elements";
-import SectionHeading from "@/components/elements/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 import { extractAttributes, getBgColor } from "@/utils/helpers";
 
 const BenefitItem = React.memo(({ text, subText, image }) => {

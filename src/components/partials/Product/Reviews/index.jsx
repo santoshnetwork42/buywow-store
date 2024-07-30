@@ -5,7 +5,7 @@ import { productData } from "@/utils/data/productData";
 import React from "react";
 import RatingBar from "@/components/partials/Product/Reviews/RatingBar";
 import ReviewStars from "./ReviewStars";
-import SectionHeading from "@/components/elements/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 
 const Reviews = ({ title, reviewProduct, ...props }) => {
   // console.log(reviewProduct, title, props);

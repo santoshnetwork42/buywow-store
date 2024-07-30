@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import SectionHeading from "@/components/elements/SectionHeading";
+import SectionHeading from "@/components/common/SectionHeading";
 import Slider from "@/components/features/Slider";
 import { Heading, Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";

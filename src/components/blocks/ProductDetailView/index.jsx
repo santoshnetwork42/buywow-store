@@ -279,7 +279,8 @@ const AddToCartSection = React.memo(({ fetchedProduct }) => (
     <AddToCart
       fetchedProduct={fetchedProduct}
       buttonText={"Add To Cart"}
-      buttonClass={"w-full py-4 text-xl"}
+      buttonClass={"w-full py-3 text-xl md:py-4"}
+      quantityClassName={"flex-1"}
       showGoToCart
     />
     <div className="flex justify-evenly gap-2">

@@ -172,7 +172,8 @@ const ProductCard = memo(
               <AddToCart
                 fetchedProduct={fetchedProduct}
                 buttonText={"Add"}
-                buttonClass={"text-xs capitalize md:text-sm"}
+                buttonSize="medium"
+                quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] lg:min-h-10 lg:grid-cols-[repeat(3,36px)]"
               />
             </div>
           </div>

@@ -5,8 +5,9 @@ import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
 import { useState, useCallback, useMemo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { twMerge } from "tailwind-merge";
 
-const Quantity = ({ quantity, cartItem }) => {
+const Quantity = ({ quantity, cartItem, className }) => {
   const dispatch = useDispatch();
   const { maximumOrderQuantity, minimumOrderQuantity } = cartItem || {};
   const [cartQuantity, setCartQuantity] = useState(quantity);
@@ -46,22 +47,24 @@ const Quantity = ({ quantity, cartItem }) => {
 
   const handleQuantityChange = useCallback(
     (change) => {
-      setCartQuantity((prevQuantity) => {
-        const newQuantity = prevQuantity + change;
-        if (
-          newQuantity >= minimumOrderQuantity &&
-          newQuantity <= maximumOrderQuantity
-        ) {
-          updateCart(newQuantity);
-          return newQuantity;
-        } else if (newQuantity < minimumOrderQuantity) {
-          removeFromCart();
-          return minimumOrderQuantity;
-        }
-        return prevQuantity;
-      });
+      const newQuantity = cartQuantity + change;
+      if (
+        newQuantity >= minimumOrderQuantity &&
+        newQuantity <= maximumOrderQuantity
+      ) {
+        setCartQuantity(newQuantity);
+        updateCart(newQuantity);
+      } else if (newQuantity < minimumOrderQuantity) {
+        removeFromCart();
+      }
     },
-    [maximumOrderQuantity, minimumOrderQuantity, updateCart, removeFromCart],
+    [
+      cartQuantity,
+      maximumOrderQuantity,
+      minimumOrderQuantity,
+      updateCart,
+      removeFromCart,
+    ],
   );
 
   const increaseQuantity = useCallback(
@@ -76,10 +79,15 @@ const Quantity = ({ quantity, cartItem }) => {
   if (!cartItem) return null;
 
   return (
-    <div className="flex h-7 items-center overflow-hidden rounded-md border bg-white-a700 md:h-9">
+    <div
+      className={twMerge(
+        "grid min-h-7 shrink-0 grid-cols-3 items-center overflow-hidden rounded-md border bg-white-a700 sm:min-h-8 md:min-h-9 lg:min-h-10",
+        className,
+      )}
+    >
       <Button
         enableRipple={false}
-        className="h-full rounded-none bg-lime-50 px-2.5 text-black-900 md:px-3 md:text-lg"
+        className="h-full rounded-none bg-lime-50 text-black-900 md:text-lg"
         onClick={decreaseQuantity}
       >
         -
@@ -88,7 +96,7 @@ const Quantity = ({ quantity, cartItem }) => {
         as="span"
         size="base"
         responsive
-        className="px-3 text-sm"
+        className="text-center text-sm"
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
@@ -98,7 +106,7 @@ const Quantity = ({ quantity, cartItem }) => {
       </Text>
       <Button
         enableRipple={false}
-        className="h-full rounded-none bg-lime-50 px-2.5 text-black-900 md:px-3 md:text-lg"
+        className="h-full rounded-none bg-lime-50 text-black-900 md:text-lg"
         onClick={increaseQuantity}
       >
         +
