@@ -176,7 +176,7 @@ const ProductCard = memo(
                 fetchedProduct={fetchedProduct}
                 buttonText={"Add"}
                 buttonSize="medium"
-                quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] lg:min-h-10 lg:grid-cols-[repeat(3,36px)]"
+                quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)]  lg:grid-cols-[repeat(3,36px)]"
               />
             </div>
           </div>
