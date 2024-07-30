@@ -1,18 +1,12 @@
 "use client";
 
-import { Button, Heading, Img, Text } from "@/components/elements";
+import { Heading, Img, Text } from "@/components/elements";
+import AddToCart from "@/components/common/ATC";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
-import Quantity from "@/components/common/Quantity";
-import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import {
-  extractAttributes,
-  getOfferValue,
-  getRecordKey,
-} from "@/utils/helpers";
+import { extractAttributes, getOfferValue } from "@/utils/helpers";
 import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 import Link from "next/link";
-import { memo, useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { memo } from "react";
 import { twMerge } from "tailwind-merge";
 
 const BenefitTag = memo(({ bgColor, tag }) => (
@@ -88,38 +82,11 @@ const ProductCard = memo(
     offerTag,
     className,
   }) => {
-    const dispatch = useDispatch();
-    const cartData = useSelector((state) => state?.cart?.data || []);
-
     const [selectedVariant] = useProductVariantGroups(fetchedProduct);
     const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
     const { listingPrice, price, rating, title, totalRatings, benefits } =
       packageProduct;
-
-    const addToCartHandler = useCallback(
-      (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        dispatch({
-          type: cartSagaActions.ADD_TO_CART,
-          payload: {
-            product: {
-              ...packageProduct,
-              cartQuantity: packageProduct.minimumOrderQuantity || 1,
-              imageBgColor,
-              // variantId: selectedVariant?.id,
-            },
-          },
-        });
-      },
-      [dispatch, packageProduct],
-    );
-
-    const cartItem = useMemo(() => {
-      const recordKey = getRecordKey(packageProduct);
-      return cartData.find((item) => item.recordKey === recordKey);
-    }, [cartData, packageProduct]);
 
     if (!fetchedProduct) return null;
 
@@ -202,23 +169,11 @@ const ProductCard = memo(
             <RatingDisplay rating={rating} totalRatings={totalRatings} />
             <div className="flex flex-1 justify-between gap-2">
               <PriceDisplay price={price} listingPrice={listingPrice} />
-              {!!cartItem && (
-                <Quantity
-                  quantity={cartItem.cartQuantity}
-                  cartItem={cartItem}
-                />
-              )}
-
-              {!cartItem && (
-                <Button
-                  variant="primary"
-                  size="medium"
-                  className="shrink-0"
-                  onClick={addToCartHandler}
-                >
-                  Add
-                </Button>
-              )}
+              <AddToCart
+                fetchedProduct={fetchedProduct}
+                buttonText={"Add"}
+                buttonClass={"text-xs capitalize md:text-sm"}
+              />
             </div>
           </div>
         </div>

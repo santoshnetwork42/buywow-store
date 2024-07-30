@@ -1,40 +1,13 @@
 "use client";
 
-import { Button, Heading, Text } from "@/components/elements";
+import { Heading, Text } from "@/components/elements";
+import AddToCart from "@/components/common/ATC";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
-import Quantity from "@/components/common/Quantity";
-import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import { getRecordKey } from "@/utils/helpers";
 import Link from "next/link";
-import { useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 const TestimonialProductCard = ({ fetchedProduct }) => {
-  const dispatch = useDispatch();
-  const cartData = useSelector((state) => state?.cart?.data || []);
-
   const { price, listingPrice, title, slug } = fetchedProduct;
   const showStrikePrice = listingPrice && price < listingPrice;
-
-  const addToCartHandler = useCallback(
-    (e) => {
-      dispatch({
-        type: cartSagaActions.ADD_TO_CART,
-        payload: {
-          product: {
-            ...fetchedProduct,
-            cartQuantity: fetchedProduct.minimumOrderQuantity || 1,
-          },
-        },
-      });
-    },
-    [dispatch, fetchedProduct],
-  );
-
-  const cartItem = useMemo(() => {
-    const recordKey = getRecordKey(fetchedProduct);
-    return cartData.find((item) => item.recordKey === recordKey);
-  }, [cartData, fetchedProduct]);
 
   return (
     <div>
@@ -76,15 +49,11 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
                 </Text>
               )}
             </div>
-            {!!cartItem && (
-              <Quantity quantity={cartItem.cartQuantity} cartItem={cartItem} />
-            )}
-
-            {!cartItem && (
-              <Button variant="primary" size="small" onClick={addToCartHandler}>
-                Add
-              </Button>
-            )}
+            <AddToCart
+              fetchedProduct={fetchedProduct}
+              buttonText={"Add"}
+              buttonClass={"text-xs capitalize md:text-sm"}
+            />
           </div>
         </div>
       </Link>
