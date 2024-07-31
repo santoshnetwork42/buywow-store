@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 
 // Dynamically import components
 const UpsellProducts = dynamic(
-  () => import("@/components/partials/Product/UpsellProducts"),
+  () => import("@/components/partials/Product/PDVUpsellProducts"),
 );
 const FeaturedList = dynamic(() => import("@/components/blocks/FeaturedList"));
 const AccordionDescription = dynamic(

@@ -53,7 +53,7 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
               fetchedProduct={fetchedProduct}
               buttonText={"Add"}
               buttonSize="small"
-              quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] sm:min-h-7 md:min-h-[30px] lg:min-h-8 lg:grid-cols-[repeat(3,36px)]"
+              quantityClassName="grid-cols-[repeat(3,24px)] sm:grid-cols-[repeat(3,26px)] md:grid-cols-[repeat(3,28px)] h-[26px] sm:h-[27px] md:h-[28px] lg:h-[29px] xl:h-[30px] lg:grid-cols-[repeat(3,30px)] xl:grid-cols-[repeat(3,32px)]"
             />
           </div>
         </div>

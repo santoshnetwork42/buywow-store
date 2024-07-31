@@ -81,7 +81,7 @@ const Quantity = ({ quantity, cartItem, className }) => {
   return (
     <div
       className={twMerge(
-        "grid min-h-7 shrink-0 grid-cols-3 items-center overflow-hidden rounded-md border bg-white-a700 sm:min-h-8 md:min-h-9 lg:min-h-10",
+        "grid h-[26px] min-h-5 shrink-0 grid-cols-3 items-center overflow-hidden rounded-md border bg-white-a700 sm:h-7 md:h-8 lg:h-9",
         className,
       )}
     >
