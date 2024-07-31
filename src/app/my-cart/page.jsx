@@ -1,19 +1,37 @@
 // MyCart page component
 "use client";
 
-import React from "react";
+import CartHeader from "@/components/partials/MyCart/CartHeader";
+import CartSidebar from "@/components/partials/MyCart/CartSidebar";
+import MainCartSection from "@/components/partials/MyCart/MainCartSection";
+import DeliveryInfoSection from "@/components/partials/Others/DeliveryInfoSection";
+import { useNavBarState } from "@/utils/context/navbar";
 import { deliveryInfoData } from "@/utils/data/homeData";
 import { myCartData } from "@/utils/data/myCartData";
-import MainCartSection from "@/components/partials/MyCart/MainCartSection";
-import CartSidebar from "@/components/partials/MyCart/CartSidebar";
-import CartHeader from "@/components/partials/MyCart/CartHeader";
+import { useCartTotal } from "@wow-star/utils";
 import { useSelector } from "react-redux";
-import { getProductSubTotal } from "@/utils/helpers";
-import DeliveryInfoSection from "@/components/partials/Others/DeliveryInfoSection";
 
 export default function MyCart() {
   const cartData = useSelector((state) => state.cart);
   const totalCartItemsCount = cartData?.data?.length || 0;
+
+  const { isRewardApplied } = useNavBarState();
+
+  const {
+    totalListingPrice,
+    totalPrice,
+    shippingTotal,
+    totalAmountSaved: totalSaved,
+    couponTotal,
+    grandTotal,
+    prepaidDiscount,
+    codCharges,
+    prepaidDiscountPercent,
+    usableRewards,
+  } = useCartTotal({
+    paymentType: "PREPAID",
+    isRewardApplied,
+  });
 
   return (
     <>
@@ -26,21 +44,27 @@ export default function MyCart() {
             itemCount={totalCartItemsCount}
             className="max-md:ml-1 md:col-span-2"
           />
-
           {/* Displays cart items, shipping progress, and cart summary */}
           <MainCartSection
             cartData={myCartData}
             realCartData={cartData}
             totalCartItemsCount={totalCartItemsCount}
-            subTotal={cartData.subTotal}
+            subTotal={totalPrice}
           />
 
           {/* Displays offers and payment summary */}
           <CartSidebar
             offers={myCartData.offers}
-            paymentSummary={myCartData.paymentSummary}
             cashback={myCartData.cashback}
-            subTotal={cartData.subTotal}
+            totalPrice={totalPrice}
+            totalListingPrice={totalListingPrice}
+            couponTotal={couponTotal}
+            prepaidDiscount={prepaidDiscount}
+            prepaidDiscountPercent={prepaidDiscountPercent}
+            shippingTotal={shippingTotal}
+            usableRewards={usableRewards}
+            grandTotal={grandTotal}
+            totalSaved={totalSaved - codCharges}
           />
         </div>
 

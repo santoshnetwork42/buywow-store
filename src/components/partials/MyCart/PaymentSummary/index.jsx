@@ -1,7 +1,19 @@
 // components/MyCart/PaymentSummary.jsx
 import { Heading, Text, Img, Button } from "@/components/elements";
 
-export default function PaymentSummary({ summary, cashback, subTotal }) {
+export default function PaymentSummary({
+  cashback,
+  totalPrice,
+  totalListingPrice,
+  couponTotal,
+  prepaidDiscount,
+  prepaidDiscountPercent,
+  shippingTotal,
+  usableRewards,
+  grandTotal,
+  totalSaved,
+}) {
+  const showStrikePrice = totalListingPrice && totalPrice < totalListingPrice;
   return (
     <div className="flex flex-col gap-4">
       <div className="flex w-[calc(100%+24px)] flex-1 -translate-x-3 items-center justify-center gap-0.5 bg-blue-50 px-2 py-1.5 shadow-sm sm:w-[calc(100%+40px)] sm:-translate-x-5 md:w-full md:translate-x-0 md:rounded-lg">
@@ -25,24 +37,34 @@ export default function PaymentSummary({ summary, cashback, subTotal }) {
             <Text size="lg" as="p" className="capitalize" responsive>
               Subtotal
             </Text>
-            <Text size="lg" as="p" className="capitalize" responsive>
-              ₹{subTotal}
-            </Text>
+            <div className="flex items-center gap-2">
+              {!!showStrikePrice && (
+                <Text
+                  size="sm"
+                  as="p"
+                  className="capitalize line-through"
+                  responsive
+                >
+                  ₹{totalListingPrice}
+                </Text>
+              )}
+              <Text size="lg" as="p" className="capitalize" responsive>
+                ₹{totalPrice}
+              </Text>
+            </div>
           </div>
+          {!!prepaidDiscount && (
+            <div className="flex items-center justify-between">
+              <Text>{prepaidDiscountPercent}% Online Payment Discount</Text>
+              <Text className="text-green-600">-₹{prepaidDiscount}</Text>
+            </div>
+          )}
           <div className="flex items-center justify-between">
             <Text size="lg" as="p" className="capitalize" responsive>
               Shipping
             </Text>
-            <Text size="lg" as="p" className="capitalize" responsive>
-              ₹{summary.shipping}
-            </Text>
-          </div>
-          <div className="flex items-center justify-between">
-            <Text size="lg" as="p" className="capitalize" responsive>
-              savings
-            </Text>
-            <Text size="lg" as="p" className="capitalize" responsive>
-              ₹{summary.savings}
+            <Text size="lg" as="p" responsive>
+              ₹{shippingTotal}
             </Text>
           </div>
         </div>
@@ -52,16 +74,28 @@ export default function PaymentSummary({ summary, cashback, subTotal }) {
             <Heading size="xl" as="h3" responsive>
               Total
             </Heading>
-            <Heading size="xl" as="h3" responsive>
-              ₹{summary.total}
-            </Heading>
+            <div className="flex flex-col items-end gap-1">
+              <Heading size="xl" as="h3" responsive>
+                ₹{grandTotal}
+              </Heading>
+              <Text className="font-light text-green-600" size="sm">
+                You Saved ₹{totalSaved.toFixed(2)}
+              </Text>
+            </div>
           </div>
           <Text size="xs" as="span" className="text-[#696969]">
             Inclusive of all taxes
           </Text>
         </div>
         <div className="mt-1 flex flex-col items-center gap-2.5">
-          <Button className="w-full" variant="primary" size="large">
+          {/* "redirectTo"  only works when "onClick" is added in button*/}
+          <Button
+            className="w-full"
+            variant="primary"
+            size="large"
+            redirectTo="/checkout"
+            onClick={() => {}}
+          >
             <Heading size="2xl" as="h2" className="text-white-a700_01">
               Checkout
             </Heading>
