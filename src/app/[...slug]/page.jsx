@@ -70,6 +70,7 @@ const AccordionUsageInstructions = dynamic(
 const AccordionFaQs = dynamic(
   () => import("@/components/blocks/Accordion/AccordionFaQs"),
 );
+const Breadcrumb = dynamic(() => import("@/components/blocks/Breadcrumb"));
 const VideoSection = dynamic(
   () => import("@/components/partials/Others/VideoSection"),
 );
@@ -135,6 +136,8 @@ const renderBlock = (block, index, slug) => {
       return <AccordionUsageInstructions key={index} slug={slug} {...block} />;
     case "ComponentAccordionFaQsSection":
       return <AccordionFaQs key={index} slug={slug} {...block} />;
+    case "ComponentBlocksBreadcrumb":
+      return <Breadcrumb key={index} slug={slug} {...block} />;
     case "ComponentVideoSection":
       return <VideoSection key={index} slug={slug} {...block} />;
     case "ComponentBlogSection":
@@ -144,11 +147,9 @@ const renderBlock = (block, index, slug) => {
   }
 };
 
-const getPageData = unstable_cache(
-  async (slug) => await getPageBySlugAPI(slug),
-  ["pageData"],
-  { revalidate: 1 },
-);
+const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
+  revalidate: 1,
+});
 
 export default async function Page({ params }) {
   const { slug } = params;
