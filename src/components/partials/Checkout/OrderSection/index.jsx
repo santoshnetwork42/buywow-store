@@ -1,10 +1,12 @@
 "use client";
 
-import { Button, Heading, Text } from "@/components/common";
+import { Button, Heading, Text } from "@/components/elements";
+import { useNavBarState } from "@/utils/context/navbar";
+import { checkAffiseValidity } from "@/utils/helpers";
+import { useCartTotal, useOrders } from "@wow-star/utils";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { STORE_ID } from "../../../../../config";
 
 export default function OrderSection() {
   const cartData = useSelector((state) => state.cart);
@@ -28,10 +30,40 @@ export default function OrderSection() {
   const handleMethodChange = (id) => {
     setSelectedMethod(id);
   };
-  
+
+  const { isRewardApplied } = useNavBarState();
+
+  const {
+    totalListingPrice,
+    totalPrice,
+    shippingTotal,
+    totalAmountSaved: totalSaved,
+    couponTotal,
+    grandTotal,
+    prepaidDiscount,
+    codGrandTotal,
+    prepaidGrandTotal,
+    codCharges,
+    appliedCODCharges,
+    prepaidDiscountPercent,
+    usableRewards,
+    totalAmount,
+    codCashbackRewardsOnOrder,
+    prepaidCashbackRewardsOnOrder,
+    amountNeededToAvailCodCashback,
+    amountNeededToAvailPrepaidCashback,
+  } = useCartTotal({
+    paymentType: "COD",
+    isRewardApplied,
+  });
+
+  const [
+    { isConfirmed, order: finalOrder, loading },
+    placeOrderV1,
+    orderHelper,
+  ] = useOrders();
 
   const placeOrderHandler = async () => {
-
     const shippingAddress = {
       firstName: "Piyush",
       lastName: "Jain",
@@ -60,13 +92,29 @@ export default function OrderSection() {
       paymentMethod: selectedMethod,
       address: shippingAddress,
       metadata: metaData,
-      appliedRewardPoints: false ? usableRewards : 0,
-      totalAmount: cartData.subTotal,
+      appliedRewardPoints: null,
+      totalAmount: totalAmount,
       shoppingCartId: uuidv4(),
       source: "WEB",
-      totalCashbackEarned: 0,
+      totalCashbackEarned: codCashbackRewardsOnOrder,
     };
-    
+
+    if (isRewardApplied && !!usableRewards) {
+      variables.appliedRewardPoints = usableRewards ? usableRewards : null;
+    }
+
+    const isAffiseTrackingValid = checkAffiseValidity();
+
+    if (isAffiseTrackingValid) {
+      variables.isAffiseTrackingValid = isAffiseTrackingValid
+        ? isAffiseTrackingValid
+        : null;
+    }
+
+    const [
+      { success, code, formError, order, payment, transaction },
+      rzpEnabled,
+    ] = await Promise.all([placeOrderV1(variables)]);
   };
 
   return (

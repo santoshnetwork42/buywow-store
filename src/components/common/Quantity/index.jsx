@@ -25,7 +25,7 @@ const Quantity = ({ quantity, cartItem, className }) => {
 
       const recordKey = getRecordKey(cartItem);
       const updatedCart = getUpdatedCart(cartList, recordKey, {
-        cartQuantity: newQuantity,
+        qty: newQuantity,
       });
 
       dispatch({

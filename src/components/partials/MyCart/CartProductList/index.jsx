@@ -56,7 +56,7 @@ const ProductItem = React.memo(({ item }) => {
           </div>
           <div className="flex items-center">
             <Quantity
-              quantity={item.cartQuantity}
+              quantity={item.qty}
               cartItem={item}
               className="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] lg:min-h-10 lg:grid-cols-[repeat(3,36px)]"
             />

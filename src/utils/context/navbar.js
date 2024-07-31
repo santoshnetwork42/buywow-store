@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { NavbarProvider as Navbar, useConfiguration } from "@wow-star/utils";
 import { generateClient } from "aws-amplify/api";
@@ -13,18 +13,16 @@ const client = generateClient();
 
 export const NavbarContext = createContext();
 
-function NavbarProvider({
-  children,
-  ignoreLazyloadNavbar,
-}) {
+function NavbarProvider({ children, ignoreLazyloadNavbar }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const _source = searchParams.get('_source');
+  const _source = searchParams.get("_source");
 
   const dispatch = useDispatch();
-  const cartList = useSelector(state => state.cart.data || []);
-  const appliedCoupon = useSelector(state => state.cart.coupon);
-  const user = useSelector(state => state.user.data);
+  const cartList = useSelector((state) => state.cart.data || []);
+  const appliedCoupon = useSelector((state) => state.cart.coupon);
+  const user = useSelector((state) => state.user.user);
+  console.log("navbaaarrr user :>> ", user);
 
   const [isInteractive, setIsInteractive] = useState(false);
   const [isRewardApplied, setIsRewardApplied] = useState(true);
@@ -52,10 +50,8 @@ function NavbarProvider({
     //   window.removeEventListener("mousemove", handleMouseMovement);
     //   window.removeEventListener("scroll", handleMouseMovement);
     // };
-
     // window.addEventListener("mousemove", handleMouseMovement);
     // window.addEventListener("scroll", handleMouseMovement);
-
     // return () => {
     //   window.removeEventListener("mousemove", handleMouseMovement);
     //   window.removeEventListener("scroll", handleMouseMovement);
@@ -66,7 +62,7 @@ function NavbarProvider({
     <Navbar
       storeId={STORE_ID}
       resolve={apiResolve}
-      isInteractive={isInteractive || ignoreLazyloadNavbar}
+      isInteractive={true}
       cartItems={cartList}
       appliedCoupon={appliedCoupon}
       user={user}

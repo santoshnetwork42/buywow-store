@@ -96,7 +96,88 @@ export const getOfferValueWithPercentage = (price, listingPrice) => {
 
 export const getProductSubTotal = (data) => {
   return data.reduce(
-    (acc, { price = 0, cartQuantity = 1 }) => acc + price * cartQuantity,
+    (acc, { price = 0, qty = 1 }) => acc + price * qty,
     0,
   );
+};
+
+
+export const getCKLocalData = (prefix) => {
+  const keysAndValues = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith(prefix)) {
+      const value = localStorage.getItem(key);
+      keysAndValues[key] = value;
+    }
+  }
+  return keysAndValues;
+};
+
+export const deleteCKLocalData = () => {
+  Object.keys(localStorage).forEach(function (key) {
+    if (/^bw_/.test(key)) {
+      localStorage.removeItem(key);
+    }
+  });
+};
+
+export const checkAffiseValidity = () => {
+  const ckSurvivalMinutes = 30 * 24 * 60;
+  // Retrieve local storage data with a specific prefix
+  const ckLocalData = getCKLocalData("bw_");
+  // console.log("ckLocalData :", ckLocalData);cons
+  if (
+    ckLocalData.bw_timestamp &&
+    ckLocalData.bw_clickid &&
+    (ckLocalData.bw_utm_medium === "affise_affiliate" ||
+      ckLocalData.bw_utm_medium.toLowerCase().includes("affise_affiliate"))
+  ) {
+    const epochTimestamp = ckLocalData.bw_timestamp;
+    const date = new Date(epochTimestamp * 1000);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+    const formattedDateTime =
+      year +
+      "-" +
+      month +
+      "-" +
+      day +
+      " " +
+      hours +
+      ":" +
+      minutes +
+      ":" +
+      seconds;
+    const providedDate = new Date(formattedDateTime);
+    const currentDate = new Date();
+    const timeDifference = currentDate - providedDate;
+    const minutesDifference = timeDifference / (1000 * 60);
+
+    // Check if the difference is within the survival days
+    if (minutesDifference <= ckSurvivalMinutes) {
+      // Check if tracking parameters are present
+      if (
+        !("bw_gclid" in ckLocalData) &&
+        !("bw_fbclid" in ckLocalData) &&
+        !("bw_igshid" in ckLocalData) &&
+        !("bw_gad_source" in ckLocalData) &&
+        !("bw_msclkid" in ckLocalData)
+      ) {
+        // Send postback data
+        return true;
+      }
+    } else {
+      // Delete local storage data if it's older than the survival days
+      deleteCKLocalData();
+      return false;
+    }
+  } else {
+    // console.log("Clickid or utm_source or timestamp not found");
+    return false;
+  }
 };

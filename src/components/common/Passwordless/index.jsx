@@ -1,15 +1,16 @@
 "use client";
 
-import Modal from "@/components/features/Modal";
-import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 import { Button, Input, Text } from "@/components/elements";
+import Modal from "@/components/features/Modal";
+import { getUserAPI } from "@/lib/appSyncAPIs";
+import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { userSagaActions } from "@/store/sagas/sagaActions/user.actions";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
-import { userSagaActions } from "@/store/sagas/sagaActions/user.actions";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PasswordLess({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
@@ -49,12 +50,12 @@ export default function PasswordLess({ enableOutsideClick = true }) {
       const currentUser = await getCurrentUser();
       const { signInDetails, userId } = currentUser;
 
-      if (user && !user.id) {
+      if (!!currentUser?.userId && user && !user.id) {
+        const userData = await getUserAPI();
         dispatch({
           type: userSagaActions.SET_USER,
           payload: {
-            phone: signInDetails?.loginId,
-            id: userId,
+            ...userData,
           },
         });
       }

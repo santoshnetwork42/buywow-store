@@ -117,6 +117,31 @@ export const getNavbarAndFooter = /* GraphQL */ `
   }
 `;
 
+export const getUser = /* GraphQL */ `
+  query GetUser {
+    getUser {
+      id
+      owner
+      firstName
+      lastName
+      email
+      phone
+      gender
+      dob
+      totalOrders
+      isActive
+      authProvider
+      isAdmin
+      profilePhotoUrl
+      emailVerified
+      phoneVerified
+      isCognitoConfirmed
+      createdAt
+      updatedAt
+      totalOrders
+    }
+  }
+`;
 // NEW APIs
 // ==================================================
 
@@ -1599,32 +1624,6 @@ export const searchOrders = /* GraphQL */ `
       }
       nextToken
       total
-    }
-  }
-`;
-
-export const getUser = /* GraphQL */ `
-  query GetUser {
-    getUser {
-      id
-      owner
-      firstName
-      lastName
-      email
-      phone
-      gender
-      dob
-      totalOrders
-      isActive
-      authProvider
-      isAdmin
-      profilePhotoUrl
-      emailVerified
-      phoneVerified
-      isCognitoConfirmed
-      createdAt
-      updatedAt
-      totalOrders
     }
   }
 `;

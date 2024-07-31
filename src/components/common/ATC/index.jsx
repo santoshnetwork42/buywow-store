@@ -26,7 +26,7 @@ const AddToCart = ({
         payload: {
           product: {
             ...fetchedProduct,
-            cartQuantity: fetchedProduct.minimumOrderQuantity || 1,
+            qty: fetchedProduct.minimumOrderQuantity || 1,
           },
         },
       });
@@ -45,7 +45,7 @@ const AddToCart = ({
         <div className="flex w-full justify-between gap-2 sm:gap-3 md:gap-4 lg:gap-5">
           <div className={`flex ${showGoToCart ? "w-1/3" : "w-auto"}`}>
             <Quantity
-              quantity={cartItem.cartQuantity}
+              quantity={cartItem.qty}
               cartItem={cartItem}
               className={quantityClassName}
             />

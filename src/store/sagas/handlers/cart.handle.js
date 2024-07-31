@@ -45,8 +45,8 @@ export function* addToCartHandler(action) {
         item.recordKey === recordKey
           ? {
               ...item,
-              cartQuantity:
-                parseInt(item.cartQuantity) + parseInt(tmpProduct.cartQuantity),
+              qty:
+                parseInt(item.qty) + parseInt(tmpProduct.qty),
             }
           : item,
       );
@@ -64,7 +64,7 @@ export function* addToCartHandler(action) {
 
       yield put(
         updateSubTotal(
-          cartState.subTotal + currentATC.price * currentATC.cartQuantity,
+          cartState.subTotal + currentATC.price * currentATC.qty,
         ),
       );
       yield put(setCart([...cartState.data, currentATC]));

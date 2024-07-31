@@ -3,6 +3,7 @@ import {
   getNavbarAndFooter,
   getPageBySlug,
   searchCMSProducts,
+  getUser,
 } from "@/graphql/appSync/api";
 import { STORE_ID } from "../../config";
 
@@ -61,6 +62,21 @@ export const getNavbarAndFooterAPI = async () => {
     });
 
     return JSON.parse(response?.data?.getNavbarAndFooter || "{}");
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
+export const getUserAPI = async () => {
+  try {
+    const response = await client.graphql({
+      query: getUser,
+      authMode: "userPool",
+    });
+
+    console.log("response :>> ", response);
+    return response?.data?.getUser || null;
   } catch (err) {
     console.error(err);
     return null;
