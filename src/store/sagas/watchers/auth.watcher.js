@@ -1,13 +1,13 @@
-import { all, fork, takeLatest } from "redux-saga/effects";
 import {
   confirmSignInHandler,
-  createAwsAccountHandler,
-  signInWithAwsAccountHandler,
   confirmSignUpHandler,
+  createAwsAccountHandler,
   setConfirmationStatusHandler,
+  signInWithAwsAccountHandler,
   signOutHandler,
 } from "@/store/sagas/handlers/auth.handle";
 import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
+import { all, fork, takeLatest } from "redux-saga/effects";
 
 function* createAccount() {
   yield takeLatest(authSagaActions.CREATE_AWS_ACCOUNT, createAwsAccountHandler);

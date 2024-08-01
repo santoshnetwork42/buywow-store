@@ -2,7 +2,11 @@
 
 import { Button, Input, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
-import { getUserAPI } from "@/lib/appSyncAPIs";
+import {
+  checkIfExistingUserAPI,
+  getUserAPI,
+  verifyCustomOTPAPI,
+} from "@/lib/appSyncAPIs";
 import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { userSagaActions } from "@/store/sagas/sagaActions/user.actions";
@@ -49,9 +53,9 @@ export default function PasswordLess({ enableOutsideClick = true }) {
   const updateUserState = async () => {
     try {
       const currentUser = await getCurrentUser();
-      const { signInDetails, userId } = currentUser;
+      const { userId } = currentUser;
 
-      if (!!currentUser?.userId && user && !user.id) {
+      if (!!userId && user && !user.id) {
         const userData = await getUserAPI();
         dispatch({
           type: userSagaActions.SET_USER,
@@ -85,11 +89,9 @@ export default function PasswordLess({ enableOutsideClick = true }) {
 
   const handleChange = (element, index) => {
     if (isNaN(element.value)) return;
-
     const newOtp = [...authData?.confirmationCode];
     newOtp[index] = element.value;
     setAuthData({ ...authData, confirmationCode: newOtp });
-
     if (element.value !== "") {
       if (index < authData?.confirmationCode?.length - 1) {
         otpInput.current[index + 1].focus();
@@ -110,10 +112,7 @@ export default function PasswordLess({ enableOutsideClick = true }) {
   const onAuthClose = async () => {
     dispatch({
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
-      payload: {
-        isPasswordLessOpen: false,
-        customLogin: false,
-      },
+      payload: { isPasswordLessOpen: false, customLogin: false },
     });
     setAuthData({
       phone: "",
@@ -133,15 +132,35 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     return validatePhoneNumber(authData.phone);
   };
 
-  const signIn = () => {
+  const signIn = async () => {
     if (!phoneFormatValidator()) return;
+
+    const phone = addPhonePrefix(authData.phone);
+
+    if (customLogin) {
+      //check if user already exists
+      const isExistingUser = await checkIfExistingUserAPI({ phone });
+
+      if (isExistingUser) {
+        // simple AWS signin if user exists
+        signInWithAWS({ phone });
+      } else {
+        dispatch({
+          type: authSagaActions.SET_CONFIRMATION_STATUS,
+          payload: "UNCONFIRMED_CUSTOM_SIGNIN",
+        });
+      }
+    } else {
+      signInWithAWS({ phone });
+    }
+    setCountdown(30);
+  };
+
+  const signInWithAWS = ({ phone }) => {
     dispatch({
       type: authSagaActions.SIGNIN_AWS_ACCOUNT,
-      payload: {
-        phone: addPhonePrefix(authData.phone),
-      },
+      payload: { phone },
     });
-    setCountdown(30);
   };
 
   const signUp = () => {
@@ -156,13 +175,11 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     }
   };
 
-  const submitOTP = () => {
+  const submitOTP = async () => {
     if (confirmationStatus === "UNCONFIRMED_SIGNIN") {
       dispatch({
         type: authSagaActions.CONFIRM_SIGNIN,
-        payload: {
-          confirmationCode: authData?.confirmationCode.join(""),
-        },
+        payload: { confirmationCode: authData?.confirmationCode.join("") },
       });
     } else if (confirmationStatus === "UNCONFIRMED_SIGNUP") {
       dispatch({
@@ -172,6 +189,26 @@ export default function PasswordLess({ enableOutsideClick = true }) {
           confirmationCode: authData?.confirmationCode.join(""),
         },
       });
+    } else if (confirmationStatus === "UNCONFIRMED_CUSTOM_SIGNIN") {
+      //verify otp sent to user for Custom Login
+      const isVerified = await verifyCustomOTPAPI({
+        phone: addPhonePrefix(authData?.phone),
+        otp: authData?.confirmationCode.join(""),
+      });
+
+      if (isVerified) {
+        dispatch({
+          type: authSagaActions.SET_CONFIRMATION_STATUS,
+          payload: "DONE",
+        });
+        //set custom user in state
+        dispatch({
+          type: userSagaActions.SET_CUSTOM_USER,
+          payload: { customUser: { phone: addPhonePrefix(authData?.phone) } },
+        });
+      } else {
+        //   setOtpError(true);
+      }
     }
   };
 
@@ -261,7 +298,8 @@ export default function PasswordLess({ enableOutsideClick = true }) {
         firstSignInStep()}
 
       {(confirmationStatus === "UNCONFIRMED_SIGNUP" ||
-        confirmationStatus === "UNCONFIRMED_SIGNIN") &&
+        confirmationStatus === "UNCONFIRMED_SIGNIN" ||
+        confirmationStatus === "UNCONFIRMED_CUSTOM_SIGNIN") &&
         secondSignInStep()}
     </Modal>
   );
