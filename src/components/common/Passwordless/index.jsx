@@ -137,23 +137,22 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     return validatePhoneNumber(authData.phone);
   };
 
+  const setAuthLoader = (isLoading) =>
+    dispatch({
+      type: authSagaActions.SET_AUTH_LOADER,
+      payload: isLoading,
+    });
+
   const signIn = async () => {
     if (!phoneFormatValidator()) return;
 
     const phone = addPhonePrefix(authData.phone);
 
-    if (customLogin) {
+    const handleCustomLogin = async () => {
+      setAuthLoader(true);
       try {
-        //check if user already exists
-        dispatch({
-          type: authSagaActions.SET_AUTH_LOADER,
-          payload: true,
-        });
-
         const isExistingUser = await checkIfExistingUserAPI({ phone });
-
         if (isExistingUser) {
-          // simple AWS signin if user exists
           signInWithAWS({ phone });
         } else {
           dispatch({
@@ -162,15 +161,18 @@ export default function PasswordLess({ enableOutsideClick = true }) {
           });
         }
       } catch (error) {
+        console.error("Error during custom login:", error);
       } finally {
-        dispatch({
-          type: authSagaActions.SET_AUTH_LOADER,
-          payload: false,
-        });
+        setAuthLoader(false);
       }
+    };
+
+    if (customLogin) {
+      await handleCustomLogin();
     } else {
       signInWithAWS({ phone });
     }
+
     setCountdown(30);
   };
 
@@ -194,53 +196,53 @@ export default function PasswordLess({ enableOutsideClick = true }) {
   };
 
   const submitOTP = async () => {
-    if (confirmationStatus === "UNCONFIRMED_SIGNIN") {
-      dispatch({
-        type: authSagaActions.CONFIRM_SIGNIN,
-        payload: { confirmationCode: authData?.confirmationCode.join("") },
-      });
-    } else if (confirmationStatus === "UNCONFIRMED_SIGNUP") {
-      dispatch({
-        type: authSagaActions.CONFIRM_SIGNUP,
-        payload: {
-          username: addPhonePrefix(authData?.phone),
-          confirmationCode: authData?.confirmationCode.join(""),
-        },
-      });
-    } else if (confirmationStatus === "UNCONFIRMED_CUSTOM_SIGNIN") {
-      dispatch({
-        type: authSagaActions.SET_AUTH_LOADER,
-        payload: true,
-      });
+    const confirmationCode = authData?.confirmationCode.join("");
+    const phone = addPhonePrefix(authData?.phone);
 
-      try {
-        //verify otp sent to user for Custom Login
-        const isVerified = await verifyCustomOTPAPI({
-          phone: addPhonePrefix(authData?.phone),
-          otp: authData?.confirmationCode.join(""),
-        });
-
-        if (isVerified) {
-          dispatch({
-            type: authSagaActions.SET_CONFIRMATION_STATUS,
-            payload: "DONE",
-          });
-          //set custom user in state
-          dispatch({
-            type: userSagaActions.SET_CUSTOM_USER,
-            payload: { phone: addPhonePrefix(authData?.phone) },
-          });
-        } else {
-          //   setOtpError(true);
-        }
-      } catch (error) {
-      } finally {
+    const actions = {
+      UNCONFIRMED_SIGNIN: () =>
         dispatch({
-          type: authSagaActions.SET_AUTH_LOADER,
-          payload: false,
-        });
-      }
+          type: authSagaActions.CONFIRM_SIGNIN,
+          payload: { confirmationCode },
+        }),
+      UNCONFIRMED_SIGNUP: () =>
+        dispatch({
+          type: authSagaActions.CONFIRM_SIGNUP,
+          payload: { username: phone, confirmationCode },
+        }),
+      UNCONFIRMED_CUSTOM_SIGNIN: async () => {
+        setAuthLoader(true);
+        try {
+          const isVerified = await verifyCustomOTPAPI({
+            phone,
+            otp: confirmationCode,
+          });
+          if (isVerified) {
+            dispatch({
+              type: authSagaActions.SET_CONFIRMATION_STATUS,
+              payload: "DONE",
+            });
+            dispatch({
+              type: userSagaActions.SET_CUSTOM_USER,
+              payload: { phone },
+            });
+          } else {
+            // Handle unverified OTP
+            // setOtpError(true);
+          }
+        } catch (error) {
+          console.error("Error verifying custom OTP:", error);
+        } finally {
+          setAuthLoader(false);
+        }
+      },
+    };
+
+    const action = actions[confirmationStatus];
+    if (action) {
+      await action();
     }
+
     if (!!redirectTo) {
       router.push(redirectTo);
     }
