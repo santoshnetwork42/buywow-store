@@ -19,9 +19,10 @@ export default function PasswordLess({ enableOutsideClick = true }) {
   const { user } = useSelector((state) => state.user);
   const {
     modal: {
-      passwordLess: { isPasswordLessOpen },
+      passwordLess: { isPasswordLessOpen, customLogin },
     },
   } = useSelector((state) => state.modal);
+
   const otpInput = useRef([]);
 
   // console.log("confirmationStatus :>> ", confirmationStatus);
@@ -111,6 +112,7 @@ export default function PasswordLess({ enableOutsideClick = true }) {
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
       payload: {
         isPasswordLessOpen: false,
+        customLogin: false,
       },
     });
     setAuthData({

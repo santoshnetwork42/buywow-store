@@ -1,5 +1,9 @@
+"use client";
+import PasswordLess from "@/components/common/Passwordless";
 // components/MyCart/PaymentSummary.jsx
-import { Heading, Text, Img, Button } from "@/components/elements";
+import { Button, Heading, Img, Text } from "@/components/elements";
+import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { useDispatch } from "react-redux";
 
 export default function PaymentSummary({
   cashback,
@@ -13,7 +17,20 @@ export default function PaymentSummary({
   grandTotal,
   totalSaved,
 }) {
+  const dispatch = useDispatch();
+
   const showStrikePrice = totalListingPrice && totalPrice < totalListingPrice;
+
+  const handleCheckoutClick = () => {
+    dispatch({
+      type: modalSagaActions.SET_PASSWORDLESS_MODAL,
+      payload: {
+        isPasswordLessOpen: true,
+        customLogin: true,
+      },
+    });
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex w-[calc(100%+24px)] flex-1 -translate-x-3 items-center justify-center gap-0.5 bg-blue-50 px-2 py-1.5 shadow-sm sm:w-[calc(100%+40px)] sm:-translate-x-5 md:w-full md:translate-x-0 md:rounded-lg">
@@ -93,13 +110,16 @@ export default function PaymentSummary({
             className="w-full"
             variant="primary"
             size="large"
-            redirectTo="/checkout"
-            onClick={() => {}}
+            // redirectTo="/checkout"
+            onClick={() => {
+              handleCheckoutClick();
+            }}
           >
             <Heading size="2xl" as="h2" className="text-white-a700_01">
               Checkout
             </Heading>
           </Button>
+          <PasswordLess />
           <Text size="base" as="p" className="text-sm" responsive>
             Estimated delivery within 3-5 days
           </Text>

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   modal: {
-    passwordLess: { isPasswordLessOpen: false, redirectAfterLogin: false },
+    passwordLess: { isPasswordLessOpen: false, customLogin: false },
     cart: { isCartOpen: false },
   },
 };

@@ -110,18 +110,24 @@ const Header = React.memo(({ data, ...props }) => {
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
       payload: {
         isPasswordLessOpen: true,
+        customLogin: false,
       },
     });
   }, [dispatch]);
 
   const handleUserClisk = useCallback(async () => {
-    //check if user is logged in
-    const currentUser = await getCurrentUser();
-    if (!!currentUser) {
-      router.push("/account");
-    } else {
-      //open passwordless if user is not logged in
+    try {
+      //check if user is logged in
+      const currentUser = await getCurrentUser();
+      if (!!currentUser) {
+        router.push("/account");
+      } else {
+        //open passwordless if user is not logged in
+        handlePasswordLessOpen();
+      }
+    } catch (error) {
       handlePasswordLessOpen();
+      console.log("Something went wrong", error);
     }
   }, [handlePasswordLessOpen, router]);
 
