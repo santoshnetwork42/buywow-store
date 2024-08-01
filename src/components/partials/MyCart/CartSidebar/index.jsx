@@ -1,13 +1,20 @@
 // components/MyCart/CartSidebar.jsx
-import React, { Suspense } from "react";
-import PaymentSummary from "@/components/partials/MyCart/PaymentSummary";
 import OfferItem from "@/components/partials/MyCart/OfferItem";
+import PaymentSummary from "@/components/partials/MyCart/PaymentSummary";
+import { Suspense } from "react";
 
 export default function CartSidebar({
   offers,
-  paymentSummary,
   cashback,
-  subTotal,
+  totalPrice,
+  totalListingPrice,
+  couponTotal,
+  prepaidDiscount,
+  prepaidDiscountPercent,
+  shippingTotal,
+  usableRewards,
+  grandTotal,
+  totalSaved,
 }) {
   return (
     <div className="flex w-full flex-col gap-10">
@@ -19,9 +26,16 @@ export default function CartSidebar({
         </Suspense>
       </div>
       <PaymentSummary
-        summary={paymentSummary}
         cashback={cashback}
-        subTotal={subTotal}
+        totalPrice={totalPrice}
+        totalListingPrice={totalListingPrice}
+        couponTotal={couponTotal}
+        prepaidDiscount={prepaidDiscount}
+        prepaidDiscountPercent={prepaidDiscountPercent}
+        shippingTotal={shippingTotal}
+        usableRewards={usableRewards}
+        grandTotal={grandTotal}
+        totalSaved={totalSaved}
       />
     </div>
   );

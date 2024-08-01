@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { useRippleEffect } from "@/utils/hooks/useRippleEffect";
 import { LoaderIcon } from "@/assets/svg/icons";
 import { useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 const Button = ({
   children,
@@ -21,6 +22,7 @@ const Button = ({
   onClick,
   ...restProps
 }) => {
+  const router = useRouter();
   const buttonRef = useRippleEffect(enableRipple && !disabled && !loader);
 
   const baseClasses =
@@ -57,6 +59,10 @@ const Button = ({
       e.preventDefault();
 
       if (onClick && !disabled && !loader) {
+        const { redirectTo } = restProps;
+        if (!!redirectTo) {
+          router.push(redirectTo);
+        }
         onClick(e);
       }
     },

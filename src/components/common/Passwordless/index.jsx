@@ -2,29 +2,35 @@
 
 import { Button, Input, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
-import { getUserAPI } from "@/lib/appSyncAPIs";
+import {
+  checkIfExistingUserAPI,
+  getUserAPI,
+  verifyCustomOTPAPI,
+} from "@/lib/appSyncAPIs";
 import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { userSagaActions } from "@/store/sagas/sagaActions/user.actions";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function PasswordLess({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { confirmationStatus, loading } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
   const {
     modal: {
-      passwordLess: { isPasswordLessOpen },
+      passwordLess: { isPasswordLessOpen, customLogin, redirectTo },
     },
   } = useSelector((state) => state.modal);
+
   const otpInput = useRef([]);
 
-  // console.log("confirmationStatus :>> ", confirmationStatus);
   const [authData, setAuthData] = useState({
     phone: "",
     confirmationCode: new Array(6).fill(""),
@@ -48,9 +54,9 @@ export default function PasswordLess({ enableOutsideClick = true }) {
   const updateUserState = async () => {
     try {
       const currentUser = await getCurrentUser();
-      const { signInDetails, userId } = currentUser;
+      const { userId } = currentUser;
 
-      if (!!currentUser?.userId && user && !user.id) {
+      if (!!userId && user && !user.id) {
         const userData = await getUserAPI();
         dispatch({
           type: userSagaActions.SET_USER,
@@ -84,11 +90,9 @@ export default function PasswordLess({ enableOutsideClick = true }) {
 
   const handleChange = (element, index) => {
     if (isNaN(element.value)) return;
-
     const newOtp = [...authData?.confirmationCode];
     newOtp[index] = element.value;
     setAuthData({ ...authData, confirmationCode: newOtp });
-
     if (element.value !== "") {
       if (index < authData?.confirmationCode?.length - 1) {
         otpInput.current[index + 1].focus();
@@ -111,6 +115,8 @@ export default function PasswordLess({ enableOutsideClick = true }) {
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
       payload: {
         isPasswordLessOpen: false,
+        customLogin: false,
+        redirectTo: null,
       },
     });
     setAuthData({
@@ -131,15 +137,50 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     return validatePhoneNumber(authData.phone);
   };
 
-  const signIn = () => {
+  const setAuthLoader = (isLoading) =>
+    dispatch({
+      type: authSagaActions.SET_AUTH_LOADER,
+      payload: isLoading,
+    });
+
+  const signIn = async () => {
     if (!phoneFormatValidator()) return;
+
+    const phone = addPhonePrefix(authData.phone);
+
+    const handleCustomLogin = async () => {
+      setAuthLoader(true);
+      try {
+        const isExistingUser = await checkIfExistingUserAPI({ phone });
+        if (isExistingUser) {
+          signInWithAWS({ phone });
+        } else {
+          dispatch({
+            type: authSagaActions.SET_CONFIRMATION_STATUS,
+            payload: "UNCONFIRMED_CUSTOM_SIGNIN",
+          });
+        }
+      } catch (error) {
+        console.error("Error during custom login:", error);
+      } finally {
+        setAuthLoader(false);
+      }
+    };
+
+    if (customLogin) {
+      await handleCustomLogin();
+    } else {
+      signInWithAWS({ phone });
+    }
+
+    setCountdown(30);
+  };
+
+  const signInWithAWS = ({ phone }) => {
     dispatch({
       type: authSagaActions.SIGNIN_AWS_ACCOUNT,
-      payload: {
-        phone: addPhonePrefix(authData.phone),
-      },
+      payload: { phone },
     });
-    setCountdown(30);
   };
 
   const signUp = () => {
@@ -154,22 +195,56 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     }
   };
 
-  const submitOTP = () => {
-    if (confirmationStatus === "UNCONFIRMED_SIGNIN") {
-      dispatch({
-        type: authSagaActions.CONFIRM_SIGNIN,
-        payload: {
-          confirmationCode: authData?.confirmationCode.join(""),
-        },
-      });
-    } else if (confirmationStatus === "UNCONFIRMED_SIGNUP") {
-      dispatch({
-        type: authSagaActions.CONFIRM_SIGNUP,
-        payload: {
-          username: addPhonePrefix(authData?.phone),
-          confirmationCode: authData?.confirmationCode.join(""),
-        },
-      });
+  const submitOTP = async () => {
+    const confirmationCode = authData?.confirmationCode.join("");
+    const phone = addPhonePrefix(authData?.phone);
+
+    const actions = {
+      UNCONFIRMED_SIGNIN: () =>
+        dispatch({
+          type: authSagaActions.CONFIRM_SIGNIN,
+          payload: { confirmationCode },
+        }),
+      UNCONFIRMED_SIGNUP: () =>
+        dispatch({
+          type: authSagaActions.CONFIRM_SIGNUP,
+          payload: { username: phone, confirmationCode },
+        }),
+      UNCONFIRMED_CUSTOM_SIGNIN: async () => {
+        setAuthLoader(true);
+        try {
+          const isVerified = await verifyCustomOTPAPI({
+            phone,
+            otp: confirmationCode,
+          });
+          if (isVerified) {
+            dispatch({
+              type: authSagaActions.SET_CONFIRMATION_STATUS,
+              payload: "DONE",
+            });
+            dispatch({
+              type: userSagaActions.SET_CUSTOM_USER,
+              payload: { phone },
+            });
+          } else {
+            // Handle unverified OTP
+            // setOtpError(true);
+          }
+        } catch (error) {
+          console.error("Error verifying custom OTP:", error);
+        } finally {
+          setAuthLoader(false);
+        }
+      },
+    };
+
+    const action = actions[confirmationStatus];
+    if (action) {
+      await action();
+    }
+
+    if (!!redirectTo) {
+      router.push(redirectTo);
     }
   };
 
@@ -191,6 +266,8 @@ export default function PasswordLess({ enableOutsideClick = true }) {
           onClick={() => {
             signIn();
           }}
+          className="p-3 px-6"
+          variant="primary"
         >
           <div className="flex items-center justify-center">Get OTP</div>
         </Button>
@@ -216,7 +293,13 @@ export default function PasswordLess({ enableOutsideClick = true }) {
             />
           ))}
         </div>
-        <Button loader={loading} loaderClass="ml-2" onClick={submitOTP}>
+        <Button
+          loader={loading}
+          loaderClass="ml-2"
+          onClick={submitOTP}
+          className="p-3 px-6"
+          variant="primary"
+        >
           Confirm
         </Button>
         <div className="flex w-full">
@@ -251,7 +334,8 @@ export default function PasswordLess({ enableOutsideClick = true }) {
         firstSignInStep()}
 
       {(confirmationStatus === "UNCONFIRMED_SIGNUP" ||
-        confirmationStatus === "UNCONFIRMED_SIGNIN") &&
+        confirmationStatus === "UNCONFIRMED_SIGNIN" ||
+        confirmationStatus === "UNCONFIRMED_CUSTOM_SIGNIN") &&
         secondSignInStep()}
     </Modal>
   );

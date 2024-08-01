@@ -114,3 +114,11 @@ export function* signOutHandler(action) {
     console.log("error", error);
   }
 }
+
+export function* authLoaderHandler(action) {
+  try {
+    yield put(setAuthLoading(action.payload));
+  } catch (error) {
+    console.log("error", error);
+  }
+}

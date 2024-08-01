@@ -5,6 +5,8 @@ import { Heading, Text, Img } from "@/components/elements";
 import FooterMenu from "@/components/partials/Footer/FooterMenu";
 import Link from "next/link";
 import { extractAttributes } from "@/utils/helpers";
+import { usePathname } from "next/navigation";
+import { restrictFooterToShow } from "@/utils/data/constants";
 
 const SocialLink = React.memo(({ item, index }) => {
   if (!item) return null;
@@ -75,6 +77,10 @@ Copyright.displayName = "Copyright";
 const Footer = React.memo(({ data, ...props }) => {
   const [openSections, setOpenSections] = useState({});
 
+  //check if footer is restricted to show on specific pages
+  const pathname = usePathname();
+  const isRestricted = restrictFooterToShow?.includes(pathname);
+
   const {
     logo,
     description,
@@ -132,6 +138,8 @@ const Footer = React.memo(({ data, ...props }) => {
   }, []);
 
   if (!data) return null;
+
+  if (isRestricted) return <></>;
 
   return (
     <footer
