@@ -3,6 +3,7 @@ import PasswordLess from "@/components/common/Passwordless";
 // components/MyCart/PaymentSummary.jsx
 import { Button, Heading, Img, Text } from "@/components/elements";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { useGuestCheckout } from "@/utils/context/navbar";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -23,13 +24,18 @@ export default function PaymentSummary({
 
   const { user } = useSelector((state) => state.user);
   const { customUser } = useSelector((state) => state.user);
+  const guestCheckout = useGuestCheckout();
 
   const showStrikePrice = totalListingPrice && totalPrice < totalListingPrice;
 
   const handleCheckoutClick = async () => {
     //check if user or custom user exists
     try {
-      if ((user && user.id) || (customUser && customUser.phone)) {
+      if (
+        (user && user.id) ||
+        (customUser && customUser.phone) ||
+        guestCheckout
+      ) {
         router.push("/checkout");
       } else {
         dispatch({
@@ -125,7 +131,6 @@ export default function PaymentSummary({
             className="w-full"
             variant="primary"
             size="large"
-            // redirectTo="/checkout"
             onClick={() => {
               handleCheckoutClick();
             }}
