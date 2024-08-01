@@ -1,4 +1,5 @@
 import {
+  authLoaderHandler,
   confirmSignInHandler,
   confirmSignUpHandler,
   createAwsAccountHandler,
@@ -39,6 +40,10 @@ function* signOut() {
   yield takeLatest(authSagaActions.SIGNOUT, signOutHandler);
 }
 
+function* authLoader() {
+  yield takeLatest(authSagaActions.SET_AUTH_LOADER, authLoaderHandler);
+}
+
 export function* authWatcher() {
   yield all([
     fork(createAccount),
@@ -47,5 +52,6 @@ export function* authWatcher() {
     fork(confirmSignUp),
     fork(setConfirmationStatus),
     fork(signOut),
+    fork(authLoader),
   ]);
 }

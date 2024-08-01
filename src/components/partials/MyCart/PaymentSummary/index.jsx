@@ -3,7 +3,8 @@ import PasswordLess from "@/components/common/Passwordless";
 // components/MyCart/PaymentSummary.jsx
 import { Button, Heading, Img, Text } from "@/components/elements";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
-import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function PaymentSummary({
   cashback,
@@ -18,17 +19,31 @@ export default function PaymentSummary({
   totalSaved,
 }) {
   const dispatch = useDispatch();
+  const router = useRouter();
+
+  const { user } = useSelector((state) => state.user);
+  const { customUser } = useSelector((state) => state.user);
 
   const showStrikePrice = totalListingPrice && totalPrice < totalListingPrice;
 
-  const handleCheckoutClick = () => {
-    dispatch({
-      type: modalSagaActions.SET_PASSWORDLESS_MODAL,
-      payload: {
-        isPasswordLessOpen: true,
-        customLogin: true,
-      },
-    });
+  const handleCheckoutClick = async () => {
+    //check if user or custom user exists
+    try {
+      if ((user && user.id) || (customUser && customUser.phone)) {
+        router.push("/checkout");
+      } else {
+        dispatch({
+          type: modalSagaActions.SET_PASSWORDLESS_MODAL,
+          payload: {
+            isPasswordLessOpen: true,
+            customLogin: true,
+            redirectTo: "/checkout",
+          },
+        });
+      }
+    } catch (error) {
+      console.log("error :>> ", error);
+    }
   };
 
   return (

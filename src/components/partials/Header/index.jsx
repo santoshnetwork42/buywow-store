@@ -111,6 +111,7 @@ const Header = React.memo(({ data, ...props }) => {
       payload: {
         isPasswordLessOpen: true,
         customLogin: false,
+        redirectTo: null,
       },
     });
   }, [dispatch]);

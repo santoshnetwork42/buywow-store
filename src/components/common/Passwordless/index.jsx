@@ -13,23 +13,24 @@ import { userSagaActions } from "@/store/sagas/sagaActions/user.actions";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function PasswordLess({ enableOutsideClick = true }) {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { confirmationStatus, loading } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
   const {
     modal: {
-      passwordLess: { isPasswordLessOpen, customLogin },
+      passwordLess: { isPasswordLessOpen, customLogin, redirectTo },
     },
   } = useSelector((state) => state.modal);
 
   const otpInput = useRef([]);
 
-  // console.log("confirmationStatus :>> ", confirmationStatus);
   const [authData, setAuthData] = useState({
     phone: "",
     confirmationCode: new Array(6).fill(""),
@@ -112,7 +113,11 @@ export default function PasswordLess({ enableOutsideClick = true }) {
   const onAuthClose = async () => {
     dispatch({
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
-      payload: { isPasswordLessOpen: false, customLogin: false },
+      payload: {
+        isPasswordLessOpen: false,
+        customLogin: false,
+        redirectTo: null,
+      },
     });
     setAuthData({
       phone: "",
@@ -138,16 +143,29 @@ export default function PasswordLess({ enableOutsideClick = true }) {
     const phone = addPhonePrefix(authData.phone);
 
     if (customLogin) {
-      //check if user already exists
-      const isExistingUser = await checkIfExistingUserAPI({ phone });
-
-      if (isExistingUser) {
-        // simple AWS signin if user exists
-        signInWithAWS({ phone });
-      } else {
+      try {
+        //check if user already exists
         dispatch({
-          type: authSagaActions.SET_CONFIRMATION_STATUS,
-          payload: "UNCONFIRMED_CUSTOM_SIGNIN",
+          type: authSagaActions.SET_AUTH_LOADER,
+          payload: true,
+        });
+
+        const isExistingUser = await checkIfExistingUserAPI({ phone });
+
+        if (isExistingUser) {
+          // simple AWS signin if user exists
+          signInWithAWS({ phone });
+        } else {
+          dispatch({
+            type: authSagaActions.SET_CONFIRMATION_STATUS,
+            payload: "UNCONFIRMED_CUSTOM_SIGNIN",
+          });
+        }
+      } catch (error) {
+      } finally {
+        dispatch({
+          type: authSagaActions.SET_AUTH_LOADER,
+          payload: false,
         });
       }
     } else {
@@ -190,25 +208,41 @@ export default function PasswordLess({ enableOutsideClick = true }) {
         },
       });
     } else if (confirmationStatus === "UNCONFIRMED_CUSTOM_SIGNIN") {
-      //verify otp sent to user for Custom Login
-      const isVerified = await verifyCustomOTPAPI({
-        phone: addPhonePrefix(authData?.phone),
-        otp: authData?.confirmationCode.join(""),
+      dispatch({
+        type: authSagaActions.SET_AUTH_LOADER,
+        payload: true,
       });
 
-      if (isVerified) {
-        dispatch({
-          type: authSagaActions.SET_CONFIRMATION_STATUS,
-          payload: "DONE",
+      try {
+        //verify otp sent to user for Custom Login
+        const isVerified = await verifyCustomOTPAPI({
+          phone: addPhonePrefix(authData?.phone),
+          otp: authData?.confirmationCode.join(""),
         });
-        //set custom user in state
+
+        if (isVerified) {
+          dispatch({
+            type: authSagaActions.SET_CONFIRMATION_STATUS,
+            payload: "DONE",
+          });
+          //set custom user in state
+          dispatch({
+            type: userSagaActions.SET_CUSTOM_USER,
+            payload: { phone: addPhonePrefix(authData?.phone) },
+          });
+        } else {
+          //   setOtpError(true);
+        }
+      } catch (error) {
+      } finally {
         dispatch({
-          type: userSagaActions.SET_CUSTOM_USER,
-          payload: { customUser: { phone: addPhonePrefix(authData?.phone) } },
+          type: authSagaActions.SET_AUTH_LOADER,
+          payload: false,
         });
-      } else {
-        //   setOtpError(true);
       }
+    }
+    if (!!redirectTo) {
+      router.push(redirectTo);
     }
   };
 
