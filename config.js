@@ -8,3 +8,4 @@ export const STORE_PREFIX = process.env.NEXT_PUBLIC_STORE_PREFIX;
 export const GUEST_CHECKOUT = process.env.NEXT_PUBLIC_GUEST_CHECKOUT;
 export const RAZORPAY_SCRIPT = "https://checkout.razorpay.com/v1/checkout.js";
 export const RAZORPAY_KEY = process.env.NEXT_PUBLIC_RAZORPAY_KEY;
+export const GUEST_CHECKOUT_COOKIE_EXPIRY = 48;
