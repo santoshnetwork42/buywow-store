@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Link from "next/link";
 import { MenuSVG } from "@/assets/images";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import PasswordLess from "@/components/common/PasswordLess";
 import { Button, Img, Text } from "@/components/elements";
+import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { extractAttributes } from "@/utils/helpers";
-import MobileMenu from "@/components/partials/Header/MobileMenu";
-import PasswordLess from "@/components/common/PasswordLess";
+import { getCurrentUser } from "aws-amplify/auth";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const MenuItem = React.memo(({ item, index, linkPrefix }) => {
   if (!item) return null;
@@ -80,6 +82,8 @@ Logo.displayName = "Logo";
 
 const Header = React.memo(({ data, ...props }) => {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const { data: cartData = [] } = useSelector((state) => state.cart);
   const totalCartItems = cartData.length;
 
@@ -109,6 +113,17 @@ const Header = React.memo(({ data, ...props }) => {
       },
     });
   }, [dispatch]);
+
+  const handleUserClisk = useCallback(async () => {
+    //check if user is logged in
+    const currentUser = await getCurrentUser();
+    if (!!currentUser) {
+      router.push("/account");
+    } else {
+      //open passwordless if user is not logged in
+      handlePasswordLessOpen();
+    }
+  }, [handlePasswordLessOpen, router]);
 
   const renderMenuItems = () => (
     <>
@@ -162,11 +177,7 @@ const Header = React.memo(({ data, ...props }) => {
 
           <div className="flex max-w-[370px] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
             <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
-            <Link
-              href="#"
-              className="flex-shrink-0"
-              onClick={handlePasswordLessOpen}
-            >
+            <Link href="#" className="flex-shrink-0" onClick={handleUserClisk}>
               <Img
                 src="img_user.svg"
                 width={24}

@@ -191,6 +191,8 @@ export default function PasswordLess({ enableOutsideClick = true }) {
           onClick={() => {
             signIn();
           }}
+          className="p-3 px-6"
+          variant="primary"
         >
           <div className="flex items-center justify-center">Get OTP</div>
         </Button>
@@ -216,7 +218,13 @@ export default function PasswordLess({ enableOutsideClick = true }) {
             />
           ))}
         </div>
-        <Button loader={loading} loaderClass="ml-2" onClick={submitOTP}>
+        <Button
+          loader={loading}
+          loaderClass="ml-2"
+          onClick={submitOTP}
+          className="p-3 px-6"
+          variant="primary"
+        >
           Confirm
         </Button>
         <div className="flex w-full">

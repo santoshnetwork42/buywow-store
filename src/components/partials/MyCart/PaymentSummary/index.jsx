@@ -76,7 +76,7 @@ export default function PaymentSummary({
             </Heading>
             <div className="flex flex-col items-end gap-1">
               <Heading size="xl" as="h3" responsive>
-                ₹{grandTotal}
+                ₹{grandTotal.toFixed(2)}
               </Heading>
               <Text className="font-light text-green-600" size="sm">
                 You Saved ₹{totalSaved.toFixed(2)}
