@@ -173,7 +173,7 @@ const ProductCard = memo(
             <div className="flex flex-1 justify-between gap-2">
               <PriceDisplay price={price} listingPrice={listingPrice} />
               <AddToCart
-                fetchedProduct={fetchedProduct}
+                product={fetchedProduct}
                 buttonText={"Add"}
                 buttonSize="medium"
                 quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)]  lg:grid-cols-[repeat(3,36px)]"

@@ -217,7 +217,7 @@ const ProductImageSection = ({
   return (
     <div
       ref={mainContainerRef}
-      className="main-container flex flex-col-reverse gap-1 sm:flex-row sm:gap-2 md:gap-3 lg:gap-4"
+      className="main-container sticky top-20 flex flex-col-reverse gap-1 sm:flex-row sm:gap-2 md:gap-3 lg:gap-4"
     >
       <div ref={thumbsContainerRef} className="w-20 max-sm:hidden">
         <div

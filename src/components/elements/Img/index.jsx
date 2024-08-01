@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import Image from "next/image";
 import { BASE_PATH } from "../../../../config";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 const BASE_URL = BASE_PATH || "/images";
-const DEFAULT_IMAGE = "/images/defaultNoData.png";
 
 const Img = React.memo(
   ({
@@ -18,8 +17,10 @@ const Img = React.memo(
     addPrefix = false,
     ...restProps
   }) => {
+    const [hasError, setHasError] = useState(false);
+
     const imageSrc = useMemo(() => {
-      if (!src) return DEFAULT_IMAGE;
+      if (!src) return null;
       if (isStatic) {
         return addPrefix
           ? getPublicImageURL({
@@ -44,7 +45,13 @@ const Img = React.memo(
       [isStatic],
     );
 
-    if (!src) return null;
+    const handleError = useCallback(() => {
+      setHasError(true);
+    }, []);
+
+    if (!src || hasError) {
+      return <div className={`bg-white ${className}`} />;
+    }
 
     return (
       <Image
@@ -53,6 +60,7 @@ const Img = React.memo(
         src={imageSrc}
         alt={alt || "Image"}
         width={width}
+        onError={handleError}
         {...restProps}
       />
     );

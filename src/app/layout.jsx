@@ -1,4 +1,3 @@
-
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
@@ -13,7 +12,6 @@ import { unstable_cache } from "next/cache";
 import awsExport from "../../aws-exports";
 import { AWS_CLIENT_ID } from "../../config";
 
-
 Amplify.configure({
   ...awsExport,
   ssr: true,
@@ -27,7 +25,7 @@ const getNavbarAndFooter = unstable_cache(
 );
 
 async function RootLayout({ children }) {
-  const { data } = await getNavbarAndFooter();
+  const { data } = (await getNavbarAndFooter()) || {};
   const { navbar: headerData = {}, footer: footerData = {} } = data || {};
 
   return (
@@ -41,9 +39,7 @@ async function RootLayout({ children }) {
       </head>
       <body>
         <Provider>
-          <NavbarProvider
-                ignoreLazyloadNavbar={false}
-              >
+          <NavbarProvider ignoreLazyloadNavbar={false}>
             <div className="flex min-h-dvh w-full flex-col bg-white-a700">
               <AnnouncementBar
                 leftText="Free Shipping On Orders Above ₹999"

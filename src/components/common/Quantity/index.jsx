@@ -1,118 +1,98 @@
 "use client";
 
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import { Button, Text } from "@/components/elements";
-import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
-import { useState, useCallback, useMemo, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { twMerge } from "tailwind-merge";
 
-const Quantity = ({ quantity, cartItem, className }) => {
-  const dispatch = useDispatch();
-  const { maximumOrderQuantity, minimumOrderQuantity } = cartItem || {};
-  const [cartQuantity, setCartQuantity] = useState(quantity);
+const Quantity = React.memo(
+  ({
+    max,
+    quantity = 1,
+    minimumOrderQuantity = 1,
+    maximumOrderQuantity = 99,
+    totalItemQuantity,
+    onChangeQuantity,
+    product,
+    className,
+  }) => {
+    const [cartQuantity, setCartQuantity] = useState(quantity);
 
-  const cartData = useSelector((state) => state.cart);
-  const cartList = useMemo(() => cartData?.data || [], [cartData?.data]);
+    useEffect(() => {
+      setCartQuantity(quantity || 1);
+    }, [quantity]);
 
-  useEffect(() => {
-    setCartQuantity(quantity);
-  }, [quantity]);
-
-  const updateCart = useCallback(
-    async (newQuantity) => {
-      if (!cartItem) return;
-
-      const recordKey = getRecordKey(cartItem);
-      const updatedCart = getUpdatedCart(cartList, recordKey, {
-        qty: newQuantity,
-      });
-
-      dispatch({
-        type: cartSagaActions.UPDATE_CART,
-        payload: { data: updatedCart },
-      });
-    },
-    [cartItem, cartList, dispatch],
-  );
-
-  const removeFromCart = useCallback(() => {
-    if (!cartItem) return;
-
-    dispatch({
-      type: cartSagaActions.REMOVE_FROM_CART,
-      payload: { product: cartItem },
-    });
-  }, [cartItem, dispatch]);
-
-  const handleQuantityChange = useCallback(
-    (change) => {
-      const newQuantity = cartQuantity + change;
-      if (
-        newQuantity >= minimumOrderQuantity &&
-        newQuantity <= maximumOrderQuantity
-      ) {
+    const decreaseQuantity = useCallback(() => {
+      if (quantity > 0) {
+        const newQuantity =
+          quantity === minimumOrderQuantity ? 0 : parseInt(quantity) - 1;
         setCartQuantity(newQuantity);
-        updateCart(newQuantity);
-      } else if (newQuantity < minimumOrderQuantity) {
-        removeFromCart();
+        onChangeQuantity(newQuantity);
       }
-    },
-    [
-      cartQuantity,
+    }, [quantity, minimumOrderQuantity, onChangeQuantity]);
+
+    const increaseQuantity = useCallback(() => {
+      if (!product?.isInventoryEnabled || quantity < max) {
+        if (quantity < maximumOrderQuantity) {
+          if (totalItemQuantity && totalItemQuantity >= maximumOrderQuantity) {
+            alert("Maximum order quantity reached");
+          } else {
+            const newQuantity = parseInt(quantity) + 1;
+            setCartQuantity(newQuantity);
+            onChangeQuantity(newQuantity);
+          }
+        } else {
+          alert("Maximum order quantity reached");
+        }
+      }
+    }, [
+      product,
+      quantity,
+      max,
       maximumOrderQuantity,
-      minimumOrderQuantity,
-      updateCart,
-      removeFromCart,
-    ],
-  );
+      totalItemQuantity,
+      onChangeQuantity,
+    ]);
 
-  const increaseQuantity = useCallback(
-    () => handleQuantityChange(1),
-    [handleQuantityChange],
-  );
-  const decreaseQuantity = useCallback(
-    () => handleQuantityChange(-1),
-    [handleQuantityChange],
-  );
+    const buttonClassName = useMemo(
+      () => "h-full rounded-none bg-lime-50 text-black-900 md:text-lg",
+      [],
+    );
 
-  if (!cartItem) return null;
+    const containerClassName = useMemo(
+      () =>
+        twMerge(
+          "grid h-[26px] min-h-5 shrink-0 grid-cols-3 items-center overflow-hidden rounded-md border bg-white-a700 sm:h-7 md:h-8 lg:h-9",
+          className,
+        ),
+      [className],
+    );
 
-  return (
-    <div
-      className={twMerge(
-        "grid h-[26px] min-h-5 shrink-0 grid-cols-3 items-center overflow-hidden rounded-md border bg-white-a700 sm:h-7 md:h-8 lg:h-9",
-        className,
-      )}
-    >
-      <Button
-        enableRipple={false}
-        className="h-full rounded-none bg-lime-50 text-black-900 md:text-lg"
-        onClick={decreaseQuantity}
-      >
-        -
-      </Button>
-      <Text
-        as="span"
-        size="base"
-        responsive
-        className="text-center text-sm"
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-        }}
-      >
-        {cartQuantity}
-      </Text>
-      <Button
-        enableRipple={false}
-        className="h-full rounded-none bg-lime-50 text-black-900 md:text-lg"
-        onClick={increaseQuantity}
-      >
-        +
-      </Button>
-    </div>
-  );
-};
+    if (!product) return null;
+
+    return (
+      <div className={containerClassName}>
+        <Button
+          enableRipple={false}
+          className={buttonClassName}
+          onClick={decreaseQuantity}
+        >
+          -
+        </Button>
+        <Text as="span" size="base" responsive className="text-center text-sm">
+          {cartQuantity}
+        </Text>
+        <Button
+          enableRipple={false}
+          className={buttonClassName}
+          onClick={increaseQuantity}
+        >
+          +
+        </Button>
+      </div>
+    );
+  },
+);
+
+Quantity.displayName = "Quantity";
 
 export default Quantity;

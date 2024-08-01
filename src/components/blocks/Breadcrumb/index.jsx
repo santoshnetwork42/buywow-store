@@ -4,7 +4,7 @@ import { Text } from "@/components/elements";
 
 export default function Breadcrumb({ breadcrumbTitle: currentPageTitle }) {
   return (
-    <div className={`container-main mb-3 flex items-center`}>
+    <div className={`container-main my-3 flex items-center`}>
       <Link href="/">
         <Text as="span" size="sm" className="font-light capitalize" responsive>
           Home

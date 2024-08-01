@@ -50,7 +50,7 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
               )}
             </div>
             <AddToCart
-              fetchedProduct={fetchedProduct}
+              product={fetchedProduct}
               buttonText={"Add"}
               buttonSize="small"
               quantityClassName="grid-cols-[repeat(3,24px)] sm:grid-cols-[repeat(3,26px)] md:grid-cols-[repeat(3,28px)] h-[26px] sm:h-[27px] md:h-[28px] lg:h-[29px] xl:h-[30px] lg:grid-cols-[repeat(3,30px)] xl:grid-cols-[repeat(3,32px)]"

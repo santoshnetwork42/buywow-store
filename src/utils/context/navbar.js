@@ -22,7 +22,6 @@ function NavbarProvider({ children, ignoreLazyloadNavbar }) {
   const cartList = useSelector((state) => state.cart.data || []);
   const appliedCoupon = useSelector((state) => state.cart.coupon);
   const user = useSelector((state) => state.user.user);
-  console.log("navbaaarrr user :>> ", user);
 
   const [isInteractive, setIsInteractive] = useState(false);
   const [isRewardApplied, setIsRewardApplied] = useState(true);
