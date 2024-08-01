@@ -206,7 +206,10 @@ export default function OrderSection() {
               </div>
               <div>
                 <Text size="lg">
-                  ₹{method.id === "COD" ? codGrandTotal : prepaidGrandTotal}
+                  ₹
+                  {method.id === "COD"
+                    ? codGrandTotal.toFixed(2)
+                    : prepaidGrandTotal.toFixed(2)}
                 </Text>
               </div>
             </div>
