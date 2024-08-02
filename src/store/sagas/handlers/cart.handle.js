@@ -2,7 +2,7 @@ import {
   emptyCart,
   setCart,
   updateSubTotal,
-} from "@/store/slices/cart/cartSlice";
+} from "@/store/slices/cart/cart.slice";
 import { getFirstVariant, getProductSubTotal } from "@/utils/helpers";
 import { put, select } from "redux-saga/effects";
 
@@ -45,8 +45,7 @@ export function* addToCartHandler(action) {
         item.recordKey === recordKey
           ? {
               ...item,
-              qty:
-                parseInt(item.qty) + parseInt(tmpProduct.qty),
+              qty: parseInt(item.qty) + parseInt(tmpProduct.qty),
             }
           : item,
       );
@@ -63,9 +62,7 @@ export function* addToCartHandler(action) {
       };
 
       yield put(
-        updateSubTotal(
-          cartState.subTotal + currentATC.price * currentATC.qty,
-        ),
+        updateSubTotal(cartState.subTotal + currentATC.price * currentATC.qty),
       );
       yield put(setCart([...cartState.data, currentATC]));
     }

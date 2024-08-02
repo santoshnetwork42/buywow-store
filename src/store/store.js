@@ -1,9 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import { authSlice } from "@/store/slices/auth/authSlice";
-import { userSlice } from "@/store/slices/user/userSlice";
-import { modalSlice } from "@/store/slices/modal/modalSlice";
-import { cartSlice } from "@/store/slices/cart/cartSlice";
+import { authSlice } from "@/store/slices/auth/auth.slice";
+import { userSlice } from "@/store/slices/user/user.slice";
+import { modalSlice } from "@/store/slices/modal/modal.slice";
+import { cartSlice } from "@/store/slices/cart/cart.slice";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import rootSaga from "./sagas";
 import {
