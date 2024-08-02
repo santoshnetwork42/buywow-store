@@ -43,6 +43,8 @@ const Quantity = React.memo(
         } else {
           alert("Maximum order quantity reached");
         }
+      } else {
+        alert("Maximum order quantity reached");
       }
     }, [
       product,

@@ -1,7 +1,7 @@
 "use client";
 
 import { Heading, Img, Text } from "@/components/elements";
-import AddToCart from "@/components/common/ATC";
+import AddToCart from "@/components/common/AddToCart";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
 import { useProduct, useProductVariantGroups } from "@wow-star/utils";

@@ -4,7 +4,7 @@ import { Button, Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes, getOfferValue } from "@/utils/helpers";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
-import AddToCart from "@/components/common/ATC";
+import AddToCart from "@/components/common/AddToCart";
 
 const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   const { fetchedProduct, imageBgColor, slug } = extractAttributes(product);

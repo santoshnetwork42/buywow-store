@@ -5,9 +5,9 @@ import CartProductList from "@/components/partials/MyCart/CartProductList";
 
 export default function MainCartSection({
   cartData,
-  realCartData,
   totalCartItemsCount,
   subTotal,
+  inventoryMapping = {},
 }) {
   const freeShippingThreshold = cartData.freeShippingThreshold;
 
@@ -18,9 +18,10 @@ export default function MainCartSection({
         cartValue={subTotal}
       />
       <CartProductList
-        cartItems={realCartData.data}
+        cartItems={cartData}
         totalItems={totalCartItemsCount}
         subtotal={subTotal}
+        inventoryMapping={inventoryMapping}
       />
     </div>
   );

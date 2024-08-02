@@ -84,6 +84,23 @@ export function* updateCartHandler(action) {
   yield put(setCart(data));
 }
 
+export function* validateCartHandler(action) {
+  const { payload } = action;
+  const { data: cartData = [] } = yield select((state) => state.cart);
+
+  const data = cartData.map((item) => {
+    if (typeof payload[item.recordKey] === "number") {
+      return {
+        ...item,
+        price: payload[item.recordKey],
+      };
+    }
+    return item;
+  });
+
+  yield put(setCart(data));
+}
+
 export function* removeFromCartHandler(action) {
   const { product: tmpProduct = {} } = action.payload;
   const { data: cartData = [] } = yield select((state) => state.cart);
