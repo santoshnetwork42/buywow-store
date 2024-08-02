@@ -64,6 +64,8 @@ export default async function OrderPage({ params, searchParams }) {
     products,
   } = order;
 
+  const { items: productItems = [] } = products || {};
+
   const { activeItemsTotalPrice, itemsTotalPrice } = products?.items?.reduce(
     (acc, { quantity, price, cancelledQuantity = 0 }) => {
       const activeTotal = quantity * price;
@@ -118,7 +120,7 @@ export default async function OrderPage({ params, searchParams }) {
         </div>
         <div className="flex flex-col gap-4 rounded-md border p-5">
           <div className="mb-5 flex flex-col gap-5">
-            {order?.products?.items?.map((item) => (
+            {productItems?.map((item) => (
               <div key={"order-" + item.id} className="flex justify-between">
                 <div className="flex items-center gap-2">
                   <Link
