@@ -7,7 +7,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { cartActions } from "~/store/cart";
-import { GUEST_CHECKOUT, STORE_ID, STORE_PREFIX } from "../../../config";
+import { GUEST_CHECKOUT, STORE_ID, STORE_PREFIX } from "@/config";
 
 const client = generateClient();
 

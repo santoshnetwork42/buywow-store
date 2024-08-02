@@ -8,7 +8,7 @@ import {
   verifyCustomOTP,
 } from "@/graphql/appSync/api";
 import { generateClient } from "aws-amplify/api";
-import { STORE_ID } from "../../config";
+import { STORE_ID } from "@/config";
 
 const client = generateClient();
 

@@ -3,7 +3,7 @@ import { Img, Text } from "@/components/elements";
 import { getOrderByIdAPI } from "@/lib/appSyncAPIs";
 import { formateDate } from "@/utils/helpers";
 import Link from "next/link";
-import { STORE_ID } from "../../../../config";
+import { STORE_ID } from "@/config";
 
 async function getOrderData(orderId, paymentId) {
   try {

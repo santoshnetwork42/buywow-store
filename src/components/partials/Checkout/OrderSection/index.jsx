@@ -8,7 +8,7 @@ import { useCartTotal, useOrders } from "@wow-star/utils";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "../../../../../config";
+import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
 
 let razorpayMethod;
 

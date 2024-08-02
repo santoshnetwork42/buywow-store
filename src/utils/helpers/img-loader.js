@@ -1,4 +1,4 @@
-import { MEDIA_BASE_URL } from "../../../config";
+import { MEDIA_BASE_URL } from "@/config";
 
 export const getPublicImageURL = ({
   key,

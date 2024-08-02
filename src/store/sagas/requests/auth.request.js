@@ -9,8 +9,8 @@ import {
   signOut,
 } from "aws-amplify/auth";
 import { Amplify } from "aws-amplify";
-import awsExport from "../../../../aws-exports";
-import { AWS_CLIENT_ID } from "../../../../config";
+import awsExport from "@/aws-exports";
+import { AWS_CLIENT_ID } from "@/config";
 
 Amplify.configure({
   ...awsExport,

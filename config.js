@@ -9,3 +9,6 @@ export const GUEST_CHECKOUT = process.env.NEXT_PUBLIC_GUEST_CHECKOUT;
 export const RAZORPAY_SCRIPT = "https://checkout.razorpay.com/v1/checkout.js";
 export const RAZORPAY_KEY = process.env.NEXT_PUBLIC_RAZORPAY_KEY;
 export const GUEST_CHECKOUT_COOKIE_EXPIRY = 48;
+export const GEOCODING_API_URL =
+  "https://maps.googleapis.com/maps/api/geocode/json";
+export const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
