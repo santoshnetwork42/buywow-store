@@ -133,33 +133,39 @@ export default async function OrderPage({ params, searchParams }) {
                     : "/products/") + item.product.slug
                 }
               >
-                <div className="flex justify-between rounded-md p-2 shadow-xs">
-                  <div className="flex items-center gap-2">
-                    <Img
-                      src={
-                        item.thumbImage ||
-                        (item.variant?.images?.items[0]?.imageKey
-                          ? item.variant?.images?.items[0]?.imageKey
-                          : item.product?.images.items[0]?.imageKey)
-                      }
-                      alt={item.product?.images.items[0]?.alt}
-                      width={80}
-                      height={88}
-                      addPrefix
-                      isStatic
-                    />
-
-                    <div className="flex flex-col gap-1">
-                      <Text>{item.product?.title}</Text>
-                      <Text className="font-light">{item.variant?.title}</Text>
-                      <Text className="font-light">
-                        <span>Qty: </span>
-                        {`${item.quantity || item.cancelledQuantity}`}
-                      </Text>
+                <div className="flex justify-between gap-1 rounded-md p-2 shadow-xs">
+                  <div className="flex w-full items-center gap-2">
+                    <div className="min-h-20 min-w-20">
+                      <Img
+                        src={
+                          item.thumbImage ||
+                          (item.variant?.images?.items[0]?.imageKey
+                            ? item.variant?.images?.items[0]?.imageKey
+                            : item.product?.images.items[0]?.imageKey)
+                        }
+                        alt={item.product?.images.items[0]?.alt}
+                        width={80}
+                        height={88}
+                        addPrefix
+                        isStatic
+                      />
                     </div>
-                  </div>
-                  <div className="product-price">
-                    ₹{(item.quantity * item.price).toFixed(2)}
+
+                    <div className="flex h-full w-full flex-col justify-between">
+                      <div className="mb-2 flex w-full justify-between gap-2">
+                        <Text>₹{(item.quantity * item.price).toFixed(2)}</Text>
+                        <Text className="font-light">
+                          <span>Qty: </span>
+                          {`${item.quantity || item.cancelledQuantity}`}
+                        </Text>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <Text size="sm">{item.product?.title}</Text>
+                        <Text size="sm" className="font-light">
+                          {item.variant?.title}
+                        </Text>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </Link>
