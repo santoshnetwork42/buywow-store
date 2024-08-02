@@ -1,7 +1,7 @@
 "use client";
 
 import { Heading, Text } from "@/components/elements";
-import AddToCart from "@/components/common/ATC";
+import AddToCart from "@/components/common/AddToCart";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import Link from "next/link";
 

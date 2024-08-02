@@ -45,8 +45,7 @@ export function* addToCartHandler(action) {
         item.recordKey === recordKey
           ? {
               ...item,
-              qty:
-                parseInt(item.qty) + parseInt(tmpProduct.qty),
+              qty: parseInt(item.qty) + parseInt(tmpProduct.qty),
             }
           : item,
       );
@@ -63,9 +62,7 @@ export function* addToCartHandler(action) {
       };
 
       yield put(
-        updateSubTotal(
-          cartState.subTotal + currentATC.price * currentATC.qty,
-        ),
+        updateSubTotal(cartState.subTotal + currentATC.price * currentATC.qty),
       );
       yield put(setCart([...cartState.data, currentATC]));
     }
@@ -84,6 +81,23 @@ export function* updateCartHandler(action) {
   const subTotal = getProductSubTotal(data);
 
   yield put(updateSubTotal(subTotal));
+  yield put(setCart(data));
+}
+
+export function* validateCartHandler(action) {
+  const { payload } = action;
+  const { data: cartData = [] } = yield select((state) => state.cart);
+
+  const data = cartData.map((item) => {
+    if (typeof payload[item.recordKey] === "number") {
+      return {
+        ...item,
+        price: payload[item.recordKey],
+      };
+    }
+    return item;
+  });
+
   yield put(setCart(data));
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { VehicleIcon, IndiaMapIcon } from "@/assets/svg/icons";
 import { Text } from "@/components/elements";
-import AddToCart from "@/components/common/ATC";
+import AddToCart from "@/components/common/AddToCart";
 
 const AddToCartSection = React.memo(({ product, selectedVariant }) => (
   <div className="max-md:container-main z-50 mt-6 flex w-full flex-col gap-2 bg-white-a700_01 max-md:fixed max-md:bottom-0 max-md:left-0 max-md:border-t max-md:py-3 md:gap-2.5">

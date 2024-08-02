@@ -1,19 +1,36 @@
-// MyCart page component
 "use client";
 
 import CartHeader from "@/components/partials/MyCart/CartHeader";
 import CartSidebar from "@/components/partials/MyCart/CartSidebar";
 import MainCartSection from "@/components/partials/MyCart/MainCartSection";
 import DeliveryInfoSection from "@/components/partials/Others/DeliveryInfoSection";
+import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { useNavBarState } from "@/utils/context/navbar";
 import { deliveryInfoData } from "@/utils/data/homeData";
 import { myCartData } from "@/utils/data/myCartData";
-import { useCartTotal } from "@wow-star/utils";
-import { useSelector } from "react-redux";
+import { useCartItems, useCartTotal, useInventory } from "@wow-star/utils";
+import { useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function MyCart() {
-  const cartData = useSelector((state) => state.cart);
-  const totalCartItemsCount = cartData?.data?.length || 0;
+  const dispatch = useDispatch();
+
+  const cartData = useCartItems({
+    showLTOProducts: false,
+    showNonApplicableFreeProducts: true,
+  });
+
+  const validateCart = useCallback(
+    (payload) => {
+      dispatch({
+        type: cartSagaActions.VALIDATE_CART,
+        payload,
+      });
+    },
+    [dispatch],
+  );
+  const inventory = useInventory({ validateCart });
+  const { inventoryMapping } = inventory;
 
   const { isRewardApplied } = useNavBarState();
 
@@ -28,6 +45,7 @@ export default function MyCart() {
     codCharges,
     prepaidDiscountPercent,
     usableRewards,
+    totalItems = 0,
   } = useCartTotal({
     paymentType: "PREPAID",
     isRewardApplied,
@@ -41,15 +59,15 @@ export default function MyCart() {
         <div className="mt-3 grid w-full grid-cols-1 gap-3 md:mt-4 md:grid-cols-[55%_auto] md:gap-4 md:gap-x-10 lg:grid-cols-[60%_auto] lg:gap-x-14 xl:gap-x-20">
           {/* Displays cart header and cart items count */}
           <CartHeader
-            itemCount={totalCartItemsCount}
+            itemCount={totalItems}
             className="max-md:ml-1 md:col-span-2"
           />
           {/* Displays cart items, shipping progress, and cart summary */}
           <MainCartSection
-            cartData={myCartData}
-            realCartData={cartData}
-            totalCartItemsCount={totalCartItemsCount}
+            cartData={cartData}
+            totalCartItemsCount={totalItems}
             subTotal={totalPrice}
+            inventoryMapping={inventoryMapping}
           />
 
           {/* Displays offers and payment summary */}
