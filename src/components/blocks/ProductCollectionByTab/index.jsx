@@ -31,7 +31,10 @@ const ProductCollectionByTab = ({
   verticalBlogSection,
   horizontalBlogSection,
 }) => {
-  const [sortOption, setSortOption] = useState(defaultCollectionSorting);
+  const [sortOption, setSortOption] = useState(
+    SORT_OPTIONS.find((option) => option.value === defaultCollectionSorting) ||
+      SORT_OPTIONS[0],
+  );
   const [horizontalCardWidth, setHorizontalCardWidth] = useState("100%");
   const containerRef = useRef(null);
 
@@ -94,6 +97,7 @@ const ProductCollectionByTab = ({
           </Heading>
           <SortDropdown
             className="shrink-0 lg:order-3"
+            value={sortOption}
             options={SORT_OPTIONS}
             onOptionChange={handleSortChange}
           />

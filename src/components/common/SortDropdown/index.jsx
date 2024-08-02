@@ -3,12 +3,9 @@ import { Text, SelectBox } from "@/components/elements";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 import { twMerge } from "tailwind-merge";
 
-const SortDropdown = ({ options, onOptionChange, className }) => {
-  const [selectedOption, setSelectedOption] = useState(options[0]);
-
+const SortDropdown = ({ value, options, onOptionChange, className }) => {
   const handleChange = (option) => {
-    setSelectedOption(option);
-    onOptionChange(option.value);
+    onOptionChange(option);
   };
 
   return (
@@ -31,7 +28,7 @@ const SortDropdown = ({ options, onOptionChange, className }) => {
           />
         }
         name="sortDropdown"
-        value={selectedOption}
+        value={value}
         options={options}
         onChange={handleChange}
         className="flex flex-grow !cursor-pointer border-b border-black-900 py-0.5 text-sm font-medium"
