@@ -62,7 +62,8 @@ export default async function OrderPage({ params, searchParams }) {
     totalCashbackRefunded,
     totalShippingCharges,
     products,
-  } = order;
+    totalCashOnDeliveryCharges,
+  } = order || {};
 
   const { items: productItems = [] } = products || {};
 
@@ -121,18 +122,19 @@ export default async function OrderPage({ params, searchParams }) {
         <div className="flex flex-col gap-4 rounded-md border p-5">
           <div className="mb-5 flex flex-col gap-5">
             {productItems?.map((item) => (
-              <div key={"order-" + item.id} className="flex justify-between">
-                <div className="flex items-center gap-2">
-                  <Link
-                    className="order-image mr-2"
-                    href={
-                      (item.product.slug ===
-                        "pure-himalayan-shilajit-resin-for-men" ||
-                      item.product.slug === "pure-himalayan-shilajit-resin"
-                        ? "/offers/"
-                        : "/products/") + item.product.slug
-                    }
-                  >
+              <Link
+                className="order-image mr-2"
+                key={"order-" + item.id}
+                href={
+                  (item.product.slug ===
+                    "pure-himalayan-shilajit-resin-for-men" ||
+                  item.product.slug === "pure-himalayan-shilajit-resin"
+                    ? "/offers/"
+                    : "/products/") + item.product.slug
+                }
+              >
+                <div className="flex justify-between rounded-md p-2 shadow-xs">
+                  <div className="flex items-center gap-2">
                     <Img
                       src={
                         item.thumbImage ||
@@ -146,20 +148,21 @@ export default async function OrderPage({ params, searchParams }) {
                       addPrefix
                       isStatic
                     />
-                  </Link>
-                  <div className="flex flex-col gap-1">
-                    <Text>{item.product?.title}</Text>
-                    <Text className="font-light">{item.variant?.title}</Text>
-                    <Text className="font-light">
-                      <span>Qty: </span>
-                      {`${item.quantity || item.cancelledQuantity}`}
-                    </Text>
+
+                    <div className="flex flex-col gap-1">
+                      <Text>{item.product?.title}</Text>
+                      <Text className="font-light">{item.variant?.title}</Text>
+                      <Text className="font-light">
+                        <span>Qty: </span>
+                        {`${item.quantity || item.cancelledQuantity}`}
+                      </Text>
+                    </div>
+                  </div>
+                  <div className="product-price">
+                    ₹{(item.quantity * item.price).toFixed(2)}
                   </div>
                 </div>
-                <div className="product-price">
-                  ₹{(item.quantity * item.price).toFixed(2)}
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
           <div className="flex justify-between">
@@ -172,6 +175,7 @@ export default async function OrderPage({ params, searchParams }) {
             </div>
           </div>
           <div className="border-b"></div>
+
           {!!prepaidDiscount && (
             <div className="flex justify-between">
               <Text>Prepaid Discount:</Text>
@@ -184,14 +188,16 @@ export default async function OrderPage({ params, searchParams }) {
               </Text>
             </div>
           )}
-          <div className="border-b"></div>
+          {!!prepaidDiscount && <div className="border-b"></div>}
+
           {!!totalDiscount && (
             <div className="flex justify-between">
               <Text>Discount:</Text>
               <Text>-₹{totalDiscount.toFixed(2)}</Text>
             </div>
           )}
-          <div className="border-b"></div>
+          {!!totalDiscount && <div className="border-b"></div>}
+
           <div className="flex justify-between">
             <Text>Shipping:</Text>
             <Text>
@@ -201,6 +207,15 @@ export default async function OrderPage({ params, searchParams }) {
             </Text>
           </div>
           <div className="border-b"></div>
+
+          {!!totalCashOnDeliveryCharges && (
+            <div className="flex justify-between">
+              <Text>Cod Charges:</Text>
+              <Text>₹{totalCashOnDeliveryCharges.toFixed(2)}</Text>
+            </div>
+          )}
+          {!!totalCashOnDeliveryCharges && <div className="border-b"></div>}
+
           <div className="flex justify-between">
             <Text>Total:</Text>
             <Text size="xl">
