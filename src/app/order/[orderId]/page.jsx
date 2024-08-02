@@ -47,7 +47,6 @@ export default async function OrderPage({ params, searchParams }) {
 
   const { paymentId = null } = searchParams;
 
-  const allStatus = ["CANCELLED", "DISPATCHED", "COURIER_RETURN", "DELIVERED"];
   const orderData = await getOrderData(orderId, paymentId);
   const { order = {} } = orderData || {};
   const {
