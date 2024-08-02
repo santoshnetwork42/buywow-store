@@ -1,5 +1,6 @@
 "use client";
 
+import { Button, Input } from "@/components/elements";
 import { fetchCityAndState } from "@/lib/customAPIs";
 import { useState, useEffect } from "react";
 
@@ -85,15 +86,19 @@ const Address = ({ userId }) => {
     <div>
       {step === 1 && (
         <form onSubmit={handlePincodeSubmit}>
-          <h2>Enter Your Pincode</h2>
-          <input
+          <Input
             type="text"
             value={pincode}
             onChange={(e) => setPincode(e.target.value)}
             placeholder="Enter Pincode"
             required
+            className="gap-1 border p-2"
+            label="Enter Your Pincode"
           />
-          <button type="submit">Next</button>
+
+          <Button type="submit" variant="primary" className="p-2 px-4">
+            Next
+          </Button>
         </form>
       )}
       {console.log("step :>> ", step, addressDetails)}
