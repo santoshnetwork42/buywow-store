@@ -1,5 +1,5 @@
 // app/order/[orderId]/page.jsx
-import { Text } from "@/components/elements";
+import { Img, Text } from "@/components/elements";
 import { getOrderByIdAPI } from "@/lib/appSyncAPIs";
 import { formateDate } from "@/utils/helpers";
 import Link from "next/link";
@@ -47,6 +47,7 @@ export default async function OrderPage({ params, searchParams }) {
 
   const { paymentId = null } = searchParams;
 
+  const allStatus = ["CANCELLED", "DISPATCHED", "COURIER_RETURN", "DELIVERED"];
   const orderData = await getOrderData(orderId, paymentId);
   const { order = {} } = orderData || {};
   const {
@@ -77,16 +78,15 @@ export default async function OrderPage({ params, searchParams }) {
 
   return (
     <div className="container-main mb-main flex flex-col gap-4 py-6">
-      
       {/* ORDER DETAILS */}
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <Text size="lg">ORDER DETAILS</Text>
-          <Text size="md" className="text-green-600">
+          <Text size="md" className="text-end text-green-600">
             Thank you. Your order is confirmed.
           </Text>
         </div>
-        <div className="flex flex-col gap-3 rounded-md border p-3">
+        <div className="flex flex-col gap-4 rounded-md border p-5">
           <div className="flex justify-between">
             <Text>Order number:</Text>
             <Text>#{code}</Text>
@@ -116,7 +116,50 @@ export default async function OrderPage({ params, searchParams }) {
         <div className="flex items-center justify-between">
           <Text size="lg">PRODUCT DETAILS</Text>
         </div>
-        <div className="flex flex-col gap-3 rounded-md border p-3">
+        <div className="flex flex-col gap-4 rounded-md border p-5">
+          <div className="mb-5 flex flex-col gap-5">
+            {order?.products?.items?.map((item) => (
+              <div key={"order-" + item.id} className="flex justify-between">
+                <div className="flex items-center gap-2">
+                  <Link
+                    className="order-image mr-2"
+                    href={
+                      (item.product.slug ===
+                        "pure-himalayan-shilajit-resin-for-men" ||
+                      item.product.slug === "pure-himalayan-shilajit-resin"
+                        ? "/offers/"
+                        : "/products/") + item.product.slug
+                    }
+                  >
+                    <Img
+                      src={
+                        item.thumbImage ||
+                        (item.variant?.images?.items[0]?.imageKey
+                          ? item.variant?.images?.items[0]?.imageKey
+                          : item.product?.images.items[0]?.imageKey)
+                      }
+                      alt={item.product?.images.items[0]?.alt}
+                      width={80}
+                      height={88}
+                      addPrefix
+                      isStatic
+                    />
+                  </Link>
+                  <div className="flex flex-col gap-1">
+                    <Text>{item.product?.title}</Text>
+                    <Text className="font-light">{item.variant?.title}</Text>
+                    <Text className="font-light">
+                      <span>Qty: </span>
+                      {`${item.quantity || item.cancelledQuantity}`}
+                    </Text>
+                  </div>
+                </div>
+                <div className="product-price">
+                  ₹{(item.quantity * item.price).toFixed(2)}
+                </div>
+              </div>
+            ))}
+          </div>
           <div className="flex justify-between">
             <Text>Subtotal:</Text>
             <div className="flex gap-2">
