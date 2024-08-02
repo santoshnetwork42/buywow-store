@@ -181,3 +181,16 @@ export const checkAffiseValidity = () => {
     return false;
   }
 };
+
+export const formateDate = (date) => {
+  const dt = date ? new Date(date) : new Date();
+  const dd = String(dt.getDate()).padStart(2, "0");
+  const hh = String(dt.getHours() % 12).padStart(2, "0");
+  const mm = String(dt.getMinutes()).padStart(2, "0");
+  const monthName = dt.toLocaleString("en-IN", {
+    month: "long",
+  });
+  const yyyy = dt.getFullYear();
+  const ap = dt.getHours() >= 12 ? "pm" : "am";
+  return `${dd} ${monthName} ${yyyy}, ${hh}:${mm} ${ap}`;
+};
