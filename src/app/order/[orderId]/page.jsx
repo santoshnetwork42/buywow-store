@@ -152,11 +152,11 @@ export default async function OrderPage({ params, searchParams }) {
 
                     <div className="flex h-full w-full flex-col justify-between">
                       <div className="mb-2 flex w-full justify-between gap-2">
-                        <Text>₹{(item.quantity * item.price).toFixed(2)}</Text>
                         <Text className="font-light">
                           <span>Qty: </span>
                           {`${item.quantity || item.cancelledQuantity}`}
                         </Text>
+                        <Text>₹{(item.quantity * item.price).toFixed(2)}</Text>
                       </div>
                       <div className="flex flex-col gap-1">
                         <Text size="sm">{item.product?.title}</Text>
