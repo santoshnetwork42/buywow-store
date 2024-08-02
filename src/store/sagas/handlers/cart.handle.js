@@ -2,7 +2,7 @@ import {
   emptyCart,
   setCart,
   updateSubTotal,
-} from "@/store/slices/cart/cartSlice";
+} from "@/store/slices/cart/cart.slice";
 import { getFirstVariant, getProductSubTotal } from "@/utils/helpers";
 import { put, select } from "redux-saga/effects";
 

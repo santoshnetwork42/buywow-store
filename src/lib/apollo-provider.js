@@ -7,7 +7,7 @@ import {
   ApolloClient,
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support";
-import { STRAPI_API_TOKEN, STRAPI_API_URL } from "../../config";
+import { STRAPI_API_TOKEN, STRAPI_API_URL } from "@/config";
 
 function makeClient() {
   const httpLink = new HttpLink({

@@ -1,4 +1,4 @@
-import { setPasswordLessModal } from "@/store/slices/modal/modalSlice";
+import { setPasswordLessModal } from "@/store/slices/modal/modal.slice";
 import { call, put } from "redux-saga/effects";
 
 export function* setPasswordLessModalHandler(action) {

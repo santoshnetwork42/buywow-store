@@ -2,7 +2,7 @@
 
 import React, { useCallback, useMemo, useState } from "react";
 import Image from "next/image";
-import { BASE_PATH } from "../../../../config";
+import { BASE_PATH } from "@/config";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 const BASE_URL = BASE_PATH || "/images";

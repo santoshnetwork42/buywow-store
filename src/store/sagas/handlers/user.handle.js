@@ -1,4 +1,4 @@
-import { setCustomUser, setUser } from "@/store/slices/user/userSlice";
+import { setCustomUser, setUser } from "@/store/slices/user/user.slice";
 import { put } from "redux-saga/effects";
 
 export function* setUserHandler(action) {

@@ -1,6 +1,6 @@
 import { HttpLink, InMemoryCache, ApolloClient } from "@apollo/client";
 import { registerApolloClient } from "@apollo/experimental-nextjs-app-support";
-import { STRAPI_API_TOKEN, STRAPI_API_URL } from "../../config";
+import { STRAPI_API_TOKEN, STRAPI_API_URL } from "@/config";
 
 export const { getClient } = registerApolloClient(() => {
   return new ApolloClient({

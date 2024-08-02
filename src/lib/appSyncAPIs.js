@@ -1,13 +1,14 @@
 import {
   ensureUserAndDispatchOTP,
   getNavbarAndFooter,
+  getOrder,
   getPageBySlug,
   getUser,
   searchCMSProducts,
   verifyCustomOTP,
 } from "@/graphql/appSync/api";
 import { generateClient } from "aws-amplify/api";
-import { STORE_ID } from "../../config";
+import { STORE_ID } from "@/config";
 
 const client = generateClient();
 
@@ -109,6 +110,21 @@ export const verifyCustomOTPAPI = async ({ phone, otp }) => {
     });
 
     return !!data?.verifyCustomOTP?.isVerified;
+  } catch (error) {
+    console.error("Error verifying custom OTP:", error);
+    return false;
+  }
+};
+
+export const getOrderByIdAPI = async ({ id }) => {
+  try {
+    const { data } = await client.graphql({
+      query: getOrder,
+      variables: { id },
+      authMode: "apiKey",
+    });
+
+    return data;
   } catch (error) {
     console.error("Error verifying custom OTP:", error);
     return false;
