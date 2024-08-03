@@ -7,7 +7,7 @@ export default function Checkout() {
     <>
       {/* Main container for the Checkout page */}
       <div className="container-main mb-8 flex w-full flex-col items-center gap-8 sm:gap-10 lg:gap-12">
-        <Address userId="user123" />
+        {/* <Address userId="user123" /> */}
         <OrderSection />
       </div>
     </>
