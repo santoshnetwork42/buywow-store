@@ -15,6 +15,7 @@ const SearchIcon = memo(() => (
   />
 ));
 
+
 SearchIcon.displayName = "SearchIcon";
 
 const ClearIcon = memo(({ onClick }) => (
