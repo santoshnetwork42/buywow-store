@@ -95,9 +95,29 @@ const RemoveButton = React.memo(({ onRemove }) => (
 
 RemoveButton.displayName = "RemoveButton";
 
+const ProductItemSkeleton = React.memo(() => (
+  <div className="grid animate-pulse grid-cols-[1fr,25%] gap-5 border-b py-4">
+    <div className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-8 xl:gap-10">
+      <div className="h-20 w-16 rounded-lg bg-gray-200 sm:w-20 md:w-24 lg:w-28 xl:w-32"></div>
+      <div className="flex-1 space-y-2">
+        <div className="h-4 w-3/4 rounded bg-gray-200"></div>
+        <div className="h-4 w-1/2 rounded bg-gray-200"></div>
+        <div className="h-8 w-1/3 rounded bg-gray-200"></div>
+      </div>
+    </div>
+    <div className="w-full">
+      <div className="h-6 w-1/2 rounded bg-gray-200"></div>
+    </div>
+  </div>
+));
+
+ProductItemSkeleton.displayName = "ProductItemSkeleton";
+
 const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
   const dispatch = useDispatch();
   const cartList = useSelector((state) => state?.cart?.data || []);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const {
     id,
@@ -261,7 +281,34 @@ const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
     }
   }, [variantGroup, selectedVariant]);
 
+  useEffect(() => {
+    const hasRequiredFields =
+      item &&
+      id &&
+      recordKey &&
+      slug &&
+      title &&
+      price !== undefined &&
+      listingPrice !== undefined;
+
+    const hasValidVariant =
+      !variantId || (variantId && variantGroup?.length > 0);
+
+    setIsLoading(!(hasRequiredFields && hasValidVariant));
+  }, [
+    item,
+    id,
+    recordKey,
+    slug,
+    title,
+    price,
+    listingPrice,
+    variantId,
+    variantGroup,
+  ]);
+
   if (!item) return null;
+  if (isLoading) return <ProductItemSkeleton />;
 
   return (
     <div className="grid grid-cols-[1fr,25%] gap-5 border-b py-4">
