@@ -1,6 +1,6 @@
 "use client";
-import PasswordLess from "@/components/common/Passwordless";
 // components/MyCart/PaymentSummary.jsx
+import PasswordLess from "@/components/common/Passwordless";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { useGuestCheckout } from "@/utils/context/navbar";
