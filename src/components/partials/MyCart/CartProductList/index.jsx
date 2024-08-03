@@ -1,19 +1,16 @@
 import React, { useMemo, useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Heading, Img, SelectBox, Text } from "@/components/elements";
+import { Button, Heading, Img, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import Quantity from "@/components/common/Quantity";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import {
-  getOfferValueWithPercentage,
-  getUpdatedCart,
-  toDecimal,
-} from "@/utils/helpers";
+import { getOfferValueWithPercentage, getUpdatedCart } from "@/utils/helpers";
 import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
 import Link from "next/link";
-import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import VariantSelector from "./VariantSelector";
+import ProductPricing from "./ProductPricing";
 
-const ProductItem = React.memo(({ item, inventory = 99 }) => {
+const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
   const dispatch = useDispatch();
   const cartList = useSelector((state) => state?.cart?.data || []);
 
@@ -52,13 +49,6 @@ const ProductItem = React.memo(({ item, inventory = 99 }) => {
       cartList?.find((cartItem) => cartItem.recordKey === recordKey)?.qty || 0,
     [cartList, recordKey],
   );
-
-  const discountPercentage = useMemo(
-    () => getOfferValueWithPercentage(price, listingPrice),
-    [price, listingPrice],
-  );
-
-  const showStrikePrice = listingPrice && price < listingPrice;
 
   const handleOnChangeVariant = useCallback(
     (groupId, optionId) => {
@@ -127,10 +117,15 @@ const ProductItem = React.memo(({ item, inventory = 99 }) => {
           payload: { data: updatedCart },
         });
       } else {
-        const finalQuantity = Math.min(
-          existingCartItem.qty + quantity,
-          variantMaxOrderQuantity || 1,
-        );
+        const isExistingCartItemOutOfStock =
+          existingCartItem.qty >=
+          (inventoryMapping || {})[existingCartItem?.recordKey];
+        const finalQuantity = isExistingCartItemOutOfStock
+          ? Math.max(1, (inventoryMapping || {})[existingCartItem?.recordKey])
+          : Math.min(
+              existingCartItem.qty + quantity,
+              variantMaxOrderQuantity || 1,
+            );
 
         const updatedCart = getUpdatedCart(
           cartList,
@@ -153,7 +148,16 @@ const ProductItem = React.memo(({ item, inventory = 99 }) => {
       }
     }
     setVariantUpdate(false);
-  }, [selectedVariant]);
+  }, [
+    selectedVariant,
+    cartList,
+    dispatch,
+    id,
+    item,
+    quantity,
+    recordKey,
+    variantUpdate,
+  ]);
 
   useEffect(() => {
     if (selectedVariant && variantGroup) {
@@ -179,152 +183,6 @@ const ProductItem = React.memo(({ item, inventory = 99 }) => {
       setSelectedVariantGroupOptions(finalGroup || []);
     }
   }, [variantGroup, selectedVariant]);
-
-  const renderVariantGroups = () => {
-    if (
-      !variantGroup ||
-      variantGroup.length === 0 ||
-      isFreeProduct ||
-      disableChange
-    )
-      return null;
-
-    return (
-      <div className="flex flex-wrap gap-2">
-        {variantGroup.map((group) => {
-          const options = group.variantOptions
-            .filter((option) => option.active)
-            .map((option) => ({
-              value: option.id,
-              label: option.label,
-            }));
-
-          const selectedOption =
-            options.find(
-              (option) =>
-                option.value ===
-                selectedVariantGroupOptions.find(
-                  (item) => item.variantGroupId === group.id,
-                )?.variantGroupOptionId,
-            ) || options[0];
-
-          return (
-            <div
-              key={group.id}
-              className="w-[calc(50%-4px)] min-w-[80px] md:min-w-[120px]"
-            >
-              <SelectBox
-                indicator={
-                  <DownArrowIconSVG
-                    strokeWidth={1.25}
-                    width={14}
-                    height={14}
-                    className="w-3 md:ml-2 md:w-[14px]"
-                  />
-                }
-                name={`${group.id}`}
-                value={selectedOption}
-                options={options}
-                onChange={(selectedOption) =>
-                  handleOnChangeVariant(group.id, selectedOption.value)
-                }
-                className="flex flex-grow !cursor-pointer rounded-sm border border-black-900 px-0.5 py-1 text-sm font-medium md:px-1"
-                styles={{
-                  menu: (provided) => ({
-                    ...provided,
-                    minWidth: "120px",
-                    width: "max-content",
-                    left: "0px",
-                    "@media (max-width: 576px)": {
-                      minWidth: "100px",
-                    },
-                  }),
-                  option: (provided) => ({
-                    ...provided,
-                    fontSize: "14px",
-                    padding: "8px 12px",
-                    "@media (max-width: 768px)": {
-                      fontSize: "12px",
-                      padding: "6px 10px",
-                    },
-                  }),
-                  control: (provided) => ({
-                    ...provided,
-                    backgroundColor: "transparent",
-                    border: "0 !important",
-                    boxShadow: "0 !important",
-                    minHeight: "auto",
-                    cursor: "pointer",
-                    width: "100%",
-                    fontSize: "14px",
-                    "&:hover": {
-                      border: "0 !important",
-                    },
-                    "@media (max-width: 768px)": {
-                      fontSize: "12px",
-                    },
-                  }),
-                  valueContainer: (provided) => ({
-                    ...provided,
-                    padding: "0px",
-                  }),
-                }}
-              />
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
-  const renderPricing = () => {
-    if (cartItemType === "AUTO_FREE_PRODUCT_DISABLED") return null;
-
-    if (isFreeProduct) {
-      return (
-        <div className="flex flex-wrap items-center gap-1.5 md:gap-2">
-          {price > 0 && slug !== "gift" && (
-            <Text as="span" size="sm" className="line-through" responsive>
-              ₹{toDecimal(price)}
-            </Text>
-          )}
-          <Text
-            size="sm"
-            as="p"
-            className="h-fit w-fit rounded-md bg-green-600 px-2 py-0.5 text-white-a700_01"
-            responsive
-          >
-            Free
-          </Text>
-        </div>
-      );
-    }
-
-    return (
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2">
-          <Heading as="h4" size="base" className="text-sm" responsive>
-            ₹{toDecimal(price)}
-          </Heading>
-          {showStrikePrice && (
-            <Text as="span" size="sm" className="line-through" responsive>
-              ₹{toDecimal(listingPrice)}
-            </Text>
-          )}
-        </div>
-        {discountPercentage > 0 && (
-          <Text
-            size="sm"
-            as="p"
-            className="w-fit rounded-md bg-lime-50 px-2 py-0.5"
-            responsive
-          >
-            {discountPercentage}% Off
-          </Text>
-        )}
-      </div>
-    );
-  };
 
   if (!item) return null;
 
@@ -357,7 +215,7 @@ const ProductItem = React.memo(({ item, inventory = 99 }) => {
           />
         </Link>
 
-        <div className="flex flex-col justify-between gap-2">
+        <div className="flex flex-1 flex-col justify-between gap-2">
           <Link href={`/product/${slug}`} className="flex flex-col gap-1">
             <Heading size="base" as="h4" className="line-clamp-3" responsive>
               {title}
@@ -384,8 +242,14 @@ const ProductItem = React.memo(({ item, inventory = 99 }) => {
             )}
           </Link>
           <div className="flex flex-col gap-1">
-            {renderVariantGroups()}
-            <div className="flex items-center">
+            <VariantSelector
+              variantGroup={variantGroup}
+              selectedVariantGroupOptions={selectedVariantGroupOptions}
+              handleOnChangeVariant={handleOnChangeVariant}
+              isFreeProduct={isFreeProduct}
+              disableChange={disableChange}
+            />
+            <div className="flex items-center gap-2">
               {!outOfStock && !isFreeProduct && !disableChange && (
                 <Quantity
                   product={item}
@@ -405,7 +269,7 @@ const ProductItem = React.memo(({ item, inventory = 99 }) => {
                 />
               )}
               <Button
-                className="ml-2 h-full min-h-6 rounded-md border bg-transparent px-2 sm:min-h-7 lg:min-h-8 lg:px-2.5"
+                className="h-full min-h-6 rounded-md border bg-transparent px-2 sm:min-h-7 lg:min-h-8 lg:px-2.5"
                 onClick={() => changeQuantity(0)}
                 enableRipple={false}
               >
@@ -430,7 +294,14 @@ const ProductItem = React.memo(({ item, inventory = 99 }) => {
         </div>
       </div>
 
-      <div className="w-full">{renderPricing()}</div>
+      <div className="w-full">
+        <ProductPricing
+          price={price}
+          listingPrice={listingPrice}
+          cartItemType={cartItemType}
+          slug={slug}
+        />
+      </div>
     </div>
   );
 });
@@ -465,11 +336,12 @@ const CartProductList = ({
           PRICE
         </Text>
       </div>
-      {cartItems.map((item) => (
+      {cartItems.map((item, index) => (
         <ProductItem
           item={item}
-          key={item.id}
+          key={`cart-item-${index}-${item?.id}`}
           inventory={(inventoryMapping || {})[item?.recordKey]}
+          inventoryMapping={inventoryMapping}
         />
       ))}
       <div className="grid grid-cols-[1fr,25%] items-center gap-5 py-2 sm:py-3 lg:py-4">
