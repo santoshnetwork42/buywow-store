@@ -1,10 +1,14 @@
 import {
+  createUserAddress,
+  deleteUserAddress,
   ensureUserAndDispatchOTP,
+  findUserAddresses,
   getNavbarAndFooter,
   getOrder,
   getPageBySlug,
   getUser,
   searchCMSProducts,
+  updateUserAddress,
   verifyCustomOTP,
 } from "@/graphql/appSync/api";
 import { generateClient } from "aws-amplify/api";
@@ -128,5 +132,69 @@ export const getOrderByIdAPI = async ({ id }) => {
   } catch (error) {
     console.error("Error verifying custom OTP:", error);
     return false;
+  }
+};
+
+export const getUserAddressAPI = async ({ id, userID }) => {
+  try {
+    const {
+      data: { searchUserAddresses: userAddresses },
+    } = await client.graphql({
+      query: findUserAddresses,
+      variables: {
+        filter: { userID: { eq: id } },
+      },
+      authMode: "userPool",
+    });
+
+    return userAddresses;
+  } catch (error) {
+    console.error("Error Fetching user address:", error);
+    return false;
+  }
+};
+
+export const removeUserAddressAPI = async ({ id, userID }) => {
+  try {
+    const result = await client.graphql({
+      query: deleteUserAddress,
+      variables: { input: { id, userID } },
+      authMode: "userPool",
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error Fetching user address:", error);
+    return false;
+  }
+};
+
+export const createUserAddressAPI = async (input) => {
+  try {
+    const result = await client.graphql({
+      query: createUserAddress,
+      variables: { input },
+      authMode: "userPool",
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error Creating User Address:", error);
+    return error;
+  }
+};
+
+export const updateUserAddressAPI = async (input) => {
+  try {
+    const result = await client.graphql({
+      query: updateUserAddress,
+      variables: { input },
+      authMode: "userPool",
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Error Creating User Address:", error);
+    return error;
   }
 };

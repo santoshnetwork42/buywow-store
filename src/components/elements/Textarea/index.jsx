@@ -4,41 +4,36 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Input = React.forwardRef(
+const Textarea = React.forwardRef(
   (
     {
       className = "flex w-full items-center justify-center gap-2",
-      inputClassName = "",
+      textareaClassName = "",
       name = "",
       placeholder = "",
-      type = "text",
       label = "",
-      prefix,
-      suffix,
       error,
       onChange,
       onBlur,
       onFocus,
       disabled = false,
       required = false,
-      pattern,
+      rows = 3,
       ...restProps
     },
     ref,
   ) => (
     <div className="flex w-full flex-col gap-2">
-      {!!label && (
+      {label && (
         <div>
           {label}
-          {required && <span className="input-required">*</span>}
+          {required && <span className="textarea-required">*</span>}
         </div>
       )}
       <div className={className}>
-        {prefix}
-        <input
+        <textarea
           ref={ref}
-          className={inputClassName}
-          type={type}
+          className={textareaClassName}
           name={name}
           placeholder={placeholder}
           onChange={onChange}
@@ -46,31 +41,28 @@ const Input = React.forwardRef(
           onFocus={onFocus}
           disabled={disabled}
           required={required}
+          rows={rows}
           {...restProps}
         />
-        {suffix}
       </div>
-      {!!error && <p className="input-error-message">{error}</p>}
+      {error && <p className="textarea-error-message">{error}</p>}
     </div>
   ),
 );
 
-Input.propTypes = {
+Textarea.propTypes = {
   className: PropTypes.string,
-  inputClassName: PropTypes.string,
+  textareaClassName: PropTypes.string,
   name: PropTypes.string,
   placeholder: PropTypes.string,
-  type: PropTypes.string,
   label: PropTypes.string,
-  prefix: PropTypes.node,
-  suffix: PropTypes.node,
   error: PropTypes.string,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,
   onFocus: PropTypes.func,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
-  pattern: PropTypes.string,
+  rows: PropTypes.number,
 };
 
-export { Input };
+export { Textarea };

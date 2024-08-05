@@ -2,7 +2,7 @@
 
 import { Button, Heading, Text } from "@/components/elements";
 import { useNavBarState } from "@/utils/context/navbar";
-import { checkAffiseValidity } from "@/utils/helpers";
+import { checkAffiseValidity, nameSplitter } from "@/utils/helpers";
 import loadScript from "@/utils/loadScript";
 import { useCartTotal, useOrders } from "@wow-star/utils";
 import { useState } from "react";
@@ -15,6 +15,8 @@ let razorpayMethod;
 export default function OrderSection() {
   const dispatch = useDispatch();
   const cartData = useSelector((state) => state.cart);
+  const { currentAddress } = useSelector((state) => state.address);
+
   const totalCartItemsCount = cartData?.data?.length || 0;
 
   const [selectedMethod, setSelectedMethod] = useState("PREPAID");
@@ -69,19 +71,6 @@ export default function OrderSection() {
   ] = useOrders();
 
   const placeOrderHandler = async () => {
-    const shippingAddress = {
-      firstName: "Piyush",
-      lastName: "Jain",
-      phone: "+919909772852",
-      country: "IN",
-      state: "AN",
-      city: "Surat",
-      pinCode: "395007",
-      landmark: "",
-      address: "Tessstttt",
-      area: "",
-    };
-
     const metaData = {
       landingPage: "http://localhost:3002/",
       referrer: "http://localhost:3002/checkout",
@@ -91,6 +80,32 @@ export default function OrderSection() {
       utmSource: null,
       utmTerm: null,
       clickId: "",
+    };
+
+    const {
+      area,
+      address,
+      city,
+      state,
+      country,
+      pinCode,
+      landmark,
+      phone,
+      name,
+    } = currentAddress;
+
+    const { firstName, lastName } = nameSplitter(name);
+    const shippingAddress = {
+      firstName,
+      lastName,
+      area,
+      address,
+      city,
+      state,
+      country,
+      pinCode,
+      landmark,
+      phone,
     };
 
     const variables = {

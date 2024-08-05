@@ -5,7 +5,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "media-uat.buywow.in",
+        hostname: "media-dev.buywow.in",
         port: "",
         pathname: "/public/wow-cms/**",
       },

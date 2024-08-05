@@ -19,6 +19,11 @@ export const addPhonePrefix = (number) => {
   return number;
 };
 
+export const removePhonePrefix = (number) => {
+  if (number && number.includes("+91")) return number.split("+91")[1];
+  return number;
+};
+
 export function extractAttributes(data, defaultValues = {}) {
   if (!data?.data?.attributes) {
     return defaultValues;
@@ -182,4 +187,14 @@ export const formateDate = (date) => {
   const yyyy = dt.getFullYear();
   const ap = dt.getHours() >= 12 ? "pm" : "am";
   return `${dd} ${monthName} ${yyyy}, ${hh}:${mm} ${ap}`;
+};
+
+export const isEmailValid = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+export const nameSplitter = (name) => {
+  const [firstName, ...lastName] = name.split(" ");
+  return { firstName, lastName: lastName.join(" ") };
 };
