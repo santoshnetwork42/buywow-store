@@ -61,7 +61,7 @@ export const GradientStarIcon = ({ color = "#FAB73B", size = 30 }) => {
   );
 };
 
-export const VehicleIcon = ({ size = 20, color = "#000000" }) => {
+export const VehicleIcon = ({ size = 20, color = "#000000", ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -70,6 +70,7 @@ export const VehicleIcon = ({ size = 20, color = "#000000" }) => {
       height={size}
       viewBox="0 0 80.000000 80.000000"
       preserveAspectRatio="xMidYMid meet"
+      {...props}
     >
       <g
         transform="translate(0.000000,80.000000) scale(0.100000,-0.100000)"
@@ -86,7 +87,7 @@ export const VehicleIcon = ({ size = 20, color = "#000000" }) => {
   );
 };
 
-export const IndiaMapIcon = ({ size = 20, color = "#000000" }) => {
+export const IndiaMapIcon = ({ size = 20, color = "#000000", ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -95,6 +96,7 @@ export const IndiaMapIcon = ({ size = 20, color = "#000000" }) => {
       height={size}
       viewBox="0 0 64.000000 65.000000"
       preserveAspectRatio="xMidYMid meet"
+      {...props}
     >
       <g
         transform="translate(0.000000,65.000000) scale(0.100000,-0.100000)"

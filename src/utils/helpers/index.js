@@ -39,18 +39,16 @@ const COLOR_MAP = {
 
 export const getBgColor = (value) => COLOR_MAP[value] || COLOR_MAP.DEFAULT;
 
-export const getOfferValue = (price, listingPrice) => {
+export const getDiscountPercentage = (price, listingPrice) => {
   if (
     typeof price !== "number" ||
     typeof listingPrice !== "number" ||
-    listingPrice === 0 ||
+    listingPrice <= price ||
     price < 0
   ) {
-    return 0;
+    return null;
   }
-  const discountAmount = listingPrice - price;
-  const offerPercentage = (discountAmount / listingPrice) * 100;
-  return Math.round(offerPercentage);
+  return Math.round(((listingPrice - price) / listingPrice) * 100);
 };
 
 export const getRecordKey = (product, variantId) => {
@@ -99,18 +97,6 @@ export const getFirstVariant = (product, variantId) => {
     items[0] ||
     null
   );
-};
-
-export const getOfferValueWithPercentage = (price, listingPrice) => {
-  if (
-    typeof price !== "number" ||
-    typeof listingPrice !== "number" ||
-    listingPrice <= price ||
-    price < 0
-  ) {
-    return 0;
-  }
-  return Math.round(((listingPrice - price) / listingPrice) * 100);
 };
 
 export const getProductSubTotal = (data) => {
@@ -170,10 +156,14 @@ export const toDecimal = (price, fixedCount = 2) => {
   if (isNaN(num)) {
     num = 0;
   }
-  return num.toLocaleString(undefined, {
-    minimumFractionDigits: Number.isInteger(num) ? 0 : fixedCount,
-    maximumFractionDigits: Number.isInteger(num) ? 0 : fixedCount,
-  });
+  return parseFloat(num.toFixed(fixedCount));
+};
+
+export const formatTotalRatings = (totalRatings) => {
+  if (!totalRatings) return "0";
+  return totalRatings > 9999
+    ? `${Math.floor(totalRatings / 1000)}k+`
+    : totalRatings.toString();
 };
 
 export const formateDate = (date) => {
@@ -187,6 +177,15 @@ export const formateDate = (date) => {
   const yyyy = dt.getFullYear();
   const ap = dt.getHours() >= 12 ? "pm" : "am";
   return `${dd} ${monthName} ${yyyy}, ${hh}:${mm} ${ap}`;
+};
+
+export const copyText = (copyText, toastMessage) => {
+  if (copyText && navigator?.clipboard) {
+    navigator.clipboard.writeText(copyText);
+    console.log(toastMessage);
+  } else {
+    console.error("Invalid copy text or clipboard not supported.");
+  }
 };
 
 export const isEmailValid = (email) => {

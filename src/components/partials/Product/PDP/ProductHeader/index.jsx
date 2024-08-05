@@ -1,9 +1,10 @@
 import React from "react";
 import { StarIcon } from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
+import { formatTotalRatings, toDecimal } from "@/utils/helpers";
 
 const ProductHeader = React.memo(
-  ({ title, benefits, formattedRating, formattedTotalRatings }) => (
+  ({ title, benefits, rating, totalRatings }) => (
     <div className="flex flex-col gap-1">
       {title && (
         <Heading className="line-clamp-2 md:text-[28px]" as="p" size="2xl">
@@ -15,14 +16,21 @@ const ProductHeader = React.memo(
           {benefits.join(" | ")}
         </Text>
       )}
-      {formattedRating && (
-        <div className="flex items-center gap-1">
-          <StarIcon size={14} />
+      <div className="flex items-center gap-1">
+        {rating > 0 && (
+          <div className="flex items-center gap-1">
+            <StarIcon size={14} />
+            <Text className="font-light capitalize" size="sm" responsive>
+              {toDecimal(rating, 1)}
+            </Text>
+          </div>
+        )}
+        {totalRatings > 0 && (
           <Text className="font-light capitalize" size="sm" responsive>
-            {formattedRating} ({formattedTotalRatings} reviews)
+            ({formatTotalRatings(totalRatings)}) reviews
           </Text>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   ),
 );

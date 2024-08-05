@@ -50,7 +50,7 @@ const Drawer = memo(
 
     return (
       <div
-        className={`fixed inset-0 z-50 bg-black-900 transition-opacity duration-300 ease-in-out ${className} ${
+        className={`fixed inset-0 z-[100] bg-black-900 transition-opacity duration-300 ease-in-out ${className} ${
           isOpen ? "bg-opacity-20" : "pointer-events-none bg-opacity-0"
         }`}
         onClick={handleClickOutside}

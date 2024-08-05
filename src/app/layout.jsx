@@ -11,6 +11,7 @@ import { Amplify } from "aws-amplify";
 import { unstable_cache } from "next/cache";
 import awsExport from "../../aws-exports";
 import { AWS_CLIENT_ID } from "@/config";
+import CartDrawer from "@/components/partials/CartDrawer";
 
 Amplify.configure({
   ...awsExport,
@@ -52,6 +53,7 @@ async function RootLayout({ children }) {
                 flashSaleDiscount={60}
               />
               {headerData?.data && <Header data={headerData} />}
+              <CartDrawer />
               <div className="flex-1">{children}</div>
               {footerData?.data && <Footer data={footerData} />}
             </div>

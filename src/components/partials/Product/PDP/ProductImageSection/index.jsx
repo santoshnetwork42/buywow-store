@@ -168,7 +168,7 @@ const ProductImageSection = ({
                 <Text
                   as="span"
                   size="base"
-                  className="absolute left-2.5 top-2 z-10 rounded px-2 py-1 text-sm text-white-a700 md:top-2.5 md:px-3"
+                  className="absolute left-2.5 top-2 z-10 rounded px-2 py-1 text-sm capitalize text-white-a700 md:top-2.5 md:px-3"
                   responsive
                   style={{ backgroundColor: bgColor || "#DD8434" }}
                 >
@@ -177,7 +177,7 @@ const ProductImageSection = ({
               );
             })()}
           {productBenefitTags?.data && (
-            <div className="absolute right-2.5 top-2 z-10 flex flex-col items-end gap-2 md:top-2.5">
+            <div className="absolute right-2.5 top-2 z-10 flex flex-col items-end gap-2 capitalize md:top-2.5">
               {productBenefitTags.data.map((benefitTag, index) => {
                 const { tag, bgColor } = benefitTag?.attributes || {};
                 return (

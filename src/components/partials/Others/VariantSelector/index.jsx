@@ -1,6 +1,7 @@
 import React from "react";
 import { SelectBox } from "@/components/elements";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import { twMerge } from "tailwind-merge";
 
 const VariantSelector = ({
   variantGroup,
@@ -8,6 +9,8 @@ const VariantSelector = ({
   handleOnChangeVariant,
   isFreeProduct,
   disableChange,
+  variantClassName,
+  className,
 }) => {
   if (
     !variantGroup ||
@@ -18,7 +21,7 @@ const VariantSelector = ({
     return null;
 
   return (
-    <div className="flex flex-wrap gap-1 lg:gap-2">
+    <div className={twMerge("flex flex-wrap gap-1 lg:gap-2", className)}>
       {variantGroup.map((group) => {
         const options = group.variantOptions
           .filter((option) => option.active)
@@ -39,7 +42,10 @@ const VariantSelector = ({
         return (
           <div
             key={group.id}
-            className="w-[calc(50%-4px)] min-w-[80px] max-w-fit md:min-w-[100px]"
+            className={twMerge(
+              "w-[calc(50%-4px)] min-w-[80px] max-w-fit md:min-w-[100px]",
+              variantClassName,
+            )}
           >
             <SelectBox
               indicator={
@@ -53,6 +59,7 @@ const VariantSelector = ({
               name={`${group.id}`}
               value={selectedOption}
               options={options}
+              // menuIsOpen
               onChange={(selectedOption) =>
                 handleOnChangeVariant(group.id, selectedOption.value)
               }
@@ -62,10 +69,12 @@ const VariantSelector = ({
                   ...provided,
                   textOverflow: "clip",
                 }),
+                menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
                 menu: (provided) => ({
                   ...provided,
                   borderRadius: "6px",
                   overflow: "hidden",
+                  zIndex: "1000",
                   left: "-7.5px",
                   top: "4px",
                   width: "calc(100% + 15px)",
@@ -88,6 +97,7 @@ const VariantSelector = ({
                   ...provided,
                   fontSize: "12px",
                   padding: "7px 10px",
+                  cursor: "pointer",
                   "@media (max-width: 992px)": {
                     padding: "5.5px 8px",
                   },
@@ -102,8 +112,8 @@ const VariantSelector = ({
                   border: "0 !important",
                   boxShadow: "0 !important",
                   minHeight: "auto",
-                  cursor: "pointer",
                   width: "100%",
+                  cursor: "pointer",
                   fontSize: "12px",
                   "&:hover": {
                     border: "0 !important",

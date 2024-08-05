@@ -65,7 +65,7 @@ export default function MyCart() {
           {/* Displays cart items, shipping progress, and cart summary */}
           <MainCartSection
             cartData={cartData}
-            totalCartItemsCount={totalItems}
+            totalCartItems={totalItems}
             subTotal={totalPrice}
             inventoryMapping={inventoryMapping}
           />
