@@ -218,3 +218,17 @@ export const validateEmail = (email) => {
   }
   return "Invalid Email";
 };
+
+export const calculateTotals = (productItems) => {
+  return productItems.reduce(
+    (acc, { quantity, price, cancelledQuantity = 0 }) => {
+      const activeTotal = quantity * price;
+      const totalWithCancelled = (quantity + cancelledQuantity) * price;
+      return {
+        activeItemsTotalPrice: acc.activeItemsTotalPrice + activeTotal,
+        itemsTotalPrice: acc.itemsTotalPrice + totalWithCancelled,
+      };
+    },
+    { activeItemsTotalPrice: 0, itemsTotalPrice: 0 },
+  );
+};

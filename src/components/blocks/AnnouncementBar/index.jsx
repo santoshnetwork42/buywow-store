@@ -1,5 +1,5 @@
 import { Text } from "@/components/elements";
-import FlipClock from "@/components/partials/FlipClock";
+import FlipClock from "@/components/partials/Others/FlipClock";
 
 const AnnouncementBar = ({ leftText, centerContent, rightText }) => {
   return (
