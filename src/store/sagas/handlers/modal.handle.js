@@ -11,3 +11,12 @@ export function* setPasswordLessModalHandler(action) {
     console.log("error", error);
   }
 }
+
+export function* setCartModalHandler(action) {
+  try {
+    const { isCartOpen } = action.payload;
+    yield put(setCartModal({ isCartOpen }));
+  } catch (error) {
+    console.log("error", error);
+  }
+}

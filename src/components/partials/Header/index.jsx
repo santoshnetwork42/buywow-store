@@ -8,7 +8,9 @@ import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { useNavBarState } from "@/utils/context/navbar";
 import { extractAttributes } from "@/utils/helpers";
+import { useCartTotal } from "@wow-star/utils";
 import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -85,7 +87,12 @@ const Header = React.memo(({ data, ...props }) => {
   const router = useRouter();
 
   const { data: cartData = [] } = useSelector((state) => state.cart);
-  const totalCartItems = cartData.length;
+  const { isRewardApplied, handleRewardApply } = useNavBarState();
+
+  const { totalItems: totalCartItems } = useCartTotal({
+    paymentType: "PREPAID",
+    isRewardApplied: isRewardApplied,
+  });
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -203,7 +210,7 @@ const Header = React.memo(({ data, ...props }) => {
                   className="aspect-square w-[22px] object-contain"
                 />
                 {!!totalCartItems && (
-                  <div className="absolute -right-2 -top-2 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
+                  <div className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
                     <Text size="xxs" className="mx-1 text-white-a700_01">
                       {totalCartItems}
                     </Text>

@@ -22,7 +22,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
             className="aspect-square h-auto w-full object-contain"
           />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col justify-center gap-1">
           <Heading size="base" as="h4" className="text-sm" responsive>
             Best Price
           </Heading>
