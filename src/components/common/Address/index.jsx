@@ -1,31 +1,13 @@
 "use client";
 
-import { Button, Img, Input, Text } from "@/components/elements";
+import { Button, Input, Text } from "@/components/elements";
 import { Textarea } from "@/components/elements/Textarea";
-import { removeUserAddressAPI } from "@/lib/appSyncAPIs";
+import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem//RemoveButton";
 import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
+import { addPhonePrefix, isEmailValid } from "@/utils/helpers";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddressModal from "../AddressModal";
-import { addPhonePrefix, isEmailValid } from "@/utils/helpers";
-
-const RemoveButton = React.memo(({ onClick }) => (
-  <Button
-    className="h-full min-h-6 rounded-md border bg-transparent px-2 sm:min-h-7 lg:min-h-8 lg:px-2.5"
-    onClick={onClick}
-    enableRipple={false}
-  >
-    <div className="aspect-[10/14] w-2.5 md:w-3">
-      <Img
-        src="img_thumbs_up.svg"
-        width={10}
-        height={14}
-        className="aspect-[10/14] h-auto w-full object-contain"
-      />
-    </div>
-  </Button>
-));
-RemoveButton.displayName = "RemoveButton";
 
 const AddressListComponent = React.memo(({ currentAddress, user, item }) => {
   const dispatch = useDispatch();
@@ -106,7 +88,7 @@ const AddressListComponent = React.memo(({ currentAddress, user, item }) => {
               <RemoveButton
                 onClick={() =>
                   deleteUserAddress({ id: item.id, userID: user.id })
-                }
+              }
               />
             </div>
             <div className="flex flex-col gap-2">

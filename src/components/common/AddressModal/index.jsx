@@ -12,24 +12,6 @@ import {
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const RemoveButton = React.memo(({ onClick }) => (
-  <Button
-    className="h-full min-h-6 rounded-md border bg-transparent px-2 sm:min-h-7 lg:min-h-8 lg:px-2.5"
-    onClick={onClick}
-    enableRipple={false}
-  >
-    <div className="aspect-[10/14] w-2.5 md:w-3">
-      <Img
-        src="img_thumbs_up.svg"
-        width={10}
-        height={14}
-        className="aspect-[10/14] h-auto w-full object-contain"
-      />
-    </div>
-  </Button>
-));
-RemoveButton.displayName = "RemoveButton";
-
 const AddressModal = ({
   isOpen = false,
   onClose = () => {},
