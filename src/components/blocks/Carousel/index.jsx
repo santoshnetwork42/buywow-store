@@ -35,7 +35,7 @@ const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
           sizes="100vw"
           fill
           isStatic
-          className="h-auto w-full object-contain"
+          className="h-auto w-full object-cover"
         />
       </picture>
     </Link>

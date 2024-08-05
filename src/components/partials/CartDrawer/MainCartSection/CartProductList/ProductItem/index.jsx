@@ -1,119 +1,22 @@
 import React, { useMemo, useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Heading, Img, Text } from "@/components/elements";
-import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
-import Quantity from "@/components/common/Quantity";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import { getUpdatedCart, toDecimal } from "@/utils/helpers";
-import Link from "next/link";
-import VariantSelector from "@/components/partials/Others/VariantSelector";
-import ProductPricing from "@/components/partials/MyCart/CartProductList/ProductPricing";
+import { getUpdatedCart } from "@/utils/helpers";
 import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
+import ProductImage from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem//ProductImage";
+import ProductDetails from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem//ProductDetails";
+import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem//RemoveButton";
+import VariantSelector from "@/components/partials/Others/VariantSelector";
+import Quantity from "@/components/common/Quantity";
+import { Text } from "@/components/elements";
+import ProductItemSkeleton from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem/ProductItemSkeleton";
 
-const ProductImage = React.memo(({ slug, outOfStock, imageKey }) => (
-  <Link
-    href={outOfStock ? "#" : `/product/${slug}`}
-    className={`relative flex aspect-[65/77] h-fit w-16 shrink-0 overflow-hidden rounded-lg bg-lime-50 sm:w-20 sm:p-1 md:aspect-square md:w-24 md:p-1.5 lg:w-28 lg:p-2 xl:w-32 ${
-      outOfStock ? "cursor-auto" : ""
-    }`}
-  >
-    {outOfStock && (
-      <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-black-900/55">
-        <Heading
-          size="2xl"
-          as="h2"
-          className="text-center text-white-a700"
-          responsive
-        >
-          Out Of Stock
-        </Heading>
-      </div>
-    )}
-    <ProductThumbnail
-      width={300}
-      height={300}
-      imageKey={imageKey}
-      className="aspect-[65/77] h-auto w-full object-contain md:aspect-square"
-      isStatic
-      alt="Product Image"
-    />
-  </Link>
-));
-
-ProductImage.displayName = "ProductImage";
-
-const ProductDetails = React.memo(
-  ({
-    title,
-    slug,
-    hasInventory,
-    currentInventory,
-    isFreeProduct,
-    quantity,
-  }) => (
-    <Link href={`/product/${slug}`} className="flex flex-col gap-1">
-      <Heading size="base" as="h4" className="line-clamp-3" responsive>
-        {title}
-      </Heading>
-      {hasInventory && currentInventory < 10 && (
-        <Text size="sm" as="p" className="line-clamp-2 text-red-600" responsive>
-          Only {currentInventory} left!
-        </Text>
-      )}
-      {isFreeProduct && quantity > 0 && (
-        <Text
-          size="sm"
-          as="p"
-          className="text-grey lh-1 text-alignment mb-2"
-          responsive
-        >
-          Qty: {quantity}
-        </Text>
-      )}
-    </Link>
-  ),
-);
-
-ProductDetails.displayName = "ProductDetails";
-
-const RemoveButton = React.memo(({ onRemove }) => (
-  <Button
-    className="h-full min-h-6 rounded-md border bg-transparent px-2 sm:min-h-7 lg:min-h-8 lg:px-2.5"
-    onClick={onRemove}
-    enableRipple={false}
-  >
-    <div className="aspect-[10/14] w-2.5 md:w-3">
-      <Img
-        src="img_thumbs_up.svg"
-        width={10}
-        height={14}
-        className="aspect-[10/14] h-auto w-full object-contain"
-      />
-    </div>
-  </Button>
-));
-
-RemoveButton.displayName = "RemoveButton";
-
-const ProductItemSkeleton = React.memo(() => (
-  <div className="grid animate-pulse grid-cols-[1fr,25%] gap-5 border-b py-4">
-    <div className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-8 xl:gap-10">
-      <div className="h-20 w-16 rounded-lg bg-gray-200 sm:w-20 md:w-24 lg:w-28 xl:w-32"></div>
-      <div className="flex-1 space-y-2">
-        <div className="h-4 w-3/4 rounded bg-gray-200"></div>
-        <div className="h-4 w-1/2 rounded bg-gray-200"></div>
-        <div className="h-8 w-1/3 rounded bg-gray-200"></div>
-      </div>
-    </div>
-    <div className="w-full">
-      <div className="h-6 w-1/2 rounded bg-gray-200"></div>
-    </div>
-  </div>
-));
-
-ProductItemSkeleton.displayName = "ProductItemSkeleton";
-
-const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
+const ProductItem = ({
+  item,
+  inventory = 99,
+  inventoryMapping,
+  handleCartClose,
+}) => {
   const dispatch = useDispatch();
   const cartList = useSelector((state) => state?.cart?.data || []);
 
@@ -142,12 +45,17 @@ const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
     useState([]);
   const [variantUpdate, setVariantUpdate] = useState(false);
 
-  const isFreeProduct =
-    cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT";
+  const isFreeProduct = useMemo(
+    () =>
+      cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT",
+    [cartItemType],
+  );
+
   const { hasInventory, currentInventory } = useMemo(
     () => getProductInventory(item, variantId),
     [item, variantId],
   );
+
   const outOfStock = quantity > inventory;
 
   const totalItemQuantity = useMemo(
@@ -254,8 +162,17 @@ const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
       }
     }
     setVariantUpdate(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedVariant]);
+  }, [
+    selectedVariant,
+    cartList,
+    dispatch,
+    id,
+    inventoryMapping,
+    item,
+    quantity,
+    recordKey,
+    variantUpdate,
+  ]);
 
   useEffect(() => {
     if (selectedVariant && variantGroup) {
@@ -284,10 +201,8 @@ const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
 
   useEffect(() => {
     const hasRequiredFields = item && price !== undefined;
-
     const hasValidVariant =
       !variantId || (variantId && variantGroup?.length > 0);
-
     setIsLoading(!(hasRequiredFields && hasValidVariant));
   }, [item, price, variantId, variantGroup]);
 
@@ -295,30 +210,39 @@ const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
   if (isLoading) return <ProductItemSkeleton />;
 
   return (
-    <div className="grid grid-cols-[1fr,25%] gap-5 border-b py-4">
-      <div className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-8 xl:gap-10">
-        <ProductImage
-          slug={slug}
-          outOfStock={outOfStock}
-          imageKey={thumbImage}
-        />
-
-        <div className="flex flex-1 flex-col justify-between gap-2">
+    <div className="flex gap-3 rounded-lg border border-b p-2 pl-3 shadow-[0_4px_4px_#0000000D]">
+      <ProductImage
+        slug={slug}
+        outOfStock={outOfStock}
+        imageKey={thumbImage}
+        handleCartClose={handleCartClose}
+      />
+      <div className="flex flex-1 flex-col gap-1">
+        <div className="flex flex-1 justify-between gap-5">
           <ProductDetails
             title={title}
+            price={price}
             slug={slug}
             hasInventory={hasInventory}
+            listingPrice={listingPrice}
+            cartItemType={cartItemType}
             currentInventory={currentInventory}
             isFreeProduct={isFreeProduct}
             quantity={quantity}
+            handleCartClose={handleCartClose}
           />
-          <div className="flex flex-col gap-1">
+          <RemoveButton onClick={() => changeQuantity(0)} />
+        </div>
+        <div className="flex flex-col justify-between gap-2">
+          <div className="flex items-end justify-between gap-1">
             <VariantSelector
               variantGroup={variantGroup}
               selectedVariantGroupOptions={selectedVariantGroupOptions}
               handleOnChangeVariant={handleOnChangeVariant}
               isFreeProduct={isFreeProduct}
               disableChange={disableChange}
+              variantClassName="w-fit"
+              className="lg:gap-1"
             />
             <div className="flex items-center gap-2">
               {!outOfStock && !isFreeProduct && !disableChange && (
@@ -339,91 +263,19 @@ const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
                   className="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] md:h-7 lg:h-8"
                 />
               )}
-              <RemoveButton onRemove={() => changeQuantity(0)} />
             </div>
-            {(selectedVariant?.minimumOrderQuantity > 1 ||
-              itemMinOrderQuantity > 1) && (
-              <Text as="span" size="xs" className="font-light">
-                Minimum Order Quantity:{" "}
-                {selectedVariant?.minimumOrderQuantity || itemMinOrderQuantity}
-              </Text>
-            )}
           </div>
+          {(selectedVariant?.minimumOrderQuantity > 1 ||
+            itemMinOrderQuantity > 1) && (
+            <Text as="span" size="xs" className="font-light">
+              Minimum Order Quantity:{" "}
+              {selectedVariant?.minimumOrderQuantity || itemMinOrderQuantity}
+            </Text>
+          )}
         </div>
-      </div>
-
-      <div className="w-full">
-        <ProductPricing
-          price={price}
-          listingPrice={listingPrice}
-          cartItemType={cartItemType}
-          slug={slug}
-        />
       </div>
     </div>
   );
-});
+};
 
-ProductItem.displayName = "ProductItem";
-
-const CartProductList = React.memo(
-  ({ cartItems, totalItems, subtotal, inventoryMapping }) => {
-    if (!cartItems || !Array.isArray(cartItems)) return null;
-
-    return (
-      <div className="w-full">
-        <div className="grid grid-cols-[1fr,25%] items-center gap-5 border-b border-t py-2">
-          <Text
-            size="sm"
-            as="p"
-            className="pl-5 uppercase text-blue_gray-400 md:pl-6"
-            responsive
-          >
-            PRODUCT
-          </Text>
-          <Text
-            size="sm"
-            as="p"
-            className="uppercase text-blue_gray-400"
-            responsive
-          >
-            PRICE
-          </Text>
-        </div>
-        {cartItems.map((item, index) => (
-          <ProductItem
-            item={item}
-            key={`cart-item-${index}-${item?.id}`}
-            inventory={(inventoryMapping || {})[item?.recordKey]}
-            inventoryMapping={inventoryMapping}
-          />
-        ))}
-        <div className="grid grid-cols-[1fr,25%] items-center gap-5 py-2 sm:py-3 lg:py-4">
-          <div className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-8 xl:gap-10">
-            <div className="w-16 sm:w-20 md:w-24 md:p-1.5 lg:w-28 xl:w-32"></div>
-            <Heading
-              size="base"
-              as="h4"
-              className="text-sm font-semibold"
-              responsive
-            >
-              {toDecimal(totalItems, 0)} Items
-            </Heading>
-          </div>
-          <Heading
-            size="base"
-            as="h4"
-            className="text-sm font-semibold"
-            responsive
-          >
-            ₹{toDecimal(subtotal)}
-          </Heading>
-        </div>
-      </div>
-    );
-  },
-);
-
-CartProductList.displayName = "CartProductList";
-
-export default CartProductList;
+export default React.memo(ProductItem);

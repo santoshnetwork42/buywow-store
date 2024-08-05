@@ -198,7 +198,7 @@ const ProductCard = memo(
                 selectedVariant={selectedVariant}
                 buttonText={"Add"}
                 buttonSize="medium"
-                quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)]  lg:grid-cols-[repeat(3,36px)]"
+                quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] lg:grid-cols-[repeat(3,36px)]"
               />
             </div>
           </div>

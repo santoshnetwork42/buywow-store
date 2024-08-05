@@ -86,8 +86,7 @@ const Header = React.memo(({ data, ...props }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const { data: cartData = [] } = useSelector((state) => state.cart);
-  const { isRewardApplied, handleRewardApply } = useNavBarState();
+  const { isRewardApplied } = useNavBarState();
 
   const { totalItems: totalCartItems } = useCartTotal({
     paymentType: "PREPAID",
@@ -119,6 +118,15 @@ const Header = React.memo(({ data, ...props }) => {
         isPasswordLessOpen: true,
         customLogin: false,
         redirectTo: null,
+      },
+    });
+  }, [dispatch]);
+
+  const handleCartOpen = useCallback(() => {
+    dispatch({
+      type: modalSagaActions.SET_CART_MODAL,
+      payload: {
+        isCartOpen: true,
       },
     });
   }, [dispatch]);
@@ -200,7 +208,7 @@ const Header = React.memo(({ data, ...props }) => {
                 className="aspect-square w-[24px] object-contain"
               />
             </Link>
-            <Link href="/my-cart" className="flex-shrink-0">
+            <Link href="#" onClick={handleCartOpen} className="flex-shrink-0">
               <div className="relative">
                 <Img
                   src="img_bag.svg"
