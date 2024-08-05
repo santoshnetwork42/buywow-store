@@ -53,6 +53,7 @@ const VariantSelector = ({
               name={`${group.id}`}
               value={selectedOption}
               options={options}
+              // menuIsOpen
               onChange={(selectedOption) =>
                 handleOnChangeVariant(group.id, selectedOption.value)
               }
@@ -88,6 +89,7 @@ const VariantSelector = ({
                   ...provided,
                   fontSize: "12px",
                   padding: "7px 10px",
+                  cursor: "pointer",
                   "@media (max-width: 992px)": {
                     padding: "5.5px 8px",
                   },
@@ -102,8 +104,8 @@ const VariantSelector = ({
                   border: "0 !important",
                   boxShadow: "0 !important",
                   minHeight: "auto",
-                  cursor: "pointer",
                   width: "100%",
+                  cursor: "pointer",
                   fontSize: "12px",
                   "&:hover": {
                     border: "0 !important",

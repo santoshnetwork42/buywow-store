@@ -2,18 +2,26 @@ import React, { useMemo } from "react";
 import Link from "next/link";
 import { Button, Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
-import { extractAttributes, getOfferValue } from "@/utils/helpers";
+import {
+  extractAttributes,
+  getDiscountPercentage,
+  getOfferValue,
+} from "@/utils/helpers";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import AddToCart from "@/components/common/AddToCart";
+import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 
 const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   const { fetchedProduct, imageBgColor, slug } = extractAttributes(product);
-  const { price, listingPrice } = fetchedProduct || {};
 
-  if (!fetchedProduct || !slug) return null;
+  const [selectedVariant] = useProductVariantGroups(fetchedProduct);
+  const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
-  const discount =
-    price < listingPrice ? getOfferValue(price, listingPrice) : null;
+  if (!fetchedProduct || !packageProduct) return null;
+
+  const { price, listingPrice } = packageProduct || {};
+
+  const discount = getDiscountPercentage(price, listingPrice);
 
   return (
     <Link
@@ -27,7 +35,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
         <ProductThumbnail
           height={100}
           width={200}
-          fetchedProduct={fetchedProduct}
+          imageKey={packageProduct?.thumbImage?.imageKey}
         />
       </div>
       <div className="flex flex-1 flex-col gap-1">
@@ -66,9 +74,9 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             )}
           </div>
           <AddToCart
-            product={fetchedProduct}
+            product={packageProduct}
             buttonText={"Add"}
-            buttonClass={"shrink-0 px-3 py-1 text-sm"}
+            buttonClassName={"shrink-0 px-3 py-1 text-sm"}
             quantityClassName="grid-cols-[repeat(3,26px)] h-[26px] sm:h-[26px] md:h-[28px] lg:h-[28px] md:grid-cols-[repeat(3,28px)]"
           />
         </div>

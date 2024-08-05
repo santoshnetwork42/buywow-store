@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Text, Heading } from "@/components/elements";
-import { getOfferValueWithPercentage, toDecimal } from "@/utils/helpers";
+import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
 
 const ProductPricing = ({ price, listingPrice, cartItemType, slug }) => {
   const isFreeProduct =
@@ -8,7 +8,7 @@ const ProductPricing = ({ price, listingPrice, cartItemType, slug }) => {
   const showStrikePrice = listingPrice && price < listingPrice;
 
   const discountPercentage = useMemo(
-    () => getOfferValueWithPercentage(price, listingPrice),
+    () => getDiscountPercentage(price, listingPrice),
     [price, listingPrice],
   );
 

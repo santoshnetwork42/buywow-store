@@ -6,13 +6,14 @@ import {
   useProductCoupons,
   useProductVariantGroups,
 } from "@wow-star/utils";
-import { extractAttributes, getOfferValue } from "@/utils/helpers";
-import ProductHeader from "@/components/partials/Product/ProductHeader";
-import PriceSection from "@/components/partials/Product/PriceSection";
-import VariantSelector from "@/components/partials/Product/VariantSelector";
-import AddToCartSection from "@/components/partials/Product/AddToCartSection";
-import ProductImageSection from "@/components/partials/Product/ProductImageSection";
-import ProductDetailViewBlocks from "@/components/partials/Product/ProductDetailViewBlocks";
+import { extractAttributes } from "@/utils/helpers";
+import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
+import PriceSection from "@/components/partials/Product/PDP/PriceSection";
+import VariantSelector from "@/components/partials/Product/PDP/VariantSelector";
+import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
+import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
+import ProductDetailViewBlocks from "@/components/partials/Product/PDP/ProductDetailViewBlocks";
+import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDiscounts";
 
 const ProductDetailView = React.memo(({ product }) => {
   const {
@@ -28,8 +29,7 @@ const ProductDetailView = React.memo(({ product }) => {
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
 
-  // console.log("packageProduct", packageProduct);
-  // console.log("selectedVariant", selectedVariant);
+  console.log(bestCoupon);
 
   const {
     title,
@@ -49,26 +49,6 @@ const ProductDetailView = React.memo(({ product }) => {
     [images],
   );
 
-  const formattedRating = useMemo(() => rating?.toFixed(1) || "0.0", [rating]);
-  const formattedTotalRatings = useMemo(() => {
-    if (!totalRatings) return "0";
-    return totalRatings > 9999
-      ? `${Math.floor(totalRatings / 1000)}k+`
-      : totalRatings.toString();
-  }, [totalRatings]);
-
-  const discountPercentage = useMemo(() => {
-    if (
-      offerTag?.showOfferTag &&
-      price &&
-      listingPrice &&
-      price < listingPrice
-    ) {
-      return getOfferValue(price, listingPrice);
-    }
-    return null;
-  }, [price, listingPrice, offerTag]);
-
   if (!fetchedProduct) {
     return <div>Product not found</div>;
   }
@@ -87,8 +67,8 @@ const ProductDetailView = React.memo(({ product }) => {
         <ProductHeader
           title={title}
           benefits={benefits}
-          formattedRating={formattedRating}
-          formattedTotalRatings={formattedTotalRatings}
+          rating={rating}
+          totalRatings={totalRatings}
         />
       </div>
 
@@ -96,10 +76,15 @@ const ProductDetailView = React.memo(({ product }) => {
         <PriceSection
           price={price}
           listingPrice={listingPrice}
-          discountPercentage={discountPercentage}
+          offerTag={offerTag}
           totalOrders={totalOrders}
           hasInventory={hasInventory}
           currentInventory={currentInventory}
+        />
+        <OffersAndDiscounts
+          bestCoupon={bestCoupon}
+          price={price}
+          hasInventory={hasInventory}
         />
         <VariantSelector
           variantGroups={variantGroup}

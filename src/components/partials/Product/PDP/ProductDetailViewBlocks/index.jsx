@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const UpsellProducts = dynamic(
   () =>
     import(
-      "@/components/partials/Product/ProductDetailViewBlocks/PDVUpsellProducts"
+      "@/components/partials/Product/PDP/ProductDetailViewBlocks/UpsellProducts"
     ),
 );
 const FeaturedList = dynamic(() => import("@/components/blocks/FeaturedList"));

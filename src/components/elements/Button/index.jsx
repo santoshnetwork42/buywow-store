@@ -66,7 +66,7 @@ const Button = ({
         onClick(e);
       }
     },
-    [onClick, disabled, loader],
+    [onClick, disabled, loader, restProps, router],
   );
 
   return (

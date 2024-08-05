@@ -10,7 +10,7 @@ import VariantSelector from "./VariantSelector";
 import ProductPricing from "./ProductPricing";
 import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
 
-const ProductImage = React.memo(({ slug, outOfStock, item }) => (
+const ProductImage = React.memo(({ slug, outOfStock, imageKey }) => (
   <Link
     href={outOfStock ? "#" : `/product/${slug}`}
     className={`relative flex aspect-[65/77] h-fit w-16 shrink-0 overflow-hidden rounded-lg bg-lime-50 sm:w-20 sm:p-1 md:aspect-square md:w-24 md:p-1.5 lg:w-28 lg:p-2 xl:w-32 ${
@@ -32,7 +32,7 @@ const ProductImage = React.memo(({ slug, outOfStock, item }) => (
     <ProductThumbnail
       width={300}
       height={300}
-      fetchedProduct={item}
+      imageKey={imageKey}
       className="aspect-[65/77] h-auto w-full object-contain md:aspect-square"
       isStatic
       alt="Product Image"
@@ -129,6 +129,7 @@ const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
     listingPrice = 0,
     variantId,
     cartItemType,
+    thumbImage,
     extraQty: extraQuantity = 0,
     disableChange = false,
     minimumOrderQuantity: itemMinOrderQuantity,
@@ -282,30 +283,13 @@ const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
   }, [variantGroup, selectedVariant]);
 
   useEffect(() => {
-    const hasRequiredFields =
-      item &&
-      id &&
-      recordKey &&
-      slug &&
-      title &&
-      price !== undefined &&
-      listingPrice !== undefined;
+    const hasRequiredFields = item && price !== undefined;
 
     const hasValidVariant =
       !variantId || (variantId && variantGroup?.length > 0);
 
     setIsLoading(!(hasRequiredFields && hasValidVariant));
-  }, [
-    item,
-    id,
-    recordKey,
-    slug,
-    title,
-    price,
-    listingPrice,
-    variantId,
-    variantGroup,
-  ]);
+  }, [item, price, variantId, variantGroup]);
 
   if (!item) return null;
   if (isLoading) return <ProductItemSkeleton />;
@@ -313,7 +297,11 @@ const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
   return (
     <div className="grid grid-cols-[1fr,25%] gap-5 border-b py-4">
       <div className="flex gap-3 sm:gap-4 md:gap-5 lg:gap-8 xl:gap-10">
-        <ProductImage slug={slug} outOfStock={outOfStock} item={item} />
+        <ProductImage
+          slug={slug}
+          outOfStock={outOfStock}
+          imageKey={thumbImage}
+        />
 
         <div className="flex flex-1 flex-col justify-between gap-2">
           <ProductDetails
