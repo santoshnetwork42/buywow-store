@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 const Input = React.forwardRef(
@@ -13,6 +13,7 @@ const Input = React.forwardRef(
       placeholder = "",
       type = "text",
       label = "",
+      labelClass = "",
       prefix,
       suffix,
       error,
@@ -22,37 +23,59 @@ const Input = React.forwardRef(
       disabled = false,
       required = false,
       pattern,
+      value,
       ...restProps
     },
     ref,
-  ) => (
-    <div className="flex w-full flex-col gap-2">
-      {!!label && (
-        <div>
-          {label}
-          {required && <span className="input-required">*</span>}
+  ) => {
+    const [isFocused, setIsFocused] = useState(false);
+
+    const handleFocus = (e) => {
+      setIsFocused(true);
+      if (onFocus) onFocus(e);
+    };
+
+    const handleBlur = (e) => {
+      setIsFocused(false);
+      if (onBlur) onBlur(e);
+    };
+
+    const borderColorClass = error ? "border-red-500" : "border-gray-300";
+    const labelColorClass = error
+      ? "text-red-500"
+      : isFocused || value
+        ? "text-blue-500"
+        : "text-gray-500";
+
+    return (
+      <div className="flex w-full flex-col gap-2">
+        <div className={`relative ${className}`}>
+          {prefix}
+          <input
+            ref={ref}
+            className={`peer w-full p-2 outline-none transition-all duration-300 ${inputClassName} ${borderColorClass}`}
+            type={type}
+            name={name}
+            placeholder=" "
+            onChange={onChange}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
+            disabled={disabled}
+            required={required}
+            value={value}
+            {...restProps}
+          />
+          <label
+            className={`absolute left-2 top-1 text-lg transition-all duration-300 ${labelColorClass} ${isFocused || value ? "-translate-y-5 scale-75" : ""} bg-white-a700_01 peer-focus:-translate-y-5 peer-focus:scale-75`}
+          >
+            {placeholder}
+            {required && <span className="ml-1 text-red-500">*</span>}
+          </label>
+          {suffix}
         </div>
-      )}
-      <div className={className}>
-        {prefix}
-        <input
-          ref={ref}
-          className={inputClassName}
-          type={type}
-          name={name}
-          placeholder={placeholder}
-          onChange={onChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-          disabled={disabled}
-          required={required}
-          {...restProps}
-        />
-        {suffix}
       </div>
-      {!!error && <p className="input-error-message">{error}</p>}
-    </div>
-  ),
+    );
+  },
 );
 
 Input.propTypes = {
@@ -71,6 +94,7 @@ Input.propTypes = {
   disabled: PropTypes.bool,
   required: PropTypes.bool,
   pattern: PropTypes.string,
+  value: PropTypes.string,
 };
 
 export { Input };

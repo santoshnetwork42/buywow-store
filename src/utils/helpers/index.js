@@ -197,3 +197,24 @@ export const nameSplitter = (name) => {
   const [firstName, ...lastName] = name.split(" ");
   return { firstName, lastName: lastName.join(" ") };
 };
+
+export const validatePinCode = (pinCode) => {
+  if (pinCode.length !== 6) {
+    return "Pin code must be 6 digits";
+  }
+  return "";
+};
+
+export const validateString = (inputString) => {
+  if (!!inputString.length) {
+    return "";
+  }
+  return "Invalid Input";
+};
+
+export const validateEmail = (email) => {
+  if (isEmailValid(email)) {
+    return "";
+  }
+  return "Invalid Email";
+};

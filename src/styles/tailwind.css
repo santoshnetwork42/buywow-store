@@ -38,6 +38,7 @@ select {
 [type="search"]:focus,
 [type="checkbox"]:focus,
 [type="radio"]:focus,
+[type="tel"]:focus,
 [multiple]:focus,
 textarea:focus,
 select:focus {
