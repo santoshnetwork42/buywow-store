@@ -130,7 +130,7 @@ const AddressModal = ({
     >
       <div className="mt-2">
         <form>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <Input
               type="text"
               value={address.pinCode}
