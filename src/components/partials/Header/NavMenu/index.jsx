@@ -2,7 +2,7 @@ import { Text } from "@/components/elements";
 import Link from "next/link";
 import React from "react";
 
-const MenuItem = React.memo(({ item, linkPrefix }) => (
+const MenuItem = ({ item, linkPrefix }) => (
   <Link
     href={`/${linkPrefix ? linkPrefix + "/" : ""}${item?.slug}`}
     className="self-center"
@@ -11,7 +11,7 @@ const MenuItem = React.memo(({ item, linkPrefix }) => (
       {item?.title}
     </Text>
   </Link>
-));
+);
 
 MenuItem.displayName = "MenuItem";
 
@@ -33,4 +33,4 @@ function NavMenu({ menuItems, linkPrefix }) {
   );
 }
 
-export default React.memo(NavMenu);
+export default NavMenu;

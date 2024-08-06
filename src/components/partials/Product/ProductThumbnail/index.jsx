@@ -1,21 +1,19 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import { Img } from "@/components/elements";
 import { twMerge } from "tailwind-merge";
 
 const ProductThumbnail = React.memo(
   ({ width, height, imageKey, className, alt, ...props }) => {
-    const mergedClassName = useMemo(() => {
-      return twMerge(
-        "object-contain h-auto w-full mix-blend-multiply",
-        className,
-      );
-    }, [className]);
-
     if (!imageKey) {
       return null;
     }
+
+    const mergedClassName = twMerge(
+      "object-contain h-auto w-full mix-blend-multiply",
+      className,
+    );
 
     return (
       <Img

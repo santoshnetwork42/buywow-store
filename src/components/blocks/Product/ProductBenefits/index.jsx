@@ -54,7 +54,7 @@ const ProductBenefits = ({
         isPaddedColor ? "py-5" : ""
       }`}
     >
-      {title && <SectionHeading title={title} />}
+      <SectionHeading title={title} />
       <div className="flex flex-wrap justify-center gap-x-4 gap-y-6 sm:gap-x-5 md:gap-x-6 lg:gap-x-7 xl:gap-x-8">
         {productBenefitItems.map((item, index) => (
           <div

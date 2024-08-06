@@ -69,7 +69,7 @@ const FeaturedCategories = ({
                 className="flex flex-col max-sm:gap-y-6"
               >
                 <CategoryItem category={category} size={itemSize} />
-                {arr[index + 1] && (
+                {!!arr[index + 1] && (
                   <CategoryItem category={arr[index + 1]} size={itemSize} />
                 )}
               </div>,

@@ -136,4 +136,4 @@ const AddToCart = ({
   );
 };
 
-export default React.memo(AddToCart);
+export default AddToCart;

@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState, memo } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Text, Heading } from "@/components/elements";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 
-const SubMenuItem = memo(({ subItem, linkPrefix, closeMenu, isLast }) => {
+const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
   if (!subItem) return null;
 
   return (
@@ -19,16 +19,16 @@ const SubMenuItem = memo(({ subItem, linkPrefix, closeMenu, isLast }) => {
       </Link>
     </li>
   );
-});
+};
 
 SubMenuItem.displayName = "SubMenuItem";
 
-const MobileMenuItem = memo(({ item, closeMenu, linkPrefix }) => {
+const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [height, setHeight] = useState(0);
   const contentRef = useRef(null);
 
-  const toggleOpen = useCallback(() => setIsOpen((prev) => !prev), []);
+  const toggleOpen = () => setIsOpen((prev) => !prev);
 
   useEffect(() => {
     if (contentRef.current) {
@@ -86,7 +86,7 @@ const MobileMenuItem = memo(({ item, closeMenu, linkPrefix }) => {
       </Heading>
     </Link>
   );
-});
+};
 
 MobileMenuItem.displayName = "MobileMenuItem";
 

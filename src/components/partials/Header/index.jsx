@@ -14,10 +14,10 @@ import { useCartTotal } from "@wow-star/utils";
 import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const MenuItem = React.memo(({ item, index, linkPrefix }) => {
+const MenuItem = ({ item, index, linkPrefix }) => {
   if (!item) return null;
 
   const key = item.id || index;
@@ -52,11 +52,11 @@ const MenuItem = React.memo(({ item, index, linkPrefix }) => {
       </Link>
     </li>
   );
-});
+};
 
 MenuItem.displayName = "MenuItem";
 
-const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
+const Logo = ({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
   <Link href="/">
     <div className="flex items-center gap-1">
       <Img
@@ -78,11 +78,11 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
       />
     </div>
   </Link>
-));
+);
 
 Logo.displayName = "Logo";
 
-const Header = React.memo(({ data, ...props }) => {
+const Header = ({ data, ...props }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -108,10 +108,10 @@ const Header = React.memo(({ data, ...props }) => {
   const { url: vipUrl, alternativeText: vipAlternativeText = "logo" } =
     extractAttributes(VIPMembershipLogo) || {};
 
-  const openMobileMenu = useCallback(() => setIsMobileMenuOpen(true), []);
-  const closeMobileMenu = useCallback(() => setIsMobileMenuOpen(false), []);
+  const openMobileMenu = () => setIsMobileMenuOpen(true);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const handlePasswordLessOpen = useCallback(() => {
+  const handlePasswordLessOpen = () => {
     dispatch({
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
       payload: {
@@ -120,18 +120,18 @@ const Header = React.memo(({ data, ...props }) => {
         redirectTo: null,
       },
     });
-  }, [dispatch]);
+  };
 
-  const handleCartOpen = useCallback(() => {
+  const handleCartOpen = () => {
     dispatch({
       type: modalSagaActions.SET_CART_MODAL,
       payload: {
         isCartOpen: true,
       },
     });
-  }, [dispatch]);
+  };
 
-  const handleUserClisk = useCallback(async () => {
+  const handleUserClisk = async () => {
     try {
       //check if user is logged in
       const currentUser = await getCurrentUser();
@@ -145,7 +145,7 @@ const Header = React.memo(({ data, ...props }) => {
       handlePasswordLessOpen();
       console.log("Something went wrong", error);
     }
-  }, [handlePasswordLessOpen, router]);
+  };
 
   const renderMenuItems = () => (
     <>
@@ -243,7 +243,7 @@ const Header = React.memo(({ data, ...props }) => {
       <PasswordLess />
     </header>
   );
-});
+};
 
 Header.displayName = "Header";
 

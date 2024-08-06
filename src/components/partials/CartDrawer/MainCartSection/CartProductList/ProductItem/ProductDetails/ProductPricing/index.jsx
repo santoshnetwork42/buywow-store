@@ -1,19 +1,13 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Text, Heading } from "@/components/elements";
 import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
 
 const ProductPricing = ({ price, listingPrice, cartItemType, slug }) => {
-  const isFreeProduct = useMemo(
-    () =>
-      cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT",
-    [cartItemType],
-  );
+  const isFreeProduct =
+    cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT";
   const showStrikePrice = listingPrice && price < listingPrice;
 
-  const discountPercentage = useMemo(
-    () => getDiscountPercentage(price, listingPrice),
-    [price, listingPrice],
-  );
+  const discountPercentage = getDiscountPercentage(price, listingPrice);
 
   if (cartItemType === "AUTO_FREE_PRODUCT_DISABLED") return null;
 

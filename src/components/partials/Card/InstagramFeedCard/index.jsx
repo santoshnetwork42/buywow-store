@@ -1,4 +1,3 @@
-// src/components/InstagramFeedItem.jsx
 import React from "react";
 import { Img, Button } from "@/components/elements";
 

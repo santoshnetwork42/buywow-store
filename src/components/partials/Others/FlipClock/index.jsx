@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, memo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Text, Img } from "@/components/elements";
 
-const FlipUnit = memo(({ digit, unit }) => {
+const FlipUnit = ({ digit, unit }) => {
   const [flip, setFlip] = useState(false);
   const [displayedDigit, setDisplayedDigit] = useState(digit);
 
@@ -41,11 +41,11 @@ const FlipUnit = memo(({ digit, unit }) => {
       </Text>
     </div>
   );
-});
+};
 
 FlipUnit.displayName = "FlipUnit";
 
-const FlipClock = memo(({ targetDate, centerText }) => {
+const FlipClock = ({ targetDate, centerText }) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -101,7 +101,7 @@ const FlipClock = memo(({ targetDate, centerText }) => {
       </div>
     </div>
   );
-});
+};
 
 FlipClock.displayName = "FlipClock";
 

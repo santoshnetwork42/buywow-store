@@ -28,7 +28,7 @@ const SingleBanner = ({ banner, slug }) => {
       className={`block w-full ${slug?.[slug?.length - 2] === "collections" ? "container-main mb-5 sm:mb-6 lg:mb-7" : "mb-main"}`}
     >
       <picture className="block w-full">
-        {webImageAttrs.url && (
+        {!!webImageAttrs.url && (
           <source
             media="(min-width: 576px)"
             srcSet={webImageAttrs.url}

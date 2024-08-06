@@ -19,4 +19,4 @@ const CartProductList = ({ cartItems, inventoryMapping, handleCartClose }) => {
   );
 };
 
-export default React.memo(CartProductList);
+export default CartProductList;

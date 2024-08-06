@@ -26,9 +26,7 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
         return (
           <Link href={link || "#"} key={`mini-banner-${index}`}>
             <picture className="relative block aspect-[298/120] w-[80vw] sm:w-[46vw] md:aspect-[650/166]">
-              {webImageAttrs.url && (
-                <source media="(min-width: 768px)" srcSet={webImageAttrs.url} />
-              )}
+              <source media="(min-width: 768px)" srcSet={webImageAttrs.url} />
               <Img
                 src={mWebImageAttrs.url || webImageAttrs.url}
                 alt={

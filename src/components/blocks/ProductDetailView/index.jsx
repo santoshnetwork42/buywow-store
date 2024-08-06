@@ -92,7 +92,7 @@ const ProductDetailView = ({ product }) => {
         />
       </div>
 
-      {productDetailView?.length > 0 && (
+      {!!(productDetailView?.length > 0) && (
         <div className="order-4 mt-3 sm:mt-5 lg:mt-7">
           <ProductDetailViewBlocks blocks={productDetailView} />
         </div>

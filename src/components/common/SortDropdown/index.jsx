@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Text, SelectBox } from "@/components/elements";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 import { twMerge } from "tailwind-merge";

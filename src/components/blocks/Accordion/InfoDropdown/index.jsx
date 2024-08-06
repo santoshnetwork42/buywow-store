@@ -66,7 +66,7 @@ const InfoDropdown = ({
         style={contentStyle}
       >
         <div ref={contentRef}>
-          {information && (
+          {!!information && (
             <Text
               size="base"
               as="p"

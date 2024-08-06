@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getUpdatedCart } from "@/utils/helpers";
@@ -45,24 +45,18 @@ const ProductItem = ({
     useState([]);
   const [variantUpdate, setVariantUpdate] = useState(false);
 
-  const isFreeProduct = useMemo(
-    () =>
-      cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT",
-    [cartItemType],
-  );
+  const isFreeProduct =
+    cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT";
 
-  const { hasInventory, currentInventory } = useMemo(
-    () => getProductInventory(item, variantId),
-    [item, variantId],
+  const { hasInventory, currentInventory } = getProductInventory(
+    item,
+    variantId,
   );
 
   const outOfStock = quantity > inventory;
 
-  const totalItemQuantity = useMemo(
-    () =>
-      cartList?.find((cartItem) => cartItem.recordKey === recordKey)?.qty || 0,
-    [cartList, recordKey],
-  );
+  const totalItemQuantity =
+    cartList?.find((cartItem) => cartItem.recordKey === recordKey)?.qty || 0;
 
   const handleOnChangeVariant = useCallback(
     (groupId, optionId) => {
@@ -278,4 +272,4 @@ const ProductItem = ({
   );
 };
 
-export default React.memo(ProductItem);
+export default ProductItem;

@@ -1,4 +1,3 @@
-// components/FooterMenu.js
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { Heading, Text } from "@/components/elements";
@@ -19,7 +18,7 @@ const SubMenuItem = React.memo(({ item }) => {
 
 SubMenuItem.displayName = "SubMenuItem";
 
-const FooterMenu = React.memo(({ item, isOpen, onToggle }) => {
+const FooterMenu = ({ item, isOpen, onToggle }) => {
   const subMenuItems = useMemo(() => {
     if (!item.subMenu || !Array.isArray(item.subMenu)) return [];
     return item.subMenu.filter((subItem) => subItem?.title && subItem?.slug);
@@ -73,7 +72,7 @@ const FooterMenu = React.memo(({ item, isOpen, onToggle }) => {
       )}
     </div>
   );
-});
+};
 
 FooterMenu.displayName = "FooterMenu";
 

@@ -1,12 +1,12 @@
 // components/SearchBar.js
 "use client";
 
-import React, { useState, useCallback, memo } from "react";
+import React, { useState, useCallback } from "react";
 import { Input, Img } from "@/components/elements";
 import { CloseSVG } from "@/assets/images";
 import { twMerge } from "tailwind-merge";
 
-const SearchIcon = memo(() => (
+const SearchIcon = () => (
   <Img
     src="img_search.svg"
     width={24}
@@ -14,17 +14,17 @@ const SearchIcon = memo(() => (
     alt="search"
     className="aspect-square w-[24px] cursor-pointer object-contain"
   />
-));
+);
 
 SearchIcon.displayName = "SearchIcon";
 
-const ClearIcon = memo(({ onClick }) => (
+const ClearIcon = ({ onClick }) => (
   <CloseSVG onClick={onClick} height={24} width={24} fillColor="#000000ff" />
-));
+);
 
 ClearIcon.displayName = "ClearIcon";
 
-const SearchBar = memo(({ className }) => {
+const SearchBar = ({ className }) => {
   const [searchBarValue, setSearchBarValue] = useState("");
 
   const handleChange = useCallback((e) => {
@@ -55,7 +55,7 @@ const SearchBar = memo(({ className }) => {
       )}
     />
   );
-});
+};
 
 SearchBar.displayName = "SearchBar";
 

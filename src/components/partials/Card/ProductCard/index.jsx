@@ -11,7 +11,7 @@ import {
 } from "@/utils/helpers";
 import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 import Link from "next/link";
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { twMerge } from "tailwind-merge";
 
 const BenefitTag = memo(({ bgColor, tag }) => {
@@ -104,10 +104,7 @@ const ProductCard = memo(
       thumbImage,
     } = packageProduct || {};
 
-    const discountPercentage = useMemo(
-      () => getDiscountPercentage(price, listingPrice),
-      [price, listingPrice],
-    );
+    const discountPercentage = getDiscountPercentage(price, listingPrice);
 
     if (!fetchedProduct || !packageProduct) return null;
 
@@ -131,7 +128,7 @@ const ProductCard = memo(
             isStatic
             alt={title || "Product image"}
           />
-          {promotionTag?.data &&
+          {!!promotionTag?.data &&
             (() => {
               const { tag, bgColor } = extractAttributes(promotionTag);
               return (

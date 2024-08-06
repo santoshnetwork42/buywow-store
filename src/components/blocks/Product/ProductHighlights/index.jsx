@@ -23,9 +23,7 @@ const ProductHighlights = ({ title, images }) => {
             key={`product-highlight-${index}`}
             className="relative block aspect-[970/600] w-full max-w-[970px] sm:w-[90%] md:w-[80%]"
           >
-            {webImageAttrs.url && (
-              <source media="(min-width: 576px)" srcSet={webImageAttrs.url} />
-            )}
+            <source media="(min-width: 576px)" srcSet={webImageAttrs.url} />
             <Img
               src={mWebImageAttrs.url || webImageAttrs.url}
               alt={

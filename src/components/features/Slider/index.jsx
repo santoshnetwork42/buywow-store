@@ -90,158 +90,156 @@ const SliderControl = React.memo(
   ),
 );
 
-const Slider = React.memo(
-  ({
-    children,
-    className,
-    sliderClassName,
-    slideClassName,
-    controlsContainerClassName,
-    showCounter = true,
-    showControls = true,
-    showDotButtons = false,
-    dragFree = true,
-    ...props
-  }) => {
-    const [emblaRef, emblaApi] = useEmblaCarousel(
-      {
-        dragFree: dragFree,
-        slidesToScroll: "auto",
-        inViewThreshold: 1,
-      },
-      [WheelGesturesPlugin()],
-    );
+const Slider = ({
+  children,
+  className,
+  sliderClassName,
+  slideClassName,
+  controlsContainerClassName,
+  showCounter = true,
+  showControls = true,
+  showDotButtons = false,
+  dragFree = true,
+  ...props
+}) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      dragFree: dragFree,
+      slidesToScroll: "auto",
+      inViewThreshold: 1,
+    },
+    [WheelGesturesPlugin()],
+  );
 
-    const [sliderState, setSliderState] = useState({
-      currentSlideIndex: 0,
-      scrollPercentage: 0,
-      totalSlides: 0,
-      isAllSlidesVisible: false,
-      scrollbarWidth: 0,
-    });
+  const [sliderState, setSliderState] = useState({
+    currentSlideIndex: 0,
+    scrollPercentage: 0,
+    totalSlides: 0,
+    isAllSlidesVisible: false,
+    scrollbarWidth: 0,
+  });
 
-    const updateSliderState = useCallback((updates) => {
-      setSliderState((prev) => ({ ...prev, ...updates }));
-    }, []);
+  const updateSliderState = useCallback((updates) => {
+    setSliderState((prev) => ({ ...prev, ...updates }));
+  }, []);
 
-    const handleInit = useCallback(() => {
-      if (!emblaApi) return;
+  const handleInit = useCallback(() => {
+    if (!emblaApi) return;
 
-      const { scrollWidth, clientWidth } = emblaApi.containerNode();
-      const scrollbarWidth = (clientWidth * 100) / scrollWidth;
-      const totalSlides = emblaApi.scrollSnapList().length;
-      const isAllSlidesVisible = totalSlides <= 1;
+    const { scrollWidth, clientWidth } = emblaApi.containerNode();
+    const scrollbarWidth = (clientWidth * 100) / scrollWidth;
+    const totalSlides = emblaApi.scrollSnapList().length;
+    const isAllSlidesVisible = totalSlides <= 1;
 
-      updateSliderState({
-        scrollbarWidth,
-        totalSlides,
-        isAllSlidesVisible,
-        currentSlideIndex: emblaApi.selectedScrollSnap(),
-      });
-    }, [emblaApi, updateSliderState]);
-
-    const handleSelect = useCallback(() => {
-      if (!emblaApi) return;
-      updateSliderState({ currentSlideIndex: emblaApi.selectedScrollSnap() });
-    }, [emblaApi, updateSliderState]);
-
-    const handleScroll = useCallback(() => {
-      if (!emblaApi) return;
-      const progress = emblaApi.scrollProgress();
-      const maxScroll = 100 - sliderState.scrollbarWidth;
-      const scrollPercentage = progress * maxScroll;
-      updateSliderState({ scrollPercentage });
-    }, [emblaApi, sliderState.scrollbarWidth, updateSliderState]);
-
-    useEffect(() => {
-      if (!emblaApi) return;
-
-      handleInit();
-      emblaApi.on("init", handleInit);
-      emblaApi.on("reInit", handleInit);
-      emblaApi.on("select", handleSelect);
-      emblaApi.on("scroll", handleScroll);
-
-      return () => {
-        emblaApi.off("init", handleInit);
-        emblaApi.off("reInit", handleInit);
-        emblaApi.off("select", handleSelect);
-        emblaApi.off("scroll", handleScroll);
-      };
-    }, [emblaApi, handleInit, handleSelect, handleScroll]);
-
-    const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-    const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
-    const scrollTo = useCallback(
-      (index) => emblaApi?.scrollTo(index),
-      [emblaApi],
-    );
-
-    const {
-      currentSlideIndex,
-      scrollPercentage,
+    updateSliderState({
+      scrollbarWidth,
       totalSlides,
       isAllSlidesVisible,
-      scrollbarWidth,
-    } = sliderState;
+      currentSlideIndex: emblaApi.selectedScrollSnap(),
+    });
+  }, [emblaApi, updateSliderState]);
 
-    const progressBarStyle = {
-      left: `${scrollPercentage}%`,
-      width: `${scrollbarWidth}%`,
+  const handleSelect = useCallback(() => {
+    if (!emblaApi) return;
+    updateSliderState({ currentSlideIndex: emblaApi.selectedScrollSnap() });
+  }, [emblaApi, updateSliderState]);
+
+  const handleScroll = useCallback(() => {
+    if (!emblaApi) return;
+    const progress = emblaApi.scrollProgress();
+    const maxScroll = 100 - sliderState.scrollbarWidth;
+    const scrollPercentage = progress * maxScroll;
+    updateSliderState({ scrollPercentage });
+  }, [emblaApi, sliderState.scrollbarWidth, updateSliderState]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    handleInit();
+    emblaApi.on("init", handleInit);
+    emblaApi.on("reInit", handleInit);
+    emblaApi.on("select", handleSelect);
+    emblaApi.on("scroll", handleScroll);
+
+    return () => {
+      emblaApi.off("init", handleInit);
+      emblaApi.off("reInit", handleInit);
+      emblaApi.off("select", handleSelect);
+      emblaApi.off("scroll", handleScroll);
     };
+  }, [emblaApi, handleInit, handleSelect, handleScroll]);
 
-    const counterText = `${currentSlideIndex + 1} / ${totalSlides}`;
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback(
+    (index) => emblaApi?.scrollTo(index),
+    [emblaApi],
+  );
 
-    const dotButtons = useMemo(
-      () =>
-        Array.from({ length: totalSlides }, (_, index) => (
-          <DotButton
-            key={`dot-button-${index}`}
-            isSelected={index === currentSlideIndex}
-            onClick={() => scrollTo(index)}
-          />
-        )),
-      [totalSlides, currentSlideIndex, scrollTo],
-    );
+  const {
+    currentSlideIndex,
+    scrollPercentage,
+    totalSlides,
+    isAllSlidesVisible,
+    scrollbarWidth,
+  } = sliderState;
 
-    return (
-      <div className={`w-full ${className}`} {...props}>
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div
-            className={twMerge(
-              "mx-auto flex max-w-fit",
-              showDotButtons
-                ? "mb-2.5 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6"
-                : "mb-4 lg:mb-6",
-              sliderClassName,
-            )}
-          >
-            {React.Children.map(children, (child, index) => (
-              <div key={`carousel-slide-${index}`} className={slideClassName}>
-                {child}
-              </div>
-            ))}
-          </div>
-        </div>
+  const progressBarStyle = {
+    left: `${scrollPercentage}%`,
+    width: `${scrollbarWidth}%`,
+  };
 
-        {!isAllSlidesVisible &&
-          (showControls || showCounter || showDotButtons) && (
-            <SliderControl
-              showCounter={showCounter}
-              showControls={showControls}
-              showDotButtons={showDotButtons}
-              progressBarStyle={progressBarStyle}
-              counterText={counterText}
-              onPrevClick={scrollPrev}
-              onNextClick={scrollNext}
-              dotButtons={dotButtons}
-              className={controlsContainerClassName}
-            />
+  const counterText = `${currentSlideIndex + 1} / ${totalSlides}`;
+
+  const dotButtons = useMemo(
+    () =>
+      Array.from({ length: totalSlides }, (_, index) => (
+        <DotButton
+          key={`dot-button-${index}`}
+          isSelected={index === currentSlideIndex}
+          onClick={() => scrollTo(index)}
+        />
+      )),
+    [totalSlides, currentSlideIndex, scrollTo],
+  );
+
+  return (
+    <div className={`w-full ${className}`} {...props}>
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div
+          className={twMerge(
+            "mx-auto flex max-w-fit",
+            showDotButtons
+              ? "mb-2.5 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6"
+              : "mb-4 lg:mb-6",
+            sliderClassName,
           )}
+        >
+          {React.Children.map(children, (child, index) => (
+            <div key={`carousel-slide-${index}`} className={slideClassName}>
+              {child}
+            </div>
+          ))}
+        </div>
       </div>
-    );
-  },
-);
+
+      {!isAllSlidesVisible &&
+        (!!showControls || !!showCounter || !!showDotButtons) && (
+          <SliderControl
+            showCounter={showCounter}
+            showControls={showControls}
+            showDotButtons={showDotButtons}
+            progressBarStyle={progressBarStyle}
+            counterText={counterText}
+            onPrevClick={scrollPrev}
+            onNextClick={scrollNext}
+            dotButtons={dotButtons}
+            className={controlsContainerClassName}
+          />
+        )}
+    </div>
+  );
+};
 
 Slider.displayName = "Slider";
 SliderControl.displayName = "SliderControl";

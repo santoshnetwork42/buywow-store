@@ -33,7 +33,7 @@ const FeaturedProducts = ({
           />
         ))}
       </Slider>
-      {button && (
+      {!!button?.text && (
         <Link
           href={`/collections/${button.slug}`}
           className="mt-2 rounded-[24px] bg-yellow-900 px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3"

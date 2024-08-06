@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { Heading, Text, Img } from "@/components/elements";
 import FooterMenu from "@/components/partials/Footer/FooterMenu";
 import Link from "next/link";
@@ -8,7 +8,7 @@ import { extractAttributes } from "@/utils/helpers";
 import { usePathname } from "next/navigation";
 import { restrictFooterToShow } from "@/utils/data/constants";
 
-const SocialLink = React.memo(({ item, index }) => {
+const SocialLink = ({ item, index }) => {
   if (!item) return null;
   const { url, alternativeText = "icon" } = extractAttributes(item.image) || {};
   if (!url) return null;
@@ -29,11 +29,11 @@ const SocialLink = React.memo(({ item, index }) => {
       />
     </Link>
   );
-});
+};
 
 SocialLink.displayName = "SocialLink";
 
-const FooterLogo = React.memo(({ logoUrl, logoAlternativeText }) => {
+const FooterLogo = ({ logoUrl, logoAlternativeText }) => {
   if (!logoUrl) return null;
   return (
     <Img
@@ -45,11 +45,11 @@ const FooterLogo = React.memo(({ logoUrl, logoAlternativeText }) => {
       className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
     />
   );
-});
+};
 
 FooterLogo.displayName = "FooterLogo";
 
-const FooterDescription = React.memo(({ description }) => {
+const FooterDescription = ({ description }) => {
   if (!description) return null;
   return (
     <Text
@@ -59,22 +59,22 @@ const FooterDescription = React.memo(({ description }) => {
       dangerouslySetInnerHTML={{ __html: description }}
     />
   );
-});
+};
 
 FooterDescription.displayName = "FooterDescription";
 
-const Copyright = React.memo(({ copyrightText }) => {
+const Copyright = ({ copyrightText }) => {
   if (!copyrightText) return null;
   return (
     <Text as="p" size="sm" className="text-white-a700_01" responsive>
       {copyrightText}
     </Text>
   );
-});
+};
 
 Copyright.displayName = "Copyright";
 
-const Footer = React.memo(({ data, ...props }) => {
+const Footer = ({ data, ...props }) => {
   const [openSections, setOpenSections] = useState({});
 
   //check if footer is restricted to show on specific pages
@@ -131,11 +131,11 @@ const Footer = React.memo(({ data, ...props }) => {
     ],
   };
 
-  const toggleSection = useCallback((index) => {
+  const toggleSection = (index) => {
     setOpenSections((prev) => ({
       ...(prev[index] ? {} : { [index]: true }),
     }));
-  }, []);
+  };
 
   if (!data) return null;
 
@@ -213,7 +213,7 @@ const Footer = React.memo(({ data, ...props }) => {
       </div>
     </footer>
   );
-});
+};
 
 Footer.displayName = "Footer";
 

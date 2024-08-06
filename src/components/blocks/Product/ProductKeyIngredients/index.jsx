@@ -37,7 +37,7 @@ const PrimaryIngredient = ({ webImage, mWebImage }) => {
 
   return (
     <picture className="w-[90%] max-w-[498px] shrink-0 md:w-[55%] md:max-w-[725px] xl:w-[60%]">
-      {webImageAttrs.url && (
+      {!!webImageAttrs.url && (
         <source
           media="(min-width: 768px)"
           srcSet={webImageAttrs.url}
@@ -83,7 +83,7 @@ const ProductKeyIngredients = ({
     >
       <SectionHeading title={title} />
       <div className="mt-1 flex w-full flex-col items-center justify-center gap-5 sm:gap-7 md:flex-row md:gap-9 lg:gap-12">
-        {primaryIngredient && <PrimaryIngredient {...primaryIngredient} />}
+        <PrimaryIngredient {...primaryIngredient} />
         {secondaryIngredients?.length > 0 && (
           <div className="grid w-full max-w-[452px] grid-cols-3 gap-y-3 sm:gap-x-1 md:gap-x-2 md:gap-y-4 lg:gap-x-3 lg:gap-y-5 xl:gap-y-6">
             {secondaryIngredients.map((ingredient, index) => (

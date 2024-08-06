@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useRef } from "react";
 import styles from "@/components/features/Modal/Modal.module.scss";
 import { Heading } from "@/components/elements";
@@ -34,7 +35,7 @@ const Modal = ({
 
   return (
     <div className={`${isOpen ? styles.fadeIn : styles.fadeOut} fixed z-[999]`}>
-      {isOpen && (
+      {!!isOpen && (
         <div
           onClick={handleClickOutside}
           className={`${styles.customModalWrapper} ${showMobileView ? "items-end" : "items-center"} bottom-0 left-0 right-0 top-0 sm:rounded-bl-none sm:rounded-br-none md:items-center lg:items-center`}
@@ -43,7 +44,7 @@ const Modal = ({
             ref={modalRef}
             className={`${styles.innerModal} ${showMobileView ? `${mobileViewHeight} w-full rounded-bl-none rounded-br-none sm:w-full md:h-auto md:rounded-lg lg:h-auto lg:rounded-lg` : ""} rounded-lg md:w-auto lg:w-auto`}
           >
-            {enableCloseButton && showCloseButtonOutOfBox && (
+            {!!enableCloseButton && !!showCloseButtonOutOfBox && (
               <div
                 className={`${styles.closeIcon} cursor-pointer`}
                 onClick={onCloseClick}
@@ -55,7 +56,7 @@ const Modal = ({
               <Heading as="h5" size="xl" className="">
                 {title}
               </Heading>
-              {enableCloseButton && !showCloseButtonOutOfBox && (
+              {!!enableCloseButton && !showCloseButtonOutOfBox && (
                 <div className={`cursor-pointer`} onClick={onCloseClick}>
                   <CloseIcon color="black" size={28} />
                 </div>
