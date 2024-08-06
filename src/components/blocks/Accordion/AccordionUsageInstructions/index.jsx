@@ -54,4 +54,4 @@ const AccordionUsageInstructions = ({
   );
 };
 
-export default memo(AccordionUsageInstructions);
+export default AccordionUsageInstructions;

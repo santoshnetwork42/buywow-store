@@ -1,6 +1,6 @@
 "use client";
 
-import React, { memo, useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import PlusMinusToggle from "@/components/features/Accordion/PlusMinusToggle";
@@ -27,9 +27,9 @@ const FaqItem = memo(({ question, answer, showDivider }) => {
     }
   }, []);
 
-  const toggleOpen = useCallback(() => {
+  const toggleOpen = () => {
     setIsOpen((prev) => !prev);
-  }, []);
+  };
 
   const contentStyle = {
     maxHeight: isOpen ? contentHeight : "0px",
@@ -70,7 +70,7 @@ const FaqItem = memo(({ question, answer, showDivider }) => {
 
 FaqItem.displayName = "FaqItem";
 
-const AccordionFaQs = memo(({ accordionFAQsTitle, image, FAQs }) => {
+const AccordionFaQs = ({ accordionFAQsTitle, image, FAQs }) => {
   if (
     !accordionFAQsTitle ||
     !FAQs ||
@@ -101,7 +101,7 @@ const AccordionFaQs = memo(({ accordionFAQsTitle, image, FAQs }) => {
       </div>
     </Accordion>
   );
-});
+};
 
 AccordionFaQs.displayName = "AccordionFaQs";
 

@@ -71,4 +71,4 @@ const AccordionIngredients = ({
   );
 };
 
-export default memo(AccordionIngredients);
+export default AccordionIngredients;
