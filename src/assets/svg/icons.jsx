@@ -513,7 +513,7 @@ export const CartIcon = ({ size = 20, color = "#000000" }) => {
       version="1.1"
       width={size}
       height={size}
-      viewBox="0 0 650 450"
+      viewBox="0 0 650 650"
     >
       <g>
         <path
