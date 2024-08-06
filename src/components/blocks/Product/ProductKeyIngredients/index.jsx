@@ -3,7 +3,7 @@ import { Heading, Img } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
 import { extractAttributes, getBgColor } from "@/utils/helpers";
 
-const AdditionalIngredient = React.memo(({ title, image }) => {
+const AdditionalIngredient = ({ title, image }) => {
   const { url, alternativeText } = extractAttributes(image);
   return (
     <div className="flex flex-col items-center gap-1">
@@ -27,11 +27,11 @@ const AdditionalIngredient = React.memo(({ title, image }) => {
       </Heading>
     </div>
   );
-});
+};
 
 AdditionalIngredient.displayName = "AdditionalIngredient";
 
-const PrimaryIngredient = React.memo(({ webImage, mWebImage }) => {
+const PrimaryIngredient = ({ webImage, mWebImage }) => {
   const webImageAttrs = extractAttributes(webImage);
   const mWebImageAttrs = extractAttributes(mWebImage);
 
@@ -60,7 +60,7 @@ const PrimaryIngredient = React.memo(({ webImage, mWebImage }) => {
       />
     </picture>
   );
-});
+};
 
 PrimaryIngredient.displayName = "PrimaryIngredient";
 
@@ -99,4 +99,4 @@ const ProductKeyIngredients = ({
   );
 };
 
-export default React.memo(ProductKeyIngredients);
+export default ProductKeyIngredients;

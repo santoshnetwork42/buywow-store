@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  useMemo,
-  useCallback,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import { Heading } from "@/components/elements";
 import ProductCard from "@/components/partials/Card/ProductCard";
@@ -38,9 +32,9 @@ const ProductCollectionByTab = ({
   const [horizontalCardWidth, setHorizontalCardWidth] = useState("100%");
   const containerRef = useRef(null);
 
-  const handleSortChange = useCallback((option) => {
+  function handleSortChange(option) {
     setSortOption(option);
-  }, []);
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -57,7 +51,7 @@ const ProductCollectionByTab = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const renderTabList = useMemo(() => {
+  const renderTabList = () => {
     if (!productCollectionTabItems?.length) return null;
 
     return (
@@ -75,7 +69,7 @@ const ProductCollectionByTab = ({
         })}
       </TabList>
     );
-  }, [productCollectionTabItems]);
+  };
 
   if (!productCollectionTabItems?.length) return null;
 
@@ -102,7 +96,7 @@ const ProductCollectionByTab = ({
             onOptionChange={handleSortChange}
           />
           <div className="no-scrollbar col-span-full w-full overflow-x-auto max-lg:[text-align:-webkit-center] lg:order-2 lg:col-span-1">
-            {renderTabList}
+            {renderTabList()}
           </div>
         </div>
 
@@ -158,4 +152,4 @@ const ProductCollectionByTab = ({
   );
 };
 
-export default React.memo(ProductCollectionByTab);
+export default ProductCollectionByTab;

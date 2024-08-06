@@ -3,7 +3,7 @@ import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
 import React from "react";
 
-const CategoryItem = React.memo(({ image, title, link }) => {
+const CategoryItem = ({ image, title, link }) => {
   const { url, alternativeText } = extractAttributes(image);
   return (
     <Link
@@ -31,7 +31,7 @@ const CategoryItem = React.memo(({ image, title, link }) => {
       )}
     </Link>
   );
-});
+};
 
 CategoryItem.displayName = "CategoryItem";
 

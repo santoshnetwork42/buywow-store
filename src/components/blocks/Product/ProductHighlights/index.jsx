@@ -3,7 +3,7 @@ import { extractAttributes } from "@/utils/helpers";
 import { Img } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
 
-const ProductHighlights = React.memo(({ title, images }) => {
+const ProductHighlights = ({ title, images }) => {
   if (!Array.isArray(images) || images.length === 0) return null;
 
   return (
@@ -44,7 +44,7 @@ const ProductHighlights = React.memo(({ title, images }) => {
       })}
     </div>
   );
-});
+};
 
 ProductHighlights.displayName = "ProductHighlights";
 

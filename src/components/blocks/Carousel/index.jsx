@@ -52,78 +52,72 @@ const DotButton = React.memo(({ selected, onClick }) => (
 
 DotButton.displayName = "DotButton";
 
-const Carousel = React.memo(
-  ({
-    autoPlay = false,
-    autoPlayInterval = 3000,
-    stopOnInteraction = false,
-    carousalItems: banners,
-    ...props
-  }) => {
-    const [selectedIndex, setSelectedIndex] = useState(0);
+const Carousel = ({
+  autoPlay = false,
+  autoPlayInterval = 3000,
+  stopOnInteraction = false,
+  carousalItems: banners,
+  ...props
+}) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-    const [emblaRef, emblaApi] = useEmblaCarousel(
-      { loop: true },
-      autoPlay
-        ? [Autoplay({ delay: autoPlayInterval, stopOnInteraction })]
-        : [],
-    );
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { loop: true },
+    autoPlay ? [Autoplay({ delay: autoPlayInterval, stopOnInteraction })] : [],
+  );
 
-    const scrollTo = useCallback(
-      (index) => emblaApi?.scrollTo(index),
-      [emblaApi],
-    );
+  const scrollTo = useCallback(
+    (index) => emblaApi?.scrollTo(index),
+    [emblaApi],
+  );
 
-    const onSelect = useCallback(() => {
-      if (!emblaApi) return;
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-    }, [emblaApi]);
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
 
-    useEffect(() => {
-      if (!emblaApi) return;
-      onSelect();
-      emblaApi.on("select", onSelect);
-      return () => emblaApi.off("select", onSelect);
-    }, [emblaApi, onSelect]);
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    return () => emblaApi.off("select", onSelect);
+  }, [emblaApi, onSelect]);
 
-    const carouselImages = useMemo(
-      () =>
-        banners?.map((banner, index) => (
-          <CarouselImage key={`carousel-image-${index}`} {...banner} />
-        )),
-      [banners],
-    );
+  const carouselImages = useMemo(
+    () =>
+      banners?.map((banner, index) => (
+        <CarouselImage key={`carousel-image-${index}`} {...banner} />
+      )),
+    [banners],
+  );
 
-    const dotButtons = useMemo(
-      () =>
-        banners?.map((_, index) => (
-          <DotButton
-            key={`dot-button-${index}`}
-            selected={index === selectedIndex}
-            onClick={() => scrollTo(index)}
-          />
-        )),
-      [banners, selectedIndex, scrollTo],
-    );
+  const dotButtons = useMemo(
+    () =>
+      banners?.map((_, index) => (
+        <DotButton
+          key={`dot-button-${index}`}
+          selected={index === selectedIndex}
+          onClick={() => scrollTo(index)}
+        />
+      )),
+    [banners, selectedIndex, scrollTo],
+  );
 
-    if (!banners?.length) return null;
+  if (!banners?.length) return null;
 
-    return (
-      <div
-        className={`relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8 ${props.className}`}
-        {...props}
-      >
-        <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex">{carouselImages}</div>
-        </div>
-        <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
-          {dotButtons}
-        </div>
+  return (
+    <div
+      className={`relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8 ${props.className}`}
+      {...props}
+    >
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">{carouselImages}</div>
       </div>
-    );
-  },
-);
-
-Carousel.displayName = "Carousel";
+      <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
+        {dotButtons}
+      </div>
+    </div>
+  );
+};
 
 export default Carousel;

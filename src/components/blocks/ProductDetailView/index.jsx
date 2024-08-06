@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import {
   useProduct,
   useProductCoupons,
@@ -15,7 +15,7 @@ import ProductImageSection from "@/components/partials/Product/PDP/ProductImageS
 import ProductDetailViewBlocks from "@/components/partials/Product/PDP/ProductDetailViewBlocks";
 import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDiscounts";
 
-const ProductDetailView = React.memo(({ product }) => {
+const ProductDetailView = ({ product }) => {
   const {
     promotionTag,
     productBenefitTags,
@@ -28,8 +28,6 @@ const ProductDetailView = React.memo(({ product }) => {
     useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
-
-  console.log(bestCoupon);
 
   const {
     title,
@@ -44,10 +42,8 @@ const ProductDetailView = React.memo(({ product }) => {
     images,
   } = packageProduct || {};
 
-  const imageList = useMemo(
-    () => images?.items?.sort((a, b) => a.position - b.position) || [],
-    [images],
-  );
+  const imageList =
+    images?.items?.sort((a, b) => a.position - b.position) || [];
 
   if (!fetchedProduct) {
     return <div>Product not found</div>;
@@ -103,7 +99,7 @@ const ProductDetailView = React.memo(({ product }) => {
       )}
     </div>
   );
-});
+};
 
 ProductDetailView.displayName = "ProductDetailView";
 
