@@ -1,14 +1,27 @@
 "use client";
 
-import { Button, Heading, Text } from "@/components/elements";
+import PaymentMethods from "@/components/blocks/PaymentMethods/paymentMethod";
+import { Button, Heading } from "@/components/elements";
+import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
 import { useNavBarState } from "@/utils/context/navbar";
-import { checkAffiseValidity, nameSplitter } from "@/utils/helpers";
+import {
+  COD_ENABLED,
+  MAX_COD_AMOUNT,
+  PPCOD_AMOUNT,
+  PPCOD_ENABLED,
+  PREPAID_ENABLED,
+} from "@/utils/data/wowStarConstants";
+import { checkAffiseValidity, nameSplitter, toDecimal } from "@/utils/helpers";
 import loadScript from "@/utils/loadScript";
-import { useCartTotal, useOrders } from "@wow-star/utils";
+import {
+  MAX_PREPAID_DISCOUNT,
+  useCartTotal,
+  useConfiguration,
+  useOrders,
+} from "@wow-star/utils";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
 
 let razorpayMethod;
 
@@ -20,19 +33,12 @@ export default function OrderSection() {
   const totalCartItemsCount = cartData?.data?.length || 0;
 
   const [selectedMethod, setSelectedMethod] = useState("PREPAID");
-
-  const paymentMethods = [
-    {
-      id: "PREPAID",
-      label: "PrePaid",
-      desc: "Pay using credit/debit cards, net-banking, UPI, or digital wallets.",
-    },
-    {
-      id: "COD",
-      label: "Cash on Delivery",
-      desc: "Pay using Cash on Delivery.",
-    },
-  ];
+  const maxCOD = useConfiguration(MAX_COD_AMOUNT, -1);
+  const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
+  const maxPrepaidDiscount = useConfiguration(MAX_PREPAID_DISCOUNT, 0);
+  const codEnabled = useConfiguration(COD_ENABLED, true);
+  const ppcodEnabled = useConfiguration(PPCOD_ENABLED, false);
+  const ppcodAmount = useConfiguration(PPCOD_AMOUNT, 0);
 
   const handleMethodChange = (id) => {
     setSelectedMethod(id);
@@ -181,56 +187,42 @@ export default function OrderSection() {
     }
   };
 
+  //need to add condition based on applied coupon
+  const ppcodAmountToTake = ppcodAmount;
+
+  const isMaxCODDisabled = maxCOD > -1 ? codGrandTotal > maxCOD : false;
+
   return (
     <div className="flex flex-col gap-4">
       <Heading size="2xl" as="h3" responsive>
         Payment Methods
       </Heading>
       <div className="flex w-full flex-col gap-2">
-        {paymentMethods.map((method) => (
-          <div
-            key={method.id}
-            className="flex w-full cursor-pointer items-center gap-2 shadow-xs"
-            onClick={() => {
-              handleMethodChange(method.id);
-            }}
-          >
-            <div className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-md border bg-white-a700_01 p-4">
-              <div className="flex gap-2">
-                <div>
-                  <input
-                    type="radio"
-                    id={method.id}
-                    name="paymentMethod"
-                    value={method.id}
-                    checked={selectedMethod === method.id}
-                    className="cursor-pointer"
-                  />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <Text htmlFor={method.id} className="w-full cursor-pointer">
-                    {method.label}
-                  </Text>
-                  <Text
-                    htmlFor={method.id}
-                    size="sm"
-                    className="w-full cursor-pointer font-light"
-                  >
-                    {method.desc}
-                  </Text>
-                </div>
-              </div>
-              <div>
-                <Text size="lg">
-                  ₹
-                  {method.id === "COD"
-                    ? codGrandTotal.toFixed(2)
-                    : prepaidGrandTotal.toFixed(2)}
-                </Text>
-              </div>
-            </div>
-          </div>
-        ))}
+        <PaymentMethods
+          label="Pay Online"
+          id="PREPAID"
+          description="Pay using credit/debit cards, net-banking, UPI, or digital wallets."
+          total={prepaidGrandTotal}
+          selectedMethod={selectedMethod}
+          handleMethodChange={handleMethodChange}
+        />
+        <PaymentMethods
+          label="Cash On Delivery"
+          id="COD"
+          description={
+            ppcodEnabled && ppcodAmount
+              ? `Pay ₹${toDecimal(
+                  ppcodAmountToTake,
+                )} now (non-refundable). Rest ₹${toDecimal(
+                  codGrandTotal - ppcodAmountToTake,
+                )} on delivery.`
+              : "Pay using Cash on Delivery."
+          }
+          total={codGrandTotal}
+          selectedMethod={selectedMethod}
+          handleMethodChange={handleMethodChange}
+          disabled={isMaxCODDisabled}
+        />
       </div>
 
       <Button

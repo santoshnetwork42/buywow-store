@@ -1,5 +1,4 @@
-import React from "react";
-import { Text, Img } from "@/components/elements";
+import { Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 
 const FeaturedItem = ({ image, text, isWebHorizontal, isInPDP }) => {
