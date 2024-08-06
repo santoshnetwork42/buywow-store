@@ -1,4 +1,7 @@
-import { setPasswordLessModal } from "@/store/slices/modal/modal.slice";
+import {
+  setCartModal,
+  setPasswordLessModal,
+} from "@/store/slices/modal/modal.slice";
 import { call, put } from "redux-saga/effects";
 
 export function* setPasswordLessModalHandler(action) {
@@ -7,6 +10,15 @@ export function* setPasswordLessModalHandler(action) {
     yield put(
       setPasswordLessModal({ isPasswordLessOpen, customLogin, redirectTo }),
     );
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
+export function* setCartModalHandler(action) {
+  try {
+    const { isCartOpen } = action.payload;
+    yield put(setCartModal({ isCartOpen }));
   } catch (error) {
     console.log("error", error);
   }

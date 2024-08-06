@@ -1,11 +1,11 @@
 // components/MyCart/MainCartSection.jsx
 import React from "react";
-import ShippingProgress from "@/components/partials/MyCart/ShippingProgress";
+import ShippingProgress from "@/components/partials/Others/ShippingProgress";
 import CartProductList from "@/components/partials/MyCart/CartProductList";
 
 export default function MainCartSection({
   cartData,
-  totalCartItemsCount,
+  totalCartItems,
   subTotal,
   inventoryMapping = {},
 }) {
@@ -19,7 +19,7 @@ export default function MainCartSection({
       />
       <CartProductList
         cartItems={cartData}
-        totalItems={totalCartItemsCount}
+        totalItems={totalCartItems}
         subtotal={subTotal}
         inventoryMapping={inventoryMapping}
       />

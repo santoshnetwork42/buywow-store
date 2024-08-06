@@ -5,7 +5,7 @@ import Slider from "@/components/features/Slider";
 import { Heading, Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 
-const CategoryItem = React.memo(({ category, size }) => {
+const CategoryItem = ({ category, size }) => {
   const { image, slug, title } = category;
   const { url, alternativeText } = extractAttributes(image);
 
@@ -42,56 +42,54 @@ const CategoryItem = React.memo(({ category, size }) => {
       </Heading>
     </Link>
   );
-});
+};
 
 CategoryItem.displayName = "CategoryItem";
 
-const FeaturedCategories = React.memo(
-  ({
-    title,
-    featuredCategoryItems: categories,
-    featuredItemSize: itemSize = "SMALL",
-  }) => {
-    const sliderClassName = `gap-2 ${
-      itemSize === "SMALL" ? "md:gap-2.5" : "sm:gap-3 md:gap-4 lg:gap-5"
-    }`;
+const FeaturedCategories = ({
+  title,
+  featuredCategoryItems: categories,
+  featuredItemSize: itemSize = "SMALL",
+}) => {
+  const sliderClassName = `gap-2 ${
+    itemSize === "SMALL" ? "md:gap-2.5" : "sm:gap-3 md:gap-4 lg:gap-5"
+  }`;
 
-    if (!categories?.length) return null;
+  if (!categories?.length) return null;
 
-    return (
-      <div className="container-main mb-main flex flex-col items-center justify-center">
-        <SectionHeading title={title} />
-        <Slider className="sm:hidden" sliderClassName={sliderClassName}>
-          {categories.reduce((acc, category, index, arr) => {
-            if (index % 2 === 0) {
-              acc.push(
-                <div
-                  key={`group-${index}`}
-                  className="flex flex-col max-sm:gap-y-6"
-                >
-                  <CategoryItem category={category} size={itemSize} />
-                  {arr[index + 1] && (
-                    <CategoryItem category={arr[index + 1]} size={itemSize} />
-                  )}
-                </div>,
-              );
-            }
-            return acc;
-          }, [])}
-        </Slider>
-        <Slider className="hidden sm:block" sliderClassName={sliderClassName}>
-          {categories.map((category, index) => (
-            <CategoryItem
-              key={`category-${index}`}
-              category={category}
-              size={itemSize}
-            />
-          ))}
-        </Slider>
-      </div>
-    );
-  },
-);
+  return (
+    <div className="container-main mb-main flex flex-col items-center justify-center">
+      <SectionHeading title={title} />
+      <Slider className="sm:hidden" sliderClassName={sliderClassName}>
+        {categories.reduce((acc, category, index, arr) => {
+          if (index % 2 === 0) {
+            acc.push(
+              <div
+                key={`group-${index}`}
+                className="flex flex-col max-sm:gap-y-6"
+              >
+                <CategoryItem category={category} size={itemSize} />
+                {arr[index + 1] && (
+                  <CategoryItem category={arr[index + 1]} size={itemSize} />
+                )}
+              </div>,
+            );
+          }
+          return acc;
+        }, [])}
+      </Slider>
+      <Slider className="hidden sm:block" sliderClassName={sliderClassName}>
+        {categories.map((category, index) => (
+          <CategoryItem
+            key={`category-${index}`}
+            category={category}
+            size={itemSize}
+          />
+        ))}
+      </Slider>
+    </div>
+  );
+};
 
 FeaturedCategories.displayName = "FeaturedCategories";
 

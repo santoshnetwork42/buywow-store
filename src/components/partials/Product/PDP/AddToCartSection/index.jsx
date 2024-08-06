@@ -11,7 +11,7 @@ const AddToCartSection = React.memo(({ product, selectedVariant }) => (
           product={product}
           selectedVariant={selectedVariant}
           buttonText="Add To Cart"
-          buttonClass="w-full py-3 text-xl md:py-4"
+          buttonClassName="w-full py-3 text-xl md:py-4"
           quantityClassName="flex-1 min-h-full"
           showGoToCart
         />

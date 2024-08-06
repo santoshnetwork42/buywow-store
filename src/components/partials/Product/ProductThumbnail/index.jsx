@@ -2,22 +2,10 @@
 
 import React, { useMemo } from "react";
 import { Img } from "@/components/elements";
-import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 import { twMerge } from "tailwind-merge";
 
 const ProductThumbnail = React.memo(
-  ({ width, height, fetchedProduct, className, alt, ...props }) => {
-    const [selectedVariant] = useProductVariantGroups(fetchedProduct);
-    const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
-
-    const { slug, thumbImage } = useMemo(() => {
-      return packageProduct || {};
-    }, [packageProduct]);
-
-    const imageUrl = useMemo(() => {
-      return thumbImage?.imageKey ? `${thumbImage.imageKey}` : "";
-    }, [thumbImage]);
-
+  ({ width, height, imageKey, className, alt, ...props }) => {
     const mergedClassName = useMemo(() => {
       return twMerge(
         "object-contain h-auto w-full mix-blend-multiply",
@@ -25,16 +13,16 @@ const ProductThumbnail = React.memo(
       );
     }, [className]);
 
-    if (!imageUrl) {
+    if (!imageKey) {
       return null;
     }
 
     return (
       <Img
-        src={imageUrl}
+        src={imageKey}
         width={width}
         height={height}
-        alt={slug || alt}
+        alt={alt}
         isStatic
         className={mergedClassName}
         addPrefix

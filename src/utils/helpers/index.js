@@ -19,6 +19,11 @@ export const addPhonePrefix = (number) => {
   return number;
 };
 
+export const removePhonePrefix = (number) => {
+  if (number && number.includes("+91")) return number.split("+91")[1];
+  return number;
+};
+
 export function extractAttributes(data, defaultValues = {}) {
   if (!data?.data?.attributes) {
     return defaultValues;
@@ -34,18 +39,16 @@ const COLOR_MAP = {
 
 export const getBgColor = (value) => COLOR_MAP[value] || COLOR_MAP.DEFAULT;
 
-export const getOfferValue = (price, listingPrice) => {
+export const getDiscountPercentage = (price, listingPrice) => {
   if (
     typeof price !== "number" ||
     typeof listingPrice !== "number" ||
-    listingPrice === 0 ||
+    listingPrice <= price ||
     price < 0
   ) {
-    return 0;
+    return null;
   }
-  const discountAmount = listingPrice - price;
-  const offerPercentage = (discountAmount / listingPrice) * 100;
-  return Math.round(offerPercentage);
+  return Math.round(((listingPrice - price) / listingPrice) * 100);
 };
 
 export const getRecordKey = (product, variantId) => {
@@ -94,18 +97,6 @@ export const getFirstVariant = (product, variantId) => {
     items[0] ||
     null
   );
-};
-
-export const getOfferValueWithPercentage = (price, listingPrice) => {
-  if (
-    typeof price !== "number" ||
-    typeof listingPrice !== "number" ||
-    listingPrice <= price ||
-    price < 0
-  ) {
-    return 0;
-  }
-  return Math.round(((listingPrice - price) / listingPrice) * 100);
 };
 
 export const getProductSubTotal = (data) => {
@@ -165,10 +156,14 @@ export const toDecimal = (price, fixedCount = 2) => {
   if (isNaN(num)) {
     num = 0;
   }
-  return num.toLocaleString(undefined, {
-    minimumFractionDigits: Number.isInteger(num) ? 0 : fixedCount,
-    maximumFractionDigits: Number.isInteger(num) ? 0 : fixedCount,
-  });
+  return parseFloat(num.toFixed(fixedCount));
+};
+
+export const formatTotalRatings = (totalRatings) => {
+  if (!totalRatings) return "0";
+  return totalRatings > 9999
+    ? `${Math.floor(totalRatings / 1000)}k+`
+    : totalRatings.toString();
 };
 
 export const formateDate = (date) => {
@@ -182,4 +177,58 @@ export const formateDate = (date) => {
   const yyyy = dt.getFullYear();
   const ap = dt.getHours() >= 12 ? "pm" : "am";
   return `${dd} ${monthName} ${yyyy}, ${hh}:${mm} ${ap}`;
+};
+
+export const copyText = (copyText, toastMessage) => {
+  if (copyText && navigator?.clipboard) {
+    navigator.clipboard.writeText(copyText);
+    console.log(toastMessage);
+  } else {
+    console.error("Invalid copy text or clipboard not supported.");
+  }
+};
+
+export const isEmailValid = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+export const nameSplitter = (name) => {
+  const [firstName, ...lastName] = name.split(" ");
+  return { firstName, lastName: lastName.join(" ") };
+};
+
+export const validatePinCode = (pinCode) => {
+  if (pinCode.length !== 6) {
+    return "Pin code must be 6 digits";
+  }
+  return "";
+};
+
+export const validateString = (inputString) => {
+  if (!!inputString.length) {
+    return "";
+  }
+  return "Invalid Input";
+};
+
+export const validateEmail = (email) => {
+  if (isEmailValid(email)) {
+    return "";
+  }
+  return "Invalid Email";
+};
+
+export const calculateTotals = (productItems) => {
+  return productItems.reduce(
+    (acc, { quantity, price, cancelledQuantity = 0 }) => {
+      const activeTotal = quantity * price;
+      const totalWithCancelled = (quantity + cancelledQuantity) * price;
+      return {
+        activeItemsTotalPrice: acc.activeItemsTotalPrice + activeTotal,
+        itemsTotalPrice: acc.itemsTotalPrice + totalWithCancelled,
+      };
+    },
+    { activeItemsTotalPrice: 0, itemsTotalPrice: 0 },
+  );
 };

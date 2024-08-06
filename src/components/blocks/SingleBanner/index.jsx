@@ -1,10 +1,9 @@
-// components/SingleBanner.js
 import React from "react";
 import Link from "next/link";
 import { extractAttributes } from "@/utils/helpers";
 import { Img } from "@/components/elements";
 
-const SingleBanner = React.memo(({ banner, slug }) => {
+const SingleBanner = ({ banner, slug }) => {
   if (!banner) return null;
 
   const { webImage, mWebImage, link } = banner;
@@ -50,7 +49,7 @@ const SingleBanner = React.memo(({ banner, slug }) => {
       </picture>
     </Link>
   );
-});
+};
 
 SingleBanner.displayName = "SingleBanner";
 

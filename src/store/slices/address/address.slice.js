@@ -1,25 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  fullName: "",
-  email: "",
-  pincode: "",
-  city: "",
-  state: "",
-  area: "",
-  street: "",
+  currentAddress: null,
+  addressList: [],
+  isLoading: false,
 };
 
-const addressSlice = createSlice({
+export const addressSlice = createSlice({
   name: "address",
   initialState,
   reducers: {
-    updateAddress: (state, action) => {
-      return { ...state, ...action.payload };
+    updateCurrentAddress: (state, action) => {
+      state.currentAddress = action.payload;
     },
     resetAddress: () => initialState,
+    updateAddressLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
+    updateAddressList: (state, action) => {
+      state.addressList = action.payload;
+    },
   },
 });
 
-export const { updateAddress, resetAddress } = addressSlice.actions;
+export const { updateCurrentAddress, updateAddressLoading, updateAddressList } =
+  addressSlice.actions;
 export default addressSlice.reducer;

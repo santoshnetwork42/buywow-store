@@ -4,10 +4,16 @@ import { Heading, Text } from "@/components/elements";
 import AddToCart from "@/components/common/AddToCart";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import Link from "next/link";
+import { useProduct, useProductVariantGroups } from "@wow-star/utils";
 
 const TestimonialProductCard = ({ fetchedProduct }) => {
-  const { price, listingPrice, title, slug } = fetchedProduct;
+  const [selectedVariant] = useProductVariantGroups(fetchedProduct);
+  const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
+
+  const { price, listingPrice, title, slug, thumbImage } = packageProduct;
   const showStrikePrice = listingPrice && price < listingPrice;
+
+  if (!fetchedProduct || !packageProduct) return null;
 
   return (
     <div>
@@ -18,7 +24,7 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
         <div className="flex aspect-square w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-white-a700_01 md:aspect-[48/56]">
           <ProductThumbnail
             width={200}
-            fetchedProduct={fetchedProduct}
+            imageKey={thumbImage?.imageKey}
             height={56}
             isStatic
             alt={"Product Image"}
@@ -50,7 +56,7 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
               )}
             </div>
             <AddToCart
-              product={fetchedProduct}
+              product={packageProduct}
               buttonText={"Add"}
               buttonSize="small"
               quantityClassName="grid-cols-[repeat(3,24px)] sm:grid-cols-[repeat(3,26px)] md:grid-cols-[repeat(3,28px)] h-[26px] sm:h-[27px] md:h-[28px] lg:h-[29px] xl:h-[30px] lg:grid-cols-[repeat(3,30px)] xl:grid-cols-[repeat(3,32px)]"

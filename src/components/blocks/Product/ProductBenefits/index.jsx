@@ -3,7 +3,7 @@ import { Heading, Img, Text } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
 import { extractAttributes, getBgColor } from "@/utils/helpers";
 
-const BenefitItem = React.memo(({ text, subText, image }) => {
+const BenefitItem = ({ text, subText, image }) => {
   const { url, alternativeText } = extractAttributes(image);
 
   return (
@@ -31,7 +31,7 @@ const BenefitItem = React.memo(({ text, subText, image }) => {
       </div>
     </div>
   );
-});
+};
 
 BenefitItem.displayName = "BenefitItem";
 
@@ -69,4 +69,4 @@ const ProductBenefits = ({
   );
 };
 
-export default React.memo(ProductBenefits);
+export default ProductBenefits;

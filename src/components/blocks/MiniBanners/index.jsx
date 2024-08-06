@@ -1,11 +1,10 @@
-// components/MultiBanner.js
 import React from "react";
 import Link from "next/link";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
 import { Img } from "@/components/elements";
 
-const MiniBanners = React.memo(({ miniBannerItems: banners }) => {
+const MiniBanners = ({ miniBannerItems: banners }) => {
   if (!Array.isArray(banners) || banners.length === 0) return null;
 
   return (
@@ -49,7 +48,7 @@ const MiniBanners = React.memo(({ miniBannerItems: banners }) => {
       })}
     </Slider>
   );
-});
+};
 
 MiniBanners.displayName = "MiniBanners";
 
