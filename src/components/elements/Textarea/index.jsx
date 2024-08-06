@@ -64,7 +64,7 @@ const Textarea = React.forwardRef(
           <label
             className={`absolute top-1 text-lg transition-all duration-300 ${labelColorClass} ${isFocused || value ? "left-0 -translate-y-5 scale-75" : "left-2"} bg-white-a700_01 peer-focus:-translate-y-5 peer-focus:scale-75`}
           >
-            {placeholder}
+            {label}
             {required && <span className="ml-1 text-red-500">*</span>}
           </label>
         </div>

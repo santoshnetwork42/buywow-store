@@ -188,6 +188,12 @@ const Address = ({}) => {
     fetchAddress();
   }, [user, dispatch]);
 
+  useEffect(() => {
+    if (!addressList?.length) {
+      setAction("CREATE");
+    }
+  }, [addressList]);
+
   const checkFormValidity = () => {
     const validPinCode = address?.pinCode?.length === 6;
     const cityError = address?.city?.length > 0;
@@ -268,172 +274,219 @@ const Address = ({}) => {
   }
 
   return (
-    <div className="md:w-1/2">
-      <form>
-        <div className="flex flex-col gap-4">
-          <Input
-            type="text"
-            value={address.pinCode}
-            onChange={(e) => {
-              const newPinCode = (e.target.value || "")
-                .replaceAll(/[^0-9]+/g, "")
-                .trim();
-              setAddress({ ...address, pinCode: newPinCode });
-            }}
-            onBlur={(e) => {
-              const newPinCode = (e.target.value || "")
-                .replaceAll(/[^0-9]+/g, "")
-                .trim();
-              setAddressErrors({
-                ...addressErrors,
-                pinCode: validatePinCode(newPinCode),
-              });
-            }}
-            placeholder="PinCode"
-            required
-            className="gap-1 border p-2"
-            error={addressErrors.pinCode}
-          />
-          <div className="flex gap-3">
-            <Input
-              type="text"
-              value={address.city}
-              onChange={(e) => {
-                setAddress({ ...address, city: e.target.value.trim() });
-              }}
-              onBlur={(e) => {
-                const newCity = e.target.value.trim();
-                setAddressErrors({
-                  ...addressErrors,
-                  city: validateString(newCity),
-                });
-              }}
-              placeholder="City"
-              required
-              className="gap-1 border p-2"
-              error={addressErrors.city}
-            />
-
-            <Input
-              type="text"
-              value={address.state}
-              onChange={(e) =>
-                setAddress({ ...address, state: e.target.value.trim() })
-              }
-              onBlur={(e) => {
-                const newState = e.target.value.trim();
-                setAddressErrors({
-                  ...addressErrors,
-                  state: validateString(newState),
-                });
-              }}
-              placeholder="State"
-              required
-              className="gap-1 border p-2"
-              error={addressErrors.state}
-            />
-          </div>
-
-          <div className="flex gap-3">
-            <Input
-              type="tel"
-              value={address.phone}
-              maxLength={10}
-              onChange={(e) =>
-                setAddress({
-                  ...address,
-                  phone: (e.target.value || "")
-                    .replaceAll(/[^0-9]+/g, "")
-                    .trim(),
-                })
-              }
-              onBlur={(e) => {
-                const newState = e.target.value.trim();
-                setAddressErrors({
-                  ...addressErrors,
-                  phone: validatePhoneNumber(newState) ? "" : "Invalid Phone",
-                });
-              }}
-              placeholder="Phone"
-              prefix="+91"
-              required
-              className="flex gap-1 border p-2"
-              error={addressErrors.phone}
-            />
-
-            <Input
-              type="text"
-              value={address.name}
-              onChange={(e) => setAddress({ ...address, name: e.target.value })}
-              onBlur={(e) => {
-                const newState = e.target.value.trim();
-                setAddressErrors({
-                  ...addressErrors,
-                  name: validateString(newState),
-                });
-              }}
-              placeholder="Full Name"
-              required
-              className="gap-1 border p-2"
-              error={addressErrors.name}
-            />
-          </div>
-
+    <>
+      {/* only visible in desktop view or above */}
+      <div className="hidden flex-col gap-2 border p-3 md:flex md:w-1/2">
+        <Text size="xl" className="font-medium">
+          Address
+        </Text>
+        <form>
           <div className="flex flex-col gap-4">
             <Input
-              type="email"
-              value={address.email}
-              onChange={(e) =>
-                setAddress({ ...address, email: e.target.value.trim() })
-              }
+              type="text"
+              value={address.pinCode}
+              onChange={(e) => {
+                const newPinCode = (e.target.value || "")
+                  .replaceAll(/[^0-9]+/g, "")
+                  .trim();
+                setAddress({ ...address, pinCode: newPinCode });
+              }}
               onBlur={(e) => {
-                const newState = e.target.value.trim();
+                const newPinCode = (e.target.value || "")
+                  .replaceAll(/[^0-9]+/g, "")
+                  .trim();
                 setAddressErrors({
                   ...addressErrors,
-                  email: validateEmail(newState),
+                  pinCode: validatePinCode(newPinCode),
                 });
               }}
-              placeholder="Email"
+              label="PinCode"
               required
               className="gap-1 border p-2"
-              error={addressErrors.email}
+              error={addressErrors.pinCode}
             />
-            <Textarea
-              value={address.address}
-              onChange={(e) =>
-                setAddress({ ...address, address: e.target.value.trim() })
-              }
-              onBlur={(e) => {
-                const newState = e.target.value.trim();
-                setAddressErrors({
-                  ...addressErrors,
-                  address: validateString(newState),
-                });
-              }}
-              placeholder="Street Address"
-              required
-              className="gap-1 border"
-              textareaClassName="border-0 resize-none"
-              error={addressErrors.address}
-              rows={4}
+            <div className="flex gap-3">
+              <Input
+                type="text"
+                value={address.city}
+                onChange={(e) => {
+                  setAddress({ ...address, city: e.target.value.trim() });
+                }}
+                onBlur={(e) => {
+                  const newCity = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    city: validateString(newCity),
+                  });
+                }}
+                label="City"
+                required
+                className="gap-1 border p-2"
+                error={addressErrors.city}
+              />
+
+              <Input
+                type="text"
+                value={address.state}
+                onChange={(e) =>
+                  setAddress({ ...address, state: e.target.value.trim() })
+                }
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    state: validateString(newState),
+                  });
+                }}
+                label="State"
+                required
+                className="gap-1 border p-2"
+                error={addressErrors.state}
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <Input
+                type="tel"
+                value={address.phone}
+                maxLength={10}
+                onChange={(e) =>
+                  setAddress({
+                    ...address,
+                    phone: (e.target.value || "")
+                      .replaceAll(/[^0-9]+/g, "")
+                      .trim(),
+                  })
+                }
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    phone: validatePhoneNumber(newState) ? "" : "Invalid Phone",
+                  });
+                }}
+                label="Phone"
+                prefix="+91"
+                required
+                className="flex gap-1 border p-2"
+                error={addressErrors.phone}
+              />
+
+              <Input
+                type="text"
+                value={address.name}
+                onChange={(e) =>
+                  setAddress({ ...address, name: e.target.value })
+                }
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    name: validateString(newState),
+                  });
+                }}
+                label="Full Name"
+                required
+                className="gap-1 border p-2"
+                error={addressErrors.name}
+              />
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <Input
+                type="email"
+                value={address.email}
+                onChange={(e) =>
+                  setAddress({ ...address, email: e.target.value.trim() })
+                }
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    email: validateEmail(newState),
+                  });
+                }}
+                label="Email"
+                required
+                className="gap-1 border p-2"
+                error={addressErrors.email}
+              />
+              <Textarea
+                value={address.address}
+                onChange={(e) =>
+                  setAddress({ ...address, address: e.target.value })
+                }
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    address: validateString(newState),
+                  });
+                }}
+                label="Street Address"
+                required
+                className="gap-1 border"
+                textareaClassName="border-0 resize-none"
+                error={addressErrors.address}
+                rows={4}
+              />
+            </div>
+            <div className="flex justify-center">
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full gap-2 p-2 px-4 text-xl"
+                onClick={(e) => {
+                  handleAddressSubmit();
+                }}
+                loader={isLoading}
+              >
+                Add Address
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
+      {/* condition ends here */}
+
+      <div className="flex flex-col gap-2">
+        {!!addressList.length && (
+          <div className="flex justify-between">
+            <Text size="lg">Shipping Address</Text>
+            <Text size="lg" onClick={handleAddNewAddress}>
+              + New Address
+            </Text>
+          </div>
+        )}
+
+        {/* only visible in mobile view */}
+        <div className="block md:hidden">
+          {(isModalOpen || !addressList?.length) && (
+            <AddressModal
+              isOpen={isModalOpen || !addressList?.length}
+              onClose={() => setIsModalOpen(false)}
+              enableOutsideClick={true}
+              action={action}
             />
-          </div>
-          <div className="flex justify-center">
-            <Button
-              type="submit"
-              variant="primary"
-              className="w-full gap-2 p-2 px-4 text-xl"
-              onClick={(e) => {
-                handleAddressSubmit();
-              }}
-              loader={isLoading}
-            >
-              Add Address
-            </Button>
-          </div>
+          )}
         </div>
-      </form>
-    </div>
+
+        {!!addressList.length && (
+          <div className="flex w-full gap-4 overflow-x-scroll">
+            {addressList?.map((item, index) => (
+              <>
+                <AddressListComponent
+                  currentAddress={currentAddress}
+                  user={user}
+                  item={item}
+                  key={`address-${index}`}
+                />
+              </>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

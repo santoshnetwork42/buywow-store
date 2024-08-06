@@ -16,6 +16,7 @@ const SearchIcon = () => (
   />
 );
 
+
 SearchIcon.displayName = "SearchIcon";
 
 const ClearIcon = ({ onClick }) => (

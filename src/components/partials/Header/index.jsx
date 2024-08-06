@@ -2,7 +2,7 @@
 
 import { MenuSVG } from "@/assets/images";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
-import PasswordLess from "@/components/common/PasswordLess";
+import PasswordLess from "@/components/common/Passwordless";
 import { Button, Img, Text } from "@/components/elements";
 import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
