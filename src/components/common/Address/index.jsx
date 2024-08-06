@@ -300,7 +300,7 @@ const Address = ({}) => {
                   pinCode: validatePinCode(newPinCode),
                 });
               }}
-              placeholder="PinCode"
+              label="PinCode"
               required
               className="gap-1 border p-2"
               error={addressErrors.pinCode}
@@ -319,7 +319,7 @@ const Address = ({}) => {
                     city: validateString(newCity),
                   });
                 }}
-                placeholder="City"
+                label="City"
                 required
                 className="gap-1 border p-2"
                 error={addressErrors.city}
@@ -338,7 +338,7 @@ const Address = ({}) => {
                     state: validateString(newState),
                   });
                 }}
-                placeholder="State"
+                label="State"
                 required
                 className="gap-1 border p-2"
                 error={addressErrors.state}
@@ -365,7 +365,7 @@ const Address = ({}) => {
                     phone: validatePhoneNumber(newState) ? "" : "Invalid Phone",
                   });
                 }}
-                placeholder="Phone"
+                label="Phone"
                 prefix="+91"
                 required
                 className="flex gap-1 border p-2"
@@ -385,7 +385,7 @@ const Address = ({}) => {
                     name: validateString(newState),
                   });
                 }}
-                placeholder="Full Name"
+                label="Full Name"
                 required
                 className="gap-1 border p-2"
                 error={addressErrors.name}
@@ -406,7 +406,7 @@ const Address = ({}) => {
                     email: validateEmail(newState),
                   });
                 }}
-                placeholder="Email"
+                label="Email"
                 required
                 className="gap-1 border p-2"
                 error={addressErrors.email}
@@ -423,7 +423,7 @@ const Address = ({}) => {
                     address: validateString(newState),
                   });
                 }}
-                placeholder="Street Address"
+                label="Street Address"
                 required
                 className="gap-1 border"
                 textareaClassName="border-0 resize-none"

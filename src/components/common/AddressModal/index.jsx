@@ -149,10 +149,10 @@ const AddressModal = ({
                   pinCode: validatePinCode(newPinCode),
                 });
               }}
-              placeholder="PinCode"
               required
               className="gap-1 border p-2"
               error={addressErrors.pinCode}
+              label="PinCode"
             />
             <div className="flex gap-3">
               <Input
@@ -168,7 +168,7 @@ const AddressModal = ({
                     city: validateString(newCity),
                   });
                 }}
-                placeholder="City"
+                label="City"
                 required
                 className="gap-1 border p-2"
                 error={addressErrors.city}
@@ -187,7 +187,7 @@ const AddressModal = ({
                     state: validateString(newState),
                   });
                 }}
-                placeholder="State"
+                label="State"
                 required
                 className="gap-1 border p-2"
                 error={addressErrors.state}
@@ -214,7 +214,7 @@ const AddressModal = ({
                     phone: validatePhoneNumber(newState) ? "" : "Invalid Phone",
                   });
                 }}
-                placeholder="Phone"
+                label="Phone"
                 prefix="+91"
                 required
                 className="flex gap-1 border p-2"
@@ -234,7 +234,7 @@ const AddressModal = ({
                     name: validateString(newState),
                   });
                 }}
-                placeholder="Full Name"
+                label="Full Name"
                 required
                 className="gap-1 border p-2"
                 error={addressErrors.name}
@@ -255,7 +255,7 @@ const AddressModal = ({
                     email: validateEmail(newState),
                   });
                 }}
-                placeholder="Email"
+                label="Email"
                 required
                 className="gap-1 border p-2"
                 error={addressErrors.email}
@@ -272,7 +272,7 @@ const AddressModal = ({
                     address: validateString(newState),
                   });
                 }}
-                placeholder="Street Address"
+                label="Street Address"
                 required
                 className="gap-1 border"
                 textareaClassName="border-0 resize-none"
