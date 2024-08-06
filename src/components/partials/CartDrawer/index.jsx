@@ -13,6 +13,7 @@ import CartHeader from "@/components/partials/CartDrawer/CartHeader";
 import ShippingProgress from "@/components/partials/Others/ShippingProgress";
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
 import { CartIcon } from "@/assets/svg/icons";
+import Link from "next/link";
 
 const CartDrawer = () => {
   const dispatch = useDispatch();
@@ -92,8 +93,15 @@ const CartDrawer = () => {
             inventoryMapping={inventoryMapping}
             handleCartClose={handleCartClose}
           />
-          <div className="flex items-center justify-center">
+          <div className="flex flex-col items-center justify-center">
             <CartIcon size={250} />
+            <Link
+              href="/"
+              className="rounded-full bg-yellow-900 p-4 text-lg text-white-a700_01"
+              onClick={handleCartClose}
+            >
+              Return To Home
+            </Link>
           </div>
         </div>
       </div>
