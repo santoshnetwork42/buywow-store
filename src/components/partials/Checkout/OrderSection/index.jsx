@@ -19,7 +19,8 @@ import {
   useConfiguration,
   useOrders,
 } from "@wow-star/utils";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
@@ -27,6 +28,7 @@ let razorpayMethod;
 
 export default function OrderSection() {
   const dispatch = useDispatch();
+  const router = useRouter();
   const cartData = useSelector((state) => state.cart);
   const { currentAddress } = useSelector((state) => state.address);
 
@@ -186,6 +188,21 @@ export default function OrderSection() {
       // logger.verbose("Razorpay initialization");
     }
   };
+
+  const afterOrderConfirm = async () => {
+    if (isConfirmed && finalOrder) {
+      if (razorpayMethod) {
+        razorpayMethod.close();
+      }
+      await router.push(`/order/${finalOrder.id}`);
+    }
+  };
+
+  useEffect(() => {
+    if (isConfirmed) {
+      afterOrderConfirm();
+    }
+  }, [isConfirmed]);
 
   //need to add condition based on applied coupon
   const ppcodAmountToTake = ppcodAmount;
