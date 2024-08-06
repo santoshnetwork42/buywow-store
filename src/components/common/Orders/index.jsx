@@ -75,6 +75,7 @@ export default function OrderList() {
           <OrderRow key={order.id} order={order} />
         ))}
       </div>
+      
       <TokenPagination
         onPage={() => getOrders(false)}
         total={totalOrder}

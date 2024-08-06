@@ -287,6 +287,27 @@ export const PendingLockIcon = ({ size = 20, color = "#000000", ...props }) => {
   );
 };
 
+export const AlertInfoIcon = ({ size = 20, color = "#000000", ...props }) => {
+  return (
+    <svg
+      className="mb-4 text-yellow-900"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+  );
+};
+
 export const WalletIcon = ({ size = 20, color = "#000000" }) => {
   return (
     <svg
