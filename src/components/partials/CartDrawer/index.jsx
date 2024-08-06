@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
 import ShippingProgress from "@/components/partials/Others/ShippingProgress";
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
+import { CartIcon } from "@/assets/svg/icons";
 
 const CartDrawer = () => {
   const dispatch = useDispatch();
@@ -91,6 +92,9 @@ const CartDrawer = () => {
             inventoryMapping={inventoryMapping}
             handleCartClose={handleCartClose}
           />
+          <div className="flex items-center justify-center">
+            <CartIcon size={250} />
+          </div>
         </div>
       </div>
     </Drawer>
