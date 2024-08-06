@@ -43,7 +43,7 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
 
   const apiResolve = useCallback(
     (query, variables, authMode) =>
-      client.graphql({
+      client?.graphql({
         query,
         variables,
         authMode: authMode === "AUTH" ? "userPool" : "apiKey",

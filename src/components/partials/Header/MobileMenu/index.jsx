@@ -5,6 +5,8 @@ import { CloseSVG, UserSVG } from "@/assets/images";
 import Sidebar from "@/components/features/Drawer";
 import { extractAttributes } from "@/utils/helpers";
 import MobileMenuItem from "@/components/partials/Header/MobileMenuItem";
+import { useDispatch } from "react-redux";
+import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 
 const HeaderSection = ({ mWebUrl, mWebAlternativeText, onClose }) => (
   <div className="flex items-center justify-between bg-yellow-900 p-4">
@@ -65,17 +67,23 @@ const MenuList = ({ items, closeMenu, linkPrefix }) => (
 
 MenuList.displayName = "MenuList";
 
-const FooterSection = () => (
-  <div className="fixed bottom-0 left-0 w-full bg-gray-50 p-4">
-    <Link href="/login" className="flex items-center gap-3">
-      <UserSVG />
-      <Text size="sm" as="p" className="capitalize">
-        Login / Register
-      </Text>
-    </Link>
-  </div>
-);
+const FooterSection = () => {
+  const dispatch = useDispatch();
+  dispatch({
+    type: authSagaActions.SIGNOUT,
+  });
 
+  return (
+    <div className="fixed bottom-0 left-0 w-full bg-gray-50 p-4">
+      <div className="flex items-center gap-2">
+        <UserSVG />
+        <Text size="sm" as="p" className="capitalize">
+          Logout
+        </Text>
+      </div>
+    </div>
+  );
+};
 FooterSection.displayName = "FooterSection";
 
 const MobileMenu = ({ isOpen, onClose, collectionMenus, otherLinks, logo }) => {
