@@ -8,6 +8,10 @@ import {
   addPhonePrefix,
   isEmailValid,
   removePhonePrefix,
+  validateEmail,
+  validatePhoneNumber,
+  validatePinCode,
+  validateString,
 } from "@/utils/helpers";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,7 +25,6 @@ const AddressModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  const [emailError, setEmailError] = useState(null);
   const { user } = useSelector((state) => state.user);
   const { isLoading } = useSelector((state) => state.address);
 
@@ -46,6 +49,15 @@ const AddressModal = ({
     city: addressItem?.city || "",
     pinCode: addressItem?.pinCode || null,
     name: addressItem?.name || null,
+  });
+  const [addressErrors, setAddressErrors] = useState({
+    pinCode: "",
+    city: "",
+    state: "",
+    address: "",
+    name: "",
+    email: "",
+    phone: "",
   });
 
   const closeModal = () => {
@@ -108,17 +120,6 @@ const AddressModal = ({
     }
   };
 
-  const handleEmailBlur = (e) => {
-    const trimmedValue = e.target.value.trim();
-    setAddress({ ...address, email: trimmedValue });
-
-    if (!isEmailValid(trimmedValue)) {
-      setEmailError("Please enter a valid email address.");
-    } else {
-      setEmailError("");
-    }
-  };
-
   return (
     <Modal
       isOpen={isOpen}
@@ -127,36 +128,50 @@ const AddressModal = ({
       title="Address"
       enableOutsideClick={enableOutsideClick}
     >
-      <div>
+      <div className="mt-2">
         <form>
           <div className="flex flex-col gap-3">
             <Input
               type="text"
               value={address.pinCode}
-              onChange={(e) =>
-                setAddress({
-                  ...address,
-                  pinCode: (e.target.value || "")
-                    .replaceAll(/[^0-9]+/g, "")
-                    .trim(),
-                })
-              }
+              onChange={(e) => {
+                const newPinCode = (e.target.value || "")
+                  .replaceAll(/[^0-9]+/g, "")
+                  .trim();
+                setAddress({ ...address, pinCode: newPinCode });
+              }}
+              onBlur={(e) => {
+                const newPinCode = (e.target.value || "")
+                  .replaceAll(/[^0-9]+/g, "")
+                  .trim();
+                setAddressErrors({
+                  ...addressErrors,
+                  pinCode: validatePinCode(newPinCode),
+                });
+              }}
               placeholder="PinCode"
               required
               className="gap-1 border p-2"
-              label="PinCode"
+              error={addressErrors.pinCode}
             />
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Input
                 type="text"
                 value={address.city}
-                onChange={(e) =>
-                  setAddress({ ...address, city: e.target.value.trim() })
-                }
+                onChange={(e) => {
+                  setAddress({ ...address, city: e.target.value.trim() });
+                }}
+                onBlur={(e) => {
+                  const newCity = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    city: validateString(newCity),
+                  });
+                }}
                 placeholder="City"
                 required
                 className="gap-1 border p-2"
-                label="City"
+                error={addressErrors.city}
               />
 
               <Input
@@ -165,14 +180,21 @@ const AddressModal = ({
                 onChange={(e) =>
                   setAddress({ ...address, state: e.target.value.trim() })
                 }
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    state: validateString(newState),
+                  });
+                }}
                 placeholder="State"
                 required
                 className="gap-1 border p-2"
-                label="State"
+                error={addressErrors.state}
               />
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Input
                 type="tel"
                 value={address.phone}
@@ -185,58 +207,77 @@ const AddressModal = ({
                       .trim(),
                   })
                 }
-                placeholder="99XXXXXX00"
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    phone: validatePhoneNumber(newState) ? "" : "Invalid Phone",
+                  });
+                }}
+                placeholder="Phone"
                 prefix="+91"
                 required
                 className="flex gap-1 border p-2"
-                label="Phone.No"
-                pattern="^[6-9]\d{9}$"
+                error={addressErrors.phone}
               />
 
               <Input
                 type="text"
                 value={address.name}
-                onChange={(e) => {
-                  setAddress({ ...address, name: e.target.value });
-                }}
-                onBlur={(e) =>
-                  setAddress({ ...address, name: e.target.value.trim() })
+                onChange={(e) =>
+                  setAddress({ ...address, name: e.target.value })
                 }
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    name: validateString(newState),
+                  });
+                }}
                 placeholder="Full Name"
                 required
                 className="gap-1 border p-2"
-                label="Name"
+                error={addressErrors.name}
               />
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               <Input
                 type="email"
                 value={address.email}
                 onChange={(e) =>
                   setAddress({ ...address, email: e.target.value.trim() })
                 }
-                onBlur={(e) => handleEmailBlur(e)}
-                placeholder="xyz@buywow.in"
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    email: validateEmail(newState),
+                  });
+                }}
+                placeholder="Email"
                 required
                 className="gap-1 border p-2"
-                label="Email"
+                error={addressErrors.email}
               />
-
               <Textarea
                 value={address.address}
-                placeholder="House number and street name"
-                required
-                className="flex gap-1 border p-2"
-                textareaClassName="w-full resize-none"
-                label="Address"
-                rows={4}
                 onChange={(e) =>
                   setAddress({ ...address, address: e.target.value })
                 }
-                onBlur={(e) =>
-                  setAddress({ ...address, address: e.target.value.trim() })
-                }
+                onBlur={(e) => {
+                  const newState = e.target.value.trim();
+                  setAddressErrors({
+                    ...addressErrors,
+                    address: validateString(newState),
+                  });
+                }}
+                placeholder="Street Address"
+                required
+                className="gap-1 border"
+                textareaClassName="border-0 resize-none"
+                error={addressErrors.address}
+                rows={4}
               />
             </div>
             <div className="flex justify-center">
