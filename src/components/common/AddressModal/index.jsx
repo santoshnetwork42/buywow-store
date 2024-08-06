@@ -97,7 +97,7 @@ const AddressModal = ({
           type: addressSagaActions.CREATE_ADDRESS,
           payload: {
             ...address,
-            userID: user?.id,
+            userID: user?.id || null,
             phone: addPhonePrefix(address?.phone),
             country: address?.country || "IN",
           },

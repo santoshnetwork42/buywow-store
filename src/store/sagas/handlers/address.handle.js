@@ -10,6 +10,7 @@ import {
   updateCurrentAddress,
 } from "@/store/slices/address/address.slice";
 import { call, put, select } from "redux-saga/effects";
+import { v4 as uuidv4 } from "uuid";
 
 export function* updateCurrentAddressHandler(action) {
   try {
@@ -24,28 +25,47 @@ export function* createAddressHandler(action) {
   try {
     yield put(updateAddressLoading(true));
     const addressPayload = action.payload;
-    const userAddress = yield call(() => createUserAddressAPI(addressPayload));
+    let newAddress;
 
-    const { id, address, city, country, state, email, name, phone, pinCode } =
-      userAddress.data.createUserAddress;
+    if (addressPayload?.userID) {
+      // Create new address in DB if userID is present
+      const userAddress = yield call(() =>
+        createUserAddressAPI(addressPayload),
+      );
+      const { id, address, city, country, state, email, name, phone, pinCode } =
+        userAddress.data.createUserAddress;
 
-    const newAddress = {
-      id,
-      address,
-      city,
-      country,
-      state,
-      email,
-      name,
-      phone,
-      pinCode,
-    };
+      newAddress = {
+        id,
+        address,
+        city,
+        country,
+        state,
+        email,
+        name,
+        phone,
+        pinCode,
+      };
+    } else {
+      //Save address in redux
+      newAddress = {
+        id: uuidv4(),
+        address: addressPayload?.address,
+        city: addressPayload?.city,
+        country: addressPayload?.country,
+        state: addressPayload?.state,
+        email: addressPayload?.email,
+        name: addressPayload?.name,
+        phone: addressPayload?.phone,
+        pinCode: addressPayload?.pinCode,
+      };
+    }
 
     yield put(updateCurrentAddress(newAddress));
-    const { addressList } = yield select((state) => state.address);
+    const { addressList = [] } = yield select((state) => state.address);
     yield put(updateAddressList([...addressList, newAddress]));
   } catch (error) {
-    console.log("error updating current address", error);
+    console.log("error creating address", error);
   } finally {
     yield put(updateAddressLoading(false));
   }
@@ -55,29 +75,47 @@ export function* editAddressHandler(action) {
   try {
     yield put(updateAddressLoading(true));
     const addressPayload = action.payload;
-    console.log("userAddress :>> ", addressPayload);
-    const userAddress = yield call(() => updateUserAddressAPI(addressPayload));
+    let updatedAddress;
 
-    const { id, address, city, country, state, email, name, phone, pinCode } =
-      userAddress.data.updateUserAddress;
+    if (addressPayload?.userID) {
+      // Update address in DB if userID is present
+      const userAddress = yield call(() =>
+        updateUserAddressAPI(addressPayload),
+      );
+      const { id, address, city, country, state, email, name, phone, pinCode } =
+        userAddress.data.updateUserAddress;
 
-    const updatedAddress = {
-      id,
-      address,
-      city,
-      country,
-      state,
-      email,
-      name,
-      phone,
-      pinCode,
-    };
+      updatedAddress = {
+        id,
+        address,
+        city,
+        country,
+        state,
+        email,
+        name,
+        phone,
+        pinCode,
+      };
+    } else {
+      // Update address in Redux only
+      updatedAddress = {
+        id: addressPayload.id, // Assuming the id is part of the payload
+        address: addressPayload.address,
+        city: addressPayload.city,
+        country: addressPayload.country,
+        state: addressPayload.state,
+        email: addressPayload.email,
+        name: addressPayload.name,
+        phone: addressPayload.phone,
+        pinCode: addressPayload.pinCode,
+      };
+    }
 
     yield put(updateCurrentAddress(updatedAddress));
 
-    const { addressList } = yield select((state) => state.address);
-    const updatedAddressList = addressList.map((addr) =>
-      addr.id === updatedAddress.id ? updatedAddress : addr,
+    const { addressList = [] } = yield select((state) => state.address);
+    const updatedAddressList = addressList?.map((addr) =>
+      addr.id === updatedAddress?.id ? updatedAddress : addr,
     );
 
     yield put(updateAddressList(updatedAddressList));
@@ -90,12 +128,23 @@ export function* editAddressHandler(action) {
 
 export function* getAddressListHandler(action) {
   try {
-    const { id } = action.payload;
-    const { currentAddress } = yield select((state) => state.address);
-    const userAddresses = yield call(() => getUserAddressAPI({ id }));
-    yield put(updateAddressList(userAddresses?.items || []));
-    if (userAddresses?.items?.length > 0 && !currentAddress) {
-      yield put(updateCurrentAddress(userAddresses.items[0]));
+    const { id = null } = action.payload;
+    const { currentAddress, addressList } = yield select(
+      (state) => state.address,
+    );
+    if (id) {
+      // User is logged in, fetch addresses from API
+      const userAddresses = yield call(() => getUserAddressAPI({ id }));
+      yield put(updateAddressList(userAddresses?.items || []));
+
+      if (userAddresses?.items?.length > 0 && !currentAddress) {
+        yield put(updateCurrentAddress(userAddresses.items[0]));
+      }
+    } else {
+      // User is not logged in, use addresses from Redux store
+      if (addressList.length > 0 && !currentAddress) {
+        yield put(updateCurrentAddress(addressList[0]));
+      }
     }
   } catch (error) {
     console.log("error getting address", error);
@@ -104,18 +153,20 @@ export function* getAddressListHandler(action) {
 
 export function* deleteAddressHandler(action) {
   try {
-    const { id, userID } = action.payload;
+    const { id, userID = null } = action.payload;
 
     // Get the current state
-    const currentState = yield select((state) => state.address); // Adjust this to match your state structure
+    const currentState = yield select((state) => state.address);
     const currentAddressList = currentState?.addressList || [];
     const currentSelectedAddress = currentState?.currentAddress || null;
 
-    // Call the API to remove the address
-    yield call(removeUserAddressAPI, { id, userID });
+    if (!!userID) {
+      // User is logged in, call API to remove the address
+      yield call(removeUserAddressAPI, { id, userID });
+    }
 
     // Filter out the deleted address locally
-    const updatedAddressList = currentAddressList.filter(
+    const updatedAddressList = currentAddressList?.filter(
       (address) => address.id !== id,
     );
 
@@ -123,7 +174,7 @@ export function* deleteAddressHandler(action) {
     yield put(updateAddressList(updatedAddressList));
 
     // Check if the deleted address was the selected one
-    if (currentSelectedAddress && currentSelectedAddress.id === id) {
+    if (!!currentSelectedAddress.length && currentSelectedAddress.id === id) {
       if (updatedAddressList.length > 0) {
         // Find the index of the deleted address in the original list
         const deletedIndex = currentAddressList.findIndex(
