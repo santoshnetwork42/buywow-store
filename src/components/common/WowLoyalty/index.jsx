@@ -1,22 +1,18 @@
 "use client";
 
-import { STORE_ID } from "@/config";
-import { getLoyalty } from "@/graphql/appSync/api";
-import { generateClient } from "aws-amplify/api";
-import dayjs from "dayjs";
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { Heading, Text } from "@/components/elements";
+import { getLoyaltyAPI } from "@/lib/appSyncAPIs";
 import {
   CreditIcon,
   DebitIcon,
-  WalletIcon,
   EllipsisIcon,
   PendingLockIcon,
+  WalletIcon,
 } from "@/src/assets/svg/icons"; // Assume these icons exist
-import { Heading, Text } from "@/components/elements";
+import dayjs from "dayjs";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-
-const client = generateClient();
 
 const WowLoyalty = ({}) => {
   const { user } = useSelector((state) => state.user);
@@ -31,11 +27,7 @@ const WowLoyalty = ({}) => {
   useEffect(() => {
     const fetchLoyalty = async () => {
       try {
-        const { data } = await client.graphql({
-          query: getLoyalty,
-          variables: { input: { storeId: STORE_ID, userId: user?.id } },
-          authMode: "userPool",
-        });
+        const { data } = await getLoyaltyAPI({ user });
 
         setWowCash({
           ...data?.getLoyalty,

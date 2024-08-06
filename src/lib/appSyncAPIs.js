@@ -1,18 +1,19 @@
+import { STORE_ID } from "@/config";
 import {
   createUserAddress,
   deleteUserAddress,
   ensureUserAndDispatchOTP,
   findUserAddresses,
+  getLoyalty,
   getNavbarAndFooter,
   getOrder,
   getPageBySlug,
   getUser,
   searchCMSProducts,
   updateUserAddress,
-  verifyCustomOTP,
+  verifyCustomOTP
 } from "@/graphql/appSync/api";
 import { generateClient } from "aws-amplify/api";
-import { STORE_ID } from "@/config";
 
 const client = generateClient();
 
@@ -82,8 +83,22 @@ export const getUserAPI = async () => {
       authMode: "userPool",
     });
 
-    console.log("response :>> ", response);
     return response?.data?.getUser || null;
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
+export const getLoyaltyAPI = async ({ user }) => {
+  try {
+    const response = await client.graphql({
+      query: getLoyalty,
+      variables: { input: { storeId: STORE_ID, userId: user?.id } },
+      authMode: "userPool",
+    });
+
+    return response || null;
   } catch (err) {
     console.error(err);
     return null;
@@ -194,7 +209,7 @@ export const updateUserAddressAPI = async (input) => {
 
     return result;
   } catch (error) {
-    console.error("Error Creating User Address:", error);
+    console.error("Error Updating User Address:", error);
     return error;
   }
 };
