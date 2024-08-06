@@ -8,11 +8,8 @@ import Autoplay from "embla-carousel-autoplay";
 import Link from "next/link";
 
 const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
-  const webImageAttrs = useMemo(() => extractAttributes(webImage), [webImage]);
-  const mWebImageAttrs = useMemo(
-    () => extractAttributes(mWebImage),
-    [mWebImage],
-  );
+  const webImageAttrs = extractAttributes(webImage);
+  const mWebImageAttrs = extractAttributes(mWebImage);
 
   if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
@@ -25,7 +22,7 @@ const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
   return (
     <Link href={link || "#"} className="flex-[0_0_100%]">
       <picture className="relative block aspect-[376/148] w-full sm:aspect-[1440/496]">
-        {webImageAttrs.url && (
+        {!!webImageAttrs.url && (
           <source media="(min-width: 576px)" srcSet={webImageAttrs.url} />
         )}
         <Img

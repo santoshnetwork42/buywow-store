@@ -40,7 +40,7 @@ async function RootLayout({ children }) {
       </head>
       <body>
         <Provider>
-          <NavbarProvider ignoreLazyloadNavbar={false}>
+          <NavbarProvider ignoreLazyLoadNavbar={false}>
             <div className="flex min-h-dvh w-full flex-col bg-white-a700">
               <AnnouncementBar
                 leftText="Free Shipping On Orders Above ₹999"

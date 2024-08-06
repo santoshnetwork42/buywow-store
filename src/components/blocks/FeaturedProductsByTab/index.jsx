@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useCallback } from "react";
+import React, { useCallback } from "react";
 import SectionHeading from "@/components/common/SectionHeading";
 import { getBgColor } from "@/utils/helpers";
 import { TabPanel, TabList, Tab, Tabs } from "react-tabs";
@@ -16,17 +16,11 @@ const FeaturedProductsByTab = React.memo(
     button,
     featuredProductsTabItems,
   }) => {
-    const bgColorClass = useMemo(
-      () => getBgColor(featuredProductsByTabBgColor),
-      [featuredProductsByTabBgColor],
-    );
+    const bgColorClass = getBgColor(featuredProductsByTabBgColor);
 
-    const isPaddedColor = useMemo(
-      () =>
-        featuredProductsByTabBgColor === "LIME" ||
-        featuredProductsByTabBgColor === "BLUE",
-      [featuredProductsByTabBgColor],
-    );
+    const isPaddedColor =
+      featuredProductsByTabBgColor === "LIME" ||
+      featuredProductsByTabBgColor === "BLUE";
 
     const renderProductCard = useCallback(
       (product, index) => (

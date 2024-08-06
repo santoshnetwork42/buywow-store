@@ -29,8 +29,7 @@ const CollectionLinks = ({ collectionLinksBgColor, collectionLinkItems }) => {
     <div className="container-main mb-main flex flex-col items-center justify-center">
       <div className="flex w-full flex-wrap items-center justify-center gap-7">
         {collectionLinkItems.map((link, index) => {
-          if (!link || typeof link !== "object") return null;
-          const { text, slug } = link;
+          const { text, slug } = link || {};
           if (!text || !slug) return null;
 
           return (

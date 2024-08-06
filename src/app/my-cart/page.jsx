@@ -9,8 +9,7 @@ import { useNavBarState } from "@/utils/context/navbar";
 import { deliveryInfoData } from "@/utils/data/homeData";
 import { myCartData } from "@/utils/data/myCartData";
 import { useCartItems, useCartTotal, useInventory } from "@wow-star/utils";
-import { useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function MyCart() {
   const dispatch = useDispatch();
@@ -20,15 +19,13 @@ export default function MyCart() {
     showNonApplicableFreeProducts: true,
   });
 
-  const validateCart = useCallback(
-    (payload) => {
-      dispatch({
-        type: cartSagaActions.VALIDATE_CART,
-        payload,
-      });
-    },
-    [dispatch],
-  );
+  const validateCart = (payload) => {
+    dispatch({
+      type: cartSagaActions.VALIDATE_CART,
+      payload,
+    });
+  };
+
   const inventory = useInventory({ validateCart });
   const { inventoryMapping } = inventory;
 

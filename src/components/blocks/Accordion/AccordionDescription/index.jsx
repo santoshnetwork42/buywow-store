@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Button, Text } from "@/components/elements";
+import { Button } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 import Accordion from "@/components/features/Accordion";
 
@@ -47,7 +47,7 @@ const AccordionDescription = ({
           ref={textRef}
           dangerouslySetInnerHTML={{ __html: description }}
         />
-        {showReadMore && (
+        {!!showReadMore && (
           <Button
             onClick={toggleExpand}
             className="absolute bottom-0 right-0 bg-white-a700_01 pl-4 text-sm hover:underline"

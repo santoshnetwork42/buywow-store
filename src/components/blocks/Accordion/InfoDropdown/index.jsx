@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useState,
-  useCallback,
-  useMemo,
-  useRef,
-  useEffect,
-} from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Heading, Text } from "@/components/elements";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import { getBgColor } from "@/utils/helpers";
@@ -41,28 +35,18 @@ const InfoDropdown = React.memo(
       setIsOpen((prev) => !prev);
     }, []);
 
-    const bgColorClass = useMemo(() => getBgColor(bgColor), [bgColor]);
-    const isPaddedColor = useMemo(
-      () => bgColor === "LIME" || bgColor === "BLUE",
-      [bgColor],
-    );
+    const bgColorClass = getBgColor(bgColor);
+    const isPaddedColor = bgColor === "LIME" || bgColor === "BLUE";
 
-    const containerClasses = useMemo(
-      () =>
-        `container-main mb-main flex flex-col items-center justify-center ${bgColorClass} ${
-          isPaddedColor ? "py-5" : ""
-        }`,
-      [bgColorClass, isPaddedColor],
-    );
+    const containerClasses = `container-main mb-main flex flex-col items-center justify-center ${bgColorClass} ${
+      isPaddedColor ? "py-5" : ""
+    }`;
 
-    const contentStyle = useMemo(
-      () => ({
-        maxHeight: isOpen ? contentHeight : "0px",
-        opacity: isOpen ? 1 : 0,
-        visibility: isOpen ? "visible" : "hidden",
-      }),
-      [isOpen, contentHeight],
-    );
+    const contentStyle = {
+      maxHeight: isOpen ? contentHeight : "0px",
+      opacity: isOpen ? 1 : 0,
+      visibility: isOpen ? "visible" : "hidden",
+    };
 
     if (!information && !title) return null;
 
