@@ -19,7 +19,7 @@ const client = generateClient();
 
 export const NavbarContext = createContext();
 
-function NavbarProvider({ children, ignoreLazyloadNavbar }) {
+function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");

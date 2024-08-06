@@ -1,9 +1,9 @@
-import React, { memo } from "react";
+import React from "react";
 import { Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import { extractAttributes } from "@/utils/helpers";
 
-const InstructionStep = memo(({ index, text }) => (
+const InstructionStep = ({ index, text }) => (
   <div className="flex gap-2">
     <Text as="p" size="sm" className="shrink-0">
       Step {index + 1}:
@@ -12,7 +12,7 @@ const InstructionStep = memo(({ index, text }) => (
       {text}
     </Text>
   </div>
-));
+);
 
 InstructionStep.displayName = "InstructionStep";
 
@@ -54,4 +54,4 @@ const AccordionUsageInstructions = ({
   );
 };
 
-export default memo(AccordionUsageInstructions);
+export default AccordionUsageInstructions;

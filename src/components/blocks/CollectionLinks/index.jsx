@@ -4,7 +4,7 @@ import { ArrowIconSVG } from "@/assets/svg/icons";
 import { Heading } from "@/components/elements";
 import { getBgColor } from "@/utils/helpers";
 
-const CollectionLink = React.memo(({ text, slug, bgColorClass }) => (
+const CollectionLink = ({ text, slug, bgColorClass }) => (
   <Link
     href={`/collections/${slug}`}
     className={`flex w-full max-w-[352px] items-center justify-between rounded px-3 py-3.5 ${bgColorClass}`}
@@ -14,7 +14,7 @@ const CollectionLink = React.memo(({ text, slug, bgColorClass }) => (
     </Heading>
     <ArrowIconSVG height={22} width={22} />
   </Link>
-));
+);
 
 CollectionLink.displayName = "CollectionLink";
 
@@ -29,8 +29,7 @@ const CollectionLinks = ({ collectionLinksBgColor, collectionLinkItems }) => {
     <div className="container-main mb-main flex flex-col items-center justify-center">
       <div className="flex w-full flex-wrap items-center justify-center gap-7">
         {collectionLinkItems.map((link, index) => {
-          if (!link || typeof link !== "object") return null;
-          const { text, slug } = link;
+          const { text, slug } = link || {};
           if (!text || !slug) return null;
 
           return (
@@ -47,4 +46,4 @@ const CollectionLinks = ({ collectionLinksBgColor, collectionLinkItems }) => {
   );
 };
 
-export default React.memo(CollectionLinks);
+export default CollectionLinks;

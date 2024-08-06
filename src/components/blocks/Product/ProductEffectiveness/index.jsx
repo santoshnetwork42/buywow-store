@@ -3,7 +3,7 @@ import { Img } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
 import { extractAttributes } from "@/utils/helpers";
 
-const ProductEffectiveness = React.memo(({ title, images }) => {
+const ProductEffectiveness = ({ title, images }) => {
   if (!Array.isArray(images) || images.length === 0) return null;
 
   return (
@@ -34,7 +34,7 @@ const ProductEffectiveness = React.memo(({ title, images }) => {
       </div>
     </div>
   );
-});
+};
 
 ProductEffectiveness.displayName = "ProductEffectiveness";
 

@@ -2,7 +2,7 @@ import React from "react";
 import { Text, Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 
-const FeaturedItem = React.memo(({ image, text, isWebHorizontal, isInPDP }) => {
+const FeaturedItem = ({ image, text, isWebHorizontal, isInPDP }) => {
   const { url, alternativeText } = extractAttributes(image);
 
   return (
@@ -26,7 +26,7 @@ const FeaturedItem = React.memo(({ image, text, isWebHorizontal, isInPDP }) => {
       />
     </div>
   );
-});
+};
 
 FeaturedItem.displayName = "FeaturedItem";
 

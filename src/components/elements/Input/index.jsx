@@ -48,31 +48,29 @@ const Input = React.forwardRef(
         : "text-gray-500";
 
     return (
-      <div className="flex w-full flex-col gap-2">
-        <div className={`relative ${className}`}>
-          {prefix}
-          <input
-            ref={ref}
-            className={`peer w-full p-2 outline-none transition-all duration-300 ${inputClassName} ${borderColorClass}`}
-            type={type}
-            name={name}
-            placeholder=" "
-            onChange={onChange}
-            onBlur={handleBlur}
-            onFocus={handleFocus}
-            disabled={disabled}
-            required={required}
-            value={value}
-            {...restProps}
-          />
-          <label
-            className={`absolute left-2 top-1 text-lg transition-all duration-300 ${labelColorClass} ${isFocused || value ? "-translate-y-5 scale-75" : ""} bg-white-a700_01 peer-focus:-translate-y-5 peer-focus:scale-75`}
-          >
-            {placeholder}
-            {required && <span className="ml-1 text-red-500">*</span>}
-          </label>
-          {suffix}
-        </div>
+      <div className={`relative ${className}`}>
+        {prefix}
+        <input
+          ref={ref}
+          className={`peer w-full p-2 outline-none transition-all duration-300 ${inputClassName} ${borderColorClass}`}
+          type={type}
+          name={name}
+          placeholder={placeholder}
+          onChange={onChange}
+          onBlur={handleBlur}
+          onFocus={handleFocus}
+          disabled={disabled}
+          required={required}
+          value={value}
+          {...restProps}
+        />
+        <label
+          className={`absolute left-2 top-1 text-lg transition-all duration-300 ${labelColorClass} ${isFocused || value ? "-translate-y-5 scale-75" : ""} bg-white-a700_01 peer-focus:-translate-y-5 peer-focus:scale-75`}
+        >
+          {label}
+          {required && <span className="ml-1 text-red-500">*</span>}
+        </label>
+        {suffix}
       </div>
     );
   },

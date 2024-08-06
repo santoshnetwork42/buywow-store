@@ -4,6 +4,7 @@
 import React, { useState, useCallback, memo } from "react";
 import { Input, Img } from "@/components/elements";
 import { CloseSVG } from "@/assets/images";
+import { twMerge } from "tailwind-merge";
 
 const SearchIcon = memo(() => (
   <Img
@@ -23,7 +24,7 @@ const ClearIcon = memo(({ onClick }) => (
 
 ClearIcon.displayName = "ClearIcon";
 
-const SearchBar = memo(({ className = "" }) => {
+const SearchBar = memo(({ className }) => {
   const [searchBarValue, setSearchBarValue] = useState("");
 
   const handleChange = useCallback((e) => {
@@ -48,7 +49,10 @@ const SearchBar = memo(({ className = "" }) => {
       value={searchBarValue}
       onChange={handleChange}
       suffix={suffix}
-      className={`flex-grow items-center gap-3 rounded-[20px] border border-solid border-gray-300_01 bg-lime-50_01 px-4 py-2 text-sm font-light text-gray-700_02 ${className}`}
+      className={twMerge(
+        "flex-grow items-center gap-3 rounded-[20px] border border-solid border-gray-300_01 bg-lime-50_01 px-4 py-2 text-sm font-light text-gray-700_02",
+        className,
+      )}
     />
   );
 });

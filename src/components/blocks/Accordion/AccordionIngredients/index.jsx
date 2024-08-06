@@ -1,9 +1,8 @@
-import { memo } from "react";
 import { Img, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import { extractAttributes } from "@/utils/helpers";
 
-const IngredientItem = memo(({ text, subText, imageUrl, imageAlt }) => (
+const IngredientItem = ({ text, subText, imageUrl, imageAlt }) => (
   <div className="flex gap-2">
     <Img
       src={imageUrl}
@@ -19,7 +18,7 @@ const IngredientItem = memo(({ text, subText, imageUrl, imageAlt }) => (
       </Text>
     </div>
   </div>
-));
+);
 
 IngredientItem.displayName = "IngredientItem";
 
@@ -71,4 +70,4 @@ const AccordionIngredients = ({
   );
 };
 
-export default memo(AccordionIngredients);
+export default AccordionIngredients;
