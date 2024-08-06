@@ -128,7 +128,7 @@ const AddressModal = ({
       title="Address"
       enableOutsideClick={enableOutsideClick}
     >
-      <div className="mt-2">
+      <div className="mt-4">
         <form>
           <div className="flex flex-col gap-4">
             <Input
