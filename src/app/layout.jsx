@@ -12,6 +12,7 @@ import { unstable_cache } from "next/cache";
 import awsExport from "../../aws-exports";
 import { AWS_CLIENT_ID } from "@/config";
 import CartDrawer from "@/components/partials/CartDrawer";
+import ToastComponent from "@/components/common/ToastComponent";
 
 Amplify.configure({
   ...awsExport,
@@ -47,13 +48,14 @@ async function RootLayout({ children }) {
                 centerContent={{
                   isTimer: true,
                   centerText: "⚡ Flash Sale up to 60% OFF for",
-                  targetDate: "2024-08-05T00:00:00",
+                  targetDate: "2024-08-10T00:00:00",
                 }}
                 rightText="100% Refund on returns"
                 flashSaleDiscount={60}
               />
               {headerData?.data && <Header data={headerData} />}
               <CartDrawer />
+              <ToastComponent />
               <div className="flex-1">{children}</div>
               {footerData?.data && <Footer data={footerData} />}
             </div>

@@ -8,6 +8,7 @@ import Quantity from "@/components/common/Quantity";
 import { Button } from "@/components/elements";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
+import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 
 const AddToCart = ({
   product,
@@ -77,6 +78,15 @@ const AddToCart = ({
 
   const totalItemQuantity = cartItem?.qty || minimumOrderQuantity;
 
+  const handleCartVisibility = (isCartOpen) => {
+    dispatch({
+      type: modalSagaActions.SET_CART_MODAL,
+      payload: {
+        isCartOpen,
+      },
+    });
+  };
+
   if (!product) return null;
 
   if (!product.hasInventory) {
@@ -115,6 +125,7 @@ const AddToCart = ({
             variant="primary"
             size={buttonSize}
             className={twMerge(buttonClassName, "w-auto flex-1")}
+            onClick={() => handleCartVisibility(true)}
           >
             Go to cart
           </Button>

@@ -1,19 +1,19 @@
 "use client";
 
-import { CloseSVG } from "@/assets/images";
-import { Button, Heading } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { useNavBarState } from "@/utils/context/navbar";
 import { useCartItems, useCartTotal, useInventory } from "@wow-star/utils";
-import React, { useCallback } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
 import ShippingProgress from "@/components/partials/Others/ShippingProgress";
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
 import { CartIcon } from "@/assets/svg/icons";
 import Link from "next/link";
+import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
+import Cashback from "./Cashback";
 
 const CartDrawer = () => {
   const dispatch = useDispatch();
@@ -28,15 +28,12 @@ const CartDrawer = () => {
     showNonApplicableFreeProducts: true,
   });
 
-  const validateCart = useCallback(
-    (payload) => {
-      dispatch({
-        type: cartSagaActions.VALIDATE_CART,
-        payload,
-      });
-    },
-    [dispatch],
-  );
+  const validateCart = (payload) => {
+    dispatch({
+      type: cartSagaActions.VALIDATE_CART,
+      payload,
+    });
+  };
   const inventory = useInventory({ validateCart });
   const { inventoryMapping } = inventory;
 
@@ -53,25 +50,26 @@ const CartDrawer = () => {
     codCharges,
     prepaidDiscountPercent,
     usableRewards,
+    totalRewardPointsOfUser,
+    prepaidCashbackRewardsOnOrder,
+    amountNeededToAvailPrepaidCashback,
+    showLoyalty,
     totalItems = 0,
   } = useCartTotal({
     paymentType: "PREPAID",
     isRewardApplied,
   });
 
-  const handleCartOpen = useCallback(
-    (isOpen = false) => {
-      dispatch({
-        type: modalSagaActions.SET_CART_MODAL,
-        payload: { isCartOpen: isOpen },
-      });
-    },
-    [dispatch],
-  );
+  const handleCartOpen = (isOpen = false) => {
+    dispatch({
+      type: modalSagaActions.SET_CART_MODAL,
+      payload: { isCartOpen: isOpen },
+    });
+  };
 
-  const handleCartClose = useCallback(() => {
+  const handleCartClose = () => {
     handleCartOpen(false);
-  }, [handleCartOpen]);
+  };
 
   return (
     <Drawer
@@ -80,9 +78,9 @@ const CartDrawer = () => {
       position="right"
       onClose={handleCartClose}
     >
-      <div className="flex flex-col gap-3 px-3 pt-4 md:px-4">
+      <div className="flex flex-1 flex-col gap-3 px-3 py-4 md:px-4">
         <CartHeader totalItems={totalItems} onClose={handleCartClose} />
-        <div className="flex w-full flex-col gap-3">
+        <div className="flex w-full flex-1 flex-col gap-3">
           <ShippingProgress
             freeShippingThreshold={1203}
             cartValue={totalPrice}
@@ -103,6 +101,8 @@ const CartDrawer = () => {
               Return To Home
             </Link>
           </div>
+          <Cashback cashbackAmount={prepaidCashbackRewardsOnOrder} />
+          <CheckoutSummary inventory={inventory} />
         </div>
       </div>
     </Drawer>
