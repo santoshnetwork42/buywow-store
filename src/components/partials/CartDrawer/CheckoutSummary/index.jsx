@@ -82,13 +82,13 @@ const CheckoutSummary = ({ inventory }) => {
   };
 
   const validateAndGoToCheckout = useCallback(async () => {
-    handleCartVisibility(false);
-
     if (!isInventoryCheckSuccess) {
       handleOutOfStock();
       showToast.error("Please remove out of stock product from cart");
       return false;
     }
+
+    handleCartVisibility(false);
 
     const lscart = localStorage.getItem(`${STORE_PREFIX}-cartId`);
     const cartId = lscart || shoppingCartId;

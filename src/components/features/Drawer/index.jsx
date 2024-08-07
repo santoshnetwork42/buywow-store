@@ -1,7 +1,19 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useState,
+  useCallback,
+  useContext,
+} from "react";
 import { useBodyScrollLock } from "@/utils/hooks/useBodyScrollLock";
+
+// Create a context to manage nested drawers
+const DrawerContext = React.createContext({
+  isChildDrawerOpen: false,
+  setIsChildDrawerOpen: () => {},
+});
 
 const Drawer = ({
   isOpen,
@@ -16,21 +28,48 @@ const Drawer = ({
   const [drawerTranslate, setDrawerTranslate] = useState(
     position === "left" ? `-${width}` : width,
   );
+  const [bgOpacity, setBgOpacity] = useState(0);
   const drawerRef = useRef(null);
+  const [isChildDrawerOpen, setIsChildDrawerOpen] = useState(false);
+
+  // Get the parent drawer's context
+  const parentContext = useContext(DrawerContext);
+  console.log(parentContext);
 
   useBodyScrollLock(isOpen);
 
   useEffect(() => {
     if (isOpen) {
       setIsAnimating(true);
-      const timer = setTimeout(() => setDrawerTranslate("0px"), 50);
-      return () => clearTimeout(timer);
+      const translateTimer = setTimeout(() => setDrawerTranslate("0px"), 50);
+      const opacityTimer = setTimeout(() => setBgOpacity(0.2), 50);
+
+      if (parentContext) {
+        parentContext.setIsChildDrawerOpen(true);
+      }
+
+      return () => {
+        clearTimeout(translateTimer);
+        clearTimeout(opacityTimer);
+      };
     } else {
       setDrawerTranslate(position === "left" ? `-${width}` : width);
+      setBgOpacity(0);
       const timer = setTimeout(() => setIsAnimating(false), 300);
+
+      if (parentContext) {
+        parentContext.setIsChildDrawerOpen(false);
+      }
+
       return () => clearTimeout(timer);
     }
-  }, [isOpen, position, width]);
+  }, [isOpen, position, width, parentContext]);
+
+  useEffect(() => {
+    if (isChildDrawerOpen && drawerRef.current) {
+      drawerRef.current?.scrollTo({ top: 0 });
+    }
+  }, [isChildDrawerOpen]);
 
   const handleClickOutside = useCallback(
     (event) => {
@@ -48,25 +87,30 @@ const Drawer = ({
   if (!isOpen && !isAnimating) return null;
 
   return (
-    <div
-      className={`fixed inset-0 z-[100] bg-black-900 transition-opacity duration-300 ease-in-out ${className} ${
-        isOpen ? "bg-opacity-20" : "pointer-events-none bg-opacity-0"
-      }`}
-      onClick={handleClickOutside}
-    >
+    <DrawerContext.Provider value={{ isChildDrawerOpen, setIsChildDrawerOpen }}>
       <div
-        ref={drawerRef}
+        className={`bg-black fixed inset-0 z-[100] transition-all duration-300 ease-in-out ${className}`}
         style={{
-          transform: `translateX(${drawerTranslate})`,
-          [position]: 0,
-          maxWidth: width,
+          pointerEvents: isOpen ? "auto" : "none",
+          backgroundColor: `rgba(0, 0, 0, ${bgOpacity})`,
         }}
-        className="fixed top-0 flex h-dvh w-full flex-col overflow-y-auto bg-gray-50 shadow-lg transition-transform duration-300 ease-in-out"
-        onClick={(e) => e.stopPropagation()}
+        onClick={handleClickOutside}
       >
-        {children}
+        <div
+          ref={drawerRef}
+          style={{
+            transform: `translateX(${drawerTranslate})`,
+            [position]: 0,
+            maxWidth: width,
+            overflow: isChildDrawerOpen ? "hidden" : "auto",
+          }}
+          className="absolute top-0 flex h-dvh w-full flex-col bg-gray-50 shadow-lg transition-transform duration-300 ease-in-out"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {children}
+        </div>
       </div>
-    </div>
+    </DrawerContext.Provider>
   );
 };
 

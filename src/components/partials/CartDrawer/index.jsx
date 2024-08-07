@@ -93,7 +93,6 @@ const CartDrawer = () => {
               inventoryMapping={inventoryMapping}
               handleCartClose={handleCartClose}
             />
-
             <Cashback cashbackAmount={prepaidCashbackRewardsOnOrder} />
             <CheckoutSummary inventory={inventory} />
           </div>
