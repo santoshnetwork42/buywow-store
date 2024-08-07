@@ -6,112 +6,145 @@ import React, {
   useState,
   useCallback,
   useContext,
+  useMemo,
 } from "react";
-import { useBodyScrollLock } from "@/utils/hooks/useBodyScrollLock";
 
-// Create a context to manage nested drawers
 const DrawerContext = React.createContext({
   isChildDrawerOpen: false,
   setIsChildDrawerOpen: () => {},
+  parentLockScroll: () => {},
+  parentUnlockScroll: () => {},
 });
 
-const Drawer = ({
-  isOpen,
-  onClose,
-  children,
-  position = "left",
-  width = "326px",
-  className = "",
-  enableOutsideClick = true,
-}) => {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [drawerTranslate, setDrawerTranslate] = useState(
-    position === "left" ? `-${width}` : width,
-  );
-  const [bgOpacity, setBgOpacity] = useState(0);
-  const drawerRef = useRef(null);
-  const [isChildDrawerOpen, setIsChildDrawerOpen] = useState(false);
+const Drawer = React.memo(
+  ({
+    isOpen,
+    onClose,
+    children,
+    position = "left",
+    width = "326px",
+    className = "",
+    enableOutsideClick = true,
+  }) => {
+    const [isAnimating, setIsAnimating] = useState(false);
+    const [drawerSize, setDrawerSize] = useState("0px");
+    const [bgOpacity, setBgOpacity] = useState(0);
+    const drawerRef = useRef(null);
+    const [isChildDrawerOpen, setIsChildDrawerOpen] = useState(false);
 
-  // Get the parent drawer's context
-  const parentContext = useContext(DrawerContext);
+    const parentContext = useContext(DrawerContext);
 
-  useBodyScrollLock(isOpen || !isChildDrawerOpen);
+    const lockScroll = useCallback(() => {
+      document.body.style.overflow = "hidden";
+    }, []);
 
-  useEffect(() => {
-    if (isOpen) {
-      setIsAnimating(true);
-      const translateTimer = setTimeout(() => setDrawerTranslate("0"), 50);
-      const opacityTimer = setTimeout(() => setBgOpacity(0.2), 50);
+    const unlockScroll = useCallback(() => {
+      document.body.style.overflow = "unset";
+    }, []);
 
-      if (parentContext) {
-        parentContext.setIsChildDrawerOpen(true);
+    useEffect(() => {
+      if (isOpen) {
+        lockScroll();
+        setIsAnimating(true);
+        const sizeTimer = setTimeout(() => setDrawerSize(width), 50);
+        const opacityTimer = setTimeout(() => setBgOpacity(0.2), 50);
+
+        if (parentContext) {
+          parentContext.setIsChildDrawerOpen(true);
+          parentContext.parentLockScroll();
+        }
+
+        return () => {
+          clearTimeout(sizeTimer);
+          clearTimeout(opacityTimer);
+          unlockScroll();
+        };
+      } else {
+        setDrawerSize("0px");
+        setBgOpacity(0);
+        unlockScroll();
+
+        const timer = setTimeout(() => setIsAnimating(false), 300);
+
+        if (parentContext) {
+          parentContext.setIsChildDrawerOpen(false);
+          parentContext.parentLockScroll();
+        }
+
+        return () => {
+          clearTimeout(timer);
+          unlockScroll();
+        };
       }
+    }, [isOpen, width, parentContext, lockScroll, unlockScroll]);
 
-      return () => {
-        clearTimeout(translateTimer);
-        clearTimeout(opacityTimer);
-      };
-    } else {
-      setDrawerTranslate(position === "left" ? `-${width}` : width);
-      setBgOpacity(0);
-      const timer = setTimeout(() => setIsAnimating(false), 300);
-
-      if (parentContext) {
-        parentContext.setIsChildDrawerOpen(false);
+    useEffect(() => {
+      if (isChildDrawerOpen && drawerRef.current) {
+        drawerRef.current.scrollTo({ top: 0 });
       }
+    }, [isChildDrawerOpen]);
 
-      return () => clearTimeout(timer);
-    }
-  }, [isOpen, position, width, parentContext]);
+    const handleClickOutside = useCallback(
+      (event) => {
+        if (
+          enableOutsideClick &&
+          drawerRef.current &&
+          !drawerRef.current.contains(event.target)
+        ) {
+          onClose();
+        }
+      },
+      [enableOutsideClick, onClose],
+    );
 
-  useEffect(() => {
-    if (isChildDrawerOpen && drawerRef.current) {
-      drawerRef.current?.scrollTo({ top: 0 });
-    }
-  }, [isChildDrawerOpen]);
+    const contextValue = useMemo(
+      () => ({
+        isChildDrawerOpen,
+        setIsChildDrawerOpen,
+        parentLockScroll: lockScroll,
+        parentUnlockScroll: unlockScroll,
+      }),
+      [isChildDrawerOpen, lockScroll, unlockScroll],
+    );
 
-  const handleClickOutside = useCallback(
-    (event) => {
-      if (
-        enableOutsideClick &&
-        drawerRef.current &&
-        !drawerRef.current.contains(event.target)
-      ) {
-        onClose();
-      }
-    },
-    [enableOutsideClick, onClose],
-  );
+    const drawerStyle = useMemo(
+      () => ({
+        [position]: 0,
+        [position === "left" || position === "right" ? "width" : "height"]:
+          drawerSize,
+        maxWidth: width,
+        overflowY: isChildDrawerOpen ? "hidden" : "auto",
+      }),
+      [position, drawerSize, width, isChildDrawerOpen],
+    );
 
-  if (!isOpen && !isAnimating) return null;
+    if (!isOpen && !isAnimating) return null;
 
-  return (
-    <DrawerContext.Provider value={{ isChildDrawerOpen, setIsChildDrawerOpen }}>
-      <div
-        className={`bg-black fixed inset-0 z-[100] transition-all duration-300 ease-in-out ${className}`}
-        style={{
-          pointerEvents: isOpen ? "auto" : "none",
-          backgroundColor: `rgba(0, 0, 0, ${bgOpacity})`,
-        }}
-        onClick={handleClickOutside}
-      >
+    return (
+      <DrawerContext.Provider value={contextValue}>
         <div
-          ref={drawerRef}
+          className={`fixed inset-0 z-[100] transition-all duration-300 ease-in-out ${className}`}
           style={{
-            transform: `translateX(${drawerTranslate})`,
-            [position]: 0,
-            maxWidth: width,
-            overflow: isChildDrawerOpen ? "hidden" : "auto",
+            pointerEvents: isOpen ? "auto" : "none",
+            backgroundColor: `rgba(0, 0, 0, ${bgOpacity})`,
           }}
-          className="absolute top-0 flex h-dvh w-full flex-col bg-gray-50 shadow-lg transition-transform duration-300 ease-in-out"
-          onClick={(e) => e.stopPropagation()}
+          onClick={handleClickOutside}
         >
-          {children}
+          <div
+            ref={drawerRef}
+            style={drawerStyle}
+            className={`absolute top-0 flex h-dvh flex-col overflow-x-hidden bg-gray-50 shadow-lg transition-all duration-300 ease-in-out ${
+              position === "right" ? "right-0" : "left-0"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {children}
+          </div>
         </div>
-      </div>
-    </DrawerContext.Provider>
-  );
-};
+      </DrawerContext.Provider>
+    );
+  },
+);
 
 Drawer.displayName = "Drawer";
 
