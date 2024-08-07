@@ -1,7 +1,9 @@
 import {
   emptyCart,
   setCart,
-  updateSubTotal,
+  setCoupon,
+  setStoredCouponCode,
+  setSubTotal,
 } from "@/store/slices/cart/cart.slice";
 import { getFirstVariant, getProductSubTotal } from "@/utils/helpers";
 import { put, select } from "redux-saga/effects";
@@ -52,7 +54,7 @@ export function* addToCartHandler(action) {
 
       const subTotal = getProductSubTotal(updatedData);
 
-      yield put(updateSubTotal(subTotal));
+      yield put(setSubTotal(subTotal));
       yield put(setCart([...updatedData]));
     } else {
       const currentATC = {
@@ -62,7 +64,7 @@ export function* addToCartHandler(action) {
       };
 
       yield put(
-        updateSubTotal(cartState.subTotal + currentATC.price * currentATC.qty),
+        setSubTotal(cartState.subTotal + currentATC.price * currentATC.qty),
       );
       yield put(setCart([...cartState.data, currentATC]));
     }
@@ -80,7 +82,7 @@ export function* updateCartHandler(action) {
   const { data = [] } = action.payload;
   const subTotal = getProductSubTotal(data);
 
-  yield put(updateSubTotal(subTotal));
+  yield put(setSubTotal(subTotal));
   yield put(setCart(data));
 }
 
@@ -102,17 +104,31 @@ export function* validateCartHandler(action) {
 }
 
 export function* removeFromCartHandler(action) {
-  const { product: tmpProduct = {} } = action.payload;
-  const { data: cartData = [] } = yield select((state) => state.cart);
+  const { product: tmpProduct } = action.payload;
+  const { data: cartData } = yield select((state) => state.cart);
 
   const filteredCart = cartData.filter(
     (product) =>
-      tmpProduct.recordKey !== product.recordKey &&
+      product.recordKey !== tmpProduct.recordKey &&
       product.parentRecordKey !== tmpProduct.recordKey,
   );
 
   const subTotal = getProductSubTotal(filteredCart);
 
-  yield put(updateSubTotal(subTotal));
+  yield put(setSubTotal(subTotal));
   yield put(setCart(filteredCart));
+}
+
+export function* applyCouponHandler(action) {
+  const { coupon } = action.payload;
+  yield put(setCoupon(coupon));
+}
+
+export function* removeCouponHandler() {
+  yield put(setCoupon(null));
+}
+
+export function* storedCouponCodeHandler(action) {
+  const { couponCode } = action.payload;
+  yield put(setStoredCouponCode(couponCode));
 }

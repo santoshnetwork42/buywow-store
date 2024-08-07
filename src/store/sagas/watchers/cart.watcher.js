@@ -1,7 +1,10 @@
 import {
   addToCartHandler,
+  applyCouponHandler,
   emptyCartHandler,
+  removeCouponHandler,
   removeFromCartHandler,
+  storedCouponCodeHandler,
   updateCartHandler,
   validateCartHandler,
 } from "@/store/sagas/handlers/cart.handle";
@@ -28,6 +31,18 @@ function* validateCart() {
   yield takeLatest(cartSagaActions.VALIDATE_CART, validateCartHandler);
 }
 
+function* applyCoupon() {
+  yield takeLatest(cartSagaActions.APPLY_COUPONS, applyCouponHandler);
+}
+
+function* removeCoupon() {
+  yield takeLatest(cartSagaActions.REMOVE_COUPON, removeCouponHandler);
+}
+
+function* storedCouponCode() {
+  yield takeLatest(cartSagaActions.STORED_COUPON_CODE, storedCouponCodeHandler);
+}
+
 export function* cartWatcher() {
   yield all([
     fork(addToCart),
@@ -35,5 +50,8 @@ export function* cartWatcher() {
     fork(removeFromCart),
     fork(updateCart),
     fork(validateCart),
+    fork(applyCoupon),
+    fork(removeCoupon),
+    fork(storedCouponCode),
   ]);
 }

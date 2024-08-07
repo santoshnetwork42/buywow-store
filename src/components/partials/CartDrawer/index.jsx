@@ -80,7 +80,11 @@ const CartDrawer = () => {
       onClose={handleCartClose}
     >
       <div className="flex flex-1 flex-col gap-3 px-3 py-4 md:px-4">
-        <CartHeader totalItems={totalItems} cartClose={handleCartClose} />
+        <CartHeader
+          text="my Cart"
+          totalItems={totalItems}
+          cartClose={handleCartClose}
+        />
         {!!(cartData?.length > 0) ? (
           <div className="flex w-full flex-1 flex-col gap-3">
             <ShippingProgress

@@ -34,14 +34,13 @@ const Drawer = ({
 
   // Get the parent drawer's context
   const parentContext = useContext(DrawerContext);
-  console.log(parentContext);
 
-  useBodyScrollLock(isOpen);
+  useBodyScrollLock(isOpen || !isChildDrawerOpen);
 
   useEffect(() => {
     if (isOpen) {
       setIsAnimating(true);
-      const translateTimer = setTimeout(() => setDrawerTranslate("0px"), 50);
+      const translateTimer = setTimeout(() => setDrawerTranslate("0"), 50);
       const opacityTimer = setTimeout(() => setBgOpacity(0.2), 50);
 
       if (parentContext) {
