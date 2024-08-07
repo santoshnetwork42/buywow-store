@@ -36,6 +36,10 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     phone: "",
     confirmationCode: new Array(6).fill(""),
   });
+  const [authErrors, setAuthErrors] = useState({
+    phone: "",
+  });
+
   const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
@@ -248,11 +252,19 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     <div className="flex flex-col items-center gap-3 px-8 py-4">
       <Input
         placeholder="Enter Mobile Number"
-        className="flex flex-grow rounded-full border p-2"
+        className="flex flex-grow gap-2 rounded-full border p-2"
         prefix="+91"
         onChange={handlePhoneChange}
         maxLength={10}
         value={authData.phone}
+        onBlur={(e) => {
+          const newState = e.target.value.trim();
+          setAuthErrors({
+            ...authErrors,
+            phone: validatePhoneNumber(newState) ? "" : "Invalid Phone",
+          });
+        }}
+        error={authErrors.phone}
       />
       <Button
         loader={loading}
@@ -260,7 +272,6 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         onClick={handleSignIn}
         className="p-3 px-6"
         variant="primary"
-        disabled={!isPhoneValid}
       >
         <div className="flex items-center justify-center">Get OTP</div>
       </Button>

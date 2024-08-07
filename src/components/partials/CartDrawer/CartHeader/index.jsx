@@ -1,6 +1,6 @@
-import React from "react";
-import { Button, Heading } from "@/components/elements";
 import { CloseSVG } from "@/assets/images";
+import { Button, Heading } from "@/components/elements";
+import React from "react";
 
 const CartHeader = React.memo(({ totalItems, onClose }) => {
   return (
