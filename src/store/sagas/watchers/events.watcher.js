@@ -1,8 +1,12 @@
 import { all, fork, takeLatest } from "redux-saga/effects";
 import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
+import {
+  outOfStockHandler,
+  proceedToCheckoutHandler,
+} from "../handlers/events.handle";
 
 function* outOfStock() {
-  yield takeLatest(eventsSagaActions.OUT_OF_STOCK, signOutHandler);
+  yield takeLatest(eventsSagaActions.OUT_OF_STOCK, outOfStockHandler);
 }
 
 function* search() {
@@ -18,7 +22,10 @@ function* auth() {
 }
 
 function* proceedToCheckout() {
-  yield takeLatest(eventsSagaActions.PROCEED_TO_CHECKOUT, signOutHandler);
+  yield takeLatest(
+    eventsSagaActions.PROCEED_TO_CHECKOUT,
+    proceedToCheckoutHandler,
+  );
 }
 
 //cart actions

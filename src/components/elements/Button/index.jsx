@@ -20,6 +20,7 @@ const Button = ({
   loaderClass = "",
   disabled = false,
   onClick,
+  redirectTo,
   ...restProps
 }) => {
   const router = useRouter();
@@ -59,14 +60,13 @@ const Button = ({
       e.preventDefault();
 
       if (onClick && !disabled && !loader) {
-        const { redirectTo } = restProps;
         if (!!redirectTo) {
           router.push(redirectTo);
         }
         onClick(e);
       }
     },
-    [onClick, disabled, loader, restProps, router],
+    [onClick, disabled, loader, redirectTo, router],
   );
 
   return (

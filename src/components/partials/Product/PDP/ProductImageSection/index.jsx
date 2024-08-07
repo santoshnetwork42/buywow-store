@@ -13,7 +13,7 @@ import { extractAttributes } from "@/utils/helpers";
 
 const Thumb = React.memo(({ isSelected, image, onClick }) => (
   <div
-    className={`cursor-pointer ${isSelected ? "border border-black-900" : ""}`}
+    className={`flex aspect-square cursor-pointer items-center justify-center ${isSelected ? "border border-black-900" : ""}`}
   >
     <button onClick={onClick} type="button" className="w-full p-0">
       <Img

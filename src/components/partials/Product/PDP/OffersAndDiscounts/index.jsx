@@ -11,7 +11,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   if (!bestCoupon || !hasInventory) return null;
 
   return (
-    <div className="flex justify-between rounded bg-gray-50 px-3 pb-2 pt-2.5 sm:w-[60%] md:w-full lg:w-[60%]">
+    <div className="flex justify-between rounded bg-gray-50 px-3 pb-2 pt-2.5 sm:w-[60%] md:w-full xl:w-[60%]">
       <div className="flex gap-2">
         <div className="aspect-square w-6 md:w-7">
           <Img
@@ -67,13 +67,13 @@ const AllOffers = ({ bestCoupon }) => {
 const OffersAndDiscounts = ({ bestCoupon, price, hasInventory }) => {
   if (!bestCoupon || !hasInventory) return null;
   return (
-    <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2.5 md:flex-col md:items-stretch lg:flex-row lg:items-center lg:gap-3">
+    <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2.5 md:flex-col md:items-stretch lg:gap-3 xl:flex-row xl:items-center">
       <BestPriceDisplay
         bestCoupon={bestCoupon}
         price={price}
         hasInventory={hasInventory}
       />
-      <AllOffers bestCoupon={bestCoupon} />
+      {/* <AllOffers bestCoupon={bestCoupon} /> */}
     </div>
   );
 };

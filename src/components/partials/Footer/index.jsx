@@ -6,7 +6,7 @@ import FooterMenu from "@/components/partials/Footer/FooterMenu";
 import Link from "next/link";
 import { extractAttributes } from "@/utils/helpers";
 import { usePathname } from "next/navigation";
-import { restrictFooterToShow } from "@/utils/data/constants";
+import { RESTRICT_FOOTER_TO_SHOW } from "@/utils/data/constants";
 
 const SocialLink = ({ item, index }) => {
   if (!item) return null;
@@ -79,7 +79,7 @@ const Footer = ({ data, ...props }) => {
 
   //check if footer is restricted to show on specific pages
   const pathname = usePathname();
-  const isRestricted = restrictFooterToShow?.includes(pathname);
+  const isRestricted = RESTRICT_FOOTER_TO_SHOW?.includes(pathname);
 
   const {
     logo,

@@ -1,3 +1,7 @@
+import { STORE_PREFIX } from "@/config";
+import Cookies from "js-cookie";
+import platform from "platform";
+
 export function generateRandomString(length) {
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -231,4 +235,54 @@ export const calculateTotals = (productItems) => {
     },
     { activeItemsTotalPrice: 0, itemsTotalPrice: 0 },
   );
+};
+
+export const analyticsMetaDataMapper = () => {
+  // Collect device details
+  const deviceDetails = {
+    os: platform.os.family || "Unknown",
+    browser: platform.name || "Unknown",
+    browserVersion: platform.version || "Unknown",
+    deviceType: platform.product || "Desktop",
+    userAgent: navigator.userAgent || "Unknown",
+    screenWidth: window.screen.width || 0,
+    screenHeight: window.screen.height || 0,
+  };
+
+  // referrer information
+  const referrer = document.referrer || "";
+
+  // page information
+  const pageInfo = {
+    url: window.location.href || "",
+    path: window.location.pathname || "",
+    queryParams: window.location.search || "",
+  };
+
+  // UTM parameters
+  const urlParams = new URLSearchParams(window.location.search || "");
+  const utmParameters = {
+    utmSource: urlParams.get("utm_source"),
+    utmMedium: urlParams.get("utm_medium"),
+    utmCampaign: urlParams.get("utm_campaign"),
+    utmTerm: urlParams.get("utm_term"),
+    utmContent: urlParams.get("utm_content"),
+  };
+  const sessionId = Cookies.get(`${STORE_PREFIX}_session_id`);
+
+  const analyticsData = {
+    deviceDetails,
+    referrer,
+    pageInfo,
+    utmParameters,
+    sessionId,
+    timestamp: new Date().toISOString(),
+  };
+  return analyticsData;
+};
+
+export const getSource = () => {
+  return typeof window !== "undefined" && window?.innerWidth > 575
+    ? "Web"
+    : "Mobile";
 };

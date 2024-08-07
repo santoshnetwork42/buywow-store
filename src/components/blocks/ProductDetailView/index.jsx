@@ -42,8 +42,11 @@ const ProductDetailView = ({ product }) => {
     images,
   } = packageProduct || {};
 
-  const imageList =
-    images?.items?.sort((a, b) => a.position - b.position) || [];
+  console.log(images);
+
+  const imageList = images?.items
+    ? [...images.items].sort((a, b) => a.position - b.position)
+    : [];
 
   if (!fetchedProduct) {
     return <div>Product not found</div>;
