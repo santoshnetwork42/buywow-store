@@ -14,6 +14,7 @@ import { CartIcon } from "@/assets/svg/icons";
 import Link from "next/link";
 import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
 import Cashback from "./Cashback";
+import EmptyCart from "./EmptyCart";
 
 const CartDrawer = () => {
   const dispatch = useDispatch();
@@ -79,31 +80,26 @@ const CartDrawer = () => {
       onClose={handleCartClose}
     >
       <div className="flex flex-1 flex-col gap-3 px-3 py-4 md:px-4">
-        <CartHeader totalItems={totalItems} onClose={handleCartClose} />
-        <div className="flex w-full flex-1 flex-col gap-3">
-          <ShippingProgress
-            freeShippingThreshold={1203}
-            cartValue={totalPrice}
-            className="bg-[#F5E8DDBF] shadow-[0_4px_4px_#0000000D]"
-          />
-          <MainCartSection
-            cartData={cartData}
-            inventoryMapping={inventoryMapping}
-            handleCartClose={handleCartClose}
-          />
-          <div className="flex flex-col items-center justify-center">
-            <CartIcon size={250} />
-            <Link
-              href="/"
-              className="rounded-full bg-yellow-900 p-4 text-lg text-white-a700_01"
-              onClick={handleCartClose}
-            >
-              Return To Home
-            </Link>
+        <CartHeader totalItems={totalItems} cartClose={handleCartClose} />
+        {!!(cartData?.length > 0) ? (
+          <div className="flex w-full flex-1 flex-col gap-3">
+            <ShippingProgress
+              freeShippingThreshold={1203}
+              cartValue={totalPrice}
+              className="bg-[#F5E8DDBF] shadow-[0_4px_4px_#0000000D]"
+            />
+            <MainCartSection
+              cartData={cartData}
+              inventoryMapping={inventoryMapping}
+              handleCartClose={handleCartClose}
+            />
+
+            <Cashback cashbackAmount={prepaidCashbackRewardsOnOrder} />
+            <CheckoutSummary inventory={inventory} />
           </div>
-          <Cashback cashbackAmount={prepaidCashbackRewardsOnOrder} />
-          <CheckoutSummary inventory={inventory} />
-        </div>
+        ) : (
+          <EmptyCart cartClose={handleCartClose} />
+        )}
       </div>
     </Drawer>
   );
