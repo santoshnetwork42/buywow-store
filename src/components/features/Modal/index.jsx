@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useRef } from "react";
-import styles from "@/components/features/Modal/Modal.module.scss";
 import { Heading } from "@/components/elements";
 import { CloseIcon } from "@/assets/svg/icons";
+import { twMerge } from "tailwind-merge";
 
 const Modal = ({
   title = "",
@@ -16,6 +16,7 @@ const Modal = ({
   showMobileView = true,
   enableOutsideClick = false,
   enableCloseButton = true,
+  modalContainerClassName,
 }) => {
   const modalRef = useRef(null);
 
@@ -34,36 +35,51 @@ const Modal = ({
   };
 
   return (
-    <div className={`${isOpen ? styles.fadeIn : styles.fadeOut} fixed z-[999]`}>
+    <div className={`fixed z-[999] ${isOpen ? "fade-in" : "fade-out"}`}>
       {!!isOpen && (
         <div
           onClick={handleClickOutside}
-          className={`${styles.customModalWrapper} ${showMobileView ? "items-end" : "items-center"} bottom-0 left-0 right-0 top-0 sm:rounded-bl-none sm:rounded-br-none md:items-center lg:items-center`}
+          className={twMerge(
+            "fixed inset-0 flex justify-center bg-black-900 bg-opacity-20",
+            showMobileView ? "items-end" : "items-center",
+            "md:items-center",
+          )}
         >
           <div
             ref={modalRef}
-            className={`${styles.innerModal} ${showMobileView ? `${mobileViewHeight} w-full rounded-bl-none rounded-br-none sm:w-full md:h-auto md:rounded-lg lg:h-auto lg:rounded-lg` : ""} rounded-lg md:w-auto lg:w-auto`}
+            className={twMerge(
+              "relative rounded-lg bg-white-a700 p-4 md:w-auto",
+              showMobileView
+                ? twMerge(
+                    mobileViewHeight,
+                    "w-full rounded-bl-none rounded-br-none md:h-auto md:w-auto md:rounded-lg",
+                  )
+                : "",
+              modalContainerClassName,
+            )}
           >
             {!!enableCloseButton && !!showCloseButtonOutOfBox && (
               <div
-                className={`${styles.closeIcon} cursor-pointer`}
+                className="absolute -right-1 -top-7 cursor-pointer"
                 onClick={onCloseClick}
               >
                 <CloseIcon color="white" size={30} />
               </div>
             )}
-            <div className={styles.modalHeader}>
-              <Heading as="h5" size="xl" className="">
-                {title}
-              </Heading>
-              {!!enableCloseButton && !showCloseButtonOutOfBox && (
-                <div className={`cursor-pointer`} onClick={onCloseClick}>
-                  <CloseIcon color="black" size={28} />
-                </div>
-              )}
-            </div>
-            <div>{description}</div>
-            <div>{children}</div>
+            {!!title && (
+              <div className="flex items-center justify-between">
+                <Heading as="h5" size="xl" className="">
+                  {title}
+                </Heading>
+                {!!enableCloseButton && !showCloseButtonOutOfBox && (
+                  <div className="cursor-pointer" onClick={onCloseClick}>
+                    <CloseIcon color="black" size={28} />
+                  </div>
+                )}
+              </div>
+            )}
+            {!!description && <div>{description}</div>}
+            {children}
           </div>
         </div>
       )}

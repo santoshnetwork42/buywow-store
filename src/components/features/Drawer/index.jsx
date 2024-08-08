@@ -25,6 +25,7 @@ const Drawer = React.memo(
       drawerSize: "0px",
       bgOpacity: 0,
     });
+
     const drawerRef = useRef(null);
     const parentContext = useContext(DrawerContext);
 
@@ -34,43 +35,53 @@ const Drawer = React.memo(
 
     useEffect(() => {
       if (isOpen) {
-        toggleScroll(true);
-        setState((prev) => ({ ...prev, isAnimating: true }));
-        const timers = [
-          setTimeout(
-            () => setState((prev) => ({ ...prev, drawerSize: width })),
-            50,
-          ),
-          setTimeout(
-            () => setState((prev) => ({ ...prev, bgOpacity: 0.2 })),
-            50,
-          ),
-        ];
-        parentContext?.parentLockScroll?.();
-        return () => {
-          timers.forEach(clearTimeout);
-          toggleScroll(false);
-        };
+        openDrawer();
       } else {
-        setState((prev) => ({ ...prev, drawerSize: "0px", bgOpacity: 0 }));
-        toggleScroll(false);
-        const timer = setTimeout(
-          () => setState((prev) => ({ ...prev, isAnimating: false })),
-          300,
-        );
-        parentContext?.parentLockScroll?.();
-        return () => {
-          clearTimeout(timer);
-          toggleScroll(false);
-        };
+        closeDrawer();
       }
+
+      return () => {
+        toggleScroll(false);
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen, width, parentContext, toggleScroll]);
+
+    const openDrawer = () => {
+      toggleScroll(true);
+      setState((prev) => ({ ...prev, isAnimating: true }));
+
+      const timers = [
+        setTimeout(
+          () => setState((prev) => ({ ...prev, drawerSize: width })),
+          50,
+        ),
+        setTimeout(() => setState((prev) => ({ ...prev, bgOpacity: 0.2 })), 50),
+      ];
+
+      parentContext?.parentLockScroll?.();
+
+      return () => timers.forEach(clearTimeout);
+    };
+
+    const closeDrawer = () => {
+      setState((prev) => ({ ...prev, drawerSize: "0px", bgOpacity: 0 }));
+      toggleScroll(false);
+
+      const timer = setTimeout(
+        () => setState((prev) => ({ ...prev, isAnimating: false })),
+        300,
+      );
+
+      parentContext?.parentLockScroll?.();
+
+      return () => clearTimeout(timer);
+    };
 
     const handleClickOutside = useCallback(
       (event) => {
-        enableOutsideClick &&
-          !drawerRef.current?.contains(event.target) &&
+        if (enableOutsideClick && !drawerRef.current?.contains(event.target)) {
           onClose();
+        }
       },
       [enableOutsideClick, onClose],
     );
