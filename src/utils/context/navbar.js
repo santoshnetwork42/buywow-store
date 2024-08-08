@@ -42,23 +42,19 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
     setIsRewardApplied(state);
   }, []);
 
-  const apiResolve = useCallback(async (query, variables, authMode) => {
+  const apiResolve = async (query, variables, authMode) => {
     try {
-      const result = await client?.graphql({
+      const response = await client.graphql({
         query,
         variables,
-        authMode: authMode ? "userPool" : "apiKey",
+        authMode: authMode === "AUTH" ? "userPool" : "apiKey",
       });
-      if (result.errors) {
-        console.error("GraphQL Errors:", result.errors);
-        // Handle GraphQL errors
-      }
-      return result;
+
+      return response;
     } catch (error) {
-      console.error("API resolve error:", error);
-      // Handle the error appropriately
+      console.error("Error in apiResolve function:", error);
     }
-  }, []);
+  };
 
   useEffect(() => {
     const handleInteraction = () => {

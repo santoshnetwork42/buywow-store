@@ -34,6 +34,7 @@ export default function OrderSection() {
 
   const totalCartItemsCount = cartData?.data?.length || 0;
 
+  const [placeOrderLoader, setPlaceOrderLoader] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState("PREPAID");
   const maxCOD = useConfiguration(MAX_COD_AMOUNT, -1);
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
@@ -79,6 +80,7 @@ export default function OrderSection() {
   ] = useOrders();
 
   const placeOrderHandler = async () => {
+    setPlaceOrderLoader(true);
     const metaData = {
       landingPage: "http://localhost:3002/",
       referrer: "http://localhost:3002/checkout",
@@ -134,58 +136,63 @@ export default function OrderSection() {
       variables.appliedRewardPoints = usableRewards ? usableRewards : null;
     }
 
-    const isAffiseTrackingValid = checkAffiseValidity();
+    try {
+      const isAffiseTrackingValid = checkAffiseValidity();
 
-    if (isAffiseTrackingValid) {
-      variables.isAffiseTrackingValid = isAffiseTrackingValid
-        ? isAffiseTrackingValid
-        : null;
-    }
+      if (isAffiseTrackingValid) {
+        variables.isAffiseTrackingValid = isAffiseTrackingValid
+          ? isAffiseTrackingValid
+          : null;
+      }
 
-    const [
-      { success, code, error, formError, order, payment, transaction },
-      rzpEnabled,
-    ] = await Promise.all([
-      placeOrderV1(variables),
-      loadScript(RAZORPAY_SCRIPT),
-    ]);
-
-    if (success && rzpEnabled && transaction && order) {
-      const options = {
-        key: RAZORPAY_KEY,
-        amount: transaction.amount,
-        currency: "INR",
-        name: "Buy Wow",
-        image: "",
-        order_id: transaction.orderId,
-        handler: async function ({ razorpay_payment_id }) {
-          orderHelper.fetchTransactionStatus(order.id, razorpay_payment_id);
-        },
-        prefill: {
-          name: shippingAddress.name,
-          email: shippingAddress.email,
-          contact: shippingAddress.phone,
-        },
-        notes: {
-          storeId: "6eb42c89-4955-4fc8-8a87-b4ff92e0908c",
-          orderId: order.id,
-          paymentId: payment.id,
-        },
-        theme: {
-          color: "#3399cc",
-        },
-        modal: {
-          ondismiss: function () {
-            orderHelper.reset();
-            razorpayMethod = null;
+      const [
+        { success, code, error, formError, order, payment, transaction },
+        rzpEnabled,
+      ] = await Promise.all([
+        placeOrderV1(variables),
+        loadScript(RAZORPAY_SCRIPT),
+      ]);
+      console.log("code :>> ", code, error);
+      if (success && rzpEnabled && transaction && order) {
+        const options = {
+          key: RAZORPAY_KEY,
+          amount: transaction.amount,
+          currency: "INR",
+          name: "Buy Wow",
+          image: "",
+          order_id: transaction.orderId,
+          handler: async function ({ razorpay_payment_id }) {
+            orderHelper.fetchTransactionStatus(order.id, razorpay_payment_id);
           },
-        },
-      };
+          prefill: {
+            name: shippingAddress.name,
+            email: shippingAddress.email,
+            contact: shippingAddress.phone,
+          },
+          notes: {
+            storeId: "6eb42c89-4955-4fc8-8a87-b4ff92e0908c",
+            orderId: order.id,
+            paymentId: payment.id,
+          },
+          theme: {
+            color: "#3399cc",
+          },
+          modal: {
+            ondismiss: function () {
+              orderHelper.reset();
+              razorpayMethod = null;
+            },
+          },
+        };
 
-      razorpayMethod = new Razorpay(options);
-      razorpayMethod.open();
-      // addPaymentInfo();
-      // logger.verbose("Razorpay initialization");
+        razorpayMethod = new Razorpay(options);
+        razorpayMethod.open();
+        // addPaymentInfo();
+        // logger.verbose("Razorpay initialization");
+      }
+    } catch (error) {
+    } finally {
+      setPlaceOrderLoader(false);
     }
   };
 
@@ -246,6 +253,8 @@ export default function OrderSection() {
         variant="primary"
         className="p-3 text-xl"
         onClick={placeOrderHandler}
+        loader={placeOrderLoader}
+        loaderClass="ml-2"
       >
         Place Order
       </Button>
