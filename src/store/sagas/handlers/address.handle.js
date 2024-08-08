@@ -174,14 +174,13 @@ export function* deleteAddressHandler(action) {
     yield put(updateAddressList(updatedAddressList));
 
     // Check if the deleted address was the selected one
-    if (!!currentSelectedAddress.length && currentSelectedAddress.id === id) {
+    if (!!currentSelectedAddress && currentSelectedAddress.id === id) {
       if (updatedAddressList.length > 0) {
         // Find the index of the deleted address in the original list
         const deletedIndex = currentAddressList.findIndex(
           (addr) => addr.id === id,
         );
 
-        console.log("nextAddress :>> ", nextAddress);
         // Select the next address, or the last one if the deleted address was the last
         const nextAddress =
           updatedAddressList[deletedIndex] ||
