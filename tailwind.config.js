@@ -60,6 +60,7 @@ module.exports = {
           "50_01": "#f9f2e0",
           a200: "#fab73b",
         },
+        pink: { 200: "#F6E8EB" },
         white: { a700: "#fefefe", a700_01: "#ffffff" },
         yellow: { 700: "#e2bb21", 900: "#dd8434" },
         black_600: "#656d76",

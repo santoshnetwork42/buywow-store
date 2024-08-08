@@ -7,6 +7,7 @@ export const initialState = {
   isRewardApplied: true,
   isShoppingCartIdLoading: false,
   subTotal: 0,
+  storedCouponCode: null,
 };
 
 export const cartSlice = createSlice({
@@ -16,14 +17,37 @@ export const cartSlice = createSlice({
     setCart: (state, action) => {
       state.data = action.payload;
     },
-    updateSubTotal: (state, action) => {
+    setSubTotal: (state, action) => {
       state.subTotal = action.payload;
     },
-    emptyCart: (state) => {
-      state.initialState = { ...initialState };
+    emptyCart: () => initialState,
+    setCoupon: (state, action) => {
+      state.coupon = action.payload;
+    },
+    setCartId: (state, action) => {
+      state.cartId = action.payload;
+    },
+    setIsRewardApplied: (state, action) => {
+      state.isRewardApplied = action.payload;
+    },
+    setIsShoppingCartIdLoading: (state, action) => {
+      state.isShoppingCartIdLoading = action.payload;
+    },
+    setStoredCouponCode: (state, action) => {
+      state.storedCouponCode = action.payload;
     },
   },
 });
 
-export const { setCart, updateSubTotal, emptyCart } = cartSlice.actions;
+export const {
+  setCart,
+  setSubTotal,
+  emptyCart,
+  setCoupon,
+  setCartId,
+  setIsRewardApplied,
+  setIsShoppingCartIdLoading,
+  setStoredCouponCode,
+} = cartSlice.actions;
+
 export default cartSlice.reducer;

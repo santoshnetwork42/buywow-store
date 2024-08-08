@@ -42,8 +42,6 @@ const ProductDetailView = ({ product }) => {
     images,
   } = packageProduct || {};
 
-  console.log(images);
-
   const imageList = images?.items
     ? [...images.items].sort((a, b) => a.position - b.position)
     : [];

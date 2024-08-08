@@ -1,5 +1,6 @@
 import { STORE_ID } from "@/config";
 import {
+  applyCoupon,
   createUserAddress,
   deleteUserAddress,
   ensureUserAndDispatchOTP,
@@ -11,7 +12,7 @@ import {
   getUser,
   searchCMSProducts,
   updateUserAddress,
-  verifyCustomOTP
+  verifyCustomOTP,
 } from "@/graphql/appSync/api";
 import { generateClient } from "aws-amplify/api";
 
@@ -211,5 +212,26 @@ export const updateUserAddressAPI = async (input) => {
   } catch (error) {
     console.error("Error Updating User Address:", error);
     return error;
+  }
+};
+
+export const applyCouponAPI = async (couponCode) => {
+  try {
+    const response = await client.graphql({
+      query: applyCoupon,
+      authMode: "apiKey",
+      variables: {
+        storeId: STORE_ID,
+        code: couponCode,
+        deviceType: "WEB",
+        variantFilter: { status: { ne: "DISABLED" } },
+        imageLimit: 1,
+      },
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error applying coupon:", error);
+    return null;
   }
 };

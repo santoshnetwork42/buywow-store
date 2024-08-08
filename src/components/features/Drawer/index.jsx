@@ -7,112 +7,121 @@ import React, {
   useCallback,
   useContext,
 } from "react";
-import { useBodyScrollLock } from "@/utils/hooks/useBodyScrollLock";
 
-// Create a context to manage nested drawers
-const DrawerContext = React.createContext({
-  isChildDrawerOpen: false,
-  setIsChildDrawerOpen: () => {},
-});
+const DrawerContext = React.createContext({});
 
-const Drawer = ({
-  isOpen,
-  onClose,
-  children,
-  position = "left",
-  width = "326px",
-  className = "",
-  enableOutsideClick = true,
-}) => {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [drawerTranslate, setDrawerTranslate] = useState(
-    position === "left" ? `-${width}` : width,
-  );
-  const [bgOpacity, setBgOpacity] = useState(0);
-  const drawerRef = useRef(null);
-  const [isChildDrawerOpen, setIsChildDrawerOpen] = useState(false);
+const Drawer = React.memo(
+  ({
+    isOpen,
+    onClose,
+    children,
+    position = "left",
+    width = "326px",
+    className = "",
+    enableOutsideClick = true,
+  }) => {
+    const [state, setState] = useState({
+      isAnimating: false,
+      drawerSize: "0px",
+      bgOpacity: 0,
+    });
 
-  // Get the parent drawer's context
-  const parentContext = useContext(DrawerContext);
-  console.log(parentContext);
+    const drawerRef = useRef(null);
+    const parentContext = useContext(DrawerContext);
 
-  useBodyScrollLock(isOpen);
+    const toggleScroll = useCallback((lock) => {
+      document.body.style.overflow = lock ? "hidden" : "unset";
+    }, []);
 
-  useEffect(() => {
-    if (isOpen) {
-      setIsAnimating(true);
-      const translateTimer = setTimeout(() => setDrawerTranslate("0px"), 50);
-      const opacityTimer = setTimeout(() => setBgOpacity(0.2), 50);
-
-      if (parentContext) {
-        parentContext.setIsChildDrawerOpen(true);
+    useEffect(() => {
+      if (isOpen) {
+        openDrawer();
+      } else {
+        closeDrawer();
       }
 
       return () => {
-        clearTimeout(translateTimer);
-        clearTimeout(opacityTimer);
+        toggleScroll(false);
       };
-    } else {
-      setDrawerTranslate(position === "left" ? `-${width}` : width);
-      setBgOpacity(0);
-      const timer = setTimeout(() => setIsAnimating(false), 300);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen, width, parentContext, toggleScroll]);
 
-      if (parentContext) {
-        parentContext.setIsChildDrawerOpen(false);
-      }
+    const openDrawer = () => {
+      toggleScroll(true);
+      setState((prev) => ({ ...prev, isAnimating: true }));
+
+      const timers = [
+        setTimeout(
+          () => setState((prev) => ({ ...prev, drawerSize: width })),
+          50,
+        ),
+        setTimeout(() => setState((prev) => ({ ...prev, bgOpacity: 0.2 })), 50),
+      ];
+
+      parentContext?.parentLockScroll?.();
+
+      return () => timers.forEach(clearTimeout);
+    };
+
+    const closeDrawer = () => {
+      setState((prev) => ({ ...prev, drawerSize: "0px", bgOpacity: 0 }));
+      toggleScroll(false);
+
+      const timer = setTimeout(
+        () => setState((prev) => ({ ...prev, isAnimating: false })),
+        300,
+      );
+
+      parentContext?.parentLockScroll?.();
 
       return () => clearTimeout(timer);
-    }
-  }, [isOpen, position, width, parentContext]);
+    };
 
-  useEffect(() => {
-    if (isChildDrawerOpen && drawerRef.current) {
-      drawerRef.current?.scrollTo({ top: 0 });
-    }
-  }, [isChildDrawerOpen]);
+    const handleClickOutside = useCallback(
+      (event) => {
+        if (enableOutsideClick && !drawerRef.current?.contains(event.target)) {
+          onClose();
+        }
+      },
+      [enableOutsideClick, onClose],
+    );
 
-  const handleClickOutside = useCallback(
-    (event) => {
-      if (
-        enableOutsideClick &&
-        drawerRef.current &&
-        !drawerRef.current.contains(event.target)
-      ) {
-        onClose();
-      }
-    },
-    [enableOutsideClick, onClose],
-  );
+    if (!isOpen && !state.isAnimating) return null;
 
-  if (!isOpen && !isAnimating) return null;
-
-  return (
-    <DrawerContext.Provider value={{ isChildDrawerOpen, setIsChildDrawerOpen }}>
-      <div
-        className={`bg-black fixed inset-0 z-[100] transition-all duration-300 ease-in-out ${className}`}
-        style={{
-          pointerEvents: isOpen ? "auto" : "none",
-          backgroundColor: `rgba(0, 0, 0, ${bgOpacity})`,
+    return (
+      <DrawerContext.Provider
+        value={{
+          parentLockScroll: () => toggleScroll(true),
+          parentUnlockScroll: () => toggleScroll(false),
         }}
-        onClick={handleClickOutside}
       >
         <div
-          ref={drawerRef}
+          className={`fixed inset-0 z-[100] transition-all duration-300 ease-in-out ${className}`}
           style={{
-            transform: `translateX(${drawerTranslate})`,
-            [position]: 0,
-            maxWidth: width,
-            overflow: isChildDrawerOpen ? "hidden" : "auto",
+            pointerEvents: isOpen ? "auto" : "none",
+            backgroundColor: `rgba(0, 0, 0, ${state.bgOpacity})`,
           }}
-          className="absolute top-0 flex h-dvh w-full flex-col bg-gray-50 shadow-lg transition-transform duration-300 ease-in-out"
-          onClick={(e) => e.stopPropagation()}
+          onClick={handleClickOutside}
         >
-          {children}
+          <div
+            ref={drawerRef}
+            style={{
+              [position]: 0,
+              [position === "left" || position === "right"
+                ? "width"
+                : "height"]: state.drawerSize,
+              maxWidth: width,
+            }}
+            className={`absolute top-0 flex h-dvh flex-col overflow-x-hidden bg-gray-50 shadow-lg transition-all duration-300 ease-in-out ${position === "right" ? "right-0" : "left-0"}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {children}
+          </div>
         </div>
-      </div>
-    </DrawerContext.Provider>
-  );
-};
+      </DrawerContext.Provider>
+    );
+  },
+);
 
 Drawer.displayName = "Drawer";
 
