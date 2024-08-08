@@ -11,6 +11,7 @@ import {
   setAuthLoading,
   setConfirmationStatus,
 } from "@/store/slices/auth/auth.slice";
+import { setUser } from "@/store/slices/user/user.slice";
 import { call, put } from "redux-saga/effects";
 
 export function* createAwsAccountHandler(action) {
@@ -104,12 +105,13 @@ export function* setConfirmationStatusHandler(action) {
   }
 }
 
-export function* signOutHandler(action) {
+export function* signOutHandler() {
   try {
     const signedOutUser = yield call(() => signOutRequest());
     console.log("signedOutUser :>> ", signedOutUser); //set user in userState
 
-    yield put(setConfirmationStatus(action.payload));
+    yield put(setConfirmationStatus(null));
+    yield put(setUser({}));
   } catch (error) {
     console.log("error", error);
   }
