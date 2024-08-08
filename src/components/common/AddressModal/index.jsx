@@ -170,7 +170,7 @@ const AddressModal = ({
                 }}
                 label="City"
                 required
-                className="gap-1 border p-2"
+                className="w-full gap-1 border p-2"
                 error={addressErrors.city}
               />
 
@@ -189,7 +189,7 @@ const AddressModal = ({
                 }}
                 label="State"
                 required
-                className="gap-1 border p-2"
+                className="w-full gap-1 border p-2"
                 error={addressErrors.state}
               />
             </div>
@@ -217,7 +217,7 @@ const AddressModal = ({
                 label="Phone"
                 prefix="+91"
                 required
-                className="flex gap-1 border p-2"
+                className="flex w-full gap-1 border p-2"
                 error={addressErrors.phone}
               />
 
@@ -236,7 +236,7 @@ const AddressModal = ({
                 }}
                 label="Full Name"
                 required
-                className="gap-1 border p-2"
+                className="w-full gap-1 border p-2"
                 error={addressErrors.name}
               />
             </div>

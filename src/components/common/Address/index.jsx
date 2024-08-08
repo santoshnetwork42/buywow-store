@@ -321,7 +321,7 @@ const Address = ({}) => {
                 }}
                 label="City"
                 required
-                className="gap-1 border p-2"
+                className="w-full gap-1 border p-2"
                 error={addressErrors.city}
               />
 
@@ -340,7 +340,7 @@ const Address = ({}) => {
                 }}
                 label="State"
                 required
-                className="gap-1 border p-2"
+                className="w-full gap-1 border p-2"
                 error={addressErrors.state}
               />
             </div>
@@ -368,7 +368,7 @@ const Address = ({}) => {
                 label="Phone"
                 prefix="+91"
                 required
-                className="flex gap-1 border p-2"
+                className="flex gap-1 border p-2 w-full"
                 error={addressErrors.phone}
               />
 
@@ -387,7 +387,7 @@ const Address = ({}) => {
                 }}
                 label="Full Name"
                 required
-                className="gap-1 border p-2"
+                className="gap-1 border p-2 w-full"
                 error={addressErrors.name}
               />
             </div>

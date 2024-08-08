@@ -57,7 +57,7 @@ const Modal = ({
 
   return (
     <div
-      className={`fixed z-[999] transition-opacity duration-300 ${
+      className={`fixed z-[999] transition-opacity duration-200 ${
         isOpen ? "opacity-100" : "opacity-0"
       }`}
       style={{ pointerEvents: isOpen ? "auto" : "none" }}

@@ -91,16 +91,16 @@ export default function OrderSection() {
     };
 
     const {
-      area,
-      address,
-      city,
-      state,
-      country,
-      pinCode,
-      landmark,
-      phone,
-      name,
-    } = currentAddress;
+      area = "",
+      address = "",
+      city = "",
+      state = "",
+      country = "",
+      pinCode = "",
+      landmark = "",
+      phone = "",
+      name = "",
+    } = currentAddress || {};
 
     const { firstName, lastName } = nameSplitter(name);
     const shippingAddress = {
