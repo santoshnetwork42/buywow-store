@@ -48,7 +48,7 @@ const Input = React.forwardRef(
         : "text-gray-500";
 
     return (
-      <div className={`relative w-full ${className}`}>
+      <div className={`relative ${className}`}>
         {prefix}
         <input
           ref={ref}
