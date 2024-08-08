@@ -14,7 +14,7 @@ const Modal = ({
   mobileViewHeight,
   showCloseButtonOutOfBox = false,
   showMobileView = true,
-  enableOutsideClick = false,
+  enableOutsideClick = true,
   enableCloseButton = true,
   modalContainerClassName,
 }) => {
@@ -30,18 +30,29 @@ const Modal = ({
     }
   }, [isOpen]);
 
-  const handleClickOutside = (event) => {
-    if (
-      enableOutsideClick &&
-      modalRef.current &&
-      !modalRef.current.contains(event.target)
-    ) {
-      onCloseClick();
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        enableOutsideClick &&
+        modalRef.current &&
+        !modalRef.current.contains(event.target)
+      ) {
+        onClose();
+      }
+    };
 
-  const onCloseClick = (args) => {
-    onClose(args);
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, enableOutsideClick, onClose]);
+
+  const onCloseClick = (event) => {
+    event.stopPropagation();
+    onClose();
   };
 
   return (
@@ -53,7 +64,6 @@ const Modal = ({
     >
       {isVisible && (
         <div
-          onClick={handleClickOutside}
           className={twMerge(
             "fixed inset-0 flex justify-center bg-black-900 bg-opacity-20 transition-opacity duration-300",
             showMobileView ? "items-end" : "items-center",
@@ -76,6 +86,7 @@ const Modal = ({
                 ? "translate-y-0"
                 : "translate-y-full md:translate-y-0 md:scale-95",
             )}
+            onClick={(e) => e.stopPropagation()}
           >
             {!!enableCloseButton && !!showCloseButtonOutOfBox && (
               <div
