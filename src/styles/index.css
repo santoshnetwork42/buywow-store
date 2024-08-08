@@ -144,36 +144,3 @@ span.ripple {
 .inline-html-content > a {
   display: inline-block;
 }
-
-/* Animation for modal */
-.fade-in {
-  animation-name: fadeIn;
-  animation-duration: 300ms;
-  animation-timing-function: ease-in;
-  animation-fill-mode: both;
-}
-
-.fade-out {
-  animation-name: fadeOut;
-  animation-duration: 300ms;
-  animation-timing-function: ease-out;
-  animation-fill-mode: both;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
