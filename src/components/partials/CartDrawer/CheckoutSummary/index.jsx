@@ -1,40 +1,41 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback } from "react";
 import { useGuestCheckout, useNavBarState } from "@/utils/context/navbar";
 import { useCartTotal, useConfiguration } from "@wow-star/utils";
 import { GOKWIK_ENABLED, PREPAID_ENABLED } from "@/utils/data/constants";
 import { useRouter } from "next/navigation";
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Button, Heading, Text } from "@/components/elements";
 import PasswordLess from "@/components/common/Passwordless";
 import { toDecimal } from "@/utils/helpers";
 import { showToast } from "@/components/common/ToastComponent";
-import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
-import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
-const CheckoutSummary = ({ inventory }) => {
+const CheckoutSummary = React.memo(({ inventory }) => {
   const router = useRouter();
   const { isRewardApplied } = useNavBarState();
+  const { handleCartVisibility } = useModalDispatch();
+  const { handleOutOfStock, handleProceedToCheckout } = useEventsDispatch();
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
 
-  const appliedCoupon = useSelector((state) => state?.cart?.coupon);
-  const shoppingCartId = useSelector((state) => state?.cart?.cartId);
-  const user = useSelector((state) => state?.user?.user);
-  const customUser = useSelector((state) => state?.customUser);
-  const cartList = useSelector((state) => state?.cart?.data);
-
-  const dispatch = useDispatch();
+  const { appliedCoupon, shoppingCartId, user, customUser, cartList } =
+    useSelector((state) => ({
+      appliedCoupon: state?.cart?.coupon,
+      shoppingCartId: state?.cart?.cartId,
+      user: state?.user?.user,
+      customUser: state?.customUser,
+      cartList: state?.cart?.data,
+    }));
 
   const {
-    totalItems,
     totalListingPrice,
     totalPrice,
     shippingTotal,
     couponTotal,
-    cartGrandTotal,
     prepaidDiscount,
     prepaidDiscountPercent,
     totalAmountSaved,
@@ -43,7 +44,7 @@ const CheckoutSummary = ({ inventory }) => {
     usableRewards,
     grandTotal,
   } = useCartTotal({
-    isRewardApplied: isRewardApplied,
+    isRewardApplied,
     paymentType: prepaidEnabled ? "PREPAID" : "COD",
   });
 
@@ -56,41 +57,16 @@ const CheckoutSummary = ({ inventory }) => {
     outOfStockItems,
   } = inventory || {};
 
-  const handleCartVisibility = (isCartOpen) => {
-    dispatch({
-      type: modalSagaActions.SET_CART_MODAL,
-      payload: {
-        isCartOpen,
-      },
-    });
-  };
-
-  const handleOutOfStock = () => {
-    dispatch({
-      type: eventsSagaActions.OUT_OF_STOCK,
-      payload: { outOfStockItems, inventoryMapping },
-    });
-  };
-
-  const onProceedToCheckout = (source) => {
-    dispatch({
-      type: eventsSagaActions.PROCEED_TO_CHECKOUT,
-      payload: {
-        source: source || "BUYWOW",
-      },
-    });
-  };
-
   const validateAndGoToCheckout = useCallback(async () => {
     if (!isInventoryCheckSuccess) {
-      handleOutOfStock();
+      handleOutOfStock(outOfStockItems, inventoryMapping);
       showToast.error("Please remove out of stock product from cart");
       return false;
     }
 
     handleCartVisibility(false);
 
-    const lscart = localStorage.getItem(`${STORE_PREFIX}-cartId`);
+    const lscart = localStorage.getItem(`${STORE_PREFIX}-cartId`) || "";
     const cartId = lscart || shoppingCartId;
 
     const isGKCXEnabled = !!(GOKWIK_MID && cartId && gokwikEnabled);
@@ -107,7 +83,7 @@ const CheckoutSummary = ({ inventory }) => {
         //   },
         // });
 
-        onProceedToCheckout("GOKWIK");
+        handleProceedToCheckout("GOKWIK");
         return Promise.resolve(true);
       } catch (e) {
         // await gokwikSdk.close();
@@ -116,7 +92,7 @@ const CheckoutSummary = ({ inventory }) => {
       }
     }
 
-    onProceedToCheckout("BUYWOW");
+    handleProceedToCheckout("BUYWOW");
     if (user || guestCheckout || customUser) {
       router.push("/checkout");
       return Promise.resolve(true);
@@ -145,120 +121,99 @@ const CheckoutSummary = ({ inventory }) => {
       <Heading size="xl" as="h3" responsive>
         Payment Summary
       </Heading>
-      <div className="flex flex-col gap-1 md:gap-2">
-        <div className="flex items-center justify-between">
-          <Text size="lg" as="p" className="capitalize" responsive>
-            Subtotal
-          </Text>
-          <div className="flex items-center gap-1.5">
-            {!!(totalPrice < totalListingPrice) && (
-              <Text
-                size="sm"
-                as="p"
-                className="text-[#AAAAAA] line-through"
-                responsive
-              >
-                ₹{toDecimal(totalListingPrice)}
-              </Text>
-            )}
-            <Text size="lg" as="p" className="" responsive>
-              ₹{totalPrice}
-            </Text>
-          </div>
-        </div>
-
-        {!!appliedCoupon && !!couponTotal && (
-          <div className="flex items-center justify-between">
-            <Text size="lg" as="p" className="capitalize" responsive>
-              Discounts
-              <span className="font-semibold"> ({appliedCoupon?.code})</span>
-            </Text>
-            <Text size="lg" as="p" className="text-green-600" responsive>
-              -{`₹${toDecimal(couponTotal)}`}
-            </Text>
-          </div>
-        )}
-
-        {!!(prepaidDiscount > 0) && (
-          <div className="flex items-center justify-between">
-            <Text size="lg" as="p" className="capitalize" responsive>
-              {prepaidDiscountPercent}% Online Payment Discount
-            </Text>
-            <Text size="lg" as="p" className="text-green-600" responsive>
-              -₹{toDecimal(prepaidDiscount)}
-            </Text>
-          </div>
-        )}
-
-        {!!codCharges && (
-          <div className="flex items-center justify-between">
-            <Text size="lg" as="p" className="capitalize" responsive>
-              COD Charges
-            </Text>
-            <div className="flex items-center gap-1.5">
-              {!appliedCODCharges && (
-                <Text
-                  size="sm"
-                  as="p"
-                  className="text-[#AAAAAA] line-through"
-                  responsive
-                >
-                  ₹{toDecimal(codCharges)}
-                </Text>
-              )}
-              <Text
-                size="lg"
-                as="p"
-                className={`${appliedCODCharges ? "text-black-600" : "text-green-600"}`}
-                responsive
-              >
-                {!!appliedCODCharges
-                  ? `₹${toDecimal(appliedCODCharges)}`
-                  : "Free"}
-              </Text>
-            </div>
-          </div>
-        )}
-
-        <div className="flex items-center justify-between">
-          <Text size="lg" as="p" className="capitalize" responsive>
-            Shipping
-          </Text>
-          <div className="flex items-center gap-1.5">
-            {!(shippingTotal < 50) && (
-              <Text
-                size="sm"
-                as="p"
-                className="text-[#AAAAAA] line-through"
-                responsive
-              >
-                ₹{toDecimal(50)}
-              </Text>
-            )}
-            <Text
-              size="lg"
-              as="p"
-              className={`${shippingTotal ? "text-black-600" : "text-green-600"}`}
-              responsive
-            >
-              {!!shippingTotal ? `₹${toDecimal(shippingTotal)}` : "Free"}
-            </Text>
-          </div>
-        </div>
-
-        {!!usableRewards && isRewardApplied && (
-          <div className="flex items-center justify-between">
-            <Text size="lg" as="p" className="capitalize" responsive>
-              WOW Cash
-            </Text>
-            <Text size="lg" as="p" className="text-green-600" responsive>
-              -₹{toDecimal(usableRewards)}
-            </Text>
-          </div>
-        )}
+      <PaymentSummary
+        totalListingPrice={totalListingPrice}
+        totalPrice={totalPrice}
+        appliedCoupon={appliedCoupon}
+        couponTotal={couponTotal}
+        prepaidDiscount={prepaidDiscount}
+        prepaidDiscountPercent={prepaidDiscountPercent}
+        codCharges={codCharges}
+        appliedCODCharges={appliedCODCharges}
+        shippingTotal={shippingTotal}
+        usableRewards={usableRewards}
+        grandTotal={grandTotal}
+        totalAmountSaved={totalAmountSaved}
+      />
+      <div className="mt-1 flex flex-col items-center gap-2.5">
+        <Button
+          className="w-full"
+          variant="primary"
+          size="large"
+          onClick={validateAndGoToCheckout}
+          disabled={checkoutButtonDisabled}
+        >
+          <Heading size="2xl" as="h2" className="text-white-a700_01">
+            Checkout
+          </Heading>
+        </Button>
+        <PasswordLess />
+        <Text size="base" as="p" className="text-sm" responsive>
+          Estimated delivery within 3-5 days
+        </Text>
       </div>
-      <div className="h-px bg-black-900" />
-      <div className="flex flex-col">
+    </div>
+  );
+});
+
+const PaymentSummary = React.memo(
+  ({
+    totalListingPrice,
+    totalPrice,
+    appliedCoupon,
+    couponTotal,
+    prepaidDiscount,
+    prepaidDiscountPercent,
+    codCharges,
+    appliedCODCharges,
+    shippingTotal,
+    usableRewards,
+    grandTotal,
+    totalAmountSaved,
+  }) => {
+    return (
+      <div className="flex flex-col gap-1 md:gap-2">
+        <SummaryItem
+          label="Subtotal"
+          value={totalPrice}
+          originalValue={totalListingPrice}
+        />
+        {!!appliedCoupon && !!couponTotal && (
+          <SummaryItem
+            label={`Discounts (${appliedCoupon?.code})`}
+            value={-couponTotal}
+            color="text-green-600"
+          />
+        )}
+        {!!(prepaidDiscount > 0) && (
+          <SummaryItem
+            label={`${prepaidDiscountPercent}% Online Payment Discount`}
+            value={-prepaidDiscount}
+            color="text-green-600"
+          />
+        )}
+        {!!codCharges && (
+          <SummaryItem
+            label="COD Charges"
+            value={!!appliedCODCharges ? appliedCODCharges : "Free"}
+            originalValue={codCharges}
+            color={appliedCODCharges ? "text-black-600" : "text-green-600"}
+          />
+        )}
+        <SummaryItem
+          label="Shipping"
+          value={!!shippingTotal ? shippingTotal : "Free"}
+          originalValue={50}
+          color={shippingTotal ? "text-black-600" : "text-green-600"}
+        />
+        {!!usableRewards && (
+          <SummaryItem
+            label="WOW Cash"
+            value={-usableRewards}
+            color="text-green-600"
+          />
+        )}
+        <div className="h-px bg-black-900" />
         <div className="flex justify-between">
           <div className="flex flex-col gap-1">
             <Heading size="xl" as="h3" responsive>
@@ -280,26 +235,41 @@ const CheckoutSummary = ({ inventory }) => {
           </div>
         </div>
       </div>
+    );
+  },
+);
 
-      <div className="mt-1 flex flex-col items-center gap-2.5">
-        <Button
-          className="w-full"
-          variant="primary"
-          size="large"
-          onClick={validateAndGoToCheckout}
-          disabled={checkoutButtonDisabled}
-        >
-          <Heading size="2xl" as="h2" className="text-white-a700_01">
-            Checkout
-          </Heading>
-        </Button>
-        <PasswordLess />
-        <Text size="base" as="p" className="text-sm" responsive>
-          Estimated delivery within 3-5 days
+const SummaryItem = React.memo(
+  ({ label, value, originalValue, color = "text-black-600" }) => (
+    <div className="flex items-center justify-between">
+      <Text size="lg" as="p" className="capitalize" responsive>
+        {label}
+      </Text>
+      <div className="flex items-center gap-1.5">
+        {!!originalValue && originalValue !== value && (
+          <Text
+            size="sm"
+            as="p"
+            className="text-[#AAAAAA] line-through"
+            responsive
+          >
+            ₹{toDecimal(originalValue)}
+          </Text>
+        )}
+        <Text size="lg" as="p" className={color} responsive>
+          {typeof value === "number"
+            ? value < 0
+              ? `-₹${toDecimal(Math.abs(value))}`
+              : `₹${toDecimal(value)}`
+            : value}
         </Text>
       </div>
     </div>
-  );
-};
+  ),
+);
+
+CheckoutSummary.displayName = "CheckoutSummary";
+PaymentSummary.displayName = "PaymentSummary";
+SummaryItem.displayName = "SummaryItem";
 
 export default CheckoutSummary;
