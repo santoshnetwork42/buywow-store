@@ -42,26 +42,12 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
     setIsRewardApplied(state);
   }, []);
 
-  const checkForUser = async () => {
-    try {
-      const { username, userId, signInDetails } = await getCurrentUser();
-      // console.log(`The username: ${username}`);
-      // console.log(`The userId: ${userId}`);
-      // console.log(`The signInDetails: ${signInDetails}`);
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  };
-
   const apiResolve = useCallback(async (query, variables, authMode) => {
     try {
-      const isAuthenticated = await checkForUser();
       const result = await client?.graphql({
         query,
         variables,
-        authMode: isAuthenticated ? "userPool" : "apiKey",
+        authMode: authMode ? "userPool" : "apiKey",
       });
       if (result.errors) {
         console.error("GraphQL Errors:", result.errors);
