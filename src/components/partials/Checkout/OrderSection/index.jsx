@@ -20,7 +20,7 @@ import {
   useOrders,
 } from "@wow-star/utils";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
@@ -34,7 +34,6 @@ export default function OrderSection() {
 
   const totalCartItemsCount = cartData?.data?.length || 0;
 
-  const [placeOrderLoader, setPlaceOrderLoader] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState("PREPAID");
   const maxCOD = useConfiguration(MAX_COD_AMOUNT, -1);
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
@@ -80,7 +79,6 @@ export default function OrderSection() {
   ] = useOrders();
 
   const placeOrderHandler = async () => {
-    setPlaceOrderLoader(true);
     const metaData = {
       landingPage: "http://localhost:3002/",
       referrer: "http://localhost:3002/checkout",
@@ -152,7 +150,7 @@ export default function OrderSection() {
         placeOrderV1(variables),
         loadScript(RAZORPAY_SCRIPT),
       ]);
-      console.log("code :>> ", code, error);
+
       if (success && rzpEnabled && transaction && order) {
         const options = {
           key: RAZORPAY_KEY,
@@ -192,24 +190,23 @@ export default function OrderSection() {
       }
     } catch (error) {
     } finally {
-      setPlaceOrderLoader(false);
     }
   };
 
-  const afterOrderConfirm = async () => {
+  const afterOrderConfirm = useCallback(async () => {
     if (isConfirmed && finalOrder) {
       if (razorpayMethod) {
         razorpayMethod.close();
       }
-      await router.push(`/order/${finalOrder.id}`);
+      router.push(`/order/${finalOrder.id}`);
     }
-  };
+  }, [isConfirmed, finalOrder, router]);
 
   useEffect(() => {
     if (isConfirmed) {
-      afterOrderConfirm();
+      void afterOrderConfirm(); // Using `void` to ignore the Promise returned by afterOrderConfirm
     }
-  }, [isConfirmed]);
+  }, [isConfirmed, afterOrderConfirm]);
 
   //need to add condition based on applied coupon
   const ppcodAmountToTake = ppcodAmount;
@@ -253,7 +250,7 @@ export default function OrderSection() {
         variant="primary"
         className="p-3 text-xl"
         onClick={placeOrderHandler}
-        loader={placeOrderLoader}
+        loader={loading}
         loaderClass="ml-2"
       >
         Place Order
