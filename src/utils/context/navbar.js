@@ -45,9 +45,9 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
   const checkForUser = async () => {
     try {
       const { username, userId, signInDetails } = await getCurrentUser();
-      console.log(`The username: ${username}`);
-      console.log(`The userId: ${userId}`);
-      console.log(`The signInDetails: ${signInDetails}`);
+      // console.log(`The username: ${username}`);
+      // console.log(`The userId: ${userId}`);
+      // console.log(`The signInDetails: ${signInDetails}`);
       return true;
     } catch (err) {
       console.log(err);
