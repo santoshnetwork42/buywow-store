@@ -220,17 +220,15 @@ const Address = ({}) => {
       return true;
     }
 
-    if (!!user && user?.id) {
-      dispatch({
-        type: addressSagaActions.CREATE_ADDRESS,
-        payload: {
-          ...address,
-          userID: user?.id,
-          phone: addPhonePrefix(address?.phone),
-          country: address?.country || "IN",
-        },
-      });
-    }
+    dispatch({
+      type: addressSagaActions.CREATE_ADDRESS,
+      payload: {
+        ...address,
+        userID: user?.id || null,
+        phone: addPhonePrefix(address?.phone),
+        country: address?.country || "IN",
+      },
+    });
 
     setAddress(initialAddressState);
   };
@@ -368,7 +366,7 @@ const Address = ({}) => {
                 label="Phone"
                 prefix="+91"
                 required
-                className="flex gap-1 border p-2 w-full"
+                className="flex w-full gap-1 border p-2"
                 error={addressErrors.phone}
               />
 
@@ -387,7 +385,7 @@ const Address = ({}) => {
                 }}
                 label="Full Name"
                 required
-                className="gap-1 border p-2 w-full"
+                className="w-full gap-1 border p-2"
                 error={addressErrors.name}
               />
             </div>
