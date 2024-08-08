@@ -69,15 +69,24 @@ MenuList.displayName = "MenuList";
 
 const FooterSection = () => {
   const dispatch = useDispatch();
-  dispatch({
-    type: authSagaActions.SIGNOUT,
-  });
+  const handleLogoutClick = () => {
+    dispatch({
+      type: authSagaActions.SIGNOUT,
+    });
+  };
 
   return (
     <div className="sticky bottom-0 left-0 w-full bg-gray-50 p-4">
-      <div className="flex items-center gap-2">
+      <div className="flex cursor-pointer items-center gap-2">
         <UserSVG />
-        <Text size="sm" as="p" className="capitalize">
+        <Text
+          size="sm"
+          as="p"
+          className="capitalize"
+          onClick={() => {
+            handleLogoutClick();
+          }}
+        >
           Logout
         </Text>
       </div>
