@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Heading } from "@/components/elements";
 import { CloseIcon } from "@/assets/svg/icons";
 import { twMerge } from "tailwind-merge";
@@ -19,6 +19,16 @@ const Modal = ({
   modalContainerClassName,
 }) => {
   const modalRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+    } else {
+      const timer = setTimeout(() => setIsVisible(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   const handleClickOutside = (event) => {
     if (
@@ -35,20 +45,26 @@ const Modal = ({
   };
 
   return (
-    <div className={`fixed z-[999] ${isOpen ? "fade-in" : "fade-out"}`}>
-      {!!isOpen && (
+    <div
+      className={`fixed z-[999] transition-opacity duration-300 ${
+        isOpen ? "opacity-100" : "opacity-0"
+      }`}
+      style={{ pointerEvents: isOpen ? "auto" : "none" }}
+    >
+      {isVisible && (
         <div
           onClick={handleClickOutside}
           className={twMerge(
-            "fixed inset-0 flex justify-center bg-black-900 bg-opacity-20",
+            "fixed inset-0 flex justify-center bg-black-900 bg-opacity-20 transition-opacity duration-300",
             showMobileView ? "items-end" : "items-center",
             "md:items-center",
+            isOpen ? "opacity-100" : "opacity-0",
           )}
         >
           <div
             ref={modalRef}
             className={twMerge(
-              "relative rounded-lg bg-white-a700 p-4 md:w-auto",
+              "relative rounded-lg bg-white-a700 p-4 transition-transform duration-300 md:w-auto",
               showMobileView
                 ? twMerge(
                     mobileViewHeight,
@@ -56,6 +72,9 @@ const Modal = ({
                   )
                 : "",
               modalContainerClassName,
+              isOpen
+                ? "translate-y-0"
+                : "translate-y-full md:translate-y-0 md:scale-95",
             )}
           >
             {!!enableCloseButton && !!showCloseButtonOutOfBox && (

@@ -383,7 +383,7 @@ const CouponsAndOffers = () => {
       <CouponHeader openSidebar={() => setIsSidebarOpen(true)} />
 
       <CouponModal
-        isOpen={!isCouponModalOpen}
+        isOpen={isCouponModalOpen}
         onClose={() => setIsCouponModalOpen(false)}
         appliedCoupon={appliedCoupon}
       />
