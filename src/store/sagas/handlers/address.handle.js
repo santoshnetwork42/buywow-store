@@ -181,6 +181,7 @@ export function* deleteAddressHandler(action) {
           (addr) => addr.id === id,
         );
 
+        console.log("nextAddress :>> ", nextAddress);
         // Select the next address, or the last one if the deleted address was the last
         const nextAddress =
           updatedAddressList[deletedIndex] ||

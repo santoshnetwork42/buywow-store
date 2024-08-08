@@ -110,9 +110,8 @@ const Drawer = React.memo(
               [position === "left" || position === "right"
                 ? "width"
                 : "height"]: state.drawerSize,
-              maxWidth: width,
             }}
-            className={`absolute top-0 flex h-dvh flex-col overflow-x-hidden bg-gray-50 shadow-lg transition-all duration-300 ease-in-out ${position === "right" ? "right-0" : "left-0"}`}
+            className={`absolute top-0 flex h-dvh max-w-full flex-col overflow-x-hidden bg-gray-50 shadow-lg transition-all duration-300 ease-in-out ${position === "right" ? "right-0" : "left-0"}`}
             onClick={(e) => e.stopPropagation()}
           >
             {children}
