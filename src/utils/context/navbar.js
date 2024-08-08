@@ -1,19 +1,20 @@
 "use client";
 
+import { GUEST_CHECKOUT, STORE_ID, STORE_PREFIX } from "@/config";
 import { NavbarProvider as Navbar, useConfiguration } from "@wow-star/utils";
 import { generateClient } from "aws-amplify/api";
+import { getCurrentUser } from "aws-amplify/auth";
 import Cookie from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
-  useState,
-  useCallback,
   useMemo,
+  useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { GUEST_CHECKOUT, STORE_ID, STORE_PREFIX } from "@/config";
 
 const client = generateClient();
 
@@ -41,15 +42,37 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
     setIsRewardApplied(state);
   }, []);
 
-  const apiResolve = useCallback(
-    (query, variables, authMode) =>
-      client?.graphql({
+  const checkForUser = async () => {
+    try {
+      const { username, userId, signInDetails } = await getCurrentUser();
+      console.log(`The username: ${username}`);
+      console.log(`The userId: ${userId}`);
+      console.log(`The signInDetails: ${signInDetails}`);
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  };
+
+  const apiResolve = useCallback(async (query, variables, authMode) => {
+    try {
+      const isAuthenticated = await checkForUser();
+      const result = await client?.graphql({
         query,
         variables,
-        authMode: authMode === "AUTH" ? "userPool" : "apiKey",
-      }),
-    [],
-  );
+        authMode: isAuthenticated ? "userPool" : "apiKey",
+      });
+      if (result.errors) {
+        console.error("GraphQL Errors:", result.errors);
+        // Handle GraphQL errors
+      }
+      return result;
+    } catch (error) {
+      console.error("API resolve error:", error);
+      // Handle the error appropriately
+    }
+  }, []);
 
   useEffect(() => {
     const handleInteraction = () => {
