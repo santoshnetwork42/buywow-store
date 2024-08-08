@@ -364,20 +364,6 @@ const CouponsAndOffers = () => {
     }
   }, [couponCode]);
 
-  useEffect(() => {
-    let timeoutId;
-    if (isCouponModalOpen) {
-      timeoutId = setTimeout(() => {
-        setIsCouponModalOpen(false);
-      }, 3000);
-    }
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [isCouponModalOpen]);
-
   return (
     <>
       <CouponHeader openSidebar={() => setIsSidebarOpen(true)} />
