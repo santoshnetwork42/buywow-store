@@ -149,13 +149,14 @@ const renderBlock = (block, index) => {
   }
 };
 
-const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
-  revalidate: 1,
-});
+// const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
+//   revalidate: 1,
+// });
 
 export default async function Page() {
   try {
-    const pageData = await getPageData("index");
+    // const pageData = await getPageData("index");
+    const pageData = await getPageBySlugAPI("index");
     const { blocks } = pageData || {};
 
     if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {

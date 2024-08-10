@@ -145,17 +145,15 @@ const renderBlock = (block, index, slug) => {
   }
 };
 
-const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
-  revalidate: 1,
-});
+// const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
+//   revalidate: 1,
+// });
 
 export default async function Page({ params }) {
   const { slug } = params;
   try {
-    // const responseData = await landingPageCMSAPI();
-    // const { blocks } = responseData?.data?.pages.data[0].attributes;
-
-    const pageData = await getPageData(slug[slug.length - 1]);
+    // const pageData = await getPageData(slug[slug.length - 1]);
+    const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
     const { blocks } = pageData || {};
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
