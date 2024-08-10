@@ -1,6 +1,7 @@
 "use client";
 
 import PaymentMethods from "@/components/blocks/PaymentMethods/paymentMethod";
+import { showToast } from "@/components/common/ToastComponent";
 import { Button, Heading } from "@/components/elements";
 import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
 import { useNavBarState } from "@/utils/context/navbar";
@@ -151,6 +152,11 @@ export default function OrderSection() {
         loadScript(RAZORPAY_SCRIPT),
       ]);
 
+      if (code === "INVALID_ADDRESS") {
+        showToast.error("Please Add Address to Proceed");
+        return;
+      }
+
       if (success && rzpEnabled && transaction && order) {
         const options = {
           key: RAZORPAY_KEY,
@@ -189,6 +195,7 @@ export default function OrderSection() {
         // logger.verbose("Razorpay initialization");
       }
     } catch (error) {
+      showToast.error("Something Unexcpected has occurred");
     } finally {
     }
   };
