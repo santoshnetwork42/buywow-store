@@ -15,6 +15,7 @@ import Link from "next/link";
 import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
 import Cashback from "./Cashback";
 import EmptyCart from "./EmptyCart";
+import LoyaltyCash from "./LoyaltyCash";
 
 const CartDrawer = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const CartDrawer = () => {
     },
   } = useSelector((state) => state?.modal);
 
-  const cartData = useCartItems({
+  const cartItems = useCartItems({
     showLTOProducts: false,
     showNonApplicableFreeProducts: true,
   });
@@ -35,21 +36,14 @@ const CartDrawer = () => {
       payload,
     });
   };
+
   const inventory = useInventory({ validateCart });
   const { inventoryMapping } = inventory;
-
-  const { isRewardApplied } = useNavBarState();
+  const { isRewardApplied, handleRewardApply } = useNavBarState();
 
   const {
-    totalListingPrice,
     totalPrice,
-    shippingTotal,
-    totalAmountSaved: totalSaved,
-    couponTotal,
     grandTotal,
-    prepaidDiscount,
-    codCharges,
-    prepaidDiscountPercent,
     usableRewards,
     totalRewardPointsOfUser,
     prepaidCashbackRewardsOnOrder,
@@ -72,6 +66,9 @@ const CartDrawer = () => {
     handleCartOpen(false);
   };
 
+  const amountNeededToAvailCashback =
+    amountNeededToAvailPrepaidCashback?.amount - grandTotal;
+
   return (
     <Drawer
       isOpen={isCartOpen}
@@ -80,12 +77,13 @@ const CartDrawer = () => {
       onClose={handleCartClose}
     >
       <div className="flex flex-1 flex-col gap-3 px-3 py-4 md:px-4">
+        {/* done */}
         <CartHeader
           text="my Cart"
           totalItems={totalItems}
           cartClose={handleCartClose}
         />
-        {!!(cartData?.length > 0) ? (
+        {cartItems?.length > 0 ? (
           <div className="flex w-full flex-1 flex-col gap-3">
             <ShippingProgress
               freeShippingThreshold={1203}
@@ -93,14 +91,28 @@ const CartDrawer = () => {
               className="bg-[#F5E8DDBF] shadow-[0_4px_4px_#0000000D]"
             />
             <MainCartSection
-              cartData={cartData}
+              cartItems={cartItems}
               inventoryMapping={inventoryMapping}
               handleCartClose={handleCartClose}
             />
-            <Cashback cashbackAmount={prepaidCashbackRewardsOnOrder} />
+            {/* done */}
+            <LoyaltyCash
+              showLoyalty={showLoyalty}
+              usableRewards={usableRewards}
+              isRewardApplied={isRewardApplied}
+              handleRewardApply={handleRewardApply}
+              totalRewardPointsOfUser={totalRewardPointsOfUser}
+            />
+            {/* done */}
+            <Cashback
+              cashbackAmount={prepaidCashbackRewardsOnOrder}
+              amountNeeded={amountNeededToAvailCashback}
+            />
+            {/* done */}
             <CheckoutSummary inventory={inventory} />
           </div>
         ) : (
+          // done
           <EmptyCart cartClose={handleCartClose} />
         )}
       </div>

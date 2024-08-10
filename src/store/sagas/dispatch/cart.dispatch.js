@@ -11,17 +11,24 @@ export const useCartDispatch = () => {
     });
   };
 
-  const removeFromCart = (product) => {
-    dispatch({
-      type: cartSagaActions.REMOVE_FROM_CART,
-      payload: { product },
-    });
-  };
-
   const removeCoupon = () => {
     dispatch({
       type: cartSagaActions.REMOVE_COUPON,
       payload: {},
+    });
+  };
+
+  const updateCart = (updatedCart) => {
+    dispatch({
+      type: cartSagaActions.UPDATE_CART,
+      payload: { data: updatedCart },
+    });
+  };
+
+  const removeFromCart = (product) => {
+    dispatch({
+      type: cartSagaActions.REMOVE_FROM_CART,
+      payload: { product },
     });
   };
 
@@ -38,5 +45,6 @@ export const useCartDispatch = () => {
     applyCoupon,
     removeFromCart,
     removeCoupon,
+    updateCart,
   };
 };

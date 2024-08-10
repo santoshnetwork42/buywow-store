@@ -4,10 +4,10 @@ import { eventsSagaActions } from "../sagaActions/events.actions";
 export const useEventsDispatch = () => {
   const dispatch = useDispatch();
 
-  const handleOutOfStock = (outOfStockItems, inventoryMapping) => {
+  const handleOutOfStock = (products, inventory) => {
     dispatch({
       type: eventsSagaActions.OUT_OF_STOCK,
-      payload: { products: outOfStockItems, inventory: inventoryMapping },
+      payload: { products, inventory },
     });
   };
 

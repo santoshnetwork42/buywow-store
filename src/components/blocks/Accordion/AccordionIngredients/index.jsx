@@ -26,10 +26,13 @@ const AccordionIngredients = ({
   accordionIngredientsTitle,
   image,
   ingredientItems,
+  ...props
 }) => {
   if (!accordionIngredientsTitle || !ingredientItems?.data) {
     return null;
   }
+
+  console.log(props, image);
 
   const { url: accordionImageUrl, alternativeText: accordionImageAlt } =
     extractAttributes(image) || {};

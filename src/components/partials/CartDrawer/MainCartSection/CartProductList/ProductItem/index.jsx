@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getUpdatedCart } from "@/utils/helpers";
@@ -10,6 +10,7 @@ import VariantSelector from "@/components/partials/Others/VariantSelector";
 import Quantity from "@/components/common/Quantity";
 import { Text } from "@/components/elements";
 import ProductItemSkeleton from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem/ProductItemSkeleton";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 
 const ProductItem = ({
   item,
@@ -19,6 +20,7 @@ const ProductItem = ({
 }) => {
   const dispatch = useDispatch();
   const cartList = useSelector((state) => state?.cart?.data || []);
+  const { updateCart, removeCoupon, removeFromCart } = useCartDispatch();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,6 +35,8 @@ const ProductItem = ({
     variantId,
     cartItemType,
     thumbImage,
+    couponMessage,
+    hideRemove,
     extraQty: extraQuantity = 0,
     disableChange = false,
     minimumOrderQuantity: itemMinOrderQuantity,
@@ -48,15 +52,18 @@ const ProductItem = ({
   const isFreeProduct =
     cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT";
 
-  const { hasInventory, currentInventory } = getProductInventory(
-    item,
-    variantId,
+  const { hasInventory, currentInventory } = useMemo(
+    () => getProductInventory(item, variantId),
+    [variantId, item],
   );
 
   const outOfStock = quantity > inventory;
 
-  const totalItemQuantity =
-    cartList?.find((cartItem) => cartItem.recordKey === recordKey)?.qty || 0;
+  const totalItemQuantity = useMemo(
+    () =>
+      cartList?.find((cartItem) => cartItem.recordKey === recordKey)?.qty || 0,
+    [cartList, recordKey],
+  );
 
   const handleOnChangeVariant = useCallback(
     (groupId, optionId) => {
@@ -66,36 +73,19 @@ const ProductItem = ({
     [onVariantChange],
   );
 
-  const changeQuantity = useCallback(
-    (newQuantity) => {
-      if (!item) return;
+  const handleChangeQuantity = (newQuantity) => {
+    if (!item) return;
+    const finalQuantity = newQuantity + extraQuantity;
 
-      const finalQuantity = newQuantity + extraQuantity;
-
-      if (finalQuantity >= 1) {
-        const updatedCart = getUpdatedCart(cartList, recordKey, {
-          qty: finalQuantity,
-        });
-        dispatch({
-          type: cartSagaActions.UPDATE_CART,
-          payload: { data: updatedCart },
-        });
-      } else {
-        const actionType =
-          item.cartItemSource === "COUPON"
-            ? cartSagaActions.REMOVE_COUPON
-            : cartSagaActions.REMOVE_FROM_CART;
-        dispatch({
-          type: actionType,
-          payload:
-            actionType === cartSagaActions.REMOVE_FROM_CART
-              ? { product: item }
-              : undefined,
-        });
-      }
-    },
-    [cartList, dispatch, extraQuantity, item, recordKey],
-  );
+    if (finalQuantity >= 1) {
+      const updatedCart = getUpdatedCart(cartList, recordKey, {
+        qty: finalQuantity,
+      });
+      updateCart(updatedCart);
+    } else {
+      item.cartItemSource === "COUPON" ? removeCoupon() : removeFromCart(item);
+    }
+  };
 
   useEffect(() => {
     if (selectedVariant && variantUpdate) {
@@ -120,10 +110,7 @@ const ProductItem = ({
           price: variantPrice,
           variantId: selectedId,
         });
-        dispatch({
-          type: cartSagaActions.UPDATE_CART,
-          payload: { data: updatedCart },
-        });
+        updateCart(updatedCart);
       } else {
         const isExistingCartItemOutOfStock =
           existingCartItem.qty >=
@@ -156,17 +143,8 @@ const ProductItem = ({
       }
     }
     setVariantUpdate(false);
-  }, [
-    selectedVariant,
-    cartList,
-    dispatch,
-    id,
-    inventoryMapping,
-    item,
-    quantity,
-    recordKey,
-    variantUpdate,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedVariant]);
 
   useEffect(() => {
     if (selectedVariant && variantGroup) {
@@ -196,23 +174,26 @@ const ProductItem = ({
   useEffect(() => {
     const hasRequiredFields = item && price !== undefined;
     const hasValidVariant =
-      !variantId || (variantId && variantGroup?.length > 0);
+      isFreeProduct || !variantId || (variantId && variantGroup?.length > 0);
     setIsLoading(!(hasRequiredFields && hasValidVariant));
-  }, [item, price, variantId, variantGroup]);
+  }, [item, price, variantId, variantGroup, isFreeProduct]);
 
   if (!item) return null;
   if (isLoading) return <ProductItemSkeleton />;
 
   return (
     <div className="flex gap-3 rounded-lg border border-b p-2 pl-3 shadow-[0_4px_4px_#0000000D]">
+      {/* done */}
       <ProductImage
         slug={slug}
         outOfStock={outOfStock}
         imageKey={thumbImage}
+        isFreeProduct={isFreeProduct}
         handleCartClose={handleCartClose}
       />
       <div className="flex flex-1 flex-col gap-1">
         <div className="flex flex-1 justify-between gap-5">
+          {/* done */}
           <ProductDetails
             title={title}
             price={price}
@@ -223,12 +204,17 @@ const ProductItem = ({
             currentInventory={currentInventory}
             isFreeProduct={isFreeProduct}
             quantity={quantity}
+            couponMessage={couponMessage}
             handleCartClose={handleCartClose}
           />
-          <RemoveButton onClick={() => changeQuantity(0)} />
+          {/* done */}
+          {!hideRemove && (
+            <RemoveButton onClick={() => handleChangeQuantity(0)} />
+          )}
         </div>
         <div className="flex flex-col justify-between gap-2">
           <div className="flex items-end justify-between gap-1">
+            {/* done */}
             <VariantSelector
               variantGroup={variantGroup}
               selectedVariantGroupOptions={selectedVariantGroupOptions}
@@ -239,6 +225,7 @@ const ProductItem = ({
               className="lg:gap-1"
             />
             <div className="flex items-center gap-2">
+              {/* done */}
               {!outOfStock && !isFreeProduct && !disableChange && (
                 <Quantity
                   product={item}
@@ -253,12 +240,13 @@ const ProductItem = ({
                   totalItemQuantity={totalItemQuantity}
                   quantity={quantity}
                   max={inventory}
-                  onChangeQuantity={changeQuantity}
+                  onChangeQuantity={handleChangeQuantity}
                   className="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] md:h-7 lg:h-8"
                 />
               )}
             </div>
           </div>
+          {/* done */}
           {(selectedVariant?.minimumOrderQuantity > 1 ||
             itemMinOrderQuantity > 1) && (
             <Text as="span" size="xs" className="font-light">

@@ -4,7 +4,6 @@ import { AlertInfoIcon } from "@/assets/svg/icons";
 import Link from "next/link";
 
 export default function Error({ error, reset }) {
-  console.error("Error caught by error boundary:", error);
   return (
     <div>
       <div className="flex flex-col items-center justify-center gap-4 bg-gradient-to-r to-pink-50 p-6 text-center">

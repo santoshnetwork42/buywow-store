@@ -49,7 +49,6 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
         variables,
         authMode: authMode === "AUTH" ? "userPool" : "apiKey",
       });
-
       return response;
     } catch (error) {
       console.error("Error in apiResolve function:", error);
@@ -72,15 +71,12 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
     };
   }, []);
 
-  const contextValue = useMemo(
-    () => ({
-      isInteractive,
-      isRewardApplied,
-      handleRewardApply,
-      source,
-    }),
-    [isInteractive, isRewardApplied, handleRewardApply, source],
-  );
+  const contextValue = {
+    isInteractive,
+    isRewardApplied,
+    handleRewardApply,
+    source,
+  };
 
   return (
     <Navbar

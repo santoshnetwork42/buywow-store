@@ -105,7 +105,7 @@ export const footer = gql`
 
 export const landingPage = gql`
   query LandingPage {
-    pages(filters: { slug: { eq: "hair-care" } }) {
+    pages(filters: { slug: { eq: "hair-oil" } }) {
       data {
         attributes {
           slug
@@ -401,177 +401,173 @@ export const landingPage = gql`
             ... on ComponentBlocksPdp {
               id
               product {
-                id
-                pdpProduct: product {
-                  data {
-                    attributes {
-                      slug
-
-                      promotionTag {
-                        data {
-                          id
-                          attributes {
-                            tag
-                            bgColor
-                          }
-                        }
-                      }
-                      productBenefitTags {
-                        data {
-                          id
-                          attributes {
-                            tag
-                            bgColor
-                          }
-                        }
-                      }
-                      imageBgColor
-                      offerTag {
+                data {
+                  attributes {
+                    slug
+                    promotionTag {
+                      data {
                         id
-                        showOfferTag
-                        bgColor
+                        attributes {
+                          tag
+                          bgColor
+                        }
                       }
-                      productDetailView {
-                        __typename
-                        ... on ComponentAccordionDescriptionSection {
-                          id
-                          accordionDescriptionTitle: title
-                          image {
-                            data {
-                              attributes {
-                                alternativeText
-                                url
-                                width
-                                height
-                              }
-                            }
-                          }
-                          description
+                    }
+                    productBenefitTags {
+                      data {
+                        id
+                        attributes {
+                          tag
+                          bgColor
                         }
-                        ... on ComponentAccordionFaQsSection {
-                          id
-                          accordionFAQsTitle: title
-                          image {
-                            data {
-                              attributes {
-                                alternativeText
-                                url
-                                width
-                                height
-                              }
+                      }
+                    }
+                    imageBgColor
+                    offerTag {
+                      id
+                      showOfferTag
+                      bgColor
+                    }
+                    productDetailView {
+                      __typename
+                      ... on ComponentAccordionDescriptionSection {
+                        id
+                        accordionDescriptionTitle: title
+                        image {
+                          data {
+                            attributes {
+                              alternativeText
+                              url
+                              width
+                              height
                             }
-                          }
-                          FAQs {
-                            id
-                            question
-                            answer
                           }
                         }
-                        ... on ComponentAccordionIngredientsSection {
-                          id
-                          accordionIngredientsTitle: title
-                          image {
-                            data {
-                              attributes {
-                                alternativeText
-                                url
-                                width
-                                height
-                              }
+                        description
+                      }
+                      ... on ComponentAccordionFaQsSection {
+                        id
+                        accordionFAQsTitle: title
+                        image {
+                          data {
+                            attributes {
+                              alternativeText
+                              url
+                              width
+                              height
                             }
                           }
-                          ingredientItems {
-                            data {
-                              attributes {
-                                text
-                                subText
-                                image {
-                                  data {
-                                    attributes {
-                                      alternativeText
-                                      url
-                                      height
-                                      width
-                                    }
+                        }
+                        FAQs {
+                          id
+                          question
+                          answer
+                        }
+                      }
+                      ... on ComponentAccordionIngredientsSection {
+                        id
+                        accordionIngredientsTitle: title
+                        image {
+                          data {
+                            attributes {
+                              alternativeText
+                              url
+                              width
+                              height
+                            }
+                          }
+                        }
+                        ingredientItems: ingredients {
+                          data {
+                            attributes {
+                              text
+                              subText
+                              image {
+                                data {
+                                  attributes {
+                                    alternativeText
+                                    url
+                                    height
+                                    width
                                   }
                                 }
                               }
                             }
                           }
                         }
-                        ... on ComponentAccordionUsageInstructionsSection {
+                      }
+                      ... on ComponentAccordionUsageInstructionsSection {
+                        id
+                        accordionUsageInstructionsTitle: title
+                        image {
+                          data {
+                            attributes {
+                              alternativeText
+                              url
+                              width
+                              height
+                            }
+                          }
+                        }
+                        usageInstructionItems {
                           id
-                          accordionUsageInstructionsTitle: title
+                          text
+                        }
+                      }
+                      ... on ComponentBlocksFeaturedList {
+                        id
+                        isWebHorizontal
+                        featuredListItems {
+                          id
+                          text
                           image {
                             data {
                               attributes {
                                 alternativeText
-                                url
                                 width
+                                url
                                 height
                               }
                             }
                           }
-                          usageInstructionItems {
-                            id
-                            text
-                          }
                         }
-                        ... on ComponentBlocksFeaturedList {
+                      }
+                      ... on ComponentBlocksUpsellProducts {
+                        id
+                        title
+                        upsellProductsBgColor: bgColor
+                        upsellProductItems {
                           id
-                          isWebHorizontal
-                          featuredListItems {
-                            id
-                            text
-                            image {
-                              data {
-                                attributes {
-                                  alternativeText
-                                  width
-                                  url
-                                  height
-                                }
-                              }
-                            }
-                          }
-                        }
-                        ... on ComponentBlocksUpsellProducts {
-                          id
-                          title
-                          upsellProductsBgColor: bgColor
-                          upsellProductItems {
-                            id
-                            text
-                            subText
-                            product {
-                              data {
-                                attributes {
-                                  slug
+                          text
+                          subText
+                          product {
+                            data {
+                              attributes {
+                                slug
 
-                                  promotionTag {
-                                    data {
-                                      id
-                                      attributes {
-                                        tag
-                                        bgColor
-                                      }
-                                    }
-                                  }
-                                  productBenefitTags {
-                                    data {
-                                      id
-                                      attributes {
-                                        tag
-                                        bgColor
-                                      }
-                                    }
-                                  }
-                                  imageBgColor
-                                  offerTag {
+                                promotionTag {
+                                  data {
                                     id
-                                    showOfferTag
-                                    bgColor
+                                    attributes {
+                                      tag
+                                      bgColor
+                                    }
                                   }
+                                }
+                                productBenefitTags {
+                                  data {
+                                    id
+                                    attributes {
+                                      tag
+                                      bgColor
+                                    }
+                                  }
+                                }
+                                imageBgColor
+                                offerTag {
+                                  id
+                                  showOfferTag
+                                  bgColor
                                 }
                               }
                             }
@@ -752,7 +748,7 @@ export const landingPage = gql`
                   }
                 }
               }
-              ingredientItems {
+              ingredientItems: ingredients {
                 data {
                   attributes {
                     text
@@ -862,7 +858,6 @@ export const landingPage = gql`
               id
               title
               productProductKeyIngredientImagesBgColor: bgColor
-
               secondaryIngredients {
                 id
                 title
@@ -980,6 +975,14 @@ export const landingPage = gql`
                   bgColor
                 }
               }
+            }
+            ... on ComponentBlocksBreadcrumb {
+              id
+              breadcrumbTitle: title
+            }
+            ... on ComponentBlocksRecentlyViewed {
+              id
+              recentlyViewedTitle: title
             }
           }
         }

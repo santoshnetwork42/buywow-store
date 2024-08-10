@@ -161,14 +161,12 @@ export default async function Page() {
     const { blocks } = pageData || {};
 
     if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-      // Instead of returning null, throw an error to be caught by error boundary
       throw new Error("No blocks found or invalid blocks data");
     }
 
     return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
   } catch (error) {
-    // Instead of throwing the error here, we'll let it propagate to the error boundary
     console.error("Error in Page component:", error);
-    throw error; // This will be caught by the nearest error boundary
+    throw error;
   }
 }

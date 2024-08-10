@@ -13,6 +13,7 @@ const ProductDetails = ({
   cartItemType,
   isFreeProduct,
   quantity,
+  couponMessage,
   handleCartClose,
 }) => (
   <div className="flex flex-1 flex-col justify-between gap-1">
@@ -29,24 +30,19 @@ const ProductDetails = ({
         slug={slug}
       />
     </div>
-    {!!hasInventory && !!(currentInventory < 10) && (
-      <Text
-        size="xs"
-        as="p"
-        className="line-clamp-2 text-yellow-900"
-        responsive
-      >
+    {!!hasInventory && currentInventory < 10 && (
+      <Text size="xs" as="p" className="line-clamp-1 text-yellow-900">
         Only {currentInventory} left!
       </Text>
     )}
-    {!!isFreeProduct && !!(quantity > 0) && (
-      <Text
-        size="sm"
-        as="p"
-        className="text-grey lh-1 text-alignment mb-2"
-        responsive
-      >
+    {!isFreeProduct && !!quantity && (
+      <Text size="sm" as="p" className="mb-1 mt-2 text-gray-500" responsive>
         Qty: {quantity}
+      </Text>
+    )}
+    {cartItemType === "AUTO_FREE_PRODUCT_DISABLED" && (
+      <Text size="sm" as="p" className="mt-2 text-red-500" responsive>
+        {couponMessage}
       </Text>
     )}
   </div>

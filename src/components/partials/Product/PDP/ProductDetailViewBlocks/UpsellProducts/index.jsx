@@ -122,7 +122,7 @@ const UpsellProducts = ({
 
   return (
     <div
-      className={`mb-6 flex flex-col justify-center gap-3 px-3 max-sm:[clip-path:inset(0_-100vmax)] sm:rounded-lg md:mb-7 md:px-4 ${shadowClass} ${bgColorClass} ${isPaddedColor ? "py-3" : ""}`}
+      className={`mb-6 flex flex-col justify-center gap-3 px-3 max-sm:[clipPath:inset(0_-100vmax)] sm:rounded-lg md:mb-7 md:px-4 ${shadowClass} ${bgColorClass} ${isPaddedColor ? "py-3" : ""}`}
     >
       <Heading size="lg" as="h4" className="line-clamp-1">
         {title}

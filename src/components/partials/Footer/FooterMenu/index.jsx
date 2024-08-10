@@ -62,7 +62,9 @@ const FooterMenu = ({ item, isOpen, onToggle }) => {
       {hasSubMenu && (
         <ul
           className={`flex flex-col gap-1.5 overflow-hidden transition-all duration-300 ease-in-out sm:gap-2 lg:gap-2.5 ${
-            isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-50 lg:max-h-96"
+            isOpen
+              ? "max-h-96 opacity-100"
+              : "max-h-0 opacity-50 lg:max-h-96 lg:opacity-100"
           }`}
         >
           {subMenuItems.map((subItem, index) => (

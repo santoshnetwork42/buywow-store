@@ -41,6 +41,7 @@ module.exports = {
           100: "#f2f4f1",
           300: "#dcdcdc",
           400: "#c2c3c7",
+          500: "#aaaaaa",
           700: "#575757",
           "300_01": "#dddddd",
           "300_02": "#dadada",
@@ -65,6 +66,7 @@ module.exports = {
         yellow: { 700: "#e2bb21", 900: "#dd8434" },
         black_600: "#656d76",
         gray_shadow: "#00000029",
+        green: { 500: "#17b31b" },
       },
       boxShadow: {
         xs: "0 4px 4px 0 #0000000c",

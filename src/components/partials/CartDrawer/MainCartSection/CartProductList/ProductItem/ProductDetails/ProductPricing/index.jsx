@@ -22,7 +22,7 @@ const ProductPricing = ({ price, listingPrice, cartItemType, slug }) => {
         <Text
           size="sm"
           as="p"
-          className="h-fit w-fit rounded-md bg-green-600 px-2 py-0.5 text-white-a700_01"
+          className="h-fit w-fit rounded-md bg-green-500 px-2 py-0.5 text-white-a700_01"
           responsive
         >
           Free

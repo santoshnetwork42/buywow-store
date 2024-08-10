@@ -160,11 +160,13 @@ export default async function Page({ params }) {
     const pageData = await getPageData(slug[slug.length - 1]);
     const { blocks } = pageData || {};
 
-    if (!blocks?.length) return null;
+    if (!Array.isArray(blocks) || blocks.length === 0) {
+      throw new Error("No blocks found or invalid blocks data");
+    }
 
     return <>{blocks.map((block, index) => renderBlock(block, index, slug))}</>;
   } catch (error) {
-    console.error(error);
-    return <p>Something went wrong...</p>;
+    console.error("Error in Page component:", error);
+    throw error;
   }
 }
