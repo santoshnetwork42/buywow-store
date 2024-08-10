@@ -1,10 +1,14 @@
 import {
-  analyticsMetaDataMapper,
-  getRecordKey,
-  getSource,
-} from "@/utils/helpers";
+  getClientSource,
+  initializeMoengageAndAddInfo,
+  trackClickStream,
+  trackEvent,
+  userMapper,
+} from "@/utils/events";
+import { analyticsMetaDataMapper, getRecordKey } from "@/utils/helpers";
+import { select } from "redux-saga/effects";
 
-export function* outOfStockHandler({ payload }) {
+export function* outOfStockEventHandler({ payload }) {
   try {
     const { products, inventory } = payload || {};
 
@@ -41,9 +45,9 @@ export function* outOfStockHandler({ payload }) {
   }
 }
 
-export function* proceedToCheckoutHandler({ payload }) {
+export function* proceedToCheckoutEventHandler({ payload }) {
   try {
-    const eventSource = getSource();
+    const eventSource = getClientSource();
     const { source } = payload || {};
     const userData = yield select((state) => state.user.data);
     const user = userMapper(userData) || {};
@@ -67,5 +71,125 @@ export function* proceedToCheckoutHandler({ payload }) {
     });
   } catch (error) {
     console.error("Error in proceedToCheckoutHandler:", error);
+  }
+}
+
+export function* searchEventHandler({ payload }) {
+  try {
+    const eventSource = getClientSource();
+    const { term } = payload || {};
+    const { user: userToMap } = yield select((state) => state.user);
+    const user = userMapper(userToMap);
+    if (window && window.dataLayer) {
+      window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
+      window.dataLayer.push({
+        event: "search",
+        eventID: uuid(),
+        attribute: { search_term: term },
+      });
+    }
+    const analyticsMeta = analyticsMetaDataMapper();
+    trackClickStream({
+      event: "search",
+      eventID: uuid(),
+      userId: user?.id || "",
+      user: user || {},
+      search_term: term,
+      source: eventSource,
+      ...analyticsMeta,
+    });
+  } catch (error) {
+    console.error("Error in searchHandler:", error);
+  }
+}
+
+export function* authEventHandler({ payload = {} }) {
+  try {
+    const eventSource = getClientSource();
+    const { action } = payload;
+    const { userId } = payload;
+    const utmData = yield select((state) => state.system.meta);
+    const { utmMedium: medium, utmSource: source } = utmData;
+    const analyticsMeta = analyticsMetaDataMapper();
+
+    if (action === "signup") {
+      const { phone } = e.payload;
+      const mobile = phone?.split("+91")[1];
+      initializeMoengageAndAddInfo({
+        phone,
+      });
+
+      trackEvent("Customer Registered", {
+        "Customer ID": userId,
+        "Mobile Number": mobile,
+        "Utm Source": source,
+        "Utm Medium": medium,
+        URL: window.location.href,
+        Source: eventSource,
+      });
+
+      trackClickStream({
+        event: "customer_registered",
+        eventID: uuid(),
+        userId: userId,
+        mobile_number: mobile,
+        source: eventSource,
+        ...analyticsMeta,
+      });
+    } else if (action === "login") {
+      if (userId) {
+        const {
+          data: { getUser: getUserResponse },
+        } = yield call([client, client.graphql], {
+          query: getUser,
+          authMode: "userPool",
+        });
+
+        if (getUserResponse) {
+          const {
+            firstName = null,
+            lastName = null,
+            email = null,
+            phone = null,
+          } = getUserResponse;
+          initializeMoengageAndAddInfo({
+            firstName,
+            lastName,
+            email,
+            phone,
+          });
+          const mobile = phone?.split("+91")[1];
+
+          trackEvent("Customer Logged In", {
+            "Customer ID": userId,
+            "Mobile Number": mobile,
+            "Utm Source": source,
+            "Utm Medium": medium,
+            URL: window.location.href,
+            "First Time User": false,
+            Source: eventSource,
+          });
+
+          trackClickStream({
+            event: "customer_logged_in",
+            eventID: uuid(),
+            userId: userId,
+            mobile_number: mobile,
+            first_time_user: false,
+            source: eventSource,
+            ...analyticsMeta,
+          });
+        }
+      }
+    } else if (action == "logout") {
+      const Moengage = window?.Moengage;
+      if (Moengage) Moengage.destroy_session();
+    }
+    if (window && window.dataLayer) {
+      window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
+      window.dataLayer.push({ event: action, eventID: uuid() });
+    }
+  } catch (error) {
+    console.error("Error in authHandler:", error);
   }
 }
