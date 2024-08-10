@@ -54,7 +54,6 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       handleSignUp();
     }
     if (confirmationStatus === "DONE") {
-      updateUserState();
       handleAuthClose();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,6 +85,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
   }, [dispatch, user]);
 
   const handleAuthClose = async () => {
+    await updateUserState();
     dispatch({
       type: modalSagaActions.SET_PASSWORDLESS_MODAL,
       payload: {
@@ -98,7 +98,6 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       phone: "",
       confirmationCode: new Array(6).fill(""),
     });
-    await updateUserState();
   };
 
   const handlePhoneChange = (event) => {
