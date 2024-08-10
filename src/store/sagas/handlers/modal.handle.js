@@ -24,12 +24,3 @@ export function* setCartModalHandler(action) {
     console.log("error", error);
   }
 }
-
-export function* setDrawerHandler(action) {
-  try {
-    const { isDrawerOpen } = action.payload;
-    yield put(setDrawer({ isDrawerOpen }));
-  } catch (error) {
-    console.log("error", error);
-  }
-}

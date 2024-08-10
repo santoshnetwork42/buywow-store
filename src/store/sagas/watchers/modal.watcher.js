@@ -17,10 +17,6 @@ function* setCartModal() {
   yield takeLatest(modalSagaActions.SET_CART_MODAL, setCartModalHandler);
 }
 
-function* setDrawer() {
-  yield takeLatest(modalSagaActions.SET_DRAWER, setDrawerHandler);
-}
-
 export function* modalWatcher() {
-  yield all([fork(setPasswordLessModal), fork(setCartModal)], fork(setDrawer));
+  yield all([fork(setPasswordLessModal), fork(setCartModal)]);
 }

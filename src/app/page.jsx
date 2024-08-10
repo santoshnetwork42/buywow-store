@@ -166,6 +166,5 @@ export default async function Page() {
     return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
   } catch (error) {
     console.error("Error in Page component:", error);
-    throw error;
   }
 }
