@@ -295,9 +295,3 @@ export const analyticsMetaDataMapper = () => {
   };
   return analyticsData;
 };
-
-export const getSource = () => {
-  return typeof window !== "undefined" && window?.innerWidth > 575
-    ? "Web"
-    : "Mobile";
-};
