@@ -8,9 +8,6 @@ const CartProductList = ({ cartItems, inventoryMapping, handleCartClose }) => {
   const validLtoProducts = cartItems?.filter((item) => item.ltoProduct);
   const validLtoDeals = cartItems?.filter((item) => item.ltoDeal);
 
-  console.log("validLtoProduct", validLtoProducts);
-  console.log("validLtoProductDeal", validLtoDeals);
-
   // const isOutOfStock =
   //   validLtoProduct?.qty >
   //   (inventoryMapping?.[validLtoProduct?.recordKey] || 99);
@@ -40,4 +37,4 @@ const CartProductList = ({ cartItems, inventoryMapping, handleCartClose }) => {
   );
 };
 
-export default CartProductList;
+export default React.memo(CartProductList);

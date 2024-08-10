@@ -32,6 +32,20 @@ export const useCartDispatch = () => {
     });
   };
 
+  const validateCart = (payload) => {
+    dispatch({
+      type: cartSagaActions.VALIDATE_CART,
+      payload,
+    });
+  };
+
+  const emptyCart = () => {
+    dispatch({
+      type: cartSagaActions.EMPTY_CART,
+      payload: {},
+    });
+  };
+
   // You can add more dispatch functions here
   // For example:
   // const removeItem = (itemId) => {
@@ -46,5 +60,7 @@ export const useCartDispatch = () => {
     removeFromCart,
     removeCoupon,
     updateCart,
+    validateCart,
+    emptyCart,
   };
 };

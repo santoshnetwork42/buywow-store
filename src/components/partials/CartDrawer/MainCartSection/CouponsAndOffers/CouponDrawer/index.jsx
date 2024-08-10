@@ -4,7 +4,7 @@ import { Button, Heading, Input, Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CouponItem from "./CouponItem";
 
-const CouponDrawer = React.memo(({
+const CouponDrawer = ({
   isOpen,
   onClose,
   couponCode,
@@ -16,7 +16,13 @@ const CouponDrawer = React.memo(({
   appliedCoupon,
   handleCouponRemove,
 }) => (
-  <Drawer isOpen={isOpen} onClose={onClose} position="right" width="500px">
+  <Drawer
+    isOpen={isOpen}
+    onClose={onClose}
+    position="right"
+    width="500px"
+    isNestedDrawer={true}
+  >
     <div className="flex flex-1 flex-col gap-4 px-3 py-4 md:px-4">
       <div className="flex items-center gap-3 border-b-[0.25px] border-black-900 pb-2 md:gap-4 md:pb-2.5">
         <Button
@@ -80,8 +86,6 @@ const CouponDrawer = React.memo(({
       </Text>
     </div>
   </Drawer>
-));
+);
 
-CouponDrawer.displayName = "CouponDrawer";
-
-export default CouponDrawer
+export default React.memo(CouponDrawer);

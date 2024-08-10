@@ -1,6 +1,9 @@
+import { errorHandler } from "@/utils/errorHandler";
 import {
   getClientSource,
   initializeMoengageAndAddInfo,
+  moEngagedOrderMapper,
+  orderMapper,
   trackClickStream,
   trackEvent,
   userMapper,
@@ -191,5 +194,87 @@ export function* authEventHandler({ payload = {} }) {
     }
   } catch (error) {
     console.error("Error in authHandler:", error);
+  }
+}
+
+export function* viewCartEventHandler() {
+  try {
+    const {
+      cart: { data, coupon },
+    } = yield select();
+
+    const userData = yield select((state) => state.user.user);
+    const user = userMapper(userData);
+    const { ga, value, pixel } = orderMapper(data, coupon, user);
+    const { cartViewed } = moEngagedOrderMapper(data, coupon);
+
+    trackEvent("Cart Viewed", cartViewed);
+
+    if (window && window.dataLayer) {
+      window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
+      window.dataLayer.push({
+        event: "view_cart",
+        eventID: uuid(),
+        attribute: pixel,
+        ecommerce: {
+          value,
+          currency: "INR",
+          coupon: coupon?.code || "",
+          items: ga,
+        },
+      });
+    }
+
+    const analyticsMeta = analyticsMetaDataMapper();
+
+    trackClickStream({
+      event: "view_cart",
+      eventID: uuid(),
+      userId: user?.id || "",
+      user: user || {},
+      items: ga,
+      value,
+      currency: "INR",
+      coupon: coupon?.code || "",
+      source: eventSource,
+      ...analyticsMeta,
+    });
+
+    // Analytics.record({
+    //   name: "view_cart",
+    //   attributes: {
+    //     currency: "INR",
+    //     coupon: coupon?.code || "",
+    //   },
+    //   metrics: { value },
+    // });
+
+    // vercelAnalytics.track("view_cart", {
+    //   currency: "INR",
+    //   coupon: coupon?.code || "",
+    // });
+
+    // pinpoint.forEach((attr) => {
+    //   Analytics.record({
+    //     name: "view_cart_item",
+    //     attributes: {
+    //       ...attr,
+    //       value: value.toString(),
+    //       currency: "INR",
+    //       coupon: coupon?.code || "",
+    //     },
+    //   });
+    // });
+
+    // vercel.forEach((attr) => {
+    //   vercelAnalytics.track("view_cart_item", {
+    //     ...attr,
+    //     value,
+    //     currency: "INR",
+    //     coupon: coupon?.code || "",
+    //   });
+    // });
+  } catch (e) {
+    errorHandler(e);
   }
 }

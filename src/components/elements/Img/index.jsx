@@ -5,7 +5,7 @@ import Image from "next/image";
 import { BASE_PATH } from "@/config";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
-const BASE_URL = BASE_PATH || "/images";
+const BASE_URL = "/images";
 
 const Img = React.memo(
   ({

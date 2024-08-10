@@ -74,15 +74,14 @@ const ProductItem = ({
   );
 
   const handleChangeQuantity = (newQuantity) => {
-    if (!item) return;
     const finalQuantity = newQuantity + extraQuantity;
+    const updatedCart = getUpdatedCart(cartList, recordKey, {
+      qty: finalQuantity,
+    });
+    updateCart(updatedCart);
+    if (!finalQuantity) {
+      console.log("finalQty", finalQuantity);
 
-    if (finalQuantity >= 1) {
-      const updatedCart = getUpdatedCart(cartList, recordKey, {
-        qty: finalQuantity,
-      });
-      updateCart(updatedCart);
-    } else {
       item.cartItemSource === "COUPON" ? removeCoupon() : removeFromCart(item);
     }
   };
@@ -260,4 +259,4 @@ const ProductItem = ({
   );
 };
 
-export default ProductItem;
+export default React.memo(ProductItem);

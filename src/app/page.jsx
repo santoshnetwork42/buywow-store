@@ -1,8 +1,6 @@
-import { AlertInfoIcon } from "@/assets/svg/icons";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 
 // Dynamically import components
 const Carousal = dynamic(() => import("@/components/blocks/Carousel"));

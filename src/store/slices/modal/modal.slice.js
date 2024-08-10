@@ -8,6 +8,7 @@ export const initialState = {
       redirectTo: null,
     },
     cart: { isCartOpen: false },
+    drawer: { isDrawerOpen: false },
   },
 };
 
@@ -24,9 +25,13 @@ export const modalSlice = createSlice({
     setCartModal: (state, action) => {
       state.modal.cart = action.payload;
     },
+    setDrawer: (state, action) => {
+      state.modal.drawer = action.payload;
+    },
   },
 });
 
-export const { setModal, setPasswordLessModal, setCartModal } =
+export const { setModal, setPasswordLessModal, setCartModal, setDrawer } =
   modalSlice.actions;
+
 export default modalSlice.reducer;

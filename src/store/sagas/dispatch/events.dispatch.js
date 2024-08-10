@@ -20,6 +20,12 @@ export const useEventsDispatch = () => {
     });
   };
 
+  const viewCart = () => {
+    dispatch({
+      type: eventsSagaActions.VIEW_CART,
+    });
+  };
+
   // You can add more dispatch functions here
   // For example:
   // const removeItem = (itemId) => {
@@ -32,5 +38,6 @@ export const useEventsDispatch = () => {
   return {
     handleOutOfStock,
     handleProceedToCheckout,
+    viewCart,
   };
 };

@@ -235,3 +235,21 @@ export const applyCouponAPI = async (couponCode) => {
     return null;
   }
 };
+
+export const fetchProductDetailsAPI = async (id) => {
+  try {
+    const response = await client.graphql({
+      query: getProductById,
+      variables: {
+        id: id,
+      },
+      authMode: "apiKey",
+    });
+
+    const data = "data" in response ? response.data : response;
+    return data?.getProduct;
+  } catch (error) {
+    console.error("Error fetching product:", error);
+    return null;
+  }
+};

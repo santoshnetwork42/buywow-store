@@ -1,7 +1,5 @@
 import dynamic from "next/dynamic";
-import React from "react";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
-import { landingPageCMSAPI } from "@/lib/strapiAPIs";
 import { unstable_cache } from "next/cache";
 
 // Dynamically import components
@@ -167,6 +165,6 @@ export default async function Page({ params }) {
     return <>{blocks.map((block, index) => renderBlock(block, index, slug))}</>;
   } catch (error) {
     console.error("Error in Page component:", error);
-    throw error;
+    // throw error;
   }
 }

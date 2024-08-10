@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "@/components/features/Modal";
 import { Button, Heading, Img, Text } from "@/components/elements";
 
-const CouponModal = React.memo(({ isOpen, onClose, appliedCoupon }) => (
+const CouponModal = ({ isOpen, onClose, appliedCoupon }) => (
   <Modal
     isOpen={isOpen}
     showMobileView={false}
@@ -52,8 +52,6 @@ const CouponModal = React.memo(({ isOpen, onClose, appliedCoupon }) => (
       </Button>
     </div>
   </Modal>
-));
+);
 
-CouponModal.displayName = "CouponModal";
-
-export default CouponModal;
+export default React.memo(CouponModal);

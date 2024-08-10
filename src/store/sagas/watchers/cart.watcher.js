@@ -2,6 +2,7 @@ import {
   addToCartHandler,
   applyCouponHandler,
   emptyCartHandler,
+  fetchAndAddProductsFromEncodedCartHandler,
   removeCouponHandler,
   removeFromCartHandler,
   storedCouponCodeHandler,
@@ -43,6 +44,13 @@ function* storedCouponCode() {
   yield takeLatest(cartSagaActions.STORED_COUPON_CODE, storedCouponCodeHandler);
 }
 
+function* fetchAndAddProductsFromEncodedCart() {
+  yield takeLatest(
+    cartSagaActions.FETCH_AND_ADD_PRODUCTS_FROM_ENCODED_CART,
+    fetchAndAddProductsFromEncodedCartHandler,
+  );
+}
+
 export function* cartWatcher() {
   yield all([
     fork(addToCart),
@@ -53,5 +61,6 @@ export function* cartWatcher() {
     fork(applyCoupon),
     fork(removeCoupon),
     fork(storedCouponCode),
+    fork(fetchAndAddProductsFromEncodedCart),
   ]);
 }

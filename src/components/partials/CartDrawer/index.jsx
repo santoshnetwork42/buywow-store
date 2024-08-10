@@ -1,41 +1,41 @@
 "use client";
 
 import Drawer from "@/components/features/Drawer";
-import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { useNavBarState } from "@/utils/context/navbar";
 import { useCartItems, useCartTotal, useInventory } from "@wow-star/utils";
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
 import ShippingProgress from "@/components/partials/Others/ShippingProgress";
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
-import { CartIcon } from "@/assets/svg/icons";
-import Link from "next/link";
 import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
 import Cashback from "./Cashback";
 import EmptyCart from "./EmptyCart";
 import LoyaltyCash from "./LoyaltyCash";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { fetchProductDetailsAPI } from "@/lib/appSyncAPIs";
 
 const CartDrawer = () => {
-  const dispatch = useDispatch();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const _cx = searchParams?.get("_cx");
+  const forceOpenCart = searchParams?.get("cart");
+
   const {
-    modal: {
-      cart: { isCartOpen },
-    },
-  } = useSelector((state) => state?.modal);
+    cart: { isCartOpen },
+  } = useSelector((state) => state?.modal?.modal);
+  const { validateCart, emptyCart, addToCart } = useCartDispatch();
+  const { handleCartVisibility } = useModalDispatch();
+  const { viewCart } = useEventsDispatch();
 
   const cartItems = useCartItems({
     showLTOProducts: false,
     showNonApplicableFreeProducts: true,
   });
-
-  const validateCart = (payload) => {
-    dispatch({
-      type: cartSagaActions.VALIDATE_CART,
-      payload,
-    });
-  };
 
   const inventory = useInventory({ validateCart });
   const { inventoryMapping } = inventory;
@@ -55,19 +55,79 @@ const CartDrawer = () => {
     isRewardApplied,
   });
 
-  const handleCartOpen = (isOpen = false) => {
-    dispatch({
-      type: modalSagaActions.SET_CART_MODAL,
-      payload: { isCartOpen: isOpen },
-    });
-  };
+  const handleCartClose = useCallback(() => {
+    handleCartVisibility(false);
+  }, [handleCartVisibility]);
 
-  const handleCartClose = () => {
-    handleCartOpen(false);
-  };
+  useEffect(() => {
+    if (!isCartOpen) {
+      viewCart();
+    }
+  }, [isCartOpen, viewCart]);
+
+  useEffect(() => {
+    if (!forceOpenCart) {
+      handleCartVisibility(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   const amountNeededToAvailCashback =
     amountNeededToAvailPrepaidCashback?.amount - grandTotal;
+
+  useEffect(() => {
+    async function fetchAndAddProduct() {
+      if (_cx) {
+        const cart = JSON.parse(atob(_cx));
+        emptyCart();
+
+        for (let index = 0; index < cart.length; index++) {
+          const element = cart[index];
+
+          if (element.product_id) {
+            const product = await fetchProductDetailsAPI(element.product_id);
+            let tmpName, tmpPrice;
+            try {
+              if (product) {
+                if (
+                  element.variant_id &&
+                  element.variant_id !== element.product_id
+                ) {
+                  const variant = product.variants.items.find(
+                    (i) => i.id === element.variant_id,
+                  );
+                  if (variant) {
+                    tmpName = `${tmpName} - ${variant.title}`;
+                    tmpPrice = variant.price;
+
+                    addToCart({
+                      ...product,
+                      name: tmpName,
+                      qty: Number(element.qty),
+                      price: tmpPrice,
+                      variantId: variant.id,
+                    });
+                    handleCartVisibility(true);
+                  }
+                } else {
+                  addToCart({
+                    ...product,
+                    qty: Number(element.qty),
+                    price: product?.price,
+                  });
+                  handleCartVisibility(true);
+                }
+              }
+            } catch (error) {
+              console.error("Error adding cart limechat :", error);
+            }
+          }
+        }
+      }
+    }
+
+    fetchAndAddProduct();
+  }, [_cx]);
 
   return (
     <Drawer
