@@ -43,10 +43,8 @@ export default function Account() {
           ))}
         </div>
       </div>
-      <div className="flex max-h-screen w-full flex-1 flex-col border">
-        <div className="no-scrollbar w-full overflow-x-auto overflow-y-visible">
-          <TabContent activeTab={activeTab} />
-        </div>
+      <div className="flex w-full flex-1 flex-col overflow-hidden rounded border md:rounded-md">
+        <TabContent activeTab={activeTab} />
       </div>
     </div>
   );

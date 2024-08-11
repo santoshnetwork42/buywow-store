@@ -191,7 +191,7 @@ const WowLoyalty = ({}) => {
   }, [transactions]);
 
   return (
-    <div className="mx-auto max-w-2xl p-4">
+    <div className="mx-auto w-full max-w-2xl p-4">
       <div
         className="bg-white mb-4 rounded-lg p-6 shadow-md"
         style={{

@@ -4,6 +4,7 @@
 import TokenPagination from "@/components/features/TokenPagination";
 import { STORE_ID } from "@/config";
 import { searchOrders } from "@/graphql/appSync/api";
+import { errorHandler } from "@/utils/errorHandler";
 import { formateDate, orderStatusBadge, toDecimal } from "@/utils/helpers";
 import { generateClient } from "aws-amplify/api";
 import Link from "next/link";
@@ -49,23 +50,23 @@ export default function OrderList() {
           setTotalOrder(total);
           setToken(nextToken);
         } catch (error) {
-          console.log("error :>> ", error);
+          errorHandler(error);
         }
       }
     },
-    [user, token],
+    [user, orders, token],
   );
 
   useEffect(() => {
     if (user) {
       getOrders(true);
     }
-  }, [user, getOrders]);
+  }, []);
 
   return (
     <div className="container-main">
       <div className="mb-4 grid grid-cols-1 gap-4">
-        <div className="hidden gap-4 bg-gray-100 p-2 font-bold md:grid md:grid-cols-4">
+        <div className="hidden gap-4 bg-gray-100 py-2 font-bold shadow-[0_0_0_100vmax_#f2f4f1] [clipPath:inset(0_-100vmax)] md:grid md:grid-cols-[22%_36%_20%_auto]">
           <div>Order</div>
           <div>Date</div>
           <div>Status</div>
@@ -94,7 +95,7 @@ function OrderRow({ order }) {
 
   return (
     <Link href={`/order/${order.id}`}>
-      <div className="grid grid-cols-2 gap-2 border-b border-gray-200 py-2 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 border-b border-gray-200 py-2 md:grid-cols-[22%_36%_20%_auto]">
         <div className="md:contents-none contents">
           <div className="font-bold md:hidden">Order:</div>
           <div>
