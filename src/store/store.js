@@ -1,10 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
-import { authSlice } from "@/store/slices/auth/auth.slice";
-import { userSlice } from "@/store/slices/user/user.slice";
-import { modalSlice } from "@/store/slices/modal/modal.slice";
-import { cartSlice } from "@/store/slices/cart/cart.slice";
-import { addressSlice } from "@/store/slices/address/address.slice";
+import { authSlice } from "@/store/slices/auth.slice";
+import { userSlice } from "@/store/slices/user.slice";
+import { modalSlice } from "@/store/slices/modal.slice";
+import { cartSlice } from "@/store/slices/cart.slice";
+import { addressSlice } from "@/store/slices/address.slice";
+import { eventsSlice } from "@/store/slices/events.slice";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import rootSaga from "./sagas";
 import {
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   [modalSlice.name]: modalSlice.reducer,
   [cartSlice.name]: cartSlice.reducer,
   [addressSlice.name]: addressSlice.reducer,
+  [eventsSlice.name]: eventsSlice.reducer,
 });
 
 const createNoopStorage = () => {
@@ -49,7 +51,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const persistConfig = {
   key: "wow",
-  whitelist: ["auth", "user", "modal", "cart", "address"],
+  whitelist: ["auth", "user", "cart", "address"],
   storage,
 };
 

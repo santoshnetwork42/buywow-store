@@ -2,7 +2,7 @@ import {
   setCartModal,
   setDrawer,
   setPasswordLessModal,
-} from "@/store/slices/modal/modal.slice";
+} from "@/store/slices/modal.slice";
 import { call, put } from "redux-saga/effects";
 
 export function* setPasswordLessModalHandler(action) {

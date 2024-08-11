@@ -6,6 +6,7 @@ import {
   getProductMeta,
   getProductPrice,
 } from "@wow-star/utils";
+import { v4 as uuid } from "uuid";
 import { getPublicImageURL } from "../helpers/img-loader";
 
 export const getFbpCookie = () => {

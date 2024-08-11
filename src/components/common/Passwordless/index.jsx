@@ -255,6 +255,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         prefix="+91"
         onChange={handlePhoneChange}
         maxLength={10}
+        autocomplete="on"
         value={authData.phone}
         onBlur={(e) => {
           const newState = e.target.value.trim();

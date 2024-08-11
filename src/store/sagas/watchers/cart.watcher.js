@@ -1,12 +1,15 @@
 import {
   addToCartHandler,
   applyCouponHandler,
+  applyRewardPointHandler,
   emptyCartHandler,
   fetchAndAddProductsFromEncodedCartHandler,
   removeCouponHandler,
   removeFromCartHandler,
   storedCouponCodeHandler,
   updateCartHandler,
+  updateCartIdHandler,
+  updateCartIdLoadingHandler,
   validateCartHandler,
 } from "@/store/sagas/handlers/cart.handle";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
@@ -14,10 +17,6 @@ import { all, fork, takeLatest } from "redux-saga/effects";
 
 function* addToCart() {
   yield takeLatest(cartSagaActions.ADD_TO_CART, addToCartHandler);
-}
-
-function* emptyCart() {
-  yield takeLatest(cartSagaActions.EMPTY_CART, emptyCartHandler);
 }
 
 function* removeFromCart() {
@@ -28,8 +27,8 @@ function* updateCart() {
   yield takeLatest(cartSagaActions.UPDATE_CART, updateCartHandler);
 }
 
-function* validateCart() {
-  yield takeLatest(cartSagaActions.VALIDATE_CART, validateCartHandler);
+function* applyRewardPoint() {
+  yield takeLatest(cartSagaActions.APPLY_REWARD_POINT, applyRewardPointHandler);
 }
 
 function* applyCoupon() {
@@ -38,6 +37,25 @@ function* applyCoupon() {
 
 function* removeCoupon() {
   yield takeLatest(cartSagaActions.REMOVE_COUPON, removeCouponHandler);
+}
+
+function* emptyCart() {
+  yield takeLatest(cartSagaActions.EMPTY_CART, emptyCartHandler);
+}
+
+function* validateCart() {
+  yield takeLatest(cartSagaActions.VALIDATE_CART, validateCartHandler);
+}
+
+function* updateCartId() {
+  yield takeLatest(cartSagaActions.UPDATE_CART_ID, updateCartIdHandler);
+}
+
+function* updateCartIdLoading() {
+  yield takeLatest(
+    cartSagaActions.UPDATE_CART_ID_LOADING,
+    updateCartIdLoadingHandler,
+  );
 }
 
 function* storedCouponCode() {
@@ -54,12 +72,15 @@ function* fetchAndAddProductsFromEncodedCart() {
 export function* cartWatcher() {
   yield all([
     fork(addToCart),
-    fork(emptyCart),
     fork(removeFromCart),
     fork(updateCart),
-    fork(validateCart),
+    fork(applyRewardPoint),
     fork(applyCoupon),
     fork(removeCoupon),
+    fork(emptyCart),
+    fork(validateCart),
+    fork(updateCartId),
+    fork(updateCartIdLoading),
     fork(storedCouponCode),
     fork(fetchAndAddProductsFromEncodedCart),
   ]);

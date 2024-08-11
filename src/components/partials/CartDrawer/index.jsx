@@ -16,7 +16,6 @@ import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
-import { fetchProductDetailsAPI } from "@/lib/appSyncAPIs";
 
 const CartDrawer = () => {
   const pathname = usePathname();
@@ -28,14 +27,10 @@ const CartDrawer = () => {
   const {
     cart: { isCartOpen },
   } = useSelector((state) => state?.modal?.modal);
-  const { validateCart, emptyCart, addToCart } = useCartDispatch();
+  const { validateCart, fetchAndAddProductsFromEncodedCart } =
+    useCartDispatch();
   const { handleCartVisibility } = useModalDispatch();
   const { viewCart } = useEventsDispatch();
-
-  const cartItems = useCartItems({
-    showLTOProducts: false,
-    showNonApplicableFreeProducts: true,
-  });
 
   const inventory = useInventory({ validateCart });
   const { inventoryMapping } = inventory;
@@ -55,15 +50,24 @@ const CartDrawer = () => {
     isRewardApplied,
   });
 
+  const cartItems = useCartItems({
+    showLTOProducts: false,
+    showNonApplicableFreeProducts: true,
+  });
+
+  const amountNeededToAvailCashback =
+    amountNeededToAvailPrepaidCashback?.amount - grandTotal;
+
   const handleCartClose = useCallback(() => {
     handleCartVisibility(false);
   }, [handleCartVisibility]);
 
   useEffect(() => {
-    if (!isCartOpen) {
+    if (isCartOpen) {
       viewCart();
     }
-  }, [isCartOpen, viewCart]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCartOpen]);
 
   useEffect(() => {
     if (!forceOpenCart) {
@@ -72,61 +76,10 @@ const CartDrawer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const amountNeededToAvailCashback =
-    amountNeededToAvailPrepaidCashback?.amount - grandTotal;
-
   useEffect(() => {
-    async function fetchAndAddProduct() {
-      if (_cx) {
-        const cart = JSON.parse(atob(_cx));
-        emptyCart();
-
-        for (let index = 0; index < cart.length; index++) {
-          const element = cart[index];
-
-          if (element.product_id) {
-            const product = await fetchProductDetailsAPI(element.product_id);
-            let tmpName, tmpPrice;
-            try {
-              if (product) {
-                if (
-                  element.variant_id &&
-                  element.variant_id !== element.product_id
-                ) {
-                  const variant = product.variants.items.find(
-                    (i) => i.id === element.variant_id,
-                  );
-                  if (variant) {
-                    tmpName = `${tmpName} - ${variant.title}`;
-                    tmpPrice = variant.price;
-
-                    addToCart({
-                      ...product,
-                      name: tmpName,
-                      qty: Number(element.qty),
-                      price: tmpPrice,
-                      variantId: variant.id,
-                    });
-                    handleCartVisibility(true);
-                  }
-                } else {
-                  addToCart({
-                    ...product,
-                    qty: Number(element.qty),
-                    price: product?.price,
-                  });
-                  handleCartVisibility(true);
-                }
-              }
-            } catch (error) {
-              console.error("Error adding cart limechat :", error);
-            }
-          }
-        }
-      }
+    if (_cx) {
+      fetchAndAddProductsFromEncodedCart(_cx);
     }
-
-    fetchAndAddProduct();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_cx]);
 

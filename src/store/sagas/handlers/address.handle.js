@@ -8,7 +8,7 @@ import {
   updateAddressList,
   updateAddressLoading,
   updateCurrentAddress,
-} from "@/store/slices/address/address.slice";
+} from "@/store/slices/address.slice";
 import { call, put, select } from "redux-saga/effects";
 import { v4 as uuidv4 } from "uuid";
 

@@ -10,8 +10,8 @@ import {
 import {
   setAuthLoading,
   setConfirmationStatus,
-} from "@/store/slices/auth/auth.slice";
-import { setUser } from "@/store/slices/user/user.slice";
+} from "@/store/slices/auth.slice";
+import { setUser } from "@/store/slices/user.slice";
 import { call, put } from "redux-saga/effects";
 
 export function* createAwsAccountHandler(action) {

@@ -23,6 +23,7 @@ export const useEventsDispatch = () => {
   const viewCart = () => {
     dispatch({
       type: eventsSagaActions.VIEW_CART,
+      payload: {},
     });
   };
 

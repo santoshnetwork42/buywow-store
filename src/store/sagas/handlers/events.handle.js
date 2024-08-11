@@ -8,8 +8,15 @@ import {
   trackEvent,
   userMapper,
 } from "@/utils/events";
-import { analyticsMetaDataMapper, getRecordKey } from "@/utils/helpers";
+import { v4 as uuid } from "uuid";
+import {
+  analyticsMetaDataMapper,
+  getRecordKey,
+  getSource,
+} from "@/utils/helpers";
 import { select } from "redux-saga/effects";
+
+const eventSource = getSource();
 
 export function* outOfStockEventHandler({ payload }) {
   try {
@@ -199,9 +206,10 @@ export function* authEventHandler({ payload = {} }) {
 
 export function* viewCartEventHandler() {
   try {
-    const {
-      cart: { data, coupon },
-    } = yield select();
+    const { data, coupon } = yield select((state) => ({
+      data: state.cart.data,
+      coupon: state.cart.coupon,
+    }));
 
     const userData = yield select((state) => state.user.user);
     const user = userMapper(userData);
