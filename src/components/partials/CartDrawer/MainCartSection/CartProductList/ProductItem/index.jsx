@@ -80,7 +80,7 @@ const ProductItem = ({
     });
     updateCart(updatedCart);
     if (!finalQuantity) {
-      console.log("finalQty", finalQuantity);
+      // console.log("finalQty", finalQuantity);
 
       item.cartItemSource === "COUPON" ? removeCoupon() : removeFromCart(item);
     }

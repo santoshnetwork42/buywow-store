@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
 import { useSelector } from "react-redux";
 import { Button, Heading, Text } from "@/components/elements";
-import PasswordLess from "@/components/common/Passwordless";
 import { toDecimal } from "@/utils/helpers";
 import { showToast } from "@/components/common/ToastComponent";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
@@ -147,7 +146,6 @@ const CheckoutSummary = React.memo(({ inventory }) => {
             Checkout
           </Heading>
         </Button>
-        <PasswordLess />
         <Text size="base" as="p" className="text-sm" responsive>
           Estimated delivery within 3-5 days
         </Text>

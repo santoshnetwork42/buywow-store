@@ -127,6 +127,7 @@ const CartDrawer = () => {
     }
 
     fetchAndAddProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_cx]);
 
   return (

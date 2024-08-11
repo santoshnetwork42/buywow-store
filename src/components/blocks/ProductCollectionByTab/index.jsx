@@ -36,6 +36,8 @@ const ProductCollectionByTab = ({
     setSortOption(option);
   }
 
+  console.log(productCollectionTabItems);
+
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current && window.innerWidth >= 1200) {

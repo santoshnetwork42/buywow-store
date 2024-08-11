@@ -75,15 +75,15 @@ const CouponsAndOffers = () => {
   useEffect(() => {
     if (cartList || cartList !== previousCartList.current) {
       previousCartList.current = cartList;
-      console.log("abc");
-      console.log(storedCouponCode, bestCouponCode, appliedCoupon);
+      // console.log("abc");
+      // console.log(storedCouponCode, bestCouponCode, appliedCoupon);
 
       if (
         storedCouponCode &&
         (!appliedCoupon || appliedCoupon?.autoApplied) &&
         appliedCoupon?.code !== storedCouponCode
       ) {
-        console.log("appliedCoupon", storedCouponCode);
+        // console.log("appliedCoupon", storedCouponCode);
 
         applyCouponCode(storedCouponCode, true);
       } else if (
@@ -91,11 +91,11 @@ const CouponsAndOffers = () => {
         (!appliedCoupon || appliedCoupon?.autoApplied) &&
         appliedCoupon?.code !== bestCouponCode
       ) {
-        console.log("appliedCoupon", bestCouponCode);
+        // console.log("appliedCoupon", bestCouponCode);
 
         applyCouponCode(bestCouponCode, true);
       } else if (appliedCoupon?.autoApplied) {
-        console.log("removeCoupon");
+        // console.log("removeCoupon");
 
         removeCoupon();
       }

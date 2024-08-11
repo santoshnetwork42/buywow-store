@@ -32,7 +32,7 @@ const AccordionIngredients = ({
     return null;
   }
 
-  console.log(props, image);
+  // console.log(props, image);
 
   const { url: accordionImageUrl, alternativeText: accordionImageAlt } =
     extractAttributes(image) || {};

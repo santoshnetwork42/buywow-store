@@ -2,19 +2,23 @@
 
 import { Button, Heading, Img, Text } from "@/components/elements";
 import { productData } from "@/utils/data/productData";
-import React from "react";
+import React, { useState } from "react";
 import ReviewStars from "@/components/blocks/Product/ProductReviews/ReviewStars";
 import SectionHeading from "@/components/common/SectionHeading";
 import RatingBar from "@/components/blocks/Product/ProductReviews/RatingBar";
 
-const Reviews = ({ title, reviewProduct, ...props }) => {
-  // console.log(reviewProduct, title, props);
+const Reviews = ({ title, reviews }) => {
+  const [reviewLoading, setReviewLoading] = useState(true);
+
+  console.log(reviews, "reviews");
+
   // return null;
   const product = productData[1];
 
   return (
     <div className="container-main mb-main flex flex-col items-center justify-center">
       <SectionHeading title={title} />
+
       <div className="flex w-full flex-col items-center justify-center gap-6 py-4 md:flex-row">
         <div className="flex flex-col items-center justify-center gap-3">
           <ReviewStars rating={product.rating} />
@@ -42,7 +46,11 @@ const Reviews = ({ title, reviewProduct, ...props }) => {
           <RatingBar starCount={1} percentage={0} />
         </div>
       </div>
+
       <div className="flex w-full flex-col items-center justify-center gap-6 py-2">
+        {reviewLoading && (
+          <div className="loader size-10 rounded-full border-4 border-yellow-900" />
+        )}
         {!!product?.reviews &&
           product.reviews.map((item, index) => {
             return (

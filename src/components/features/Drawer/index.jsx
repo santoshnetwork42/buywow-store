@@ -1,13 +1,6 @@
 "use client";
 
-import React, {
-  useRef,
-  useEffect,
-  useState,
-  useCallback,
-  useContext,
-} from "react";
-import { useSelector } from "react-redux";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 
 const Drawer = ({
   isOpen,
@@ -26,10 +19,6 @@ const Drawer = ({
   });
 
   const drawerRef = useRef(null);
-
-  const {
-    passwordLess: { isPasswordLessOpen },
-  } = useSelector((state) => state?.modal?.modal) || {};
 
   const toggleScroll = useCallback((lock) => {
     document.body.style.overflow = lock ? "hidden" : "unset";
@@ -79,8 +68,6 @@ const Drawer = ({
     },
     [enableOutsideClick, onClose],
   );
-
-  if (isPasswordLessOpen) return null;
 
   return (
     <div
