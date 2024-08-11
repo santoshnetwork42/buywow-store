@@ -2,7 +2,7 @@
 
 import { Button, Input, Text } from "@/components/elements";
 import { Textarea } from "@/components/elements/Textarea";
-import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem//RemoveButton";
+import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem//RemoveButton";
 import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
 import {
   addPhonePrefix,

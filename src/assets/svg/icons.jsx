@@ -190,7 +190,7 @@ export const CreditIcon = ({ size = 20, color = "#000000", ...props }) => {
       fill={color}
     >
       <g transform="translate(0, 0)">
-        <circle cx="16" cy="16" r="16" fill="#32B566" fill-opacity="0.15" />
+        <circle cx="16" cy="16" r="16" fill="#32B566" fillOpacity="0.15" />
       </g>
 
       <g transform="translate(8, 8)">
@@ -223,7 +223,7 @@ export const DebitIcon = ({ size = 20, color = "#000000", ...props }) => {
       fill={color}
     >
       <g transform="translate(0, 0)">
-        <circle cx="16" cy="16" r="16" fill="#E61F42" fill-opacity="0.13" />
+        <circle cx="16" cy="16" r="16" fill="#E61F42" fillOpacity="0.13" />
       </g>
 
       <g transform="translate(8, 8)">

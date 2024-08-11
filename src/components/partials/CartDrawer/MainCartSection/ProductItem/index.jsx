@@ -1,15 +1,14 @@
 import React, { useCallback, useState, useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
+import { useSelector } from "react-redux";
 import { getUpdatedCart } from "@/utils/helpers";
 import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
-import ProductImage from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem//ProductImage";
-import ProductDetails from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem//ProductDetails";
-import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem//RemoveButton";
+import ProductImage from "@/components/partials/CartDrawer/MainCartSection/ProductItem//ProductImage";
+import ProductDetails from "@/components/partials/CartDrawer/MainCartSection/ProductItem//ProductDetails";
+import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem//RemoveButton";
 import VariantSelector from "@/components/partials/Others/VariantSelector";
 import Quantity from "@/components/common/Quantity";
 import { Text } from "@/components/elements";
-import ProductItemSkeleton from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem/ProductItemSkeleton";
+import ProductItemSkeleton from "@/components/partials/CartDrawer/MainCartSection/ProductItem/ProductItemSkeleton";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 
 const ProductItem = ({
@@ -18,7 +17,6 @@ const ProductItem = ({
   inventoryMapping,
   handleCartClose,
 }) => {
-  const dispatch = useDispatch();
   const cartList = useSelector((state) => state?.cart?.data || []);
   const { updateCart, removeCoupon, removeFromCart } = useCartDispatch();
 
@@ -80,8 +78,6 @@ const ProductItem = ({
     });
     updateCart(updatedCart);
     if (!finalQuantity) {
-      // console.log("finalQty", finalQuantity);
-
       item.cartItemSource === "COUPON" ? removeCoupon() : removeFromCart(item);
     }
   };
@@ -131,14 +127,8 @@ const ProductItem = ({
             variantId: selectedId,
           },
         );
-        dispatch({
-          type: cartSagaActions.UPDATE_CART,
-          payload: { data: updatedCart },
-        });
-        dispatch({
-          type: cartSagaActions.REMOVE_FROM_CART,
-          payload: { product: item },
-        });
+        updateCart(updatedCart);
+        removeFromCart(item);
       }
     }
     setVariantUpdate(false);

@@ -2,8 +2,8 @@
 
 import React, { useCallback, useMemo, useState } from "react";
 import Image from "next/image";
-import { BASE_PATH } from "@/config";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
+import { Text } from "..";
 
 const BASE_URL = "/images";
 
@@ -50,7 +50,15 @@ const Img = React.memo(
     }, []);
 
     if (!src || hasError) {
-      return <div className={`bg-white ${className}`} />;
+      return (
+        <div
+          className={`bg-white ${className} flex items-center justify-center overflow-hidden`}
+        >
+          <Text size="sm" as="span" responsive>
+            {alt}
+          </Text>
+        </div>
+      );
     }
 
     return (

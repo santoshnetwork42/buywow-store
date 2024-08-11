@@ -133,6 +133,7 @@ const CheckoutSummary = React.memo(({ inventory }) => {
         usableRewards={usableRewards}
         grandTotal={grandTotal}
         totalAmountSaved={totalAmountSaved}
+        isRewardApplied={isRewardApplied}
       />
       <div className="mt-1 flex flex-col items-center gap-2.5">
         <Button
@@ -168,6 +169,7 @@ const PaymentSummary = React.memo(
     usableRewards,
     grandTotal,
     totalAmountSaved,
+    isRewardApplied,
   }) => {
     return (
       <div className="flex flex-col gap-1 md:gap-2">
@@ -183,7 +185,7 @@ const PaymentSummary = React.memo(
             color="text-green-600"
           />
         )}
-        {!!(prepaidDiscount > 0) && (
+        {prepaidDiscount > 0 && (
           <SummaryItem
             label={`${prepaidDiscountPercent}% Online Payment Discount`}
             value={-prepaidDiscount}
@@ -193,18 +195,18 @@ const PaymentSummary = React.memo(
         {!!codCharges && (
           <SummaryItem
             label="COD Charges"
-            value={!!appliedCODCharges ? appliedCODCharges : "Free"}
+            value={appliedCODCharges ? appliedCODCharges : "Free"}
             originalValue={codCharges}
             color={appliedCODCharges ? "text-black-600" : "text-green-600"}
           />
         )}
         <SummaryItem
           label="Shipping"
-          value={!!shippingTotal ? shippingTotal : "Free"}
-          originalValue={50}
+          value={shippingTotal ? shippingTotal : "Free"}
+          originalValue={shippingTotal < 50 ? 50 : null}
           color={shippingTotal ? "text-black-600" : "text-green-600"}
         />
-        {!!usableRewards && (
+        {!!usableRewards && isRewardApplied && (
           <SummaryItem
             label="WOW Cash"
             value={-usableRewards}

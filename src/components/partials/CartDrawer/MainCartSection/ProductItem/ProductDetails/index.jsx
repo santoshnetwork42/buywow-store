@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Heading, Text } from "@/components/elements";
-import ProductPricing from "@/components/partials/CartDrawer/MainCartSection/CartProductList/ProductItem/ProductDetails/ProductPricing";
+import ProductPricing from "@/components/partials/CartDrawer/MainCartSection/ProductItem/ProductDetails/ProductPricing";
 
 const ProductDetails = ({
   title,
@@ -19,7 +19,13 @@ const ProductDetails = ({
   <div className="flex flex-1 flex-col justify-between gap-1">
     <div className="flex flex-col gap-1">
       <Link href={`/product/${slug}`} onClick={handleCartClose}>
-        <Heading size="base" as="h4" className="line-clamp-3" responsive>
+        <Heading
+          size="base"
+          as="h4"
+          className="line-clamp-3"
+          title={title}
+          responsive
+        >
           {title}
         </Heading>
       </Link>
@@ -27,6 +33,7 @@ const ProductDetails = ({
         price={price}
         listingPrice={listingPrice}
         cartItemType={cartItemType}
+        isFreeProduct={isFreeProduct}
         slug={slug}
       />
     </div>
@@ -35,7 +42,7 @@ const ProductDetails = ({
         Only {currentInventory} left!
       </Text>
     )}
-    {!isFreeProduct && !!quantity && (
+    {isFreeProduct && !!quantity && (
       <Text size="sm" as="p" className="mb-1 mt-2 text-gray-500" responsive>
         Qty: {quantity}
       </Text>

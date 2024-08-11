@@ -1,6 +1,27 @@
 import React from "react";
-import CartProductList from "@/components/partials/CartDrawer/MainCartSection/CartProductList";
 import CouponsAndOffers from "./CouponsAndOffers";
+import ProductItem from "@/components/partials/CartDrawer/MainCartSection/ProductItem";
+
+const CartProductList = React.memo(
+  ({ cartItems, inventoryMapping, handleCartClose }) => {
+    if (!cartItems || !Array.isArray(cartItems)) return null;
+
+    return (
+      <div className="flex flex-col gap-3">
+        {/* done */}
+        {cartItems.map((item, index) => (
+          <ProductItem
+            key={`cart-item-${item?.id}-${index}`}
+            item={item}
+            inventory={inventoryMapping?.[item?.recordKey]}
+            inventoryMapping={inventoryMapping}
+            handleCartClose={handleCartClose}
+          />
+        ))}
+      </div>
+    );
+  },
+);
 
 const MainCartSection = ({ cartItems, inventoryMapping, handleCartClose }) => {
   return (

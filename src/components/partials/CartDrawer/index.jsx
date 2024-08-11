@@ -24,9 +24,10 @@ const CartDrawer = () => {
   const _cx = searchParams?.get("_cx");
   const forceOpenCart = searchParams?.get("cart");
 
-  const {
-    cart: { isCartOpen },
-  } = useSelector((state) => state?.modal?.modal);
+  const { isCartOpen, user } = useSelector((state) => ({
+    isCartOpen: state?.modal?.modal?.cart?.isCartOpen,
+    user: state?.user?.user,
+  }));
   const { validateCart, fetchAndAddProductsFromEncodedCart } =
     useCartDispatch();
   const { handleCartVisibility } = useModalDispatch();

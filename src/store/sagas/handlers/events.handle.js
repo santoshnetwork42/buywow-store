@@ -80,7 +80,7 @@ export function* proceedToCheckoutEventHandler({ payload }) {
       ...analyticsMeta,
     });
   } catch (error) {
-    console.error("Error in proceedToCheckoutHandler:", error);
+    errorHandler(error);
   }
 }
 

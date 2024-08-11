@@ -24,19 +24,6 @@ const Drawer = ({
     document.body.style.overflow = lock ? "hidden" : "unset";
   }, []);
 
-  useEffect(() => {
-    if (isOpen) {
-      openDrawer();
-    } else {
-      closeDrawer();
-    }
-
-    return () => {
-      !isNestedDrawer && toggleScroll(false);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, width, toggleScroll]);
-
   const openDrawer = () => {
     toggleScroll(true);
     setState((prev) => ({ ...prev, isAnimating: true }));
@@ -68,6 +55,23 @@ const Drawer = ({
     },
     [enableOutsideClick, onClose],
   );
+
+  useEffect(() => {
+    if (isOpen) {
+      openDrawer();
+    } else {
+      closeDrawer();
+    }
+
+    return () => {
+      !isNestedDrawer && toggleScroll(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, width, toggleScroll]);
+
+  useEffect(() => {
+    closeDrawer();
+  }, []);
 
   return (
     <div
