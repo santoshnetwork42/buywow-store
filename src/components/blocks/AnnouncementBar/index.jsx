@@ -11,17 +11,18 @@ import { usePathname } from "next/navigation";
 const AnnouncementContent = ({ announcement }) => {
   const { leftText, centerText, rightText, showTimer, timer } = announcement;
 
+  if (!leftText && !centerText && !rightText && (showTimer ? !timer : true))
+    return null;
+
   return (
-    <div className="flex flex-1 items-center justify-between gap-5">
-      {!!leftText && (
-        <Text
-          as="p"
-          className="shrink-0 text-white-a700_01 max-lg:hidden lg:w-[28%]"
-          size="sm"
-        >
-          {leftText}
-        </Text>
-      )}
+    <div className="flex flex-1 items-center justify-between gap-5 py-1 md:py-2">
+      <Text
+        as="p"
+        className="shrink-0 text-white-a700_01 max-lg:hidden lg:w-[28%]"
+        size="sm"
+      >
+        {leftText}
+      </Text>
       <div className="m-auto flex w-auto shrink-0 items-center justify-center">
         {showTimer && !!timer ? (
           <FlipClock timer={timer} centerText={centerText} />
@@ -31,15 +32,14 @@ const AnnouncementContent = ({ announcement }) => {
           </Text>
         )}
       </div>
-      {!!rightText && (
-        <Text
-          as="p"
-          className="text-end text-white-a700_01 max-lg:hidden lg:w-[28%]"
-          size="sm"
-        >
-          {rightText}
-        </Text>
-      )}
+
+      <Text
+        as="p"
+        className="text-end text-white-a700_01 max-lg:hidden lg:w-[28%]"
+        size="sm"
+      >
+        {rightText}
+      </Text>
     </div>
   );
 };
@@ -79,7 +79,7 @@ const AnnouncementBar = ({ data }) => {
   return (
     <Link
       href={announcement?.link || "#"}
-      className="container-main flex justify-center py-1 md:py-2"
+      className="container-main flex justify-center"
       style={{ backgroundColor: announcement?.bgColor || "#6E809A" }}
     >
       <AnnouncementContent announcement={announcement} />
