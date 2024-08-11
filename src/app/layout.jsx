@@ -13,6 +13,7 @@ import awsExport from "../../aws-exports";
 import { AWS_CLIENT_ID } from "@/config";
 import CartDrawer from "@/components/partials/CartDrawer";
 import ToastComponent from "@/components/common/ToastComponent";
+import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 
 Amplify.configure({
   ...awsExport,
@@ -20,15 +21,20 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
-const getNavbarAndFooter = unstable_cache(
-  getNavbarAndFooterAPI,
-  ["navbar", "footer"],
-  { revalidate: 1 },
-);
+// const getNavbarAndFooter = unstable_cache(
+//   getNavbarAndFooterAPI,
+//   ["navbar", "footer"],
+//   { revalidate: 1 },
+// );
 
 async function RootLayout({ children }) {
-  const { data } = (await getNavbarAndFooter()) || {};
-  const { navbar: headerData = {}, footer: footerData = {} } = data || {};
+  // const { data } = (await getNavbarAndFooter()) || {};
+  const { data } = await getNavbarAndFooterAPI();
+  const {
+    announcementBar: announcementData = {},
+    navbar: headerData = {},
+    footer: footerData = {},
+  } = data || {};
 
   return (
     <html lang="en">
@@ -42,23 +48,16 @@ async function RootLayout({ children }) {
       <body>
         <Provider>
           <NavbarProvider ignoreLazyLoadNavbar={false}>
-            <div className="flex min-h-dvh w-full flex-col bg-white-a700">
-              <AnnouncementBar
-                leftText="Free Shipping On Orders Above ₹999"
-                centerContent={{
-                  isTimer: true,
-                  centerText: "⚡ Flash Sale up to 60% OFF for",
-                  targetDate: "2024-08-10T00:00:00",
-                }}
-                rightText="100% Refund on returns"
-                flashSaleDiscount={60}
-              />
-              {headerData?.data && <Header data={headerData} />}
-              <CartDrawer />
-              <ToastComponent />
-              <div className="flex-1">{children}</div>
-              {footerData?.data && <Footer data={footerData} />}
-            </div>
+            <AnnouncementProvider>
+              <div className="flex min-h-dvh w-full flex-col bg-white-a700">
+                <AnnouncementBar data={announcementData} />
+                {headerData?.data && <Header data={headerData} />}
+                <CartDrawer />
+                <ToastComponent />
+                <div className="flex-1">{children}</div>
+                {footerData?.data && <Footer data={footerData} />}
+              </div>
+            </AnnouncementProvider>
           </NavbarProvider>
         </Provider>
       </body>

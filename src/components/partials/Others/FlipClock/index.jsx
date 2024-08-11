@@ -45,7 +45,7 @@ const FlipUnit = ({ digit, unit }) => {
 
 FlipUnit.displayName = "FlipUnit";
 
-const FlipClock = ({ targetDate, centerText }) => {
+const FlipClock = ({ timer, centerText }) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -54,12 +54,33 @@ const FlipClock = ({ targetDate, centerText }) => {
   });
 
   const calculateTimeLeft = useCallback(() => {
-    const now = new Date().getTime();
-    const distance = new Date(targetDate).getTime() - now;
+    const now = new Date();
+    const startDateTime = new Date(`${timer.startDate}T${timer.startTime}`);
+    const endDateTime = new Date(`${timer.endDate}T${timer.endTime}`);
 
-    if (distance < 0) {
-      return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    if (
+      now < startDateTime ||
+      now > endDateTime ||
+      startDateTime > endDateTime
+    ) {
+      return null;
     }
+
+    let targetDate = endDateTime;
+    if (timer.type === "DAILY") {
+      // For daily timer, set target to today's end time
+      targetDate = new Date(now);
+      const [endHours, endMinutes, endSeconds] = timer.endTime
+        .split(":")
+        .map(Number);
+      targetDate.setHours(endHours, endMinutes, endSeconds, 0);
+
+      if (targetDate <= now) {
+        return null;
+      }
+    }
+
+    const distance = targetDate.getTime() - now.getTime();
 
     return {
       days: Math.floor(distance / (1000 * 60 * 60 * 24)),
@@ -67,17 +88,21 @@ const FlipClock = ({ targetDate, centerText }) => {
       minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
       seconds: Math.floor((distance % (1000 * 60)) / 1000),
     };
-  }, [targetDate]);
+  }, [timer]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
+    const updateTimer = () => {
+      const newTimeLeft = calculateTimeLeft();
+      setTimeLeft(newTimeLeft);
+    };
+
+    updateTimer(); // Initial call
+    const interval = setInterval(updateTimer, 1000);
 
     return () => clearInterval(interval);
   }, [calculateTimeLeft]);
 
-  if (!targetDate) {
+  if (!timer || !timer.startDate || !timer.endDate) {
     return null;
   }
 
@@ -90,15 +115,17 @@ const FlipClock = ({ targetDate, centerText }) => {
           </Text>
         </div>
       )}
-      <div className="flex items-center">
-        <FlipUnit digit={timeLeft.days} unit="DYS" />
-        <Text className="mx-1 mb-1 text-white-a700_01">:</Text>
-        <FlipUnit digit={timeLeft.hours} unit="HRS" />
-        <Text className="mx-1 mb-1 text-white-a700_01">:</Text>
-        <FlipUnit digit={timeLeft.minutes} unit="MIN" />
-        <Text className="mx-1 mb-1 text-white-a700_01">:</Text>
-        <FlipUnit digit={timeLeft.seconds} unit="SEC" />
-      </div>
+      {!!timeLeft && (
+        <div className="flex items-center">
+          <FlipUnit digit={timeLeft.days} unit="DYS" />
+          <Text className="mx-1 mb-1 text-white-a700_01">:</Text>
+          <FlipUnit digit={timeLeft.hours} unit="HRS" />
+          <Text className="mx-1 mb-1 text-white-a700_01">:</Text>
+          <FlipUnit digit={timeLeft.minutes} unit="MIN" />
+          <Text className="mx-1 mb-1 text-white-a700_01">:</Text>
+          <FlipUnit digit={timeLeft.seconds} unit="SEC" />
+        </div>
+      )}
     </div>
   );
 };

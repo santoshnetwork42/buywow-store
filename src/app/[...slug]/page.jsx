@@ -3,6 +3,9 @@ import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import { unstable_cache } from "next/cache";
 
 // Dynamically import components
+const PageAnnouncementBar = dynamic(
+  () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
+);
 const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
 const SingleBanner = dynamic(() => import("@/components/blocks/SingleBanner"));
 const MiniBanners = dynamic(() => import("@/components/blocks/MiniBanners"));
@@ -84,6 +87,8 @@ export const metadata = {
 
 const renderBlock = (block, index, slug) => {
   switch (block?.__typename) {
+    case "ComponentBlocksAnnouncementBar":
+      return <PageAnnouncementBar key={index} slug={["index"]} {...block} />;
     case "ComponentBannerCarousal":
       return <Carousal key={index} slug={slug} {...block} />;
     case "ComponentBannerSingleBanner":

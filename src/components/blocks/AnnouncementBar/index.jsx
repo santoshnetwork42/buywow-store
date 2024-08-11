@@ -1,10 +1,19 @@
+"use client";
+
+import React, { useEffect, useMemo } from "react";
 import { Text } from "@/components/elements";
 import FlipClock from "@/components/partials/Others/FlipClock";
+import { useAnnouncementContext } from "@/utils/context/AnnouncementContext";
+import { extractAttributes } from "@/utils/helpers";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const AnnouncementBar = ({ leftText, centerContent, rightText }) => {
+const AnnouncementContent = ({ announcement }) => {
+  const { leftText, centerText, rightText, showTimer, timer } = announcement;
+
   return (
-    <div className="container-main flex justify-center bg-blue_gray-400_01 py-1 md:py-2">
-      <div className="flex flex-1 items-center justify-between gap-5">
+    <div className="flex flex-1 items-center justify-between gap-5">
+      {!!leftText && (
         <Text
           as="p"
           className="shrink-0 text-white-a700_01 max-lg:hidden lg:w-[28%]"
@@ -12,18 +21,17 @@ const AnnouncementBar = ({ leftText, centerContent, rightText }) => {
         >
           {leftText}
         </Text>
-        <div className="m-auto flex w-auto shrink-0 items-center justify-center">
-          {centerContent.isTimer === true ? (
-            <FlipClock
-              targetDate={centerContent.targetDate}
-              centerText={centerContent.centerText}
-            />
-          ) : (
-            <Text as="p" className="py-0.5 text-white-a700_01" size="sm">
-              {centerContent.centerText}
-            </Text>
-          )}
-        </div>
+      )}
+      <div className="m-auto flex w-auto shrink-0 items-center justify-center">
+        {showTimer && !!timer ? (
+          <FlipClock timer={timer} centerText={centerText} />
+        ) : (
+          <Text as="p" className="py-0.5 text-white-a700_01" size="sm">
+            {centerText}
+          </Text>
+        )}
+      </div>
+      {!!rightText && (
         <Text
           as="p"
           className="text-end text-white-a700_01 max-lg:hidden lg:w-[28%]"
@@ -31,9 +39,52 @@ const AnnouncementBar = ({ leftText, centerContent, rightText }) => {
         >
           {rightText}
         </Text>
-      </div>
+      )}
     </div>
   );
 };
 
-export default AnnouncementBar;
+const AnnouncementBar = ({ data }) => {
+  const pathname = usePathname();
+  const {
+    globalAnnouncement,
+    pageAnnouncements,
+    updateGlobalAnnouncement,
+    updatePageAnnouncement,
+  } = useAnnouncementContext();
+
+  useEffect(() => {
+    if (pathname) {
+      updatePageAnnouncement(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  useEffect(() => {
+    if (data) {
+      const extractedData = extractAttributes(data);
+      updateGlobalAnnouncement(extractedData);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  const announcement = useMemo(() => {
+    return pageAnnouncements || globalAnnouncement || {};
+  }, [globalAnnouncement, pageAnnouncements]);
+
+  if (!announcement || Object.keys(announcement).length === 0) {
+    return null;
+  }
+
+  return (
+    <Link
+      href={announcement?.link || "#"}
+      className="container-main flex justify-center py-1 md:py-2"
+      style={{ backgroundColor: announcement?.bgColor || "#6E809A" }}
+    >
+      <AnnouncementContent announcement={announcement} />
+    </Link>
+  );
+};
+
+export default React.memo(AnnouncementBar);
