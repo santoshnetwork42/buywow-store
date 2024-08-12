@@ -276,7 +276,7 @@ const Address = ({}) => {
           />
         )}
         <div className="flex w-full gap-4 overflow-x-scroll">
-          {addressList.map((item, index) => (
+          {addressList?.map((item, index) => (
             <>
               <AddressListComponent
                 currentAddress={currentAddress}
@@ -475,20 +475,6 @@ const Address = ({}) => {
       {/* condition ends here */}
 
       <div className="flex flex-col gap-2">
-        {!!addressList.length && (
-          <div className="flex justify-between">
-            <Text size="lg">Shipping Address</Text>
-            <Text
-              size="lg"
-              onClick={handleAddNewAddress}
-              className="cursor-pointer"
-            >
-              + New Address
-            </Text>
-          </div>
-        )}
-
-        {/* only visible in mobile view */}
         <div className="block md:hidden">
           {(isModalOpen || !addressList?.length) && (
             <AddressModal
@@ -499,21 +485,6 @@ const Address = ({}) => {
             />
           )}
         </div>
-
-        {!!addressList.length && (
-          <div className="flex w-full gap-4 overflow-x-scroll">
-            {addressList?.map((item, index) => (
-              <>
-                <AddressListComponent
-                  currentAddress={currentAddress}
-                  user={user}
-                  item={item}
-                  key={`address-${index}`}
-                />
-              </>
-            ))}
-          </div>
-        )}
       </div>
     </>
   );
