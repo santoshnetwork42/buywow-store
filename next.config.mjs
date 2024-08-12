@@ -21,6 +21,10 @@ const nextConfig = {
         port: "3001",
         pathname: "/images/**",
       },
+      {
+        protocol: "https",
+        hostname: process.env.NEXT_PUBLIC_WP_MEDIA_URL,
+      },
     ],
   },
 };

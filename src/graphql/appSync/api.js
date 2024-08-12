@@ -2426,24 +2426,22 @@ export const sendAffiseAnalytics = /* GraphQL */ `
 `;
 
 export const getFeaturedBlogs = /* GraphQL */ `
-  query FeatueredBlogs {
-    posts(first: 3, where: { tagSlugIn: "english", status: PUBLISH }) {
-      edges {
-        node {
-          date
-          id
-          databaseId
-          slug
-          status
-          title
-          uri
-          excerpt
-          toPing
-          link
-          featuredImage {
-            node {
-              mediaItemUrl
-            }
+  query FeatueredBlogs($first: Int) {
+    posts(first: $first, where: { tagSlugIn: "english", status: PUBLISH }) {
+      nodes {
+        date
+        id
+        databaseId
+        slug
+        status
+        title
+        uri
+        excerpt
+        toPing
+        link
+        featuredImage {
+          node {
+            mediaItemUrl
           }
         }
       }
@@ -2531,7 +2529,6 @@ export const getBlogs = /* GraphQL */ `
           slug
           title
           uri
-          readingTime
           excerpt
           link
           date
