@@ -14,6 +14,13 @@ export function generateRandomString(length) {
 }
 
 export function validatePhoneNumber(phoneNumber) {
+  if (isPhoneNumberValid(phoneNumber)) {
+    return { error: false };
+  }
+  return { error: true, message: "Invalid Phone Number" };
+}
+
+export function isPhoneNumberValid(phoneNumber) {
   const pattern = /^\d{10}$/;
   return pattern.test(phoneNumber);
 }
@@ -203,24 +210,24 @@ export const nameSplitter = (name) => {
 };
 
 export const validatePinCode = (pinCode) => {
-  if (pinCode.length !== 6) {
-    return "Pin code must be 6 digits";
+  if (pinCode?.length !== 6) {
+    return { error: true, message: "Pin code must be 6 digits" };
   }
-  return "";
+  return { error: false };
 };
 
 export const validateString = (inputString) => {
-  if (!!inputString.length) {
-    return "";
+  if (!!inputString?.length) {
+    return { error: false };
   }
-  return "Invalid Input";
+  return { error: true, message: "Invalid Input" };
 };
 
 export const validateEmail = (email) => {
   if (isEmailValid(email)) {
-    return "";
+    return { error: false };
   }
-  return "Invalid Email";
+  return { error: true, message: "Invalid Email" };
 };
 
 export const calculateTotals = (productItems) => {

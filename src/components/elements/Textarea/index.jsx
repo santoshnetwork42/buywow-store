@@ -46,10 +46,10 @@ const Textarea = React.forwardRef(
 
     return (
       <div className="flex w-full flex-col gap-2">
-        <div className={`relative ${className}`}>
+        <div className={`relative ${className} ${borderColorClass}`}>
           <textarea
             ref={ref}
-            className={`peer w-full p-2 outline-none transition-all duration-300 ${textareaClassName} ${borderColorClass}`}
+            className={`peer w-full p-2 outline-none transition-all duration-300 ${textareaClassName} `}
             name={name}
             placeholder=" "
             onChange={onChange}

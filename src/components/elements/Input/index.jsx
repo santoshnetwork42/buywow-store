@@ -48,11 +48,11 @@ const Input = React.forwardRef(
         : "text-gray-500";
 
     return (
-      <div className={`relative ${className}`}>
+      <div className={`relative ${className} ${borderColorClass}`}>
         {prefix}
         <input
           ref={ref}
-          className={`peer w-full p-2 outline-none transition-all duration-300 ${inputClassName} ${borderColorClass}`}
+          className={`peer w-full p-2 outline-none transition-all duration-300 ${inputClassName} `}
           type={type}
           name={name}
           placeholder={placeholder}
