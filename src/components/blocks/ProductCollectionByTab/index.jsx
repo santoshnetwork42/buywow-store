@@ -16,6 +16,7 @@ import Slider from "@/components/features/Slider";
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
 import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
 import InfiniteScroll from "@/components/features/InfiniteScroll";
+import { PRODUCT_COLLECTION_PAGE_SIZE } from "@/utils/data/constants";
 
 const SORT_OPTIONS = [
   { value: "RECOMMENDED", label: "Recommended" },
@@ -79,7 +80,6 @@ const ProductCollectionByTab = ({
     async (newSortOption) => {
       setIsLoading(true);
       const activeTab = productCollectionTabItems[activeTabIndex];
-      const pageSize = activeTab?.pagination?.pageSize ?? 10;
 
       try {
         setProductCollectionTabItems((prevItems) =>
@@ -94,7 +94,7 @@ const ProductCollectionByTab = ({
           tabSelected: activeTab?.tab?.data?.id,
           defaultSorting: newSortOption.value,
           page: 1,
-          limit: pageSize,
+          limit: PRODUCT_COLLECTION_PAGE_SIZE,
         });
 
         const newProducts = response?.items?.data ?? [];
@@ -125,10 +125,13 @@ const ProductCollectionByTab = ({
     [activeTabIndex, productCollectionTabItems, slug],
   );
 
-  const handleSortChange = useCallback((option) => {
-    setSortOption(option);
-    reloadProducts(option);
-  }, []);
+  const handleSortChange = useCallback(
+    (option) => {
+      setSortOption(option);
+      reloadProducts(option);
+    },
+    [activeTabIndex],
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -151,7 +154,6 @@ const ProductCollectionByTab = ({
     setIsLoading(true);
     const nextPage = currentPage + 1;
     const activeTab = productCollectionTabItems[activeTabIndex];
-    const pageSize = activeTab?.pagination?.pageSize ?? 10;
 
     try {
       const response = await searchCMSCollectionProductsAPI({
@@ -159,7 +161,7 @@ const ProductCollectionByTab = ({
         tabSelected: activeTab?.tab?.data?.id,
         defaultSorting: sortOption.value,
         page: nextPage,
-        limit: pageSize,
+        limit: PRODUCT_COLLECTION_PAGE_SIZE,
       });
 
       const newProducts = response?.items?.data ?? [];
@@ -213,7 +215,7 @@ const ProductCollectionByTab = ({
       if (selectedTab) {
         const productsInTab = selectedTab.products?.data?.length ?? 0;
         const totalProducts = selectedTab.pagination?.totalData ?? 0;
-        const pageSize = selectedTab.pagination?.pageSize ?? 10;
+        const pageSize = PRODUCT_COLLECTION_PAGE_SIZE;
         const calculatedPage = Math.ceil(productsInTab / pageSize);
 
         setCurrentPage(calculatedPage);
@@ -242,6 +244,35 @@ const ProductCollectionByTab = ({
       </TabList>
     );
   }, [productCollectionTabItems]);
+
+  const renderProductsAndSkeletons = useCallback(
+    (category) => {
+      const currentProducts = category.products?.data || [];
+      const totalProducts = category.pagination?.totalData || 0;
+      const pageSize = PRODUCT_COLLECTION_PAGE_SIZE;
+      const remainingProducts = Math.min(
+        totalProducts - currentProducts.length,
+        pageSize,
+      );
+      const skeletonCount = isLoading ? remainingProducts : 0;
+
+      return [
+        ...currentProducts.map((product, productIndex) => (
+          <ProductCard
+            className="h-auto bg-white-a700_01"
+            key={`product-${productIndex}`}
+            {...product.attributes}
+          />
+        )),
+        ...Array.from({ length: skeletonCount }).map((_, index) => (
+          <ProductCardSkeleton
+            key={`skeleton-${currentProducts.length + index}`}
+          />
+        )),
+      ];
+    },
+    [isLoading],
+  );
 
   if (!productCollectionTabItems?.length) return null;
 
@@ -282,31 +313,7 @@ const ProductCollectionByTab = ({
               rootMargin="500px"
             >
               <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
-                {(() => {
-                  const currentProducts = category.products?.data || [];
-                  const totalProducts = category.pagination?.totalData || 0;
-                  const pageSize = category.pagination?.pageSize ?? 10;
-                  const remainingProducts = Math.min(
-                    totalProducts - currentProducts.length,
-                    pageSize,
-                  );
-                  const skeletonCount = isLoading ? remainingProducts : 0;
-
-                  return [
-                    ...currentProducts.map((product, productIndex) => (
-                      <ProductCard
-                        className="h-auto bg-white-a700_01"
-                        key={`product-${productIndex}`}
-                        {...product.attributes}
-                      />
-                    )),
-                    ...Array.from({ length: skeletonCount }).map((_, index) => (
-                      <ProductCardSkeleton
-                        key={`skeleton-${currentProducts.length + index}`}
-                      />
-                    )),
-                  ];
-                })()}
+                {renderProductsAndSkeletons(category)}
                 {verticalBlogSection?.verticalBlogItem && (
                   <BlogCard
                     cardData={verticalBlogSection.verticalBlogItem}
