@@ -10,10 +10,12 @@ import {
   getOrder,
   getPageBySlug,
   getUser,
+  searchCMSCollectionProducts,
   searchCMSProducts,
   updateUserAddress,
   verifyCustomOTP,
 } from "@/graphql/appSync/api";
+import { errorHandler } from "@/utils/errorHandler";
 import { generateClient } from "aws-amplify/api";
 
 const client = generateClient();
@@ -36,7 +38,37 @@ export const searchCMSProductsAPI = async (
     const products = response?.data?.searchCMSProducts?.items || [];
     return products;
   } catch (err) {
-    console.error(err);
+    errorHandler(err, "Search CMS Products API");
+    return null;
+  }
+};
+
+export const searchCMSCollectionProductsAPI = async ({
+  collectionSlug,
+  tabSelected,
+  defaultSorting,
+  page = 1,
+  limit = 20,
+}) => {
+  try {
+    const response = await client.graphql({
+      query: searchCMSCollectionProducts,
+      authMode: "apiKey",
+      variables: {
+        storeId: STORE_ID,
+        collectionSlug,
+        tabSelected,
+        defaultSorting,
+        page,
+        limit,
+      },
+    });
+
+    // console.log(response);
+
+    return JSON.parse(response?.data?.searchCMSCollectionProducts || {});
+  } catch (err) {
+    errorHandler(err, "Search CMS Collection Products API");
     return null;
   }
 };
@@ -55,7 +87,7 @@ export const getPageBySlugAPI = async (slugId) => {
 
     return JSON.parse(response?.data?.getPageBySlug || "[]");
   } catch (err) {
-    console.error(err);
+    errorHandler(err, "Get Page By Slug API");
     return null;
   }
 };
@@ -72,7 +104,7 @@ export const getNavbarAndFooterAPI = async () => {
 
     return JSON.parse(response?.data?.getNavbarAndFooter || "{}");
   } catch (err) {
-    console.error(err);
+    errorHandler(err, "Get Navbar And Footer API");
     return null;
   }
 };
@@ -86,7 +118,7 @@ export const getUserAPI = async () => {
 
     return response?.data?.getUser || null;
   } catch (err) {
-    console.error(err);
+    errorHandler(err, "Get User API");
     return null;
   }
 };
@@ -101,7 +133,7 @@ export const getLoyaltyAPI = async ({ user }) => {
 
     return response || null;
   } catch (err) {
-    console.error(err);
+    errorHandler(err, "Get Loyalty API");
     return null;
   }
 };
@@ -116,7 +148,7 @@ export const checkIfExistingUserAPI = async ({ phone }) => {
 
     return !!data?.ensureUserAndDispatchOTP?.isExistingUser;
   } catch (error) {
-    console.error("Error checking existing user:", error);
+    errorHandler(error, "Check If Existing User API");
     return false;
   }
 };
@@ -131,7 +163,7 @@ export const verifyCustomOTPAPI = async ({ phone, otp }) => {
 
     return !!data?.verifyCustomOTP?.isVerified;
   } catch (error) {
-    console.error("Error verifying custom OTP:", error);
+    errorHandler(error, "Verify Custom OTP API");
     return false;
   }
 };
@@ -146,7 +178,7 @@ export const getOrderByIdAPI = async ({ id }) => {
 
     return data;
   } catch (error) {
-    console.error("Error verifying custom OTP:", error);
+    errorHandler(error, "Get Order By Id API");
     return false;
   }
 };
@@ -165,7 +197,7 @@ export const getUserAddressAPI = async ({ id, userID }) => {
 
     return userAddresses;
   } catch (error) {
-    console.error("Error Fetching user address:", error);
+    errorHandler(error, "Get User Address API");
     return false;
   }
 };
@@ -180,7 +212,7 @@ export const removeUserAddressAPI = async ({ id, userID }) => {
 
     return result;
   } catch (error) {
-    console.error("Error Fetching user address:", error);
+    errorHandler(error, "Remove User Address API");
     return false;
   }
 };
@@ -195,7 +227,7 @@ export const createUserAddressAPI = async (input) => {
 
     return result;
   } catch (error) {
-    console.error("Error Creating User Address:", error);
+    errorHandler(error, "Create User Address API");
     return error;
   }
 };
@@ -210,7 +242,7 @@ export const updateUserAddressAPI = async (input) => {
 
     return result;
   } catch (error) {
-    console.error("Error Updating User Address:", error);
+    errorHandler(error, "Update User Address API");
     return error;
   }
 };
@@ -231,7 +263,7 @@ export const applyCouponAPI = async (couponCode) => {
 
     return response;
   } catch (error) {
-    console.error("Error applying coupon:", error);
+    errorHandler(error, "Apply Coupon API");
     return null;
   }
 };
@@ -249,7 +281,7 @@ export const fetchProductDetailsAPI = async (id) => {
     const data = "data" in response ? response.data : response;
     return data?.getProduct;
   } catch (error) {
-    console.error("Error fetching product:", error);
+    errorHandler(error, "Fetch Product Details API");
     return null;
   }
 };

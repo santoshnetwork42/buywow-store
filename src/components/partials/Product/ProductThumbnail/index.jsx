@@ -6,10 +6,6 @@ import { twMerge } from "tailwind-merge";
 
 const ProductThumbnail = React.memo(
   ({ width, height, imageKey, className, alt, ...props }) => {
-    if (!imageKey) {
-      return null;
-    }
-
     const mergedClassName = twMerge(
       "object-contain h-auto w-full mix-blend-multiply",
       className,

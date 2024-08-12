@@ -24,7 +24,7 @@ export const errorHandler = (error, context = "General") => {
   }
 
   // Log the error
-  console.error(`[${context}] ${errorMessage}`);
+  console.error(`${context}: ${errorMessage}`);
   if (errorDetails) {
     console.error("Error details:", errorDetails);
   }

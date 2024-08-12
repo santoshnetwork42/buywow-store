@@ -1,6 +1,26 @@
 // ==================================================
 // NEW APIs
 
+export const searchCMSCollectionProducts = /* GraphQL */ `
+  query searchCMSCollectionProducts(
+    $storeId: String!
+    $collectionSlug: String!
+    $tabSelected: String
+    $defaultSorting: DefaultSorting
+    $page: Int
+    $limit: Int
+  ) {
+    searchCMSCollectionProducts(
+      storeId: $storeId
+      collectionSlug: $collectionSlug
+      tabSelected: $tabSelected
+      defaultSorting: $defaultSorting
+      page: $page
+      limit: $limit
+    )
+  }
+`;
+
 export const searchCMSProducts = /* GraphQL */ `
   query SearchCMSProducts($products: [String!]!, $storeId: String!) {
     searchCMSProducts(products: $products, storeId: $storeId) {
