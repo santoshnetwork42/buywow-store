@@ -66,23 +66,39 @@ const AddressModal = ({
   };
 
   const checkFormValidity = () => {
-    const validPinCode = address?.pinCode?.length === 6;
-    const cityError = address?.city?.length > 0;
-    const stateError = address?.state?.length > 0;
-    const validPhone = address?.phone?.length === 10;
-    const addressError = address?.address?.length > 0;
-    const emailError = isEmailValid(address?.email);
-    const nameError = address?.name?.length > 0;
+    const fields = [
+      { key: "pinCode", validate: validatePinCode },
+      { key: "city", validate: validateString },
+      { key: "state", validate: validateString },
+      { key: "phone", validate: validatePhoneNumber },
+      { key: "name", validate: validateString },
+      { key: "email", validate: validateEmail },
+      { key: "address", validate: validateString },
+    ];
 
-    return (
-      validPinCode &&
-      cityError &&
-      stateError &&
-      validPhone &&
-      addressError &&
-      emailError &&
-      nameError
-    );
+    let hasError = false;
+    const newErrors = {};
+
+    for (const field of fields) {
+      const result = field.validate(address[field.key]);
+      if (result?.error) {
+        newErrors[field.key] = result.message;
+        if (!hasError) {
+          hasError = true;
+          setAddressErrors((prevErrors) => ({
+            ...prevErrors,
+            [field.key]: result.message,
+          }));
+          return;
+        }
+      }
+    }
+
+    if (!hasError) {
+      setAddressErrors({});
+    }
+
+    return !hasError;
   };
 
   const handleAddressSubmit = async (e) => {
@@ -144,9 +160,10 @@ const AddressModal = ({
                 const newPinCode = (e.target.value || "")
                   .replaceAll(/[^0-9]+/g, "")
                   .trim();
+                const res = validatePinCode(newPinCode);
                 setAddressErrors({
                   ...addressErrors,
-                  pinCode: validatePinCode(newPinCode),
+                  pinCode: res?.error ? res?.message : null,
                 });
               }}
               required
@@ -163,9 +180,10 @@ const AddressModal = ({
                 }}
                 onBlur={(e) => {
                   const newCity = e.target.value.trim();
+                  const res = validateString(newCity);
                   setAddressErrors({
                     ...addressErrors,
-                    city: validateString(newCity),
+                    city: res?.error ? res?.message : null,
                   });
                 }}
                 label="City"
@@ -182,9 +200,10 @@ const AddressModal = ({
                 }
                 onBlur={(e) => {
                   const newState = e.target.value.trim();
+                  const res = validateString(newState);
                   setAddressErrors({
                     ...addressErrors,
-                    state: validateString(newState),
+                    state: res?.error ? res?.message : null,
                   });
                 }}
                 label="State"
@@ -208,10 +227,11 @@ const AddressModal = ({
                   })
                 }
                 onBlur={(e) => {
-                  const newState = e.target.value.trim();
+                  const newPhone = e.target.value.trim();
+                  const res = validatePhoneNumber(newPhone);
                   setAddressErrors({
                     ...addressErrors,
-                    phone: validatePhoneNumber(newState) ? "" : "Invalid Phone",
+                    phone: res?.error ? res?.message : null,
                   });
                 }}
                 label="Phone"
@@ -228,10 +248,11 @@ const AddressModal = ({
                   setAddress({ ...address, name: e.target.value })
                 }
                 onBlur={(e) => {
-                  const newState = e.target.value.trim();
+                  const newName = e.target.value.trim();
+                  const res = validateString(newName);
                   setAddressErrors({
                     ...addressErrors,
-                    name: validateString(newState),
+                    name: res?.error ? res?.message : null,
                   });
                 }}
                 label="Full Name"
@@ -249,10 +270,11 @@ const AddressModal = ({
                   setAddress({ ...address, email: e.target.value.trim() })
                 }
                 onBlur={(e) => {
-                  const newState = e.target.value.trim();
+                  const newEmail = e.target.value.trim();
+                  const res = validateEmail(newEmail);
                   setAddressErrors({
                     ...addressErrors,
-                    email: validateEmail(newState),
+                    email: res?.error ? res?.message : null,
                   });
                 }}
                 label="Email"
@@ -266,10 +288,11 @@ const AddressModal = ({
                   setAddress({ ...address, address: e.target.value })
                 }
                 onBlur={(e) => {
-                  const newState = e.target.value.trim();
+                  const newAddress = e.target.value.trim();
+                  const res = validateString(newAddress);
                   setAddressErrors({
                     ...addressErrors,
-                    address: validateString(newState),
+                    address: res?.error ? res?.message : null,
                   });
                 }}
                 label="Street Address"
