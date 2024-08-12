@@ -78,6 +78,9 @@ const VideoSection = dynamic(
 const BlogSection = dynamic(
   () => import("@/components/partials/Others/BlogSection"),
 );
+const RecentlyViewed = dynamic(
+  () => import("@/components/blocks/RecentlyViewed"),
+);
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -145,6 +148,8 @@ const renderBlock = (block, index, slug) => {
       return <VideoSection key={index} slug={slug} {...block} />;
     case "ComponentBlogSection":
       return <BlogSection key={index} slug={slug} {...block} />;
+    case "ComponentBlocksRecentlyViewed":
+      return <RecentlyViewed key={index} slug={slug} {...block} />;
     default:
       return null;
   }

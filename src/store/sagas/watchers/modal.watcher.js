@@ -1,7 +1,6 @@
 import { all, fork, takeLatest } from "redux-saga/effects";
 import {
   setCartModalHandler,
-  setDrawerHandler,
   setPasswordLessModalHandler,
 } from "@/store/sagas/handlers/modal.handle";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";

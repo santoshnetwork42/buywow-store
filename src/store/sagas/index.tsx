@@ -5,6 +5,7 @@ import { userWatcher } from "@/store/sagas/watchers/user.watcher";
 import { cartWatcher } from "@/store/sagas/watchers/cart.watcher";
 import { addressWatcher } from "@/store/sagas/watchers/address.watcher";
 import { eventsWatcher } from "./watchers/events.watcher";
+import { recentlyViewedWatcher } from "./watchers/recentlyViewed.watcher";
 
 export default function* rootSaga() {
   yield all([
@@ -14,5 +15,6 @@ export default function* rootSaga() {
     fork(cartWatcher),
     fork(addressWatcher),
     fork(eventsWatcher),
+    fork(recentlyViewedWatcher),
   ]);
 }
