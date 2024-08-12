@@ -15,6 +15,7 @@ import BlogCard from "@/components/partials/Card/BlogCard";
 import Slider from "@/components/features/Slider";
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
 import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
+import InfiniteScroll from "@/components/features/InfiniteScroll";
 
 const SORT_OPTIONS = [
   { value: "RECOMMENDED", label: "Recommended" },
@@ -74,8 +75,59 @@ const ProductCollectionByTab = ({
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef(null);
 
+  const reloadProducts = useCallback(
+    async (newSortOption) => {
+      setIsLoading(true);
+      const activeTab = productCollectionTabItems[activeTabIndex];
+      const pageSize = activeTab?.pagination?.pageSize ?? 10;
+
+      try {
+        setProductCollectionTabItems((prevItems) =>
+          prevItems.map((item) => ({
+            ...item,
+            products: { ...item.products, data: [] },
+          })),
+        );
+
+        const response = await searchCMSCollectionProductsAPI({
+          collectionSlug: slug[slug.length - 1],
+          tabSelected: activeTab?.tab?.data?.id,
+          defaultSorting: newSortOption.value,
+          page: 1,
+          limit: pageSize,
+        });
+
+        const newProducts = response?.items?.data ?? [];
+
+        setProductCollectionTabItems((prevItems) => {
+          const updatedItems = [...prevItems];
+          if (updatedItems[activeTabIndex]) {
+            updatedItems[activeTabIndex] = {
+              ...updatedItems[activeTabIndex],
+              products: {
+                ...response?.items,
+                data: newProducts,
+              },
+            };
+          }
+          return updatedItems;
+        });
+
+        setCurrentPage(1);
+        const totalProducts = activeTab?.pagination?.totalData ?? 0;
+        setHasMore(newProducts.length < totalProducts);
+      } catch (error) {
+        console.error("Error reloading products:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [activeTabIndex, productCollectionTabItems, slug],
+  );
+
   const handleSortChange = useCallback((option) => {
     setSortOption(option);
+    reloadProducts(option);
   }, []);
 
   useEffect(() => {
@@ -99,6 +151,7 @@ const ProductCollectionByTab = ({
     setIsLoading(true);
     const nextPage = currentPage + 1;
     const activeTab = productCollectionTabItems[activeTabIndex];
+    const pageSize = activeTab?.pagination?.pageSize ?? 10;
 
     try {
       const response = await searchCMSCollectionProductsAPI({
@@ -106,7 +159,7 @@ const ProductCollectionByTab = ({
         tabSelected: activeTab?.tab?.data?.id,
         defaultSorting: sortOption.value,
         page: nextPage,
-        limit: 4,
+        limit: pageSize,
       });
 
       const newProducts = response?.items?.data ?? [];
@@ -160,7 +213,8 @@ const ProductCollectionByTab = ({
       if (selectedTab) {
         const productsInTab = selectedTab.products?.data?.length ?? 0;
         const totalProducts = selectedTab.pagination?.totalData ?? 0;
-        const calculatedPage = Math.ceil(productsInTab / 4);
+        const pageSize = selectedTab.pagination?.pageSize ?? 10;
+        const calculatedPage = Math.ceil(productsInTab / pageSize);
 
         setCurrentPage(calculatedPage);
         setHasMore(productsInTab < totalProducts);
@@ -221,59 +275,56 @@ const ProductCollectionByTab = ({
 
         {productCollectionTabItems.map((category, index) => (
           <TabPanel key={`tab-panel-${index}`}>
-            <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
-              {(() => {
-                const currentProducts = category.products?.data || [];
-                const totalProducts = category.pagination?.totalData || 0;
-                const remainingProducts = Math.min(
-                  totalProducts - currentProducts.length,
-                  4,
-                );
-                const skeletonCount = isLoading ? remainingProducts : 0;
+            <InfiniteScroll
+              loadMore={loadMoreProducts}
+              hasMore={hasMore}
+              isLoading={isLoading}
+              rootMargin="500px"
+            >
+              <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
+                {(() => {
+                  const currentProducts = category.products?.data || [];
+                  const totalProducts = category.pagination?.totalData || 0;
+                  const pageSize = category.pagination?.pageSize ?? 10;
+                  const remainingProducts = Math.min(
+                    totalProducts - currentProducts.length,
+                    pageSize,
+                  );
+                  const skeletonCount = isLoading ? remainingProducts : 0;
 
-                return [
-                  ...currentProducts.map((product, productIndex) => (
-                    <ProductCard
-                      className="h-auto bg-white-a700_01"
-                      key={`product-${productIndex}`}
-                      {...product.attributes}
-                    />
-                  )),
-                  ...Array.from({ length: skeletonCount }).map((_, index) => (
-                    <ProductCardSkeleton
-                      key={`skeleton-${currentProducts.length + index}`}
-                    />
-                  )),
-                ];
-              })()}
-              {verticalBlogSection?.verticalBlogItem && (
-                <BlogCard
-                  cardData={verticalBlogSection.verticalBlogItem}
-                  isVertical={true}
-                  className="col-start-[-2]"
-                  row={verticalBlogSection.row}
-                />
-              )}
-              {horizontalBlogSection?.map((horizontalBlogs, index) => (
-                <HorizontalBlogSection
-                  key={`horizontal-blog-${index}`}
-                  horizontalBlogs={horizontalBlogs}
-                  containerRef={containerRef}
-                  horizontalCardWidth={horizontalCardWidth}
-                />
-              ))}
-            </div>
-            {hasMore && (
-              <div className="mt-8 text-center">
-                <button
-                  className="text-white rounded-full bg-blue-500 px-6 py-2 hover:bg-blue-600"
-                  onClick={loadMoreProducts}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Loading..." : "Load More"}
-                </button>
+                  return [
+                    ...currentProducts.map((product, productIndex) => (
+                      <ProductCard
+                        className="h-auto bg-white-a700_01"
+                        key={`product-${productIndex}`}
+                        {...product.attributes}
+                      />
+                    )),
+                    ...Array.from({ length: skeletonCount }).map((_, index) => (
+                      <ProductCardSkeleton
+                        key={`skeleton-${currentProducts.length + index}`}
+                      />
+                    )),
+                  ];
+                })()}
+                {verticalBlogSection?.verticalBlogItem && (
+                  <BlogCard
+                    cardData={verticalBlogSection.verticalBlogItem}
+                    isVertical={true}
+                    className="col-start-[-2]"
+                    row={verticalBlogSection.row}
+                  />
+                )}
+                {horizontalBlogSection?.map((horizontalBlogs, index) => (
+                  <HorizontalBlogSection
+                    key={`horizontal-blog-${index}`}
+                    horizontalBlogs={horizontalBlogs}
+                    containerRef={containerRef}
+                    horizontalCardWidth={horizontalCardWidth}
+                  />
+                ))}
               </div>
-            )}
+            </InfiniteScroll>
           </TabPanel>
         ))}
       </Tabs>
