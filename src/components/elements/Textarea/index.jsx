@@ -1,8 +1,8 @@
 /* eslint-disable react/display-name */
 "use client";
 
-import React, { useState } from "react";
 import PropTypes from "prop-types";
+import React, { useRef, useState } from "react";
 
 const Textarea = React.forwardRef(
   (
@@ -26,6 +26,7 @@ const Textarea = React.forwardRef(
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
+    const textAreaRef = useRef(null);
 
     const handleFocus = (e) => {
       setIsFocused(true);
@@ -35,6 +36,12 @@ const Textarea = React.forwardRef(
     const handleBlur = (e) => {
       setIsFocused(false);
       if (onBlur) onBlur(e);
+    };
+
+    const handleLabelClick = () => {
+      if (textAreaRef.current) {
+        textAreaRef.current.focus();
+      }
     };
 
     const borderColorClass = error ? "border-red-500" : "border-gray-300";
@@ -48,7 +55,14 @@ const Textarea = React.forwardRef(
       <div className="flex w-full flex-col gap-2">
         <div className={`relative ${className} ${borderColorClass}`}>
           <textarea
-            ref={ref}
+            ref={(node) => {
+              textAreaRef.current = node;
+              if (typeof ref === "function") {
+                ref(node);
+              } else if (ref) {
+                ref.current = node;
+              }
+            }}
             className={`peer w-full p-2 outline-none transition-all duration-300 ${textareaClassName} `}
             name={name}
             placeholder=" "
@@ -62,7 +76,8 @@ const Textarea = React.forwardRef(
             {...restProps}
           />
           <label
-            className={`absolute top-1 text-lg transition-all duration-300 ${labelColorClass} ${isFocused || value ? "left-0 -translate-y-5 scale-75" : "left-2"} bg-white-a700_01 peer-focus:-translate-y-5 peer-focus:scale-75`}
+            onClick={handleLabelClick}
+            className={`absolute top-1 cursor-pointer text-lg transition-all duration-300 ${labelColorClass} ${isFocused || value ? "left-0 -translate-y-5 scale-75" : "left-2"} bg-white-a700_01 peer-focus:-translate-y-5 peer-focus:scale-75`}
           >
             {label}
             {required && <span className="ml-1 text-red-500">*</span>}
