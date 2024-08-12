@@ -257,7 +257,7 @@ const Address = ({}) => {
   if (!!addressList?.length) {
     return (
       <div className="flex flex-col gap-2">
-        <div className="flex justify-between">
+        <div className="flex justify-between rounded-md bg-blue-50 p-2">
           <Text size="lg">Shipping Address</Text>
           <Text
             size="lg"
