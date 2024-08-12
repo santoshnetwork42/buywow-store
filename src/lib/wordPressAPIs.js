@@ -1,4 +1,9 @@
-import { getBlogs, getFeaturedBlogs } from "@/graphql/appSync/api";
+import {
+  getBlog,
+  getBlogs,
+  getBlogsByCategory,
+  getFeaturedBlogs,
+} from "@/graphql/appSync/api";
 
 export const wordpressAuth = `Basic ${Buffer.from(
   `${process.env.NEXT_PUBLIC_WP_USERNAME}:${process.env.NEXT_PUBLIC_WP_PASSWORD}`,
@@ -31,7 +36,7 @@ export const fetchFeaturedBlogs = async (first = 3) => {
 export const fetchBlogs = async (
   filters = {
     category,
-    tag,
+    tags,
     first,
     last,
     after,
@@ -42,7 +47,7 @@ export const fetchBlogs = async (
     const variables = {};
 
     if (filters.category) variables.category = filters.category;
-    if (filters.tag) variables.tag = filters.tag;
+    if (filters.tags) variables.tag = filters.tags;
     if (filters.first) variables.first = filters.first;
     if (filters.last) variables.last = filters.last;
     if (filters.after) variables.after = filters.after;
@@ -68,7 +73,36 @@ export const fetchBlogs = async (
 
     return data?.data?.posts?.edges || [];
   } catch (error) {
-    console.error(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    console.error(JSON.stringify(error));
+    return false;
+  }
+};
+
+export const fetchBlog = async (slug) => {
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: wordpressAuth,
+      },
+      body: JSON.stringify({
+        query: getBlog,
+        variables: { id: slug, idType: "SLUG" },
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    console.log(data);
+
+    return data?.data?.post || {};
+  } catch (err) {
+    console.log(err);
     return false;
   }
 };

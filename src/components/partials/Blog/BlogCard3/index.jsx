@@ -4,11 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export default function BlogCard2({
+export default function BlogCard3({
   blog = {
     id,
     featuredImage,
     date,
+    author,
     title,
     excerpt,
     slug,
@@ -16,8 +17,8 @@ export default function BlogCard2({
 }) {
   return (
     <Link href={`/blog/${blog.slug}`}>
-      <div className="grid grid-cols-[auto_1fr] gap-x-3">
-        <div className="relative aspect-[4/3] w-full">
+      <div className="grid grid-cols-[2fr,4fr] items-center gap-4">
+        <div className="relative aspect-video w-full">
           <Image
             src={blog.featuredImage?.node?.mediaItemUrl}
             alt={blog.title}
@@ -27,18 +28,25 @@ export default function BlogCard2({
         </div>
 
         <div>
-          <Text as={"p"} className="line-clamp-1" size="sm">
-            {dayjs(blog.date).format("MMMM DD, YYYY")}
+          <Text as={"p"} className="line-clamp-3" size="sm">
+            {dayjs(blog.date).format("MMMM DD, YYYY")} | {blog.author.node.name}
           </Text>
 
           <Heading
-            as="h6"
-            size="base"
-            className="my-2 line-clamp-2 text-base normal-case"
-            responsive
+            as="h5"
+            size="2xl"
+            className="my-3 line-clamp-3 text-base normal-case"
           >
             {blog.title}
           </Heading>
+
+          <Text as={"p"} className="line-clamp-3" size="sm">
+            <div
+              dangerouslySetInnerHTML={{
+                __html: blog.excerpt,
+              }}
+            />
+          </Text>
         </div>
       </div>
     </Link>

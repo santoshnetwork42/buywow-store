@@ -25,6 +25,10 @@ const nextConfig = {
         protocol: "https",
         hostname: process.env.NEXT_PUBLIC_WP_MEDIA_URL,
       },
+      {
+        protocol: "https",
+        hostname: process.env.NEXT_PUBLIC_WP_AVATAR_URL,
+      },
     ],
   },
 };

@@ -2591,7 +2591,6 @@ export const getBlog = /* GraphQL */ `
       title
       uri
       excerpt
-      readingTime
       link
       date
       seo {
