@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useProduct,
   useProductCoupons,
@@ -14,6 +14,7 @@ import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import ProductDetailViewBlocks from "@/components/partials/Product/PDP/ProductDetailViewBlocks";
 import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDiscounts";
+import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
 
 const ProductDetailView = ({ product }) => {
   const {
@@ -24,10 +25,15 @@ const ProductDetailView = ({ product }) => {
     fetchedProduct,
   } = extractAttributes(product?.pdpProduct);
 
+  const { addRecentlyViewedProduct } = useRecentlyViewedDispatch();
   const [selectedVariant, variantGroup, onVariantChange] =
     useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
+
+  useEffect(() => {
+    addRecentlyViewedProduct(extractAttributes(product?.pdpProduct));
+  }, [product]);
 
   const {
     title,

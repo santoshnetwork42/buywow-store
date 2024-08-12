@@ -2,7 +2,6 @@ import { fetchProductDetailsAPI } from "@/lib/appSyncAPIs";
 import {
   emptyCart,
   setCart,
-  setCartError,
   setCartId,
   setCoupon,
   setIsRewardApplied,

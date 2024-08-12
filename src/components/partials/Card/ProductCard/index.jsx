@@ -29,8 +29,6 @@ const BenefitTag = memo(({ bgColor, tag }) => {
   );
 });
 
-BenefitTag.displayName = "BenefitTag";
-
 const RatingDisplay = memo(({ rating, totalRatings }) => {
   if (!(totalRatings > 0)) return null;
   return (
@@ -54,8 +52,6 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
   );
 });
 
-RatingDisplay.displayName = "RatingDisplay";
-
 const PriceDisplay = memo(({ price, listingPrice }) => {
   if (!price) return null;
   return (
@@ -77,8 +73,6 @@ const PriceDisplay = memo(({ price, listingPrice }) => {
     </div>
   );
 });
-
-PriceDisplay.displayName = "PriceDisplay";
 
 const ProductCard = memo(
   ({
@@ -205,6 +199,9 @@ const ProductCard = memo(
   },
 );
 
+RatingDisplay.displayName = "RatingDisplay";
+PriceDisplay.displayName = "PriceDisplay";
+BenefitTag.displayName = "BenefitTag";
 ProductCard.displayName = "ProductCard";
 
 export default ProductCard;
