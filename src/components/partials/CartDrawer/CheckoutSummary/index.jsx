@@ -20,7 +20,7 @@ const CheckoutSummary = React.memo(({ inventory }) => {
   const { handleCartVisibility } = useModalDispatch();
   const { handleOutOfStock, handleProceedToCheckout } = useEventsDispatch();
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
-  const gokwikEnabled = true || useConfiguration(GOKWIK_ENABLED, false);
+  const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
 
   const {
     appliedCoupon,
