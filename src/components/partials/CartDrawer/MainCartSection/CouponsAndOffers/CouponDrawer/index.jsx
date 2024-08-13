@@ -1,7 +1,7 @@
-import React from "react";
 import { ArrowIconSVG } from "@/assets/svg/icons";
 import { Button, Heading, Input, Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
+import React from "react";
 import CouponItem from "./CouponItem";
 
 const CouponDrawer = ({
@@ -23,7 +23,7 @@ const CouponDrawer = ({
     width="500px"
     isNestedDrawer={true}
   >
-    <div className="flex flex-1 flex-col gap-4 px-3 py-4 md:px-4">
+    <div className="flex flex-1 flex-col gap-4 bg-white-a700 px-3 py-4 md:px-4">
       <div className="flex items-center gap-3 border-b-[0.25px] border-black-900 pb-2 md:gap-4 md:pb-2.5">
         <Button
           onClick={onClose}
@@ -47,8 +47,8 @@ const CouponDrawer = ({
           suffix={
             <Button
               onClick={() => couponCode && applyCouponCode(couponCode)}
-              variant="primary"
               size="small"
+              className="text-base font-semibold text-yellow-900"
               disabled={loading}
             >
               Apply
@@ -81,8 +81,9 @@ const CouponDrawer = ({
         </div>
       )}
 
-      <Text as="p" size="sm">
-        *Applicable on certain products
+      <Text as="p" size="sm" className="mt-4 font-medium">
+        <span className="font-bold text-yellow-900">*</span>Applicable on
+        certain products
       </Text>
     </div>
   </Drawer>

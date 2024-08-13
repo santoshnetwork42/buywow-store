@@ -1,5 +1,4 @@
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
-import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
 
 // Dynamically import components
@@ -88,85 +87,56 @@ export const metadata = {
     "Revitalize your skin with Vitamin C face wash and natural ingredients. Cruelty-free, dermatologically tested skincare on sale. Free shipping on orders above ₹999.",
 };
 
-const renderBlock = (block, index) => {
-  switch (block?.__typename) {
-    case "ComponentBlocksAnnouncementBar":
-      return <PageAnnouncementBar key={index} slug={["index"]} {...block} />;
-    case "ComponentBannerCarousal":
-      return <Carousal key={index} slug={["index"]} {...block} />;
-    case "ComponentBannerSingleBanner":
-      return <SingleBanner key={index} slug={["index"]} {...block} />;
-    case "ComponentBannerMiniBanners":
-      return <MiniBanners key={index} slug={["index"]} {...block} />;
-    case "ComponentCategoriesTrendingCategories":
-      return <TrendingCategories key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksFeaturedList":
-      return <FeaturedList key={index} slug={["index"]} {...block} />;
-    case "ComponentCategoriesIngredientCategories":
-      return <IngredientCategories key={index} slug={["index"]} {...block} />;
-    case "ComponentCategoriesFeaturedCategories":
-      return <FeaturedCategories key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksTestimonialSection":
-      return <TestimonialSection key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksFeaturedProducts":
-      return <FeaturedProducts key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksFeaturedProductsByTab":
-      return <FeaturedProductsByTab key={index} slug={["index"]} {...block} />;
-    case "ComponentProductProductEffectivenessImages":
-      return <ProductEffectiveness key={index} slug={["index"]} {...block} />;
-    case "ComponentProductProductHighlightImages":
-      return <ProductHighlights key={index} slug={["index"]} {...block} />;
-    case "ComponentProductProductBenefits":
-      return <ProductBenefits key={index} slug={["index"]} {...block} />;
-    case "ComponentProductProductKeyIngredientImages":
-      return <ProductKeyIngredients key={index} slug={["index"]} {...block} />;
-    case "ComponentAccordionInfoDropdownSection":
-      return <InfoDropdown key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksCollectionLinks":
-      return <CollectionLinks key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksPdp":
-      return <ProductDetailView key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksProductCollectionByTab":
-      return (
-        <ProductCollectionSection key={index} slug={["index"]} {...block} />
-      );
-    case "ComponentBlocksInfoSection":
-      return <InfoSection key={index} slug={["index"]} {...block} />;
-    case "ComponentProductProductReviews":
-      return <Reviews key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksUpsellProducts":
-      return <UpsellProducts key={index} slug={["index"]} {...block} />;
-    case "ComponentAccordionDescriptionSection":
-      return <AccordionDescription key={index} slug={["index"]} {...block} />;
-    case "ComponentAccordionIngredientsSection":
-      return <AccordionIngredients key={index} slug={["index"]} {...block} />;
-    case "ComponentAccordionUsageInstructionsSection":
-      return (
-        <AccordionUsageInstructions key={index} slug={["index"]} {...block} />
-      );
-    case "ComponentAccordionFaQsSection":
-      return <AccordionFaQs key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksBreadcrumb":
-      return <Breadcrumb key={index} slug={slug} {...block} />;
-    case "ComponentVideoSection":
-      return <VideoSection key={index} slug={["index"]} {...block} />;
-    case "ComponentBlogSection":
-      return <BlogSection key={index} slug={["index"]} {...block} />;
-    case "ComponentBlocksRecentlyViewed":
-      return <RecentlyViewed key={index} slug={slug} {...block} />;
-    default:
-      return null;
-  }
+const componentMap = {
+  ComponentBlocksAnnouncementBar: PageAnnouncementBar,
+  ComponentBannerCarousal: Carousal,
+  ComponentBannerSingleBanner: SingleBanner,
+  ComponentBannerMiniBanners: MiniBanners,
+  ComponentCategoriesTrendingCategories: TrendingCategories,
+  ComponentBlocksFeaturedList: FeaturedList,
+  ComponentCategoriesIngredientCategories: IngredientCategories,
+  ComponentCategoriesFeaturedCategories: FeaturedCategories,
+  ComponentBlocksTestimonialSection: TestimonialSection,
+  ComponentBlocksFeaturedProducts: FeaturedProducts,
+  ComponentBlocksFeaturedProductsByTab: FeaturedProductsByTab,
+  ComponentProductProductEffectivenessImages: ProductEffectiveness,
+  ComponentProductProductHighlightImages: ProductHighlights,
+  ComponentProductProductBenefits: ProductBenefits,
+  ComponentProductProductKeyIngredientImages: ProductKeyIngredients,
+  ComponentAccordionInfoDropdownSection: InfoDropdown,
+  ComponentBlocksCollectionLinks: CollectionLinks,
+  ComponentBlocksPdp: ProductDetailView,
+  ComponentBlocksProductCollectionByTab: ProductCollectionSection,
+  ComponentBlocksInfoSection: InfoSection,
+  ComponentProductProductReviews: Reviews,
+  ComponentBlocksUpsellProducts: UpsellProducts,
+  ComponentAccordionDescriptionSection: AccordionDescription,
+  ComponentAccordionIngredientsSection: AccordionIngredients,
+  ComponentAccordionUsageInstructionsSection: AccordionUsageInstructions,
+  ComponentAccordionFaQsSection: AccordionFaQs,
+  ComponentBlocksBreadcrumb: Breadcrumb,
+  ComponentVideoSection: VideoSection,
+  ComponentBlogSection: BlogSection,
+  ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
-  revalidate: 1800,
-});
+const renderBlock = (block, index, slug) => {
+  if (!block?.showComponent) return null;
+
+  const Component = componentMap[block?.__typename];
+  if (!Component) return null;
+
+  return <Component key={index} slug={slug} {...block} />;
+};
+
+// const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
+//   revalidate: 1800,
+// });
 
 export default async function Page() {
   try {
-    const pageData = await getPageData("index");
-    // const pageData = await getPageBySlugAPI("index");
+    // const pageData = await getPageData("index");
+    const pageData = await getPageBySlugAPI("index");
     const { blocks } = pageData || {};
 
     if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {

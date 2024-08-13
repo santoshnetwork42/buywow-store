@@ -140,9 +140,15 @@ span.ripple {
 }
 
 /* Inline HTML  */
-.inline-html-content > p,
-.inline-html-content > a {
+.inline-html-content p,
+.inline-html-content a {
   display: inline-block;
+}
+
+.inline-html-content a {
+  color: #8aa0c0;
+  font-weight: 600;
+  text-decoration: underline;
 }
 
 /* Loader */

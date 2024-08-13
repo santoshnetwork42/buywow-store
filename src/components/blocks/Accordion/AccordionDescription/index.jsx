@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/elements";
-import { extractAttributes } from "@/utils/helpers";
 import Accordion from "@/components/features/Accordion";
+import { extractAttributes } from "@/utils/helpers";
+import { useEffect, useRef, useState } from "react";
 
 const AccordionDescription = ({
   accordionDescriptionTitle: title,

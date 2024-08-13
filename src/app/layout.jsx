@@ -1,6 +1,9 @@
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
+import ToastComponent from "@/components/common/ToastComponent";
+import CartDrawer from "@/components/partials/CartDrawer";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
+import { AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
   getCartUpsellProductsAPI,
   getNavbarAndFooterAPI,
@@ -9,15 +12,11 @@ import { Provider } from "@/store/Provider";
 import "@/styles/font.css";
 import "@/styles/index.css";
 import "@/styles/tailwind.css";
-import NavbarProvider from "@/utils/context/navbar";
-import { Amplify } from "aws-amplify";
-import { unstable_cache } from "next/cache";
-import awsExport from "../../aws-exports";
-import { AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
-import CartDrawer from "@/components/partials/CartDrawer";
-import ToastComponent from "@/components/common/ToastComponent";
 import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 import GoKwikProvider from "@/utils/context/gokwik";
+import NavbarProvider from "@/utils/context/navbar";
+import { Amplify } from "aws-amplify";
+import awsExport from "../../aws-exports";
 
 Amplify.configure({
   ...awsExport,
@@ -25,15 +24,15 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
-const getNavbarAndFooter = unstable_cache(
-  getNavbarAndFooterAPI,
-  ["navbar", "footer"],
-  { revalidate: 1800 },
-);
+// const getNavbarAndFooter = unstable_cache(
+//   getNavbarAndFooterAPI,
+//   ["navbar", "footer"],
+//   { revalidate: 1800 },
+// );
 
 async function RootLayout({ children }) {
-  const { data } = (await getNavbarAndFooter()) || {};
-  // const { data } = await getNavbarAndFooterAPI();
+  // const { data } = (await getNavbarAndFooter()) || {};
+  const { data } = await getNavbarAndFooterAPI();
   const upsellProducts = await getCartUpsellProductsAPI();
   const {
     announcementBar: announcementData = {},

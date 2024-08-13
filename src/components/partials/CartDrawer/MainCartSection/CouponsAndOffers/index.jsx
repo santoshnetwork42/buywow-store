@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { applyCouponAPI } from "@/lib/appSyncAPIs";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import {
   getCouponDiscount,
   useBestCoupon,
   useFeaturedCoupons,
 } from "@wow-star/utils";
-import { applyCouponAPI } from "@/lib/appSyncAPIs";
-import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
-import CouponModal from "./CouponModal";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import CouponDrawer from "./CouponDrawer";
 import CouponHeader from "./CouponHeader";
+import CouponModal from "./CouponModal";
 
 const CouponsAndOffers = () => {
   const { applyCoupon, removeCoupon, removeFromCart } = useCartDispatch();
@@ -57,12 +57,13 @@ const CouponsAndOffers = () => {
             setIsCouponModalOpen(true);
           }, 300);
           setIsSidebarOpen(false);
+          setError(null);
         } else {
-          setError(message);
+          !autoApplied && setError(message);
         }
       } catch (error) {
         console.log("Coupon not found", error);
-        setError("Coupon not found");
+        !autoApplied && setError("Coupon not found");
       } finally {
         setCouponCode("");
         setLoading(false);
@@ -75,28 +76,20 @@ const CouponsAndOffers = () => {
   useEffect(() => {
     if (cartList || cartList !== previousCartList.current) {
       previousCartList.current = cartList;
-      // console.log("abc");
-      // console.log(storedCouponCode, bestCouponCode, appliedCoupon);
 
       if (
         storedCouponCode &&
         (!appliedCoupon || appliedCoupon?.autoApplied) &&
         appliedCoupon?.code !== storedCouponCode
       ) {
-        // console.log("appliedCoupon", storedCouponCode);
-
         applyCouponCode(storedCouponCode, true);
       } else if (
         bestCouponCode &&
         (!appliedCoupon || appliedCoupon?.autoApplied) &&
         appliedCoupon?.code !== bestCouponCode
       ) {
-        // console.log("appliedCoupon", bestCouponCode);
-
         applyCouponCode(bestCouponCode, true);
       } else if (appliedCoupon?.autoApplied) {
-        // console.log("removeCoupon");
-
         removeCoupon();
       }
     }
