@@ -1,10 +1,11 @@
-import { Heading, Text } from "@/components/elements";
-import { fetchBlog } from "@/lib/wordPressAPIs";
-import dayjs from "dayjs";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import React from "react";
+import dayjs from "dayjs";
+import { Heading, Text } from "@/components/elements";
+import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
+import { fetchBlog } from "@/lib/wordPressAPIs";
 
 export default async function page({ params }) {
   const { slug } = params;
@@ -17,6 +18,13 @@ export default async function page({ params }) {
 
   return (
     <div className="grid gap-y-4">
+      <BlogBreadCrumb
+        links={[
+          { label: "Blog", url: "/blog" },
+          { label: blog.title, url: `/blog/${blog.slug}` },
+        ]}
+      />
+
       <div className="flex flex-wrap gap-4">
         {blog?.categories?.nodes?.map((category) => (
           <Link
@@ -64,10 +72,12 @@ export default async function page({ params }) {
           height={100}
           className="rounded-full"
         />
-        <div>
-          <Heading as="h4" size="lg" className="mb-2">
-            {blog.author.node.name}
-          </Heading>
+        <div className="space-y-2">
+          <div className="flex justify-between">
+            <Heading as="h4" size="lg">
+              {blog.author.node.name}
+            </Heading>
+          </div>
 
           <Text as="p" size="sm">
             {blog.author.node.description}

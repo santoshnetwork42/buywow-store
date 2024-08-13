@@ -17,7 +17,7 @@ export default function BlogCard({
 }) {
   return (
     <Link href={`/blog/${blog.slug}`}>
-      <div className="flex flex-col rounded-xl border p-3 shadow-xs">
+      <div className="flex h-full flex-col rounded-xl border p-3 shadow-xs">
         <div className="relative aspect-video w-full">
           <Image
             src={blog.featuredImage?.node?.mediaItemUrl}

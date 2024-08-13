@@ -17,7 +17,7 @@ export default function BlogCard3({
 }) {
   return (
     <Link href={`/blog/${blog.slug}`}>
-      <div className="grid grid-cols-[2fr,4fr] items-center gap-4">
+      <div className="grid items-center gap-4 md:grid-cols-[2fr,4fr]">
         <div className="relative aspect-video w-full">
           <Image
             src={blog.featuredImage?.node?.mediaItemUrl}
@@ -27,7 +27,7 @@ export default function BlogCard3({
           />
         </div>
 
-        <div>
+        <div className="space-y-3">
           <Text as={"p"} className="line-clamp-3" size="sm">
             {dayjs(blog.date).format("MMMM DD, YYYY")} | {blog.author.node.name}
           </Text>
@@ -35,7 +35,7 @@ export default function BlogCard3({
           <Heading
             as="h5"
             size="2xl"
-            className="my-3 line-clamp-3 text-base normal-case"
+            className="line-clamp-3 text-base normal-case"
           >
             {blog.title}
           </Heading>
