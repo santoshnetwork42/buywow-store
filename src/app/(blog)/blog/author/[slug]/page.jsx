@@ -1,9 +1,15 @@
 import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
-import { fetchAuthor, fetchAuthors, fetchBlogs } from "@/lib/wordPressAPIs";
+import {
+  fetchAuthor,
+  fetchAuthors,
+  fetchBlogs,
+  fetchFeaturedBlogs,
+} from "@/lib/wordPressAPIs";
 import { notFound } from "next/navigation";
 import React from "react";
+import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 
 export const revalidate = 3600;
 
@@ -37,28 +43,36 @@ export default async function BlogsByAuthor({ params }) {
     notFound();
   }
 
+  const featuredBlogs = await fetchFeaturedBlogs(5);
+
   return (
-    <div className="grid gap-y-8">
-      <BlogBreadCrumb
-        links={[
-          { label: "Blog", url: "/blog" },
-          { label: slug, url: `/blog/author/${slug}` },
-        ]}
-      />
-      <BlogAuthor
-        name={author.name}
-        avatar={author.avatar.url}
-        description={author.description}
-        slug={author.slug}
-      />
+    <React.Fragment>
+      <div className="col-span-12 lg:col-span-9">
+        <div className="grid gap-y-8">
+          <BlogBreadCrumb
+            links={[
+              { label: "Blog", url: "/blog" },
+              { label: slug, url: `/blog/author/${slug}` },
+            ]}
+          />
+          <BlogAuthor
+            name={author.name}
+            avatar={author.avatar.url}
+            description={author.description}
+            slug={author.slug}
+          />
 
-      <hr className="border-t border-gray-200" />
+          <hr className="border-t border-gray-200" />
 
-      <BlogInfiniteScroll2
-        blogsData={blogs}
-        pageInfoData={pageInfo}
-        author={slug}
-      />
-    </div>
+          <BlogInfiniteScroll2
+            blogsData={blogs}
+            pageInfoData={pageInfo}
+            author={slug}
+          />
+        </div>
+      </div>
+
+      <BlogSidebar featuredBlogs={featuredBlogs} />
+    </React.Fragment>
   );
 }

@@ -1,6 +1,7 @@
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
-import { fetchBlogs, fetchTags } from "@/lib/wordPressAPIs";
+import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
+import { fetchBlogs, fetchFeaturedBlogs, fetchTags } from "@/lib/wordPressAPIs";
 import { notFound } from "next/navigation";
 import React from "react";
 
@@ -30,20 +31,28 @@ export default async function BlogsByTag({ params }) {
     notFound();
   }
 
-  return (
-    <div className="grid gap-y-6">
-      <BlogBreadCrumb
-        links={[
-          { label: "Blog", url: "/blog" },
-          { label: slug, url: `/blog/tag/${slug}` },
-        ]}
-      />
+  const featuredBlogs = await fetchFeaturedBlogs(5);
 
-      <BlogInfiniteScroll2
-        blogsData={blogs}
-        pageInfoData={pageInfo}
-        tags={[slug]}
-      />
-    </div>
+  return (
+    <React.Fragment>
+      <div className="col-span-12 lg:col-span-9">
+        <div className="grid gap-y-6">
+          <BlogBreadCrumb
+            links={[
+              { label: "Blog", url: "/blog" },
+              { label: slug, url: `/blog/tag/${slug}` },
+            ]}
+          />
+
+          <BlogInfiniteScroll2
+            blogsData={blogs}
+            pageInfoData={pageInfo}
+            tags={[slug]}
+          />
+        </div>
+      </div>
+
+      <BlogSidebar featuredBlogs={featuredBlogs} />
+    </React.Fragment>
   );
 }

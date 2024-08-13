@@ -4,6 +4,7 @@ import { useState } from "react";
 import BlogCard from "../BlogCard";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getBlogs } from "@/graphql/appSync/api";
+import { LoaderIcon } from "@/assets/svg/icons";
 
 export default function BlogInfiniteScroll({ blogsData, pageInfoData }) {
   const [blogs, setBlog] = useState(blogsData);
@@ -46,7 +47,9 @@ export default function BlogInfiniteScroll({ blogsData, pageInfoData }) {
       hasMore={pageInfo?.hasNextPage || false}
       loader={
         <div className="flex h-12 w-full items-center justify-center">
-          <h4>Loading...</h4>
+          <div className="animate-spin">
+            <LoaderIcon size={32} />
+          </div>
         </div>
       }
     >

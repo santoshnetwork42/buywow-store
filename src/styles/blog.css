@@ -1,0 +1,93 @@
+.blog {
+  font-family: Outfit, sans-serif;
+}
+
+.blog * {
+  font-family: Outfit, sans-serif;
+}
+
+.blog .wp-block-heading {
+  display: inline-block;
+}
+
+.blog .blog-content a {
+  color: #eeb63d;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.blog .blog-content a:hover {
+  color: #eeb63d;
+  text-decoration: underline;
+}
+
+.blog .blog-content .wp-block-pullquote {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.blog .blog-content .wp-block-pullquote blockquote {
+  text-align: start;
+  margin: 2.4rem 0;
+}
+
+.blog .blog-content .wp-block-pullquote blockquote p {
+  margin: 0;
+}
+
+.blog .blog-content ol {
+  list-style-type: decimal;
+  padding-left: 2rem;
+}
+
+.blog .blog-content blockquote {
+  font-style: italic;
+  background: #f9f9f9;
+  border-left: 4px solid #eeb63d;
+  padding: 1rem;
+  text-align: start;
+  margin: 2.4rem 0;
+}
+
+.blog .blog-content blockquote p {
+  margin: 0;
+}
+
+.blog-font-size-convention h1 {
+  font-size: 35px !important;
+}
+
+.blog-font-size-convention h2 {
+  font-size: 25px !important;
+}
+
+.blog-font-size-convention h3 {
+  font-size: 20px !important;
+}
+
+.blog-font-size-convention h4 {
+  font-size: 19px !important;
+}
+
+.blog-font-size-convention h5 {
+  font-size: 18px !important;
+}
+
+.blog-font-size-convention p {
+  font-size: 17px;
+}
+
+.blog-font-size-convention li {
+  font-size: 17px;
+  line-height: 29px;
+}
+
+.blog-font-size-convention blockquote {
+  font-size: 19px !important;
+}
+
+.blog-font-size-convention .author-bio {
+  color: #666;
+  font-size: 14px;
+}
