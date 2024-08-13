@@ -64,7 +64,8 @@ export default async function ReadBlog({ params }) {
 
             <Text as={"p"} size="sm">
               {blog.author.node.name} |{" "}
-              {dayjs(blog.date).format("MMMM D, YYYY h:mm A")}
+              {dayjs(blog.date).format("MMMM D, YYYY h:mm A")} |{" "}
+              {blog.seo.readingTime} min read
             </Text>
           </div>
 
@@ -91,6 +92,7 @@ export default async function ReadBlog({ params }) {
             avatar={blog.author.node.avatar.url}
             description={blog.author.node.description}
             slug={blog.author.node.slug}
+            linkedin={blog.author.node.seo.social.linkedIn}
           />
         </div>
       </div>

@@ -2531,6 +2531,9 @@ export const getBlogs = /* GraphQL */ `
           id
           databaseId
           slug
+          seo {
+            readingTime
+          }
           title
           uri
           excerpt
@@ -2617,6 +2620,7 @@ export const getBlog = /* GraphQL */ `
       date
       seo {
         metaDesc
+        readingTime
       }
       featuredImage {
         node {
@@ -2643,6 +2647,11 @@ export const getBlog = /* GraphQL */ `
           description
           avatar {
             url
+          }
+          seo {
+            social {
+              linkedIn
+            }
           }
         }
       }

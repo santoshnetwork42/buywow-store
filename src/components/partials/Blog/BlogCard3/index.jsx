@@ -13,6 +13,9 @@ export default function BlogCard3({
     title,
     excerpt,
     slug,
+    seo: {
+      readingTime,
+    },
   },
 }) {
   return (
@@ -29,7 +32,8 @@ export default function BlogCard3({
 
         <div className="space-y-3">
           <Text as={"p"} className="line-clamp-3" size="sm">
-            {dayjs(blog.date).format("MMMM DD, YYYY")} | {blog.author.node.name}
+            {dayjs(blog.date).format("MMMM DD, YYYY")} | {blog.author.node.name}{" "}
+            | {blog.seo.readingTime} min
           </Text>
 
           <Heading
