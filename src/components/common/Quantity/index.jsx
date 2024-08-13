@@ -17,8 +17,6 @@ const Quantity = ({
 }) => {
   const [cartQuantity, setCartQuantity] = useState(quantity);
 
-  console.log(product);
-
   useEffect(() => {
     setCartQuantity(quantity || 1);
   }, [quantity]);
