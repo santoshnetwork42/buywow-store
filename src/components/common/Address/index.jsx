@@ -294,7 +294,7 @@ const Address = ({}) => {
   return (
     <>
       {/* only visible in desktop view or above */}
-      <div className="hidden flex-col gap-2 border p-3 md:flex md:w-1/2">
+      <div className="hidden flex-col gap-2 border p-3 md:flex">
         <Text size="xl" className="font-medium">
           Address
         </Text>
