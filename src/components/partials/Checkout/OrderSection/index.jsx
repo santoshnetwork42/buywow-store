@@ -28,7 +28,7 @@ import {
 } from "@wow-star/utils";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
 let razorpayMethod;
