@@ -1,4 +1,4 @@
-import BlogCard from "@/components/partials/Blog/BlogCard";
+import BlogInfiniteScroll from "@/components/partials/Blog/BlogInfiniteScroll";
 import { fetchBlogs } from "@/lib/wordPressAPIs";
 
 import React from "react";
@@ -11,11 +11,5 @@ export default async function Blogs() {
     first: 49,
   });
 
-  return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {blogs &&
-        blogs.length > 0 &&
-        blogs.map((blog) => <BlogCard key={blog.id} blog={blog.node} />)}
-    </div>
-  );
+  return <BlogInfiniteScroll blogsData={blogs} pageInfoData={pageInfo} />;
 }

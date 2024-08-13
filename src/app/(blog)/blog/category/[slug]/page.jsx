@@ -1,5 +1,5 @@
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
-import BlogCard3 from "@/components/partials/Blog/BlogCard3";
+import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
 import { fetchBlogs, fetchCategories } from "@/lib/wordPressAPIs";
 import React from "react";
 
@@ -20,7 +20,7 @@ export async function generateStaticParams() {
 export default async function BlogsByCategory({ params }) {
   const { slug } = params;
 
-  const { blogs } = await fetchBlogs({
+  const { blogs, pageInfo } = await fetchBlogs({
     category: slug,
     first: 10,
   });
@@ -40,9 +40,11 @@ export default async function BlogsByCategory({ params }) {
         ]}
       />
 
-      {blogs &&
-        blogs.length > 0 &&
-        blogs.map((blog) => <BlogCard3 key={blog.node.id} blog={blog.node} />)}
+      <BlogInfiniteScroll2
+        blogsData={blogs}
+        pageInfoData={pageInfo}
+        category={slug}
+      />
     </div>
   );
 }

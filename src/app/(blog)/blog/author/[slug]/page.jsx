@@ -1,6 +1,6 @@
 import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
-import BlogCard3 from "@/components/partials/Blog/BlogCard3";
+import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
 import { fetchAuthor, fetchAuthors, fetchBlogs } from "@/lib/wordPressAPIs";
 import React from "react";
 
@@ -29,7 +29,7 @@ export default async function BlogsByAuthor({ params }) {
     };
   }
 
-  const { blogs } = await fetchBlogs({
+  const { blogs, pageInfo } = await fetchBlogs({
     author: slug,
   });
 
@@ -56,9 +56,11 @@ export default async function BlogsByAuthor({ params }) {
 
       <hr className="border-t border-gray-200" />
 
-      {blogs &&
-        blogs.length > 0 &&
-        blogs.map((blog) => <BlogCard3 key={blog.node.id} blog={blog.node} />)}
+      <BlogInfiniteScroll2
+        blogsData={blogs}
+        pageInfoData={pageInfo}
+        author={slug}
+      />
     </div>
   );
 }
