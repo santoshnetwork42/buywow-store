@@ -7,6 +7,7 @@ const CouponModal = ({ isOpen, onClose, appliedCoupon }) => (
     isOpen={isOpen}
     showMobileView={false}
     onClose={onClose}
+    showConfetti={true}
     modalContainerClassName="max-w-[min(400px,88vw)] w-full p-0 rounded overflow-hidden md:w-full"
   >
     <div className="flex items-center justify-between px-5 py-1">
