@@ -1,6 +1,7 @@
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
 import { fetchBlogs, fetchCategories } from "@/lib/wordPressAPIs";
+import { notFound } from "next/navigation";
 import React from "react";
 
 export const revalidate = 3600;
@@ -26,9 +27,7 @@ export default async function BlogsByCategory({ params }) {
   });
 
   if (!blogs || blogs.length === 0) {
-    return {
-      notFound: true,
-    };
+    notFound();
   }
 
   return (

@@ -1,12 +1,12 @@
+import React, { Suspense } from "react";
 import { Heading } from "@/components/elements";
 import BlogCard2 from "@/components/partials/Blog/BlogCard2";
 import BlogCard2Skeleton from "@/components/partials/Blog/BlogCard2Skeleton";
 import { fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
-import React, { Suspense } from "react";
 
 export default async function BlogLayout({ children }) {
   return (
-    <div className="container-main mb-main grid grid-cols-12 gap-8 py-6">
+    <div className={`container-main mb-main grid grid-cols-12 gap-8 py-6`}>
       <div className="col-span-12 lg:col-span-9">{children}</div>
 
       <Suspense fallback={<SidebarFallback />}>
