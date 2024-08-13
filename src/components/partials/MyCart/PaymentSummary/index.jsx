@@ -117,7 +117,7 @@ export default function PaymentSummary({
                 ₹{grandTotal.toFixed(2)}
               </Heading>
               <Text className="font-light text-green-600" size="sm">
-                You Saved ₹{totalSaved.toFixed(2)}
+                You Saved ₹{totalSaved?.toFixed(2)}
               </Text>
             </div>
           </div>

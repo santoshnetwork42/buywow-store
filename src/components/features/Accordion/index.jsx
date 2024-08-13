@@ -4,7 +4,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import { Heading, Img } from "@/components/elements";
 
-const Accordion = ({ title, imgUrl, alternativeText, children }) => {
+const Accordion = ({ title, imgUrl, alternativeText, children, header }) => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
   const [contentHeight, setContentHeight] = useState("auto");
@@ -38,13 +38,13 @@ const Accordion = ({ title, imgUrl, alternativeText, children }) => {
   };
 
   return (
-    <div className="mb-2.5 mr-4 flex w-full flex-col border-b">
+    <div className="flex w-full flex-col border-b">
       <button
-        className="flex w-full cursor-pointer items-center justify-between py-3"
+        className={`${title ? "py-3" : ""} flex w-full cursor-pointer items-center justify-between`}
         onClick={toggleOpen}
         aria-expanded={isOpen}
       >
-        <div className="flex items-center gap-2 md:gap-2.5">
+        <div className="flex w-full items-center gap-2 md:gap-2.5">
           {imgUrl && (
             <div className="aspect-square w-6">
               <Img
@@ -60,8 +60,9 @@ const Accordion = ({ title, imgUrl, alternativeText, children }) => {
           <Heading as="h4" size="lg" className="text-base" responsive>
             {title}
           </Heading>
+          {header}
         </div>
-        <ToggleArrow open={isOpen} />
+        {!!title && <ToggleArrow open={isOpen} />}
       </button>
       <div
         className="overflow-hidden transition-all duration-300 ease-out sm:px-3 md:px-5 lg:px-7"

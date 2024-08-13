@@ -1,4 +1,4 @@
-export const RESTRICT_FOOTER_TO_SHOW = ["/CHECKOUT"];
+export const RESTRICT_FOOTER_TO_SHOW = ["/checkout"];
 export const PREPAID_ENABLED = "PREPAID_ENABLED";
 export const GOKWIK_ENABLED = "GOKWIK_ENABLED";
 export const PRODUCT_COLLECTION_PAGE_SIZE = 10;
