@@ -5,7 +5,7 @@ import { fetchBlogs, fetchFeaturedBlogs, fetchTags } from "@/lib/wordPressAPIs";
 import { notFound } from "next/navigation";
 import React from "react";
 
-export const revalidate = 3600;
+export const revalidate = 60 * 60 * 24;
 
 export async function generateStaticParams() {
   const tags = await fetchTags();
@@ -34,7 +34,7 @@ export default async function BlogsByTag({ params }) {
   const featuredBlogs = await fetchFeaturedBlogs(5);
 
   return (
-    <React.Fragment>
+    <div className="container-main mb-main grid grid-cols-12 gap-8 py-6">
       <div className="col-span-12 lg:col-span-9">
         <div className="grid gap-y-6">
           <BlogBreadCrumb
@@ -53,6 +53,6 @@ export default async function BlogsByTag({ params }) {
       </div>
 
       <BlogSidebar featuredBlogs={featuredBlogs} />
-    </React.Fragment>
+    </div>
   );
 }

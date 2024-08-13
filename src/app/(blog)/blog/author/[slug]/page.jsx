@@ -11,7 +11,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 
-export const revalidate = 3600;
+export const revalidate = 60 * 60 * 24;
 
 export async function generateStaticParams() {
   const authors = await fetchAuthors();
@@ -46,7 +46,7 @@ export default async function BlogsByAuthor({ params }) {
   const featuredBlogs = await fetchFeaturedBlogs(5);
 
   return (
-    <React.Fragment>
+    <div className="container-main mb-main grid grid-cols-12 gap-8 py-6">
       <div className="col-span-12 lg:col-span-9">
         <div className="grid gap-y-8">
           <BlogBreadCrumb
@@ -73,6 +73,6 @@ export default async function BlogsByAuthor({ params }) {
       </div>
 
       <BlogSidebar featuredBlogs={featuredBlogs} />
-    </React.Fragment>
+    </div>
   );
 }

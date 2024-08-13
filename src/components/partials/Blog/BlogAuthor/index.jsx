@@ -27,15 +27,17 @@ export default function BlogAuthor({
             </Heading>
           </Link>
 
-          <div>
-            <Link href={linkedin} target="_blank" rel="noopener noreferrer">
-              <Image
-                src="/images/linkedin.svg"
-                width={16}
-                height={16}
-                style={{ filter: "invert(1)" }}
-              />
-            </Link>
+          <div className="space-x-2">
+            {linkedin && (
+              <Link href={linkedin} target="_blank" rel="noopener noreferrer">
+                <Image
+                  src="/images/linkedin.svg"
+                  width={16}
+                  height={16}
+                  style={{ filter: "invert(1)" }}
+                />
+              </Link>
+            )}
           </div>
         </div>
 

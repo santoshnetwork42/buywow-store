@@ -37,4 +37,6 @@ const MainCartSection = ({ cartItems, inventoryMapping, handleCartClose }) => {
   );
 };
 
+MainCartSection.displayName = "MainCartSection";
+
 export default MainCartSection;

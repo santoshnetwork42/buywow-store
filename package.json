@@ -13,6 +13,7 @@
     "@apollo/experimental-nextjs-app-support": "^0.11.2",
     "@reduxjs/toolkit": "^2.2.6",
     "@tailwindcss/forms": "^0.5.7",
+    "@wordpress/block-library": "^9.5.0",
     "@wow-star/utils": "2.0.6",
     "aws-amplify": "^6.4.0",
     "dayjs": "^1.11.12",

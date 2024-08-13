@@ -11,18 +11,18 @@ export default function BlogBreadCrumb({ links = [{ label: "", url: "/" }] }) {
         </Text>
       </Link>
 
-      {links.map((link, index) => (
-        <React.Fragment key={index}>
-          <Text
-            as="span"
-            size="sm"
-            className="font-light capitalize"
-            responsive
-          >
-            {" / "}
-          </Text>
+      {links.map((link, index) =>
+        index === links.length - 1 ? (
+          <React.Fragment key={index}>
+            <Text
+              as="span"
+              size="sm"
+              className="font-light capitalize"
+              responsive
+            >
+              {" / "}
+            </Text>
 
-          <Link href={link.url}>
             <Text
               as="span"
               size="sm"
@@ -31,9 +31,31 @@ export default function BlogBreadCrumb({ links = [{ label: "", url: "/" }] }) {
             >
               {link.label}
             </Text>
-          </Link>
-        </React.Fragment>
-      ))}
+          </React.Fragment>
+        ) : (
+          <React.Fragment key={index}>
+            <Text
+              as="span"
+              size="sm"
+              className="font-light capitalize"
+              responsive
+            >
+              {" / "}
+            </Text>
+
+            <Link href={link.url}>
+              <Text
+                as="span"
+                size="sm"
+                className="font-light capitalize"
+                responsive
+              >
+                {link.label}
+              </Text>
+            </Link>
+          </React.Fragment>
+        ),
+      )}
     </div>
   );
 }
