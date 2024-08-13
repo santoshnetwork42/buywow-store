@@ -39,12 +39,21 @@ export default function OrderSection() {
   const { currentAddress } = useSelector((state) => state.address);
 
   const [selectedMethod, setSelectedMethod] = useState("PREPAID");
+
   const maxCOD = useConfiguration(MAX_COD_AMOUNT, -1);
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const maxPrepaidDiscount = useConfiguration(MAX_PREPAID_DISCOUNT, 0);
   const codEnabled = useConfiguration(COD_ENABLED, true);
   const ppcodEnabled = useConfiguration(PPCOD_ENABLED, false);
   const ppcodAmount = useConfiguration(PPCOD_AMOUNT, 0);
+
+  useEffect(() => {
+    if (prepaidEnabled) {
+      setSelectedMethod("PREPAID");
+    } else if (codEnabled || ppcodEnabled) {
+      setSelectedMethod("COD");
+    }
+  }, [codEnabled, prepaidEnabled, ppcodEnabled]);
 
   const handleMethodChange = (id) => {
     setSelectedMethod(id);
@@ -382,31 +391,35 @@ export default function OrderSection() {
             Payment Methods
           </Heading>
           <div className="flex w-full flex-col gap-2">
-            <PaymentMethods
-              label="Pay Online"
-              id="PREPAID"
-              description="Pay using credit/debit cards, net-banking, UPI, or digital wallets."
-              total={prepaidGrandTotal}
-              selectedMethod={selectedMethod}
-              handleMethodChange={handleMethodChange}
-            />
-            <PaymentMethods
-              label="Cash On Delivery"
-              id="COD"
-              description={
-                ppcodEnabled && ppcodAmount
-                  ? `Pay ₹${toDecimal(
-                      ppcodAmountToTake,
-                    )} now (non-refundable). Rest ₹${toDecimal(
-                      codGrandTotal - ppcodAmountToTake,
-                    )} on delivery.`
-                  : "Pay using Cash on Delivery."
-              }
-              total={codGrandTotal}
-              selectedMethod={selectedMethod}
-              handleMethodChange={handleMethodChange}
-              disabled={isMaxCODDisabled}
-            />
+            {prepaidEnabled && (
+              <PaymentMethods
+                label="Pay Online"
+                id="PREPAID"
+                description="Pay using credit/debit cards, net-banking, UPI, or digital wallets."
+                total={prepaidGrandTotal}
+                selectedMethod={selectedMethod}
+                handleMethodChange={handleMethodChange}
+              />
+            )}
+            {(ppcodEnabled || codEnabled) && (
+              <PaymentMethods
+                label="Cash On Delivery"
+                id="COD"
+                description={
+                  ppcodEnabled && ppcodAmount
+                    ? `Pay ₹${toDecimal(
+                        ppcodAmountToTake,
+                      )} now (non-refundable). Rest ₹${toDecimal(
+                        codGrandTotal - ppcodAmountToTake,
+                      )} on delivery.`
+                    : "Pay using Cash on Delivery."
+                }
+                total={codGrandTotal}
+                selectedMethod={selectedMethod}
+                handleMethodChange={handleMethodChange}
+                disabled={isMaxCODDisabled}
+              />
+            )}
           </div>
 
           <Button
