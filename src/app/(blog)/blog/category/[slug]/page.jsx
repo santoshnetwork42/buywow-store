@@ -22,7 +22,7 @@ export default async function BlogsByCategory({ params }) {
 
   const { blogs, pageInfo } = await fetchBlogs({
     category: slug,
-    first: 10,
+    first: 9,
   });
 
   if (!blogs || blogs.length === 0) {

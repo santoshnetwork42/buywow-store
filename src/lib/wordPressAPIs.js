@@ -42,11 +42,11 @@ export const fetchBlogs = async (
   filters = {
     category,
     tags,
+    author,
     first,
     last,
     after,
     before,
-    author,
   },
 ) => {
   try {

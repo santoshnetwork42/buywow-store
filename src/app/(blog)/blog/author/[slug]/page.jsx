@@ -31,6 +31,7 @@ export default async function BlogsByAuthor({ params }) {
 
   const { blogs, pageInfo } = await fetchBlogs({
     author: slug,
+    first: 9,
   });
 
   if (!blogs || blogs.length === 0) {
@@ -40,7 +41,7 @@ export default async function BlogsByAuthor({ params }) {
   }
 
   return (
-    <div className="grid gap-y-6">
+    <div className="grid gap-y-8">
       <BlogBreadCrumb
         links={[
           { label: "Blog", url: "/blog" },

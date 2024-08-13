@@ -11,7 +11,7 @@ export default function BlogInfiniteScroll2({
   pageInfoData,
   category = "",
   tags = [],
-  author,
+  author = "",
 }) {
   const [blogs, setBlog] = useState(blogsData);
   const [pageInfo, setPageInfo] = useState(pageInfoData);
@@ -26,7 +26,7 @@ export default function BlogInfiniteScroll2({
         body: JSON.stringify({
           query: getBlogs,
           variables: {
-            first: 10,
+            first: 9,
             after,
             ...(category ? { category } : {}),
             ...(tags && tags.length > 0 ? { tags } : {}),
@@ -54,7 +54,7 @@ export default function BlogInfiniteScroll2({
 
   return (
     <InfiniteScroll
-      dataLength={blogs?.length}
+      dataLength={blogs?.length || 0}
       next={() => loadMore(pageInfo?.endCursor)}
       hasMore={pageInfo?.hasNextPage}
       loader={

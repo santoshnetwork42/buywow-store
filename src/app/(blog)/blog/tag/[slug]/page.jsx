@@ -21,7 +21,7 @@ export default async function BlogsByTag({ params }) {
   const { slug } = params;
 
   const { blogs, pageInfo } = await fetchBlogs({
-    first: 10,
+    first: 9,
     tags: [slug],
   });
 

@@ -2500,19 +2500,19 @@ query GetTag($id: ID!) {
 export const getBlogs = /* GraphQL */ `
   query GetBlogs(
     $category: String
+    $author: String
     $tags: [String]
     $first: Int
     $last: Int
     $after: String
     $before: String
-    $author: String
   ) {
     posts(
       where: {
         categoryName: $category
         tagSlugIn: $tags
-        status: PUBLISH
         authorName: $author
+        status: PUBLISH
       }
       first: $first
       last: $last
@@ -2547,7 +2547,24 @@ export const getBlogs = /* GraphQL */ `
               slug
               avatar {
                 url
+                height
+                width
               }
+              seo {
+                social {
+                  facebook
+                  instagram
+                  mySpace
+                  linkedIn
+                  pinterest
+                  soundCloud
+                  twitter
+                  wikipedia
+                  youTube
+                }
+              }
+              username
+              nicename
             }
           }
         }

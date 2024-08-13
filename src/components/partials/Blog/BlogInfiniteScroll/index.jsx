@@ -18,7 +18,7 @@ export default function BlogInfiniteScroll({ blogsData, pageInfoData }) {
         method: "POST",
         body: JSON.stringify({
           query: getBlogs,
-          variables: { first: 10, after },
+          variables: { first: 9, after },
         }),
       });
 
@@ -41,9 +41,9 @@ export default function BlogInfiniteScroll({ blogsData, pageInfoData }) {
 
   return (
     <InfiniteScroll
-      dataLength={blogs?.length}
+      dataLength={blogs?.length || 0}
       next={() => loadMore(pageInfo?.endCursor)}
-      hasMore={pageInfo?.hasNextPage}
+      hasMore={pageInfo?.hasNextPage || false}
       loader={
         <div className="flex h-12 w-full items-center justify-center">
           <h4>Loading...</h4>
