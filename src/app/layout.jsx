@@ -1,7 +1,10 @@
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
-import { getNavbarAndFooterAPI } from "@/lib/appSyncAPIs";
+import {
+  getCartUpsellProductsAPI,
+  getNavbarAndFooterAPI,
+} from "@/lib/appSyncAPIs";
 import { Provider } from "@/store/Provider";
 import "@/styles/font.css";
 import "@/styles/index.css";
@@ -30,6 +33,7 @@ Amplify.configure({
 async function RootLayout({ children }) {
   // const { data } = (await getNavbarAndFooter()) || {};
   const { data } = await getNavbarAndFooterAPI();
+  const upsellProducts = await getCartUpsellProductsAPI();
   const {
     announcementBar: announcementData = {},
     navbar: headerData = {},
@@ -52,7 +56,7 @@ async function RootLayout({ children }) {
               <div className="flex min-h-dvh w-full flex-col bg-white-a700">
                 <AnnouncementBar data={announcementData} />
                 {headerData?.data && <Header data={headerData} />}
-                <CartDrawer />
+                <CartDrawer upsellProducts={upsellProducts} />
                 <ToastComponent />
                 <div className="flex-1">{children}</div>
                 {footerData?.data && <Footer data={footerData} />}

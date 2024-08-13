@@ -17,16 +17,15 @@ import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
-const CartDrawer = () => {
+const CartDrawer = ({ upsellProducts }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const _cx = searchParams?.get("_cx");
   const forceOpenCart = searchParams?.get("cart");
 
-  const { isCartOpen, user } = useSelector((state) => ({
+  const { isCartOpen } = useSelector((state) => ({
     isCartOpen: state?.modal?.modal?.cart?.isCartOpen,
-    user: state?.user?.user,
   }));
   const { validateCart, fetchAndAddProductsFromEncodedCart } =
     useCartDispatch();
@@ -44,6 +43,8 @@ const CartDrawer = () => {
     totalRewardPointsOfUser,
     prepaidCashbackRewardsOnOrder,
     amountNeededToAvailPrepaidCashback,
+    totalAmountForShippingCharge,
+    targetAmountForFreeShipping,
     showLoyalty,
     totalItems = 0,
   } = useCartTotal({
@@ -101,14 +102,15 @@ const CartDrawer = () => {
         {cartItems?.length > 0 ? (
           <div className="flex w-full flex-1 flex-col gap-3">
             <ShippingProgress
-              freeShippingThreshold={1203}
-              cartValue={totalPrice}
+              freeShippingThreshold={targetAmountForFreeShipping}
+              cartValue={totalAmountForShippingCharge}
               className="bg-[#F5E8DDBF] shadow-[0_4px_4px_#0000000D]"
             />
             <MainCartSection
               cartItems={cartItems}
               inventoryMapping={inventoryMapping}
               handleCartClose={handleCartClose}
+              upsellProducts={upsellProducts}
             />
             {/* done */}
             <LoyaltyCash
