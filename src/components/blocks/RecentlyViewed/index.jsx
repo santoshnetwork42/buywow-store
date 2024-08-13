@@ -11,8 +11,8 @@ const RecentlyViewed = ({
   recentlyViewedTitle: title,
   recentlyViewedBgColor: bgColor,
 }) => {
-  const products = useSelector(
-    (state) => state.recentlyViewed?.recentlyViewedProducts,
+  const products = useSelector((state) =>
+    state.recentlyViewed?.recentlyViewedProducts.slice(1),
   );
 
   if (!Array.isArray(products) || products.length === 0) return null;

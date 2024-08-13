@@ -54,6 +54,8 @@ const HorizontalBlogSection = React.memo(
   ),
 );
 
+HorizontalBlogSection.displayName = "HorizontalBlogSection";
+
 const ProductCollectionByTab = ({
   title,
   defaultCollectionSorting = "RECOMMENDED",

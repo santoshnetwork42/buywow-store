@@ -1,6 +1,12 @@
 // ==================================================
 // NEW APIs
 
+export const getCartUpsellProducts = /* GraphQL */ `
+  query getCartUpsellProducts($storeId: String!) {
+    getCartUpsellProducts(storeId: $storeId)
+  }
+`;
+
 export const searchCMSCollectionProducts = /* GraphQL */ `
   query searchCMSCollectionProducts(
     $storeId: String!

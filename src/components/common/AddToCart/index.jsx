@@ -6,9 +6,9 @@ import { twMerge } from "tailwind-merge";
 
 import Quantity from "@/components/common/Quantity";
 import { Button } from "@/components/elements";
-import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
-import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 
 const AddToCart = ({
   product,
@@ -20,22 +20,19 @@ const AddToCart = ({
   showGoToCart = false,
 }) => {
   const dispatch = useDispatch();
+  const { addToCart, updateCart, removeFromCart } = useCartDispatch();
+  const { handleCartVisibility } = useModalDispatch();
   const cartItems = useSelector((state) => state?.cart?.data || []);
 
   const addToCartHandler = useCallback(() => {
     if (!product) return;
 
-    dispatch({
-      type: cartSagaActions.ADD_TO_CART,
-      payload: {
-        product: {
-          ...product,
-          qty: product.minimumOrderQuantity || 1,
-          variantId: selectedVariant?.id,
-        },
-      },
+    addToCart({
+      ...product,
+      qty: product.minimumOrderQuantity || 1,
+      variantId: selectedVariant?.id,
     });
-  }, [dispatch, product, selectedVariant]);
+  }, [product, selectedVariant]);
 
   const cartItem = useMemo(() => {
     if (!cartItems.length || !product) return null;
@@ -54,15 +51,9 @@ const AddToCart = ({
           qty: newQuantity,
         });
 
-        dispatch({
-          type: cartSagaActions.UPDATE_CART,
-          payload: { data: updatedCart },
-        });
+        updateCart(updatedCart);
       } else {
-        dispatch({
-          type: cartSagaActions.REMOVE_FROM_CART,
-          payload: { product: cartItem },
-        });
+        removeFromCart(cartItem);
       }
     },
     [cartItem, cartItems, dispatch, product, selectedVariant?.id],
@@ -77,15 +68,6 @@ const AddToCart = ({
     99;
 
   const totalItemQuantity = cartItem?.qty || minimumOrderQuantity;
-
-  const handleCartVisibility = (isCartOpen) => {
-    dispatch({
-      type: modalSagaActions.SET_CART_MODAL,
-      payload: {
-        isCartOpen,
-      },
-    });
-  };
 
   if (!product) return null;
 

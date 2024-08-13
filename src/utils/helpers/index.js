@@ -1,6 +1,8 @@
+import { showToast } from "@/components/common/ToastComponent";
 import { STORE_PREFIX } from "@/config";
 import Cookies from "js-cookie";
 import platform from "platform";
+import toast from "react-hot-toast";
 
 export function generateRandomString(length) {
   const characters =
@@ -193,7 +195,7 @@ export const formateDate = (date) => {
 export const copyText = (copyText, toastMessage) => {
   if (copyText && navigator?.clipboard) {
     navigator.clipboard.writeText(copyText);
-    console.log(toastMessage);
+    showToast.success(toastMessage);
   } else {
     console.error("Invalid copy text or clipboard not supported.");
   }

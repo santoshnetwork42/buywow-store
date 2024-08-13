@@ -5,6 +5,7 @@ import {
   deleteUserAddress,
   ensureUserAndDispatchOTP,
   findUserAddresses,
+  getCartUpsellProducts,
   getLoyalty,
   getNavbarAndFooter,
   getOrder,
@@ -282,6 +283,24 @@ export const fetchProductDetailsAPI = async (id) => {
     return data?.getProduct;
   } catch (error) {
     errorHandler(error, "Fetch Product Details API");
+    return null;
+  }
+};
+
+export const getCartUpsellProductsAPI = async () => {
+  try {
+    const response = await client.graphql({
+      query: getCartUpsellProducts,
+      authMode: "apiKey",
+      variables: {
+        storeId: STORE_ID,
+      },
+    });
+
+    const products = JSON.parse(response?.data?.getCartUpsellProducts || "{}");
+    return products;
+  } catch (err) {
+    errorHandler(err, "Get Cart Upsell Products API");
     return null;
   }
 };

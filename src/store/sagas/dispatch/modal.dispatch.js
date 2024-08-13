@@ -13,15 +13,6 @@ export const useModalDispatch = () => {
     });
   };
 
-  // You can add more dispatch functions here
-  // For example:
-  // const removeItem = (itemId) => {
-  //   dispatch({
-  //     type: cartSagaActions.REMOVE_ITEM,
-  //     payload: { itemId },
-  //   });
-  // };
-
   return {
     handleCartVisibility,
   };
