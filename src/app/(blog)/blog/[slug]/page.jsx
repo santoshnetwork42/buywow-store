@@ -5,9 +5,26 @@ import { notFound } from "next/navigation";
 import dayjs from "dayjs";
 import { Heading, Text } from "@/components/elements";
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
-import { fetchBlog } from "@/lib/wordPressAPIs";
+import { fetchBlog, fetchBlogs } from "@/lib/wordPressAPIs";
+import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
 
-export default async function page({ params }) {
+export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const blogs = await fetchBlogs({});
+
+  if (!blogs || blogs.length === 0) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return blogs.map((blog) => ({
+    slug: blog.slug,
+  }));
+}
+
+export default async function ReadBlog({ params }) {
   const { slug } = params;
 
   const blog = await fetchBlog(slug);
@@ -17,7 +34,7 @@ export default async function page({ params }) {
   }
 
   return (
-    <div className="grid gap-y-4">
+    <div className="grid gap-y-6">
       <BlogBreadCrumb
         links={[
           { label: "Blog", url: "/blog" },
@@ -25,31 +42,33 @@ export default async function page({ params }) {
         ]}
       />
 
-      <div className="flex flex-wrap gap-4">
-        {blog?.categories?.nodes?.map((category) => (
-          <Link
-            href={`/blog/category/${category.slug}`}
-            key={category.id}
-            className="rounded bg-yellow-900 px-2 py-1 text-sm text-white-a700"
-          >
-            {category.name}
-          </Link>
-        ))}
+      <div className="space-y-3">
+        <div className="flex flex-wrap gap-4">
+          {blog?.categories?.nodes?.map((category) => (
+            <Link
+              href={`/blog/category/${category.slug}`}
+              key={category.id}
+              className="rounded bg-yellow-900 px-2 py-1 text-sm text-white-a700"
+            >
+              {category.name}
+            </Link>
+          ))}
+        </div>
+
+        <Heading as="h1" size="2xl">
+          {blog.title}
+        </Heading>
+
+        <Text as={"p"} size="sm">
+          {blog.author.node.name} |{" "}
+          {dayjs(blog.date).format("MMMM D, YYYY h:mm A")}
+        </Text>
       </div>
-
-      <Heading as="h1" size="2xl">
-        {blog.title}
-      </Heading>
-
-      <Text as={"p"} size="sm">
-        {blog.author.node.name} |{" "}
-        {dayjs(blog.date).format("MMMM D, YYYY h:mm A")}
-      </Text>
 
       <div className="relative aspect-video w-full">
         <Image
           src={blog.featuredImage?.node?.mediaItemUrl}
-          alt={blog.featuredImage.node.altText}
+          alt={blog.title}
           fill
           className="rounded-md"
         />
@@ -64,26 +83,12 @@ export default async function page({ params }) {
 
       <hr className="my-6 border-t border-gray-300" />
 
-      <div className="grid grid-cols-[auto,1fr] gap-4">
-        <Image
-          src={blog.author.node.avatar.url}
-          alt={blog.author.node.name}
-          width={100}
-          height={100}
-          className="rounded-full"
-        />
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <Heading as="h4" size="lg">
-              {blog.author.node.name}
-            </Heading>
-          </div>
-
-          <Text as="p" size="sm">
-            {blog.author.node.description}
-          </Text>
-        </div>
-      </div>
+      <BlogAuthor
+        name={blog.author.node.name}
+        avatar={blog.author.node.avatar.url}
+        description={blog.author.node.description}
+        slug={blog.author.node.slug}
+      />
     </div>
   );
 }

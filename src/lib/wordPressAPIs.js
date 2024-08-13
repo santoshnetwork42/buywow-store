@@ -1,8 +1,13 @@
 import {
+  getAuthor,
+  getAuthors,
   getBlog,
   getBlogs,
-  getBlogsByCategory,
+  getCategories,
+  getCategory,
   getFeaturedBlogs,
+  getTag,
+  getTags,
 } from "@/graphql/appSync/api";
 
 export const wordpressAuth = `Basic ${Buffer.from(
@@ -28,7 +33,7 @@ export const fetchFeaturedBlogs = async (first = 3) => {
 
     return data?.data?.posts?.nodes || [];
   } catch (error) {
-    console.error(JSON.stringify(error, Object.getOwnPropertyNames(error)));
+    console.error(JSON.stringify(error));
     return false;
   }
 };
@@ -41,17 +46,19 @@ export const fetchBlogs = async (
     last,
     after,
     before,
+    author,
   },
 ) => {
   try {
     const variables = {};
 
     if (filters.category) variables.category = filters.category;
-    if (filters.tags) variables.tag = filters.tags;
+    if (filters.tags) variables.tags = filters.tags;
     if (filters.first) variables.first = filters.first;
     if (filters.last) variables.last = filters.last;
     if (filters.after) variables.after = filters.after;
     if (filters.before) variables.before = filters.before;
+    if (filters.author) variables.author = filters.author;
 
     const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
       method: "POST",
@@ -103,6 +110,165 @@ export const fetchBlog = async (slug) => {
     return data?.data?.post || {};
   } catch (err) {
     console.log(err);
+    return false;
+  }
+};
+
+export const fetchCategories = async () => {
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: wordpressAuth,
+      },
+      body: JSON.stringify({
+        query: getCategories,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return data?.data?.categories?.nodes || [];
+  } catch (error) {
+    console.error(JSON.stringify(error));
+    return false;
+  }
+};
+
+export const fetchCategory = async (slug) => {
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: wordpressAuth,
+      },
+      body: JSON.stringify({
+        query: getCategory,
+        variables: { slug },
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return data?.data?.category || {};
+  } catch (error) {
+    console.error(JSON.stringify(error));
+    return false;
+  }
+};
+
+export const fetchTags = async () => {
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: wordpressAuth,
+      },
+      body: JSON.stringify({
+        query: getTags,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return data?.data?.tags?.nodes || [];
+  } catch (error) {
+    console.error(JSON.stringify(error));
+    return false;
+  }
+};
+
+export const fetchTag = async (slug) => {
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: wordpressAuth,
+      },
+      body: JSON.stringify({
+        query: getTag,
+        variables: { slug },
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return data?.data?.tag || {};
+  } catch (error) {
+    console.error(JSON.stringify(error));
+    return false;
+  }
+};
+
+export const fetchAuthors = async () => {
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: wordpressAuth,
+      },
+      body: JSON.stringify({
+        query: getAuthors,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return data?.data?.users?.nodes || [];
+  } catch (error) {
+    console.error(JSON.stringify(error));
+    return false;
+  }
+};
+
+export const fetchAuthor = async (slug) => {
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: wordpressAuth,
+      },
+      body: JSON.stringify({
+        query: getAuthor,
+        variables: { id: slug, idType: "SLUG" },
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return data?.data?.user || {};
+  } catch (error) {
+    console.error(JSON.stringify(error));
     return false;
   }
 };

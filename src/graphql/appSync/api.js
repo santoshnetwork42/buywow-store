@@ -2452,13 +2452,11 @@ export const getFeaturedBlogs = /* GraphQL */ `
 export const getCategories = /* GraphQL */ `
   query GetCategories {
     categories {
-      edges {
-        node {
-          id
-          databaseId
-          slug
-          name
-        }
+      nodes {
+        id
+        databaseId
+        slug
+        name
       }
     }
   }
@@ -2478,12 +2476,11 @@ export const getCategory = /* GraphQL */ `
 export const getTags = /* GraphQL */ `
   query GetTags {
     tags {
-      edges {
-        node {
-          id
-          slug
-          name
-        }
+      nodes {
+        id
+        databaseId
+        slug
+        name
       }
     }
   }
@@ -2493,6 +2490,7 @@ export const getTag = `
 query GetTag($id: ID!) {
   tag(id: $id, idType: SLUG) {
     id
+    databaseId
     slug
     name
   }
@@ -2502,14 +2500,20 @@ query GetTag($id: ID!) {
 export const getBlogs = /* GraphQL */ `
   query GetBlogs(
     $category: String
-    $tag: [String]
+    $tags: [String]
     $first: Int
     $last: Int
     $after: String
     $before: String
+    $author: String
   ) {
     posts(
-      where: { categoryName: $category, tagSlugIn: $tag, status: PUBLISH }
+      where: {
+        categoryName: $category
+        tagSlugIn: $tags
+        status: PUBLISH
+        authorName: $author
+      }
       first: $first
       last: $last
       after: $after
@@ -2540,6 +2544,7 @@ export const getBlogs = /* GraphQL */ `
           author {
             node {
               name
+              slug
               avatar {
                 url
               }
@@ -2617,11 +2622,64 @@ export const getBlog = /* GraphQL */ `
       author {
         node {
           name
+          slug
           description
           avatar {
             url
           }
         }
+      }
+    }
+  }
+`;
+
+export const getAuthors = /* GraphQL */ `
+  query GetAuthors {
+    users {
+      nodes {
+        slug
+        databaseId
+        nicename
+        name
+      }
+    }
+  }
+`;
+
+export const getAuthor = /* GraphQL */ `
+  query Author($id: ID!, $idType: UserNodeIdTypeEnum!) {
+    user(id: $id, idType: $idType) {
+      nicename
+      email
+      databaseId
+      description
+      firstName
+      lastName
+      name
+      nickname
+      slug
+      username
+      url
+      uri
+      avatar {
+        url
+        height
+        width
+      }
+      seo {
+        social {
+          facebook
+          instagram
+          linkedIn
+          mySpace
+          pinterest
+          soundCloud
+          twitter
+          wikipedia
+          youTube
+        }
+        title
+        canonical
       }
     }
   }
