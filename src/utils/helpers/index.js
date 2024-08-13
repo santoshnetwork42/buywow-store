@@ -313,7 +313,7 @@ export const getSource = () => {
 
 export const checkFormValidity = (address) => {
   if (!address) return true; // Return true if there's no address (indicating an error)
-  console.log("address :>> ", address);
+
   const fields = [
     { key: "pinCode", validate: validatePinCode },
     { key: "city", validate: validateString },
