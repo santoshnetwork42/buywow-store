@@ -310,3 +310,19 @@ export const getSource = () => {
     ? "Web"
     : "Mobile";
 };
+
+export const checkFormValidity = (address) => {
+  if (!address) return true; // Return true if there's no address (indicating an error)
+  console.log("address :>> ", address);
+  const fields = [
+    { key: "pinCode", validate: validatePinCode },
+    { key: "city", validate: validateString },
+    { key: "state", validate: validateString },
+    { key: "phone", validate: validatePhoneNumber },
+    { key: "name", validate: validateString },
+    { key: "email", validate: validateEmail },
+    { key: "address", validate: validateString },
+  ];
+
+  return fields.some((field) => field.validate(address[field.key])?.error);
+};

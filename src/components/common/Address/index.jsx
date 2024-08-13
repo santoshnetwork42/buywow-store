@@ -91,7 +91,9 @@ const AddressListComponent = React.memo(({ currentAddress, user, item }) => {
         <div className="flex h-full w-full flex-col justify-between gap-2">
           <div className="flex max-h-52 flex-col gap-2">
             <div className="flex justify-between">
-              <Text size="xl">{item.name}</Text>
+              <Text size="xl" className="line-clamp-1 max-w-44">
+                {item.name}
+              </Text>
               <RemoveButton
                 onClick={() =>
                   deleteUserAddress({ id: item.id, userID: user.id })

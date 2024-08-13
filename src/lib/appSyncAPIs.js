@@ -6,6 +6,7 @@ import {
   ensureUserAndDispatchOTP,
   findUserAddresses,
   getCartUpsellProducts,
+  getCMSPages,
   getLoyalty,
   getNavbarAndFooter,
   getOrder,
@@ -299,6 +300,23 @@ export const getCartUpsellProductsAPI = async () => {
 
     const products = JSON.parse(response?.data?.getCartUpsellProducts || "{}");
     return products;
+  } catch (err) {
+    errorHandler(err, "Get Cart Upsell Products API");
+    return null;
+  }
+};
+
+export const getCMSPagesAPI = async () => {
+  try {
+    const response = await client.graphql({
+      query: getCMSPages,
+      authMode: "apiKey",
+      variables: {
+        storeId: STORE_ID,
+      },
+    });
+
+    return JSON.parse(response?.data?.getCMSPages || "[]");
   } catch (err) {
     errorHandler(err, "Get Cart Upsell Products API");
     return null;

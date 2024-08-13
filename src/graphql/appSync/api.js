@@ -7,6 +7,12 @@ export const getCartUpsellProducts = /* GraphQL */ `
   }
 `;
 
+export const getCMSPages = /* GraphQL */ `
+  query getCMSPages($storeId: String!) {
+    getCMSPages(storeId: $storeId)
+  }
+`;
+
 export const searchCMSCollectionProducts = /* GraphQL */ `
   query searchCMSCollectionProducts(
     $storeId: String!

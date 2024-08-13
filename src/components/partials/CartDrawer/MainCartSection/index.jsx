@@ -24,6 +24,8 @@ const CartProductList = React.memo(
   },
 );
 
+CartProductList.displayName = "CartProductList";
+
 const MainCartSection = ({
   cartItems,
   upsellProducts,

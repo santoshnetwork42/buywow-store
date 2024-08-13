@@ -24,15 +24,15 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
-// const getNavbarAndFooter = unstable_cache(
-//   getNavbarAndFooterAPI,
-//   ["navbar", "footer"],
-//   { revalidate: 1 },
-// );
+const getNavbarAndFooter = unstable_cache(
+  getNavbarAndFooterAPI,
+  ["navbar", "footer"],
+  { revalidate: 1800 },
+);
 
 async function RootLayout({ children }) {
-  // const { data } = (await getNavbarAndFooter()) || {};
-  const { data } = await getNavbarAndFooterAPI();
+  const { data } = (await getNavbarAndFooter()) || {};
+  // const { data } = await getNavbarAndFooterAPI();
   const upsellProducts = await getCartUpsellProductsAPI();
   const {
     announcementBar: announcementData = {},

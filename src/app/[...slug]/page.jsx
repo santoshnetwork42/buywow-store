@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
+import { getCMSPagesAPI, getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import { unstable_cache } from "next/cache";
 
 // Dynamically import components
@@ -155,15 +155,34 @@ const renderBlock = (block, index, slug) => {
   }
 };
 
-// const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
-//   revalidate: 1,
-// });
+const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
+  revalidate: 1800,
+});
+
+export async function generateStaticParams() {
+  // Fetch all possible pages
+  const pages = await getCMSPagesAPI();
+
+  const pageType = {
+    HOME: "",
+    COLLECTION: "collections",
+    PRODUCT: "product",
+    LANDING: "",
+  };
+
+  return pages.map((page) => ({
+    slug: [pageType[page.attributes.type], page.attributes.slug].filter(
+      Boolean,
+    ),
+  }));
+}
 
 export default async function Page({ params }) {
   const { slug } = params;
+  console.log("slug :>> ", slug);
   try {
-    // const pageData = await getPageData(slug[slug.length - 1]);
-    const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
+    const pageData = await getPageData(slug[slug.length - 1]);
+    // const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
     const { blocks } = pageData || {};
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
