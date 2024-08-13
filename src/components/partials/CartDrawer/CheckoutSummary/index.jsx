@@ -12,6 +12,7 @@ import { toDecimal } from "@/utils/helpers";
 import { showToast } from "@/components/common/ToastComponent";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import SummaryItem from "@/components/common/CheckoutSummaryItem";
 
 const CheckoutSummary = React.memo(({ inventory }) => {
   const router = useRouter();
@@ -239,37 +240,7 @@ const PaymentSummary = React.memo(
   },
 );
 
-const SummaryItem = React.memo(
-  ({ label, value, originalValue, color = "text-black-600" }) => (
-    <div className="flex items-center justify-between">
-      <Text size="lg" as="p" className="capitalize" responsive>
-        {label}
-      </Text>
-      <div className="flex items-center gap-1.5">
-        {!!originalValue && originalValue !== value && (
-          <Text
-            size="sm"
-            as="p"
-            className="text-[#AAAAAA] line-through"
-            responsive
-          >
-            ₹{toDecimal(originalValue)}
-          </Text>
-        )}
-        <Text size="lg" as="p" className={color} responsive>
-          {typeof value === "number"
-            ? value < 0
-              ? `-₹${toDecimal(Math.abs(value))}`
-              : `₹${toDecimal(value)}`
-            : value}
-        </Text>
-      </div>
-    </div>
-  ),
-);
-
 CheckoutSummary.displayName = "CheckoutSummary";
 PaymentSummary.displayName = "PaymentSummary";
-SummaryItem.displayName = "SummaryItem";
 
 export default CheckoutSummary;

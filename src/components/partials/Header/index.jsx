@@ -2,6 +2,7 @@
 
 import { MenuSVG } from "@/assets/images";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import { BagIcon } from "@/assets/svg/icons";
 import PasswordLess from "@/components/common/Passwordless";
 import { Button, Img, Text } from "@/components/elements";
 import MobileMenu from "@/components/partials/Header/MobileMenu";
@@ -210,13 +211,7 @@ const Header = ({ data, ...props }) => {
             </Link>
             <Link href="#" onClick={handleCartOpen} className="flex-shrink-0">
               <div className="relative">
-                <Img
-                  src="img_bag.svg"
-                  width={22}
-                  height={22}
-                  alt="bag icon"
-                  className="aspect-square w-[22px] object-contain"
-                />
+                <BagIcon size={20} />
                 {!!totalCartItems && (
                   <div className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
                     <Text size="xxs" className="mx-1 text-white-a700_01">

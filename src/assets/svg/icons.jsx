@@ -2651,3 +2651,46 @@ export const AlertIcon = ({ size = 34, className, ...props }) => {
     </svg>
   );
 };
+
+export const BagIcon = ({ size = 20, className }) => {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 18 21"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4.72333 6.06427V5.1425C4.72333 3.00439 6.44332 0.904294 8.58143 0.704738C11.1282 0.457667 13.2758 2.46274 13.2758 4.96195V6.27333"
+        stroke="black"
+        stroke-width="1.34783"
+        stroke-miterlimit="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M6.14893 19.6819H11.8506C15.6706 19.6819 16.3548 18.1519 16.5544 16.2894L17.2671 10.5878C17.5237 8.26912 16.8585 6.37808 12.8008 6.37808H5.19866C1.141 6.37808 0.475813 8.26912 0.732386 10.5878L1.44509 16.2894C1.64465 18.1519 2.32884 19.6819 6.14893 19.6819Z"
+        stroke="black"
+        stroke-width="1.34783"
+        stroke-miterlimit="10"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M12.3219 10.1796H12.3304"
+        stroke="black"
+        stroke-width="1.7971"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M5.66815 10.1796H5.67669"
+        stroke="black"
+        stroke-width="1.7971"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
+};
