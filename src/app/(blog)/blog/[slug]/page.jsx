@@ -12,16 +12,14 @@ import { replaceBlogLinks } from "@/lib/replaceBlogLinks";
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const blogs = await fetchBlogs({});
+  const { blogs } = await fetchBlogs({});
 
   if (!blogs || blogs.length === 0) {
-    return {
-      notFound: true,
-    };
+    return [];
   }
 
   return blogs.map((blog) => ({
-    slug: blog.slug,
+    slug: blog.node.slug,
   }));
 }
 
@@ -79,7 +77,7 @@ export default async function ReadBlog({ params }) {
         <div
           className="mt-6"
           dangerouslySetInnerHTML={{
-            __html: replaceBlogLinks(blog?.content || ""),
+            __html: blog?.content,
           }}
         />
       }

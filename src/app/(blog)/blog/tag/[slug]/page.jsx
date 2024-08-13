@@ -9,9 +9,7 @@ export async function generateStaticParams() {
   const tags = await fetchTags();
 
   if (!tags || tags.length === 0) {
-    return {
-      notFound: true,
-    };
+    return [];
   }
 
   return tags.map((tag) => ({

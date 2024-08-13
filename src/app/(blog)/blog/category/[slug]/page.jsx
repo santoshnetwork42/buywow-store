@@ -9,9 +9,7 @@ export async function generateStaticParams() {
   const categories = await fetchCategories();
 
   if (!categories || categories.length === 0) {
-    return {
-      notFound: true,
-    };
+    return [];
   }
 
   return categories.map((category) => ({

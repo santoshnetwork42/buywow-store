@@ -1,12 +1,12 @@
 import BlogCard from "@/components/partials/Blog/BlogCard";
-import { fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
+import { fetchBlogs } from "@/lib/wordPressAPIs";
 
 import React from "react";
 
 export const revalidate = 3600;
 
 export default async function Blogs() {
-  const { blogs } = await fetchBlogs({
+  const { blogs, pageInfo } = await fetchBlogs({
     tags: ["english"],
     first: 49,
   });

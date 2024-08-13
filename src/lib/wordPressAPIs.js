@@ -53,7 +53,7 @@ export const fetchBlogs = async (
     const variables = {};
 
     if (filters.category) variables.category = filters.category;
-    if (filters.tags) variables.tags = filters.tags;
+    if (filters.tags && filters.tags.length > 0) variables.tags = filters.tags;
     if (filters.first) variables.first = filters.first;
     if (filters.last) variables.last = filters.last;
     if (filters.after) variables.after = filters.after;
@@ -78,12 +78,11 @@ export const fetchBlogs = async (
       throw new Error("Failed to fetch data");
     }
 
+    console.log("blogData", JSON.stringify(blogData, null, 2));
+
     return {
       blogs: blogData?.data?.posts?.edges || [],
-      pageInfo: blogData?.data?.posts?.pageInfo || {
-        hasNextPage: false,
-        endCursor: null,
-      },
+      pageInfo: blogData?.data?.posts?.pageInfo,
     };
   } catch (error) {
     console.error(JSON.stringify(error));
