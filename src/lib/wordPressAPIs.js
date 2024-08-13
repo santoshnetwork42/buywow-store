@@ -72,16 +72,28 @@ export const fetchBlogs = async (
       }),
     });
 
-    const data = await res.json();
+    const blogData = await res.json();
 
     if (!res.ok) {
       throw new Error("Failed to fetch data");
     }
 
-    return data?.data?.posts?.edges || [];
+    return {
+      blogs: blogData?.data?.posts?.edges || [],
+      pageInfo: blogData?.data?.posts?.pageInfo || {
+        hasNextPage: false,
+        endCursor: null,
+      },
+    };
   } catch (error) {
     console.error(JSON.stringify(error));
-    return false;
+    return {
+      blogs: [],
+      pageInfo: {
+        hasNextPage: false,
+        endCursor: null,
+      },
+    };
   }
 };
 

@@ -31,7 +31,7 @@ export default async function BlogsByAuthor({ params }) {
     };
   }
 
-  const blogs = await fetchBlogs({
+  const { blogs } = await fetchBlogs({
     author: slug,
   });
 

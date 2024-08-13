@@ -22,7 +22,7 @@ export async function generateStaticParams() {
 export default async function BlogsByCategory({ params }) {
   const { slug } = params;
 
-  const blogs = await fetchBlogs({
+  const { blogs } = await fetchBlogs({
     category: slug,
     first: 10,
   });
