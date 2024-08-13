@@ -18,7 +18,12 @@ import {
   PPCOD_ENABLED,
   PREPAID_ENABLED,
 } from "@/utils/data/wowStarConstants";
-import { checkAffiseValidity, nameSplitter, toDecimal } from "@/utils/helpers";
+import {
+  checkAffiseValidity,
+  checkFormValidity,
+  nameSplitter,
+  toDecimal,
+} from "@/utils/helpers";
 import loadScript from "@/utils/loadScript";
 import {
   MAX_PREPAID_DISCOUNT,
@@ -105,6 +110,11 @@ export default function OrderSection() {
       clickId: "",
     };
 
+    if (!checkFormValidity(currentAddress)) {
+      showToast.error("Please Add Valid Address to Proceed");
+      return;
+    }
+
     const {
       area = "",
       address = "",
@@ -167,7 +177,11 @@ export default function OrderSection() {
       ]);
 
       if (code === "INVALID_ADDRESS") {
-        showToast.error("Please Add Address to Proceed");
+        showToast.error("Invalid Address");
+        return;
+      }
+      if (error) {
+        showToast.error("Something went wrong");
         return;
       }
 

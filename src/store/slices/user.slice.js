@@ -8,6 +8,7 @@ export const initialState = {
   customUser: {
     phone: null,
   },
+  isLoggedinViaGokwik: false,
 };
 
 export const userSlice = createSlice({
@@ -20,8 +21,13 @@ export const userSlice = createSlice({
     setCustomUser: (state, action) => {
       state.customUser = action.payload;
     },
+    setIsLoggedinViaGokwik: (state, action) => {
+      state.isLoggedinViaGokwik = action.payload;
+    },
   },
 });
 
-export const { setUser, setCustomUser } = userSlice.actions;
+export const { setUser, setCustomUser, setIsLoggedinViaGokwik } =
+  userSlice.actions;
+
 export default userSlice.reducer;

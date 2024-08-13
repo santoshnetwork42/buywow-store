@@ -1,8 +1,8 @@
 import { showToast } from "@/components/common/ToastComponent";
 import { STORE_PREFIX } from "@/config";
+import States from "@/utils/constants/states.json";
 import Cookies from "js-cookie";
 import platform from "platform";
-import toast from "react-hot-toast";
 
 export function generateRandomString(length) {
   const characters =
@@ -309,4 +309,35 @@ export const getSource = () => {
   return typeof window !== "undefined" && window?.innerWidth > 575
     ? "Web"
     : "Mobile";
+};
+
+export const checkFormValidity = (address) => {
+  if (!address) return true; // Return true if there's no address (indicating an error)
+
+  const fields = [
+    { key: "pinCode", validate: validatePinCode },
+    { key: "city", validate: validateString },
+    { key: "state", validate: validateString },
+    { key: "phone", validate: validatePhoneNumber },
+    { key: "name", validate: validateString },
+    { key: "email", validate: validateEmail },
+    { key: "address", validate: validateString },
+  ];
+
+  return fields.some((field) => field.validate(address[field.key])?.error);
+};
+
+export const formatUserAddress = (address) => {
+  const state = States.find(
+    (s) => s.name.toLocaleLowerCase() === address?.state.toLocaleLowerCase(),
+  )?.value;
+
+  return {
+    ...address,
+    name: address.first_name + " " + address.last_name,
+    pinCode: address.pincode,
+    country: "IN",
+    state,
+    phone: address.recipient_phone || address.phone,
+  };
 };
