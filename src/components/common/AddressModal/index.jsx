@@ -150,6 +150,7 @@ const AddressModal = ({
             <Input
               type="text"
               value={address.pinCode}
+              maxLength={6}
               onChange={(e) => {
                 const newPinCode = (e.target.value || "")
                   .replaceAll(/[^0-9]+/g, "")
