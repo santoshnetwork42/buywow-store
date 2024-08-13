@@ -1,6 +1,5 @@
-import dynamic from "next/dynamic";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
-import { unstable_cache } from "next/cache";
+import dynamic from "next/dynamic";
 
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
@@ -165,6 +164,8 @@ export default async function Page({ params }) {
     // const pageData = await getPageData(slug[slug.length - 1]);
     const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
     const { blocks } = pageData || {};
+
+    console.log(pageData);
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
       throw new Error("No blocks found or invalid blocks data");

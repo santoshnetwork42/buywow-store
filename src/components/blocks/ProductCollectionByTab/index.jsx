@@ -1,22 +1,21 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
-import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
-import { Heading } from "@/components/elements";
-import ProductCard from "@/components/partials/Card/ProductCard";
 import SortDropdown from "@/components/common/SortDropdown";
-import BlogCard from "@/components/partials/Card/BlogCard";
-import Slider from "@/components/features/Slider";
-import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
-import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
+import { Heading } from "@/components/elements";
 import InfiniteScroll from "@/components/features/InfiniteScroll";
-import { PRODUCT_COLLECTION_PAGE_SIZE } from "@/utils/data/constants";
+import Slider from "@/components/features/Slider";
+import BlogCard from "@/components/partials/Card/BlogCard";
+import ProductCard from "@/components/partials/Card/ProductCard";
+import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
+import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 const SORT_OPTIONS = [
   { value: "RECOMMENDED", label: "Recommended" },
@@ -96,7 +95,7 @@ const ProductCollectionByTab = ({
           tabSelected: activeTab?.tab?.data?.id,
           defaultSorting: newSortOption.value,
           page: 1,
-          limit: PRODUCT_COLLECTION_PAGE_SIZE,
+          limit: activeTab?.pagination?.pageSize ?? 10,
         });
 
         const newProducts = response?.items?.data ?? [];
@@ -132,7 +131,7 @@ const ProductCollectionByTab = ({
       setSortOption(option);
       reloadProducts(option);
     },
-    [activeTabIndex],
+    [reloadProducts],
   );
 
   useEffect(() => {
@@ -163,7 +162,7 @@ const ProductCollectionByTab = ({
         tabSelected: activeTab?.tab?.data?.id,
         defaultSorting: sortOption.value,
         page: nextPage,
-        limit: PRODUCT_COLLECTION_PAGE_SIZE,
+        limit: activeTab?.pagination?.pageSize ?? 10,
       });
 
       const newProducts = response?.items?.data ?? [];
@@ -217,7 +216,7 @@ const ProductCollectionByTab = ({
       if (selectedTab) {
         const productsInTab = selectedTab.products?.data?.length ?? 0;
         const totalProducts = selectedTab.pagination?.totalData ?? 0;
-        const pageSize = PRODUCT_COLLECTION_PAGE_SIZE;
+        const pageSize = selectedTab.pagination?.pageSize ?? 10;
         const calculatedPage = Math.ceil(productsInTab / pageSize);
 
         setCurrentPage(calculatedPage);
@@ -251,7 +250,7 @@ const ProductCollectionByTab = ({
     (category) => {
       const currentProducts = category.products?.data || [];
       const totalProducts = category.pagination?.totalData || 0;
-      const pageSize = PRODUCT_COLLECTION_PAGE_SIZE;
+      const pageSize = category.pagination?.pageSize || 10;
       const remainingProducts = Math.min(
         totalProducts - currentProducts.length,
         pageSize,
