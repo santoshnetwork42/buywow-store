@@ -13,10 +13,11 @@ import NavbarProvider from "@/utils/context/navbar";
 import { Amplify } from "aws-amplify";
 import { unstable_cache } from "next/cache";
 import awsExport from "../../aws-exports";
-import { AWS_CLIENT_ID } from "@/config";
+import { AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import CartDrawer from "@/components/partials/CartDrawer";
 import ToastComponent from "@/components/common/ToastComponent";
 import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
+import GoKwikProvider from "@/utils/context/gokwik";
 
 Amplify.configure({
   ...awsExport,
@@ -48,20 +49,23 @@ async function RootLayout({ children }) {
         <meta name="theme-color" content="#000000" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
+        {!!GOKWIK_SCRIPT && <script defer src={GOKWIK_SCRIPT} />}
       </head>
       <body>
         <Provider>
           <NavbarProvider ignoreLazyLoadNavbar={false}>
-            <AnnouncementProvider>
-              <div className="flex min-h-dvh w-full flex-col bg-white-a700">
-                <AnnouncementBar data={announcementData} />
-                {headerData?.data && <Header data={headerData} />}
-                <CartDrawer upsellProducts={upsellProducts} />
-                <ToastComponent />
-                <div className="flex-1">{children}</div>
-                {footerData?.data && <Footer data={footerData} />}
-              </div>
-            </AnnouncementProvider>
+            <GoKwikProvider>
+              <AnnouncementProvider>
+                <div className="flex min-h-dvh w-full flex-col bg-white-a700">
+                  <AnnouncementBar data={announcementData} />
+                  {headerData?.data && <Header data={headerData} />}
+                  <CartDrawer upsellProducts={upsellProducts} />
+                  <ToastComponent />
+                  <div className="flex-1">{children}</div>
+                  {footerData?.data && <Footer data={footerData} />}
+                </div>
+              </AnnouncementProvider>
+            </GoKwikProvider>
           </NavbarProvider>
         </Provider>
       </body>

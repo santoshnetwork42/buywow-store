@@ -5,13 +5,24 @@ import {
   setCartId,
   setCoupon,
   setIsRewardApplied,
+  setIsShoppingCartIdLoading,
   setStoredCouponCode,
   setSubTotal,
 } from "@/store/slices/cart.slice";
-import { getFirstVariant, getProductSubTotal } from "@/utils/helpers";
+import {
+  checkAffiseValidity,
+  getFirstVariant,
+  getProductSubTotal,
+} from "@/utils/helpers";
 import { getCouponDiscount } from "@wow-star/utils";
 import { all, call, put, select } from "redux-saga/effects";
+import { cartSagaActions } from "../sagaActions/cart.actions";
 import { setCartModalHandler } from "./modal.handle";
+import {
+  createShoppingCartAPI,
+  manageShoppingCartAPI,
+} from "../requests/cart.request";
+import { STORE_ID, STORE_PREFIX } from "@/config";
 
 export function* addToCartHandler(action) {
   try {
@@ -72,6 +83,7 @@ export function* addToCartHandler(action) {
     const subTotal = getProductSubTotal(updatedCart);
     yield put(setSubTotal(subTotal));
     yield put(setCart(updatedCart));
+    yield put({ type: cartSagaActions.MANAGE_CART });
   } catch (error) {
     console.error("Error in addToCartHandler:", error);
     // yield put(setCartError(error));
@@ -102,6 +114,7 @@ export function* removeFromCartHandler(action) {
   if (!allowedCoupon) {
     yield put(setCoupon(null));
   }
+  yield put({ type: cartSagaActions.MANAGE_CART });
 }
 
 export function* updateCartHandler(action) {
@@ -122,24 +135,29 @@ export function* updateCartHandler(action) {
   if (!isCouponAllowed) {
     yield put(setCoupon(null));
   }
+  yield put({ type: cartSagaActions.MANAGE_CART });
 }
 
 export function* applyRewardPointHandler(action) {
   const { isRewardApplied = false } = action.payload;
   yield put(setIsRewardApplied(isRewardApplied));
+  yield put({ type: cartSagaActions.MANAGE_CART });
 }
 
 export function* applyCouponHandler(action) {
   const { coupon } = action.payload;
   yield put(setCoupon(coupon));
+  yield put({ type: cartSagaActions.MANAGE_CART });
 }
 
 export function* removeCouponHandler() {
   yield put(setCoupon(null));
+  yield put({ type: cartSagaActions.MANAGE_CART });
 }
 
 export function* emptyCartHandler() {
   yield put(emptyCart());
+  yield put({ type: cartSagaActions.MANAGE_CART });
 }
 
 export function* validateCartHandler(action) {
@@ -160,18 +178,74 @@ export function* validateCartHandler(action) {
 }
 
 export function* updateCartIdHandler(action) {
-  const { cartId } = action.payload;
-  yield put(setCartId(cartId));
+  yield put(setCartId(action.payload));
 }
 
 export function* updateCartIdLoadingHandler(action) {
-  const { isLoading } = action.payload;
-  yield put(setIsShoppingCartIdLoading(isLoading));
+  yield put(setIsShoppingCartIdLoading(action.payload));
 }
 
 export function* storedCouponCodeHandler(action) {
   const { couponCode } = action.payload;
   yield put(setStoredCouponCode(couponCode));
+}
+
+export function* manageCartHandler(action) {
+  try {
+    if (action.type === "EMPTY_CART") {
+      localStorage.removeItem(`${STORE_PREFIX}-cartId`);
+      yield put({ type: cartSagaActions.UPDATE_CART_ID, payload: null });
+      return;
+    }
+
+    yield put({ type: cartSagaActions.UPDATE_CART_ID_LOADING, payload: true });
+
+    const { user, cart, system } = yield select();
+    console.log("cart>>>>>>", cart);
+    let { coupon, data: products, isRewardApplied } = cart;
+    const { user: userData, isLoggedinViaGokwik } = user;
+    const { id: couponCode, code } = coupon || {};
+
+    const data = products.map(({ id, variantId, qty, cartItemSource }) => ({
+      productId: id,
+      variantId,
+      quantity: qty,
+      source: cartItemSource || null,
+    }));
+
+    const isAffiseTrackingValid = checkAffiseValidity();
+
+    const cartInput = {
+      couponCodeId: couponCode || null,
+      couponCode: code || "",
+      storeId: STORE_ID,
+      isRewardApplied:
+        userData?.id && !isLoggedinViaGokwik ? isRewardApplied : false,
+      data,
+      metadata: { ...system?.meta, isAffiseTrackingValid },
+    };
+
+    if (cart.cartId) {
+      cartInput.shoppingCartId = cart.cartId;
+    }
+
+    const methodToCall = userData?.id
+      ? manageShoppingCartAPI
+      : createShoppingCartAPI;
+
+    const authMode = userData?.id ? "userPool" : "apiKey";
+
+    const response = yield call(methodToCall, cartInput, authMode);
+
+    const cartId = response?.shoppingCartId || null;
+
+    if (cartId) localStorage.setItem(`${STORE_PREFIX}-cartId`, cartId);
+
+    yield put({ type: cartSagaActions.UPDATE_CART_ID, payload: cartId });
+    yield put({ type: cartSagaActions.UPDATE_CART_ID_LOADING, payload: false });
+  } catch (e) {
+    console.log("Error in manageCartHandler", e);
+  }
 }
 
 export function* fetchAndAddProductsFromEncodedCartHandler(action) {

@@ -11,7 +11,9 @@ import {
   getNavbarAndFooter,
   getOrder,
   getPageBySlug,
+  getProductById,
   getUser,
+  getUserRewards,
   searchCMSCollectionProducts,
   searchCMSProducts,
   updateUserAddress,
@@ -319,6 +321,36 @@ export const getCMSPagesAPI = async () => {
     return JSON.parse(response?.data?.getCMSPages || "[]");
   } catch (err) {
     errorHandler(err, "Get Cart Upsell Products API");
+    return null;
+  }
+};
+
+export const getUserRewardsAPI = async () => {
+  try {
+    const response = await client.graphql({
+      query: getUserRewards,
+      variables: { storeId: STORE_ID },
+      authMode: "userPool",
+    });
+    const data = "data" in response ? response.data : response;
+    return data?.getUser;
+  } catch (error) {
+    console.error("Error fetching user rewards:", error);
+    return null;
+  }
+};
+
+export const fetchCouponRuleAPI = async (code) => {
+  try {
+    const response = await client.graphql({
+      query: getCouponRule,
+      variables: { code, storeId: STORE_ID },
+      authMode: id ? "userPool" : "apiKey",
+    });
+    const data = "data" in response ? response.data : response;
+    return data?.getCouponRule;
+  } catch (error) {
+    console.error("Error fetching coupon rule:", error);
     return null;
   }
 };

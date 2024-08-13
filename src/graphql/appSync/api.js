@@ -2696,5 +2696,14 @@ export const verifyCustomOTP = /* GraphQL */ `
   }
 `;
 
+export const getUserRewards = /* GraphQL */ `
+  query GetUser($storeId: ID) {
+    getUser(storeId: $storeId) {
+      id
+      totalRewards
+    }
+  }
+`;
+
 // OLD APIs
 // ==================================================

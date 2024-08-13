@@ -1,8 +1,8 @@
 import { showToast } from "@/components/common/ToastComponent";
 import { STORE_PREFIX } from "@/config";
+import States from "@/utils/constants/states.json";
 import Cookies from "js-cookie";
 import platform from "platform";
-import toast from "react-hot-toast";
 
 export function generateRandomString(length) {
   const characters =
@@ -325,4 +325,19 @@ export const checkFormValidity = (address) => {
   ];
 
   return fields.some((field) => field.validate(address[field.key])?.error);
+};
+
+export const formatUserAddress = (address) => {
+  const state = States.find(
+    (s) => s.name.toLocaleLowerCase() === address?.state.toLocaleLowerCase(),
+  )?.value;
+
+  return {
+    ...address,
+    name: address.first_name + " " + address.last_name,
+    pinCode: address.pincode,
+    country: "IN",
+    state,
+    phone: address.recipient_phone || address.phone,
+  };
 };
