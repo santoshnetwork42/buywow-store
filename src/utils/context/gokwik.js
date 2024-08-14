@@ -35,7 +35,7 @@ function GoKwikProvider({ children }) {
     useCartDispatch();
   const { setIsLoggedinViaGokwik, setCustomUser } = useUserDispatch();
   const { cartList } = useSelector((state) => state.cart);
-  const { id = "" } = useSelector((state) => state.user.user);
+  const { id = "" } = useSelector((state) => state.user.user) || {};
 
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const { totalPrice } = useCartTotal({

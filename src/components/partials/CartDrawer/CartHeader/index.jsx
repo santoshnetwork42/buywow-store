@@ -2,10 +2,12 @@ import { CloseSVG } from "@/assets/images";
 import { Button, Heading } from "@/components/elements";
 import React from "react";
 
-const CartHeader = React.memo(({ totalItems, cartClose, text }) => {
+const CartHeader = React.memo(({ totalItems, cartClose, text, className }) => {
   if (!text) return null;
   return (
-    <div className="flex items-center justify-between border-b-[0.25px] border-black-900 pb-2 md:pb-2.5">
+    <div
+      className={`flex items-center justify-between border-b-[0.25px] border-black-900 pb-2 md:pb-2.5 ${className}`}
+    >
       <Heading size="xl" as="h2" className="text-lg" responsive>
         {text} {totalItems > 0 && `(${totalItems})`}
       </Heading>

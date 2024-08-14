@@ -24,15 +24,13 @@ IngredientItem.displayName = "IngredientItem";
 
 const AccordionIngredients = ({
   accordionIngredientsTitle,
-  image,
+  accordionIngredientsImage: image,
   ingredientItems,
   ...props
 }) => {
   if (!accordionIngredientsTitle || !ingredientItems?.data) {
     return null;
   }
-
-  // console.log(props, image);
 
   const { url: accordionImageUrl, alternativeText: accordionImageAlt } =
     extractAttributes(image) || {};
