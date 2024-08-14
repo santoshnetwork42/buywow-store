@@ -8,7 +8,7 @@ import { Button, Img, Text } from "@/components/elements";
 import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
-import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useNavBarState } from "@/utils/context/navbar";
 import { extractAttributes } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
@@ -16,9 +16,8 @@ import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
-const MenuItem = ({ item, index, linkPrefix }) => {
+const MenuItem = React.memo(({ item, index, linkPrefix }) => {
   if (!item) return null;
 
   const key = item.id || index;
@@ -53,11 +52,9 @@ const MenuItem = ({ item, index, linkPrefix }) => {
       </Link>
     </li>
   );
-};
+});
 
-MenuItem.displayName = "MenuItem";
-
-const Logo = ({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
+const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
   <Link href="/">
     <div className="flex items-center gap-1">
       <Img
@@ -79,14 +76,12 @@ const Logo = ({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
       />
     </div>
   </Link>
-);
-
-Logo.displayName = "Logo";
+));
 
 const Header = ({ data, ...props }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
 
+  const { handlePasswordLessModal, handleCartVisibility } = useModalDispatch();
   const { isRewardApplied } = useNavBarState();
 
   const { totalItems: totalCartItems } = useCartTotal({
@@ -112,26 +107,6 @@ const Header = ({ data, ...props }) => {
   const openMobileMenu = () => setIsMobileMenuOpen(true);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const handlePasswordLessOpen = () => {
-    dispatch({
-      type: modalSagaActions.SET_PASSWORDLESS_MODAL,
-      payload: {
-        isPasswordLessOpen: true,
-        customLogin: false,
-        redirectTo: null,
-      },
-    });
-  };
-
-  const handleCartOpen = () => {
-    dispatch({
-      type: modalSagaActions.SET_CART_MODAL,
-      payload: {
-        isCartOpen: true,
-      },
-    });
-  };
-
   const handleUserClisk = async () => {
     try {
       //check if user is logged in
@@ -140,10 +115,10 @@ const Header = ({ data, ...props }) => {
         router.push("/account");
       } else {
         //open passwordless if user is not logged in
-        handlePasswordLessOpen();
+        handlePasswordLessModal(true, false, null);
       }
     } catch (error) {
-      handlePasswordLessOpen();
+      handlePasswordLessModal(true, false, null);
       console.log("Something went wrong", error);
     }
   };
@@ -209,7 +184,11 @@ const Header = ({ data, ...props }) => {
                 className="aspect-square w-[24px] object-contain"
               />
             </Link>
-            <Link href="#" onClick={handleCartOpen} className="flex-shrink-0">
+            <Link
+              href="#"
+              onClick={() => handleCartVisibility(true)}
+              className="flex-shrink-0"
+            >
               <div className="relative">
                 <BagIcon size={20} />
                 {!!totalCartItems && (
@@ -240,6 +219,8 @@ const Header = ({ data, ...props }) => {
   );
 };
 
+MenuItem.displayName = "MenuItem";
+Logo.displayName = "Logo";
 Header.displayName = "Header";
 
 export default Header;
