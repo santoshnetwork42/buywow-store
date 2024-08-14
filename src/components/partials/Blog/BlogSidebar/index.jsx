@@ -22,7 +22,7 @@ export default function BlogSidebar({ featuredBlogs = [], tags = [] }) {
           onClick={toggle}
           className="rounded-full bg-yellow-900 px-3 py-2 text-sm text-white-a700 shadow-lg"
         >
-          {open ? "Close" : "Open"} Sidebar
+          {open ? "Close" : "View More"}
         </button>
       </div>
 
@@ -76,7 +76,7 @@ export default function BlogSidebar({ featuredBlogs = [], tags = [] }) {
         <div
           onClick={toggle}
           className="fixed inset-0 z-30 bg-black-900 opacity-50 lg:hidden"
-        ></div>
+        />
       )}
     </React.Fragment>
   );

@@ -8,6 +8,7 @@ import {
   getFeaturedBlogs,
   getTag,
   getTags,
+  getTopMenu,
 } from "@/graphql/appSync/api";
 
 export const wordpressAuth = `Basic ${Buffer.from(
@@ -147,7 +148,7 @@ export const fetchCategories = async () => {
     return data?.data?.categories?.nodes || [];
   } catch (error) {
     console.error(JSON.stringify(error));
-    return false;
+    return [];
   }
 };
 
@@ -200,7 +201,7 @@ export const fetchTags = async () => {
     return data?.data?.tags?.nodes || [];
   } catch (error) {
     console.error(JSON.stringify(error));
-    return false;
+    return [];
   }
 };
 
@@ -253,7 +254,7 @@ export const fetchAuthors = async () => {
     return data?.data?.users?.nodes || [];
   } catch (error) {
     console.error(JSON.stringify(error));
-    return false;
+    return [];
   }
 };
 
@@ -281,5 +282,32 @@ export const fetchAuthor = async (slug) => {
   } catch (error) {
     console.error(JSON.stringify(error));
     return false;
+  }
+};
+
+export const fetchTopMenu = async () => {
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: wordpressAuth,
+      },
+      body: JSON.stringify({
+        query: getTopMenu,
+        variables: { id: "dGVybTo1Mw==" },
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return data?.data?.menu?.menuItems.nodes || [];
+  } catch (error) {
+    console.error(JSON.stringify(error));
+    return [];
   }
 };

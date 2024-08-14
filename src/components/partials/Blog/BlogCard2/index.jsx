@@ -33,7 +33,7 @@ export default function BlogCard2({
 
           <Heading
             as="h6"
-            size="base"
+            size="sm"
             className="line-clamp-2 text-base normal-case"
             responsive
           >

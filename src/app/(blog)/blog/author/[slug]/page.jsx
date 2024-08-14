@@ -10,6 +10,7 @@ import {
 import { notFound } from "next/navigation";
 import React from "react";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
+import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 export const revalidate = 60 * 60 * 24;
 
@@ -23,6 +24,21 @@ export async function generateStaticParams() {
   return authors.map((author) => ({
     slug: author.slug,
   }));
+}
+
+export async function generateMetadata({ params }) {
+  const author = await fetchAuthor(params.slug);
+
+  if (author) {
+    return {
+      siteName: "Wow Skin Science",
+      title: author?.name,
+      description:
+        "Discover the ultimate destination for expert skin & hair care tips, along with a curated selection of products for you. Explore our blog",
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/author/${author?.slug}`,
+      // image: getPublicImageURL("/images/logo.png"),
+    };
+  }
 }
 
 export default async function BlogsByAuthor({ params }) {

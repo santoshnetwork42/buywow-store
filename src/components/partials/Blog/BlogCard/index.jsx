@@ -38,7 +38,7 @@ export default function BlogCard({
         <Heading
           as="h5"
           size="2xl"
-          className="my-2 line-clamp-3 text-base normal-case"
+          className="my-2 line-clamp-2 text-base normal-case"
         >
           {blog.title}
         </Heading>

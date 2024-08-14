@@ -15,6 +15,22 @@ import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 
 export const revalidate = 60 * 60 * 24;
 
+export async function generateMetadata({ params }) {
+  const blog = await fetchBlog(params.slug);
+
+  if (blog) {
+    return {
+      siteName: "Wow Skin Science",
+      title: blog?.title,
+      description: blog?.seo?.metaDesc,
+      image: blog.featuredImage?.node?.mediaItemUrl,
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${blog?.slug}`,
+      type: "article",
+      authorName: blog?.author?.node?.name,
+    };
+  }
+}
+
 export async function generateStaticParams() {
   const { blogs } = await fetchBlogs({});
 

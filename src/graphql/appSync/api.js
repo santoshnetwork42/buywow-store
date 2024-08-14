@@ -2748,6 +2748,21 @@ export const getBlogsByCategory = /* GraphQL */ `
   }
 `;
 
+export const getTopMenu = /* GraphQL */ `
+  query GetMenu($id: ID!) {
+    menu(id: $id, idType: ID) {
+      id
+      menuItems {
+        nodes {
+          id
+          label
+          path
+        }
+      }
+    }
+  }
+`;
+
 export const ensureUserAndDispatchOTP = /* GraphQL */ `
   query EnsureUserAndDispatchOTP($storeId: ID!, $phone: AWSPhone!) {
     ensureUserAndDispatchOTP(storeId: $storeId, phone: $phone) {

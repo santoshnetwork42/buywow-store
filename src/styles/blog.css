@@ -2,19 +2,19 @@
   font-family: Outfit, sans-serif;
 }
 
-* > .wp-block-heading {
+.blog-content .wp-block-heading {
   display: inline-block;
 }
 
 .blog-content a {
-  color: #eeb63d;
   text-decoration: none;
   transition: color 0.3s;
+  @apply text-yellow-900;
 }
 
 .blog-content a:hover {
-  color: #eeb63d;
   text-decoration: underline;
+  @apply text-yellow-900;
 }
 
 .blog-content .wp-block-pullquote {
