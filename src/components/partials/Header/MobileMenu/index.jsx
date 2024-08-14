@@ -1,12 +1,11 @@
-import React from "react";
-import Link from "next/link";
-import { Text, Img, Heading, Button } from "@/components/elements";
 import { CloseSVG, UserSVG } from "@/assets/images";
+import { Button, Heading, Img, Text } from "@/components/elements";
 import Sidebar from "@/components/features/Drawer";
-import { extractAttributes } from "@/utils/helpers";
 import MobileMenuItem from "@/components/partials/Header/MobileMenuItem";
-import { useDispatch } from "react-redux";
 import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
+import { extractAttributes } from "@/utils/helpers";
+import Link from "next/link";
+import { useDispatch } from "react-redux";
 
 const HeaderSection = ({ mWebUrl, mWebAlternativeText, onClose }) => (
   <div className="flex items-center justify-between bg-yellow-900 p-4">
@@ -100,7 +99,7 @@ const MobileMenu = ({ isOpen, onClose, collectionMenus, otherLinks, logo }) => {
     extractAttributes(logo);
 
   const menuContent = (
-    <div className="flex-1 overflow-y-auto p-4">
+    <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
       {(!!collectionMenus?.length || !!otherLinks?.length) && (
         <ul className="space-y-4">
           {collectionMenus?.length > 0 && (

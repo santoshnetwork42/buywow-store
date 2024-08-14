@@ -1,11 +1,10 @@
-import Link from "next/link";
-import React from "react";
 import { Text } from "@/components/elements";
+import Link from "next/link";
 
 export default function Breadcrumb({ breadcrumbTitle: currentPageTitle }) {
   return (
     <div className={`container-main my-3 flex items-center`}>
-      <Link href="/">
+      <Link href="/" className="flex">
         <Text as="span" size="sm" className="font-light capitalize" responsive>
           Home
         </Text>

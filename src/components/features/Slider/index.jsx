@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, useMemo } from "react";
-import useEmblaCarousel from "embla-carousel-react";
 import { Button, Img, Text } from "@/components/elements";
-import { twMerge } from "tailwind-merge";
+import useEmblaCarousel from "embla-carousel-react";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 const ProgressBar = React.memo(({ style }) => (
   <div className="relative h-[2px] flex-1 overflow-x-hidden rounded-xl bg-gray-300_01">
@@ -58,6 +58,7 @@ const SliderControl = React.memo(
     onNextClick,
     dotButtons,
     className,
+    size,
   }) => (
     <div className={twMerge(`flex w-full items-center`, className)}>
       {showDotButtons ? (
@@ -65,11 +66,26 @@ const SliderControl = React.memo(
       ) : (
         <>
           <ProgressBar style={progressBarStyle} />
-          <div className="relative m-auto ml-4 flex sm:ml-8 md:ml-12 lg:ml-16 xl:ml-20">
-            <div className="flex w-full items-center justify-center gap-2 sm:gap-3 lg:gap-4 xl:gap-5">
+          <div
+            className={twMerge(
+              "relative m-auto ml-4 flex sm:ml-8 md:ml-12 lg:ml-16 xl:ml-20",
+              size === "small" && "sm:!ml-6",
+            )}
+          >
+            <div
+              className={twMerge(
+                "flex w-full items-center justify-center gap-2 sm:gap-3 lg:gap-4 xl:gap-5",
+                size === "small" && "md:!gap-3",
+              )}
+            >
               {showCounter && <Counter text={counterText} />}
               {showControls && (
-                <div className="flex flex-1 justify-center gap-2 sm:gap-3 lg:gap-4">
+                <div
+                  className={twMerge(
+                    "flex flex-1 justify-center gap-2 sm:gap-3 lg:gap-4",
+                    size === "small" && "!gap-2",
+                  )}
+                >
                   <SliderButton
                     src="img_arrow_left.svg"
                     alt="Previous slide"
@@ -100,6 +116,7 @@ const Slider = ({
   showControls = true,
   showDotButtons = false,
   dragFree = true,
+  size,
   ...props
 }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
@@ -235,6 +252,7 @@ const Slider = ({
             onNextClick={scrollNext}
             dotButtons={dotButtons}
             className={controlsContainerClassName}
+            size={size}
           />
         )}
     </div>
