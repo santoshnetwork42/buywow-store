@@ -12,6 +12,7 @@ import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import { fetchBlog, fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
 import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
+import { replaceBlogLinks } from "@/lib/replaceBlogLinks";
 
 export const revalidate = 60 * 60 * 24;
 
@@ -101,7 +102,7 @@ export default async function ReadBlog({ params }) {
           <div
             className="blog-content"
             dangerouslySetInnerHTML={{
-              __html: blog?.content,
+              __html: replaceBlogLinks(blog?.content),
             }}
           />
 

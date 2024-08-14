@@ -1,6 +1,6 @@
 export const replaceBlogLinks = (content) => {
   const domain = `${process.env.NEXT_PUBLIC_SITE_URL}/blog`;
-  const ip = process.env.NEXT_PUBLIC_WORDPRESS_IP;
+  const ip = process.env.NEXT_PUBLIC_WP_IP;
   const regEx = new RegExp(ip, "g");
   const newContent = content.replace(regEx, domain);
 

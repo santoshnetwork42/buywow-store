@@ -36,7 +36,7 @@ export async function generateMetadata({ params }) {
       description:
         "Discover the ultimate destination for expert skin & hair care tips, along with a curated selection of products for you. Explore our blog",
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/author/${author?.slug}`,
-      // image: getPublicImageURL("/images/logo.png"),
+      image: getPublicImageURL("/images/logo.png"),
     };
   }
 }
