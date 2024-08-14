@@ -137,7 +137,7 @@ const CartDrawer = ({ upsellProducts }) => {
       return Promise.resolve(true);
     }
 
-    handlePasswordLessModal(true, true);
+    handlePasswordLessModal(true, true, "/checkout");
     return Promise.resolve(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
