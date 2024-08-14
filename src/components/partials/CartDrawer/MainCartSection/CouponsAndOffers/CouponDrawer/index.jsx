@@ -23,7 +23,7 @@ const CouponDrawer = ({
     width="500px"
     isNestedDrawer={true}
   >
-    <div className="flex flex-1 flex-col gap-4 bg-white-a700 px-3 py-4 md:px-4">
+    <div className="flex flex-1 flex-col gap-4 px-3 py-4 md:px-4">
       <div className="flex items-center gap-3 border-b-[0.25px] border-black-900 pb-2 md:gap-4 md:pb-2.5">
         <Button
           onClick={onClose}
