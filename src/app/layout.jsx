@@ -32,7 +32,7 @@ Amplify.configure({
 
 async function RootLayout({ children }) {
   // const { data } = (await getNavbarAndFooter()) || {};
-  const { data } = await getNavbarAndFooterAPI();
+  const { data } = (await getNavbarAndFooterAPI()) || {};
   const upsellProducts = await getCartUpsellProductsAPI();
   const {
     announcementBar: announcementData = {},
