@@ -13,7 +13,23 @@ export const useModalDispatch = () => {
     });
   };
 
+  const handlePasswordLessModal = (
+    isPasswordLessOpen = false,
+    customLogin = false,
+    redirectTo = null,
+  ) => {
+    dispatch({
+      type: modalSagaActions.SET_PASSWORDLESS_MODAL,
+      payload: {
+        isPasswordLessOpen,
+        customLogin,
+        redirectTo,
+      },
+    });
+  };
+
   return {
     handleCartVisibility,
+    handlePasswordLessModal,
   };
 };
