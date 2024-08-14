@@ -1,6 +1,5 @@
+import { getCMSPagesAPI, getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import dynamic from "next/dynamic";
-import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
-import { unstable_cache } from "next/cache";
 
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
@@ -78,6 +77,9 @@ const VideoSection = dynamic(
 const BlogSection = dynamic(
   () => import("@/components/partials/Others/BlogSection"),
 );
+const RecentlyViewed = dynamic(
+  () => import("@/components/blocks/RecentlyViewed"),
+);
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -85,81 +87,79 @@ export const metadata = {
     "Revitalize your skin with Vitamin C face wash and natural ingredients. Cruelty-free, dermatologically tested skincare on sale. Free shipping on orders above ₹999.",
 };
 
+const componentMap = {
+  ComponentBlocksAnnouncementBar: PageAnnouncementBar,
+  ComponentBannerCarousal: Carousal,
+  ComponentBannerSingleBanner: SingleBanner,
+  ComponentBannerMiniBanners: MiniBanners,
+  ComponentCategoriesTrendingCategories: TrendingCategories,
+  ComponentBlocksFeaturedList: FeaturedList,
+  ComponentCategoriesIngredientCategories: IngredientCategories,
+  ComponentCategoriesFeaturedCategories: FeaturedCategories,
+  ComponentBlocksTestimonialSection: TestimonialSection,
+  ComponentBlocksFeaturedProducts: FeaturedProducts,
+  ComponentBlocksFeaturedProductsByTab: FeaturedProductsByTab,
+  ComponentProductProductEffectivenessImages: ProductEffectiveness,
+  ComponentProductProductHighlightImages: ProductHighlights,
+  ComponentProductProductBenefits: ProductBenefits,
+  ComponentProductProductKeyIngredientImages: ProductKeyIngredients,
+  ComponentAccordionInfoDropdownSection: InfoDropdown,
+  ComponentBlocksCollectionLinks: CollectionLinks,
+  ComponentBlocksPdp: ProductDetailView,
+  ComponentBlocksProductCollectionByTab: ProductCollectionSection,
+  ComponentBlocksInfoSection: InfoSection,
+  ComponentProductProductReviews: Reviews,
+  ComponentBlocksUpsellProducts: UpsellProducts,
+  ComponentAccordionDescriptionSection: AccordionDescription,
+  ComponentAccordionIngredientsSection: AccordionIngredients,
+  ComponentAccordionUsageInstructionsSection: AccordionUsageInstructions,
+  ComponentAccordionFaQsSection: AccordionFaQs,
+  ComponentBlocksBreadcrumb: Breadcrumb,
+  ComponentVideoSection: VideoSection,
+  ComponentBlogSection: BlogSection,
+  ComponentBlocksRecentlyViewed: RecentlyViewed,
+};
+
 const renderBlock = (block, index, slug) => {
-  switch (block?.__typename) {
-    case "ComponentBlocksAnnouncementBar":
-      return <PageAnnouncementBar key={index} slug={["index"]} {...block} />;
-    case "ComponentBannerCarousal":
-      return <Carousal key={index} slug={slug} {...block} />;
-    case "ComponentBannerSingleBanner":
-      return <SingleBanner key={index} slug={slug} {...block} />;
-    case "ComponentBannerMiniBanners":
-      return <MiniBanners key={index} slug={slug} {...block} />;
-    case "ComponentCategoriesTrendingCategories":
-      return <TrendingCategories key={index} slug={slug} {...block} />;
-    case "ComponentBlocksFeaturedList":
-      return <FeaturedList key={index} slug={slug} {...block} />;
-    case "ComponentCategoriesIngredientCategories":
-      return <IngredientCategories key={index} slug={slug} {...block} />;
-    case "ComponentCategoriesFeaturedCategories":
-      return <FeaturedCategories key={index} slug={slug} {...block} />;
-    case "ComponentBlocksTestimonialSection":
-      return <TestimonialSection key={index} slug={slug} {...block} />;
-    case "ComponentBlocksFeaturedProducts":
-      return <FeaturedProducts key={index} slug={slug} {...block} />;
-    case "ComponentBlocksFeaturedProductsByTab":
-      return <FeaturedProductsByTab key={index} slug={slug} {...block} />;
-    case "ComponentProductProductEffectivenessImages":
-      return <ProductEffectiveness key={index} slug={slug} {...block} />;
-    case "ComponentProductProductHighlightImages":
-      return <ProductHighlights key={index} slug={slug} {...block} />;
-    case "ComponentProductProductBenefits":
-      return <ProductBenefits key={index} slug={slug} {...block} />;
-    case "ComponentProductProductKeyIngredientImages":
-      return <ProductKeyIngredients key={index} slug={slug} {...block} />;
-    case "ComponentAccordionInfoDropdownSection":
-      return <InfoDropdown key={index} slug={slug} {...block} />;
-    case "ComponentBlocksCollectionLinks":
-      return <CollectionLinks key={index} slug={slug} {...block} />;
-    case "ComponentBlocksPdp":
-      return <ProductDetailView key={index} slug={slug} {...block} />;
-    case "ComponentBlocksProductCollectionByTab":
-      return <ProductCollectionSection key={index} slug={slug} {...block} />;
-    case "ComponentBlocksInfoSection":
-      return <InfoSection key={index} slug={slug} {...block} />;
-    case "ComponentProductProductReviews":
-      return <Reviews key={index} slug={slug} {...block} />;
-    case "ComponentBlocksUpsellProducts":
-      return <UpsellProducts key={index} slug={slug} {...block} />;
-    case "ComponentAccordionDescriptionSection":
-      return <AccordionDescription key={index} slug={slug} {...block} />;
-    case "ComponentAccordionIngredientsSection":
-      return <AccordionIngredients key={index} slug={slug} {...block} />;
-    case "ComponentAccordionUsageInstructionsSection":
-      return <AccordionUsageInstructions key={index} slug={slug} {...block} />;
-    case "ComponentAccordionFaQsSection":
-      return <AccordionFaQs key={index} slug={slug} {...block} />;
-    case "ComponentBlocksBreadcrumb":
-      return <Breadcrumb key={index} slug={slug} {...block} />;
-    case "ComponentVideoSection":
-      return <VideoSection key={index} slug={slug} {...block} />;
-    case "ComponentBlogSection":
-      return <BlogSection key={index} slug={slug} {...block} />;
-    default:
-      return null;
-  }
+  if (!block?.showComponent) return null;
+
+  const Component = componentMap[block?.__typename];
+  if (!Component) return null;
+
+  return <Component key={index} slug={slug} {...block} />;
 };
 
 // const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
-//   revalidate: 1,
+//   revalidate: 1800,
 // });
+
+export async function generateStaticParams() {
+  // Fetch all possible pages
+  const pages = await getCMSPagesAPI();
+
+  const pageType = {
+    HOME: "",
+    COLLECTION: "collections",
+    PRODUCT: "product",
+    LANDING: "",
+  };
+
+  return pages.map((page) => ({
+    slug: [pageType[page.attributes.type], page.attributes.slug].filter(
+      Boolean,
+    ),
+  }));
+}
 
 export default async function Page({ params }) {
   const { slug } = params;
+  console.log("slug :>> ", slug);
   try {
     // const pageData = await getPageData(slug[slug.length - 1]);
     const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
     const { blocks } = pageData || {};
+
+    console.log(pageData);
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
       throw new Error("No blocks found or invalid blocks data");

@@ -1,10 +1,21 @@
 "use client";
 
-import React, { useState, useCallback, useRef, useEffect } from "react";
-import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import { Heading, Img } from "@/components/elements";
+import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
-const Accordion = ({ title, imgUrl, alternativeText, children }) => {
+const Accordion = ({
+  title,
+  imgUrl,
+  alternativeText,
+  children,
+  header,
+  className,
+  accordionButtonClassName,
+  toggleArrowClassName,
+  variant,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
   const [contentHeight, setContentHeight] = useState("auto");
@@ -29,22 +40,18 @@ const Accordion = ({ title, imgUrl, alternativeText, children }) => {
     setIsOpen((prev) => !prev);
   }, []);
 
-  const contentStyle = {
-    maxHeight: isOpen ? contentHeight : "0px",
-    opacity: isOpen ? 1 : 0,
-    visibility: isOpen ? "visible" : "hidden",
-    marginBottom: isOpen ? "20px" : "0px",
-    marginTop: isOpen ? "10px" : "0px",
-  };
-
   return (
-    <div className="mb-2.5 mr-4 flex w-full flex-col border-b">
+    <div className={`flex w-full flex-col border-b ${className}`}>
       <button
-        className="flex w-full cursor-pointer items-center justify-between py-3"
+        className={twMerge(
+          "flex w-full cursor-pointer items-center justify-between",
+          title && "py-3",
+          accordionButtonClassName,
+        )}
         onClick={toggleOpen}
         aria-expanded={isOpen}
       >
-        <div className="flex items-center gap-2 md:gap-2.5">
+        <div className="flex w-full items-center gap-2 md:gap-2.5">
           {imgUrl && (
             <div className="aspect-square w-6">
               <Img
@@ -60,12 +67,25 @@ const Accordion = ({ title, imgUrl, alternativeText, children }) => {
           <Heading as="h4" size="lg" className="text-base" responsive>
             {title}
           </Heading>
+          {header}
         </div>
-        <ToggleArrow open={isOpen} />
+        {!!title && (
+          <ToggleArrow
+            open={isOpen}
+            variant={variant}
+            className={toggleArrowClassName}
+          />
+        )}
       </button>
       <div
-        className="overflow-hidden transition-all duration-300 ease-out sm:px-3 md:px-5 lg:px-7"
-        style={contentStyle}
+        className={twMerge(
+          "overflow-hidden transition-all duration-300 ease-out sm:px-3 md:px-5 lg:px-7",
+          isOpen ? "opacity-100" : "opacity-0",
+          isOpen ? "visible" : "invisible",
+          isOpen ? (variant === "small" ? "mb-2" : "mb-5") : "mb-0",
+          isOpen ? "mt-2.5" : "mt-0",
+        )}
+        style={{ maxHeight: isOpen ? contentHeight : "0px" }}
       >
         <div ref={contentRef}>{children}</div>
       </div>

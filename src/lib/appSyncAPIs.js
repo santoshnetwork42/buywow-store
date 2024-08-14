@@ -5,11 +5,15 @@ import {
   deleteUserAddress,
   ensureUserAndDispatchOTP,
   findUserAddresses,
+  getCartUpsellProducts,
+  getCMSPages,
   getLoyalty,
   getNavbarAndFooter,
   getOrder,
   getPageBySlug,
+  getProductById,
   getUser,
+  getUserRewards,
   searchCMSCollectionProducts,
   searchCMSProducts,
   updateUserAddress,
@@ -282,6 +286,71 @@ export const fetchProductDetailsAPI = async (id) => {
     return data?.getProduct;
   } catch (error) {
     errorHandler(error, "Fetch Product Details API");
+    return null;
+  }
+};
+
+export const getCartUpsellProductsAPI = async () => {
+  try {
+    const response = await client.graphql({
+      query: getCartUpsellProducts,
+      authMode: "apiKey",
+      variables: {
+        storeId: STORE_ID,
+      },
+    });
+
+    const products = JSON.parse(response?.data?.getCartUpsellProducts || "{}");
+    return products;
+  } catch (err) {
+    errorHandler(err, "Get Cart Upsell Products API");
+    return null;
+  }
+};
+
+export const getCMSPagesAPI = async () => {
+  try {
+    const response = await client.graphql({
+      query: getCMSPages,
+      authMode: "apiKey",
+      variables: {
+        storeId: STORE_ID,
+      },
+    });
+
+    return JSON.parse(response?.data?.getCMSPages || "[]");
+  } catch (err) {
+    errorHandler(err, "Get Cart Upsell Products API");
+    return null;
+  }
+};
+
+export const getUserRewardsAPI = async () => {
+  try {
+    const response = await client.graphql({
+      query: getUserRewards,
+      variables: { storeId: STORE_ID },
+      authMode: "userPool",
+    });
+    const data = "data" in response ? response.data : response;
+    return data?.getUser;
+  } catch (error) {
+    console.error("Error fetching user rewards:", error);
+    return null;
+  }
+};
+
+export const fetchCouponRuleAPI = async (code) => {
+  try {
+    const response = await client.graphql({
+      query: getCouponRule,
+      variables: { code, storeId: STORE_ID },
+      authMode: id ? "userPool" : "apiKey",
+    });
+    const data = "data" in response ? response.data : response;
+    return data?.getCouponRule;
+  } catch (error) {
+    console.error("Error fetching coupon rule:", error);
     return null;
   }
 };

@@ -1,4 +1,6 @@
+import { showToast } from "@/components/common/ToastComponent";
 import { STORE_PREFIX } from "@/config";
+import States from "@/utils/constants/states.json";
 import Cookies from "js-cookie";
 import platform from "platform";
 
@@ -14,6 +16,13 @@ export function generateRandomString(length) {
 }
 
 export function validatePhoneNumber(phoneNumber) {
+  if (isPhoneNumberValid(phoneNumber)) {
+    return { error: false };
+  }
+  return { error: true, message: "Invalid Phone Number" };
+}
+
+export function isPhoneNumberValid(phoneNumber) {
   const pattern = /^\d{10}$/;
   return pattern.test(phoneNumber);
 }
@@ -186,7 +195,7 @@ export const formateDate = (date) => {
 export const copyText = (copyText, toastMessage) => {
   if (copyText && navigator?.clipboard) {
     navigator.clipboard.writeText(copyText);
-    console.log(toastMessage);
+    showToast.success(toastMessage);
   } else {
     console.error("Invalid copy text or clipboard not supported.");
   }
@@ -203,24 +212,24 @@ export const nameSplitter = (name) => {
 };
 
 export const validatePinCode = (pinCode) => {
-  if (pinCode.length !== 6) {
-    return "Pin code must be 6 digits";
+  if (pinCode?.length !== 6) {
+    return { error: true, message: "Pin code must be 6 digits" };
   }
-  return "";
+  return { error: false };
 };
 
 export const validateString = (inputString) => {
-  if (!!inputString.length) {
-    return "";
+  if (!!inputString?.length) {
+    return { error: false };
   }
-  return "Invalid Input";
+  return { error: true, message: "Invalid Input" };
 };
 
 export const validateEmail = (email) => {
   if (isEmailValid(email)) {
-    return "";
+    return { error: false };
   }
-  return "Invalid Email";
+  return { error: true, message: "Invalid Email" };
 };
 
 export const calculateTotals = (productItems) => {
@@ -300,4 +309,35 @@ export const getSource = () => {
   return typeof window !== "undefined" && window?.innerWidth > 575
     ? "Web"
     : "Mobile";
+};
+
+export const checkFormValidity = (address) => {
+  if (!address) return true; // Return true if there's no address (indicating an error)
+
+  const fields = [
+    { key: "pinCode", validate: validatePinCode },
+    { key: "city", validate: validateString },
+    { key: "state", validate: validateString },
+    { key: "phone", validate: validatePhoneNumber },
+    { key: "name", validate: validateString },
+    { key: "email", validate: validateEmail },
+    { key: "address", validate: validateString },
+  ];
+
+  return fields.some((field) => field.validate(address[field.key])?.error);
+};
+
+export const formatUserAddress = (address) => {
+  const state = States.find(
+    (s) => s.name.toLocaleLowerCase() === address?.state.toLocaleLowerCase(),
+  )?.value;
+
+  return {
+    ...address,
+    name: address.first_name + " " + address.last_name,
+    pinCode: address.pincode,
+    country: "IN",
+    state,
+    phone: address.recipient_phone || address.phone,
+  };
 };

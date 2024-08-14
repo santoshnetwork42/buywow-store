@@ -141,6 +141,7 @@ export const landingPage = gql`
               }
               autoPlay
               autoPlayInterval
+              showComponent
             }
             ... on ComponentBannerSingleBanner {
               id
@@ -169,6 +170,7 @@ export const landingPage = gql`
                 link
                 moeText
               }
+              showComponent
             }
             ... on ComponentBannerMiniBanners {
               id
@@ -197,6 +199,7 @@ export const landingPage = gql`
                 link
                 moeText
               }
+              showComponent
             }
             ... on ComponentCategoriesFeaturedCategories {
               id
@@ -217,6 +220,7 @@ export const landingPage = gql`
                 slug
                 title
               }
+              showComponent
             }
             ... on ComponentCategoriesTrendingCategories {
               id
@@ -235,6 +239,7 @@ export const landingPage = gql`
                 }
                 title
               }
+              showComponent
             }
             ... on ComponentCategoriesIngredientCategories {
               id
@@ -254,12 +259,16 @@ export const landingPage = gql`
                 }
                 moeText
               }
+              showComponent
             }
             ... on ComponentBlocksAnnouncementBar {
               id
               leftText
               rightText
               centerText
+              showTimer
+              bgColor
+              link
               timer {
                 id
                 type
@@ -268,10 +277,17 @@ export const landingPage = gql`
                 startDate
                 endDate
               }
+              showComponent
+            }
+            ... on ComponentBlocksBreadcrumb {
+              id
+              breadcrumbTitle: title
+              showComponent
             }
             ... on ComponentBlocksBlogSection {
               id
               title
+              showComponent
             }
             ... on ComponentBlocksCollectionLinks {
               id
@@ -281,6 +297,7 @@ export const landingPage = gql`
                 text
                 slug
               }
+              showComponent
             }
             ... on ComponentBlocksFeaturedList {
               id
@@ -299,6 +316,7 @@ export const landingPage = gql`
                 text
               }
               isWebHorizontal
+              showComponent
             }
             ... on ComponentBlocksFeaturedProducts {
               id
@@ -313,7 +331,6 @@ export const landingPage = gql`
                 data {
                   attributes {
                     slug
-
                     promotionTag {
                       data {
                         id
@@ -341,6 +358,7 @@ export const landingPage = gql`
                   }
                 }
               }
+              showComponent
             }
             ... on ComponentBlocksFeaturedProductsByTab {
               id
@@ -393,10 +411,12 @@ export const landingPage = gql`
                   }
                 }
               }
+              showComponent
             }
             ... on ComponentBlocksInfoSection {
               id
               information
+              showComponent
             }
             ... on ComponentBlocksPdp {
               id
@@ -444,6 +464,7 @@ export const landingPage = gql`
                           }
                         }
                         description
+                        showComponent
                       }
                       ... on ComponentAccordionFaQsSection {
                         id
@@ -463,11 +484,12 @@ export const landingPage = gql`
                           question
                           answer
                         }
+                        showComponent
                       }
                       ... on ComponentAccordionIngredientsSection {
                         id
                         accordionIngredientsTitle: title
-                        image {
+                        accordionIngredientsImage: image {
                           data {
                             attributes {
                               alternativeText
@@ -495,6 +517,7 @@ export const landingPage = gql`
                             }
                           }
                         }
+                        showComponent
                       }
                       ... on ComponentAccordionUsageInstructionsSection {
                         id
@@ -513,6 +536,7 @@ export const landingPage = gql`
                           id
                           text
                         }
+                        showComponent
                       }
                       ... on ComponentBlocksFeaturedList {
                         id
@@ -531,6 +555,7 @@ export const landingPage = gql`
                             }
                           }
                         }
+                        showComponent
                       }
                       ... on ComponentBlocksUpsellProducts {
                         id
@@ -573,316 +598,13 @@ export const landingPage = gql`
                             }
                           }
                         }
+                        showComponent
                       }
                     }
                   }
                 }
               }
-            }
-            ... on ComponentBlocksTestimonialSection {
-              id
-              title
-              testimonials {
-                data {
-                  attributes {
-                    name
-                    age
-                    webImage {
-                      data {
-                        attributes {
-                          alternativeText
-                          url
-                          width
-                          height
-                        }
-                      }
-                    }
-                    mWebImage {
-                      data {
-                        attributes {
-                          alternativeText
-                          url
-                          width
-                          height
-                        }
-                      }
-                    }
-                    description
-                    concerns {
-                      id
-                      text
-                    }
-                    product {
-                      data {
-                        attributes {
-                          slug
-
-                          imageBgColor
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            ... on ComponentBlocksUpsellProducts {
-              id
-              title
-              upsellProductsBgColor: bgColor
-              upsellProductItems {
-                id
-                text
-                subText
-                product {
-                  data {
-                    attributes {
-                      slug
-
-                      promotionTag {
-                        data {
-                          id
-                          attributes {
-                            tag
-                            bgColor
-                          }
-                        }
-                      }
-                      productBenefitTags {
-                        data {
-                          id
-                          attributes {
-                            tag
-                            bgColor
-                          }
-                        }
-                      }
-                      imageBgColor
-                      offerTag {
-                        id
-                        showOfferTag
-                        bgColor
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            ... on ComponentBlocksVideoSection {
-              id
-              title
-              videoSectionBgColor: bgColor
-              videoSize: size
-              button {
-                id
-                text
-                link
-              }
-              videoItems {
-                id
-                video {
-                  data {
-                    attributes {
-                      alternativeText
-                      width
-                      height
-                      url
-                    }
-                  }
-                }
-                thumbnail {
-                  data {
-                    attributes {
-                      alternativeText
-                      url
-                      width
-                      height
-                    }
-                  }
-                }
-              }
-            }
-            ... on ComponentAccordionDescriptionSection {
-              id
-              accordionDescriptionTitle: title
-              image {
-                data {
-                  attributes {
-                    alternativeText
-                    url
-                    width
-                    height
-                  }
-                }
-              }
-              description
-            }
-            ... on ComponentAccordionFaQsSection {
-              id
-              accordionFAQsTitle: title
-              image {
-                data {
-                  attributes {
-                    alternativeText
-                    url
-                    width
-                    height
-                  }
-                }
-              }
-              FAQs {
-                id
-                question
-                answer
-              }
-            }
-            ... on ComponentAccordionIngredientsSection {
-              id
-              accordionIngredientsTitle: title
-              image {
-                data {
-                  attributes {
-                    alternativeText
-                    url
-                    width
-                    height
-                  }
-                }
-              }
-              ingredientItems: ingredients {
-                data {
-                  attributes {
-                    text
-                    subText
-                    image {
-                      data {
-                        attributes {
-                          alternativeText
-                          url
-                          height
-                          width
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            ... on ComponentAccordionUsageInstructionsSection {
-              id
-              accordionUsageInstructionsTitle: title
-              image {
-                data {
-                  attributes {
-                    alternativeText
-                    url
-                    width
-                    height
-                  }
-                }
-              }
-              usageInstructionItems {
-                id
-                text
-              }
-            }
-            ... on ComponentAccordionInfoDropdownSection {
-              id
-              accordionInfoDropdownTitle: title
-              accordionInfoDropdownBgColor: bgColor
-              information
-            }
-            ... on ComponentProductProductBenefits {
-              id
-              title
-              productBenefitsBgColor: bgColor
-              productBenefitItems {
-                id
-                text
-                subText
-                image {
-                  data {
-                    attributes {
-                      alternativeText
-                      url
-                      width
-                      height
-                    }
-                  }
-                }
-              }
-            }
-            ... on ComponentProductProductEffectivenessImages {
-              id
-              title
-              images {
-                id
-                image {
-                  data {
-                    attributes {
-                      alternativeText
-                      url
-                      width
-                      height
-                    }
-                  }
-                }
-              }
-            }
-            ... on ComponentProductProductHighlightImages {
-              id
-              images {
-                id
-                webImage {
-                  data {
-                    attributes {
-                      alternativeText
-                      url
-                      width
-                      height
-                    }
-                  }
-                }
-                mWebImage {
-                  data {
-                    attributes {
-                      alternativeText
-                      url
-                      width
-                      height
-                    }
-                  }
-                }
-              }
-            }
-            ... on ComponentProductProductKeyIngredientImages {
-              id
-              title
-              productProductKeyIngredientImagesBgColor: bgColor
-              secondaryIngredients {
-                id
-                title
-                image {
-                  data {
-                    attributes {
-                      alternativeText
-                      url
-                      width
-                      height
-                    }
-                  }
-                }
-              }
-            }
-            ... on ComponentProductProductReviews {
-              id
-              title
-              reviewProduct: product {
-                data {
-                  attributes {
-                    slug
-                  }
-                }
-              }
+              showComponent
             }
             ... on ComponentBlocksProductCollectionByTab {
               id
@@ -892,6 +614,7 @@ export const landingPage = gql`
                 id
                 tab {
                   data {
+                    id
                     attributes {
                       title
                     }
@@ -975,14 +698,364 @@ export const landingPage = gql`
                   bgColor
                 }
               }
-            }
-            ... on ComponentBlocksBreadcrumb {
-              id
-              breadcrumbTitle: title
+              showComponent
             }
             ... on ComponentBlocksRecentlyViewed {
               id
               recentlyViewedTitle: title
+              recentlyViewedBgColor: bgColor
+              showComponent
+            }
+            ... on ComponentBlocksTestimonialSection {
+              id
+              title
+              testimonials {
+                data {
+                  attributes {
+                    name
+                    age
+                    webImage {
+                      data {
+                        attributes {
+                          alternativeText
+                          url
+                          width
+                          height
+                        }
+                      }
+                    }
+                    mWebImage {
+                      data {
+                        attributes {
+                          alternativeText
+                          url
+                          width
+                          height
+                        }
+                      }
+                    }
+                    description
+                    concerns {
+                      id
+                      text
+                    }
+                    product {
+                      data {
+                        attributes {
+                          slug
+                          imageBgColor
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              showComponent
+            }
+            ... on ComponentBlocksUpsellProducts {
+              id
+              title
+              upsellProductsBgColor: bgColor
+              upsellProductItems {
+                id
+                text
+                subText
+                image {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      width
+                      height
+                    }
+                  }
+                }
+                product {
+                  data {
+                    attributes {
+                      slug
+                      promotionTag {
+                        data {
+                          id
+                          attributes {
+                            tag
+                            bgColor
+                          }
+                        }
+                      }
+                      productBenefitTags {
+                        data {
+                          id
+                          attributes {
+                            tag
+                            bgColor
+                          }
+                        }
+                      }
+                      imageBgColor
+                      offerTag {
+                        id
+                        showOfferTag
+                        bgColor
+                      }
+                    }
+                  }
+                }
+              }
+              showComponent
+            }
+            ... on ComponentBlocksVideoSection {
+              id
+              title
+              videoSectionBgColor: bgColor
+              videoSize: size
+              button {
+                id
+                text
+                link
+              }
+              videoItems {
+                id
+                video {
+                  data {
+                    attributes {
+                      alternativeText
+                      width
+                      height
+                      url
+                    }
+                  }
+                }
+                thumbnail {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      width
+                      height
+                    }
+                  }
+                }
+              }
+              showComponent
+            }
+            ... on ComponentAccordionDescriptionSection {
+              id
+              accordionDescriptionTitle: title
+              image {
+                data {
+                  attributes {
+                    alternativeText
+                    url
+                    width
+                    height
+                  }
+                }
+              }
+              description
+              showComponent
+            }
+            ... on ComponentAccordionFaQsSection {
+              id
+              accordionFAQsTitle: title
+              image {
+                data {
+                  attributes {
+                    alternativeText
+                    url
+                    width
+                    height
+                  }
+                }
+              }
+              FAQs {
+                id
+                question
+                answer
+              }
+              showComponent
+            }
+            ... on ComponentAccordionIngredientsSection {
+              id
+              accordionIngredientsTitle: title
+              accordionIngredientsImage: image {
+                data {
+                  attributes {
+                    alternativeText
+                    url
+                    width
+                    height
+                  }
+                }
+              }
+              ingredientItems: ingredients {
+                data {
+                  attributes {
+                    text
+                    subText
+                    image {
+                      data {
+                        attributes {
+                          alternativeText
+                          url
+                          height
+                          width
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              showComponent
+            }
+            ... on ComponentAccordionUsageInstructionsSection {
+              id
+              accordionUsageInstructionsTitle: title
+              image {
+                data {
+                  attributes {
+                    alternativeText
+                    url
+                    width
+                    height
+                  }
+                }
+              }
+              usageInstructionItems {
+                id
+                text
+              }
+              showComponent
+            }
+            ... on ComponentAccordionInfoDropdownSection {
+              id
+              accordionInfoDropdownTitle: title
+              accordionInfoDropdownBgColor: bgColor
+              information
+              showComponent
+            }
+            ... on ComponentProductProductBenefits {
+              id
+              title
+              productBenefitsBgColor: bgColor
+              productBenefitItems {
+                id
+                text
+                subText
+                image {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      width
+                      height
+                    }
+                  }
+                }
+              }
+              showComponent
+            }
+            ... on ComponentProductProductEffectivenessImages {
+              id
+              title
+              image {
+                data {
+                  attributes {
+                    alternativeText
+                    url
+                    width
+                    height
+                  }
+                }
+              }
+              EffectivenessChart {
+                id
+                text
+                number
+              }
+              showComponent
+            }
+            ... on ComponentProductProductHighlightImages {
+              id
+              title
+              images {
+                id
+                webImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      width
+                      height
+                    }
+                  }
+                }
+                mWebImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      width
+                      height
+                    }
+                  }
+                }
+              }
+              showComponent
+            }
+            ... on ComponentProductProductKeyIngredientImages {
+              id
+              title
+              productProductKeyIngredientImagesBgColor: bgColor
+              primaryIngredient {
+                webImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      width
+                      height
+                    }
+                  }
+                }
+                mWebImage {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      width
+                      height
+                    }
+                  }
+                }
+              }
+              secondaryIngredients {
+                id
+                title
+                image {
+                  data {
+                    attributes {
+                      alternativeText
+                      url
+                      width
+                      height
+                    }
+                  }
+                }
+              }
+              showComponent
+            }
+            ... on ComponentProductProductReviews {
+              id
+              title
+              reviewProduct: product {
+                data {
+                  attributes {
+                    slug
+                  }
+                }
+              }
+              showComponent
             }
           }
         }

@@ -10,8 +10,6 @@ import RatingBar from "@/components/blocks/Product/ProductReviews/RatingBar";
 const Reviews = ({ title, reviews }) => {
   const [reviewLoading, setReviewLoading] = useState(true);
 
-  console.log(reviews, "reviews");
-
   // return null;
   const product = productData[1];
 

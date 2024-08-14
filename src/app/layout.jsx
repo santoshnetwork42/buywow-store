@@ -1,19 +1,22 @@
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
+import ToastComponent from "@/components/common/ToastComponent";
+import CartDrawer from "@/components/partials/CartDrawer";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
-import { getNavbarAndFooterAPI } from "@/lib/appSyncAPIs";
+import { AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
+import {
+  getCartUpsellProductsAPI,
+  getNavbarAndFooterAPI,
+} from "@/lib/appSyncAPIs";
 import { Provider } from "@/store/Provider";
 import "@/styles/font.css";
 import "@/styles/index.css";
 import "@/styles/tailwind.css";
+import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
+import GoKwikProvider from "@/utils/context/gokwik";
 import NavbarProvider from "@/utils/context/navbar";
 import { Amplify } from "aws-amplify";
-import { unstable_cache } from "next/cache";
 import awsExport from "../../aws-exports";
-import { AWS_CLIENT_ID } from "@/config";
-import CartDrawer from "@/components/partials/CartDrawer";
-import ToastComponent from "@/components/common/ToastComponent";
-import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 
 Amplify.configure({
   ...awsExport,
@@ -24,12 +27,13 @@ Amplify.configure({
 // const getNavbarAndFooter = unstable_cache(
 //   getNavbarAndFooterAPI,
 //   ["navbar", "footer"],
-//   { revalidate: 1 },
+//   { revalidate: 1800 },
 // );
 
 async function RootLayout({ children }) {
   // const { data } = (await getNavbarAndFooter()) || {};
   const { data } = await getNavbarAndFooterAPI();
+  const upsellProducts = await getCartUpsellProductsAPI();
   const {
     announcementBar: announcementData = {},
     navbar: headerData = {},
@@ -44,20 +48,23 @@ async function RootLayout({ children }) {
         <meta name="theme-color" content="#000000" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
+        {!!GOKWIK_SCRIPT && <script defer src={GOKWIK_SCRIPT} />}
       </head>
       <body>
         <Provider>
           <NavbarProvider ignoreLazyLoadNavbar={false}>
-            <AnnouncementProvider>
-              <div className="flex min-h-dvh w-full flex-col bg-white-a700">
-                <AnnouncementBar data={announcementData} />
-                {headerData?.data && <Header data={headerData} />}
-                <CartDrawer />
-                <ToastComponent />
-                <div className="flex-1">{children}</div>
-                {footerData?.data && <Footer data={footerData} />}
-              </div>
-            </AnnouncementProvider>
+            <GoKwikProvider>
+              <AnnouncementProvider>
+                <div className="flex min-h-dvh w-full flex-col bg-white-a700">
+                  <AnnouncementBar data={announcementData} />
+                  {headerData?.data && <Header data={headerData} />}
+                  <CartDrawer upsellProducts={upsellProducts} />
+                  <ToastComponent />
+                  <div className="flex-1">{children}</div>
+                  {footerData?.data && <Footer data={footerData} />}
+                </div>
+              </AnnouncementProvider>
+            </GoKwikProvider>
           </NavbarProvider>
         </Provider>
       </body>

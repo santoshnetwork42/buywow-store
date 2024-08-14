@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
 import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Button, Input, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
@@ -16,7 +16,11 @@ import {
 import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 import { userSagaActions } from "@/store/sagas/sagaActions/user.actions";
-import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
+import {
+  addPhonePrefix,
+  isPhoneNumberValid,
+  validatePhoneNumber,
+} from "@/utils/helpers";
 
 const PasswordLess = ({ enableOutsideClick = true }) => {
   const dispatch = useDispatch();
@@ -107,7 +111,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     }));
   };
 
-  const isPhoneValid = validatePhoneNumber(authData.phone);
+  const isPhoneValid = isPhoneNumberValid(authData.phone);
 
   const setAuthLoader = (isLoading) => {
     dispatch({
@@ -259,9 +263,10 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         value={authData.phone}
         onBlur={(e) => {
           const newState = e.target.value.trim();
+          const res = validatePhoneNumber(newState);
           setAuthErrors({
             ...authErrors,
-            phone: validatePhoneNumber(newState) ? "" : "Invalid Phone",
+            phone: res.error ? res.message : null,
           });
         }}
         error={authErrors.phone}

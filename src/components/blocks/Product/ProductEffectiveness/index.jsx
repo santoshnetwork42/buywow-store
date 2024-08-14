@@ -1,9 +1,9 @@
-import React from "react";
-import { Img } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
+import { Img } from "@/components/elements";
+import ProductEffectivenessChart from "@/components/partials/Product/ProductEffectivenessChart";
 import { extractAttributes } from "@/utils/helpers";
 
-const ProductEffectiveness = ({ title, images }) => {
+const ProductEffectiveness = ({ title, images, EffectivenessChart }) => {
   if (!Array.isArray(images) || images.length === 0) return null;
 
   return (
@@ -16,7 +16,7 @@ const ProductEffectiveness = ({ title, images }) => {
           return (
             <div
               key={`effectiveness-image-${index}`}
-              className="aspect-[600/376] w-full overflow-hidden rounded-lg"
+              className="aspect-[450/344] w-full overflow-hidden rounded-lg md:max-w-[48%]"
             >
               <Img
                 src={url}
@@ -31,6 +31,7 @@ const ProductEffectiveness = ({ title, images }) => {
             </div>
           );
         })}
+        <ProductEffectivenessChart EffectivenessChart={EffectivenessChart} />
       </div>
     </div>
   );

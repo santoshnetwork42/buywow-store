@@ -65,7 +65,7 @@ const SliderControl = React.memo(
       ) : (
         <>
           <ProgressBar style={progressBarStyle} />
-          <div className="relative m-auto mx-4 flex sm:mx-8 md:mx-12 lg:mx-16 xl:mx-20">
+          <div className="relative m-auto ml-4 flex sm:ml-8 md:ml-12 lg:ml-16 xl:ml-20">
             <div className="flex w-full items-center justify-center gap-2 sm:gap-3 lg:gap-4 xl:gap-5">
               {showCounter && <Counter text={counterText} />}
               {showControls && (

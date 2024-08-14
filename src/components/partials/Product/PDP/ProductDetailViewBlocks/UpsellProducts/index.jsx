@@ -1,4 +1,6 @@
-import React, { useMemo } from "react";
+"use client";
+
+import React, { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Button, Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
@@ -10,6 +12,7 @@ import {
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import AddToCart from "@/components/common/AddToCart";
 import { useProduct, useProductVariantGroups } from "@wow-star/utils";
+import { twMerge } from "tailwind-merge";
 
 const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   const { fetchedProduct, imageBgColor, slug } = extractAttributes(product);
@@ -91,11 +94,15 @@ const UpsellProducts = ({
   title,
   upsellProductsBgColor,
   upsellProductItems,
+  endTime,
+  isCartUpsell,
 }) => {
+  const [timeLeft, setTimeLeft] = useState("");
+
   const bgColorClass = useMemo(() => {
     switch (upsellProductsBgColor) {
       case "LIME":
-        return "bg-gray-50";
+        return isCartUpsell ? "bg-lime-50" : "bg-gray-50";
       case "BLUE":
         return "bg-blue-50";
       default:
@@ -117,17 +124,72 @@ const UpsellProducts = ({
     }
   }, [upsellProductsBgColor]);
 
+  useEffect(() => {
+    if (!endTime) return;
+
+    const parseTime = (timeString) => {
+      const [hours, minutes, seconds] = timeString.split(":").map(Number);
+      return hours * 3600 + minutes * 60 + Math.floor(seconds);
+    };
+
+    let secondsLeft = parseTime(endTime);
+
+    const calculateTimeLeft = () => {
+      if (secondsLeft > 0) {
+        const hours = Math.floor(secondsLeft / 3600);
+        const minutes = Math.floor((secondsLeft % 3600) / 60);
+        const seconds = secondsLeft % 60;
+        return `${hours.toString().padStart(2, "0")}h : ${minutes.toString().padStart(2, "0")}m : ${seconds.toString().padStart(2, "0")}s`;
+      }
+      return "";
+    };
+
+    setTimeLeft(calculateTimeLeft());
+
+    const timer = setInterval(() => {
+      secondsLeft -= 1;
+      setTimeLeft(calculateTimeLeft());
+      if (secondsLeft <= 0) {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [endTime]);
+
   if (!Array.isArray(upsellProductItems) || upsellProductItems.length === 0)
     return null;
 
+  if (isCartUpsell && !timeLeft) return null;
+
   return (
     <div
-      className={`mb-6 flex flex-col justify-center gap-3 px-3 max-sm:[clipPath:inset(0_-100vmax)] sm:rounded-lg md:mb-7 md:px-4 ${shadowClass} ${bgColorClass} ${isPaddedColor ? "py-3" : ""}`}
+      className={twMerge(
+        "mb-6 flex flex-col justify-center gap-3 px-3 max-sm:[clipPath:inset(0_-100vmax)] sm:rounded-lg md:mb-7 md:px-4",
+        shadowClass,
+        bgColorClass,
+        isPaddedColor ? "py-3" : "",
+        isCartUpsell && "rounded-lg",
+      )}
     >
-      <Heading size="lg" as="h4" className="line-clamp-1">
-        {title}
+      <Heading
+        size={isCartUpsell ? "base" : "lg"}
+        as="h4"
+        className={twMerge(
+          "line-clamp-2 w-fit",
+          isCartUpsell ? "text-sm" : "text-base",
+        )}
+        responsive
+      >
+        <span>{title}</span>
+        {timeLeft && (
+          <span className="ml-0.5 text-sm font-bold text-yellow-900 lg:text-base">
+            {" "}
+            {timeLeft}
+          </span>
+        )}
       </Heading>
-      <Slider sliderClassName="gap-2 lg:gap-3">
+      <Slider sliderClassName="gap-2 lg:gap-3 lg:mb-4">
         {upsellProductItems.map((item, index) => (
           <UpsellProduct key={`product-${index}`} {...item} index={index} />
         ))}

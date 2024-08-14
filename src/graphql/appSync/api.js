@@ -1,6 +1,18 @@
 // ==================================================
 // NEW APIs
 
+export const getCartUpsellProducts = /* GraphQL */ `
+  query getCartUpsellProducts($storeId: String!) {
+    getCartUpsellProducts(storeId: $storeId)
+  }
+`;
+
+export const getCMSPages = /* GraphQL */ `
+  query getCMSPages($storeId: String!) {
+    getCMSPages(storeId: $storeId)
+  }
+`;
+
 export const searchCMSCollectionProducts = /* GraphQL */ `
   query searchCMSCollectionProducts(
     $storeId: String!
@@ -2775,6 +2787,15 @@ export const verifyCustomOTP = /* GraphQL */ `
   query VerifyCustomOTP($storeId: ID!, $phone: AWSPhone!, $otp: String!) {
     verifyCustomOTP(storeId: $storeId, phone: $phone, otp: $otp) {
       isVerified
+    }
+  }
+`;
+
+export const getUserRewards = /* GraphQL */ `
+  query GetUser($storeId: ID) {
+    getUser(storeId: $storeId) {
+      id
+      totalRewards
     }
   }
 `;

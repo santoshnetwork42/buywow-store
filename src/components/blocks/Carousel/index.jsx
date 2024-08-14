@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useCallback, useMemo, useState, useEffect } from "react";
 import { Button, Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
-import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import useEmblaCarousel from "embla-carousel-react";
 import Link from "next/link";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
   const webImageAttrs = extractAttributes(webImage);
@@ -57,7 +57,6 @@ const Carousel = ({
   autoPlayInterval = 3000,
   stopOnInteraction = false,
   carousalItems: banners,
-  ...props
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -106,10 +105,7 @@ const Carousel = ({
   if (!banners?.length) return null;
 
   return (
-    <div
-      className={`relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8 ${props.className}`}
-      {...props}
-    >
+    <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">{carouselImages}</div>
       </div>

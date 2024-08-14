@@ -1,17 +1,18 @@
 "use client";
 
-import React, { useCallback } from "react";
-import { useGuestCheckout, useNavBarState } from "@/utils/context/navbar";
-import { useCartTotal, useConfiguration } from "@wow-star/utils";
-import { GOKWIK_ENABLED, PREPAID_ENABLED } from "@/utils/data/constants";
-import { useRouter } from "next/navigation";
-import { GOKWIK_MID, STORE_PREFIX } from "@/config";
-import { useSelector } from "react-redux";
-import { Button, Heading, Text } from "@/components/elements";
-import { toDecimal } from "@/utils/helpers";
+import SummaryItem from "@/components/common/CheckoutSummaryItem";
 import { showToast } from "@/components/common/ToastComponent";
-import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { Button, Heading, Text } from "@/components/elements";
+import { GOKWIK_MID, STORE_PREFIX } from "@/config";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { useGuestCheckout, useNavBarState } from "@/utils/context/navbar";
+import { GOKWIK_ENABLED, PREPAID_ENABLED } from "@/utils/data/constants";
+import { toDecimal } from "@/utils/helpers";
+import { useCartTotal, useConfiguration } from "@wow-star/utils";
+import { useRouter } from "next/navigation";
+import React, { useCallback } from "react";
+import { useSelector } from "react-redux";
 
 const CheckoutSummary = React.memo(({ inventory }) => {
   const router = useRouter();
@@ -21,14 +22,21 @@ const CheckoutSummary = React.memo(({ inventory }) => {
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
 
-  const { appliedCoupon, shoppingCartId, user, customUser, cartList } =
-    useSelector((state) => ({
-      appliedCoupon: state?.cart?.coupon,
-      shoppingCartId: state?.cart?.cartId,
-      user: state?.user?.user,
-      customUser: state?.customUser,
-      cartList: state?.cart?.data,
-    }));
+  const {
+    appliedCoupon,
+    shoppingCartId,
+    user,
+    customUser,
+    cartList,
+    isShoppingCartIdLoading,
+  } = useSelector((state) => ({
+    appliedCoupon: state?.cart?.coupon,
+    shoppingCartId: state?.cart?.cartId,
+    isShoppingCartIdLoading: state?.cart?.isShoppingCartIdLoading,
+    user: state?.user?.user,
+    customUser: state?.customUser,
+    cartList: state?.cart?.data,
+  }));
 
   const {
     totalListingPrice,
@@ -72,19 +80,20 @@ const CheckoutSummary = React.memo(({ inventory }) => {
 
     if (isGKCXEnabled) {
       try {
-        // gokwikSdk.initCheckout({
-        //   environment: "sandbox",
-        //   type: "merchantInfo",
-        //   mid: GOKWIK_MID,
-        //   merchantParams: {
-        //     merchantCheckoutId: cartId,
-        //     customerToken: user?.id || "",
-        //   },
-        // });
+        gokwikSdk.initCheckout({
+          environment: "sandbox",
+          type: "merchantInfo",
+          mid: GOKWIK_MID,
+          merchantParams: {
+            merchantCheckoutId: cartId,
+            customerToken: user?.id || "",
+          },
+        });
 
         handleProceedToCheckout("GOKWIK");
         return Promise.resolve(true);
       } catch (e) {
+        console.log(e);
         // await gokwikSdk.close();
         // errorHandler(e);
         router.push("/checkout");
@@ -239,37 +248,7 @@ const PaymentSummary = React.memo(
   },
 );
 
-const SummaryItem = React.memo(
-  ({ label, value, originalValue, color = "text-black-600" }) => (
-    <div className="flex items-center justify-between">
-      <Text size="lg" as="p" className="capitalize" responsive>
-        {label}
-      </Text>
-      <div className="flex items-center gap-1.5">
-        {!!originalValue && originalValue !== value && (
-          <Text
-            size="sm"
-            as="p"
-            className="text-[#AAAAAA] line-through"
-            responsive
-          >
-            ₹{toDecimal(originalValue)}
-          </Text>
-        )}
-        <Text size="lg" as="p" className={color} responsive>
-          {typeof value === "number"
-            ? value < 0
-              ? `-₹${toDecimal(Math.abs(value))}`
-              : `₹${toDecimal(value)}`
-            : value}
-        </Text>
-      </div>
-    </div>
-  ),
-);
-
 CheckoutSummary.displayName = "CheckoutSummary";
 PaymentSummary.displayName = "PaymentSummary";
-SummaryItem.displayName = "SummaryItem";
 
 export default CheckoutSummary;

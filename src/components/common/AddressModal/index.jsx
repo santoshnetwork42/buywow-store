@@ -66,23 +66,39 @@ const AddressModal = ({
   };
 
   const checkFormValidity = () => {
-    const validPinCode = address?.pinCode?.length === 6;
-    const cityError = address?.city?.length > 0;
-    const stateError = address?.state?.length > 0;
-    const validPhone = address?.phone?.length === 10;
-    const addressError = address?.address?.length > 0;
-    const emailError = isEmailValid(address?.email);
-    const nameError = address?.name?.length > 0;
+    const fields = [
+      { key: "pinCode", validate: validatePinCode },
+      { key: "city", validate: validateString },
+      { key: "state", validate: validateString },
+      { key: "phone", validate: validatePhoneNumber },
+      { key: "name", validate: validateString },
+      { key: "email", validate: validateEmail },
+      { key: "address", validate: validateString },
+    ];
 
-    return (
-      validPinCode &&
-      cityError &&
-      stateError &&
-      validPhone &&
-      addressError &&
-      emailError &&
-      nameError
-    );
+    let hasError = false;
+    const newErrors = {};
+
+    for (const field of fields) {
+      const result = field.validate(address[field.key]);
+      if (result?.error) {
+        newErrors[field.key] = result.message;
+        if (!hasError) {
+          hasError = true;
+          setAddressErrors((prevErrors) => ({
+            ...prevErrors,
+            [field.key]: result.message,
+          }));
+          return;
+        }
+      }
+    }
+
+    if (!hasError) {
+      setAddressErrors({});
+    }
+
+    return !hasError;
   };
 
   const handleAddressSubmit = async (e) => {
@@ -120,6 +136,27 @@ const AddressModal = ({
     }
   };
 
+  const handleInputChange = (field) => (e) => {
+    let value = e.target.value;
+
+    if (field === "pinCode" || field === "phone") {
+      value = value.replaceAll(/[^0-9]+/g, "").trim();
+    } else {
+      value = value.trim();
+    }
+
+    setAddress({ ...address, [field]: value });
+  };
+
+  const handleInputBlur = (field, validationFunction) => (e) => {
+    const value = e.target.value.trim();
+    const res = validationFunction(value);
+    setAddressErrors({
+      ...addressErrors,
+      [field]: res?.error ? res?.message : null,
+    });
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -133,150 +170,91 @@ const AddressModal = ({
           <div className="flex flex-col gap-4">
             <Input
               type="text"
-              value={address.pinCode}
-              onChange={(e) => {
-                const newPinCode = (e.target.value || "")
-                  .replaceAll(/[^0-9]+/g, "")
-                  .trim();
-                setAddress({ ...address, pinCode: newPinCode });
-              }}
-              onBlur={(e) => {
-                const newPinCode = (e.target.value || "")
-                  .replaceAll(/[^0-9]+/g, "")
-                  .trim();
-                setAddressErrors({
-                  ...addressErrors,
-                  pinCode: validatePinCode(newPinCode),
-                });
-              }}
+              value={address?.pinCode}
+              maxLength={6}
+              onChange={handleInputChange("pinCode")}
+              onBlur={handleInputBlur("pinCode", validatePinCode)}
               required
               className="gap-1 border p-2"
-              error={addressErrors.pinCode}
+              error={addressErrors?.pinCode}
               label="PinCode"
             />
+
             <div className="flex gap-3">
               <Input
                 type="text"
-                value={address.city}
-                onChange={(e) => {
-                  setAddress({ ...address, city: e.target.value.trim() });
-                }}
-                onBlur={(e) => {
-                  const newCity = e.target.value.trim();
-                  setAddressErrors({
-                    ...addressErrors,
-                    city: validateString(newCity),
-                  });
-                }}
-                label="City"
+                value={address?.city}
+                onChange={handleInputChange("city")}
+                onBlur={handleInputBlur("city", validateString)}
                 required
                 className="w-full gap-1 border p-2"
-                error={addressErrors.city}
+                error={addressErrors?.city}
+                label="City"
+                maxLength={20}
               />
 
               <Input
                 type="text"
-                value={address.state}
-                onChange={(e) =>
-                  setAddress({ ...address, state: e.target.value.trim() })
-                }
-                onBlur={(e) => {
-                  const newState = e.target.value.trim();
-                  setAddressErrors({
-                    ...addressErrors,
-                    state: validateString(newState),
-                  });
-                }}
-                label="State"
+                value={address?.state}
+                onChange={handleInputChange("state")}
+                onBlur={handleInputBlur("state", validateString)}
                 required
                 className="w-full gap-1 border p-2"
-                error={addressErrors.state}
+                error={addressErrors?.state}
+                label="State"
+                maxLength={20}
               />
             </div>
 
             <div className="flex gap-3">
               <Input
                 type="tel"
-                value={address.phone}
+                value={address?.phone}
                 maxLength={10}
-                onChange={(e) =>
-                  setAddress({
-                    ...address,
-                    phone: (e.target.value || "")
-                      .replaceAll(/[^0-9]+/g, "")
-                      .trim(),
-                  })
-                }
-                onBlur={(e) => {
-                  const newState = e.target.value.trim();
-                  setAddressErrors({
-                    ...addressErrors,
-                    phone: validatePhoneNumber(newState) ? "" : "Invalid Phone",
-                  });
-                }}
+                onChange={handleInputChange("phone")}
+                onBlur={handleInputBlur("phone", validatePhoneNumber)}
                 label="Phone"
                 prefix="+91"
                 required
                 className="flex w-full gap-1 border p-2"
-                error={addressErrors.phone}
+                error={addressErrors?.phone}
               />
 
               <Input
                 type="text"
-                value={address.name}
-                onChange={(e) =>
-                  setAddress({ ...address, name: e.target.value })
-                }
-                onBlur={(e) => {
-                  const newState = e.target.value.trim();
-                  setAddressErrors({
-                    ...addressErrors,
-                    name: validateString(newState),
-                  });
-                }}
-                label="Full Name"
+                value={address?.name}
+                onChange={handleInputChange("name")}
+                onBlur={handleInputBlur("name", validateString)}
                 required
                 className="w-full gap-1 border p-2"
-                error={addressErrors.name}
+                error={addressErrors?.name}
+                label="Full Name"
+                maxLength={30}
               />
             </div>
 
             <div className="flex flex-col gap-4">
               <Input
                 type="email"
-                value={address.email}
-                onChange={(e) =>
-                  setAddress({ ...address, email: e.target.value.trim() })
-                }
-                onBlur={(e) => {
-                  const newState = e.target.value.trim();
-                  setAddressErrors({
-                    ...addressErrors,
-                    email: validateEmail(newState),
-                  });
-                }}
-                label="Email"
+                value={address?.email}
+                onChange={handleInputChange("email")}
+                onBlur={handleInputBlur("email", validateEmail)}
                 required
                 className="gap-1 border p-2"
-                error={addressErrors.email}
+                error={addressErrors?.email}
+                label="Email"
+                maxLength={20}
               />
+
               <Textarea
-                value={address.address}
-                onChange={(e) =>
-                  setAddress({ ...address, address: e.target.value })
-                }
-                onBlur={(e) => {
-                  const newState = e.target.value.trim();
-                  setAddressErrors({
-                    ...addressErrors,
-                    address: validateString(newState),
-                  });
-                }}
+                value={address?.address}
+                onChange={handleInputChange("address")}
+                onBlur={handleInputBlur("address", validateString)}
                 label="Street Address"
                 required
                 className="gap-1 border"
                 textareaClassName="border-0 resize-none"
-                error={addressErrors.address}
+                error={addressErrors?.address}
                 rows={4}
               />
             </div>

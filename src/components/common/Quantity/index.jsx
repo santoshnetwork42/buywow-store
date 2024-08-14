@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Text } from "@/components/elements";
 import { twMerge } from "tailwind-merge";
+import { showToast } from "../ToastComponent";
 
 const Quantity = ({
   max,
@@ -33,20 +34,25 @@ const Quantity = ({
     if (!product?.isInventoryEnabled || quantity < max) {
       if (quantity < maximumOrderQuantity) {
         if (totalItemQuantity && totalItemQuantity >= maximumOrderQuantity) {
-          alert("Maximum order quantity reached");
+          showToast.custom(
+            `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
+          );
         } else {
           const newQuantity = quantity + 1;
           setCartQuantity(newQuantity);
           onChangeQuantity(newQuantity);
         }
       } else {
-        alert("Maximum order quantity reached");
+        showToast.custom(
+          `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
+        );
       }
     } else {
-      alert("Maximum order quantity reached");
+      showToast.custom(
+        `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
+      );
     }
   };
-
   const buttonClassName =
     "h-full rounded-none bg-lime-50 text-black-900 md:text-lg";
 

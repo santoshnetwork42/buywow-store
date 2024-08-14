@@ -1,21 +1,21 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
-import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
-import { Heading } from "@/components/elements";
-import ProductCard from "@/components/partials/Card/ProductCard";
 import SortDropdown from "@/components/common/SortDropdown";
-import BlogCard from "@/components/partials/Card/BlogCard";
-import Slider from "@/components/features/Slider";
-import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
-import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
+import { Heading } from "@/components/elements";
 import InfiniteScroll from "@/components/features/InfiniteScroll";
+import Slider from "@/components/features/Slider";
+import BlogCard from "@/components/partials/Card/BlogCard";
+import ProductCard from "@/components/partials/Card/ProductCard";
+import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
+import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 const SORT_OPTIONS = [
   { value: "RECOMMENDED", label: "Recommended" },
@@ -53,6 +53,8 @@ const HorizontalBlogSection = React.memo(
   ),
 );
 
+HorizontalBlogSection.displayName = "HorizontalBlogSection";
+
 const ProductCollectionByTab = ({
   title,
   defaultCollectionSorting = "RECOMMENDED",
@@ -79,7 +81,6 @@ const ProductCollectionByTab = ({
     async (newSortOption) => {
       setIsLoading(true);
       const activeTab = productCollectionTabItems[activeTabIndex];
-      const pageSize = activeTab?.pagination?.pageSize ?? 10;
 
       try {
         setProductCollectionTabItems((prevItems) =>
@@ -94,7 +95,7 @@ const ProductCollectionByTab = ({
           tabSelected: activeTab?.tab?.data?.id,
           defaultSorting: newSortOption.value,
           page: 1,
-          limit: pageSize,
+          limit: activeTab?.pagination?.pageSize ?? 10,
         });
 
         const newProducts = response?.items?.data ?? [];
@@ -125,10 +126,13 @@ const ProductCollectionByTab = ({
     [activeTabIndex, productCollectionTabItems, slug],
   );
 
-  const handleSortChange = useCallback((option) => {
-    setSortOption(option);
-    reloadProducts(option);
-  }, []);
+  const handleSortChange = useCallback(
+    (option) => {
+      setSortOption(option);
+      reloadProducts(option);
+    },
+    [reloadProducts],
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -151,7 +155,6 @@ const ProductCollectionByTab = ({
     setIsLoading(true);
     const nextPage = currentPage + 1;
     const activeTab = productCollectionTabItems[activeTabIndex];
-    const pageSize = activeTab?.pagination?.pageSize ?? 10;
 
     try {
       const response = await searchCMSCollectionProductsAPI({
@@ -159,7 +162,7 @@ const ProductCollectionByTab = ({
         tabSelected: activeTab?.tab?.data?.id,
         defaultSorting: sortOption.value,
         page: nextPage,
-        limit: pageSize,
+        limit: activeTab?.pagination?.pageSize ?? 10,
       });
 
       const newProducts = response?.items?.data ?? [];
@@ -243,6 +246,35 @@ const ProductCollectionByTab = ({
     );
   }, [productCollectionTabItems]);
 
+  const renderProductsAndSkeletons = useCallback(
+    (category) => {
+      const currentProducts = category.products?.data || [];
+      const totalProducts = category.pagination?.totalData || 0;
+      const pageSize = category.pagination?.pageSize || 10;
+      const remainingProducts = Math.min(
+        totalProducts - currentProducts.length,
+        pageSize,
+      );
+      const skeletonCount = isLoading ? remainingProducts : 0;
+
+      return [
+        ...currentProducts.map((product, productIndex) => (
+          <ProductCard
+            className="h-auto bg-white-a700_01"
+            key={`product-${productIndex}`}
+            {...product.attributes}
+          />
+        )),
+        ...Array.from({ length: skeletonCount }).map((_, index) => (
+          <ProductCardSkeleton
+            key={`skeleton-${currentProducts.length + index}`}
+          />
+        )),
+      ];
+    },
+    [isLoading],
+  );
+
   if (!productCollectionTabItems?.length) return null;
 
   return (
@@ -282,31 +314,7 @@ const ProductCollectionByTab = ({
               rootMargin="500px"
             >
               <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
-                {(() => {
-                  const currentProducts = category.products?.data || [];
-                  const totalProducts = category.pagination?.totalData || 0;
-                  const pageSize = category.pagination?.pageSize ?? 10;
-                  const remainingProducts = Math.min(
-                    totalProducts - currentProducts.length,
-                    pageSize,
-                  );
-                  const skeletonCount = isLoading ? remainingProducts : 0;
-
-                  return [
-                    ...currentProducts.map((product, productIndex) => (
-                      <ProductCard
-                        className="h-auto bg-white-a700_01"
-                        key={`product-${productIndex}`}
-                        {...product.attributes}
-                      />
-                    )),
-                    ...Array.from({ length: skeletonCount }).map((_, index) => (
-                      <ProductCardSkeleton
-                        key={`skeleton-${currentProducts.length + index}`}
-                      />
-                    )),
-                  ];
-                })()}
+                {renderProductsAndSkeletons(category)}
                 {verticalBlogSection?.verticalBlogItem && (
                   <BlogCard
                     cardData={verticalBlogSection.verticalBlogItem}

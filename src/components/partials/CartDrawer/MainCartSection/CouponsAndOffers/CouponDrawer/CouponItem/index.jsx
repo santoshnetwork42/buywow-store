@@ -1,5 +1,6 @@
-import React from "react";
 import { Button, Heading, Text } from "@/components/elements";
+import Accordion from "@/components/features/Accordion";
+import React from "react";
 
 const CouponItem = ({
   title,
@@ -19,17 +20,33 @@ const CouponItem = ({
   );
 
   return (
-    <div
-      className={`flex flex-col gap-3 rounded-lg px-4 py-3 ${
-        isApplied ? "border-2 border-green-500 bg-green-100" : "bg-pink-200"
-      }`}
-    >
-      <div className="flex flex-col gap-1">
-        {!!title && (
-          <Heading as="h3" size="lg">
-            {title}
-          </Heading>
-        )}
+    <div className="flex flex-col rounded-lg border-[0.5px] border-[#1F1F1F]">
+      <div className="flex flex-col gap-1.5 p-3">
+        <div className="flex gap-4">
+          <div className="flex flex-1 flex-col gap-1.5">
+            {!title && (
+              <Heading as="h4" size="lg">
+                {title}
+                Get 25% Off | Save ₹323
+              </Heading>
+            )}
+            {!!exclusions && (
+              <Text as="p" size="sm" className="font-semibold text-yellow-900">
+                {exclusions}
+                {showAsterisk && "*"}
+              </Text>
+            )}
+          </div>
+          <Button
+            variant="primary"
+            size="small"
+            className={`h-fit overflow-visible px-3 py-1.5 ${isApplied ? "bg-gray-400" : "bg-yellow-900"}`}
+            onClick={isApplied ? removeCoupon : () => applyCoupon(coupon.code)}
+            disabled={!allowed || loading}
+          >
+            {isApplied ? "Remove" : "Apply"}
+          </Button>
+        </div>
         {!!coupon.couponNote && (
           <Text
             as="p"
@@ -38,37 +55,37 @@ const CouponItem = ({
             className="inline-html-content"
           />
         )}
-        {!!exclusions && (
-          <Text as="p" size="sm" className={`${!allowed && "text-red-600"}`}>
-            {exclusions}
-            {showAsterisk && "*"}
-          </Text>
-        )}
       </div>
-      <div className="flex items-center justify-between">
+      <div className="relative mt-1 border-b-[1px] border-dotted border-[#1F1F1F] before:absolute before:left-0 before:size-[18px] before:-translate-x-1/2 before:-translate-y-1/2 before:rotate-45 before:rounded-full before:border-[0.5px] before:border-transparent before:border-r-[#1F1F1F] before:border-t-[#1F1F1F] before:bg-white-a700 after:absolute after:right-0 after:size-[18px] after:-translate-y-1/2 after:translate-x-1/2 after:rotate-[225deg] after:rounded-full after:border-[0.5px] after:border-transparent after:border-r-[#1F1F1F] after:border-t-[#1F1F1F] after:bg-white-a700" />
+      <div className="flex justify-between px-3 py-2">
+        <Accordion
+          className="border-b-0"
+          accordionButtonClassName="py-1 gap-2 w-fit"
+          variant="small"
+          title={
+            <Text as="span" size="sm" className="underline">
+              {" "}
+              View details{" "}
+            </Text>
+          }
+        >
+          <ul className="list-inside list-disc">
+            <Text as="li" size="sm">
+              Only valid on prepaid orders
+            </Text>
+            <Text as="li" size="sm">
+              Other T&amp;C may apply
+            </Text>
+          </ul>
+        </Accordion>
         <Heading
           as="h5"
           size="sm"
-          className={`rounded-full border-[1.5px] border-dashed ${
-            isApplied
-              ? "border-green-700 bg-green-50"
-              : "border-yellow-900 bg-white-a700"
-          } px-2.5 py-1`}
+          className={`h-fit rounded border-[1.5px] border-dashed border-blue-300 bg-blue-300/15 px-3 py-1.5`}
         >
           {coupon.code}
         </Heading>
-        <Button
-          variant={isApplied ? "secondary" : "primary"}
-          size="small"
-          onClick={isApplied ? removeCoupon : () => applyCoupon(coupon.code)}
-          disabled={!allowed || loading}
-        >
-          {isApplied ? "REMOVE" : "Apply"}
-        </Button>
       </div>
-      <Text as="p" size="xs">
-        *Other T&C May Apply
-      </Text>
     </div>
   );
 };
