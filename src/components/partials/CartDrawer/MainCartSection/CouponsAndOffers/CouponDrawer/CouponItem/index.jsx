@@ -31,7 +31,7 @@ const CouponItem = ({
               </Heading>
             )}
             {!!exclusions && (
-              <Text as="p" size="sm" className="font-semibold text-yellow-900">
+              <Text as="p" size="sm" className="font-medium text-yellow-900">
                 {exclusions}
                 {showAsterisk && "*"}
               </Text>
@@ -40,7 +40,7 @@ const CouponItem = ({
           <Button
             variant="primary"
             size="small"
-            className={`h-fit overflow-visible px-3 py-1.5 ${isApplied ? "bg-gray-400" : "bg-yellow-900"}`}
+            className={`h-fit overflow-visible px-3 py-1.5 ${isApplied ? "bg-transparent uppercase text-black-900" : "bg-yellow-900"}`}
             onClick={isApplied ? removeCoupon : () => applyCoupon(coupon.code)}
             disabled={!allowed || loading}
           >
@@ -81,7 +81,7 @@ const CouponItem = ({
         <Heading
           as="h5"
           size="sm"
-          className={`h-fit rounded border-[1.5px] border-dashed border-blue-300 bg-blue-300/15 px-3 py-1.5`}
+          className={`h-fit rounded-md border-[1.5px] border-dashed border-blue-300 bg-blue-300/15 px-3 py-1.5`}
         >
           {coupon.code}
         </Heading>

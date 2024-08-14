@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
-import { Heading, Text, Img } from "@/components/elements";
+import { Heading, Img, Text } from "@/components/elements";
 import FooterMenu from "@/components/partials/Footer/FooterMenu";
-import Link from "next/link";
-import { extractAttributes } from "@/utils/helpers";
-import { usePathname } from "next/navigation";
 import { RESTRICT_FOOTER_TO_SHOW } from "@/utils/data/constants";
+import { extractAttributes } from "@/utils/helpers";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React, { useState } from "react";
 
-const SocialLink = ({ item, index }) => {
+const SocialLink = React.memo(({ item, index }) => {
   if (!item) return null;
   const { url, alternativeText = "icon" } = extractAttributes(item.image) || {};
   if (!url) return null;
@@ -29,11 +29,9 @@ const SocialLink = ({ item, index }) => {
       />
     </Link>
   );
-};
+});
 
-SocialLink.displayName = "SocialLink";
-
-const FooterLogo = ({ logoUrl, logoAlternativeText }) => {
+const FooterLogo = React.memo(({ logoUrl, logoAlternativeText }) => {
   if (!logoUrl) return null;
   return (
     <Img
@@ -45,11 +43,9 @@ const FooterLogo = ({ logoUrl, logoAlternativeText }) => {
       className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
     />
   );
-};
+});
 
-FooterLogo.displayName = "FooterLogo";
-
-const FooterDescription = ({ description }) => {
+const FooterDescription = React.memo(({ description }) => {
   if (!description) return null;
   return (
     <Text
@@ -59,20 +55,16 @@ const FooterDescription = ({ description }) => {
       dangerouslySetInnerHTML={{ __html: description }}
     />
   );
-};
+});
 
-FooterDescription.displayName = "FooterDescription";
-
-const Copyright = ({ copyrightText }) => {
+const Copyright = React.memo(({ copyrightText }) => {
   if (!copyrightText) return null;
   return (
     <Text as="p" size="sm" className="text-white-a700_01" responsive>
       {copyrightText}
     </Text>
   );
-};
-
-Copyright.displayName = "Copyright";
+});
 
 const Footer = ({ data, ...props }) => {
   const [openSections, setOpenSections] = useState({});
@@ -215,6 +207,10 @@ const Footer = ({ data, ...props }) => {
   );
 };
 
+SocialLink.displayName = "SocialLink";
+FooterLogo.displayName = "FooterLogo";
+FooterDescription.displayName = "FooterDescription";
+Copyright.displayName = "Copyright";
 Footer.displayName = "Footer";
 
 export default Footer;

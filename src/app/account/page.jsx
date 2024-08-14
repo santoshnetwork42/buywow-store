@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import OrderList from "@/components/common/Orders";
 import WowLoyalty from "@/components/common/WowLoyalty";
 import { Button, Text } from "@/components/elements";
+import AccountAddressSection from "@/components/common/AccountAddressSection";
 
 const TabContent = ({ activeTab }) => {
   switch (activeTab) {
@@ -11,7 +12,7 @@ const TabContent = ({ activeTab }) => {
     case "Orders":
       return <OrderList />;
     case "Addresses":
-      return <div>Addresses Content</div>; // Placeholder for Addresses content
+      return <AccountAddressSection />; // Placeholder for Addresses content
     default:
       return null;
   }

@@ -153,13 +153,10 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }) {
   const { slug } = params;
-  console.log("slug :>> ", slug);
   try {
     // const pageData = await getPageData(slug[slug.length - 1]);
     const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
     const { blocks } = pageData || {};
-
-    console.log(pageData);
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
       throw new Error("No blocks found or invalid blocks data");

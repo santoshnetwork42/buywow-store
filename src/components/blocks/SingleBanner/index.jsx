@@ -1,7 +1,6 @@
-import React from "react";
-import Link from "next/link";
-import { extractAttributes } from "@/utils/helpers";
+import LinkClickTracker from "@/components/common/LinkClickTracker";
 import { Img } from "@/components/elements";
+import { extractAttributes } from "@/utils/helpers";
 
 const SingleBanner = ({ banner, slug }) => {
   if (!banner) return null;
@@ -23,9 +22,13 @@ const SingleBanner = ({ banner, slug }) => {
   if (!imageUrl || !imageWidth || !imageHeight) return null;
 
   return (
-    <Link
+    <LinkClickTracker
       href={link || "#"}
-      className={`block w-full ${slug?.[slug?.length - 2] === "collections" ? "container-main mb-5 sm:mb-6 lg:mb-7" : "mb-main"}`}
+      className={`block w-full ${
+        slug?.[slug?.length - 2] === "collections"
+          ? "container-main mb-5 sm:mb-6 lg:mb-7"
+          : "mb-main"
+      }`}
     >
       <picture className="block w-full">
         {!!webImageAttrs.url && (
@@ -47,7 +50,7 @@ const SingleBanner = ({ banner, slug }) => {
           sizes="100vw"
         />
       </picture>
-    </Link>
+    </LinkClickTracker>
   );
 };
 

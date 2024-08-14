@@ -12,25 +12,29 @@ const EffectivenessSection = ({ number, text, isReversed }) => (
     <Text
       as="p"
       size="lg"
-      className="border-t border-black-900 pt-2"
+      className="line-clamp-5 border-t border-black-900 pt-2"
+      dangerouslySetInnerHTML={{ __html: text }}
       responsive
-    >
-      {text}
-    </Text>
+    />
   </div>
 );
 
-const ProductEffectivenessChart = ({ EffectivenessChart }) => (
-  <div className="flex w-[80%] flex-1 flex-col items-center overflow-hidden rounded-lg md:max-w-[50%]">
-    {EffectivenessChart.map((item, index) => (
-      <EffectivenessSection
-        key={index}
-        number={item.number}
-        text={item.text}
-        isReversed={index % 2 !== 0}
-      />
-    ))}
-  </div>
-);
+const ProductEffectivenessChart = ({ effectivenessChart }) => {
+  if (!Array.isArray(effectivenessChart) || effectivenessChart.length === 0)
+    return null;
+
+  return (
+    <div className="flex w-[80%] flex-1 flex-col items-center overflow-hidden rounded-lg md:max-w-[50%]">
+      {effectivenessChart.map((item, index) => (
+        <EffectivenessSection
+          key={index}
+          number={item.number}
+          text={item.text}
+          isReversed={index % 2 !== 0}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default ProductEffectivenessChart;
