@@ -16,6 +16,7 @@ import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 const MenuItem = React.memo(({ item, index, linkPrefix }) => {
   if (!item) return null;
@@ -80,10 +81,9 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
 
 const Header = ({ data, ...props }) => {
   const router = useRouter();
-
+  const user = useSelector((state) => state.user.user);
   const { handlePasswordLessModal, handleCartVisibility } = useModalDispatch();
   const { isRewardApplied } = useNavBarState();
-
   const { totalItems: totalCartItems } = useCartTotal({
     paymentType: "PREPAID",
     isRewardApplied: isRewardApplied,
@@ -212,6 +212,7 @@ const Header = ({ data, ...props }) => {
         collectionMenus={collectionMenus}
         otherLinks={otherLinks}
         logo={mWebMenuLogo}
+        isLoggedin={!!user?.id}
       />
 
       <PasswordLess />
