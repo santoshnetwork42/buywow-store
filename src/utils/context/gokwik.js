@@ -243,7 +243,7 @@ function GoKwikProvider({ children }) {
       gokwikSdk.on("address-selected", (address) => {
         console.log("address-selected>>>", address);
         const formattedAddress = formatUserAddress(address);
-        addressSelected(formattedAddress, totalPrice, "GOKWIK");
+        // addressSelected(formattedAddress, totalPrice, "GOKWIK");
       });
 
       gokwikSdk.on("payment-method-selected", (payment) => {
