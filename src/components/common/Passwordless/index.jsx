@@ -335,8 +335,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       title="Signup"
       enableOutsideClick={enableOutsideClick}
     >
-      {(confirmationStatus === null || confirmationStatus === "DONE") &&
-        renderSignInStep}
+      {confirmationStatus === null && renderSignInStep}
       {[
         "UNCONFIRMED_SIGNUP",
         "UNCONFIRMED_SIGNIN",

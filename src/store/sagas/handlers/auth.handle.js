@@ -11,8 +11,9 @@ import {
   setAuthLoading,
   setConfirmationStatus,
 } from "@/store/slices/auth.slice";
+import { setPasswordLessModal } from "@/store/slices/modal.slice";
 import { setUser } from "@/store/slices/user.slice";
-import { call, put } from "redux-saga/effects";
+import { call, put, select } from "redux-saga/effects";
 
 export function* createAwsAccountHandler(action) {
   try {
@@ -60,13 +61,20 @@ export function* signInWithAwsAccountHandler(action) {
 export function* confirmSignInHandler(action) {
   try {
     const { confirmationCode } = action.payload;
-
+    const { passwordLess } = yield select((state) => state.modal);
     yield put(setAuthLoading(true));
     const user = yield call(() => confirmSignInRequest({ confirmationCode }));
     console.log("SignedIn user :>> ", user); //set user in userState
     yield put(setAuthLoading(false));
 
     yield put(setConfirmationStatus(user?.nextStep?.signInStep));
+    yield put(
+      setPasswordLessModal({
+        isPasswordLessOpen: false,
+        customLogin: passwordLess?.customLogin,
+        redirectTo: passwordLess?.redirectTo,
+      }),
+    );
   } catch (error) {
     console.log("error", error);
   } finally {
