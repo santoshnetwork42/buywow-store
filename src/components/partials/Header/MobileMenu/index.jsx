@@ -100,7 +100,7 @@ const MobileMenu = ({ isOpen, onClose, collectionMenus, otherLinks, logo }) => {
 
   const menuContent = (
     <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
-      {(!!collectionMenus?.length || !!otherLinks?.length) && (
+      {(collectionMenus?.length > 0 || otherLinks?.length > 0) && (
         <ul className="space-y-4">
           {collectionMenus?.length > 0 && (
             <MenuList
