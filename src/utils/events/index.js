@@ -1,5 +1,10 @@
 import { STORE_PREFIX } from "@/config";
-import { addPhonePrefix, getFirstVariant, getSource } from "@/utils/helpers";
+import {
+  addPhonePrefix,
+  getFirstVariant,
+  getSource,
+  removePhonePrefix,
+} from "@/utils/helpers";
 import {
   getCouponDiscount,
   getProductInventory,
@@ -8,6 +13,7 @@ import {
 } from "@wow-star/utils";
 import { v4 as uuid } from "uuid";
 import { getPublicImageURL } from "../helpers/img-loader";
+import { v4 as uuidv4 } from "uuid";
 
 export const getFbpCookie = () => {
   const name = "_fbp=";
@@ -25,14 +31,15 @@ export const getFbpCookie = () => {
 };
 
 export const userMapper = (userData, address) => {
+  let [firstNamePart, ...lastNameParts] = address?.name?.split(" ") || [];
   const {
     city,
     state,
     country,
     pinCode = address?.pincode,
     phone: aP,
-    firstName: aF = address?.first_name,
-    lastName: aL = address?.last_name,
+    firstName: aF = address?.first_name || firstNamePart,
+    lastName: aL = address?.last_name || lastNameParts?.join(" "),
     email: aE,
     userId = address?.userId,
   } = address || {};
@@ -169,7 +176,7 @@ export const itemMapper = (
       num_items: 1,
       value: price,
       price: price,
-      external_id: user?.id || uuid(),
+      external_id: user?.id || uuidv4(),
       fbc: getFbpCookie(),
     },
     pinpoint: {
@@ -253,7 +260,7 @@ export const orderMapper = (
           content_ids: [...pixel.content_ids, ...pixelNew.content_ids],
           num_items: pixel.num_items + pixelNew.num_items,
           value: pixel.value + pixelNew.value,
-          external_id: user?.id || uuid(),
+          external_id: user?.id || uuidv4(),
           fbc: getFbpCookie(),
           coupon_code: coupon?.code || "",
         },
@@ -502,4 +509,100 @@ export const moEngagedOrderMapper = (
       "Payment Status": null,
     },
   };
+};
+
+export const moEngageItemPurchasedMapper = (
+  products,
+  coupon,
+  paymentMethod,
+  order,
+  isFirstTimeUser,
+  checkoutSource = "BUYWOW",
+) => {
+  const { discount: couponTotal } = getCouponDiscount(coupon, products) || {};
+  let currentURL = window.location.href.split("/").slice(0, 3).join("/");
+  const source = checkoutSource === "GOKWIK" ? "GoKwik" : getSource();
+  const basicAttributes = {
+    Currency: "INR",
+    Source: source,
+    "Cart URL": `${currentURL}/cart`,
+    "Coupon Applied": coupon?.code,
+    "First Time User": isFirstTimeUser,
+  };
+  const events = products.map((product) => {
+    const { value: valueNew, mrpValue } = itemMapper(
+      product,
+      coupon,
+      null,
+      checkoutSource,
+    );
+    const { thumbImage } = getProductMeta(product);
+    const url = getPublicImageURL(thumbImage?.imageKey);
+    const totalDiscount = mrpValue - valueNew;
+    const eventAttributes = {
+      ...basicAttributes,
+      "Total Discount": totalDiscount || 0,
+      "Total Price": valueNew,
+      "Vendor Name": product.vendor,
+      "Product Title": product.title,
+      SKU: product.sku,
+      "Image URL": url,
+      "Total Quantity": product.qty || 0,
+      "Product ID": product.id,
+      "Product Price": product.price,
+      "Product Quantity": product.qty,
+      "Variant ID": product.variantId ? product.variantId : product.id,
+      "Product URL": `${currentURL}/products/${product.slug}`,
+      "Total MRP": mrpValue,
+      "Product Subcategory": product.subCategory?.name,
+      "Product Category": product.category?.name,
+      "Product Range": null,
+    };
+
+    return {
+      ...eventAttributes,
+      "Order ID": order?.code,
+      "Order Date": null,
+      "Payment Mode": paymentMethod,
+      "Payment Status": paymentMethod === "COD" ? "Unpaid" : "Paid",
+    };
+  });
+
+  return events;
+};
+
+export const addressMapper = (
+  address,
+  totalPrice,
+  checkoutSource = "BUYWOW",
+) => {
+  if (address) {
+    const source = checkoutSource === "GOKWIK" ? "GoKwik" : getSource();
+    const { city, country, email, name, state, pinCode, phone } = address;
+    const phoneNo = removePhonePrefix(phone);
+    const [firstName, ...lastName] = name.split(" ");
+
+    const basicAttributes = {
+      "Cart Total Price": totalPrice,
+      City: city,
+      Country: country,
+      Currency: "INR",
+      Email: email,
+      "First Name": firstName,
+      "Last Name": lastName?.join(" "),
+      "Mobile Number": phoneNo,
+      Pincode: pinCode,
+      State: state,
+      Source: source,
+    };
+
+    return {
+      addressAdded: {
+        ...basicAttributes,
+      },
+      addressSelected: {
+        ...basicAttributes,
+      },
+    };
+  }
 };

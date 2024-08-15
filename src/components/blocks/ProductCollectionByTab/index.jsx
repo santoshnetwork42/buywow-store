@@ -16,6 +16,8 @@ import React, {
   useState,
 } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { getSource } from "@/utils/helpers";
 
 const SORT_OPTIONS = [
   { value: "RECOMMENDED", label: "Recommended" },
@@ -76,6 +78,8 @@ const ProductCollectionByTab = ({
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef(null);
+  const { viewList, categoryViewed } = useEventsDispatch();
+  const source = getSource();
 
   const reloadProducts = useCallback(
     async (newSortOption) => {
@@ -117,6 +121,7 @@ const ProductCollectionByTab = ({
         setCurrentPage(1);
         const totalProducts = activeTab?.pagination?.totalData ?? 0;
         setHasMore(newProducts.length < totalProducts);
+        viewList(slug[slug.length - 1], "PLP", newProducts); // viewListItems event passed
       } catch (error) {
         console.error("Error reloading products:", error);
       } finally {
@@ -134,6 +139,7 @@ const ProductCollectionByTab = ({
     [reloadProducts],
   );
 
+  const viewListItemEventTriggered = useRef(false);
   useEffect(() => {
     const handleResize = () => {
       if (containerRef.current && window.innerWidth >= 1200) {
@@ -148,6 +154,25 @@ const ProductCollectionByTab = ({
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    // event passing
+    if (!viewListItemEventTriggered.current) {
+      const [_products] = productCollectionTabItems
+        ?.filter((i, index) => activeTabIndex === index)
+        .map((i) => i?.products);
+      viewList(slug[slug.length - 1], "PLP", _products?.data);
+
+      categoryViewed({
+        URL: window.location.href,
+        "Category Name": title,
+        "Item Count": 10,
+        Source: source,
+      });
+      viewListItemEventTriggered.current = true;
+    }
+    //  event passed
+  }, [productCollectionTabItems]);
 
   const loadMoreProducts = useCallback(async () => {
     if (isLoading || !hasMore) return;
@@ -190,6 +215,7 @@ const ProductCollectionByTab = ({
         const newTotalLoaded =
           (activeTab?.products?.data?.length ?? 0) + newProducts.length;
         setHasMore(newTotalLoaded < totalProducts);
+        viewList(slug[slug.length - 1], "PLP", newProducts); // event passed
       } else {
         setHasMore(false);
       }

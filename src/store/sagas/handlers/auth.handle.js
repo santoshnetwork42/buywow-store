@@ -14,6 +14,8 @@ import {
 import { setPasswordLessModal } from "@/store/slices/modal.slice";
 import { setUser } from "@/store/slices/user.slice";
 import { call, put, select } from "redux-saga/effects";
+import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
+// import { logOutEventHandler } from "@/store/sagas/handlers/events.handle";
 
 export function* createAwsAccountHandler(action) {
   try {
@@ -115,9 +117,9 @@ export function* setConfirmationStatusHandler(action) {
 
 export function* signOutHandler() {
   try {
+    // yield call(eventsSagaActions.LOG_OUT, logOutEventHandler);
     const signedOutUser = yield call(() => signOutRequest());
     console.log("signedOutUser :>> ", signedOutUser); //set user in userState
-
     yield put(setConfirmationStatus(null));
     yield put(setUser({}));
   } catch (error) {

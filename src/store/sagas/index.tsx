@@ -13,6 +13,7 @@ export default function* rootSaga() {
     fork(modalWatcher),
     fork(userWatcher),
     fork(cartWatcher),
+    fork(eventsWatcher),
     fork(addressWatcher),
     fork(eventsWatcher),
     fork(recentlyViewedWatcher),

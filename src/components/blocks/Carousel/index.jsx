@@ -1,11 +1,18 @@
 "use client";
 
 import { Button, Img } from "@/components/elements";
-import { extractAttributes } from "@/utils/helpers";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { extractAttributes, getSource } from "@/utils/helpers";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import Link from "next/link";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
   const webImageAttrs = extractAttributes(webImage);
@@ -19,8 +26,28 @@ const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
     webImageAttrs.alternativeText ||
     "Carousel Banner";
 
+  const { homeViewed, bannerClicked } = useEventsDispatch();
+  const eventTriggered = useRef(false);
+  const source = getSource();
+  useEffect(() => {
+    if (!eventTriggered.current) {
+      homeViewed();
+      eventTriggered.current = true;
+    }
+  }, []);
+
   return (
-    <Link href={link || "#"} className="flex-[0_0_100%]">
+    <Link
+      href={link || "#"}
+      className="flex-[0_0_100%]"
+      onClick={() => {
+        bannerClicked({
+          Source: source,
+          item_id: imageUrl,
+          banner_name: imageAlt,
+        });
+      }}
+    >
       <picture className="relative block aspect-[376/148] w-full sm:aspect-[1440/496]">
         {!!webImageAttrs.url && (
           <source media="(min-width: 576px)" srcSet={webImageAttrs.url} />

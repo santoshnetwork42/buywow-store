@@ -5,6 +5,7 @@ import React, { useState, useCallback } from "react";
 import { Input, Img } from "@/components/elements";
 import { CloseSVG } from "@/assets/images";
 import { twMerge } from "tailwind-merge";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 const SearchIcon = () => (
   <Img
@@ -15,7 +16,6 @@ const SearchIcon = () => (
     className="aspect-square w-[24px] cursor-pointer object-contain"
   />
 );
-
 
 SearchIcon.displayName = "SearchIcon";
 
@@ -28,7 +28,10 @@ ClearIcon.displayName = "ClearIcon";
 const SearchBar = ({ className }) => {
   const [searchBarValue, setSearchBarValue] = useState("");
 
+  const { search } = useEventsDispatch();
+
   const handleChange = useCallback((e) => {
+    search(e.target.value); //search event passed
     setSearchBarValue(e.target.value);
   }, []);
 

@@ -16,6 +16,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddressModal from "../AddressModal";
 import { AddressListComponent } from "../AddressList";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { useCartTotal } from "@wow-star/utils";
 
 // const AddressListComponent = React.memo(({ currentAddress, user, item }) => {
 //   const dispatch = useDispatch();
@@ -141,6 +143,14 @@ const Address = ({}) => {
   const { currentAddress, addressList, isLoading } = useSelector(
     (state) => state.address,
   );
+  const { totalPrice } = useCartTotal({
+    paymentType: "PREPAID",
+  });
+
+  const { addressAdded, addressSelected } = useEventsDispatch();
+  useEffect(() => {
+    addressSelected(currentAddress, totalPrice);
+  }, [currentAddress]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [action, setAction] = useState(null);
@@ -248,6 +258,7 @@ const Address = ({}) => {
         country: address?.country || "IN",
       },
     });
+    addressAdded(address, totalPrice);
 
     setAddress(initialAddressState);
   };

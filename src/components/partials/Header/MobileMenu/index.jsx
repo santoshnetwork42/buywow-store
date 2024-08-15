@@ -2,6 +2,7 @@ import { CloseSVG, UserSVG } from "@/assets/images";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import Sidebar from "@/components/features/Drawer";
 import MobileMenuItem from "@/components/partials/Header/MobileMenuItem";
+// import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
@@ -75,10 +76,16 @@ MenuList.displayName = "MenuList";
 
 const FooterSection = ({ onClose }) => {
   const dispatch = useDispatch();
+  // const { logout } = useEventsDispatch();
   const handleLogoutClick = () => {
     dispatch({
       type: authSagaActions.SIGNOUT,
     });
+    //   .then(() => {
+    //   logout({
+    //     URL: window.location.href,
+    //   });
+    // });
     onClose();
   };
 

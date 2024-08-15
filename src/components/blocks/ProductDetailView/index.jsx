@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   useProduct,
   useProductCoupons,
@@ -14,6 +14,7 @@ import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import ProductDetailViewBlocks from "@/components/partials/Product/PDP/ProductDetailViewBlocks";
 import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDiscounts";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
 
 const ProductDetailView = ({ product }) => {
@@ -30,6 +31,7 @@ const ProductDetailView = ({ product }) => {
     useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
+  const { viewItem } = useEventsDispatch();
 
   useEffect(() => {
     addRecentlyViewedProduct(extractAttributes(product?.pdpProduct));
@@ -55,6 +57,17 @@ const ProductDetailView = ({ product }) => {
   if (!fetchedProduct) {
     return <div>Product not found</div>;
   }
+  const viewItemEventTriggered = useRef(false);
+
+  useEffect(() => {
+    if (!viewItemEventTriggered.current) {
+      viewItem({
+        ...fetchedProduct,
+        section: { id: "product-detail", name: "Product Detail" },
+      });
+      viewItemEventTriggered.current = true;
+    }
+  }, []);
 
   return (
     <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[50%_calc(50%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[50%_calc(50%-3rem)] lg:gap-x-12 xl:grid-cols-[50%_calc(50%-4rem)] xl:gap-x-16">

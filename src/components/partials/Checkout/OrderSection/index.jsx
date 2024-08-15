@@ -10,6 +10,7 @@ import Accordion from "@/components/features/Accordion";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useNavBarState } from "@/utils/context/navbar";
 import {
   COD_ENABLED,
@@ -29,10 +30,11 @@ import {
   MAX_PREPAID_DISCOUNT,
   useCartTotal,
   useConfiguration,
+  useFreeProducts,
   useOrders,
 } from "@wow-star/utils";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
@@ -44,6 +46,7 @@ export default function OrderSection() {
   const { currentAddress } = useSelector((state) => state.address);
 
   const [selectedMethod, setSelectedMethod] = useState("PREPAID");
+  const { startCheckout, addPaymentInfo, placeOrder } = useEventsDispatch();
 
   const maxCOD = useConfiguration(MAX_COD_AMOUNT, -1);
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
@@ -65,6 +68,16 @@ export default function OrderSection() {
   };
 
   const { isRewardApplied } = useNavBarState();
+
+  // Free Products From wow-star-utils
+  const freeProductsResponse = useFreeProducts({
+    showNonApplicableFreeProducts: false,
+  });
+
+  const freeProducts = useMemo(
+    () => freeProductsResponse.map((f) => f.product),
+    [freeProductsResponse],
+  );
 
   const {
     totalListingPrice,
@@ -219,7 +232,7 @@ export default function OrderSection() {
 
         razorpayMethod = new Razorpay(options);
         razorpayMethod.open();
-        // addPaymentInfo();
+        addPaymentInfo();
         // logger.verbose("Razorpay initialization");
       }
     } catch (error) {
@@ -230,6 +243,15 @@ export default function OrderSection() {
 
   const afterOrderConfirm = useCallback(async () => {
     if (isConfirmed && finalOrder) {
+      placeOrder(
+        finalOrder,
+        [...freeProducts],
+        appliedCoupon,
+        currentAddress,
+        selectedMethod,
+        "BUYWOW",
+      );
+
       if (razorpayMethod) {
         razorpayMethod.close();
       }
@@ -243,6 +265,9 @@ export default function OrderSection() {
     }
   }, [isConfirmed, afterOrderConfirm]);
 
+  useEffect(() => {
+    startCheckout();
+  }, []);
   //need to add condition based on applied coupon
   const ppcodAmountToTake = ppcodAmount;
 

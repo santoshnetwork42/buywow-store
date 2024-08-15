@@ -8,6 +8,7 @@ import { Button, Img, Text } from "@/components/elements";
 import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useNavBarState } from "@/utils/context/navbar";
 import { extractAttributes } from "@/utils/helpers";
@@ -20,7 +21,7 @@ import { useSelector } from "react-redux";
 
 const MenuItem = React.memo(({ item, index, linkPrefix }) => {
   if (!item) return null;
-
+  const { topNavbarClicked } = useEventsDispatch();
   const key = item.id || index;
   const title = (
     <Text size="base" as="p" className="capitalize" responsive>
@@ -31,10 +32,25 @@ const MenuItem = React.memo(({ item, index, linkPrefix }) => {
   if (item.subMenu && item.subMenu.length > 0) {
     return (
       <li key={key} className="group relative">
-        <div className="flex cursor-pointer items-center gap-1">
+        <Link
+          href={
+            item.slug
+              ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
+              : item.link || "#"
+          }
+          onClick={() => {
+            topNavbarClicked({
+              banner_name: item.title,
+              item_id: item.slug,
+              Source: "Web",
+              "Section Name": "Top Navbar",
+            });
+          }}
+          className="flex cursor-pointer items-center gap-1"
+        >
           {title}
           <DownArrowIconSVG />
-        </div>
+        </Link>
         <NavMenu menuItems={item.subMenu} linkPrefix={linkPrefix} />
       </li>
     );
@@ -48,6 +64,14 @@ const MenuItem = React.memo(({ item, index, linkPrefix }) => {
             ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
             : item.link || "#"
         }
+        onClick={() => {
+          topNavbarClicked({
+            banner_name: item.title,
+            item_id: item.slug,
+            Source: "Web",
+            "Section Name": "Top Navbar",
+          });
+        }}
       >
         {title}
       </Link>

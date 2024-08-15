@@ -3,6 +3,7 @@
 import { Button, Img, Input } from "@/components/elements";
 import { Textarea } from "@/components/elements/Textarea";
 import Modal from "@/components/features/Modal";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
 import {
   addPhonePrefix,
@@ -13,6 +14,7 @@ import {
   validatePinCode,
   validateString,
 } from "@/utils/helpers";
+import { useCartTotal } from "@wow-star/utils";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -24,6 +26,10 @@ const AddressModal = ({
   addressItem = {},
 }) => {
   const dispatch = useDispatch();
+  const { addressAdded } = useEventsDispatch();
+  const { totalPrice } = useCartTotal({
+    paymentType: "PREPAID",
+  });
 
   const { user } = useSelector((state) => state.user);
   const { isLoading } = useSelector((state) => state.address);
@@ -129,6 +135,7 @@ const AddressModal = ({
           },
         });
       }
+      addressAdded(address, totalPrice);
     } catch (error) {
       //   console.error("Error saving address:", error);
     } finally {

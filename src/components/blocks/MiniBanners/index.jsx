@@ -3,6 +3,7 @@ import Link from "next/link";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
 import { Img } from "@/components/elements";
+import LinkClickTracker from "@/components/common/LinkClickTracker";
 
 const MiniBanners = ({ miniBannerItems: banners }) => {
   if (!Array.isArray(banners) || banners.length === 0) return null;
@@ -24,7 +25,12 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
         if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
         return (
-          <Link href={link || "#"} key={`mini-banner-${index}`}>
+          <LinkClickTracker
+            href={link || "#"}
+            key={`mini-banner-${index}`}
+            trackingType="BANNER_CLICKED"
+            trackingEventPayload={webImageAttrs}
+          >
             <picture className="relative block aspect-[298/120] w-[80vw] sm:w-[46vw] md:aspect-[650/166]">
               <source media="(min-width: 768px)" srcSet={webImageAttrs.url} />
               <Img
@@ -41,7 +47,7 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
                 className="h-auto w-full object-contain"
               />
             </picture>
-          </Link>
+          </LinkClickTracker>
         );
       })}
     </Slider>

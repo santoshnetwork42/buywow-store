@@ -21,6 +21,7 @@ import {
   isPhoneNumberValid,
   validatePhoneNumber,
 } from "@/utils/helpers";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 const PasswordLess = ({ enableOutsideClick = true }) => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       passwordLess: { isPasswordLessOpen, customLogin, redirectTo },
     },
   } = useSelector((state) => state.modal);
+  const { auth, otpRequested } = useEventsDispatch();
 
   const otpInputRefs = useRef([]);
 
@@ -124,7 +126,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     if (!isPhoneValid) return;
 
     const phone = addPhonePrefix(authData.phone);
-
+    otpRequested({ phone });
     const handleCustomLogin = async () => {
       setAuthLoader(true);
       try {
@@ -177,16 +179,30 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     const phone = addPhonePrefix(authData.phone);
 
     const actions = {
-      UNCONFIRMED_SIGNIN: () =>
-        dispatch({
-          type: authSagaActions.CONFIRM_SIGNIN,
-          payload: { confirmationCode },
-        }),
-      UNCONFIRMED_SIGNUP: () =>
-        dispatch({
-          type: authSagaActions.CONFIRM_SIGNUP,
-          payload: { username: phone, confirmationCode },
-        }),
+      UNCONFIRMED_SIGNIN: () => {
+        try {
+          dispatch({
+            type: authSagaActions.CONFIRM_SIGNIN,
+            payload: { confirmationCode },
+          }).then((res) => {
+            auth("login", { userId: null, phone });
+          });
+        } catch (e) {
+          console.error("Error while confirming for signIn", error);
+        }
+      },
+      UNCONFIRMED_SIGNUP: () => {
+        try {
+          dispatch({
+            type: authSagaActions.CONFIRM_SIGNUP,
+            payload: { username: phone, confirmationCode },
+          }).then((res) => {
+            auth("signup", { userId: null, phone });
+          });
+        } catch (e) {
+          console.error("Error while confirming for singUp", error);
+        }
+      },
       UNCONFIRMED_CUSTOM_SIGNIN: async () => {
         setAuthLoader(true);
         try {
@@ -202,6 +218,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
             dispatch({
               type: userSagaActions.SET_CUSTOM_USER,
               payload: { phone },
+            }).then((res) => {
+              auth("signup", { userId: null, phone });
             });
           } else {
             // Handle unverified OTP
