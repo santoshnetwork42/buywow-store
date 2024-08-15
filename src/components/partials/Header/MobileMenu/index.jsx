@@ -7,7 +7,12 @@ import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
 
-const HeaderSection = ({ mWebUrl, mWebAlternativeText, onClose }) => (
+const HeaderSection = ({
+  mWebUrl,
+  mWebAlternativeText,
+  onClose,
+  isLoggedin,
+}) => (
   <div className="flex items-center justify-between bg-yellow-900 p-4">
     <Link href="/" onClick={onClose}>
       <Img
@@ -19,28 +24,30 @@ const HeaderSection = ({ mWebUrl, mWebAlternativeText, onClose }) => (
         className="aspect-[100/48] w-[100px] object-contain"
       />
     </Link>
-    <div className="ml-2.5 flex flex-1 flex-col gap-0.5">
-      <Heading as="h4" size="lg" className="text-white-a700_01">
-        Hi Guest
-      </Heading>
-      <Link
-        href="/login"
-        className="relative flex w-fit items-center gap-1"
-        onClick={onClose}
-      >
-        <Text size="sm" as="p" className="text-white-a700_01">
-          Login
-        </Text>
-        <Img
-          src="img_arrow_right_white.svg"
-          width={18}
-          height={18}
-          alt={`Login arrow`}
-          className="aspect-square w-[18px] object-contain"
-        />
-        <div className="absolute -bottom-[3px] left-0 h-[0.5px] w-[55px] bg-white-a700_01"></div>
-      </Link>
-    </div>
+    {!isLoggedin && (
+      <div className="ml-2.5 flex flex-1 flex-col gap-0.5">
+        <Heading as="h4" size="lg" className="text-white-a700_01">
+          Hi Guest
+        </Heading>
+        <Link
+          href="/login"
+          className="relative flex w-fit items-center gap-1"
+          onClick={onClose}
+        >
+          <Text size="sm" as="p" className="text-white-a700_01">
+            Login
+          </Text>
+          <Img
+            src="img_arrow_right_white.svg"
+            width={18}
+            height={18}
+            alt={`Login arrow`}
+            className="aspect-square w-[18px] object-contain"
+          />
+          <div className="absolute -bottom-[3px] left-0 h-[0.5px] w-[55px] bg-white-a700_01"></div>
+        </Link>
+      </div>
+    )}
     <Button onClick={onClose}>
       <CloseSVG height={24} width={24} fillColor="#ffffff" />
     </Button>
@@ -66,12 +73,13 @@ const MenuList = ({ items, closeMenu, linkPrefix }) => (
 
 MenuList.displayName = "MenuList";
 
-const FooterSection = () => {
+const FooterSection = ({ onClose }) => {
   const dispatch = useDispatch();
   const handleLogoutClick = () => {
     dispatch({
       type: authSagaActions.SIGNOUT,
     });
+    onClose();
   };
 
   return (
@@ -94,7 +102,14 @@ const FooterSection = () => {
 };
 FooterSection.displayName = "FooterSection";
 
-const MobileMenu = ({ isOpen, onClose, collectionMenus, otherLinks, logo }) => {
+const MobileMenu = ({
+  isOpen,
+  onClose,
+  collectionMenus,
+  otherLinks,
+  logo,
+  isLoggedin,
+}) => {
   const { url: mWebUrl, alternativeText: mWebAlternativeText = "logo" } =
     extractAttributes(logo);
 
@@ -129,9 +144,10 @@ const MobileMenu = ({ isOpen, onClose, collectionMenus, otherLinks, logo }) => {
         mWebUrl={mWebUrl}
         mWebAlternativeText={mWebAlternativeText}
         onClose={onClose}
+        isLoggedin={isLoggedin}
       />
       {menuContent}
-      <FooterSection />
+      {isLoggedin && <FooterSection onClose={onClose} />}
     </Sidebar>
   );
 };

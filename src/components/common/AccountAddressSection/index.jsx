@@ -1,34 +1,32 @@
 "use client";
 
-import { Button, Img, Input } from "@/components/elements";
+import { Button, Input, Text } from "@/components/elements";
 import { Textarea } from "@/components/elements/Textarea";
-import Modal from "@/components/features/Modal";
+import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem//RemoveButton";
 import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
 import {
   addPhonePrefix,
   isEmailValid,
-  removePhonePrefix,
   validateEmail,
   validatePhoneNumber,
   validatePinCode,
   validateString,
 } from "@/utils/helpers";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import AddressModal from "../AddressModal";
+import { AddressListComponent } from "../AddressList";
 
-const AddressModal = ({
-  isOpen = false,
-  onClose = () => {},
-  enableOutsideClick = true,
-  action = null,
-  addressItem = {},
-}) => {
+const AccountAddressSection = ({}) => {
   const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.user);
-  const { isLoading } = useSelector((state) => state.address);
+  const { user, customUser } = useSelector((state) => state.user);
+  const { currentAddress, addressList, isLoading } = useSelector(
+    (state) => state.address,
+  );
 
-  const ButtonText = action === "CREATE" ? "Add Address" : "Update Address";
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [action, setAction] = useState(null);
 
   const initialAddressState = {
     email: "",
@@ -41,14 +39,13 @@ const AddressModal = ({
   };
 
   const [address, setAddress] = useState({
-    id: addressItem?.id || null,
-    email: addressItem?.email || null,
-    phone: removePhonePrefix(addressItem?.phone) || null,
-    address: addressItem?.address || "",
-    state: addressItem?.state || "",
-    city: addressItem?.city || "",
-    pinCode: addressItem?.pinCode || null,
-    name: addressItem?.name || null,
+    email: null,
+    phone: "",
+    address: "",
+    state: "",
+    city: "",
+    pinCode: null,
+    name: null, //store firstName and lastName if exists
   });
   const [addressErrors, setAddressErrors] = useState({
     pinCode: "",
@@ -60,10 +57,28 @@ const AddressModal = ({
     phone: "",
   });
 
-  const closeModal = () => {
-    setAddress(initialAddressState);
-    onClose();
-  };
+  useEffect(() => {
+    const fetchAddress = async () => {
+      if (!!user && !!user.id) {
+        try {
+          dispatch({
+            type: addressSagaActions.GET_ADDRESS_LIST,
+            payload: { id: user.id },
+          });
+        } catch (error) {
+          console.error("Error fetching address:", error);
+        }
+      }
+    };
+
+    fetchAddress();
+  }, [user, dispatch]);
+
+  useEffect(() => {
+    if (!addressList?.length) {
+      setAction("CREATE");
+    }
+  }, [addressList]);
 
   const checkFormValidity = () => {
     const fields = [
@@ -107,34 +122,60 @@ const AddressModal = ({
       return true;
     }
 
-    try {
-      if (action === "CREATE") {
-        dispatch({
-          type: addressSagaActions.CREATE_ADDRESS,
-          payload: {
-            ...address,
-            userID: user?.id || null,
-            phone: addPhonePrefix(address?.phone),
-            country: address?.country || "IN",
-          },
-        });
-      } else if (action === "EDIT") {
-        dispatch({
-          type: addressSagaActions.EDIT_ADDRESS,
-          payload: {
-            ...address,
-            userID: user?.id,
-            phone: addPhonePrefix(address?.phone),
-            country: address?.country || "IN",
-          },
-        });
-      }
-    } catch (error) {
-      //   console.error("Error saving address:", error);
-    } finally {
-      closeModal();
-    }
+    dispatch({
+      type: addressSagaActions.CREATE_ADDRESS,
+      payload: {
+        ...address,
+        userID: user?.id || null,
+        phone: addPhonePrefix(address?.phone),
+        country: address?.country || "IN",
+      },
+    });
+
+    // setAddress(initialAddressState);
   };
+
+  const handleAddNewAddress = () => {
+    setIsModalOpen(true);
+    setAction("CREATE");
+  };
+
+  if (!!addressList?.length) {
+    return (
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between rounded-md bg-blue-50 p-2">
+          <Text size="lg">Shipping Address</Text>
+          <Text
+            size="lg"
+            onClick={handleAddNewAddress}
+            className="cursor-pointer"
+          >
+            + New Address
+          </Text>
+        </div>
+        {isModalOpen && (
+          <AddressModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            enableOutsideClick={true}
+            action={action}
+          />
+        )}
+        <div className="flex w-full gap-4 overflow-x-scroll">
+          {addressList?.map((item, index) => (
+            <>
+              <AddressListComponent
+                currentAddress={currentAddress}
+                user={user}
+                item={item}
+                key={`address-${index}`}
+              />
+            </>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   const handleInputChange = (field) => (e) => {
     let value = e.target.value;
@@ -156,14 +197,11 @@ const AddressModal = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={closeModal}
-      showMobileView
-      title="Address"
-      enableOutsideClick={enableOutsideClick}
-    >
-      <div className="mt-4">
+    <>
+      <div className="flex flex-col gap-4 border p-3">
+        <Text size="xl" className="font-medium">
+          Address
+        </Text>
         <form>
           <div className="flex flex-col gap-4">
             <Input
@@ -177,7 +215,6 @@ const AddressModal = ({
               error={addressErrors?.pinCode}
               label="PinCode"
             />
-
             <div className="flex gap-3">
               <Input
                 type="text"
@@ -260,20 +297,20 @@ const AddressModal = ({
               <Button
                 type="submit"
                 variant="primary"
-                className="w-full gap-1 p-2 px-4 text-xl"
+                className="w-full gap-2 p-2 px-4 text-xl"
                 onClick={(e) => {
                   handleAddressSubmit();
                 }}
                 loader={isLoading}
               >
-                {ButtonText}
+                Add Address
               </Button>
             </div>
           </div>
         </form>
       </div>
-    </Modal>
+    </>
   );
 };
 
-export default AddressModal;
+export default AccountAddressSection;

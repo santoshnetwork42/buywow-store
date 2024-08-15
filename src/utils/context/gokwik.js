@@ -35,7 +35,7 @@ function GoKwikProvider({ children }) {
     useCartDispatch();
   const { setIsLoggedinViaGokwik, setCustomUser } = useUserDispatch();
   const { cartList } = useSelector((state) => state.cart);
-  const { id = "" } = useSelector((state) => state.user.user);
+  const { id = "" } = useSelector((state) => state.user.user) || {};
 
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const { totalPrice } = useCartTotal({
@@ -243,7 +243,7 @@ function GoKwikProvider({ children }) {
       gokwikSdk.on("address-selected", (address) => {
         console.log("address-selected>>>", address);
         const formattedAddress = formatUserAddress(address);
-        addressSelected(formattedAddress, totalPrice, "GOKWIK");
+        // addressSelected(formattedAddress, totalPrice, "GOKWIK");
       });
 
       gokwikSdk.on("payment-method-selected", (payment) => {
