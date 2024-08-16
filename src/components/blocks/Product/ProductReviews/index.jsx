@@ -1,14 +1,157 @@
 "use client";
 
-import { Button, Heading, Img, Text } from "@/components/elements";
-import { productData } from "@/utils/data/productData";
-import React, { useState } from "react";
+import RatingBar from "@/components/blocks/Product/ProductReviews/RatingBar";
 import ReviewStars from "@/components/blocks/Product/ProductReviews/ReviewStars";
 import SectionHeading from "@/components/common/SectionHeading";
-import RatingBar from "@/components/blocks/Product/ProductReviews/RatingBar";
+import { showToast } from "@/components/common/ToastComponent";
+import { Button, Heading, Img, Text } from "@/components/elements";
+import {
+  getProductReviewsAPI,
+  getReviewsAnalyticsAPI,
+  getUserReviewAPI,
+  submitReviewAPI,
+} from "@/lib/appSyncAPIs";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { productData } from "@/utils/data/productData";
+import { errorHandler } from "@/utils/errorHandler";
+import { processAnalytics, toDecimal } from "@/utils/helpers";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 
-const Reviews = ({ title, reviews }) => {
+const reviewDefault = {
+  rating: 0,
+  comment: "",
+  name: "",
+  email: "",
+  images: [],
+  reviewId: "",
+};
+
+const Reviews = ({
+  title,
+  productId,
+  productTotalRatings = 1279,
+  rating = 14.79,
+  reviews: initialReviews = {},
+  analytics,
+  ...props
+}) => {
+  const { user } = useSelector((state) => state.user);
+  const { handlePasswordLessModal } = useModalDispatch();
+
+  console.log(productId, props);
+
+  const [reviewState, setReview] = useState(reviewDefault);
+  const [reviews, setReviews] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [showReview, setShowReview] = useState(false);
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [reviewAnalytics, setReviewAnalytics] = useState([]);
   const [reviewLoading, setReviewLoading] = useState(true);
+  const [userReview, setUserReview] = useState(null);
+
+  const totalRating = useMemo(() => {
+    if (total) {
+      return userReview?.verified ? total + 1 : total;
+    }
+    return productTotalRatings ?? 0;
+  }, [total, productTotalRatings, userReview]);
+
+  const onPhotoChange = useCallback(async (e) => {
+    const files = [...e.target.files];
+    if (files.length) {
+      try {
+        const urls = await Promise.all(
+          files.map((element) => uploadImages(element, "review")),
+        );
+        setReview((prev) => ({
+          ...prev,
+          images: [...prev.images, ...urls],
+        }));
+      } catch (error) {
+        errorHandler(error);
+      }
+    }
+  }, []);
+
+  const removeImage = useCallback((index) => {
+    setReview((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+  }, []);
+
+  const getStarAnalytics = useCallback(async () => {
+    try {
+      setReviewLoading(true);
+      const item = await getReviewsAnalyticsAPI(productId, user?.id);
+      setReviewAnalytics(processAnalytics(item));
+    } catch (error) {
+      errorHandler(error);
+    } finally {
+      setReviewLoading(false);
+    }
+  }, [productId, user?.id]);
+
+  const getProductReviews = useCallback(
+    async (reset = true) => {
+      try {
+        setLoading(true);
+        setReviewLoading(true);
+        const result = await getProductReviewsAPI(
+          productId,
+          user?.id,
+          reset ? null : token,
+        );
+        if (result) {
+          const { items, total: totalCount, nextToken } = result;
+          setReviews((prev) => (reset ? items : [...prev, ...items]));
+          setToken(nextToken);
+          setTotal(totalCount);
+        }
+      } catch (error) {
+        errorHandler(error);
+      } finally {
+        setLoading(false);
+        setReviewLoading(false);
+      }
+    },
+    [productId, user?.id, token],
+  );
+
+  const submitReview = useCallback(
+    async (e) => {
+      e.preventDefault();
+      try {
+        const result = await submitReviewAPI(reviewState, user, productId);
+        if (result) {
+          setUserReview(result);
+          setReview(reviewDefault);
+          setShowReview((prev) => !prev);
+          getStarAnalytics();
+          getProductReviews();
+          showToast.success("Your review has been submitted.", "success");
+        }
+      } catch (error) {
+        errorHandler(error);
+      }
+    },
+    [reviewState, user, productId, getStarAnalytics, getProductReviews],
+  );
+
+  useEffect(() => {
+    if (user) {
+      getUserReviewAPI(productId, user.id)
+        .then(setUserReview)
+        .catch(errorHandler);
+    }
+  }, [user, productId]);
+
+  useEffect(() => {
+    getProductReviews();
+    getStarAnalytics();
+  }, [getProductReviews, getStarAnalytics]);
 
   // return null;
   const product = productData[1];
@@ -19,11 +162,11 @@ const Reviews = ({ title, reviews }) => {
 
       <div className="flex w-full flex-col items-center justify-center gap-6 py-4 md:flex-row">
         <div className="flex flex-col items-center justify-center gap-3">
-          <ReviewStars rating={product.rating} />
+          <ReviewStars rating={rating} />
           <div className="flex items-center gap-1">
-            <Text as="p" size="sm">
-              {product.rating} OutOf 5
-            </Text>
+            <Heading as="h4" size="base" className="text-sm" responsive>
+              {toDecimal(rating, 1)} OutOf 5
+            </Heading>
             <Text as="span" size="base">
               |
             </Text>
@@ -49,6 +192,7 @@ const Reviews = ({ title, reviews }) => {
         {reviewLoading && (
           <div className="loader size-10 rounded-full border-4 border-yellow-900" />
         )}
+
         {!!product?.reviews &&
           product.reviews.map((item, index) => {
             return (

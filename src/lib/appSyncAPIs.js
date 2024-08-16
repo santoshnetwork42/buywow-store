@@ -1,6 +1,7 @@
 import { STORE_ID } from "@/config";
 import {
   applyCoupon,
+  createReview,
   createUserAddress,
   deleteUserAddress,
   ensureUserAndDispatchOTP,
@@ -12,10 +13,14 @@ import {
   getOrder,
   getPageBySlug,
   getProductById,
+  getReviews,
+  getReviewsAnalytics,
   getUser,
   getUserRewards,
   searchCMSCollectionProducts,
   searchCMSProducts,
+  updateReview,
+  updateUser,
   updateUserAddress,
   verifyCustomOTP,
 } from "@/graphql/appSync/api";
@@ -335,12 +340,12 @@ export const getUserRewardsAPI = async () => {
     const data = "data" in response ? response.data : response;
     return data?.getUser;
   } catch (error) {
-    console.error("Error fetching user rewards:", error);
+    errorHandler(error, "Get User Rewards API");
     return null;
   }
 };
 
-export const fetchCouponRuleAPI = async (code) => {
+export const fetchCouponRuleAPI = async (code, id) => {
   try {
     const response = await client.graphql({
       query: getCouponRule,
@@ -350,7 +355,176 @@ export const fetchCouponRuleAPI = async (code) => {
     const data = "data" in response ? response.data : response;
     return data?.getCouponRule;
   } catch (error) {
-    console.error("Error fetching coupon rule:", error);
+    errorHandler(error, "Fetch Coupon Rule API");
     return null;
+  }
+};
+
+export const getReviewsAnalyticsAPI = async (productId, userId) => {
+  try {
+    const response = await client.graphql({
+      query: getReviewsAnalytics,
+      variables: {
+        filter: {
+          productId: { eq: productId },
+          verified: { eq: true },
+          userId: { ne: userId },
+        },
+        aggregates: [
+          {
+            name: "perStartGrouping",
+            type: "terms",
+            field: "rating",
+          },
+        ],
+      },
+      authMode: "apiKey",
+    });
+
+    const {
+      data: {
+        searchReviews: {
+          aggregateItems: [item],
+        },
+      },
+    } = response;
+
+    return item;
+  } catch (error) {
+    errorHandler(error, "Get Reviews Analytics API");
+    return null;
+  }
+};
+
+export const getProductReviewsAPI = async (
+  productId,
+  userId,
+  nextToken = null,
+  limit = 10,
+) => {
+  try {
+    const filter = { productId: { eq: productId }, verified: { eq: true } };
+    if (userId) {
+      filter.userId = { ne: userId };
+    }
+
+    const response = await client.graphql({
+      query: getReviews,
+      variables: {
+        filter,
+        sort: [{ field: "createdAt", direction: "desc" }],
+        nextToken,
+        limit,
+      },
+      authMode: "apiKey",
+    });
+
+    const {
+      data: {
+        searchReviews: { items, total, nextToken: newNextToken },
+      },
+    } = response;
+
+    return { items, total, nextToken: newNextToken };
+  } catch (error) {
+    errorHandler(error, "Get Product Reviews API");
+    return null;
+  }
+};
+
+export const getUserReviewAPI = async (productId, userId) => {
+  try {
+    const response = await client.graphql({
+      query: getReviews,
+      variables: {
+        filter: {
+          productId: { eq: productId },
+          userId: { eq: userId },
+        },
+        limit: 1,
+      },
+      authMode: "apiKey",
+    });
+
+    return response.data.searchReviews.items[0];
+  } catch (error) {
+    errorHandler(error, "Get User Review API");
+    return null;
+  }
+};
+
+export const submitReviewAPI = async (reviewData, userId, productId) => {
+  try {
+    const { reviewId, rating, comment, name, email, images } = reviewData;
+
+    if (reviewId) {
+      const response = await client.graphql({
+        query: updateReview,
+        authMode: "userPool",
+        variables: {
+          input: {
+            id: reviewId,
+            rating,
+            comment,
+            reviewer: { name, email },
+            userId,
+            productId,
+            storeId: STORE_ID,
+            images,
+          },
+        },
+      });
+
+      return {
+        ...response.data.updateReview,
+        rating,
+        comment,
+        reviewer: { name, email },
+        images,
+      };
+    } else {
+      const response = await client.graphql({
+        query: createReview,
+        authMode: "userPool",
+        variables: {
+          input: {
+            rating,
+            comment,
+            reviewer: { name, email },
+            userId,
+            productId,
+            storeId: STORE_ID,
+            images,
+          },
+        },
+      });
+
+      return response.data.createReview;
+    }
+  } catch (error) {
+    errorHandler(error, "Submit Review API");
+    return null;
+  }
+};
+
+export const updateUserAPI = async (user) => {
+  try {
+    const response = await client.graphql({
+      query: updateUser,
+      variables: {
+        input: {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        },
+      },
+      authMode: "userPool",
+    });
+
+    return response;
+  } catch (error) {
+    errorHandler("Error Updating User", error);
+    return error;
   }
 };

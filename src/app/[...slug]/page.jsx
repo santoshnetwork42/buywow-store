@@ -140,7 +140,7 @@ export async function generateStaticParams() {
   const pageType = {
     HOME: "",
     COLLECTION: "collections",
-    PRODUCT: "product",
+    PRODUCT: "products",
     LANDING: "",
   };
 
