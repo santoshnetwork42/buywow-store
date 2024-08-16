@@ -15,8 +15,6 @@ import { setPasswordLessModal } from "@/store/slices/modal.slice";
 import { setUser } from "@/store/slices/user.slice";
 import { call, put, select } from "redux-saga/effects";
 import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
-// import { logOutEventHandler } from "@/store/sagas/handlers/events.handle";
-
 export function* createAwsAccountHandler(action) {
   try {
     const { phone } = action.payload;
@@ -96,8 +94,17 @@ export function* confirmSignUpHandler(action) {
 
     if (user?.nextStep?.signUpStep === "COMPLETE_AUTO_SIGN_IN") {
       const res = yield call(() => autoSignInRequest());
+      // event for signup is passed here
+      yield put({
+        type: eventsSagaActions.AUTH,
+        payload: {
+          action: "signup",
+          userId: user?.userId,
+          query: "",
+          phone: username,
+        },
+      });
       console.log("SignedUp res :>> ", res); //set user in userState
-
       yield put(setConfirmationStatus(res?.nextStep?.signInStep));
     }
   } catch (error) {
@@ -117,8 +124,16 @@ export function* setConfirmationStatusHandler(action) {
 
 export function* signOutHandler() {
   try {
-    // yield call(eventsSagaActions.LOG_OUT, logOutEventHandler);
+    const user = yield select((state) => state.user.user);
     const signedOutUser = yield call(() => signOutRequest());
+    // event for logout is passed here
+    yield put({
+      type: eventsSagaActions.LOG_OUT,
+      payload: {
+        "Customer ID": user?.id,
+        URL: window.location.href,
+      },
+    });
     console.log("signedOutUser :>> ", signedOutUser); //set user in userState
     yield put(setConfirmationStatus(null));
     yield put(setUser({}));

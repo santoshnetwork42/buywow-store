@@ -18,7 +18,7 @@ import {
   getRecordKey,
   getSource,
 } from "@/utils/helpers";
-import { select } from "redux-saga/effects";
+import { call, select } from "redux-saga/effects";
 import { v4 as uuidv4 } from "uuid";
 
 const eventSource = getSource();
@@ -51,13 +51,13 @@ export function* outOfStockEventHandler({ payload }) {
               ...payload,
             });
           }
-        } catch (productError) {
-          console.error("Error processing individual product:", productError);
+        } catch (e) {
+          console.error("Error processing individual product:", e);
         }
       }
     }
-  } catch (error) {
-    console.error("Error in outOfStockHandler:", error);
+  } catch (e) {
+    console.error("Error in outOfStockHandler:", e);
   }
 }
 
@@ -94,8 +94,8 @@ export function* proceedToCheckoutEventHandler({ payload }) {
       source: eventSource,
       ...analyticsMeta,
     });
-  } catch (error) {
-    errorHandler(error);
+  } catch (e) {
+    errorHandler(e);
   }
 }
 
@@ -131,18 +131,19 @@ export function* searchEventHandler({ payload }) {
     });
 
     console.log(term, "userSEArched", user);
-  } catch (error) {
-    console.error("Error in searchHandler:", error);
+  } catch (e) {
+    console.error("Error in searchHandler:", e);
   }
 }
 
 export function* authEventHandler({ payload = {} }) {
   try {
+    console.log("payload auth+++", payload);
     const eventSource = getClientSource();
     const { action } = payload;
     const { userId } = payload;
-    const utmData = yield select((state) => state.system.meta);
-    const { utmMedium: medium, utmSource: source } = utmData;
+    // const utmData = yield select((state) => state.system.meta);
+    // const { utmMedium: medium, utmSource: source } = utmData;
     const analyticsMeta = analyticsMetaDataMapper();
 
     if (action === "signup") {
@@ -155,8 +156,8 @@ export function* authEventHandler({ payload = {} }) {
       trackEvent("Customer Registered", {
         "Customer ID": userId,
         "Mobile Number": mobile,
-        "Utm Source": source,
-        "Utm Medium": medium,
+        // "Utm Source": source,
+        // "Utm Medium": medium,
         URL: window.location.href,
         Source: eventSource,
       });
@@ -196,8 +197,8 @@ export function* authEventHandler({ payload = {} }) {
           trackEvent("Customer Logged In", {
             "Customer ID": userId,
             "Mobile Number": mobile,
-            "Utm Source": source,
-            "Utm Medium": medium,
+            // "Utm Source": source,
+            // "Utm Medium": medium,
             URL: window.location.href,
             "First Time User": false,
             Source: eventSource,
@@ -222,8 +223,8 @@ export function* authEventHandler({ payload = {} }) {
       window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
       window.dataLayer.push({ event: action, eventID: uuidv4() });
     }
-  } catch (error) {
-    console.error("Error in authHandler:", error);
+  } catch (e) {
+    console.error("Error in authHandler:", e);
   }
 }
 
@@ -662,9 +663,8 @@ export function* placeOrderEventHandler({ payload }) {
 }
 
 export function* checkoutStartedEventHandler({ payload }) {
-  const { source = "BUYWOW" } = payload;
-  console.log("Checkout Started+++##");
   try {
+    const { source = "BUYWOW" } = payload;
     const { data, coupon } = yield select((state) => state.cart);
     const userData = yield select((state) =>
       state.user.user?.phone ? state.user.user : state.user.customUser,
@@ -675,7 +675,7 @@ export function* checkoutStartedEventHandler({ payload }) {
 
     const user = userMapper(userData, currentAddress);
 
-    console.log("+++++", data, coupon, user, source);
+    console.log("+++++checkoutStartedEventHandler", data, coupon, user, source);
     const { pinpoint, ga, value, pixel, vercel } = orderMapper(
       data,
       coupon,
@@ -854,54 +854,62 @@ export function* addressSelectedEventHandler({ payload }) {
 }
 
 export function* categoryViewedEventHandler({ payload }) {
-  const userData = yield select((state) =>
-    state.user.user?.phone ? state.user.user : state.user.customUser,
-  );
-  const user = userMapper(userData);
-  trackEvent("Category Viewed", {
-    ...payload,
-  });
+  try {
+    const userData = yield select((state) =>
+      state.user.user?.phone ? state.user.user : state.user.customUser,
+    );
+    const user = userMapper(userData);
+    trackEvent("Category Viewed", {
+      ...payload,
+    });
 
-  const eventSource = getClientSource();
-  const analyticsMeta = analyticsMetaDataMapper();
-  console.log(payload, userData, "category_viewed");
+    const eventSource = getClientSource();
+    const analyticsMeta = analyticsMetaDataMapper();
+    console.log(payload, userData, "category_viewed");
 
-  trackClickStream({
-    event: "category_viewed",
-    eventID: uuidv4(),
-    userId: user?.id || "",
-    user: user || {},
-    category_name: payload["Category Name"],
-    item_count: payload["Item Count"],
-    source: eventSource,
-    ...analyticsMeta,
-  });
+    trackClickStream({
+      event: "category_viewed",
+      eventID: uuidv4(),
+      userId: user?.id || "",
+      user: user || {},
+      category_name: payload["Category Name"],
+      item_count: payload["Item Count"],
+      source: eventSource,
+      ...analyticsMeta,
+    });
+  } catch (e) {
+    errorHandler(e);
+  }
 }
 
 export function* homeViewedEventHandler(e) {
-  const userData = yield select((state) =>
-    state.user.user?.phone ? state.user.user : state.user.customUser,
-  );
-  const eventSource = getClientSource();
-  const user = userMapper(userData);
-  trackEvent("Home Viewed", {
-    URL: window.location.href,
-    Source: eventSource,
-  });
+  try {
+    const userData = yield select((state) =>
+      state.user.user?.phone ? state.user.user : state.user.customUser,
+    );
+    const eventSource = getClientSource();
+    const user = userMapper(userData);
+    trackEvent("Home Viewed", {
+      URL: window.location.href,
+      Source: eventSource,
+    });
 
-  console.log("Home Viewed", userData);
+    console.log("Home Viewed", userData);
 
-  const analyticsMeta = analyticsMetaDataMapper();
+    const analyticsMeta = analyticsMetaDataMapper();
 
-  trackClickStream({
-    event: "home_viewed",
-    eventID: uuidv4(),
-    userId: user?.id || "",
-    user: user || {},
-    URL: window.location.href,
-    source: eventSource,
-    ...analyticsMeta,
-  });
+    trackClickStream({
+      event: "home_viewed",
+      eventID: uuidv4(),
+      userId: user?.id || "",
+      user: user || {},
+      URL: window.location.href,
+      source: eventSource,
+      ...analyticsMeta,
+    });
+  } catch (e) {
+    errorHandler(e);
+  }
 }
 
 export function* addPaymentInfoEventHandler({ payload }) {
@@ -980,6 +988,7 @@ export function* otpRequestedEventHandler({ payload }) {
       ...payload,
     });
 
+    console.log("OTP requested", payload);
     const eventSource = getClientSource();
     const analyticsMeta = analyticsMetaDataMapper();
 
@@ -992,6 +1001,106 @@ export function* otpRequestedEventHandler({ payload }) {
       source: eventSource,
       ...analyticsMeta,
     });
+  } catch (e) {
+    errorHandler(e);
+  }
+}
+
+export function* addToCartEventHandler({ payload }) {
+  try {
+    const { product } = payload;
+    const { qty } = product;
+    const userData = yield select((state) => state.user.user);
+    const user = userMapper(userData);
+    const { value, pixel, vercel, ga, moengage } = itemMapper(
+      product,
+      null,
+      user,
+    );
+
+    const eventName = qty > 0 ? "add_to_cart" : "remove_from_cart";
+
+    trackEvent("Add To Cart", moengage.addToCart);
+    console.log("add to cart", value, pixel, vercel, ga, moengage);
+    if (window && window.dataLayer) {
+      window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
+      window.dataLayer.push({
+        event: eventName,
+        eventID: uuid(),
+        attribute: pixel,
+        user,
+        ecommerce: {
+          currency: "INR",
+          value,
+          items: ga,
+        },
+      });
+    }
+    const analyticsMeta = analyticsMetaDataMapper();
+
+    trackClickStream({
+      event: "add_to_cart",
+      eventID: uuid(),
+      userId: user?.id || "",
+      user: user || {},
+      currency: "INR",
+      value,
+      items: ga,
+      source: eventSource,
+      ...analyticsMeta,
+    });
+    // Analytics.record({ name: eventName, pinpoint, metrics: { value } });
+    // vercelAnalytics.track(eventName, vercel);
+  } catch (e) {
+    errorHandler(e);
+  }
+}
+
+export function* removeFromCartEventHandler({ payload }) {
+  try {
+    const { product } = payload;
+    const userData = yield select((state) => state.user.user);
+    const user = userMapper(userData);
+    const { value, pixel, vercel, ga, moengage } = itemMapper(
+      product,
+      null,
+      user,
+    );
+
+    trackEvent("Removed From Cart", moengage.removedFromCart);
+    console.log("Removed From Cart", value, pixel, vercel, ga, moengage);
+    if (window && window.dataLayer) {
+      window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
+      window.dataLayer.push({
+        event: "remove_from_cart",
+        eventID: uuid(),
+        attribute: pixel,
+        ecommerce: {
+          currency: "INR",
+          value,
+          items: ga,
+        },
+      });
+    }
+    const analyticsMeta = analyticsMetaDataMapper();
+
+    trackClickStream({
+      event: "remove_from_cart",
+      eventID: uuid(),
+      userId: user?.id || "",
+      user: user || {},
+      currency: "INR",
+      value,
+      items: ga,
+      source: eventSource,
+      ...analyticsMeta,
+    });
+    // Analytics.record({
+    //   name: "remove_from_cart",
+    //   pinpoint,
+    //   metrics: { value },
+    // });
+    // vercelAnalytics.track("remove_from_cart", vercel);
   } catch (e) {
     errorHandler(e);
   }
@@ -1041,130 +1150,160 @@ export function* otpRequestedEventHandler({ payload }) {
 // }
 
 export function* tileClickedEventHandler({ payload }) {
-  const userData = yield select((state) =>
-    state.user.user?.phone ? state.user.user : state.user.customUser,
-  );
-  const user = userMapper(userData);
-  trackEvent("Tile Clicked", {
-    ...payload,
-  });
+  try {
+    const userData = yield select((state) =>
+      state.user.user?.phone ? state.user.user : state.user.customUser,
+    );
+    const user = userMapper(userData);
+    trackEvent("Tile Clicked", {
+      ...payload,
+    });
 
-  const eventSource = getClientSource();
-  const analyticsMeta = analyticsMetaDataMapper();
+    const eventSource = getClientSource();
+    const analyticsMeta = analyticsMetaDataMapper();
 
-  trackClickStream({
-    event: "tile_clicked",
-    eventID: uuidv4(),
-    userId: user?.id || "",
-    user: user || {},
-    banner_name: payload.banner_name,
-    item_id: payload.item_id,
-    item_count: payload["Item Count"],
-    section_name: payload["Section Name"],
-    source: eventSource,
-    ...analyticsMeta,
-  });
+    trackClickStream({
+      event: "tile_clicked",
+      eventID: uuidv4(),
+      userId: user?.id || "",
+      user: user || {},
+      banner_name: payload.banner_name,
+      item_id: payload.item_id,
+      item_count: payload["Item Count"],
+      section_name: payload["Section Name"],
+      source: eventSource,
+      ...analyticsMeta,
+    });
+  } catch (e) {
+    errorHandler(e);
+  }
 }
 
 export function* logOutEventHandler({ payload }) {
-  const userData = yield select((state) =>
-    state.user.user?.phone ? state.user.user : state.user.customUser,
-  );
-  const currentAddress = yield select(
-    (state) => state.address.currentAddress || state.address.addressList?.[0],
-  );
-  const eventSource = getClientSource();
-  const user = userMapper(userData, currentAddress);
-  trackEvent("Customer Logged Out", {
-    ...payload,
-    "Customer ID": user?.phone || user?.id,
-    Source: eventSource,
-  });
-  const analyticsMeta = analyticsMetaDataMapper();
+  try {
+    const userData = yield select((state) =>
+      state.user.user?.phone ? state.user.user : state.user.customUser,
+    );
+    const currentAddress = yield select(
+      (state) => state.address.currentAddress || state.address.addressList?.[0],
+    );
+    const eventSource = getClientSource();
+    const user = userMapper(userData, currentAddress);
+    trackEvent("Customer Logged Out", {
+      ...payload,
+      Source: eventSource,
+    });
+    const analyticsMeta = analyticsMetaDataMapper();
 
-  trackClickStream({
-    event: "customer_logged_out",
-    eventID: uuidv4(),
-    userId: user?.id || "",
-    user: user || {},
-    source: eventSource,
-    ...analyticsMeta,
-  });
-  Cookie.remove(`${STORE_PREFIX}_session_id`);
+    console.log(
+      {
+        event: "customer_logged_out",
+        eventID: uuidv4(),
+        userId: user?.phone || user?.id || "",
+        user: user || {},
+        source: eventSource,
+        ...analyticsMeta,
+      },
+      "LOG________________OUT",
+    );
+    trackClickStream({
+      event: "customer_logged_out",
+      eventID: uuidv4(),
+      userId: user?.phone || user?.id || "",
+      user: user || {},
+      source: eventSource,
+      ...analyticsMeta,
+    });
+    // Cookie.remove(`${STORE_PREFIX}_session_id`);
+  } catch (e) {
+    errorHandler(e);
+  }
 }
 
 export function* topNavbarClickedEventHandler({ payload }) {
-  const userData = yield select((state) =>
-    state.user.user?.phone ? state.user.user : state.user.customUser,
-  );
-  const eventSource = getClientSource();
-  const user = userMapper(userData);
-  trackEvent("Top Navbar Clicked", {
-    ...payload,
-  });
+  try {
+    const userData = yield select((state) =>
+      state.user.user?.phone ? state.user.user : state.user.customUser,
+    );
+    const eventSource = getClientSource();
+    const user = userMapper(userData);
+    trackEvent("Top Navbar Clicked", {
+      ...payload,
+    });
 
-  console.log(payload, "Top Navbar Clicked");
-  const analyticsMeta = analyticsMetaDataMapper();
+    console.log(payload, "Top Navbar Clicked");
+    const analyticsMeta = analyticsMetaDataMapper();
 
-  trackClickStream({
-    event: "top_navbar_clicked",
-    eventID: uuidv4(),
-    userId: user?.id || "",
-    user: user || {},
-    banner_name: payload.banner_name,
-    item_id: payload.item_id,
-    section_name: payload["Section Name"],
-    source: eventSource,
-    ...analyticsMeta,
-  });
+    trackClickStream({
+      event: "top_navbar_clicked",
+      eventID: uuidv4(),
+      userId: user?.id || "",
+      user: user || {},
+      banner_name: payload.banner_name,
+      item_id: payload.item_id,
+      section_name: payload["Section Name"],
+      source: eventSource,
+      ...analyticsMeta,
+    });
+  } catch (e) {
+    errorHandler(e);
+  }
 }
 
 export function* shopByClickEventHandler({ payload }) {
-  const userData = yield select((state) =>
-    state.user.user?.phone ? state.user.user : state.user.customUser,
-  );
-  const eventSource = getClientSource();
-  const user = userMapper(userData);
+  try {
+    const userData = yield select((state) =>
+      state.user.user?.phone ? state.user.user : state.user.customUser,
+    );
+    const eventSource = getClientSource();
+    const user = userMapper(userData);
 
-  const analyticsMeta = analyticsMetaDataMapper();
+    const analyticsMeta = analyticsMetaDataMapper();
 
-  trackClickStream({
-    event: "shop_by_clicked",
-    eventID: uuidv4(),
-    userId: user?.id || "",
-    user: user || {},
-    ...payload,
-    source: eventSource,
-    ...analyticsMeta,
-  });
-  console.log("shop_by_clicked", {
-    event: "shop_by_clicked",
-    eventID: uuidv4(),
-    userId: user?.id || "",
-    user: user || {},
-    ...payload,
-    source: eventSource,
-    ...analyticsMeta,
-  });
+    trackClickStream({
+      event: "shop_by_clicked",
+      eventID: uuidv4(),
+      userId: user?.id || "",
+      user: user || {},
+      ...payload,
+      source: eventSource,
+      ...analyticsMeta,
+    });
+    console.log("shop_by_clicked", {
+      event: "shop_by_clicked",
+      eventID: uuidv4(),
+      userId: user?.id || "",
+      user: user || {},
+      ...payload,
+      source: eventSource,
+      ...analyticsMeta,
+    });
+  } catch (e) {
+    errorHandler(e);
+  }
 }
 
 export function* blogClickEventHandler({ payload }) {
-  const userData = yield select((state) =>
-    state.user.user?.phone ? state.user.user : state.user.customUser,
-  );
-  const user = userMapper(userData);
-  const eventSource = getClientSource();
-  const analyticsMeta = analyticsMetaDataMapper();
+  try {
+    const userData = yield select((state) =>
+      state.user.user?.phone ? state.user.user : state.user.customUser,
+    );
+    const user = userMapper(userData);
+    const eventSource = getClientSource();
+    const analyticsMeta = analyticsMetaDataMapper();
 
-  trackClickStream({
-    event: "blogs_clicked",
-    eventID: uuidv4(),
-    userId: user?.id || "",
-    user: user || {},
-    ...payload,
-    source: eventSource,
-    ...analyticsMeta,
-  });
+    trackClickStream({
+      event: "blogs_clicked",
+      eventID: uuidv4(),
+      userId: user?.id || "",
+      user: user || {},
+      ...payload,
+      source: eventSource,
+      ...analyticsMeta,
+    });
+  } catch (e) {
+    errorHandler(e);
+  }
 }
 
 export function* applyCouponsEventHandler({ payload }) {
@@ -1172,7 +1311,7 @@ export function* applyCouponsEventHandler({ payload }) {
   const checkoutSource = coupon.checkoutSource || "BUYWOW";
 
   try {
-    const { data, coupon } = yield select((state) => state.cart);
+    const data = yield select((state) => state.cart.data);
     const userData = yield select((state) =>
       state.user.user?.phone ? state.user.user : state.user.customUser,
     );
@@ -1187,6 +1326,12 @@ export function* applyCouponsEventHandler({ payload }) {
         attribute: pixel,
       });
     }
+
+    console.log("COUPON APPLIED ", {
+      event: "add_coupon_code",
+      eventID: uuidv4(),
+      attribute: pixel,
+    });
   } catch (e) {
     errorHandler(e);
   }

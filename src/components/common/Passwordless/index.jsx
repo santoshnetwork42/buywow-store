@@ -74,6 +74,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
           type: userSagaActions.SET_USER,
           payload: userData,
         });
+        // for signup as well as for signin it will run
+        auth("login", { userId: userData?.id, phone: userData?.phone });
       }
       if (!currentUser) {
         dispatch({
@@ -184,10 +186,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
           dispatch({
             type: authSagaActions.CONFIRM_SIGNIN,
             payload: { confirmationCode },
-          }).then((res) => {
-            auth("login", { userId: null, phone });
           });
-        } catch (e) {
+        } catch (error) {
           console.error("Error while confirming for signIn", error);
         }
       },
@@ -196,10 +196,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
           dispatch({
             type: authSagaActions.CONFIRM_SIGNUP,
             payload: { username: phone, confirmationCode },
-          }).then((res) => {
-            auth("signup", { userId: null, phone });
           });
-        } catch (e) {
+        } catch (error) {
           console.error("Error while confirming for singUp", error);
         }
       },
@@ -218,9 +216,9 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
             dispatch({
               type: userSagaActions.SET_CUSTOM_USER,
               payload: { phone },
-            }).then((res) => {
-              auth("signup", { userId: null, phone });
             });
+            // our custom signup
+            auth("signup", { userId: null, phone });
           } else {
             // Handle unverified OTP
             console.error("OTP verification failed");

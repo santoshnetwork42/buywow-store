@@ -27,14 +27,15 @@ import {
   spinTheWheelRewardEventHandler,
   customEventVercelEventHandler,
   viewListItemEventHandler,
+  addToCartEventHandler,
+  removeFromCartEventHandler,
 } from "@/store/sagas/handlers/events.handle";
+import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 
-// done
 function* outOfStock() {
   yield takeEvery(eventsSagaActions.OUT_OF_STOCK, outOfStockEventHandler);
 }
 
-// done
 function* search() {
   yield takeLatest(eventsSagaActions.SEARCH, searchEventHandler);
 }
@@ -43,12 +44,10 @@ function* priceMisMatch() {
   // yield takeLatest(eventsSagaActions.PRICE_MISMATCH, priceMisMatchEventHandler);
 }
 
-// done
 function* auth() {
   yield takeLatest(eventsSagaActions.AUTH, authEventHandler);
 }
 
-// done
 function* proceedToCheckout() {
   yield takeLatest(
     eventsSagaActions.PROCEED_TO_CHECKOUT,
@@ -57,13 +56,16 @@ function* proceedToCheckout() {
 }
 
 //cart actions
-function* addToCart() {
-  // yield takeLatest(cartSagaActions.ADD_TO_CART, signOutHandler);
+function* addToCartEvent() {
+  yield takeLatest(cartSagaActions.ADD_TO_CART, addToCartEventHandler);
 }
 
 //cart actions
-function* removeFromCart() {
-  // yield takeLatest(cartSagaActions.REMOVE_FROM_CART, signOutHandler);
+function* removeFromCartEvent() {
+  yield takeLatest(
+    cartSagaActions.REMOVE_FROM_CART,
+    removeFromCartEventHandler,
+  );
 }
 
 function* viewItem() {
@@ -74,9 +76,9 @@ function* viewItem() {
 function* placeOrder() {
   yield takeLatest(eventsSagaActions.PLACE_ORDER, placeOrderEventHandler);
 }
-
+//cart actions
 function* applyCoupons() {
-  yield takeLatest(eventsSagaActions.APPLY_COUPONS, applyCouponsEventHandler);
+  yield takeLatest(cartSagaActions.APPLY_COUPONS, applyCouponsEventHandler);
 }
 
 function* checkoutStarted() {
@@ -183,6 +185,9 @@ function* logOut() {
 export function* eventsWatcher() {
   yield all([
     fork(outOfStock),
+    fork(addToCartEvent),
+    fork(removeFromCartEvent),
+    fork(applyCoupons),
     fork(search),
     fork(priceMisMatch),
     fork(auth),
