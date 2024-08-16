@@ -4,6 +4,7 @@ import OrderList from "@/components/common/Orders";
 import WowLoyalty from "@/components/common/WowLoyalty";
 import { Button, Text } from "@/components/elements";
 import AccountAddressSection from "@/components/common/AccountAddressSection";
+import AccountDetails from "@/components/common/AccountDetails";
 
 const TabContent = ({ activeTab }) => {
   switch (activeTab) {
@@ -13,6 +14,8 @@ const TabContent = ({ activeTab }) => {
       return <OrderList />;
     case "Addresses":
       return <AccountAddressSection />; // Placeholder for Addresses content
+    case "Account Details":
+      return <AccountDetails />; // Placeholder for Addresses content
     default:
       return null;
   }
@@ -20,7 +23,7 @@ const TabContent = ({ activeTab }) => {
 
 export default function Account() {
   const [activeTab, setActiveTab] = useState("WOW Cash");
-  const tabItems = ["WOW Cash", "Orders", "Addresses"];
+  const tabItems = ["WOW Cash", "Orders", "Addresses", "Account Details"];
 
   const handleTabClick = useCallback((tab) => {
     setActiveTab(tab);

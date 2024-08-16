@@ -11,11 +11,12 @@ import SearchBar from "@/components/partials/Header/SearchBar";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useNavBarState } from "@/utils/context/navbar";
+import { RESTRICT_SEARCH_AND_CART_TO_SHOW } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
 import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
@@ -106,6 +107,9 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
 const Header = ({ data, ...props }) => {
   const router = useRouter();
   const user = useSelector((state) => state.user.user);
+  const pathname = usePathname();
+
+  const isRestricted = RESTRICT_SEARCH_AND_CART_TO_SHOW?.includes(pathname);
   const { handlePasswordLessModal, handleCartVisibility } = useModalDispatch();
   const { isRewardApplied } = useNavBarState();
   const { totalItems: totalCartItems } = useCartTotal({
@@ -198,7 +202,9 @@ const Header = ({ data, ...props }) => {
           )}
 
           <div className="flex max-w-[370px] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
-            <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
+            {!isRestricted && (
+              <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
+            )}
             <Link href="#" className="flex-shrink-0" onClick={handleUserClisk}>
               <Img
                 src="img_user.svg"
@@ -208,25 +214,27 @@ const Header = ({ data, ...props }) => {
                 className="aspect-square w-[24px] object-contain"
               />
             </Link>
-            <Link
-              href="#"
-              onClick={() => handleCartVisibility(true)}
-              className="flex-shrink-0"
-            >
-              <div className="relative">
-                <BagIcon size={20} />
-                {!!totalCartItems && (
-                  <div className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
-                    <Text size="xxs" className="mx-1 text-white-a700_01">
-                      {totalCartItems}
-                    </Text>
-                  </div>
-                )}
-              </div>
-            </Link>
+            {!isRestricted && (
+              <Link
+                href="#"
+                onClick={() => handleCartVisibility(true)}
+                className="flex-shrink-0"
+              >
+                <div className="relative">
+                  <BagIcon size={20} />
+                  {!!totalCartItems && (
+                    <div className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
+                      <Text size="xxs" className="mx-1 text-white-a700_01">
+                        {totalCartItems}
+                      </Text>
+                    </div>
+                  )}
+                </div>
+              </Link>
+            )}
           </div>
 
-          <SearchBar className="flex w-full md:hidden" />
+          {!isRestricted && <SearchBar className="flex w-full md:hidden" />}
         </div>
       </div>
 

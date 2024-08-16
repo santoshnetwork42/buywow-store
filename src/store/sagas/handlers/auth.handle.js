@@ -64,7 +64,6 @@ export function* confirmSignInHandler(action) {
     const { passwordLess } = yield select((state) => state.modal);
     yield put(setAuthLoading(true));
     const user = yield call(() => confirmSignInRequest({ confirmationCode }));
-    console.log("SignedIn user :>> ", user); //set user in userState
     yield put(setAuthLoading(false));
 
     yield put(setConfirmationStatus(user?.nextStep?.signInStep));
