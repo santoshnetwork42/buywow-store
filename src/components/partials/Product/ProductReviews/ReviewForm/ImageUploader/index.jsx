@@ -54,7 +54,7 @@ const ImageUploader = React.memo(({ images, onPhotoChange }) => {
             >
               <Img
                 src={img}
-                className="aspect-square h-auto w-full p-1"
+                className="aspect-square h-auto w-full object-contain p-1"
                 width={100}
                 height={100}
                 isStatic

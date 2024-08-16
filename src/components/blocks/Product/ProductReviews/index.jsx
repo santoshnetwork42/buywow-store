@@ -44,7 +44,6 @@ const Reviews = ({
   const [showReview, setShowReview] = useState(false);
   const [token, setToken] = useState(initialReviews.nextToken || null);
   const [loading, setLoading] = useState(false);
-  const [reviewAnalytics, setReviewAnalytics] = useState(processedAnalytics);
   const [userReview, setUserReview] = useState(null);
 
   const productId = fetchedProduct?.id;
@@ -87,7 +86,7 @@ const Reviews = ({
       if (!productId || !user) return;
       setLoading(true);
       try {
-        const result = await submitReviewAPI(reviewState, user, productId);
+        const result = await submitReviewAPI(reviewState, user?.id, productId);
         if (result) {
           setUserReview(result);
           setReview(reviewDefault);
@@ -114,7 +113,9 @@ const Reviews = ({
 
   const handleReviewClick = useCallback(() => {
     if (user?.id) {
-      setShowReview(true);
+      userReview
+        ? showToast.error("You have already reviewed this product.")
+        : setShowReview(true);
     } else {
       handlePasswordLessModal(true);
     }
@@ -131,7 +132,7 @@ const Reviews = ({
         title={title}
         rating={rating}
         totalRating={totalRating}
-        reviewAnalytics={reviewAnalytics}
+        reviewAnalytics={processedAnalytics}
         onReviewClick={handleReviewClick}
       />
 

@@ -79,7 +79,7 @@ const Modal = ({
           {showConfetti && <Confetti />}
           <div
             className={twMerge(
-              "fixed inset-0 z-20 flex justify-center bg-black-900 bg-opacity-20 transition-opacity duration-300",
+              "fixed inset-0 z-20 flex justify-center bg-black-900 bg-opacity-40 transition-opacity duration-300",
               showMobileView ? "items-end" : "items-center",
               "md:items-center",
               isOpen ? "opacity-100" : "opacity-0",
@@ -102,20 +102,20 @@ const Modal = ({
               )}
               onClick={(e) => e.stopPropagation()}
             >
-              {!!enableCloseButton && !!showCloseButtonOutOfBox && (
+              {enableCloseButton && showCloseButtonOutOfBox && (
                 <div
                   className="absolute -right-1 -top-7 cursor-pointer"
                   onClick={onCloseClick}
                 >
-                  <CloseIcon color="white" size={32} />
+                  <CloseIcon color="white" size={36} />
                 </div>
               )}
               {!!title && (
                 <div className="flex items-center justify-between">
-                  <Heading as="h5" size="xl" className="">
+                  <Heading as="h5" size="xl">
                     {title}
                   </Heading>
-                  {!!enableCloseButton && !showCloseButtonOutOfBox && (
+                  {enableCloseButton && !showCloseButtonOutOfBox && (
                     <div className="cursor-pointer" onClick={onCloseClick}>
                       <CloseIcon
                         color="black"
