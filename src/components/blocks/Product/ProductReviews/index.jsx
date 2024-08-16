@@ -16,7 +16,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
 const reviewDefault = {
-  rating: 5,
+  rating: 0,
   comment: "",
   name: "",
   email: "",
@@ -120,6 +120,11 @@ const Reviews = ({
     }
   }, [user?.id, handlePasswordLessModal]);
 
+  const handleUpdateReview = useCallback((reviewData) => {
+    setReview(reviewData);
+    setShowReview(true);
+  }, []);
+
   return (
     <div className="container-main mb-main flex flex-col items-center justify-center">
       <ReviewSummary
@@ -137,6 +142,7 @@ const Reviews = ({
         token={token}
         loading={loading}
         getProductReviews={getProductReviews}
+        handleUpdateReview={handleUpdateReview}
       />
 
       <ReviewForm
@@ -150,4 +156,5 @@ const Reviews = ({
     </div>
   );
 };
+
 export default Reviews;

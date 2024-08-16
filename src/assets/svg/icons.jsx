@@ -33,7 +33,7 @@ export const StarIcon = ({ size = 30, color = "#FAB73B", className }) => {
   );
 };
 
-export const GradientStarIcon = ({ color = "#FAB73B", size = 30 }) => {
+export const GradientStarIcon = ({ color = "#FFA41C", size = 30 }) => {
   const gradientId = `grad${color}`;
 
   return (
