@@ -26,7 +26,7 @@ const ReviewForm = React.memo(
       <Modal
         isOpen={isOpen}
         title="Write a Review"
-        modalContainerClassName="md:w-[500px] flex flex-col gap-3 sm:gap-4 lg:gap-5"
+        modalContainerClassName="md:w-[500px] lg:w-[580px] flex flex-col gap-3 sm:gap-4 lg:gap-5"
         onClose={onClose}
       >
         <form
