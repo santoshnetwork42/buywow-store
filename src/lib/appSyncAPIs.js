@@ -344,7 +344,7 @@ export const getUserRewardsAPI = async () => {
   }
 };
 
-export const fetchCouponRuleAPI = async (code) => {
+export const fetchCouponRuleAPI = async (code, id) => {
   try {
     const response = await client.graphql({
       query: getCouponRule,

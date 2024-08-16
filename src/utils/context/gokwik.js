@@ -116,9 +116,9 @@ function GoKwikProvider({ children }) {
     }
   };
 
-  const fetchCoupon = async (code) => {
+  const fetchCoupon = async (code, userId) => {
     try {
-      const response = await fetchCouponRuleAPI(code);
+      const response = await fetchCouponRuleAPI(code, userId);
       return response;
     } catch (error) {
       errorHandler(error);
@@ -189,6 +189,7 @@ function GoKwikProvider({ children }) {
               if (orderDetails?.applied_discount)
                 coupon = await fetchCoupon(
                   orderDetails?.applied_discount?.code,
+                  id,
                 );
 
               // placeOrder(
