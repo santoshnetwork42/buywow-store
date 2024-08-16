@@ -81,8 +81,6 @@ export const searchCMSCollectionProductsAPI = async ({
       },
     });
 
-    // console.log(response);
-
     return JSON.parse(response?.data?.searchCMSCollectionProducts || {});
   } catch (err) {
     errorHandler(err, "Search CMS Collection Products API");
@@ -454,8 +452,6 @@ export const getUserReviewAPI = async (productId, userId) => {
       authMode: "apiKey",
     });
 
-    console.log("response", response);
-
     return response.data.searchReviews.items[0];
   } catch (error) {
     errorHandler(error, "Get User Review API");
@@ -466,7 +462,6 @@ export const getUserReviewAPI = async (productId, userId) => {
 export const submitReviewAPI = async (reviewData, userId, productId) => {
   try {
     const { reviewId, rating, comment, name, email, images } = reviewData;
-    console.log("reviewData", reviewData);
 
     if (reviewId) {
       const response = await client.graphql({
