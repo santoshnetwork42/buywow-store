@@ -2,20 +2,18 @@
 
 import { Button, Input, Text } from "@/components/elements";
 import { Textarea } from "@/components/elements/Textarea";
-import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem//RemoveButton";
 import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
 import {
   addPhonePrefix,
-  isEmailValid,
   validateEmail,
   validatePhoneNumber,
   validatePinCode,
   validateString,
 } from "@/utils/helpers";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AddressModal from "../AddressModal";
 import { AddressListComponent } from "../AddressList";
+import AddressModal from "../AddressModal";
 
 const AccountAddressSection = ({}) => {
   const dispatch = useDispatch();
@@ -278,7 +276,7 @@ const AccountAddressSection = ({}) => {
                 className="gap-1 border p-2"
                 error={addressErrors?.email}
                 label="Email"
-                maxLength={20}
+                maxLength={30}
               />
 
               <Textarea
