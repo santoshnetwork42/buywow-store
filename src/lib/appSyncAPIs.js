@@ -16,6 +16,7 @@ import {
   getUserRewards,
   searchCMSCollectionProducts,
   searchCMSProducts,
+  updateUser,
   updateUserAddress,
   verifyCustomOTP,
 } from "@/graphql/appSync/api";
@@ -352,5 +353,27 @@ export const fetchCouponRuleAPI = async (code) => {
   } catch (error) {
     console.error("Error fetching coupon rule:", error);
     return null;
+  }
+};
+
+export const updateUserAPI = async (user) => {
+  try {
+    const response = await client.graphql({
+      query: updateUser,
+      variables: {
+        input: {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        },
+      },
+      authMode: "userPool",
+    });
+
+    return response;
+  } catch (error) {
+    errorHandler("Error Updating User", error);
+    return error;
   }
 };
