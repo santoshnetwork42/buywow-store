@@ -1,17 +1,18 @@
+import OrderDetails from "@/components/partials/Order/OrderDetails";
+import OrderSummary from "@/components/partials/Order/OrderSummary";
+import ProductList from "@/components/partials/Order/ProductList";
+import { STORE_ID } from "@/config";
 import { getOrderByIdAPI } from "@/lib/appSyncAPIs";
 import { calculateTotals } from "@/utils/helpers";
 import Link from "next/link";
-import { STORE_ID } from "@/config";
-import OrderDetails from "@/components/partials/Order/OrderDetails";
-import ProductList from "@/components/partials/Order/ProductList";
-import OrderSummary from "@/components/partials/Order/OrderSummary";
+import { Suspense } from "react";
 
-async function getOrderData(orderId, paymentId) {
+const getOrderData = async (orderId, paymentId) => {
   try {
     const { getOrder: response } = await getOrderByIdAPI({ id: orderId });
 
     if (!response || response.storeId !== STORE_ID) {
-      return { order: null, paymentId: null, orderId };
+      return null;
     }
 
     const isValidOrder =
@@ -20,7 +21,7 @@ async function getOrderData(orderId, paymentId) {
       response.source === "GOKWIK";
 
     if (!isValidOrder) {
-      return { order: null, paymentId: null, orderId };
+      return null;
     }
 
     const products = response.products?.items.map((item) => ({
@@ -31,29 +32,28 @@ async function getOrderData(orderId, paymentId) {
     }));
 
     return {
-      order: {
-        ...response,
-        products: { ...response.products, items: products },
-      },
-      paymentId,
-      orderId,
+      ...response,
+      products: { ...response.products, items: products },
     };
   } catch (error) {
     console.error("Error fetching order data:", error);
-    return { order: null, paymentId: null, orderId };
+    return null;
   }
-}
+};
 
-export default async function OrderPage({ params, searchParams }) {
-  const { orderId } = params;
-  const { paymentId = null } = searchParams;
+const OrderSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="mb-4 h-10 rounded bg-gray-200"></div>
+    <div className="mb-4 h-40 rounded bg-gray-200"></div>
+    <div className="mb-4 h-60 rounded bg-gray-200"></div>
+    <div className="flex justify-between">
+      <div className="h-10 w-32 rounded bg-gray-200"></div>
+      <div className="h-10 w-32 rounded bg-gray-200"></div>
+    </div>
+  </div>
+);
 
-  const { order } = await getOrderData(orderId, paymentId);
-
-  if (!order) {
-    return <div>Order not found or unauthorized access.</div>;
-  }
-
+const OrderContent = ({ order, paymentId }) => {
   const {
     code,
     status,
@@ -67,14 +67,14 @@ export default async function OrderPage({ params, searchParams }) {
     totalShippingCharges,
     products,
     totalCashOnDeliveryCharges,
-  } = order || {};
+  } = order;
 
   const productItems = products?.items || [];
   const { activeItemsTotalPrice, itemsTotalPrice } =
     calculateTotals(productItems);
 
   return (
-    <div className="container-main mb-main flex flex-col gap-4 py-6">
+    <>
       <OrderDetails
         code={code}
         status={status}
@@ -110,6 +110,26 @@ export default async function OrderPage({ params, searchParams }) {
           RETURN TO SHOP
         </Link>
       </div>
+    </>
+  );
+};
+
+export default async function OrderPage({ params, searchParams }) {
+  const { orderId } = params;
+  const { paymentId = null } = searchParams;
+
+  const order = await getOrderData(orderId, paymentId);
+  console.log("order :>> ", order);
+
+  if (!order) {
+    return <div>Order not found or unauthorized access.</div>;
+  }
+
+  return (
+    <div className="container-main mb-main flex flex-col gap-4 py-6">
+      <Suspense fallback={<OrderSkeleton />}>
+        <OrderContent order={order} paymentId={paymentId} />
+      </Suspense>
     </div>
   );
 }

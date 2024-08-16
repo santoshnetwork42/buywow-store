@@ -1,4 +1,5 @@
-import { STORE_ID } from "@/config";
+import awsExport from "@/aws-exports";
+import { AWS_CLIENT_ID, STORE_ID } from "@/config";
 import {
   applyCoupon,
   createReview,
@@ -25,7 +26,14 @@ import {
   verifyCustomOTP,
 } from "@/graphql/appSync/api";
 import { errorHandler } from "@/utils/errorHandler";
+import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
+
+Amplify.configure({
+  ...awsExport,
+  ssr: true,
+  aws_user_pools_web_client_id: AWS_CLIENT_ID,
+});
 
 const client = generateClient();
 
