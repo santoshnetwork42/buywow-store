@@ -64,7 +64,6 @@ export function* confirmSignInHandler(action) {
     const { passwordLess } = yield select((state) => state.modal);
     yield put(setAuthLoading(true));
     const user = yield call(() => confirmSignInRequest({ confirmationCode }));
-    console.log("SignedIn user :>> ", user); //set user in userState
     yield put(setAuthLoading(false));
 
     yield put(setConfirmationStatus(user?.nextStep?.signInStep));
@@ -94,7 +93,6 @@ export function* confirmSignUpHandler(action) {
 
     if (user?.nextStep?.signUpStep === "COMPLETE_AUTO_SIGN_IN") {
       const res = yield call(() => autoSignInRequest());
-      console.log("SignedUp res :>> ", res); //set user in userState
 
       yield put(setConfirmationStatus(res?.nextStep?.signInStep));
     }
@@ -116,7 +114,6 @@ export function* setConfirmationStatusHandler(action) {
 export function* signOutHandler() {
   try {
     const signedOutUser = yield call(() => signOutRequest());
-    console.log("signedOutUser :>> ", signedOutUser); //set user in userState
 
     yield put(setConfirmationStatus(null));
     yield put(setUser({}));

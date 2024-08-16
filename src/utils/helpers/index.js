@@ -341,3 +341,31 @@ export const formatUserAddress = (address) => {
     phone: address.recipient_phone || address.phone,
   };
 };
+
+export const getPer = (totalCount, allReview) => {
+  if (totalCount && allReview)
+    return Math.round((allReview * 100) / totalCount);
+  return 0;
+};
+
+export const processAnalytics = (item) => {
+  if (!item) return [];
+
+  const data = item.result?.buckets.sort((a, b) => +a.key - +b.key);
+  const totalDocCount = data.reduce((a, b) => a + b.doc_count, 0);
+
+  return Array(5)
+    .fill({ key: "", doc_count: 0 })
+    .map((item, index) => {
+      const inputIndex = data.findIndex((i) => i.key === String(index + 1));
+      const d =
+        inputIndex !== -1
+          ? data[inputIndex]
+          : { ...item, key: (index + 1).toString() };
+      return {
+        ...d,
+        percentage: getPer(totalDocCount, +d.doc_count),
+      };
+    })
+    .reverse();
+};

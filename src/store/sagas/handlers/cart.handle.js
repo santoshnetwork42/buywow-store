@@ -1,3 +1,4 @@
+import { STORE_ID, STORE_PREFIX } from "@/config";
 import { fetchProductDetailsAPI } from "@/lib/appSyncAPIs";
 import {
   emptyCart,
@@ -16,13 +17,12 @@ import {
 } from "@/utils/helpers";
 import { getCouponDiscount } from "@wow-star/utils";
 import { all, call, put, select } from "redux-saga/effects";
-import { cartSagaActions } from "../sagaActions/cart.actions";
-import { setCartModalHandler } from "./modal.handle";
 import {
   createShoppingCartAPI,
   manageShoppingCartAPI,
 } from "../requests/cart.request";
-import { STORE_ID, STORE_PREFIX } from "@/config";
+import { cartSagaActions } from "../sagaActions/cart.actions";
+import { setCartModalHandler } from "./modal.handle";
 
 export function* addToCartHandler(action) {
   try {
@@ -201,7 +201,6 @@ export function* manageCartHandler(action) {
     yield put({ type: cartSagaActions.UPDATE_CART_ID_LOADING, payload: true });
 
     const { user, cart, system } = yield select();
-    console.log("cart>>>>>>", cart);
     let { coupon, data: products, isRewardApplied } = cart;
     const { user: userData, isLoggedinViaGokwik } = user;
     const { id: couponCode, code } = coupon || {};
