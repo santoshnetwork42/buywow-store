@@ -118,9 +118,11 @@ export const itemMapper = (
     "Product Subcategory": subCategory?.name || null,
     "Product Title": product.title,
     SKU: product.sku,
-    "Image URL": getPublicImageURL(thumbImage?.imageKey),
+    "Image URL": thumbImage?.imageKey
+      ? getPublicImageURL(thumbImage?.imageKey)
+      : "",
     "Product Category": category?.name,
-    "Product URL": `${currentURL}/products/${product.slug}`,
+    "Product URL": `${currentURL}/products/${product?.slug}`,
     "Vendor name": vendor,
     "Product Price": price,
     Currency: "INR",
@@ -184,7 +186,7 @@ export const itemMapper = (
       item_name: title,
       affiliation: "",
       coupon: coupon?.code || "",
-      discount: (listingPrice - price).toString(),
+      discount: (listingPrice - price)?.toString(),
       item_brand: vendor,
       item_category: category?.name || "",
       item_category2: subCategory?.name || "",
@@ -192,8 +194,8 @@ export const itemMapper = (
       item_list_name: section?.name || "",
       item_variant: variantId,
       location_id: "",
-      price: price.toString(),
-      quantity: qty.toString(),
+      price: price?.toString(),
+      quantity: qty?.toString(),
     },
     ga: [
       {
@@ -234,7 +236,7 @@ export const orderMapper = (
     value: 0,
   };
 
-  const mappings = products.reduce(
+  const mappings = products?.reduce(
     ({ value, pinpoint, ga, pixel, vercel }, product, index) => {
       const {
         ga: [itemNew],
@@ -498,7 +500,7 @@ export const moEngagedOrderMapper = (
       "Order ID": order?.code,
       "Order Date": new Date().toISOString(),
       "Payment Mode": paymentMethod,
-      "Payment Status": paymentMethod === "COD" ? "Unpaid" : "Paid",
+      "Payment Status": paymentMethod === "PREPAID" ? "Paid" : "Unpaid",
     },
     cartViewed: {
       ...basicAttributes,
@@ -562,9 +564,9 @@ export const moEngageItemPurchasedMapper = (
     return {
       ...eventAttributes,
       "Order ID": order?.code,
-      "Order Date": null,
+      "Order Date": new Date().toISOString(),
       "Payment Mode": paymentMethod,
-      "Payment Status": paymentMethod === "COD" ? "Unpaid" : "Paid",
+      "Payment Status": paymentMethod === "PREPAID" ? "Paid" : "Unpaid",
     };
   });
 
@@ -578,11 +580,21 @@ export const addressMapper = (
 ) => {
   if (address) {
     const source = checkoutSource === "GOKWIK" ? "GoKwik" : getSource();
-    const { city, country, email, name, state, pinCode, phone } = address;
+    const {
+      address: addressLine,
+      city,
+      country,
+      email,
+      name,
+      state,
+      pinCode,
+      phone,
+    } = address;
     const phoneNo = removePhonePrefix(phone);
     const [firstName, ...lastName] = name.split(" ");
 
     const basicAttributes = {
+      Address: addressLine,
       "Cart Total Price": totalPrice,
       City: city,
       Country: country,

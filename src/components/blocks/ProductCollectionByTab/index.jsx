@@ -121,7 +121,13 @@ const ProductCollectionByTab = ({
         setCurrentPage(1);
         const totalProducts = activeTab?.pagination?.totalData ?? 0;
         setHasMore(newProducts.length < totalProducts);
-        viewList(slug[slug.length - 1], "PLP", newProducts); // viewListItems event passed
+        viewList(
+          slug[slug.length - 1],
+          "PLP",
+          newProducts
+            ?.filter((i) => i?.attributes?.fetchedProduct)
+            ?.map((i) => i.attributes.fetchedProduct),
+        ); // viewListItems event passed
       } catch (error) {
         console.error("Error reloading products:", error);
       } finally {
@@ -161,7 +167,13 @@ const ProductCollectionByTab = ({
       const [_products] = productCollectionTabItems
         ?.filter((i, index) => activeTabIndex === index)
         .map((i) => i?.products);
-      viewList(slug[slug.length - 1], "PLP", _products?.data);
+      viewList(
+        slug[slug.length - 1],
+        "PLP",
+        _products?.data
+          ?.filter((i) => i?.attributes?.fetchedProduct)
+          ?.map((i) => i.attributes.fetchedProduct),
+      );
 
       categoryViewed({
         URL: window.location.href,
@@ -215,7 +227,13 @@ const ProductCollectionByTab = ({
         const newTotalLoaded =
           (activeTab?.products?.data?.length ?? 0) + newProducts.length;
         setHasMore(newTotalLoaded < totalProducts);
-        viewList(slug[slug.length - 1], "PLP", newProducts); // event passed
+        viewList(
+          slug[slug.length - 1],
+          "PLP",
+          newProducts
+            ?.filter((i) => i?.attributes?.fetchedProduct)
+            ?.map((i) => i.attributes.fetchedProduct),
+        ); // event passed
       } else {
         setHasMore(false);
       }
@@ -247,6 +265,13 @@ const ProductCollectionByTab = ({
 
         setCurrentPage(calculatedPage);
         setHasMore(productsInTab < totalProducts);
+        viewList(
+          slug[slug.length - 1],
+          "PLP",
+          selectedTab.products?.data
+            ?.filter((i) => i?.attributes?.fetchedProduct)
+            ?.map((i) => i.attributes.fetchedProduct),
+        );
       }
     },
     [productCollectionTabItems],

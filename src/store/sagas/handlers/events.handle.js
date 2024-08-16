@@ -393,12 +393,10 @@ export function* viewListItemEventHandler({ payload }) {
     const currentAddress = yield select(
       (state) => state.address.currentAddress || state.address.addressList?.[0],
     );
-    console.log(products, "viewList");
     const user = userMapper(userData, currentAddress);
     const { ga, pixel } = orderMapper(products, null, user);
 
     const eventSource = getClientSource();
-    console.log(ga, pixel, "ga, pixel");
     if (window && window.dataLayer) {
       window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
       window.dataLayer.push({
@@ -412,7 +410,19 @@ export function* viewListItemEventHandler({ payload }) {
         },
       });
     }
-    console.log(ga, pixel, "ga, pixel");
+    console.log(
+      {
+        event: "view_item_list",
+        eventID: uuidv4(),
+        attribute: pixel,
+        ecommerce: {
+          item_list_id: id,
+          item_list_name: name,
+          items: ga,
+        },
+      },
+      "viewList",
+    );
 
     const analyticsMeta = analyticsMetaDataMapper();
 
@@ -865,7 +875,12 @@ export function* categoryViewedEventHandler({ payload }) {
 
     const eventSource = getClientSource();
     const analyticsMeta = analyticsMetaDataMapper();
-    console.log(payload, userData, "category_viewed");
+    console.log(
+      {
+        ...payload,
+      },
+      "category_viewed",
+    );
 
     trackClickStream({
       event: "category_viewed",
@@ -894,8 +909,6 @@ export function* homeViewedEventHandler(e) {
       Source: eventSource,
     });
 
-    console.log("Home Viewed", userData);
-
     const analyticsMeta = analyticsMetaDataMapper();
 
     trackClickStream({
@@ -906,6 +919,11 @@ export function* homeViewedEventHandler(e) {
       URL: window.location.href,
       source: eventSource,
       ...analyticsMeta,
+    });
+
+    console.log("Home Viewed", {
+      URL: window.location.href,
+      Source: eventSource,
     });
   } catch (e) {
     errorHandler(e);
@@ -966,7 +984,7 @@ export function* bannerClickedEventHandler({ payload }) {
 
     const eventSource = getClientSource();
     const analyticsMeta = analyticsMetaDataMapper();
-
+    console.log("BANNER clicked", payload);
     trackClickStream({
       event: "banner_clicked",
       eventID: uuidv4(),

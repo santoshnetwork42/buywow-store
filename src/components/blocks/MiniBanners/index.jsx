@@ -29,7 +29,13 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
             href={link || "#"}
             key={`mini-banner-${index}`}
             trackingType="BANNER_CLICKED"
-            trackingEventPayload={webImageAttrs}
+            trackingEventPayload={{
+              id: index + 1,
+              moeText:
+                banner?.moeText ||
+                webImageAttrs?.alternativeText ||
+                mWebImageAttrs?.alternativeText,
+            }}
           >
             <picture className="relative block aspect-[298/120] w-[80vw] sm:w-[46vw] md:aspect-[650/166]">
               <source media="(min-width: 768px)" srcSet={webImageAttrs.url} />

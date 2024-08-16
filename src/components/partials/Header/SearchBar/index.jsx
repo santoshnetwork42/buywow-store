@@ -51,7 +51,7 @@ const SearchBar = memo(({ className }) => {
 
   const handleChange = useCallback((e) => {
     searchEvent(e.target.value); //search event passed
-    setSearchBarValue(e.target.value);
+    setSearch(e.target.value);
   }, []);
 
   const clearSearch = useCallback(() => {

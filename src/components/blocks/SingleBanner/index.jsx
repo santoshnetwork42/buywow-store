@@ -30,7 +30,13 @@ const SingleBanner = ({ banner, slug }) => {
           : "mb-main"
       }`}
       trackingType="BANNER_CLICKED"
-      trackingEventPayload={webImageAttrs}
+      trackingEventPayload={{
+        id: 1,
+        moeText:
+          banner?.moeText ||
+          webImageAttrs?.alternativeText ||
+          mWebImageAttrs?.alternativeText,
+      }}
     >
       <picture className="block w-full">
         {!!webImageAttrs.url && (

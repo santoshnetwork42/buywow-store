@@ -14,57 +14,59 @@ import React, {
   useState,
 } from "react";
 
-const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
-  const webImageAttrs = extractAttributes(webImage);
-  const mWebImageAttrs = extractAttributes(mWebImage);
+const CarouselImage = React.memo(
+  ({ webImage, mWebImage, link, index, moeText }) => {
+    const webImageAttrs = extractAttributes(webImage);
+    const mWebImageAttrs = extractAttributes(mWebImage);
 
-  if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
+    if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
-  const imageUrl = mWebImageAttrs.url || webImageAttrs.url;
-  const imageAlt =
-    mWebImageAttrs.alternativeText ||
-    webImageAttrs.alternativeText ||
-    "Carousel Banner";
+    const imageUrl = mWebImageAttrs.url || webImageAttrs.url;
+    const imageAlt =
+      mWebImageAttrs.alternativeText ||
+      webImageAttrs.alternativeText ||
+      "Carousel Banner";
 
-  const { homeViewed, bannerClicked } = useEventsDispatch();
-  const eventTriggered = useRef(false);
-  const source = getSource();
-  useEffect(() => {
-    if (!eventTriggered.current) {
-      homeViewed();
-      eventTriggered.current = true;
-    }
-  }, []);
+    const { homeViewed, bannerClicked } = useEventsDispatch();
+    const eventTriggered = useRef(false);
+    const source = getSource();
+    useEffect(() => {
+      if (!eventTriggered.current) {
+        homeViewed();
+        eventTriggered.current = true;
+      }
+    }, []);
 
-  return (
-    <Link
-      href={link || "#"}
-      className="flex-[0_0_100%]"
-      onClick={() => {
-        bannerClicked({
-          Source: source,
-          item_id: imageUrl,
-          banner_name: imageAlt,
-        });
-      }}
-    >
-      <picture className="relative block aspect-[376/148] w-full sm:aspect-[1440/496]">
-        {!!webImageAttrs.url && (
-          <source media="(min-width: 576px)" srcSet={webImageAttrs.url} />
-        )}
-        <Img
-          src={imageUrl}
-          alt={imageAlt}
-          priority
-          sizes="100vw"
-          fill
-          isStatic
-          className="h-auto w-full object-cover"
-        />
-      </picture>
-    </Link>
-  );
-});
+    return (
+      <Link
+        href={"#"}
+        className="flex-[0_0_100%]"
+        onClick={() => {
+          bannerClicked({
+            Source: source,
+            item_id: index,
+            banner_name: moeText,
+          });
+        }}
+      >
+        <picture className="relative block aspect-[376/148] w-full sm:aspect-[1440/496]">
+          {!!webImageAttrs.url && (
+            <source media="(min-width: 576px)" srcSet={webImageAttrs.url} />
+          )}
+          <Img
+            src={imageUrl}
+            alt={imageAlt}
+            priority
+            sizes="100vw"
+            fill
+            isStatic
+            className="h-auto w-full object-cover"
+          />
+        </picture>
+      </Link>
+    );
+  },
+);
 
 CarouselImage.displayName = "CarouselImage";
 
@@ -112,7 +114,11 @@ const Carousel = ({
   const carouselImages = useMemo(
     () =>
       banners?.map((banner, index) => (
-        <CarouselImage key={`carousel-image-${index}`} {...banner} />
+        <CarouselImage
+          key={`carousel-image-${index}`}
+          {...banner}
+          index={index}
+        />
       )),
     [banners],
   );

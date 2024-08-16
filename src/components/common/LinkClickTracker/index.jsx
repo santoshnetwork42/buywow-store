@@ -21,8 +21,8 @@ const LinkClickTracker = ({
         case "BANNER_CLICKED": {
           bannerClicked({
             Source: source,
-            item_id: trackingEventPayload?.url,
-            banner_name: trackingEventPayload?.alternativeText,
+            item_id: trackingEventPayload?.id,
+            banner_name: trackingEventPayload?.moeText,
           });
           break;
         }
