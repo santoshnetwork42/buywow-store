@@ -1,7 +1,7 @@
 "use client";
 
-import { Heading, Img, Text } from "@/components/elements";
 import AddToCart from "@/components/common/AddToCart";
+import { Heading, Img, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import {
   extractAttributes,
@@ -83,6 +83,7 @@ const ProductCard = memo(
     fetchedProduct,
     offerTag,
     className,
+    image,
     showBenefitTags = true,
   }) => {
     const [selectedVariant] = useProductVariantGroups(fetchedProduct);
@@ -100,6 +101,8 @@ const ProductCard = memo(
 
     const discountPercentage = getDiscountPercentage(price, listingPrice);
 
+    const { url } = extractAttributes(image);
+
     if (!fetchedProduct || !packageProduct) return null;
 
     return (
@@ -111,12 +114,13 @@ const ProductCard = memo(
         )}
       >
         <div
-          className="relative overflow-hidden rounded-lg p-0.5 sm:p-1 md:p-2 lg:p-3 xl:p-4"
+          className="relative overflow-hidden rounded-lg"
           style={{ backgroundColor: imageBgColor || "#FFFFFF" }}
         >
           <ProductThumbnail
             width={500}
             height={550}
+            url={url}
             imageKey={thumbImage?.imageKey}
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
             isStatic
@@ -129,7 +133,7 @@ const ProductCard = memo(
                 <Text
                   as="span"
                   size="sm"
-                  className="absolute left-1 top-1 z-10 rounded px-2 py-1 text-white-a700 sm:left-1.5 sm:top-1.5 md:left-2 md:top-2 md:px-3 lg:left-2.5 lg:top-2.5"
+                  className="absolute left-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize text-white-a700 md:left-2.5 md:top-2.5 md:px-3"
                   responsive
                   style={{ backgroundColor: bgColor || "#DD8434" }}
                 >
@@ -141,7 +145,7 @@ const ProductCard = memo(
             <Text
               as="span"
               size="sm"
-              className="absolute right-1 top-1 z-10 rounded bg-lime-50 px-2 py-1 text-center capitalize sm:right-1.5 sm:top-1.5 md:right-2 md:top-2 md:px-3 lg:right-2.5 lg:top-2.5"
+              className="absolute right-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize md:right-2.5 md:top-2.5 md:px-3"
               responsive
               style={{ backgroundColor: offerTag?.bgColor || "#DD8434" }}
             >

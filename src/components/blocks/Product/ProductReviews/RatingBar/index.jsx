@@ -1,15 +1,12 @@
 "use client";
-import { Text } from "@/components/elements";
-import React from "react";
+import { Heading, Text } from "@/components/elements";
 
 const RatingBar = ({ starCount = 0, percentage = 0 }) => {
   return (
     <div className="flex w-full items-center justify-between gap-2">
-      <div className="min-w-12">
-        <Text as="p" size="sm" className="font-light">
-          {starCount} {starCount > 1 ? "Stars" : "Star"}
-        </Text>
-      </div>
+      <Text as="p" size="base" className="min-w-12 text-sm" responsive>
+        {starCount} {starCount > 1 ? "Stars" : "Star"}
+      </Text>
       <div className="h-1.5 flex-1 rounded-full bg-gray-300">
         {!!percentage && (
           <div
@@ -18,11 +15,9 @@ const RatingBar = ({ starCount = 0, percentage = 0 }) => {
           />
         )}
       </div>
-      <div className="min-w-7">
-        <Text as="p" size="sm" className="font-light">
-          {percentage}%
-        </Text>
-      </div>
+      <Heading as="h4" size="base" className="min-w-7 text-sm" responsive>
+        {percentage}%
+      </Heading>
     </div>
   );
 };

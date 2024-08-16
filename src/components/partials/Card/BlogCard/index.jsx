@@ -1,7 +1,6 @@
-import React from "react";
 import { Heading, Img } from "@/components/elements";
-import Link from "next/link";
 import { extractAttributes } from "@/utils/helpers";
+import Link from "next/link";
 
 const BlogCard = ({
   cardData,
@@ -17,7 +16,7 @@ const BlogCard = ({
 
   const cardClassName = `flex gap-3 h-full ${isVertical ? "flex-col" : "flex-row"} justify-between rounded-lg p-2.5 sm:p-3 lg:p-3.5 ${className}`;
   const contentClassName = `flex flex-col justify-between ${isVertical ? "mt-3 sm:mt-4 lg:mt-5 gap-5" : ""}`;
-  const imageClassName = `shrink-0 overflow-hidden rounded ${isVertical ? "aspect-square" : "aspect-[182/114]"}`;
+  const imageClassName = `shrink-0 overflow-hidden rounded ${isVertical ? "aspect-square" : "w-[44%] max-w-[200px] aspect-[155/112] md:aspect-[182/114]"}`;
 
   return (
     <div

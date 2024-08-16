@@ -454,6 +454,8 @@ export const getUserReviewAPI = async (productId, userId) => {
       authMode: "apiKey",
     });
 
+    console.log("response", response);
+
     return response.data.searchReviews.items[0];
   } catch (error) {
     errorHandler(error, "Get User Review API");
@@ -464,6 +466,7 @@ export const getUserReviewAPI = async (productId, userId) => {
 export const submitReviewAPI = async (reviewData, userId, productId) => {
   try {
     const { reviewId, rating, comment, name, email, images } = reviewData;
+    console.log("reviewData", reviewData);
 
     if (reviewId) {
       const response = await client.graphql({
@@ -511,7 +514,6 @@ export const submitReviewAPI = async (reviewData, userId, productId) => {
     }
   } catch (error) {
     errorHandler(error, "Submit Review API");
-    return null;
   }
 };
 

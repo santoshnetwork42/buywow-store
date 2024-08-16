@@ -1,7 +1,7 @@
-import { Button, Heading } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
-import ProductCard from "@/components/partials/Card/ProductCard";
+import { Heading } from "@/components/elements";
 import Slider from "@/components/features/Slider";
+import ProductCard from "@/components/partials/Card/ProductCard";
 import { getBgColor } from "@/utils/helpers";
 
 const UpsellProducts = ({
@@ -16,7 +16,7 @@ const UpsellProducts = ({
   const isPaddedColor = bgColor === "LIME" || bgColor === "BLUE";
 
   const renderProductItem = (item, index) => {
-    const { product, text } = item;
+    const { product, image, text } = item;
     const isMiddleItem = (index - 1) % 3 === 1;
 
     return (
@@ -26,12 +26,13 @@ const UpsellProducts = ({
           isMiddleItem ? "col-start-2" : ""
         }`}
       >
-        <Heading size="xl" as="h3" className="text-lg" responsive>
+        <Heading size="xl" as="h3" className="line-clamp-1 text-lg" responsive>
           <span className="font-light">Step {index + 1}:</span> {text}
         </Heading>
         <ProductCard
           className="w-[calc(50vw-16px)] max-w-[356px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
           showBenefitTags={false}
+          image={image}
           {...product?.data?.attributes}
         />
       </div>
@@ -57,9 +58,9 @@ const UpsellProducts = ({
           renderProductItem(item, index),
         )}
       </div>
-      <Button variant="primary" size="large" className="mt-2">
+      {/* <Button variant="primary" size="large" className="mt-2">
         ₹1695 | Add 5 products to cart
-      </Button>
+      </Button> */}
     </div>
   );
 };

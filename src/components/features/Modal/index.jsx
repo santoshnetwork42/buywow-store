@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import { Heading } from "@/components/elements";
 import { CloseIcon } from "@/assets/svg/icons";
+import { Heading } from "@/components/elements";
+import { useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import Confetti from "./Confetti";
 
@@ -13,7 +13,7 @@ const Modal = ({
   onClose = () => {},
   children,
   mobileViewHeight,
-  showConfetti,
+  showConfetti = false,
   showCloseButtonOutOfBox = false,
   showMobileView = true,
   enableOutsideClick = true,
@@ -24,12 +24,22 @@ const Modal = ({
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    let timer;
+
     if (isOpen) {
       setIsVisible(true);
+      document.body.style.overflow = "hidden";
     } else {
-      const timer = setTimeout(() => setIsVisible(false), 300);
-      return () => clearTimeout(timer);
+      timer = setTimeout(() => {
+        setIsVisible(false);
+      }, 300);
+      document.body.style.overflow = "auto";
     }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+      document.body.style.overflow = "auto";
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -97,7 +107,7 @@ const Modal = ({
                   className="absolute -right-1 -top-7 cursor-pointer"
                   onClick={onCloseClick}
                 >
-                  <CloseIcon color="white" size={30} />
+                  <CloseIcon color="white" size={32} />
                 </div>
               )}
               {!!title && (
@@ -107,7 +117,11 @@ const Modal = ({
                   </Heading>
                   {!!enableCloseButton && !showCloseButtonOutOfBox && (
                     <div className="cursor-pointer" onClick={onCloseClick}>
-                      <CloseIcon color="black" size={28} />
+                      <CloseIcon
+                        color="black"
+                        size={32}
+                        className="translate-x-1.5"
+                      />
                     </div>
                   )}
                 </div>

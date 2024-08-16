@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useCallback, useMemo, useState } from "react";
-import Image from "next/image";
+import { Text } from "@/components/elements";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
-import { Text } from "..";
+import Image from "next/image";
+import React, { useCallback, useMemo, useState } from "react";
 
 const BASE_URL = "/images";
 
@@ -15,35 +15,30 @@ const Img = React.memo(
     isStatic = false,
     width,
     addPrefix = false,
+    quality = 75,
     ...restProps
   }) => {
     const [hasError, setHasError] = useState(false);
 
-    const imageSrc = useMemo(() => {
-      if (!src) return null;
-      if (isStatic) {
-        return addPrefix
-          ? getPublicImageURL({
-              key: src ? encodeURI(src) : "",
-              resize: width,
-              addPrefix: true,
-            })
-          : src;
-      }
-      return `${BASE_URL}/${src}`;
-    }, [src, isStatic, addPrefix, width]);
+    const imageData = useMemo(() => {
+      if (!src) return { src: null, loader: undefined };
 
-    const imageLoader = useCallback(
-      ({ src, width, quality }) => {
-        if (!isStatic) return src;
-        return getPublicImageURL({
-          key: src ? encodeURI(src) : "",
-          resize: width,
-          quality: quality || 75,
-        });
-      },
-      [isStatic],
-    );
+      if (isStatic) {
+        const staticSrc = addPrefix ? src : encodeURI(src);
+        return {
+          src: staticSrc,
+          loader: ({ src, width: w }) =>
+            getPublicImageURL({
+              key: src,
+              resize: w,
+              quality,
+              addPrefix,
+            }),
+        };
+      }
+
+      return { src: `${BASE_URL}/${src}`, loader: undefined };
+    }, [src, isStatic, addPrefix, quality]);
 
     const handleError = useCallback(() => {
       setHasError(true);
@@ -54,7 +49,7 @@ const Img = React.memo(
         <div
           className={`bg-white ${className} flex items-center justify-center overflow-hidden`}
         >
-          <Text size="sm" as="span" responsive>
+          <Text size="sm" as="span" className="text-center" responsive>
             {alt}
           </Text>
         </div>
@@ -64,8 +59,8 @@ const Img = React.memo(
     return (
       <Image
         className={className}
-        loader={isStatic ? imageLoader : undefined}
-        src={imageSrc}
+        loader={imageData.loader}
+        src={imageData.src}
         alt={alt || "Image"}
         width={width}
         onError={handleError}
