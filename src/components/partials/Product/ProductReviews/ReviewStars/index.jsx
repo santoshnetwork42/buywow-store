@@ -19,7 +19,11 @@ const ReviewStars = React.memo(
               onClick={() => handleStarClick(index)}
               style={{ cursor: editable ? "pointer" : "default" }}
             >
-              <GradientStarIcon size={size} color={fill} />
+              <GradientStarIcon
+                className="w-4 md:w-5"
+                size={size}
+                color={fill}
+              />
             </span>
           );
         })}

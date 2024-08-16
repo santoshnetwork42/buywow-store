@@ -476,7 +476,7 @@ export const submitReviewAPI = async (reviewData, userId, productId) => {
             userId,
             productId,
             storeId: STORE_ID,
-            images,
+            images: images.slice(0, 10),
           },
         },
       });

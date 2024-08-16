@@ -350,21 +350,18 @@ export const getPer = (totalCount, allReview) => {
 };
 
 export const processAnalytics = (analytics) => {
-  if (!analytics || !Array.isArray(analytics))
-    return { processedAnalytics: [], rating: 0 };
+  if (!analytics || !Array.isArray(analytics)) return [];
 
   const totalDocCount = analytics.reduce(
     (sum, item) => sum + item.doc_count,
     0,
   );
-  let weightedSum = 0;
 
-  const processedAnalytics = Array(5)
+  return Array(5)
     .fill({ key: "", doc_count: 0 })
     .map((item, index) => {
       const rating = 5 - index;
       const existingData = analytics.find((a) => a.key === rating) || item;
-      weightedSum += rating * existingData.doc_count;
       return {
         ...existingData,
         key: rating.toString(),
@@ -373,10 +370,6 @@ export const processAnalytics = (analytics) => {
           : 0,
       };
     });
-
-  const rating = totalDocCount ? (weightedSum / totalDocCount).toFixed(1) : 0;
-
-  return { processedAnalytics, rating: parseFloat(rating) };
 };
 
 export const formatTimeAgo = (date) => {

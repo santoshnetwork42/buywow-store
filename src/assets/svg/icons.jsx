@@ -33,7 +33,11 @@ export const StarIcon = ({ size = 30, color = "#FAB73B", className }) => {
   );
 };
 
-export const GradientStarIcon = ({ color = "#FFA41C", size = 30 }) => {
+export const GradientStarIcon = ({
+  color = "#FFA41C",
+  size = 30,
+  className,
+}) => {
   const gradientId = `grad${color}`;
 
   return (
@@ -42,6 +46,7 @@ export const GradientStarIcon = ({ color = "#FFA41C", size = 30 }) => {
       height={size}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 14 13"
+      className={className}
     >
       <defs>
         <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">

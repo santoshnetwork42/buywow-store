@@ -92,10 +92,10 @@ const InputComponent = React.forwardRef(
           <label
             onClick={handleLabelClick}
             className={twMerge(
-              "absolute left-0 top-1/2 ml-2 -translate-y-1/2 cursor-text bg-white-a700_01 px-1 text-base leading-[1.25] transition-all duration-300 peer-focus:top-0 peer-focus:scale-75",
+              "absolute left-0 top-1/2 ml-2 -translate-y-1/2 cursor-text bg-white-a700_01 px-1 text-base leading-[1.25] transition-all duration-300 peer-focus:top-0 peer-focus:scale-90 peer-focus:md:scale-75",
               labelColorClass,
               labelClassName,
-              isFocused || value ? "!top-0 scale-75" : "",
+              isFocused || value ? "!top-0 scale-90 md:scale-75" : "",
             )}
           >
             {label}

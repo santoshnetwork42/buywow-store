@@ -26,17 +26,21 @@ const ReviewForm = React.memo(
       <Modal
         isOpen={isOpen}
         title="Write a Review"
-        modalContainerClassName="md:w-[500px] flex flex-col gap-5"
+        modalContainerClassName="md:w-[500px] flex flex-col gap-3 sm:gap-4 lg:gap-5"
         onClose={onClose}
       >
-        <form onSubmit={onSubmit} className="flex flex-col gap-6">
-          <div className="grid grid-cols-2 gap-5">
+        <form
+          onSubmit={onSubmit}
+          className="flex flex-col gap-4 sm:gap-5 lg:gap-6"
+        >
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
             <Input
               type="text"
               label="Name"
               name="name"
               value={reviewState.name}
-              className="rounded p-2.5 outline outline-1 outline-gray-500"
+              className="rounded px-2.5 py-2 text-sm outline outline-1 outline-gray-500 md:py-2.5 md:text-base"
+              labelClassName="text-sm md:text-base"
               required
               onChange={handleInputChange}
               onBlur={handleInputBlur}
@@ -46,7 +50,8 @@ const ReviewForm = React.memo(
               label="Email"
               name="email"
               value={reviewState.email}
-              className="rounded p-2.5 outline outline-1 outline-gray-500"
+              className="rounded px-2.5 py-2 text-sm outline outline-1 outline-gray-500 md:py-2.5 md:text-base"
+              labelClassName="text-sm md:text-base"
               onChange={handleInputChange}
               onBlur={handleInputBlur}
             />
@@ -72,9 +77,9 @@ const ReviewForm = React.memo(
           <Input
             isTextarea
             rows={6}
-            className="w-full rounded outline outline-1 outline-gray-500"
-            inputClassName="py-2.5 px-3"
-            labelClassName="top-5"
+            className="mt-1 w-full rounded text-sm outline outline-1 outline-gray-500 md:text-base"
+            inputClassName="py-2 md:py-2.5 px-3"
+            labelClassName="top-5 text-sm md:text-base"
             name="comment"
             label="Comment"
             value={reviewState.comment}
@@ -86,7 +91,7 @@ const ReviewForm = React.memo(
             type="submit"
             variant="primary"
             size="medium"
-            className="my-2 w-fit"
+            className="my-2 w-fit py-1.5"
             loader={loading}
           >
             Submit

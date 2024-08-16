@@ -5,14 +5,15 @@ import useEmblaCarousel from "embla-carousel-react";
 import React, { useCallback, useEffect, useState } from "react";
 
 const CarouselImage = React.memo(({ src, alt }) => (
-  <div className="relative block aspect-square w-full flex-[0_0_100%]">
+  <div className="relative flex aspect-[100/80] w-full flex-[0_0_100%] justify-center sm:aspect-[100/70] md:aspect-square">
     <Img
       src={src}
       alt={alt}
-      fill
+      width={400}
+      height={400}
       isStatic
       addPrefix
-      className="h-auto w-full object-contain"
+      className="aspect-[100/80] h-auto w-full object-contain sm:aspect-[100/70] md:aspect-square"
     />
   </div>
 ));
@@ -87,8 +88,8 @@ const ReviewImageCarousel = ({ images, initialSlide = 0 }) => {
   if (!images || images.length === 0) return null;
 
   return (
-    <div className="relative w-full">
-      <div className="overflow-hidden" ref={emblaRef}>
+    <div className="relative flex h-full w-full items-center">
+      <div className="h-full flex-1 overflow-hidden" ref={emblaRef}>
         <div className="flex gap-3">
           {images.map((image, index) => (
             <CarouselImage
@@ -111,7 +112,7 @@ const ReviewImageCarousel = ({ images, initialSlide = 0 }) => {
         onClick={scrollNext}
         className="right-0"
       />
-      <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 cursor-pointer">
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 cursor-pointer">
         {images.map((_, index) => (
           <DotButton
             key={`dot-button-${index}`}

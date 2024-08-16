@@ -1,4 +1,4 @@
-import { Text } from "@/components/elements";
+import { Button, Text } from "@/components/elements";
 import { useState } from "react";
 
 const ReadMore = ({ content, maxLength = 150 }) => {
@@ -6,7 +6,7 @@ const ReadMore = ({ content, maxLength = 150 }) => {
 
   if (content.length <= maxLength) {
     return (
-      <Text as="p" size="base">
+      <Text as="p" size="base" className="text-sm" responsive>
         {content}
       </Text>
     );
@@ -14,15 +14,15 @@ const ReadMore = ({ content, maxLength = 150 }) => {
 
   return (
     <div>
-      <Text as="p" size="base">
+      <Text as="p" size="base" className="text-sm" responsive>
         {isExpanded ? content : `${content.slice(0, maxLength)}...`}
       </Text>
-      <button
+      <Button
         onClick={() => setIsExpanded(!isExpanded)}
         className="mt-2 text-sm text-blue-600 underline"
       >
         {isExpanded ? "Read less" : "Read more"}
-      </button>
+      </Button>
     </div>
   );
 };

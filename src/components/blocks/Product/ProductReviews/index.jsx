@@ -16,7 +16,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
 const reviewDefault = {
-  rating: 0,
+  rating: 1,
   comment: "",
   name: "",
   email: "",
@@ -33,19 +33,20 @@ const Reviews = ({
   const { user } = useSelector((state) => state.user);
   const { handlePasswordLessModal } = useModalDispatch();
 
-  const { processedAnalytics, rating } = useMemo(
+  const processedAnalytics = useMemo(
     () => processAnalytics(initialAnalytics),
     [initialAnalytics],
   );
 
   const [reviewState, setReview] = useState(reviewDefault);
   const [reviews, setReviews] = useState(initialReviews.items || []);
-  const [total, setTotal] = useState(initialReviews.total || 0);
+  const [total, setTotal] = useState(fetchedProduct?.totalRatings || 0);
   const [showReview, setShowReview] = useState(false);
   const [token, setToken] = useState(initialReviews.nextToken || null);
   const [loading, setLoading] = useState(false);
   const [userReview, setUserReview] = useState(null);
 
+  const rating = fetchedProduct?.rating;
   const productId = fetchedProduct?.id;
 
   const totalRating = useMemo(() => {

@@ -68,11 +68,11 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
         </div>
       </div>
       <div className="flex h-fit w-full items-start justify-between gap-2 md:w-auto md:min-w-[170px] md:flex-col">
-        <div className="flex flex-col gap-1">
-          <Text as="p" size="base">
+        <div className="flex flex-col gap-0.5">
+          <Text as="p" size="base" responsive>
             Submitted {formatTimeAgo(review?.createdAt)}
           </Text>
-          <Text as="p" size="base">
+          <Text as="p" size="base" responsive>
             By {review?.reviewer.name}
           </Text>
         </div>
@@ -83,9 +83,9 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
               width={22}
               height={22}
               alt="search"
-              className="aspect-square w-[24px] cursor-pointer object-contain"
+              className="aspect-square w-5 cursor-pointer object-contain md:w-6"
             />
-            <Text as="p" size="base">
+            <Text as="p" size="base" responsive>
               VERIFIED BUYER
             </Text>
           </div>
@@ -96,7 +96,7 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
         isOpen={isImageModalOpen}
         showMobileView={false}
         onClose={() => setIsImageModalOpen(false)}
-        modalContainerClassName="w-[min(400px,90%)] p-0 sm:w-[500px] md:w-[600px] lg:w-[700px] xl:w-[800px] md:h-[450px] overflow-hidden"
+        modalContainerClassName="w-[min(380px,90%)] p-0 sm:w-[450px] md:w-[600px] lg:w-[700px] xl:w-[800px] h-[550px] md:h-[450px] overflow-hidden"
       >
         <div className="relative flex h-full flex-col md:flex-row">
           <div className="flex items-center justify-center p-4 md:w-3/5">
@@ -105,9 +105,9 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
               initialSlide={selectedImageIndex}
             />
           </div>
-          <div className="flex flex-col gap-2 bg-lime-50 px-4 py-7 md:w-2/5">
-            <div className="mt-2 flex items-center justify-between gap-1">
-              <Heading as="h3" size="lg" responsive>
+          <div className="flex flex-1 flex-col gap-1.5 bg-lime-50 px-4 py-3 md:w-2/5 md:gap-2 md:py-7">
+            <div className="flex items-center justify-between gap-1 md:mt-2">
+              <Heading as="h3" size="lg" className="text-base" responsive>
                 {review?.reviewer.name}
               </Heading>
               {!review?.verified && (
@@ -117,7 +117,7 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
                     width={22}
                     height={22}
                     alt="search"
-                    className="aspect-square w-[24px] cursor-pointer object-contain"
+                    className="aspect-square w-5 cursor-pointer object-contain md:w-6"
                   />
                   <Text as="p" size="xs">
                     VERIFIED
@@ -129,7 +129,7 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
             <Text as="span" size="sm" className="text-gray-700">
               Submitted {formatTimeAgo(review?.createdAt)}
             </Text>
-            <div className="max-h-[300px] overflow-y-scroll">
+            <div className="h-full max-h-[136px] overflow-y-scroll sm:max-h-[120px] md:max-h-[300px]">
               <ReadMore content={review?.comment} />
             </div>
           </div>

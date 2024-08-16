@@ -1,20 +1,29 @@
 import { CloseIcon, ImageCamera } from "@/assets/svg/icons";
 import { Img, Text } from "@/components/elements";
 import { uploadImages } from "@/utils/helpers";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
+
+const MAX_IMAGES = 10;
 
 const ImageUploader = React.memo(({ images, onPhotoChange }) => {
+  const [error, setError] = useState("");
+
   const handleFileChange = useCallback(
     async (e) => {
       const files = [...e.target.files];
       if (files.length) {
+        if (images.length + files.length > MAX_IMAGES) {
+          setError(`You can only upload a maximum of ${MAX_IMAGES} images.`);
+          return;
+        }
+        setError("");
         try {
           const urls = await Promise.all(
             files.map((element) => uploadImages(element, "review")),
           );
           onPhotoChange([...images, ...urls]);
         } catch (error) {
-          console.error("Error uploading images:", error);
+          setError("Error uploading images. Please try again.");
         }
       }
     },
@@ -24,17 +33,18 @@ const ImageUploader = React.memo(({ images, onPhotoChange }) => {
   const removeImage = useCallback(
     (index) => {
       onPhotoChange(images.filter((_, i) => i !== index));
+      setError(""); // Clear any existing error when an image is removed
     },
     [images, onPhotoChange],
   );
 
   return (
     <div className="flex flex-col gap-2">
-      <Text as="span" size="base" responsive>
+      <Text as="span" size="base" className="text-sm" responsive>
         Add photos (Optional)
       </Text>
       <div className="flex gap-2">
-        <div className="relative flex size-24 cursor-pointer items-center justify-center rounded border p-3">
+        <div className="relative flex size-20 cursor-pointer items-center justify-center rounded border p-3 md:size-24">
           <input
             className="absolute inset-0 cursor-pointer opacity-0 file:hidden"
             onChange={handleFileChange}
@@ -50,7 +60,7 @@ const ImageUploader = React.memo(({ images, onPhotoChange }) => {
           {images.map((img, index) => (
             <div
               key={index}
-              className="relative flex size-24 shrink-0 rounded border"
+              className="relative flex size-20 shrink-0 rounded border md:size-24"
             >
               <Img
                 src={img}
@@ -71,6 +81,11 @@ const ImageUploader = React.memo(({ images, onPhotoChange }) => {
           ))}
         </div>
       </div>
+      {error && (
+        <Text as="p" size="sm" className="mt-2 text-red-500" responsive>
+          {error}
+        </Text>
+      )}
     </div>
   );
 });
