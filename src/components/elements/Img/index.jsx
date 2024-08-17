@@ -29,18 +29,6 @@ const Img = React.memo(
         return {
           src: staticSrc,
           loader: ({ src, width: w }) => {
-            {
-              test &&
-                console.log(
-                  src,
-                  getPublicImageURL({
-                    key: src,
-                    resize: w,
-                    quality,
-                    addPrefix,
-                  }),
-                );
-            }
             return getPublicImageURL({
               key: src,
               resize: w,

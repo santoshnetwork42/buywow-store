@@ -73,8 +73,11 @@ const DotButton = React.memo(({ isSelected, onClick, isVideo }) => {
   );
 });
 
-const PlayPauseButton = React.memo(({ isPlaying }) => (
-  <div className="bg-black text-white absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-opacity-50 p-4 transition-opacity">
+const PlayPauseButton = React.memo(({ isPlaying, onClick }) => (
+  <div
+    className={`absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black-900 bg-opacity-50 p-4 text-white-a700 transition-all duration-300 ease-in-out ${isPlaying ? "scale-95" : "scale-100"}`}
+    onClick={onClick}
+  >
     {isPlaying ? (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -89,8 +92,8 @@ const PlayPauseButton = React.memo(({ isPlaying }) => (
     ) : (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
+        width="28"
+        height="28"
         viewBox="0 0 24 24"
         fill="currentColor"
       >
@@ -107,7 +110,7 @@ const ProductImageSection = ({
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState({});
-  const [showControls, setShowControls] = useState({});
+  const [showPlayButton, setShowPlayButton] = useState({});
   const [mainViewportRef, emblaMainApi] = useEmblaCarousel({
     skipSnaps: false,
   });
@@ -130,29 +133,35 @@ const ProductImageSection = ({
     [emblaMainApi],
   );
 
-  const togglePlayPause = useCallback((index) => {
-    setIsPlaying((prev) => {
-      const newState = { ...prev, [index]: !prev[index] };
-      const video = videoRefs.current[index];
-      if (video) {
-        newState[index] ? video.play() : video.pause();
+  const togglePlayPause = useCallback(
+    (index) => {
+      setIsPlaying((prev) => {
+        const newState = { ...prev, [index]: !prev[index] };
+        const video = videoRefs.current[index];
+        if (video) {
+          newState[index] ? video.play() : video.pause();
+        }
+        return newState;
+      });
+
+      // Show play button
+      setShowPlayButton((prev) => ({ ...prev, [index]: true }));
+
+      // Clear any existing timeout
+      if (controlTimeoutRefs.current[index]) {
+        clearTimeout(controlTimeoutRefs.current[index]);
       }
-      return newState;
-    });
 
-    // Show controls
-    setShowControls((prev) => ({ ...prev, [index]: true }));
-
-    // Clear any existing timeout
-    if (controlTimeoutRefs.current[index]) {
-      clearTimeout(controlTimeoutRefs.current[index]);
-    }
-
-    // Set a new timeout to hide controls after 1 second
-    controlTimeoutRefs.current[index] = setTimeout(() => {
-      setShowControls((prev) => ({ ...prev, [index]: false }));
-    }, 1000);
-  }, []);
+      // Set a new timeout to hide play button after 2 seconds if the video is playing
+      if (!isPlaying[index]) {
+        // Only set timeout if changing to play state
+        controlTimeoutRefs.current[index] = setTimeout(() => {
+          setShowPlayButton((prev) => ({ ...prev, [index]: false }));
+        }, 1000);
+      }
+    },
+    [isPlaying],
+  );
 
   const onSelect = useCallback(() => {
     if (!emblaMainApi) return;
@@ -181,6 +190,12 @@ const ProductImageSection = ({
     if (selectedVideo && imageList[newIndex].isVideo) {
       selectedVideo.play();
       setIsPlaying((prev) => ({ ...prev, [newIndex]: true }));
+      setShowPlayButton((prev) => ({ ...prev, [newIndex]: true }));
+
+      // Hide play button after 2 seconds
+      controlTimeoutRefs.current[newIndex] = setTimeout(() => {
+        setShowPlayButton((prev) => ({ ...prev, [newIndex]: false }));
+      }, 1000);
     }
   }, [emblaMainApi, emblaThumbsApi, imageList]);
 
@@ -273,13 +288,19 @@ const ProductImageSection = ({
                   resize: 820,
                   addPrefix: true,
                 })}
-                className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
+                className="main-image m-auto aspect-square cursor-pointer rounded-lg border object-contain shadow-sm"
                 loop
                 muted
                 playsInline
               />
-              {showControls[index] && (
-                <PlayPauseButton isPlaying={isPlaying[index]} />
+              {(showPlayButton[index] || !isPlaying[index]) && (
+                <PlayPauseButton
+                  isPlaying={isPlaying[index]}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    togglePlayPause(index);
+                  }}
+                />
               )}
             </>
           ) : (
@@ -292,7 +313,6 @@ const ProductImageSection = ({
               priority={index === 0}
               className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
               addPrefix
-              test={index === 1}
             />
           )}
           {promotionTag?.data &&
@@ -337,7 +357,7 @@ const ProductImageSection = ({
       promotionTag,
       productBenefitTags,
       isPlaying,
-      showControls,
+      showPlayButton,
       togglePlayPause,
     ],
   );
