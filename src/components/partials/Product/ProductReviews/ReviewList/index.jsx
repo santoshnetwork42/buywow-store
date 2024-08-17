@@ -12,8 +12,9 @@ const ReviewList = React.memo(
     getProductReviews,
     handleUpdateReview,
   }) => {
+    if (!reviews.length && !userReview) return null;
     return (
-      <div className="flex w-full flex-col items-center justify-center gap-6 py-2">
+      <div className="mt-4 flex w-full flex-col items-center justify-center gap-6 py-2">
         {!!userReview && (
           <ReviewItem
             review={userReview}
@@ -26,7 +27,9 @@ const ReviewList = React.memo(
           <ReviewItem key={item.id} review={item} />
         ))}
 
-        {total > 0 && <div className="h-[0.5px] w-full bg-black-900" />}
+        {(total > 0 || userReview) && (
+          <div className="h-[0.5px] w-full bg-black-900" />
+        )}
 
         {total > 0 && (
           <Text as="span" size="sm" className="w-full" responsive>

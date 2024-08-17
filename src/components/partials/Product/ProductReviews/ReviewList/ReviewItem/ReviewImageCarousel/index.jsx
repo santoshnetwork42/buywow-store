@@ -90,7 +90,7 @@ const ReviewImageCarousel = ({ images, initialSlide = 0 }) => {
   return (
     <div className="relative flex h-full w-full items-center">
       <div className="h-full flex-1 overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-3">
+        <div className="flex h-full gap-3">
           {images.map((image, index) => (
             <CarouselImage
               key={`review-image-${index}`}

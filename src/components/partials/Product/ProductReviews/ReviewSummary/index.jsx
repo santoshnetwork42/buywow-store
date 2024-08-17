@@ -9,7 +9,7 @@ const ReviewSummary = React.memo(
   ({ title, rating, totalRating, reviewAnalytics, onReviewClick }) => (
     <>
       <SectionHeading title={title} />
-      <div className="mb-4 flex w-full flex-col items-center justify-center gap-6 md:flex-row">
+      <div className="flex w-full flex-col items-center justify-center gap-6 md:flex-row">
         <div className="flex flex-col items-center justify-center gap-3">
           <ReviewStars rating={rating} />
           <div className="flex items-center gap-1">

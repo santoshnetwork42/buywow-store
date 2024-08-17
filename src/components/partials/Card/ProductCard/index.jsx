@@ -60,7 +60,7 @@ const PriceDisplay = memo(({ price, listingPrice }) => {
         <Heading as="span" size="lg" className="text-base" responsive>
           ₹{toDecimal(price)}
         </Heading>
-        {!!(listingPrice >= price) && (
+        {listingPrice > price && (
           <Text
             as="span"
             size="sm"
