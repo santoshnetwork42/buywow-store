@@ -1,7 +1,9 @@
 "use client";
 
+import { VideoDotIcon } from "@/assets/svg/icons";
 import { Button, Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
+import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import useEmblaCarousel from "embla-carousel-react";
 import React, {
   useCallback,
@@ -13,32 +15,63 @@ import React, {
 
 const Thumb = React.memo(({ isSelected, image, onClick }) => (
   <div
-    className={`flex aspect-square cursor-pointer items-center justify-center ${isSelected ? "border border-black-900" : ""}`}
+    className={`relative flex aspect-square cursor-pointer items-center justify-center rounded-lg ${isSelected ? "border border-black-900" : ""}`}
   >
     <button onClick={onClick} type="button" className="w-full p-0">
-      <Img
-        src={image?.imageKey}
-        width={300}
-        height={300}
-        alt="Thumbnail"
-        className="aspect-square w-full rounded-lg object-cover"
-        isStatic
-        addPrefix
-      />
+      {image.isVideo ? (
+        <>
+          <video
+            src={getPublicImageURL({
+              key: image.imageKey,
+              resize: 300,
+              addPrefix: true,
+            })}
+            className="aspect-square w-full rounded-lg object-cover"
+            muted
+          />
+          <div className="absolute left-1/2 top-1/2 size-8 -translate-x-1/2 -translate-y-1/2">
+            <VideoDotIcon className="h-full w-full" />
+          </div>
+        </>
+      ) : (
+        <Img
+          src={image?.imageKey}
+          width={300}
+          height={300}
+          alt="Thumbnail"
+          className="aspect-square w-full rounded-lg object-cover"
+          isStatic
+          addPrefix
+        />
+      )}
     </button>
   </div>
 ));
 
-const DotButton = React.memo(({ isSelected, onClick }) => (
-  <Button
-    className={`mr-1.5 inline-block h-1.5 cursor-pointer rounded-full transition-all duration-300 ease-in-out ${
-      isSelected ? "w-3 bg-black-900" : "w-1.5 bg-gray-300_01 hover:bg-gray-400"
-    }`}
-    size="none"
-    variant="none"
-    onClick={onClick}
-  />
-));
+const DotButton = React.memo(({ isSelected, onClick, isVideo }) => {
+  const baseClassName = `
+    mr-1.5 
+    inline-block 
+    size-2.5 
+    cursor-pointer 
+    rounded-full 
+    transition-all 
+    duration-300 
+    ease-in-out
+    ${isSelected ? "bg-black-900" : "bg-gray-300_01 hover:bg-gray-400"}
+  `;
+
+  return (
+    <Button
+      className={baseClassName}
+      size="none"
+      variant="none"
+      onClick={onClick}
+    >
+      {isVideo && <VideoDotIcon color={isSelected ? "black" : undefined} />}
+    </Button>
+  );
+});
 
 const ProductImageSection = ({
   imageList,
@@ -58,6 +91,7 @@ const ProductImageSection = ({
   const mainContainerRef = useRef(null);
   const mainImageContainerRef = useRef(null);
   const thumbsContainerRef = useRef(null);
+  const videoRefs = useRef({});
 
   const onThumbClick = useCallback(
     (index) => {
@@ -71,7 +105,18 @@ const ProductImageSection = ({
     const newIndex = emblaMainApi.selectedScrollSnap();
     setSelectedIndex(newIndex);
     emblaThumbsApi?.scrollTo(newIndex);
-  }, [emblaMainApi, emblaThumbsApi]);
+
+    // Pause all videos
+    Object.values(videoRefs.current).forEach((video) => {
+      if (video) video.pause();
+    });
+
+    // Play the selected video if it exists
+    const selectedVideo = videoRefs.current[newIndex];
+    if (selectedVideo && imageList[newIndex].isVideo) {
+      selectedVideo.play();
+    }
+  }, [emblaMainApi, emblaThumbsApi, imageList]);
 
   const setThumbsHeight = useCallback(() => {
     const mainContainer = mainContainerRef.current;
@@ -150,17 +195,34 @@ const ProductImageSection = ({
           key={image?.imageKey || index}
           className="main-image flex-[0_0_100%] overflow-hidden"
         >
-          <Img
-            src={image?.imageKey}
-            width={820}
-            height={480}
-            alt={`Product image ${index + 1}`}
-            isStatic
-            priority={index === 0}
-            className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
-            addPrefix
-            test={index === 1}
-          />
+          {image.isVideo ? (
+            <video
+              ref={(el) => {
+                videoRefs.current[index] = el;
+              }}
+              src={getPublicImageURL({
+                key: image.imageKey,
+                resize: 820,
+                addPrefix: true,
+              })}
+              className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
+              loop
+              muted
+              playsInline
+            />
+          ) : (
+            <Img
+              src={image?.imageKey}
+              width={820}
+              height={480}
+              alt={`Product image ${index + 1}`}
+              isStatic
+              priority={index === 0}
+              className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
+              addPrefix
+              test={index === 1}
+            />
+          )}
           {promotionTag?.data &&
             index === 0 &&
             (() => {
@@ -207,6 +269,7 @@ const ProductImageSection = ({
         <DotButton
           key={index}
           onClick={() => onThumbClick(index)}
+          isVideo={imageList[index]?.isVideo}
           isSelected={index === selectedIndex}
         />
       )),
