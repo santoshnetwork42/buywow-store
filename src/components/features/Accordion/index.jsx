@@ -41,7 +41,7 @@ const Accordion = ({
   }, []);
 
   return (
-    <div className={`flex w-full flex-col border-b ${className}`}>
+    <div className={twMerge(`flex w-full flex-col border-b`, className)}>
       <button
         className={twMerge(
           "flex w-full cursor-pointer items-center justify-between",
@@ -53,7 +53,7 @@ const Accordion = ({
       >
         <div className="flex w-full items-center gap-2 md:gap-2.5">
           {imgUrl && (
-            <div className="aspect-square w-6">
+            <div className="aspect-square w-6 md:w-7">
               <Img
                 src={imgUrl}
                 width={26}

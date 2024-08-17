@@ -76,7 +76,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             product={packageProduct}
             buttonText={"Add"}
             buttonClassName={"shrink-0 px-3 py-1 text-sm"}
-            quantityClassName="grid-cols-[repeat(3,26px)] h-[26px] sm:h-[26px] md:h-[28px] lg:h-[28px] md:grid-cols-[repeat(3,28px)]"
+            quantityClassName="grid-cols-[repeat(3,26px)] !h-[25.5px] md:grid-cols-[repeat(3,28px)]"
           />
         </div>
       </div>

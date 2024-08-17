@@ -57,7 +57,7 @@ const ProductDetailView = ({ product }) => {
   }
 
   return (
-    <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[50%_calc(50%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[50%_calc(50%-3rem)] lg:gap-x-12 xl:grid-cols-[50%_calc(50%-4rem)] xl:gap-x-16">
+    <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[calc(52%-2.5rem)_48%] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[calc(52%-3rem)_48%] lg:gap-x-12 xl:grid-cols-[calc(52%-4rem)_48%] xl:gap-x-16">
       <div className="relative order-2 md:order-1 md:row-span-3">
         <ProductImageSection
           imageList={imageList}
