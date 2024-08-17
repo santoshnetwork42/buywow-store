@@ -73,12 +73,41 @@ const DotButton = React.memo(({ isSelected, onClick, isVideo }) => {
   );
 });
 
+const PlayPauseButton = React.memo(({ isPlaying }) => (
+  <div className="bg-black text-white absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-opacity-50 p-4 transition-opacity">
+    {isPlaying ? (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <rect x="6" y="4" width="4" height="16" />
+        <rect x="14" y="4" width="4" height="16" />
+      </svg>
+    ) : (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    )}
+  </div>
+));
+
 const ProductImageSection = ({
   imageList,
   promotionTag,
   productBenefitTags,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState({});
+  const [showControls, setShowControls] = useState({});
   const [mainViewportRef, emblaMainApi] = useEmblaCarousel({
     skipSnaps: false,
   });
@@ -92,6 +121,7 @@ const ProductImageSection = ({
   const mainImageContainerRef = useRef(null);
   const thumbsContainerRef = useRef(null);
   const videoRefs = useRef({});
+  const controlTimeoutRefs = useRef({});
 
   const onThumbClick = useCallback(
     (index) => {
@@ -100,21 +130,57 @@ const ProductImageSection = ({
     [emblaMainApi],
   );
 
+  const togglePlayPause = useCallback((index) => {
+    setIsPlaying((prev) => {
+      const newState = { ...prev, [index]: !prev[index] };
+      const video = videoRefs.current[index];
+      if (video) {
+        newState[index] ? video.play() : video.pause();
+      }
+      return newState;
+    });
+
+    // Show controls
+    setShowControls((prev) => ({ ...prev, [index]: true }));
+
+    // Clear any existing timeout
+    if (controlTimeoutRefs.current[index]) {
+      clearTimeout(controlTimeoutRefs.current[index]);
+    }
+
+    // Set a new timeout to hide controls after 1 second
+    controlTimeoutRefs.current[index] = setTimeout(() => {
+      setShowControls((prev) => ({ ...prev, [index]: false }));
+    }, 1000);
+  }, []);
+
   const onSelect = useCallback(() => {
     if (!emblaMainApi) return;
     const newIndex = emblaMainApi.selectedScrollSnap();
     setSelectedIndex(newIndex);
     emblaThumbsApi?.scrollTo(newIndex);
 
-    // Pause all videos
-    Object.values(videoRefs.current).forEach((video) => {
-      if (video) video.pause();
+    // Pause all videos and update playing state
+    Object.keys(videoRefs.current).forEach((key) => {
+      const video = videoRefs.current[key];
+      if (video) {
+        video.pause();
+      }
+    });
+
+    setIsPlaying((prev) => {
+      const newState = { ...prev };
+      Object.keys(newState).forEach((key) => {
+        newState[key] = false;
+      });
+      return newState;
     });
 
     // Play the selected video if it exists
     const selectedVideo = videoRefs.current[newIndex];
     if (selectedVideo && imageList[newIndex].isVideo) {
       selectedVideo.play();
+      setIsPlaying((prev) => ({ ...prev, [newIndex]: true }));
     }
   }, [emblaMainApi, emblaThumbsApi, imageList]);
 
@@ -193,23 +259,29 @@ const ProductImageSection = ({
       imageList?.map((image, index) => (
         <div
           key={image?.imageKey || index}
-          className="main-image flex-[0_0_100%] overflow-hidden"
+          className="main-image relative flex-[0_0_100%] overflow-hidden"
+          onClick={() => image.isVideo && togglePlayPause(index)}
         >
           {image.isVideo ? (
-            <video
-              ref={(el) => {
-                videoRefs.current[index] = el;
-              }}
-              src={getPublicImageURL({
-                key: image.imageKey,
-                resize: 820,
-                addPrefix: true,
-              })}
-              className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
-              loop
-              muted
-              playsInline
-            />
+            <>
+              <video
+                ref={(el) => {
+                  videoRefs.current[index] = el;
+                }}
+                src={getPublicImageURL({
+                  key: image.imageKey,
+                  resize: 820,
+                  addPrefix: true,
+                })}
+                className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
+                loop
+                muted
+                playsInline
+              />
+              {showControls[index] && (
+                <PlayPauseButton isPlaying={isPlaying[index]} />
+              )}
+            </>
           ) : (
             <Img
               src={image?.imageKey}
@@ -260,7 +332,14 @@ const ProductImageSection = ({
           )}
         </div>
       )),
-    [imageList, promotionTag, productBenefitTags],
+    [
+      imageList,
+      promotionTag,
+      productBenefitTags,
+      isPlaying,
+      showControls,
+      togglePlayPause,
+    ],
   );
 
   const renderDotButtons = useMemo(
@@ -308,6 +387,7 @@ const ProductImageSection = ({
 
 Thumb.displayName = "Thumb";
 DotButton.displayName = "DotButton";
+PlayPauseButton.displayName = "PlayPauseButton";
 ProductImageSection.displayName = "ProductImageSection";
 
 export default React.memo(ProductImageSection);
