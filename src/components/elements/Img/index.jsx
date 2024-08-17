@@ -16,6 +16,7 @@ const Img = React.memo(
     width,
     addPrefix = false,
     quality = 75,
+    test,
     ...restProps
   }) => {
     const [hasError, setHasError] = useState(false);
@@ -27,13 +28,26 @@ const Img = React.memo(
         const staticSrc = addPrefix ? src : encodeURI(src);
         return {
           src: staticSrc,
-          loader: ({ src, width: w }) =>
-            getPublicImageURL({
+          loader: ({ src, width: w }) => {
+            {
+              test &&
+                console.log(
+                  src,
+                  getPublicImageURL({
+                    key: src,
+                    resize: w,
+                    quality,
+                    addPrefix,
+                  }),
+                );
+            }
+            return getPublicImageURL({
               key: src,
               resize: w,
               quality,
               addPrefix,
-            }),
+            });
+          },
         };
       }
 

@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { twMerge } from "tailwind-merge";
 
 import Quantity from "@/components/common/Quantity";
 import { Button } from "@/components/elements";
-import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
 
 const AddToCart = ({
   product,
@@ -78,7 +78,7 @@ const AddToCart = ({
         size={buttonSize}
         className={twMerge(
           buttonClassName,
-          "rounded bg-red-50 uppercase text-red-600 opacity-100",
+          "bg-gray-400 text-white-a700 opacity-100",
         )}
         disabled
       >

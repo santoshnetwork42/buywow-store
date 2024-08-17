@@ -1,15 +1,15 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef,
-} from "react";
-import useEmblaCarousel from "embla-carousel-react";
 import { Button, Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
+import useEmblaCarousel from "embla-carousel-react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const Thumb = React.memo(({ isSelected, image, onClick }) => (
   <div
@@ -159,6 +159,7 @@ const ProductImageSection = ({
             priority={index === 0}
             className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
             addPrefix
+            test={index === 1}
           />
           {promotionTag?.data &&
             index === 0 &&

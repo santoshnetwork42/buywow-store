@@ -1,20 +1,20 @@
 "use client";
 
-import React, { useEffect } from "react";
+import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
+import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDiscounts";
+import PriceSection from "@/components/partials/Product/PDP/PriceSection";
+import ProductDetailViewBlocks from "@/components/partials/Product/PDP/ProductDetailViewBlocks";
+import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
+import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
+import VariantSelector from "@/components/partials/Product/PDP/VariantSelector";
+import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
+import { extractAttributes } from "@/utils/helpers";
 import {
   useProduct,
   useProductCoupons,
   useProductVariantGroups,
 } from "@wow-star/utils";
-import { extractAttributes } from "@/utils/helpers";
-import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
-import PriceSection from "@/components/partials/Product/PDP/PriceSection";
-import VariantSelector from "@/components/partials/Product/PDP/VariantSelector";
-import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
-import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
-import ProductDetailViewBlocks from "@/components/partials/Product/PDP/ProductDetailViewBlocks";
-import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDiscounts";
-import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
+import { useEffect } from "react";
 
 const ProductDetailView = ({ product }) => {
   const {
@@ -55,6 +55,8 @@ const ProductDetailView = ({ product }) => {
   if (!fetchedProduct) {
     return <div>Product not found</div>;
   }
+
+  console.log("imageList", imageList);
 
   return (
     <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[50%_calc(50%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[50%_calc(50%-3rem)] lg:gap-x-12 xl:grid-cols-[50%_calc(50%-4rem)] xl:gap-x-16">
