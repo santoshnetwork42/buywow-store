@@ -14,6 +14,7 @@ const Accordion = ({
   className,
   accordionButtonClassName,
   toggleArrowClassName,
+  accordionMainContainerClassName,
   variant,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,6 +85,7 @@ const Accordion = ({
           isOpen ? "visible" : "invisible",
           isOpen ? (variant === "small" ? "mb-2" : "mb-5") : "mb-0",
           isOpen ? "mt-2.5" : "mt-0",
+          accordionMainContainerClassName,
         )}
         style={{ maxHeight: isOpen ? contentHeight : "0px" }}
       >
