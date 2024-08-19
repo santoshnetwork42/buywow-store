@@ -1,6 +1,6 @@
-import React from "react";
-import Modal from "@/components/features/Modal";
 import { Button, Heading, Img, Text } from "@/components/elements";
+import Modal from "@/components/features/Modal";
+import React from "react";
 
 const CouponModal = ({ isOpen, onClose, appliedCoupon }) => (
   <Modal
@@ -42,7 +42,7 @@ const CouponModal = ({ isOpen, onClose, appliedCoupon }) => (
           className="line-clamp-2 text-sm"
           responsive
         >
-          Enjoy 30% OFF on buying any 2 products.
+          {appliedCoupon?.couponTitle}
         </Heading>
         <Text as="span" size="sm" className="line-clamp-3" responsive>
           Applicable on hair, skin, body and kids products.

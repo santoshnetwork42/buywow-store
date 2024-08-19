@@ -1,6 +1,7 @@
 import { showToast } from "@/components/common/ToastComponent";
 import { STORE_PREFIX } from "@/config";
 import States from "@/utils/constants/states.json";
+import { uploadData } from "aws-amplify/storage";
 import Cookies from "js-cookie";
 import platform from "platform";
 
@@ -348,24 +349,54 @@ export const getPer = (totalCount, allReview) => {
   return 0;
 };
 
-export const processAnalytics = (item) => {
-  if (!item) return [];
+export const processAnalytics = (analytics) => {
+  if (!analytics || !Array.isArray(analytics)) return [];
 
-  const data = item.result?.buckets.sort((a, b) => +a.key - +b.key);
-  const totalDocCount = data.reduce((a, b) => a + b.doc_count, 0);
+  const totalDocCount = analytics.reduce(
+    (sum, item) => sum + item.doc_count,
+    0,
+  );
 
   return Array(5)
     .fill({ key: "", doc_count: 0 })
     .map((item, index) => {
-      const inputIndex = data.findIndex((i) => i.key === String(index + 1));
-      const d =
-        inputIndex !== -1
-          ? data[inputIndex]
-          : { ...item, key: (index + 1).toString() };
+      const rating = 5 - index;
+      const existingData = analytics.find((a) => a.key === rating) || item;
       return {
-        ...d,
-        percentage: getPer(totalDocCount, +d.doc_count),
+        ...existingData,
+        key: rating.toString(),
+        percentage: totalDocCount
+          ? Math.round((existingData.doc_count * 100) / totalDocCount)
+          : 0,
       };
-    })
-    .reverse();
+    });
+};
+
+export const formatTimeAgo = (date) => {
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - new Date(date)) / 1000);
+  const diffInDays = Math.floor(diffInSeconds / 86400);
+
+  if (diffInDays === 0) return "today";
+  if (diffInDays === 1) return "yesterday";
+  if (diffInDays < 7) return `${diffInDays} days ago`;
+  if (diffInDays < 30) return `${Math.floor(diffInDays / 7)} weeks ago`;
+  if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} months ago`;
+  return `${Math.floor(diffInDays / 365)} years ago`;
+};
+
+export const uploadImages = async (file, prefix = "wow", level = "public") => {
+  if (file) {
+    const fileName = `${prefix}/${new Date().valueOf()}-${file.name}`;
+    const { key } = await uploadData({
+      key: fileName,
+      data: file,
+      options: {
+        contentType: file.type,
+        accessLevel: level === "public" ? "guest" : "private",
+      },
+    }).result;
+
+    return key;
+  }
 };

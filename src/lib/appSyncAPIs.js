@@ -81,8 +81,6 @@ export const searchCMSCollectionProductsAPI = async ({
       },
     });
 
-    // console.log(response);
-
     return JSON.parse(response?.data?.searchCMSCollectionProducts || {});
   } catch (err) {
     errorHandler(err, "Search CMS Collection Products API");
@@ -478,7 +476,7 @@ export const submitReviewAPI = async (reviewData, userId, productId) => {
             userId,
             productId,
             storeId: STORE_ID,
-            images,
+            images: images.slice(0, 10),
           },
         },
       });
@@ -511,7 +509,6 @@ export const submitReviewAPI = async (reviewData, userId, productId) => {
     }
   } catch (error) {
     errorHandler(error, "Submit Review API");
-    return null;
   }
 };
 

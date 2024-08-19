@@ -2,7 +2,6 @@
 
 import { AlertIcon } from "@/assets/svg/icons";
 import { Text } from "@/components/elements";
-import React from "react";
 import { Toaster, toast } from "react-hot-toast";
 
 // Generic Toast Component
@@ -45,7 +44,6 @@ export const showToast = {
             "radial-gradient(18.26% 56.66% at 50% 50%, #66442C 0%, #352215 100%)",
           maxWidth: "min(90vw, 936px)",
         }}
-        responsive
       >
         <AlertIcon className="size-4 max-sm:mt-[3px] sm:size-6 lg:size-7" />
         <Text size="lg" as="p" className="flex-1 text-white-a700" responsive>

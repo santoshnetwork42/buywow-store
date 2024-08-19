@@ -35,7 +35,12 @@ const AccordionDescription = ({
   };
 
   return (
-    <Accordion title={title} imgUrl={url} alternativeText={alternativeText}>
+    <Accordion
+      title={title}
+      imgUrl={url}
+      alternativeText={alternativeText}
+      className="lg:w-[90%]"
+    >
       <div
         ref={containerRef}
         className={`relative overflow-hidden transition-all duration-300 ease-in-out ${
