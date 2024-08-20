@@ -1,110 +1,142 @@
 "use client";
 
 import { Button, Text } from "@/components/elements";
-import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem//RemoveButton";
-import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem/RemoveButton";
+import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import AddressModal from "../AddressModal";
 
-export const AddressListComponent = React.memo(
-  ({ currentAddress, user, item }) => {
-    const dispatch = useDispatch();
+const AddressList = React.memo(({ addressList }) => {
+  const dispatch = useDispatch();
+  const { currentAddress } = useSelector((state) => state.address);
+  const { user } = useSelector((state) => state.user);
+  const { updateCurrentAddress, deleteAddress } = useAddressDispatch();
 
-    const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
+
+  useEffect(() => {
+    setSelectedAddressId(currentAddress?.id);
+  }, [currentAddress]);
+
+  const handleAddressDelete = useCallback(
+    (addressId) => {
+      deleteAddress(addressId, user.id);
+
+      if (addressId === selectedAddressId) {
+        const remainingAddresses = addressList.filter(
+          (addr) => addr.id !== addressId,
+        );
+        if (remainingAddresses.length > 0) {
+          const newSelectedAddress = remainingAddresses[0];
+          setSelectedAddressId(newSelectedAddress.id);
+          updateCurrentAddress(newSelectedAddress);
+        } else {
+          setSelectedAddressId(null);
+          updateCurrentAddress(null);
+        }
+      }
+    },
+    [
+      addressList,
+      selectedAddressId,
+      deleteAddress,
+      user.id,
+      updateCurrentAddress,
+    ],
+  );
+
+  return (
+    <div className="flex-1 overflow-x-scroll">
+      <div className="flex w-max gap-3">
+        {Array.isArray(addressList) &&
+          addressList.map((item, index) => (
+            <AddressListComponent
+              key={`address-${index}`}
+              address={item}
+              isSelected={selectedAddressId === item.id}
+              onSelect={() => {
+                setSelectedAddressId(item.id);
+                updateCurrentAddress(item);
+              }}
+              onDelete={() => handleAddressDelete(item.id)}
+              user={user}
+            />
+          ))}
+      </div>
+    </div>
+  );
+});
+
+const AddressListComponent = React.memo(
+  ({ address, isSelected, onSelect, onDelete, user }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [action, setAction] = useState("EDIT");
 
-    useEffect(() => {
-      setSelectedAddress(currentAddress?.id);
-    }, [currentAddress, selectedAddress]);
-
-    const handleAddressChange = (item) => {
-      const {
-        id,
-        name,
-        address,
-        state,
-        city,
-        pinCode,
-        phone,
-        country,
-        area,
-        landmark,
-        email,
-      } = item;
-
-      dispatch({
-        type: addressSagaActions.UPDATE_CURRENT_ADDRESS,
-        payload: {
-          id,
-          name,
-          email,
-          address,
-          state,
-          city,
-          pinCode,
-          phone,
-          country: country || "IN",
-          area,
-          landmark,
-        },
-      });
-    };
-
-    const handleAddressEdit = () => {
+    const handleAddressEdit = useCallback((e) => {
+      e.stopPropagation();
       setIsModalOpen(true);
-      setAction("EDIT");
-    };
+    }, []);
 
-    const deleteUserAddress = async ({ id, userID }) => {
-      dispatch({
-        type: addressSagaActions.DELETE_ADDRESS,
-        payload: { id, userID },
-      });
-    };
+    const handleDelete = useCallback(
+      (e) => {
+        e.stopPropagation();
+        onDelete();
+      },
+      [onDelete],
+    );
 
     return (
       <div
-        onClick={() => {
-          handleAddressChange(item);
-        }}
-        className="flex max-h-64 min-h-56 min-w-72 max-w-80 flex-col justify-between gap-2 rounded-md border p-4"
+        onClick={onSelect}
+        className="flex w-72 cursor-pointer rounded-md border p-4 shadow-sm sm:w-80 lg:w-96"
       >
-        <div className="flex h-full gap-2">
+        <div className="flex gap-2 md:gap-3">
           <input
             type="radio"
-            id={item.id}
+            id={address.id}
             name="address"
-            value={item.id}
-            checked={selectedAddress === item.id}
-            className="mt-1 cursor-pointer"
+            value={address.id}
+            checked={isSelected}
+            onChange={onSelect}
+            className="mt-1 cursor-pointer checked:bg-yellow-900 focus:border focus:border-gray-500 focus:checked:bg-yellow-900"
           />
-          <div className="flex h-full w-full flex-col justify-between gap-2">
-            <div className="flex max-h-52 flex-col gap-2">
-              <div className="flex justify-between">
-                <Text size="xl" className="line-clamp-1 max-w-44">
-                  {item.name}
+          <div className="flex flex-1 flex-col justify-between gap-4">
+            <div className="flex flex-1 flex-col gap-2 md:gap-3">
+              <div className="flex items-center justify-between gap-2">
+                <Text
+                  size="xl"
+                  as="span"
+                  className="line-clamp-1 uppercase"
+                  responsive
+                >
+                  {address.name}
                 </Text>
-                <RemoveButton
-                  onClick={() =>
-                    deleteUserAddress({ id: item.id, userID: user.id })
-                  }
-                />
+                <RemoveButton onClick={handleDelete} />
               </div>
-              <div className="flex flex-col gap-2">
-                <Text>{item.phone}</Text>
-                <Text className="line-clamp-3 max-w-56">{item.address}</Text>
+              <div className="flex flex-col gap-1">
+                <Text as="span" size="base" className="text-sm" responsive>
+                  {address.phone}
+                </Text>
+                <Text as="span" size="base" className="text-sm" responsive>
+                  {address.address}
+                </Text>
                 <div className="flex flex-wrap gap-2">
-                  <Text className="line-clamp-1 max-w-44">{item.city}</Text>
-                  <Text className="line-clamp-1 max-w-32">{item.state}</Text>
-                  <Text className="line-clamp-1 max-w-32">{item.pinCode}</Text>
+                  <Text as="span" size="base" className="text-sm" responsive>
+                    {address.city},
+                  </Text>
+                  <Text as="span" size="base" className="text-sm" responsive>
+                    {address.state},
+                  </Text>
+                  <Text as="span" size="base" className="text-sm" responsive>
+                    {address.pinCode}
+                  </Text>
                 </div>
               </div>
             </div>
             <Button
               variant="primary"
-              className="w-fit rounded-md p-2 px-4"
+              size="medium"
+              className="w-fit rounded-md py-1.5"
               onClick={handleAddressEdit}
             >
               Edit
@@ -116,12 +148,16 @@ export const AddressListComponent = React.memo(
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             enableOutsideClick={true}
-            action={action}
-            addressItem={item}
+            action="EDIT"
+            addressItem={address}
           />
         )}
       </div>
     );
   },
 );
+
 AddressListComponent.displayName = "AddressListComponent";
+AddressList.displayName = "AddressList";
+
+export default AddressList;

@@ -73,8 +73,6 @@ export default function OrderSection() {
     }
   }, [user, guestCheckout, customUser, router]);
 
-  console.log(!user?.id, !guestCheckout, customUser?.phone, "pageLoading");
-
   useEffect(() => {
     if (prepaidEnabled) {
       setSelectedMethod("PREPAID");

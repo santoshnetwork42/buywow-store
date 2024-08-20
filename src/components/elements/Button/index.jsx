@@ -32,8 +32,7 @@ const Button = ({
   const variantClasses = {
     primary: "bg-yellow-900 text-white-a700_01",
     secondary: "bg-white text-black-900",
-    outlined:
-      "bg-transparent border border-yellow-900 text-yellow-900 hover:bg-yellow-50",
+    outlined: "bg-transparent border border-black-900 rounded ",
     none: "",
   };
 

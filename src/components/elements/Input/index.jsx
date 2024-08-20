@@ -54,7 +54,9 @@ const InputComponent = React.forwardRef(
       }
     }, []);
 
-    const borderColorClass = error ? "border-red-500" : "border-gray-300";
+    const borderColorClass = error
+      ? "border-red-500 outline-red-500"
+      : "border-gray-300 outline-gray-300";
     const labelColorClass = error
       ? "text-red-500"
       : isFocused || value
@@ -64,7 +66,7 @@ const InputComponent = React.forwardRef(
     const InputElement = isTextarea ? "textarea" : "input";
 
     return (
-      <div className={`relative ${className} ${borderColorClass}`}>
+      <div className={`relative flex gap-1 ${className} ${borderColorClass}`}>
         {prefix}
         <InputElement
           ref={(node) => {
@@ -75,7 +77,7 @@ const InputComponent = React.forwardRef(
               ref.current = node;
             }
           }}
-          className={`peer w-full ${inputClassName}`}
+          className={twMerge(`peer w-full`, inputClassName)}
           type={isTextarea ? undefined : type}
           name={name}
           placeholder={placeholder}
