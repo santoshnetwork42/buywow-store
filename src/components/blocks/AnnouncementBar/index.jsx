@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useMemo } from "react";
 import { Text } from "@/components/elements";
 import FlipClock from "@/components/partials/Others/FlipClock";
 import { useAnnouncementContext } from "@/utils/context/AnnouncementContext";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import React, { useEffect, useMemo } from "react";
 
 const AnnouncementContent = ({ announcement }) => {
   const { leftText, centerText, rightText, showTimer, timer } = announcement;
@@ -15,7 +15,7 @@ const AnnouncementContent = ({ announcement }) => {
     return null;
 
   return (
-    <div className="flex flex-1 items-center justify-between gap-5 py-1 md:py-2">
+    <div className="flex min-h-8 flex-1 items-center justify-between gap-5 py-1 md:py-2">
       <Text
         as="p"
         className="shrink-0 text-white-a700_01 max-lg:hidden lg:w-[28%]"

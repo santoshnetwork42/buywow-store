@@ -2,10 +2,9 @@ import { CloseSVG, UserSVG } from "@/assets/images";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import Sidebar from "@/components/features/Drawer";
 import MobileMenuItem from "@/components/partials/Header/MobileMenuItem";
-import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
+import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
 
 const HeaderSection = ({
   mWebUrl,
@@ -74,11 +73,9 @@ const MenuList = ({ items, closeMenu, linkPrefix }) => (
 MenuList.displayName = "MenuList";
 
 const FooterSection = ({ onClose }) => {
-  const dispatch = useDispatch();
+  const { handleSignOut } = useAuthDispatch();
   const handleLogoutClick = () => {
-    dispatch({
-      type: authSagaActions.SIGNOUT,
-    });
+    handleSignOut();
     onClose();
   };
 

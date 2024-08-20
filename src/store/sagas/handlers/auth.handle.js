@@ -116,7 +116,12 @@ export function* signOutHandler() {
     const signedOutUser = yield call(() => signOutRequest());
 
     yield put(setConfirmationStatus(null));
-    yield put(setUser({}));
+    yield put(
+      setUser({
+        id: null,
+        phone: null,
+      }),
+    );
   } catch (error) {
     console.log("error", error);
   }

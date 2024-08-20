@@ -188,7 +188,11 @@ const Header = ({ data, ...props }) => {
             {!isRestricted && (
               <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
             )}
-            <Link href="#" className="flex-shrink-0" onClick={handleUserClisk}>
+            <Link
+              href="#"
+              className="ml-auto flex-shrink-0"
+              onClick={handleUserClisk}
+            >
               <Img
                 src="img_user.svg"
                 width={24}

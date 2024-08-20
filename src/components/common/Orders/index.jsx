@@ -1,6 +1,7 @@
 // app/account/orders/OrderList.js
 "use client";
 
+import { Heading, Text } from "@/components/elements";
 import TokenPagination from "@/components/features/TokenPagination";
 import { STORE_ID } from "@/config";
 import { searchOrders } from "@/graphql/appSync/api";
@@ -65,12 +66,20 @@ export default function OrderList() {
 
   return (
     <div className="container-main">
-      <div className="mb-4 grid grid-cols-1 gap-4">
-        <div className="hidden gap-4 bg-gray-100 py-2 font-bold shadow-[0_0_0_100vmax_#f2f4f1] [clipPath:inset(0_-100vmax)] md:grid md:grid-cols-[22%_36%_20%_auto]">
-          <div>Order</div>
-          <div>Date</div>
-          <div>Status</div>
-          <div>Total</div>
+      <div className="mb-4 grid grid-cols-1 gap-1 sm:gap-2 md:gap-0">
+        <div className="hidden gap-2 bg-gray-100 shadow-[0_0_0_100vmax_#f2f4f1] [clipPath:inset(0_-100vmax)] md:grid md:grid-cols-[23%_36%_20%_auto] md:py-2.5 lg:py-3">
+          <Heading as="h4" size="base" className="font-semibold" responsive>
+            Order
+          </Heading>
+          <Heading as="h4" size="base" className="font-semibold" responsive>
+            Date
+          </Heading>
+          <Heading as="h4" size="base" className="font-semibold" responsive>
+            Status
+          </Heading>
+          <Heading as="h4" size="base" className="font-semibold" responsive>
+            Total
+          </Heading>
         </div>
         {orders?.map((order) => (
           <OrderRow key={order.id} order={order} />
@@ -95,76 +104,54 @@ function OrderRow({ order }) {
 
   return (
     <Link href={`/order/${order.id}`}>
-      <div className="grid grid-cols-2 gap-4 border-b border-gray-200 py-2 md:grid-cols-[22%_36%_20%_auto]">
-        <div className="md:contents-none contents">
-          <div className="font-bold md:hidden">Order:</div>
-          <div>
-            <a
-              href={`/order/${order.id}`}
-              className="text-blue-600 hover:underline"
-            >
-              #{order.code}
-            </a>
-          </div>
+      <div className="grid grid-cols-[30%_70%] gap-2 border-b py-2 md:mt-1 md:grid-cols-[22%_36%_20%_auto] md:py-3 lg:py-4">
+        <div className="contents">
+          <Heading as="h4" size="base" className="text-sm md:hidden" responsive>
+            Order:
+          </Heading>
+
+          <Text
+            as="span"
+            size="base"
+            className="text-sm text-blue-600 hover:underline"
+            responsive
+          >
+            #{order.code}
+          </Text>
         </div>
-        <div className="md:contents-none contents">
-          <div className="font-bold md:hidden">Date:</div>
-          <div>
-            <time>{formateDate(order.orderDate)}</time>
-          </div>
+        <div className="contents">
+          <Heading as="h4" size="base" className="text-sm md:hidden" responsive>
+            Date:
+          </Heading>
+
+          <Text as="span" size="base" className="text-sm" responsive>
+            {formateDate(order.orderDate)}
+          </Text>
         </div>
-        <div className="md:contents-none contents">
-          <div className="font-bold md:hidden">Status:</div>
-          <div>
-            <span style={badgeStyle}>{order.status}</span>
-          </div>
+        <div className="contents">
+          <Heading as="h4" size="base" className="text-sm md:hidden" responsive>
+            Status:
+          </Heading>
+
+          <Text
+            as="span"
+            size="base"
+            className="text-sm"
+            style={badgeStyle}
+            responsive
+          >
+            {order.status}
+          </Text>
         </div>
-        <div className="md:contents-none contents">
-          <div className="font-bold md:hidden">Total:</div>
-          <div>₹{toDecimal(order.totalAmount)}</div>
+        <div className="contents">
+          <Heading as="h4" size="base" className="text-sm md:hidden" responsive>
+            Total:
+          </Heading>
+          <Text as="span" size="base" className="text-sm" responsive>
+            ₹{toDecimal(order.totalAmount)}
+          </Text>
         </div>
       </div>
     </Link>
   );
 }
-
-// function OrderRow({ order }) {
-//   const badgeStyle = {
-//     color: orderStatusBadge[order.status]?.color || "#0000ff",
-//   };
-
-//   return (
-//     <div className="grid gap-2 border-b border-gray-200 py-2 md:grid-cols-5 md:gap-4">
-//       <div className="flex flex-col md:flex-row">
-//         <span className="font-bold md:hidden">Order:</span>
-//         <a
-//           href={`/order/${order.id}`}
-//           className="text-blue-600 hover:underline"
-//         >
-//           #{order.code}
-//         </a>
-//       </div>
-//       <div className="flex flex-col md:flex-row">
-//         <span className="font-bold md:hidden">Date:</span>
-//         <time>{formateDate(order.orderDate)}</time>
-//       </div>
-//       <div className="flex flex-col md:flex-row">
-//         <span className="font-bold md:hidden">Status:</span>
-//         <span style={badgeStyle}>{order.status}</span>
-//       </div>
-//       <div className="flex flex-col md:flex-row">
-//         <span className="font-bold md:hidden">Total:</span>
-//         <span>₹{toDecimal(order.totalAmount)}</span>
-//       </div>
-//       <div className="flex flex-col md:flex-row">
-//         <span className="font-bold md:hidden">Actions:</span>
-//         <a
-//           href={`/order/${order.id}`}
-//           className="text-blue-600 hover:underline"
-//         >
-//           View
-//         </a>
-//       </div>
-//     </div>
-//   );
-// }

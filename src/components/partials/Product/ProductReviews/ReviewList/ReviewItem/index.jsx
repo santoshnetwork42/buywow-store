@@ -3,8 +3,8 @@ import { Button, Heading, Img, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
 import { formatTimeAgo } from "@/utils/helpers";
 import React, { useCallback, useState } from "react";
+import ReadMore from "../../../../../features/ReadMore";
 import ReviewStars from "../../ReviewStars";
-import ReadMore from "./ReadMore";
 import ReviewImageCarousel from "./ReviewImageCarousel";
 
 const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
@@ -130,7 +130,10 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
               Submitted {formatTimeAgo(review?.createdAt)}
             </Text>
             <div className="h-full max-h-[136px] overflow-y-scroll sm:max-h-[120px] md:max-h-[300px]">
-              <ReadMore content={review?.comment} />
+              <ReadMore
+                content={review?.comment}
+                buttonClassName="bg-lime-50"
+              />
             </div>
           </div>
           <div
