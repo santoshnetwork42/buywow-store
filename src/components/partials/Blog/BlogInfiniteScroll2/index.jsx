@@ -17,7 +17,7 @@ export default function BlogInfiniteScroll2({
   const [blogs, setBlog] = useState(blogsData);
   const [pageInfo, setPageInfo] = useState(pageInfoData);
 
-  async function loadMore(after = "") {
+  async function loadMore(fetchMore = false, after = "") {
     try {
       const blogRes = await fetch("/api/blog", {
         headers: {
@@ -43,7 +43,7 @@ export default function BlogInfiniteScroll2({
       const blogData = await blogRes.json();
 
       if (blogData.data && blogData.data.posts.edges) {
-        if (loadMore) {
+        if (fetchMore) {
           setBlog([...blogs, ...blogData.data.posts.edges]);
           setPageInfo(blogData.data.posts.pageInfo);
         }
@@ -56,7 +56,7 @@ export default function BlogInfiniteScroll2({
   return (
     <InfiniteScroll
       dataLength={blogs?.length || 0}
-      next={() => loadMore(pageInfo?.endCursor)}
+      next={() => loadMore(!!pageInfo?.endCursor, pageInfo?.endCursor)}
       hasMore={pageInfo?.hasNextPage}
       loader={
         <div className="flex h-12 w-full items-center justify-center">

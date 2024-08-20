@@ -2451,6 +2451,22 @@ export const getFeaturedBlogs = /* GraphQL */ `
         excerpt
         toPing
         link
+        author {
+          node {
+            name
+            slug
+            avatar {
+              url
+              height
+              width
+            }
+            username
+            nicename
+          }
+        }
+        seo {
+          readingTime
+        }
         featuredImage {
           node {
             mediaItemUrl

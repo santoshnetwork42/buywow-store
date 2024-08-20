@@ -46,6 +46,7 @@ const AnnouncementContent = ({ announcement }) => {
 
 const AnnouncementBar = ({ data }) => {
   const pathname = usePathname();
+  const showAnnouncementBar = pathname?.includes("blog");
   const {
     globalAnnouncement,
     pageAnnouncements,
@@ -76,7 +77,9 @@ const AnnouncementBar = ({ data }) => {
     return null;
   }
 
-  return (
+  return showAnnouncementBar ? (
+    <></>
+  ) : (
     <Link
       href={announcement?.link || "#"}
       className="container-main flex justify-center"

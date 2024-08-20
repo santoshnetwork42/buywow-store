@@ -1,37 +1,109 @@
 // src/components/BlogSection.jsx
 "use client";
 
-import React from "react";
-import { Button, Heading } from "@/components/elements";
-import BlogCard from "@/components/partials/Card/BlogCard";
-import SliderComponent from "@/components/features/Slider";
+import { Heading, Text } from "@/components/elements";
+import Slider from "@/components/features/Slider";
+import { getFeaturedBlogs } from "@/graphql/appSync/api";
+import dayjs from "dayjs";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-const BlogSection = ({ sectionData }) => {
-  const { title, buttonText, articles } = sectionData;
+const BlogCard = ({
+  blog = {
+    featuredImage,
+    date,
+    author,
+    title,
+    excerpt,
+    slug,
+    seo: {
+      readingTime,
+    },
+  },
+}) => {
+  return (
+    <Link href={`/blog/${blog.slug}`}>
+      <div className="flex h-full flex-col rounded-xl">
+        <div className="relative aspect-[16/9] w-[400px]">
+          <Image
+            src={blog.featuredImage?.node?.mediaItemUrl}
+            alt={blog.title}
+            fill
+            className="rounded-xl"
+          />
+        </div>
+        <Heading
+          as="h5"
+          size="2xl"
+          className="line-clamp-1 pr-3 pt-5 text-base normal-case"
+        >
+          {blog.title}
+        </Heading>
+
+        <Text
+          as={"p"}
+          className="mt-3 line-clamp-3 flex justify-between"
+          size="sm"
+        >
+          <p>{blog?.author?.node?.name}</p>
+          <p>{dayjs(blog.date).format("MMMM DD, YYYY")} </p>
+        </Text>
+      </div>
+    </Link>
+  );
+};
+
+const BlogSection = ({ title = "Explore Blogs", buttonText = "Read More" }) => {
+  const [featuredBlogs, setFeaturedBlogs] = useState([]);
+  useEffect(() => {
+    const fetchFeaturedBlogs = async () => {
+      try {
+        const blogRes = await fetch("/api/blog", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            query: getFeaturedBlogs,
+            variables: { first: 5 },
+          }),
+        });
+
+        const blogData = await blogRes.json();
+        if (blogData.data && blogData.data.posts.nodes) {
+          setFeaturedBlogs(blogData.data.posts.nodes);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchFeaturedBlogs();
+  }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-5">
+    <div className="container-main mb-main flex flex-col items-center justify-center gap-5">
       <Heading size="heading" as="h1" responsive>
         {title}
       </Heading>
-      <div className="flex w-full flex-col items-center gap-4 sm:gap-5 md:gap-6 lg:gap-7">
-        <SliderComponent
-          items={articles}
-          renderItem={(article, index) => (
-            <BlogCard
-              key={`${article.id}-${index}`}
-              className="flex w-[80vw] max-w-[330px] sm:w-[58vw] sm:max-w-[434px] md:w-[50vw] lg:w-[42vw]"
-              article={article}
-            />
-          )}
-          sliderClassName="gap-3 sm:gap-4 lg:gap-5"
-          showCounter={false}
-          showControls={false}
-        />
-        <Button className="rounded-full bg-yellow-900 px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3">
-          {buttonText}
-        </Button>
+      <div className="gap px-auto flex w-full justify-evenly overflow-scroll sm:gap-5 md:gap-6 lg:gap-7">
+        <Slider
+          controlsContainerClassName="mb-2 md:mb-3"
+          sliderClassName="gap-[10px] sm:gap-3 lg:gap-5"
+        >
+          {featuredBlogs.map((blog, index) => (
+            <BlogCard key={blog.id} blog={blog} />
+          ))}
+        </Slider>
       </div>
+      <Link
+        href={`/blog`}
+        className="mt-2 rounded-[24px] bg-yellow-900 px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3"
+      >
+        <Heading as="h3" size="xl" className="text-white-a700_01" responsive>
+          {buttonText}
+        </Heading>
+      </Link>
     </div>
   );
 };

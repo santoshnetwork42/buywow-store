@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
 
 const MenuItem = ({ item, index, linkPrefix }) => {
   if (!item) return null;
@@ -84,6 +85,8 @@ const Logo = ({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
 Logo.displayName = "Logo";
 
 const Header = ({ data, ...props }) => {
+  const pathname = usePathname();
+  const showHeader = pathname?.includes("blog");
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -171,7 +174,9 @@ const Header = ({ data, ...props }) => {
 
   if (!data) return null;
 
-  return (
+  return showHeader ? (
+    <></>
+  ) : (
     <header className={`${props.className} relative`}>
       <div className="container-main flex border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
         <div className="flex flex-1 flex-wrap items-center justify-between gap-x-5 gap-y-2.5 md:flex-nowrap">

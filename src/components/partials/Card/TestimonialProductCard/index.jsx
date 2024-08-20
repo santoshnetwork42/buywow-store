@@ -10,7 +10,7 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
   const [selectedVariant] = useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
-  const { price, listingPrice, title, slug, thumbImage } = packageProduct;
+  const { price, listingPrice, title, slug, thumbImage } = packageProduct || {};
   const showStrikePrice = listingPrice && price < listingPrice;
 
   if (!fetchedProduct || !packageProduct) return null;
