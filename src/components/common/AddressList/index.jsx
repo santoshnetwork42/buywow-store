@@ -4,11 +4,10 @@ import { Button, Text } from "@/components/elements";
 import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem/RemoveButton";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AddressModal from "../AddressModal";
 
 const AddressList = React.memo(({ addressList }) => {
-  const dispatch = useDispatch();
   const { currentAddress } = useSelector((state) => state.address);
   const { user } = useSelector((state) => state.user);
   const { updateCurrentAddress, deleteAddress } = useAddressDispatch();

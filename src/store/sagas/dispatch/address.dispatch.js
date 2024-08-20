@@ -5,6 +5,14 @@ export const useAddressDispatch = () => {
   const dispatch = useDispatch();
 
   const updateCurrentAddress = (item) => {
+    if (item === null) {
+      dispatch({
+        type: addressSagaActions.UPDATE_CURRENT_ADDRESS,
+        payload: null,
+      });
+      return;
+    }
+
     const {
       id,
       name,
