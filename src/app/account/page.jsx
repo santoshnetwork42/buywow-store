@@ -8,9 +8,12 @@ import {
   User,
   WowCashIcon,
 } from "@/assets/svg/icons";
+import AccountDetails from "@/components/common/AccountDetails";
+import WowLoyalty from "@/components/common/WowLoyalty";
 import AccountSkeleton from "@/components/partials/Account/AccountSkeleton";
 import AccountTabs from "@/components/partials/Account/AccountTabs";
-import TabContent from "@/components/partials/Account/TabContent";
+import AddressSection from "@/components/partials/Account/AddressSection";
+import OrderSection from "@/components/partials/Account/OrderSection";
 import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -102,5 +105,20 @@ const getTabItems = (handleLogout) => [
     ArrowIcon: () => null,
   },
 ];
+
+const TabContent = ({ activeTab }) => {
+  switch (activeTab) {
+    case "My Orders":
+      return <OrderSection />;
+    case "My Addresses":
+      return <AddressSection variant="CHECKOUT" />;
+    case "Account Details":
+      return <AccountDetails />;
+    case "WOW Cash":
+      return <WowLoyalty />;
+    default:
+      return null;
+  }
+};
 
 export default Account;

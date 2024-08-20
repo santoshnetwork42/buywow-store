@@ -6,7 +6,7 @@ import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
 import { addPhonePrefix, removePhonePrefix } from "@/utils/helpers";
 import { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AddressFormFields from "../Address/AddressFormFields";
+import AddressFormFields from "../AddressForm/AddressFormFields";
 
 const AddressModal = ({
   isOpen = false,

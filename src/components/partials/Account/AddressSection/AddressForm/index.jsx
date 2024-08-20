@@ -3,7 +3,7 @@ import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
 import { addPhonePrefix } from "@/utils/helpers";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AddressFormFields from "../../Address/AddressFormFields";
+import AddressFormFields from "./AddressFormFields";
 
 const AddressForm = React.memo(() => {
   const dispatch = useDispatch();

@@ -4,11 +4,11 @@ import { Button, Heading, Text } from "@/components/elements";
 import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import AddressList from "../AddressList";
-import AddressModal from "../AddressModal";
 import AddressForm from "./AddressForm";
+import AddressList from "./AddressList";
+import AddressModal from "./AddressModal";
 
-const AccountAddressSection = React.memo(({ variant = "CARD" }) => {
+const AddressSection = React.memo(({ variant }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { addressList } = useSelector((state) => state.address);
@@ -40,20 +40,26 @@ const AccountAddressSection = React.memo(({ variant = "CARD" }) => {
     setIsModalOpen(false);
   }, []);
 
-  console.log("addressList", addressList);
-
   return (
     <div className="flex flex-col gap-4 p-2">
-      <div className="flex justify-between">
-        <Heading as="h3" size="2xl" responsive>
+      <div
+        className={`flex items-center justify-between ${variant === "CHECKOUT" && "rounded-md bg-blue-50 px-4 py-1.5"}`}
+      >
+        <Heading
+          as="h3"
+          size={variant === "CHECKOUT" ? "xl" : "2xl"}
+          responsive
+        >
           Address
         </Heading>
         {addressList?.length > 0 && (
           <Button
-            variant="outlined"
-            size="medium"
+            variant={variant === "CHECKOUT" ? "none" : "outlined"}
+            size={variant === "CHECKOUT" ? "small" : "medium"}
             onClick={handleAddNewAddress}
-            className="cursor-pointer"
+            className={
+              variant === "CHECKOUT" ? "rounded-none px-0 underline" : ""
+            }
           >
             + New Address
           </Button>
@@ -84,6 +90,6 @@ const AccountAddressSection = React.memo(({ variant = "CARD" }) => {
   );
 });
 
-AccountAddressSection.displayName = "AccountAddressSection";
+AddressSection.displayName = "AddressSection";
 
-export default AccountAddressSection;
+export default AddressSection;

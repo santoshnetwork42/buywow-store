@@ -89,7 +89,7 @@ const AddressListComponent = React.memo(
         onClick={onSelect}
         className="flex w-72 cursor-pointer rounded-md border p-4 shadow-sm sm:w-80 lg:w-96"
       >
-        <div className="flex gap-2 md:gap-3">
+        <div className="flex w-full gap-2 md:gap-3">
           <input
             type="radio"
             id={address.id}
@@ -97,7 +97,7 @@ const AddressListComponent = React.memo(
             value={address.id}
             checked={isSelected}
             onChange={onSelect}
-            className="mt-1 cursor-pointer checked:bg-yellow-900 focus:border focus:border-gray-500 focus:checked:bg-yellow-900"
+            className="mt-1.5 cursor-pointer checked:bg-yellow-900 focus:border focus:border-gray-500 focus:checked:bg-yellow-900"
           />
           <div className="flex flex-1 flex-col justify-between gap-4">
             <div className="flex flex-1 flex-col gap-2 md:gap-3">
@@ -119,7 +119,7 @@ const AddressListComponent = React.memo(
                 <Text as="span" size="base" className="text-sm" responsive>
                   {address.address}
                 </Text>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1">
                   <Text as="span" size="base" className="text-sm" responsive>
                     {address.city},
                   </Text>

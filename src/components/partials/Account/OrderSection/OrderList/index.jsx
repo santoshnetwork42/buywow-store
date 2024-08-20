@@ -1,12 +1,10 @@
 "use client";
 
-import { Text } from "@/components/elements";
 import TokenPagination from "@/components/features/TokenPagination";
 import { STORE_ID } from "@/config";
 import { searchOrders } from "@/graphql/appSync/api";
 import { errorHandler } from "@/utils/errorHandler";
 import { generateClient } from "aws-amplify/api";
-import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import OrderListHeader from "./OrderListHeader";
@@ -83,32 +81,19 @@ const OrderList = React.memo(() => {
   );
 
   return (
-    <div className="flex flex-col gap-5">
-      <div className="container-main overflow-hidden rounded-md border shadow-sm">
-        <div className="mb-4 grid grid-cols-1 gap-1 sm:gap-2 md:gap-0">
-          <OrderListHeader />
-          {isLoading && orders.length === 0 ? skeletons : memoizedOrders}
-        </div>
-        <TokenPagination
-          onPage={() => getOrders(false)}
-          total={totalOrder}
-          loaded={orders?.length}
-          nextToken={token}
-          content="orders"
-        />
+    <>
+      <div className="mb-4 grid grid-cols-1 gap-1 sm:gap-2 md:gap-0">
+        <OrderListHeader />
+        {isLoading && orders.length === 0 ? skeletons : memoizedOrders}
       </div>
-      <Text as="p" size="sm">
-        For order history, please write to us @{" "}
-        <Link href="mailto:support@buywow.in" className="text-blue-600">
-          support@buywow.in
-        </Link>{" "}
-        with your order id and mobile number. Track your order{" "}
-        <Link href="https://track.buywow.in/" className="text-blue-600">
-          here
-        </Link>
-        .
-      </Text>
-    </div>
+      <TokenPagination
+        onPage={() => getOrders(false)}
+        total={totalOrder}
+        loaded={orders?.length}
+        nextToken={token}
+        content="orders"
+      />
+    </>
   );
 });
 

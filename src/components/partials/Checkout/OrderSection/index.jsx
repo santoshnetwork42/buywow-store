@@ -2,12 +2,12 @@
 
 import { BagIcon } from "@/assets/svg/icons";
 import PaymentMethods from "@/components/blocks/PaymentMethods/paymentMethod";
-import Address from "@/components/common/Address";
 import SummaryItem from "@/components/common/CheckoutSummaryItem";
 import { showToast } from "@/components/common/ToastComponent";
 import { Button, Heading, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
+import AddressSection from "@/components/partials/Account/AddressSection";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
@@ -416,7 +416,7 @@ export default function OrderSection() {
       </div>
 
       <div className="order-2 md:order-1 md:w-6/12">
-        <Address />
+        <AddressSection />
       </div>
       <div className="order-3 flex h-full flex-col justify-between gap-4 md:order-2">
         <div className="hidden md:order-2 md:block">
