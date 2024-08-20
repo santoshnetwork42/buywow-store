@@ -30,6 +30,8 @@ Amplify.configure({
 //   { revalidate: 1800 },
 // );
 
+export const revalidate = 5;
+
 async function RootLayout({ children }) {
   // const { data } = (await getNavbarAndFooter()) || {};
   const { data } = (await getNavbarAndFooterAPI()) || {};
