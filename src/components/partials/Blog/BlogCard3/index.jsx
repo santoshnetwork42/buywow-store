@@ -44,12 +44,14 @@ export default function BlogCard3({
             {blog.title}
           </Heading>
 
-          <Text as={"p"} className="line-clamp-3" size="sm">
-            <div
-              dangerouslySetInnerHTML={{
-                __html: blog.excerpt,
-              }}
-            />
+          <Text as={"div"} className="line-clamp-3" size="sm">
+            {!!blog.excerpt && (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: blog.excerpt,
+                }}
+              />
+            )}
           </Text>
         </div>
       </div>

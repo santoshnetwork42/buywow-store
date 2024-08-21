@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
       siteName: "Wow Skin Science",
       title: blog?.title,
       description: blog?.seo?.metaDesc,
-      image: blog.featuredImage?.node?.mediaItemUrl,
+      image: blog?.featuredImage?.node?.mediaItemUrl,
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${blog?.slug}`,
       type: "article",
       authorName: blog?.author?.node?.name,
@@ -40,7 +40,7 @@ export async function generateStaticParams() {
   }
 
   return blogs.map((blog) => ({
-    slug: blog.node.slug,
+    slug: blog?.node?.slug,
   }));
 }
 
@@ -62,19 +62,19 @@ export default async function ReadBlog({ params }) {
           <BlogBreadCrumb
             links={[
               { label: "Blog", url: "/blog" },
-              { label: blog.title, url: `/blog/${blog.slug}` },
+              { label: blog?.title, url: `/blog/${blog?.slug}` },
             ]}
           />
 
-          <div className="space-y-3">
+          <div className="blog-font-size-convention space-y-3">
             <div className="flex flex-wrap gap-4">
               {blog?.categories?.nodes?.map((category) => (
                 <Link
-                  href={`/blog/category/${category.slug}`}
-                  key={category.id}
+                  href={`/blog/category/${category?.slug}`}
+                  key={category?.id}
                   className="rounded bg-yellow-900 px-2 py-1 text-sm text-white-a700"
                 >
-                  {category.name}
+                  {category?.name}
                 </Link>
               ))}
             </div>
@@ -84,41 +84,43 @@ export default async function ReadBlog({ params }) {
             </Heading>
 
             <Text as={"p"} size="sm">
-              {blog.author.node.name} |{" "}
-              {dayjs(blog.date).format("MMMM D, YYYY h:mm A")} |{" "}
-              {blog.seo.readingTime} min read
+              {blog?.author?.node?.name} |{" "}
+              {dayjs(blog?.date).format("MMMM D, YYYY h:mm A")} |{" "}
+              {blog?.seo?.readingTime} min read
             </Text>
           </div>
 
-          <div className="relative aspect-video w-full">
+          <div className="blog-font-size-convention relative aspect-video w-full">
             <Image
-              src={blog.featuredImage?.node?.mediaItemUrl}
-              alt={blog.title}
+              src={blog?.featuredImage?.node?.mediaItemUrl}
+              alt={blog?.title}
               fill
               className="rounded-md"
             />
           </div>
 
-          <div
-            className="blog-content"
-            dangerouslySetInnerHTML={{
-              __html: replaceBlogLinks(blog?.content),
-            }}
-          />
+          {!!blog?.content && (
+            <div
+              className="blog-content blog-font-size-convention"
+              dangerouslySetInnerHTML={{
+                __html: replaceBlogLinks(blog?.content),
+              }}
+            />
+          )}
 
           <hr className="my-6 border-t border-gray-300" />
 
           <BlogAuthor
-            name={blog.author.node.name}
-            avatar={blog.author.node.avatar.url}
-            description={blog.author.node.description}
-            slug={blog.author.node.slug}
-            linkedin={blog.author.node.seo.social.linkedIn}
+            name={blog?.author?.node?.name}
+            avatar={blog?.author?.node.avatar?.url}
+            description={blog?.author?.node?.description}
+            slug={blog?.author?.node?.slug}
+            linkedin={blog?.author?.node?.seo?.social?.linkedIn}
           />
         </div>
       </div>
 
-      <BlogSidebar featuredBlogs={featuredBlogs} tags={blog.tags.nodes} />
+      <BlogSidebar featuredBlogs={featuredBlogs} tags={blog?.tags?.nodes} />
     </div>
   );
 }

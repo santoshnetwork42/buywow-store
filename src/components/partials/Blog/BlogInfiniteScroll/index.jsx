@@ -29,7 +29,7 @@ export default function BlogInfiniteScroll({ blogsData, pageInfoData }) {
 
       const blogData = await blogRes.json();
 
-      if (blogData.data && blogData.data.posts.nodes) {
+      if (blogData.data && blogData.data.posts.edges) {
         if (fetchMore) {
           setBlog([...blogs, ...blogData.data.posts.edges]);
           setPageInfo(blogData.data.posts.pageInfo);

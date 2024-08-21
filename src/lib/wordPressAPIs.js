@@ -79,8 +79,6 @@ export const fetchBlogs = async (
       throw new Error("Failed to fetch data");
     }
 
-    console.log("blogData", JSON.stringify(blogData, null, 2));
-
     return {
       blogs: blogData?.data?.posts?.edges || [],
       pageInfo: blogData?.data?.posts?.pageInfo,
@@ -116,8 +114,6 @@ export const fetchBlog = async (slug) => {
     if (!res.ok) {
       throw new Error("Failed to fetch data");
     }
-
-    console.log(data);
 
     return data?.data?.post || {};
   } catch (err) {

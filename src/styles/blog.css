@@ -47,7 +47,7 @@
 }
 
 .blog-content blockquote p {
-  margin: 0;
+  margin: 5px 0px;
 }
 
 .blog-font-size-convention h1 {
@@ -56,10 +56,12 @@
 
 .blog-font-size-convention h2 {
   font-size: 25px !important;
+  line-height: 2 !important;
 }
 
 .blog-font-size-convention h3 {
   font-size: 20px !important;
+  line-height: 1.5 !important;
 }
 
 .blog-font-size-convention h4 {
@@ -72,6 +74,7 @@
 
 .blog-font-size-convention p {
   font-size: 17px;
+  line-height: 2 !important;
 }
 
 .blog-font-size-convention li {
@@ -79,6 +82,16 @@
   line-height: 29px;
 }
 
+.blog-font-size-convention ul {
+  font-size: 17px;
+  line-height: 29px;
+}
+
 .blog-font-size-convention blockquote {
   font-size: 19px !important;
+  line-height: 2 !important;
+}
+
+.blog-content img {
+  margin: 10px 0px !important;
 }
