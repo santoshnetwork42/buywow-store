@@ -88,9 +88,10 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
 ));
 
 const Header = ({ data, ...props }) => {
+  const pathname = usePathname();
+  const showHeader = pathname?.includes("blog");
   const router = useRouter();
   const user = useSelector((state) => state.user.user);
-  const pathname = usePathname();
 
   const isRestricted = RESTRICT_SEARCH_AND_CART_TO_SHOW?.includes(pathname);
   const { handlePasswordLessModal, handleCartVisibility } = useModalDispatch();
@@ -157,7 +158,9 @@ const Header = ({ data, ...props }) => {
 
   if (!data) return null;
 
-  return (
+  return showHeader ? (
+    <></>
+  ) : (
     <header className={`${props.className} relative`}>
       <div className="container-main flex border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
         <div className="flex flex-1 flex-wrap items-center justify-between gap-x-5 gap-y-2.5 md:flex-nowrap">
@@ -188,7 +191,11 @@ const Header = ({ data, ...props }) => {
             {!isRestricted && (
               <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
             )}
-            <Link href="#" className="flex-shrink-0" onClick={handleUserClisk}>
+            <Link
+              href="#"
+              className="ml-auto flex-shrink-0"
+              onClick={handleUserClisk}
+            >
               <Img
                 src="img_user.svg"
                 width={24}

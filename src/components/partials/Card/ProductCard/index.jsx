@@ -133,7 +133,7 @@ const ProductCard = memo(
                 <Text
                   as="span"
                   size="sm"
-                  className="absolute left-1.5 top-1.5 z-10 max-w-[50%] rounded px-2 py-1 capitalize text-white-a700 md:left-2.5 md:top-2.5 md:px-3"
+                  className={`absolute left-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize text-white-a700 md:left-2.5 md:top-2.5 md:px-3 ${!!offerTag?.showOfferTag && discountPercentage > 0 && "max-w-[50%]"}`}
                   responsive
                   style={{ backgroundColor: bgColor || "#DD8434" }}
                 >
@@ -141,7 +141,7 @@ const ProductCard = memo(
                 </Text>
               );
             })()}
-          {!!offerTag?.showOfferTag && !!(discountPercentage > 0) && (
+          {!!offerTag?.showOfferTag && discountPercentage > 0 && (
             <Text
               as="span"
               size="sm"

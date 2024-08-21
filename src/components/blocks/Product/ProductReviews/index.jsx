@@ -120,6 +120,7 @@ const Reviews = ({
     } else {
       handlePasswordLessModal(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, handlePasswordLessModal]);
 
   const handleUpdateReview = useCallback((reviewData) => {

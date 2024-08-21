@@ -37,7 +37,7 @@ function* setConfirmationStatus() {
 }
 
 function* signOut() {
-  yield takeLatest(authSagaActions.SIGNOUT, signOutHandler);
+  yield takeLatest(authSagaActions.SIGN_OUT, signOutHandler);
 }
 
 function* authLoader() {

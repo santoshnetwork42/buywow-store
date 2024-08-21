@@ -10,7 +10,8 @@ import Accordion from "@/components/features/Accordion";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
-import { useNavBarState } from "@/utils/context/navbar";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { useGuestCheckout, useNavBarState } from "@/utils/context/navbar";
 import {
   COD_ENABLED,
   MAX_COD_AMOUNT,
@@ -40,10 +41,19 @@ let razorpayMethod;
 
 export default function OrderSection() {
   const router = useRouter();
-  const cartData = useSelector((state) => state.cart);
-  const { currentAddress } = useSelector((state) => state.address);
+  const { handlePasswordLessModal } = useModalDispatch();
+  const { cartData, currentAddress, user, customUser } = useSelector(
+    (state) => ({
+      cartData: state.cart,
+      currentAddress: state.address.currentAddress,
+      user: state.user.user,
+      customUser: state.user.customUser,
+    }),
+  );
 
   const [selectedMethod, setSelectedMethod] = useState("PREPAID");
+  const [pageLoading, setPageLoading] = useState(true);
+  const guestCheckout = useGuestCheckout();
 
   const maxCOD = useConfiguration(MAX_COD_AMOUNT, -1);
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
@@ -51,6 +61,19 @@ export default function OrderSection() {
   const codEnabled = useConfiguration(COD_ENABLED, true);
   const ppcodEnabled = useConfiguration(PPCOD_ENABLED, false);
   const ppcodAmount = useConfiguration(PPCOD_AMOUNT, 0);
+
+  useEffect(() => {
+    setPageLoading(true);
+    if (!user?.id && !guestCheckout && !customUser?.phone) {
+      router.push("/");
+      handlePasswordLessModal(true, false, "/collections");
+    }
+    if (user?.id || guestCheckout || customUser?.phone) {
+      setPageLoading(false);
+    }
+  }, [user, guestCheckout, customUser, router]);
+
+  console.log(!user?.id, !guestCheckout, customUser?.phone, "pageLoading");
 
   useEffect(() => {
     if (prepaidEnabled) {
@@ -247,6 +270,8 @@ export default function OrderSection() {
   const ppcodAmountToTake = ppcodAmount;
 
   const isMaxCODDisabled = maxCOD > -1 ? codGrandTotal > maxCOD : false;
+
+  if (pageLoading) return null;
 
   const OrderSummary = () => {
     const [isOpen, setIsOpen] = useState(false);

@@ -48,7 +48,7 @@ const CartDrawer = ({ upsellProducts }) => {
     shoppingCartId: state?.cart?.cartId,
     isShoppingCartIdLoading: state?.cart?.isShoppingCartIdLoading,
     user: state?.user?.user,
-    customUser: state?.customUser,
+    customUser: state?.user?.customUser,
     cartList: state?.cart?.data,
     isCartOpen: state?.modal?.modal?.cart?.isCartOpen,
   }));
@@ -132,7 +132,7 @@ const CartDrawer = ({ upsellProducts }) => {
     }
 
     handleProceedToCheckout("BUYWOW");
-    if (user?.id || guestCheckout || customUser) {
+    if (user?.id || guestCheckout || customUser?.phone) {
       router.push("/checkout");
       return Promise.resolve(true);
     }

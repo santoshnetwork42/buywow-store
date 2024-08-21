@@ -12,7 +12,7 @@ import {
   setConfirmationStatus,
 } from "@/store/slices/auth.slice";
 import { setPasswordLessModal } from "@/store/slices/modal.slice";
-import { setUser } from "@/store/slices/user.slice";
+import { setCustomUser, setUser } from "@/store/slices/user.slice";
 import { call, put, select } from "redux-saga/effects";
 
 export function* createAwsAccountHandler(action) {
@@ -116,7 +116,13 @@ export function* signOutHandler() {
     const signedOutUser = yield call(() => signOutRequest());
 
     yield put(setConfirmationStatus(null));
-    yield put(setUser({}));
+    yield put(
+      setUser({
+        id: null,
+        phone: null,
+      }),
+    );
+    yield put(setCustomUser({ phone: null }));
   } catch (error) {
     console.log("error", error);
   }
