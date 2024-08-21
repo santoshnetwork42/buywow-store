@@ -24,7 +24,7 @@ export default async function Blogs() {
   const featuredBlogs = await fetchFeaturedBlogs(5);
 
   return (
-    <div className="container-main mb-main blog-font-size-convention grid grid-cols-12 gap-8 py-6">
+    <div className="container-main mb-main grid grid-cols-12 gap-8 py-6">
       <div className="col-span-12 lg:col-span-9">
         <BlogInfiniteScroll blogsData={blogs} pageInfoData={pageInfo} />
       </div>
