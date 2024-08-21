@@ -2,7 +2,7 @@ import { Button, Heading } from "@/components/elements";
 import React from "react";
 
 const AccountTabs = ({ tabItems, activeTab, handleTabClick }) => (
-  <div className="no-scrollbar w-full shrink-0 overflow-x-auto md:flex md:w-[200px] lg:w-[232px] xl:w-[264px]">
+  <div className="no-scrollbar w-full shrink-0 overflow-x-auto md:flex">
     <div className="flex w-max flex-row gap-1 sm:gap-2 md:flex-1 md:flex-col lg:gap-1">
       {tabItems.map((item) => (
         <AccountTabButton

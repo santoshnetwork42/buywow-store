@@ -7,7 +7,7 @@ import OrderList from "./OrderList";
 
 const OrderSection = React.memo(() => {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 py-1">
       <div className="container-main overflow-hidden rounded-md border shadow-sm">
         <OrderList />
       </div>

@@ -59,13 +59,13 @@ const Account = () => {
   }
 
   return (
-    <div className="container-main mb-main mt-4 flex flex-col gap-3 sm:mt-5 sm:gap-4 md:mt-6 md:flex-row md:gap-5 lg:mt-7 lg:gap-6">
+    <div className="container-main mb-main mt-4 grid grid-cols-1 gap-3 sm:mt-5 sm:gap-4 md:mt-6 md:grid-cols-[200px_minmax(0,_1fr)] md:gap-5 lg:mt-7 lg:grid-cols-[232px_minmax(0,_1fr)] lg:gap-6 xl:grid-cols-[264px_minmax(0,_1fr)]">
       <AccountTabs
         tabItems={tabItems}
         activeTab={activeTab}
         handleTabClick={handleTabClick}
       />
-      <div className="flex flex-1 flex-col overflow-x-auto">
+      <div className="flex flex-1 flex-col">
         <TabContent activeTab={activeTab} />
       </div>
     </div>

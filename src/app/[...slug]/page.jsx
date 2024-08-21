@@ -129,12 +129,7 @@ const renderBlock = (block, index, slug) => {
   return <Component key={index} slug={slug} {...block} />;
 };
 
-// const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
-//   revalidate: 1800,
-// });
-
 export async function generateStaticParams() {
-  // Fetch all possible pages
   const pages = await getCMSPagesAPI();
 
   const pageType = {
@@ -154,7 +149,6 @@ export async function generateStaticParams() {
 export default async function Page({ params }) {
   const { slug } = params;
   try {
-    // const pageData = await getPageData(slug[slug.length - 1]);
     const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
     const { blocks } = pageData || {};
 

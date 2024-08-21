@@ -41,7 +41,7 @@ const AddressSection = React.memo(({ variant }) => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-4 p-2">
+    <div className="flex w-full flex-col gap-4 py-1">
       <div
         className={`flex items-center justify-between ${variant === "CHECKOUT" && "rounded-md bg-blue-50 px-4 py-1.5"}`}
       >

@@ -2,175 +2,57 @@
 
 import { Heading, Text } from "@/components/elements";
 import { getLoyaltyAPI } from "@/lib/appSyncAPIs";
-import {
-  CreditIcon,
-  DebitIcon,
-  EllipsisIcon,
-  PendingLockIcon,
-  WalletIcon,
-} from "@/src/assets/svg/icons"; // Assume these icons exist
+import { EllipsisIcon, WalletIcon } from "@/src/assets/svg/icons";
 import dayjs from "dayjs";
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import History from "./History";
+import WowLoyaltySkeleton from "./WowLoyaltySkeleton";
 
-const WowLoyalty = ({}) => {
+const INITIAL_WOW_CASH_STATE = {
+  transactions: [],
+  totalAllotted: 0,
+  totalUsed: 0,
+  totalUsable: 0,
+  totalExpired: 0,
+};
+
+const WowLoyalty = React.memo(() => {
   const { user } = useSelector((state) => state.user);
-  const [wowCash, setWowCash] = useState({
-    transactions: [],
-    totalAllotted: 0,
-    totalUsed: 0,
-    totalUsable: 0,
-    totalExpired: 0,
-  });
+  const [wowCash, setWowCash] = useState(INITIAL_WOW_CASH_STATE);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchLoyalty = async () => {
-      try {
-        const { data } = await getLoyaltyAPI({ user });
-
+  const fetchLoyalty = useCallback(async () => {
+    if (!user) return;
+    setIsLoading(true);
+    try {
+      const { data } = await getLoyaltyAPI({ user });
+      if (data?.getLoyalty) {
         setWowCash({
-          ...data?.getLoyalty,
-          transactions: data?.getLoyalty?.transactions?.filter(
-            (item) => item?.status !== "CANCELLED",
-          ),
+          ...data.getLoyalty,
+          transactions:
+            data.getLoyalty.transactions?.filter(
+              (item) => item?.status !== "CANCELLED",
+            ) || [],
         });
-      } catch (error) {
-        console.error("Error fetching loyalty data:", error);
       }
-    };
-
-    if (user) fetchLoyalty();
+    } catch (error) {
+      console.error("Error fetching loyalty data:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [user]);
 
-  const eventTitle = (eventType) => {
-    const eventTitles = {
-      CREDIT_PREPAID_ORDER: "Cashback added",
-      CREDIT_COD_ORDER: "Cashback added",
-      CREDIT_USER_SIGNUP: "Cashback added",
-      DEBIT_PREPAID_ORDER: "Cashback debited",
-      DEBIT_COD_ORDER: "Cashback debited",
-      DEBIT_EXPIRED: "Cashback expired",
-      DEBIT_BY_ADMIN: "Cashback debited",
-      CREDIT_BY_ADMIN: "Promotional cashback",
-      CREDIT_ORDER_REFUNDED: "Cashback added",
-      CREDIT_BY_MOENGAGE: "Promotional cashback",
-    };
-    return eventTitles[eventType] || "";
-  };
-
-  const expireLabel = (date) => {
-    const days = dayjs(date).diff(dayjs(), "days");
-    if (days > 0 && days < 7) return `Expires in ${days} day(s)`;
-    if (days > 0) return `Expires on ${dayjs(date).format("DD MMM YYYY")}`;
-    if (days === 0) return `Expires today`;
-    if (dayjs(date).valueOf() <= dayjs().valueOf())
-      return `Expired on ${dayjs(date).format("DD MMM")}`;
-  };
-
-  const eventDescription = (eventType, reason) => {
-    const eventTitles = {
-      CREDIT_PREPAID_ORDER: "Cashback for Order",
-      CREDIT_COD_ORDER: "Cashback for Order",
-      CREDIT_USER_SIGNUP: "Joining Bonus",
-      DEBIT_PREPAID_ORDER: "Used against Order",
-      DEBIT_COD_ORDER: "Used against Order",
-      DEBIT_BY_ADMIN: reason || "",
-      CREDIT_BY_ADMIN: reason || "",
-      CREDIT_ORDER_REFUNDED: "Refunded against Order",
-      CREDIT_BY_MOENGAGE: reason || "",
-      DEBIT_BY_MOENGAGE: reason || "",
-    };
-    return eventTitles[eventType] || "";
-  };
-
-  const ViewTransaction = ({ data }) => {
-    const {
-      event,
-      transactionState,
-      amount,
-      expiresAt,
-      status,
-      reason,
-      metadata,
-    } = data || {};
-    const { orderCode = "", orderId = "" } = metadata
-      ? JSON.parse(metadata)
-      : {};
-
-    return (
-      <div
-        className={`flex items-center ${status === "PENDING" ? "bg-gray-100" : "bg-white"} rounded-lg p-4 shadow`}
-      >
-        <div className="mr-4">
-          {transactionState === "CREDIT" ? (
-            <CreditIcon size={36} color="none" />
-          ) : (
-            <DebitIcon size={36} color="none" />
-          )}
-        </div>
-        <div className="flex-grow">
-          <div className="flex items-center justify-between">
-            <Text className="font-semibold text-gray-800">
-              {eventTitle(event)}
-            </Text>
-            <Text
-              size="sm"
-              className={`font-medium ${transactionState === "CREDIT" ? "text-green-500" : "text-red-400"}`}
-            >
-              {transactionState === "CREDIT" ? "+" : "-"}₹{amount?.toFixed(2)}
-            </Text>
-          </div>
-          <div className="mt-1 flex items-center justify-between text-xs text-gray-600">
-            <Text size="xs">
-              {eventDescription(event, reason)}
-              {orderCode && (
-                <Link
-                  href={`/order/${orderId}`}
-                  className="ml-1 text-blue-500 hover:underline"
-                >
-                  #{orderCode}
-                </Link>
-              )}
-            </Text>
-            {status === "PENDING" ? (
-              <div className="flex items-center">
-                <PendingLockIcon className="mr-1 h-4 w-4 bg-gray-100" />
-              </div>
-            ) : (
-              expiresAt && <Text size="sm">{expireLabel(expiresAt)}</Text>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const History = ({ Transaction }) => {
-    const { data, title } = Transaction;
-
-    return (
-      <div>
-        <Text className="mb-2 font-semibold" size="sm">
-          {title}
-        </Text>
-        <div className="space-y-4">
-          {data?.map((transaction, index) => (
-            <ViewTransaction key={index} data={transaction} />
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  const { transactions, totalAllotted, totalUsed, totalUsable } = wowCash;
+  useEffect(() => {
+    fetchLoyalty();
+  }, [fetchLoyalty]);
 
   const groupedTransactions = useMemo(() => {
-    if (transactions) {
-      const sortedTransactions = [...transactions].sort((a, b) =>
-        dayjs(b.createdAt).diff(dayjs(a.createdAt)),
-      );
-      return sortedTransactions.reduce((result, transaction) => {
+    if (!wowCash.transactions || wowCash.transactions.length === 0) return [];
+
+    return wowCash.transactions
+      .sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))
+      .reduce((result, transaction) => {
         const createdAtDate = dayjs(transaction.createdAt).format(
           "DD MMM, YYYY",
         );
@@ -179,19 +61,23 @@ const WowLoyalty = ({}) => {
         );
 
         if (existingGroup) {
-          existingGroup.data.push(transaction);
+          existingGroup.transactions.push(transaction);
         } else {
-          result.push({ title: createdAtDate, data: [transaction] });
+          result.push({ title: createdAtDate, transactions: [transaction] });
         }
 
         return result;
       }, []);
-    }
-    return [];
-  }, [transactions]);
+  }, [wowCash.transactions]);
+
+  const { totalAllotted, totalUsed, totalUsable } = wowCash;
+
+  if (isLoading) {
+    return <WowLoyaltySkeleton />;
+  }
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-1">
       <div className="flex flex-col overflow-hidden rounded-md shadow-sm">
         <div
           className="relative flex flex-col gap-4 p-4 md:gap-5"
@@ -222,36 +108,47 @@ const WowLoyalty = ({}) => {
                 </Text>
               </div>
             </Text>
-            <Heading as="h3" size="3xl" className="text-green-600" responsive>
+            <Heading as="h3" size="2xl" className="text-green-600" responsive>
               ₹{totalUsable > 0 ? totalUsable.toFixed(2) : "0.00"}
             </Heading>
             <Text as="span" size="sm" className="text-gray-600" responsive>
               Cashback applies automatically
             </Text>
           </div>
-          <WalletIcon size={100} className="absolute right-[4%] top-0 h-full" />
+          <WalletIcon
+            size={100}
+            className="absolute right-0 top-0 h-full sm:right-[2%] md:right-[4%] lg:right-[6%]"
+          />
         </div>
 
         <div className="flex justify-between gap-5 bg-gray-100 px-4 py-3 md:p-4">
           <Text as="span" size="sm" responsive>
-            Total cashback earned: ₹{totalAllotted?.toFixed(2)}
+            Total cashback earned: ₹{totalAllotted?.toFixed(2) || "0.00"}
           </Text>
           <Text as="span" size="sm" responsive>
-            Cashback redeemed: ₹{totalUsed?.toFixed(2)}
+            Cashback redeemed: ₹{totalUsed?.toFixed(2) || "0.00"}
           </Text>
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 md:gap-4">
-        <Heading>RECENT HISTORY</Heading>
-        <div className="space-y-6">
-          {groupedTransactions?.map((Transaction, index) => (
-            <History Transaction={Transaction} key={index} />
+      <div className="flex flex-col gap-2.5 md:gap-4">
+        <Heading as="h3" size="lg">
+          RECENT HISTORY
+        </Heading>
+        <div className="space-y-5 md:space-y-6">
+          {groupedTransactions.map((group, index) => (
+            <History
+              key={index}
+              transactions={group.transactions}
+              title={group.title}
+            />
           ))}
         </div>
       </div>
     </div>
   );
-};
+});
+
+WowLoyalty.displayName = "WowLoyalty";
 
 export default WowLoyalty;

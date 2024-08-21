@@ -120,7 +120,7 @@ const AccountDetails = React.memo(() => {
   );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5 p-2">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 py-1">
       <AccountFormFields
         user={user}
         errors={errors}
