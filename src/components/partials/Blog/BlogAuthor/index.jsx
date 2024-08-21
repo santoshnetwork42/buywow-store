@@ -26,6 +26,7 @@ export default function BlogAuthor({
             </Heading>
           </Link>
 
+
           <div className="space-x-2">
             {linkedin && (
               <Link href={linkedin} target="_blank" rel="noopener noreferrer">
