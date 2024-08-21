@@ -116,7 +116,7 @@ const componentMap = {
   ComponentAccordionFaQsSection: AccordionFaQs,
   ComponentBlocksBreadcrumb: Breadcrumb,
   ComponentVideoSection: VideoSection,
-  ComponentBlogSection: BlogSection,
+  ComponentBlocksBlogSection: BlogSection,
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 

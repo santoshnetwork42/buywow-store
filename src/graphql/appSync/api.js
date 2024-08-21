@@ -2439,24 +2439,38 @@ export const sendAffiseAnalytics = /* GraphQL */ `
 `;
 
 export const getFeaturedBlogs = /* GraphQL */ `
-  query FeatueredBlogs {
-    posts(first: 3, where: { tagSlugIn: "english", status: PUBLISH }) {
-      edges {
-        node {
-          date
-          id
-          databaseId
-          slug
-          status
-          title
-          uri
-          excerpt
-          toPing
-          link
-          featuredImage {
-            node {
-              mediaItemUrl
+  query FeatueredBlogs($first: Int) {
+    posts(first: $first, where: { tagSlugIn: "english", status: PUBLISH }) {
+      nodes {
+        date
+        id
+        databaseId
+        slug
+        status
+        title
+        uri
+        excerpt
+        toPing
+        link
+        author {
+          node {
+            name
+            slug
+            avatar {
+              url
+              height
+              width
             }
+            username
+            nicename
+          }
+        }
+        seo {
+          readingTime
+        }
+        featuredImage {
+          node {
+            mediaItemUrl
           }
         }
       }
@@ -2467,13 +2481,11 @@ export const getFeaturedBlogs = /* GraphQL */ `
 export const getCategories = /* GraphQL */ `
   query GetCategories {
     categories {
-      edges {
-        node {
-          id
-          databaseId
-          slug
-          name
-        }
+      nodes {
+        id
+        databaseId
+        slug
+        name
       }
     }
   }
@@ -2493,12 +2505,11 @@ export const getCategory = /* GraphQL */ `
 export const getTags = /* GraphQL */ `
   query GetTags {
     tags {
-      edges {
-        node {
-          id
-          slug
-          name
-        }
+      nodes {
+        id
+        databaseId
+        slug
+        name
       }
     }
   }
@@ -2508,6 +2519,7 @@ export const getTag = `
 query GetTag($id: ID!) {
   tag(id: $id, idType: SLUG) {
     id
+    databaseId
     slug
     name
   }
@@ -2517,14 +2529,20 @@ query GetTag($id: ID!) {
 export const getBlogs = /* GraphQL */ `
   query GetBlogs(
     $category: String
-    $tag: [String]
+    $author: String
+    $tags: [String]
     $first: Int
     $last: Int
     $after: String
     $before: String
   ) {
     posts(
-      where: { categoryName: $category, tagSlugIn: $tag, status: PUBLISH }
+      where: {
+        categoryName: $category
+        tagSlugIn: $tags
+        authorName: $author
+        status: PUBLISH
+      }
       first: $first
       last: $last
       after: $after
@@ -2542,9 +2560,11 @@ export const getBlogs = /* GraphQL */ `
           id
           databaseId
           slug
+          seo {
+            readingTime
+          }
           title
           uri
-          readingTime
           excerpt
           link
           date
@@ -2556,9 +2576,27 @@ export const getBlogs = /* GraphQL */ `
           author {
             node {
               name
+              slug
               avatar {
                 url
+                height
+                width
               }
+              seo {
+                social {
+                  facebook
+                  instagram
+                  mySpace
+                  linkedIn
+                  pinterest
+                  soundCloud
+                  twitter
+                  wikipedia
+                  youTube
+                }
+              }
+              username
+              nicename
             }
           }
         }
@@ -2607,11 +2645,11 @@ export const getBlog = /* GraphQL */ `
       title
       uri
       excerpt
-      readingTime
       link
       date
       seo {
         metaDesc
+        readingTime
       }
       featuredImage {
         node {
@@ -2634,11 +2672,69 @@ export const getBlog = /* GraphQL */ `
       author {
         node {
           name
+          slug
           description
           avatar {
             url
           }
+          seo {
+            social {
+              linkedIn
+            }
+          }
         }
+      }
+    }
+  }
+`;
+
+export const getAuthors = /* GraphQL */ `
+  query GetAuthors {
+    users {
+      nodes {
+        slug
+        databaseId
+        nicename
+        name
+      }
+    }
+  }
+`;
+
+export const getAuthor = /* GraphQL */ `
+  query Author($id: ID!, $idType: UserNodeIdTypeEnum!) {
+    user(id: $id, idType: $idType) {
+      nicename
+      email
+      databaseId
+      description
+      firstName
+      lastName
+      name
+      nickname
+      slug
+      username
+      url
+      uri
+      avatar {
+        url
+        height
+        width
+      }
+      seo {
+        social {
+          facebook
+          instagram
+          linkedIn
+          mySpace
+          pinterest
+          soundCloud
+          twitter
+          wikipedia
+          youTube
+        }
+        title
+        canonical
       }
     }
   }
@@ -2675,6 +2771,21 @@ export const getBlogsByCategory = /* GraphQL */ `
               }
             }
           }
+        }
+      }
+    }
+  }
+`;
+
+export const getTopMenu = /* GraphQL */ `
+  query GetMenu($id: ID!) {
+    menu(id: $id, idType: ID) {
+      id
+      menuItems {
+        nodes {
+          id
+          label
+          path
         }
       }
     }

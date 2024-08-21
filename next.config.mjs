@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  async rewrites() {
+    const payload = [
+      { source: "/blog/sitemap.xml", destination: "/api/blog-sitemap" },
+    ];
+    return payload;
+  },
   images: {
     remotePatterns: [
       {
@@ -20,6 +26,14 @@ const nextConfig = {
         hostname: "localhost",
         port: "3001",
         pathname: "/images/**",
+      },
+      {
+        protocol: "https",
+        hostname: process.env.NEXT_PUBLIC_WP_MEDIA_URL,
+      },
+      {
+        protocol: "https",
+        hostname: process.env.NEXT_PUBLIC_WP_AVATAR_URL,
       },
     ],
   },
