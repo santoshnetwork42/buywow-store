@@ -8,18 +8,18 @@ import { Button, Img, Text } from "@/components/elements";
 import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
-import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useNavBarState } from "@/utils/context/navbar";
+import { RESTRICT_SEARCH_AND_CART_TO_SHOW } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
 import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
 
-const MenuItem = ({ item, index, linkPrefix }) => {
+const MenuItem = React.memo(({ item, index, linkPrefix }) => {
   if (!item) return null;
 
   const key = item.id || index;
@@ -32,10 +32,17 @@ const MenuItem = ({ item, index, linkPrefix }) => {
   if (item.subMenu && item.subMenu.length > 0) {
     return (
       <li key={key} className="group relative">
-        <div className="flex cursor-pointer items-center gap-1">
+        <Link
+          href={
+            item.slug
+              ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
+              : item.link || "#"
+          }
+          className="flex cursor-pointer items-center gap-1"
+        >
           {title}
           <DownArrowIconSVG />
-        </div>
+        </Link>
         <NavMenu menuItems={item.subMenu} linkPrefix={linkPrefix} />
       </li>
     );
@@ -54,11 +61,9 @@ const MenuItem = ({ item, index, linkPrefix }) => {
       </Link>
     </li>
   );
-};
+});
 
-MenuItem.displayName = "MenuItem";
-
-const Logo = ({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
+const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
   <Link href="/">
     <div className="flex items-center gap-1">
       <Img
@@ -80,18 +85,17 @@ const Logo = ({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
       />
     </div>
   </Link>
-);
-
-Logo.displayName = "Logo";
+));
 
 const Header = ({ data, ...props }) => {
   const pathname = usePathname();
   const showHeader = pathname?.includes("blog");
-  const dispatch = useDispatch();
   const router = useRouter();
+  const user = useSelector((state) => state.user.user);
 
+  const isRestricted = RESTRICT_SEARCH_AND_CART_TO_SHOW?.includes(pathname);
+  const { handlePasswordLessModal, handleCartVisibility } = useModalDispatch();
   const { isRewardApplied } = useNavBarState();
-
   const { totalItems: totalCartItems } = useCartTotal({
     paymentType: "PREPAID",
     isRewardApplied: isRewardApplied,
@@ -115,26 +119,6 @@ const Header = ({ data, ...props }) => {
   const openMobileMenu = () => setIsMobileMenuOpen(true);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const handlePasswordLessOpen = () => {
-    dispatch({
-      type: modalSagaActions.SET_PASSWORDLESS_MODAL,
-      payload: {
-        isPasswordLessOpen: true,
-        customLogin: false,
-        redirectTo: null,
-      },
-    });
-  };
-
-  const handleCartOpen = () => {
-    dispatch({
-      type: modalSagaActions.SET_CART_MODAL,
-      payload: {
-        isCartOpen: true,
-      },
-    });
-  };
-
   const handleUserClisk = async () => {
     try {
       //check if user is logged in
@@ -143,10 +127,10 @@ const Header = ({ data, ...props }) => {
         router.push("/account");
       } else {
         //open passwordless if user is not logged in
-        handlePasswordLessOpen();
+        handlePasswordLessModal(true, false, null);
       }
     } catch (error) {
-      handlePasswordLessOpen();
+      handlePasswordLessModal(true, false, null);
       console.log("Something went wrong", error);
     }
   };
@@ -204,8 +188,14 @@ const Header = ({ data, ...props }) => {
           )}
 
           <div className="flex max-w-[370px] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
-            <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
-            <Link href="#" className="flex-shrink-0" onClick={handleUserClisk}>
+            {!isRestricted && (
+              <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
+            )}
+            <Link
+              href="#"
+              className="ml-auto flex-shrink-0"
+              onClick={handleUserClisk}
+            >
               <Img
                 src="img_user.svg"
                 width={24}
@@ -214,21 +204,27 @@ const Header = ({ data, ...props }) => {
                 className="aspect-square w-[24px] object-contain"
               />
             </Link>
-            <Link href="#" onClick={handleCartOpen} className="flex-shrink-0">
-              <div className="relative">
-                <BagIcon size={20} />
-                {!!totalCartItems && (
-                  <div className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
-                    <Text size="xxs" className="mx-1 text-white-a700_01">
-                      {totalCartItems}
-                    </Text>
-                  </div>
-                )}
-              </div>
-            </Link>
+            {!isRestricted && (
+              <Link
+                href="#"
+                onClick={() => handleCartVisibility(true)}
+                className="flex-shrink-0"
+              >
+                <div className="relative">
+                  <BagIcon size={20} />
+                  {!!totalCartItems && (
+                    <div className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
+                      <Text size="xxs" className="mx-1 text-white-a700_01">
+                        {totalCartItems}
+                      </Text>
+                    </div>
+                  )}
+                </div>
+              </Link>
+            )}
           </div>
 
-          <SearchBar className="flex w-full md:hidden" />
+          {!isRestricted && <SearchBar className="flex w-full md:hidden" />}
         </div>
       </div>
 
@@ -238,6 +234,7 @@ const Header = ({ data, ...props }) => {
         collectionMenus={collectionMenus}
         otherLinks={otherLinks}
         logo={mWebMenuLogo}
+        isLoggedin={!!user?.id}
       />
 
       <PasswordLess />
@@ -245,6 +242,8 @@ const Header = ({ data, ...props }) => {
   );
 };
 
+MenuItem.displayName = "MenuItem";
+Logo.displayName = "Logo";
 Header.displayName = "Header";
 
 export default Header;

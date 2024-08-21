@@ -1,43 +1,77 @@
 "use client";
 
+import { showToast } from "@/components/common/ToastComponent";
 import Drawer from "@/components/features/Drawer";
-import { useNavBarState } from "@/utils/context/navbar";
-import { useCartItems, useCartTotal, useInventory } from "@wow-star/utils";
-import React, { useCallback, useEffect } from "react";
-import { useSelector } from "react-redux";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
-import ShippingProgress from "@/components/partials/Others/ShippingProgress";
-import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
 import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
+import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
+import ShippingProgress from "@/components/partials/Others/ShippingProgress";
+import { GOKWIK_MID, STORE_PREFIX } from "@/config";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { useGuestCheckout, useNavBarState } from "@/utils/context/navbar";
+import { GOKWIK_ENABLED, PREPAID_ENABLED } from "@/utils/data/constants";
+import {
+  useCartItems,
+  useCartTotal,
+  useConfiguration,
+  useInventory,
+} from "@wow-star/utils";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
 import Cashback from "./Cashback";
+import CheckoutButton from "./CheckoutButton";
 import EmptyCart from "./EmptyCart";
 import LoyaltyCash from "./LoyaltyCash";
-import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
-import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import CouponsAndOffers from "./MainCartSection/CouponsAndOffers";
 
 const CartDrawer = ({ upsellProducts }) => {
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const _cx = searchParams?.get("_cx");
   const forceOpenCart = searchParams?.get("cart");
 
-  const { isCartOpen } = useSelector((state) => ({
+  const {
+    appliedCoupon,
+    shoppingCartId,
+    user,
+    customUser,
+    cartList,
+    isShoppingCartIdLoading,
+    isCartOpen,
+  } = useSelector((state) => ({
+    appliedCoupon: state?.cart?.coupon,
+    shoppingCartId: state?.cart?.cartId,
+    isShoppingCartIdLoading: state?.cart?.isShoppingCartIdLoading,
+    user: state?.user?.user,
+    customUser: state?.user?.customUser,
+    cartList: state?.cart?.data,
     isCartOpen: state?.modal?.modal?.cart?.isCartOpen,
   }));
+
   const { validateCart, fetchAndAddProductsFromEncodedCart } =
     useCartDispatch();
-  const { handleCartVisibility } = useModalDispatch();
-  const { viewCart } = useEventsDispatch();
+  const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
+  const { handleOutOfStock, handleProceedToCheckout, viewCart } =
+    useEventsDispatch();
 
   const inventory = useInventory({ validateCart });
-  const { inventoryMapping } = inventory;
+  const {
+    ready: isInventoryCheckReady,
+    success: isInventoryCheckSuccess,
+    inventoryMapping,
+    outOfStockItems,
+  } = inventory;
   const { isRewardApplied, handleRewardApply } = useNavBarState();
+  const guestCheckout = useGuestCheckout();
+  const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
+  const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
 
   const {
-    totalPrice,
     grandTotal,
     usableRewards,
     totalRewardPointsOfUser,
@@ -45,10 +79,11 @@ const CartDrawer = ({ upsellProducts }) => {
     amountNeededToAvailPrepaidCashback,
     totalAmountForShippingCharge,
     targetAmountForFreeShipping,
+    totalAmountSaved,
     showLoyalty,
     totalItems = 0,
   } = useCartTotal({
-    paymentType: "PREPAID",
+    paymentType: prepaidEnabled ? "PREPAID" : "COD",
     isRewardApplied,
   });
 
@@ -59,6 +94,66 @@ const CartDrawer = ({ upsellProducts }) => {
 
   const amountNeededToAvailCashback =
     amountNeededToAvailPrepaidCashback?.amount - grandTotal;
+
+  const validateAndGoToCheckout = useCallback(async () => {
+    if (!isInventoryCheckSuccess) {
+      handleOutOfStock(outOfStockItems, inventoryMapping);
+      showToast.error("Please remove out of stock product from cart");
+      return false;
+    }
+
+    handleCartVisibility(false);
+
+    const lscart = localStorage.getItem(`${STORE_PREFIX}-cartId`) || "";
+    const cartId = lscart || shoppingCartId;
+
+    const isGKCXEnabled = !!(GOKWIK_MID && cartId && gokwikEnabled);
+
+    if (isGKCXEnabled) {
+      try {
+        gokwikSdk.initCheckout({
+          environment: "sandbox",
+          type: "merchantInfo",
+          mid: GOKWIK_MID,
+          merchantParams: {
+            merchantCheckoutId: cartId,
+            customerToken: user?.id || "",
+          },
+        });
+
+        handleProceedToCheckout("GOKWIK");
+        return Promise.resolve(true);
+      } catch (e) {
+        console.log(e);
+        // await gokwikSdk.close();
+        // errorHandler(e);
+        router.push("/checkout");
+      }
+    }
+
+    handleProceedToCheckout("BUYWOW");
+    if (user?.id || guestCheckout || customUser?.phone) {
+      router.push("/checkout");
+      return Promise.resolve(true);
+    }
+
+    handlePasswordLessModal(true, true, "/checkout");
+    return Promise.resolve(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    user,
+    guestCheckout,
+    customUser,
+    isInventoryCheckSuccess,
+    appliedCoupon,
+    cartList,
+    outOfStockItems,
+    inventoryMapping,
+  ]);
+
+  const checkoutButtonDisabled = GOKWIK_MID
+    ? !isInventoryCheckReady && isShoppingCartIdLoading
+    : !isInventoryCheckReady;
 
   const handleCartClose = useCallback(() => {
     handleCartVisibility(false);
@@ -92,42 +187,57 @@ const CartDrawer = ({ upsellProducts }) => {
       position="right"
       onClose={handleCartClose}
     >
-      <div className="flex flex-1 flex-col gap-3 px-3 py-4 md:px-4">
+      <div className="relative flex flex-1 flex-col gap-3 pt-4">
         {/* done */}
         <CartHeader
           text="my Cart"
           totalItems={totalItems}
           cartClose={handleCartClose}
+          className="mx-3 md:mx-4"
         />
         {cartItems?.length > 0 ? (
-          <div className="flex w-full flex-1 flex-col gap-3">
-            <ShippingProgress
-              freeShippingThreshold={targetAmountForFreeShipping}
-              cartValue={totalAmountForShippingCharge}
-              className="bg-[#F5E8DDBF] shadow-[0_4px_4px_#0000000D]"
-            />
-            <MainCartSection
-              cartItems={cartItems}
-              inventoryMapping={inventoryMapping}
-              handleCartClose={handleCartClose}
-              upsellProducts={upsellProducts}
-            />
-            {/* done */}
-            <LoyaltyCash
-              showLoyalty={showLoyalty}
-              usableRewards={usableRewards}
-              isRewardApplied={isRewardApplied}
-              handleRewardApply={handleRewardApply}
-              totalRewardPointsOfUser={totalRewardPointsOfUser}
-            />
-            {/* done */}
-            <Cashback
-              cashbackAmount={prepaidCashbackRewardsOnOrder}
-              amountNeeded={amountNeededToAvailCashback}
-            />
-            {/* done */}
-            <CheckoutSummary inventory={inventory} />
-          </div>
+          <>
+            <div className="flex flex-1 flex-col gap-3 px-3 md:px-4">
+              <ShippingProgress
+                freeShippingThreshold={targetAmountForFreeShipping}
+                cartValue={totalAmountForShippingCharge}
+                className="bg-[#F5E8DDBF] shadow-[0_4px_4px_#0000000D]"
+              />
+              <MainCartSection
+                cartItems={cartItems}
+                inventoryMapping={inventoryMapping}
+                handleCartClose={handleCartClose}
+                upsellProducts={upsellProducts}
+              />
+              {/* done */}
+              <LoyaltyCash
+                showLoyalty={showLoyalty}
+                usableRewards={usableRewards}
+                isRewardApplied={isRewardApplied}
+                handleRewardApply={handleRewardApply}
+                totalRewardPointsOfUser={totalRewardPointsOfUser}
+              />
+              {/* done */}
+              <Cashback
+                cashbackAmount={prepaidCashbackRewardsOnOrder}
+                amountNeeded={amountNeededToAvailCashback}
+              />
+              {/* done */}
+              <CheckoutSummary />
+            </div>
+
+            <div className="sticky bottom-0 left-3 z-10 flex flex-col gap-3 border-t bg-white-a700 px-3 pb-4 pt-1.5 md:gap-4 md:px-4">
+              {/* done */}
+              <CouponsAndOffers />
+              {/* done */}
+              <CheckoutButton
+                grandTotal={grandTotal}
+                totalAmountSaved={totalAmountSaved}
+                validateAndGoToCheckout={validateAndGoToCheckout}
+                checkoutButtonDisabled={checkoutButtonDisabled}
+              />
+            </div>
+          </>
         ) : (
           // done
           <EmptyCart cartClose={handleCartClose} />

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const Drawer = ({
   isOpen,
@@ -89,7 +89,7 @@ const Drawer = ({
           [position === "left" || position === "right" ? "width" : "height"]:
             state.drawerSize,
         }}
-        className={`absolute top-0 flex h-dvh max-w-full flex-col overflow-x-hidden bg-gray-50 shadow-lg transition-all duration-300 ease-in-out ${position === "right" ? "right-0" : "left-0"}`}
+        className={`no-scrollbar absolute top-0 flex h-dvh max-w-full flex-col overflow-x-hidden bg-white-a700 shadow-lg transition-all duration-300 ease-in-out ${position === "right" ? "right-0" : "left-0"}`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}

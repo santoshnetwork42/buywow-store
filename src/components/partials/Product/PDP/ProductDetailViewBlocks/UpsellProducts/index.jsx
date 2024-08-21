@@ -1,17 +1,13 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
-import { Button, Heading, Text } from "@/components/elements";
-import Slider from "@/components/features/Slider";
-import {
-  extractAttributes,
-  getDiscountPercentage,
-  getOfferValue,
-} from "@/utils/helpers";
-import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import AddToCart from "@/components/common/AddToCart";
+import { Heading, Text } from "@/components/elements";
+import Slider from "@/components/features/Slider";
+import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
+import { extractAttributes, getDiscountPercentage } from "@/utils/helpers";
 import { useProduct, useProductVariantGroups } from "@wow-star/utils";
+import Link from "next/link";
+import React, { useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 const UpsellProduct = React.memo(({ product, index, text, subText }) => {
@@ -32,7 +28,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
       className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded bg-white-a700 p-2.5 shadow md:p-3"
     >
       <div
-        className="flex aspect-[74/80] w-[74px] items-center"
+        className="flex aspect-[74/80] w-[74px] items-center overflow-hidden rounded"
         style={{ backgroundColor: imageBgColor }}
       >
         <ProductThumbnail
@@ -80,7 +76,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             product={packageProduct}
             buttonText={"Add"}
             buttonClassName={"shrink-0 px-3 py-1 text-sm"}
-            quantityClassName="grid-cols-[repeat(3,26px)] h-[26px] sm:h-[26px] md:h-[28px] lg:h-[28px] md:grid-cols-[repeat(3,28px)]"
+            quantityClassName="grid-cols-[repeat(3,26px)] !h-[25.5px] md:grid-cols-[repeat(3,28px)]"
           />
         </div>
       </div>
@@ -169,7 +165,7 @@ const UpsellProducts = ({
         shadowClass,
         bgColorClass,
         isPaddedColor ? "py-3" : "",
-        isCartUpsell && "rounded-lg",
+        isCartUpsell && "!mb-0 rounded-lg shadow-[0_4px_4px_#0000000D]",
       )}
     >
       <Heading
@@ -189,7 +185,7 @@ const UpsellProducts = ({
           </span>
         )}
       </Heading>
-      <Slider sliderClassName="gap-2 lg:gap-3 lg:mb-4">
+      <Slider sliderClassName="gap-2 lg:gap-3 lg:mb-4" size="small">
         {upsellProductItems.map((item, index) => (
           <UpsellProduct key={`product-${index}`} {...item} index={index} />
         ))}

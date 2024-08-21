@@ -24,15 +24,13 @@ IngredientItem.displayName = "IngredientItem";
 
 const AccordionIngredients = ({
   accordionIngredientsTitle,
-  image,
+  accordionIngredientsImage: image,
   ingredientItems,
   ...props
 }) => {
   if (!accordionIngredientsTitle || !ingredientItems?.data) {
     return null;
   }
-
-  // console.log(props, image);
 
   const { url: accordionImageUrl, alternativeText: accordionImageAlt } =
     extractAttributes(image) || {};
@@ -47,6 +45,7 @@ const AccordionIngredients = ({
       title={accordionIngredientsTitle}
       imgUrl={accordionImageUrl}
       alternativeText={accordionImageAlt}
+      className="lg:w-[90%]"
     >
       <div className="flex flex-col gap-3 md:gap-4">
         {ingredients.map((item, index) => {

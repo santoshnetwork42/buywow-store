@@ -1,25 +1,26 @@
 "use client";
 
-import React from "react";
 import { Img } from "@/components/elements";
+import React from "react";
 import { twMerge } from "tailwind-merge";
 
 const ProductThumbnail = React.memo(
-  ({ width, height, imageKey, className, alt, ...props }) => {
+  ({ width, height, imageKey, url, className, alt, ...props }) => {
     const mergedClassName = twMerge(
-      "object-contain h-auto w-full mix-blend-multiply",
+      "object-contain h-auto w-full mix-blend-darken",
       className,
+      url && "aspect-square",
     );
 
     return (
       <Img
-        src={imageKey}
+        src={url || imageKey}
         width={width}
         height={height}
         alt={alt}
         isStatic
         className={mergedClassName}
-        addPrefix
+        addPrefix={url ? false : true}
         {...props}
       />
     );

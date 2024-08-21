@@ -1,11 +1,10 @@
-/* eslint-disable react/display-name */
-/* eslint-disable react/display-name */
 "use client";
 
-import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
+import React, { useCallback, useRef, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
-const Input = React.forwardRef(
+const InputComponent = React.forwardRef(
   (
     {
       className = "flex w-full items-center justify-center gap-2",
@@ -14,7 +13,7 @@ const Input = React.forwardRef(
       placeholder = "",
       type = "text",
       label = "",
-      labelClass = "",
+      labelClassName = "",
       prefix,
       suffix,
       error,
@@ -23,8 +22,9 @@ const Input = React.forwardRef(
       onFocus,
       disabled = false,
       required = false,
-      pattern,
       value,
+      rows = 3,
+      isTextarea = false,
       ...restProps
     },
     ref,
@@ -32,21 +32,27 @@ const Input = React.forwardRef(
     const [isFocused, setIsFocused] = useState(false);
     const inputRef = useRef(null);
 
-    const handleFocus = (e) => {
-      setIsFocused(true);
-      if (onFocus) onFocus(e);
-    };
+    const handleFocus = useCallback(
+      (e) => {
+        setIsFocused(true);
+        if (onFocus) onFocus(e);
+      },
+      [onFocus],
+    );
 
-    const handleBlur = (e) => {
-      setIsFocused(false);
-      if (onBlur) onBlur(e);
-    };
+    const handleBlur = useCallback(
+      (e) => {
+        setIsFocused(false);
+        if (onBlur) onBlur(e);
+      },
+      [onBlur],
+    );
 
-    const handleLabelClick = () => {
+    const handleLabelClick = useCallback(() => {
       if (inputRef.current) {
         inputRef.current.focus();
       }
-    };
+    }, []);
 
     const borderColorClass = error ? "border-red-500" : "border-gray-300";
     const labelColorClass = error
@@ -55,10 +61,12 @@ const Input = React.forwardRef(
         ? "text-blue-500"
         : "text-gray-500";
 
+    const InputElement = isTextarea ? "textarea" : "input";
+
     return (
       <div className={`relative ${className} ${borderColorClass}`}>
         {prefix}
-        <input
+        <InputElement
           ref={(node) => {
             inputRef.current = node;
             if (typeof ref === "function") {
@@ -67,8 +75,8 @@ const Input = React.forwardRef(
               ref.current = node;
             }
           }}
-          className={`peer w-full p-2 outline-none transition-all duration-300 ${inputClassName} `}
-          type={type}
+          className={`peer w-full ${inputClassName}`}
+          type={isTextarea ? undefined : type}
           name={name}
           placeholder={placeholder}
           onChange={onChange}
@@ -77,28 +85,37 @@ const Input = React.forwardRef(
           disabled={disabled}
           required={required}
           value={value}
+          rows={isTextarea ? rows : undefined}
           {...restProps}
         />
-        <label
-          onClick={handleLabelClick}
-          className={`absolute left-2 top-1 text-lg transition-all duration-300 ${labelColorClass} ${isFocused || value ? "-translate-y-5 scale-75" : ""} cursor-pointer bg-white-a700_01 peer-focus:-translate-y-5 peer-focus:scale-75`}
-        >
-          {label}
-          {required && <span className="ml-1 text-red-500">*</span>}
-        </label>
+        {label && (
+          <label
+            onClick={handleLabelClick}
+            className={twMerge(
+              "absolute left-0 top-1/2 ml-2 -translate-y-1/2 cursor-text bg-white-a700_01 px-1 text-base leading-[1.25] transition-all duration-300 peer-focus:top-0 peer-focus:scale-90 peer-focus:md:scale-75",
+              labelColorClass,
+              labelClassName,
+              isFocused || value ? "!top-0 scale-90 md:scale-75" : "",
+            )}
+          >
+            {label}
+            {required && <span className="ml-1 text-red-500">*</span>}
+          </label>
+        )}
         {suffix}
       </div>
     );
   },
 );
 
-Input.propTypes = {
+InputComponent.propTypes = {
   className: PropTypes.string,
   inputClassName: PropTypes.string,
   name: PropTypes.string,
   placeholder: PropTypes.string,
   type: PropTypes.string,
   label: PropTypes.string,
+  labelClassName: PropTypes.string,
   prefix: PropTypes.node,
   suffix: PropTypes.node,
   error: PropTypes.string,
@@ -107,8 +124,11 @@ Input.propTypes = {
   onFocus: PropTypes.func,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
-  pattern: PropTypes.string,
   value: PropTypes.string,
+  rows: PropTypes.number,
+  isTextarea: PropTypes.bool,
 };
 
-export { Input };
+InputComponent.displayName = "InputComponent";
+
+export { InputComponent as Input };

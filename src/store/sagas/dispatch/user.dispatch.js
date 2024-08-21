@@ -18,8 +18,16 @@ export const useUserDispatch = () => {
     });
   };
 
+  const setUser = (payload) => {
+    dispatch({
+      type: userSagaActions.SET_USER,
+      payload,
+    });
+  };
+
   return {
     setIsLoggedinViaGokwik,
     setCustomUser,
+    setUser,
   };
 };

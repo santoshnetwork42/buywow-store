@@ -1,19 +1,18 @@
 "use client";
 
-import { Button, Img, Input } from "@/components/elements";
+import { Button, Input } from "@/components/elements";
 import { Textarea } from "@/components/elements/Textarea";
 import Modal from "@/components/features/Modal";
 import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
 import {
   addPhonePrefix,
-  isEmailValid,
   removePhonePrefix,
   validateEmail,
   validatePhoneNumber,
   validatePinCode,
   validateString,
 } from "@/utils/helpers";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const AddressModal = ({
@@ -141,8 +140,6 @@ const AddressModal = ({
 
     if (field === "pinCode" || field === "phone") {
       value = value.replaceAll(/[^0-9]+/g, "").trim();
-    } else {
-      value = value.trim();
     }
 
     setAddress({ ...address, [field]: value });
@@ -243,7 +240,7 @@ const AddressModal = ({
                 className="gap-1 border p-2"
                 error={addressErrors?.email}
                 label="Email"
-                maxLength={20}
+                maxLength={30}
               />
 
               <Textarea

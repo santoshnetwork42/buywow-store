@@ -1,4 +1,3 @@
-import React from "react";
 import { Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import { extractAttributes } from "@/utils/helpers";
@@ -40,6 +39,7 @@ const AccordionUsageInstructions = ({
       title={accordionUsageInstructionsTitle}
       imgUrl={accordionImageUrl}
       alternativeText={accordionImageAlt}
+      className="lg:w-[90%]"
     >
       <div className="flex flex-col gap-2 md:gap-2.5">
         {usageInstructionItems.map((item, index) => (

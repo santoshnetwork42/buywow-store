@@ -1,11 +1,11 @@
 "use client";
 
-import PropTypes from "prop-types";
-import { twMerge } from "tailwind-merge";
-import { useRippleEffect } from "@/utils/hooks/useRippleEffect";
 import { LoaderIcon } from "@/assets/svg/icons";
-import { useCallback } from "react";
+import { useRippleEffect } from "@/utils/hooks/useRippleEffect";
 import { useRouter } from "next/navigation";
+import PropTypes from "prop-types";
+import { useCallback } from "react";
+import { twMerge } from "tailwind-merge";
 
 const Button = ({
   children,
@@ -27,7 +27,7 @@ const Button = ({
   const buttonRef = useRippleEffect(enableRipple && !disabled && !loader);
 
   const baseClasses =
-    "relative flex items-center justify-center overflow-hidden capitalize rounded-full font-medium transition-colors duration-200 !leading-tight";
+    "relative flex gap-2 items-center justify-center overflow-hidden capitalize rounded-full font-medium transition-colors duration-200 !leading-tight";
 
   const variantClasses = {
     primary: "bg-yellow-900 text-white-a700_01",
@@ -56,10 +56,8 @@ const Button = ({
 
   const handleClick = useCallback(
     (e) => {
-      e.stopPropagation();
-      e.preventDefault();
-
       if (onClick && !disabled && !loader) {
+        e.preventDefault();
         if (!!redirectTo) {
           router.push(redirectTo);
         }
@@ -77,14 +75,14 @@ const Button = ({
       disabled={disabled || loader}
       {...restProps}
     >
-      {leftIcon && <span className="mr-2">{leftIcon}</span>}
+      {leftIcon && <span>{leftIcon}</span>}
       {children}
       {loader && (
         <div className={`animate-spin ${loaderClass}`}>
           <LoaderIcon size="16" />
         </div>
       )}
-      {rightIcon && <span className="ml-2">{rightIcon}</span>}
+      {rightIcon && <span>{rightIcon}</span>}
     </button>
   );
 };

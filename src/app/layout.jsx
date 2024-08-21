@@ -1,3 +1,4 @@
+import awsExport from "@/aws-exports";
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
 import ToastComponent from "@/components/common/ToastComponent";
 import CartDrawer from "@/components/partials/CartDrawer";
@@ -16,7 +17,6 @@ import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 import GoKwikProvider from "@/utils/context/gokwik";
 import NavbarProvider from "@/utils/context/navbar";
 import { Amplify } from "aws-amplify";
-import awsExport from "../../aws-exports";
 
 Amplify.configure({
   ...awsExport,

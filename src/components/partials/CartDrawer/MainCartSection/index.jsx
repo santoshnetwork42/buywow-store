@@ -1,6 +1,5 @@
-import React from "react";
-import CouponsAndOffers from "./CouponsAndOffers";
 import ProductItem from "@/components/partials/CartDrawer/MainCartSection/ProductItem";
+import React from "react";
 import UpsellProducts from "../../Product/PDP/ProductDetailViewBlocks/UpsellProducts";
 
 const CartProductList = React.memo(
@@ -33,7 +32,7 @@ const MainCartSection = ({
   handleCartClose,
 }) => {
   return (
-    <div className="mb-5 flex flex-1 flex-col gap-4">
+    <div className="mb-7 flex flex-1 flex-col gap-4">
       <CartProductList
         cartItems={cartItems}
         inventoryMapping={inventoryMapping}
@@ -47,7 +46,6 @@ const MainCartSection = ({
         isCartUpsell={true}
       />
       {/* done */}
-      <CouponsAndOffers />
     </div>
   );
 };

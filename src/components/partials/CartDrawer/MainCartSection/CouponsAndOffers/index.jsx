@@ -113,7 +113,11 @@ const CouponsAndOffers = () => {
 
   return (
     <>
-      <CouponHeader openSidebar={() => setIsSidebarOpen(true)} />
+      <CouponHeader
+        appliedCoupon={appliedCoupon}
+        openSidebar={() => setIsSidebarOpen(true)}
+        removeCoupon={handleCouponRemove}
+      />
 
       <CouponModal
         isOpen={isCouponModalOpen}

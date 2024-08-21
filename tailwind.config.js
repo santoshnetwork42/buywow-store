@@ -58,6 +58,7 @@ module.exports = {
         orange: {
           50: "#fdfbdb",
           400: "#ffa41c",
+          500: "#F5E8DD",
           "50_01": "#f9f2e0",
           a200: "#fab73b",
         },
@@ -70,7 +71,7 @@ module.exports = {
       },
       boxShadow: {
         xs: "0 4px 4px 0 #0000000c",
-        sm: "0 1px 1px 0 #00000019",
+        sm: "0 4px 4px 0 #0000000D",
         md: "0 0 13px 5px #00000029",
       },
       fontFamily: {
