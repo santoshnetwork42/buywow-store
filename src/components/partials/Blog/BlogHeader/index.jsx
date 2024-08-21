@@ -1,9 +1,8 @@
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
 import { fetchBlogs, fetchTopMenu } from "@/lib/wordPressAPIs";
-import React from "react";
-import BlogCard2 from "../BlogCard2";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
+import BlogCard2 from "../BlogCard2";
 
 export default async function BlogHeader() {
   const menu = await fetchTopMenu();

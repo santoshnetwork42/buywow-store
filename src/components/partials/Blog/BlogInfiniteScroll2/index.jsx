@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import BlogCard from "../BlogCard";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { getBlogs } from "@/graphql/appSync/api";
-import BlogCard3 from "../BlogCard3";
 import { LoaderIcon } from "@/assets/svg/icons";
+import { getBlogs } from "@/graphql/appSync/api";
+import { useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import BlogCard3 from "../BlogCard3";
 
 export default function BlogInfiniteScroll2({
   blogsData,

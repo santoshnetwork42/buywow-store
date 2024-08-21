@@ -2,7 +2,6 @@ import { Heading, Text } from "@/components/elements";
 import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 export default function BlogCard2({
   blog = {

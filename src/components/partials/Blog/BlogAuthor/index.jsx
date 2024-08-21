@@ -1,7 +1,6 @@
 import { Heading, Text } from "@/components/elements";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 export default function BlogAuthor({
   name,
@@ -32,6 +31,7 @@ export default function BlogAuthor({
               <Link href={linkedin} target="_blank" rel="noopener noreferrer">
                 <Image
                   src="/images/linkedin.svg"
+                  alt="linkedin"
                   width={16}
                   height={16}
                   style={{ filter: "invert(1)" }}
