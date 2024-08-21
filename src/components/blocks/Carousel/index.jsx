@@ -21,18 +21,21 @@ const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
 
   return (
     <Link href={link || "#"} className="flex-[0_0_100%]">
-      <picture className="relative block aspect-[376/148] w-full sm:aspect-[1440/496]">
+      <picture className="relative block w-full">
         {!!webImageAttrs.url && (
-          <source media="(min-width: 576px)" srcSet={webImageAttrs.url} />
+          <source
+            media="(min-width: 576px)"
+            srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}
+          />
         )}
         <Img
           src={imageUrl}
           alt={imageAlt}
           priority
-          sizes="100vw"
-          fill
+          width={500}
+          height={500}
           isStatic
-          className="h-auto w-full object-cover"
+          className="h-auto w-full object-contain"
         />
       </picture>
     </Link>

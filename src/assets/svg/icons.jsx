@@ -256,7 +256,7 @@ export const DebitIcon = ({ size = 20, color = "#000000", ...props }) => {
   );
 };
 
-export const EllipsisIcon = ({ size = 20, color = "#000000", ...props }) => {
+export const EllipsisIcon = ({ size = 20, color = "#000000", className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -264,6 +264,7 @@ export const EllipsisIcon = ({ size = 20, color = "#000000", ...props }) => {
       height={size}
       viewBox="0 0 20 20"
       fill={color}
+      className={className}
     >
       <circle cx="10" cy="10" r="10" fill="#282828" />
       <text
@@ -318,13 +319,14 @@ export const AlertInfoIcon = ({ size = 20, color = "#000000", ...props }) => {
   );
 };
 
-export const WalletIcon = ({ size = 20, color = "#000000" }) => {
+export const WalletIcon = ({ size = 20, color = "#000000", className }) => {
   return (
     <svg
       width="130"
       height="178"
       viewBox="0 0 130 178"
       fill="none"
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

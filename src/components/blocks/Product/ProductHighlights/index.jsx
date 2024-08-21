@@ -1,7 +1,6 @@
-import React from "react";
-import { extractAttributes } from "@/utils/helpers";
-import { Img } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
+import { Img } from "@/components/elements";
+import { extractAttributes } from "@/utils/helpers";
 
 const ProductHighlights = ({ title, images }) => {
   if (!Array.isArray(images) || images.length === 0) return null;
@@ -16,26 +15,31 @@ const ProductHighlights = ({ title, images }) => {
         const webImageAttrs = extractAttributes(webImage);
         const mWebImageAttrs = extractAttributes(mWebImage);
 
-        if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
+        const imageUrl = mWebImageAttrs.url || webImageAttrs.url;
+        const imageAlt =
+          mWebImageAttrs.alternativeText ||
+          webImageAttrs.alternativeText ||
+          `Product Highlight ${index + 1}`;
+
+        if (!imageUrl) return null;
 
         return (
           <picture
             key={`product-highlight-${index}`}
-            className="relative block aspect-[970/600] w-full max-w-[970px] sm:w-[90%] md:w-[80%]"
+            className="relative block w-full max-w-[970px] sm:w-[90%] md:w-[80%]"
           >
-            <source media="(min-width: 576px)" srcSet={webImageAttrs.url} />
+            <source
+              media="(min-width: 768px)"
+              srcSet={`${webImageAttrs.url}?w=1200&q=75&f=webp`}
+            />
             <Img
-              src={mWebImageAttrs.url || webImageAttrs.url}
-              alt={
-                mWebImageAttrs.alternativeText ||
-                webImageAttrs.alternativeText ||
-                `Product Highlight ${index + 1}`
-              }
-              fill
-              sizes="(min-width: 970px) 970px, (min-width: 768px) 80vw, (min-width: 576px) 90vw, 100vw"
+              src={imageUrl}
+              alt={imageAlt}
+              width={500}
+              height={500}
               priority
               isStatic
-              className="aspect-[970/600] h-auto w-full object-contain"
+              className="h-auto w-full object-contain"
             />
           </picture>
         );

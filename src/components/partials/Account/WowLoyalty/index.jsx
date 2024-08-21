@@ -191,46 +191,59 @@ const WowLoyalty = ({}) => {
   }, [transactions]);
 
   return (
-    <div className="mx-auto w-full max-w-2xl p-4">
-      <div
-        className="bg-white mb-4 rounded-lg p-6 shadow-md"
-        style={{
-          background: "linear-gradient(258deg, #d89979 3.32%, #e5cfaf 48.97%)",
-        }}
-      >
-        <div className="mb-4 flex flex-col items-center gap-2">
-          <Heading size="2xl">WOW Cash</Heading>
-          <div className="flex w-full items-end justify-between gap-2">
-            <div className="text-center">
-              <Heading className="mb-2 flex items-center justify-center text-lg">
-                Available Balance
-                <div className="group relative ml-1">
-                  <EllipsisIcon className="h-4 w-4 cursor-help text-gray-500" />
-                  <Text className="text-white absolute -mt-2 ml-2 hidden w-32 rounded bg-gray-200 p-2 text-xs group-hover:block">
-                    This section talks about the terms and rules of the
-                    cashback.
-                  </Text>
-                </div>
-              </Heading>
-              <Text className="mb-2 font-bold text-green-600" size="3xl">
-                ₹{totalUsable > 0 ? totalUsable.toFixed(2) : "0.00"}
-              </Text>
-              <Text size="sm" className="text-gray-600">
-                Cashback applies automatically
-              </Text>
-            </div>
-            <WalletIcon size={100} className="ml-2 h-6 w-6 text-blue-500" />
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 py-2">
+      <div className="flex flex-col overflow-hidden rounded-md shadow-sm">
+        <div
+          className="relative flex flex-col gap-4 p-4 md:gap-5"
+          style={{
+            background:
+              "linear-gradient(258deg, #d89979 3.32%, #e5cfaf 48.97%)",
+          }}
+        >
+          <Heading as="h3" size="2xl" className="w-full text-center" responsive>
+            WOW Cash
+          </Heading>
+          <div className="flex flex-col gap-1 md:gap-1.5">
+            <Text
+              as="span"
+              size="base"
+              className="flex items-center gap-1 text-sm"
+              responsive
+            >
+              Available Balance
+              <div className="group relative mt-0.5">
+                <EllipsisIcon className="size-3 cursor-help" />
+                <Text
+                  as="p"
+                  size="xs"
+                  className="absolute left-2.5 top-2.5 hidden w-40 rounded bg-black-900 p-2 font-light text-white-a700 group-hover:block"
+                >
+                  This section talks about the terms and rules of the cashback.
+                </Text>
+              </div>
+            </Text>
+            <Heading as="h3" size="3xl" className="text-green-600" responsive>
+              ₹{totalUsable > 0 ? totalUsable.toFixed(2) : "0.00"}
+            </Heading>
+            <Text as="span" size="sm" className="text-gray-600" responsive>
+              Cashback applies automatically
+            </Text>
           </div>
+          <WalletIcon size={100} className="absolute right-[4%] top-0 h-full" />
+        </div>
+
+        <div className="flex justify-between gap-5 bg-gray-100 px-4 py-3 md:p-4">
+          <Text as="span" size="sm" responsive>
+            Total cashback earned: ₹{totalAllotted?.toFixed(2)}
+          </Text>
+          <Text as="span" size="sm" responsive>
+            Cashback redeemed: ₹{totalUsed?.toFixed(2)}
+          </Text>
         </div>
       </div>
-      <div className="mb-6 flex justify-between rounded-lg bg-gray-100 p-4 text-sm">
-        <Text size="sm">
-          Total cashback earned: ₹{totalAllotted?.toFixed(2)}
-        </Text>
-        <Text size="sm">Cashback redeemed: ₹{totalUsed?.toFixed(2)}</Text>
-      </div>
-      <div>
-        <Heading className="mb-4">RECENT HISTORY</Heading>
+
+      <div className="flex flex-col gap-3 md:gap-4">
+        <Heading>RECENT HISTORY</Heading>
         <div className="space-y-6">
           {groupedTransactions?.map((Transaction, index) => (
             <History Transaction={Transaction} key={index} />

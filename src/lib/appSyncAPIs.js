@@ -100,7 +100,7 @@ export const getPageBySlugAPI = async (slugId) => {
       },
     });
 
-    return JSON.parse(response?.data?.getPageBySlug || "[]");
+    return JSON.parse(response?.data?.getPageBySlug || "{}");
   } catch (err) {
     errorHandler(err, "Get Page By Slug API");
     return null;

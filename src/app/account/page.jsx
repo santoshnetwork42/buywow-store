@@ -8,12 +8,12 @@ import {
   User,
   WowCashIcon,
 } from "@/assets/svg/icons";
-import AccountDetails from "@/components/common/AccountDetails";
-import WowLoyalty from "@/components/common/WowLoyalty";
+import AccountDetails from "@/components/partials/Account/AccountDetails";
 import AccountSkeleton from "@/components/partials/Account/AccountSkeleton";
 import AccountTabs from "@/components/partials/Account/AccountTabs";
 import AddressSection from "@/components/partials/Account/AddressSection";
 import OrderSection from "@/components/partials/Account/OrderSection";
+import WowLoyalty from "@/components/partials/Account/WowLoyalty";
 import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
