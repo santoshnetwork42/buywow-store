@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  async rewrites() {
+    const payload = [
+      { source: "/blog/sitemap.xml", destination: "/api/blog-sitemap" },
+    ];
+    return payload;
+  },
   images: {
     remotePatterns: [
       {
