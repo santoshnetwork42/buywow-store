@@ -63,11 +63,24 @@ export function* addToCartHandler(action) {
     let updatedCart;
     if (existingItemIndex !== -1) {
       updatedCart = [...cartState.data];
+
+      let newQty =
+        parseInt(updatedCart[existingItemIndex].qty) +
+        parseInt(updatedProduct.qty);
+
+      if (
+        updatedProduct.maximumOrderQuantity &&
+        newQty > updatedProduct.maximumOrderQuantity
+      ) {
+        newQty = updatedProduct.maximumOrderQuantity;
+      }
+      if (newQty > updatedProduct.currentInventory) {
+        newQty = updatedProduct.currentInventory;
+      }
+
       updatedCart[existingItemIndex] = {
         ...updatedCart[existingItemIndex],
-        qty:
-          parseInt(updatedCart[existingItemIndex].qty) +
-          parseInt(updatedProduct.qty),
+        qty: newQty,
       };
     } else {
       updatedCart = [

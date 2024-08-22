@@ -49,7 +49,7 @@ const Quantity = ({
       }
     } else {
       showToast.custom(
-        `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
+        `Product is out of stock`,
       );
     }
   };
