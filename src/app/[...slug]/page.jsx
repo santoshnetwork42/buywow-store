@@ -320,15 +320,17 @@ async function generateSEOAndJSONLD(params) {
     url: extractedSlug,
     title: seoComponent?.seoTitle,
     description: removeHtmlTags(seoComponent?.seoDescription),
-    canonical:
-      seoComponent?.seoCanonical ||
-      `${webUrl}/${isProduct ? "products" : "collections"}/${extractedSlug}`,
     metaTitle: seoComponent?.seoMetaTitle,
     noIndex: seoComponent?.noIndex,
     content: collectionInfoSection?.information || "",
     faqsPageJsonLd,
     breadcrumbListJsonLd,
     productJsonLd,
+    alternates: {
+      canonical:
+        seoComponent?.seoCanonical ||
+        `${webUrl}/${isProduct ? "products" : "collections"}/${extractedSlug}`,
+    },
     openGraph: {
       title: seoComponent?.seoTitle,
       description: seoComponent?.seoDescription,
@@ -380,28 +382,7 @@ export async function generateMetadata({ params }) {
       removeHtmlTags,
     })) || {};
 
-  // metadata object
-  const metadata = {
-    title: seoData.title,
-    description: seoData.description,
-    openGraph: {
-      title: seoData?.openGraph?.title,
-      description: seoData?.openGraph?.description,
-      url: seoData.url,
-      siteName: seoData.siteName,
-      locale: "en_US",
-      type: "website",
-    },
-    alternates: {
-      canonical: seoData.canonical,
-    },
-  };
-
-  if (seoData.noIndex) {
-    metadata.robots = { index: false };
-  }
-
-  return metadata;
+  return seoData;
 }
 
 export default async function Page({ params }) {
