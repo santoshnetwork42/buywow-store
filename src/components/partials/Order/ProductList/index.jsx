@@ -1,62 +1,83 @@
-import React from "react";
+import { Heading, Img, Text } from "@/components/elements";
+import { toDecimal } from "@/utils/helpers";
 import Link from "next/link";
-import { Img, Text } from "@/components/elements";
+import React, { useMemo } from "react";
 
-const ProductList = ({ productItems }) => (
-  <div className="flex flex-col gap-4">
-    <div className="flex items-center justify-between">
-      <Text size="lg">PRODUCT DETAILS</Text>
-    </div>
-    <div className="flex flex-col gap-4 rounded-md border p-5">
-      <div className="mb-5 flex flex-col gap-5">
-        {productItems?.map((item) => (
+const ProductItem = React.memo(({ item }) => {
+  const { product, variant, quantity, price, cancelledQuantity, thumbImage } =
+    item || {};
+  const totalPrice = useMemo(
+    () => toDecimal((quantity || 0) * (price || 0)),
+    [quantity, price],
+  );
+
+  return (
+    <Link
+      className="flex w-full gap-2 rounded-md border p-2 shadow-xs sm:gap-3 sm:p-3 lg:gap-4 lg:p-4"
+      href={`/products/${product?.slug || ""}`}
+    >
+      <div className="aspect-[65/77] w-20 overflow-hidden rounded-md bg-lime-50 sm:w-24 md:aspect-square lg:w-28">
+        <Img
+          src={thumbImage}
+          alt={product?.title || "Product Image"}
+          className="aspect-[65/77] h-auto w-full object-contain mix-blend-darken md:aspect-square"
+          width={80}
+          height={88}
+          addPrefix
+          isStatic
+        />
+      </div>
+      <div className="flex flex-1 flex-col gap-2">
+        <div className="flex flex-1 justify-between gap-2">
+          <div className="flex flex-col gap-1">
+            <Text as="p" size="base" className="text-sm" responsive>
+              {product?.title || "Untitled Product"}
+            </Text>
+            <Text
+              as="span"
+              size="base"
+              className="text-sm font-light text-gray-600"
+              responsive
+            >
+              {variant?.title || ""}
+            </Text>
+          </div>
+          <Text as="p" size="lg" className="text-base" responsive>
+            ₹{totalPrice}
+          </Text>
+        </div>
+        <Text
+          as="p"
+          size="base"
+          className="mb-1 text-sm font-light text-gray-600 md:mb-2"
+          responsive
+        >
+          Qty: {quantity || cancelledQuantity || 0}
+        </Text>
+      </div>
+    </Link>
+  );
+});
+
+ProductItem.displayName = "ProductItem";
+
+const ProductList = React.memo(({ productItems }) => {
+  return (
+    <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
+      <div className="flex items-center justify-between">
+        <Heading as="h3" size="xl" className="text-lg font-medium" responsive>
+          PRODUCT DETAILS
+        </Heading>
+      </div>
+      <div className="flex flex-col gap-3 md:gap-4">
+        {productItems.map((item) => (
           <ProductItem key={`order-${item.id}`} item={item} />
         ))}
       </div>
     </div>
-  </div>
-);
-
-const ProductItem = ({ item }) => {
-  const productLink =
-    item.product.slug === "pure-himalayan-shilajit-resin-for-men" ||
-    item.product.slug === "pure-himalayan-shilajit-resin"
-      ? `/offers/${item.product.slug}`
-      : `/products/${item.product.slug}`;
-
-  return (
-    <Link className="order-image mr-2" href={productLink}>
-      <div className="flex justify-between gap-1 rounded-md p-2 shadow-xs">
-        <div className="flex w-full items-center gap-2">
-          <div className="min-h-20 min-w-20">
-            <Img
-              src={item.thumbImage}
-              alt={item.product?.images.items[0]?.alt || "Product Image"}
-              width={80}
-              height={88}
-              addPrefix
-              isStatic
-            />
-          </div>
-          <div className="flex h-full w-full flex-col justify-between">
-            <div className="mb-2 flex w-full justify-between gap-2">
-              <Text className="font-light">
-                <span>Qty: </span>
-                {`${item.quantity || item.cancelledQuantity}`}
-              </Text>
-              <Text>₹{(item.quantity * item.price).toFixed(2)}</Text>
-            </div>
-            <div className="flex flex-col gap-1">
-              <Text size="sm">{item.product?.title}</Text>
-              <Text size="sm" className="font-light">
-                {item.variant?.title}
-              </Text>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Link>
   );
-};
+});
+
+ProductList.displayName = "ProductList";
 
 export default ProductList;

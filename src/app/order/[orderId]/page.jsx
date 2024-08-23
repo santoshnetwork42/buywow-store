@@ -1,6 +1,7 @@
 import OrderDetails from "@/components/partials/Order/OrderDetails";
 import OrderSummary from "@/components/partials/Order/OrderSummary";
 import ProductList from "@/components/partials/Order/ProductList";
+import ProgressSteps from "@/components/partials/Others/ProgressSteps";
 import { STORE_ID } from "@/config";
 import { getOrderByIdAPI } from "@/lib/appSyncAPIs";
 import { calculateTotals } from "@/utils/helpers";
@@ -24,12 +25,13 @@ const getOrderData = async (orderId, paymentId) => {
       return null;
     }
 
-    const products = response.products?.items.map((item) => ({
-      ...item,
-      thumbImage:
-        item.variant?.images?.items[0]?.imageKey ||
-        item.product.images?.items[0]?.imageKey,
-    }));
+    const products =
+      response.products?.items?.map((item) => ({
+        ...item,
+        thumbImage:
+          item.variant?.images?.items?.[0]?.imageKey ||
+          item.product?.images?.items?.[0]?.imageKey,
+      })) || [];
 
     return {
       ...response,
@@ -53,7 +55,7 @@ const OrderSkeleton = () => (
   </div>
 );
 
-const OrderContent = ({ order, paymentId }) => {
+const OrderContent = ({ order }) => {
   const {
     code,
     status,
@@ -75,6 +77,8 @@ const OrderContent = ({ order, paymentId }) => {
 
   return (
     <>
+      <ProgressSteps activeStep={3} className="mb-5 mt-4" />
+
       <OrderDetails
         code={code}
         status={status}
@@ -96,23 +100,27 @@ const OrderContent = ({ order, paymentId }) => {
         totalCashbackRefunded={totalCashbackRefunded}
       />
 
-      <div className="flex justify-between">
-        <Link
-          href="/"
-          className="rounded-full bg-yellow-900 p-3 px-6 text-white-a700_01"
-        >
-          CONTACT US
-        </Link>
-        <Link
-          href="/"
-          className="rounded-full bg-yellow-900 p-3 px-6 text-white-a700_01"
-        >
-          RETURN TO SHOP
-        </Link>
-      </div>
+      <ActionButtons />
     </>
   );
 };
+
+const ActionButtons = () => (
+  <div className="flex justify-between">
+    <Link
+      href="/"
+      className="rounded-full bg-yellow-900 p-3 px-6 text-white-a700_01"
+    >
+      CONTACT US
+    </Link>
+    <Link
+      href="/"
+      className="rounded-full bg-yellow-900 p-3 px-6 text-white-a700_01"
+    >
+      RETURN TO SHOP
+    </Link>
+  </div>
+);
 
 export default async function OrderPage({ params, searchParams }) {
   const { orderId } = params;
@@ -125,9 +133,9 @@ export default async function OrderPage({ params, searchParams }) {
   }
 
   return (
-    <div className="container-main mb-main flex flex-col gap-4 py-6">
+    <div className="container-main mb-main flex max-w-4xl flex-col gap-5 py-5 md:gap-6">
       <Suspense fallback={<OrderSkeleton />}>
-        <OrderContent order={order} paymentId={paymentId} />
+        <OrderContent order={order} />
       </Suspense>
     </div>
   );
