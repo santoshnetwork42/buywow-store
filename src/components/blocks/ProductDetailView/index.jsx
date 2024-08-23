@@ -88,6 +88,7 @@ const ProductDetailView = ({ product }) => {
           bestCoupon={bestCoupon}
           price={price}
           hasInventory={hasInventory}
+          productId={packageProduct?.id}
         />
         <VariantSelector
           variantGroups={variantGroup}
