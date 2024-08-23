@@ -413,3 +413,29 @@ export const isValidAddress = (address) => {
   }
   return true;
 };
+
+export async function fetchSearchItems(search, limit = 1) {
+  const NEXT_PUBLIC_TTM_CLIENT_URL = process.env.NEXT_PUBLIC_TTM_CLIENT_URL;
+  const NEXT_PUBLIC_TTM_CLIENT_API_KEY =
+    process.env.NEXT_PUBLIC_TTM_CLIENT_API_KEY;
+  const NEXT_PUBLIC_TTM_CLIENT_THRESHOLD =
+    process.env.NEXT_PUBLIC_TTM_CLIENT_THRESHOLD;
+  try {
+    const response = await fetch(
+      `${NEXT_PUBLIC_TTM_CLIENT_URL}/search?query=${encodeURIComponent(
+        search,
+      )}&threshold=${NEXT_PUBLIC_TTM_CLIENT_THRESHOLD}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${NEXT_PUBLIC_TTM_CLIENT_API_KEY}`,
+        },
+      },
+    );
+    const data = await response.json();
+
+    return data?.results || [];
+  } catch (error) {
+    console.error("Error fetching items:", error);
+    return [];
+  }
+}
