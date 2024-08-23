@@ -128,6 +128,8 @@ const Reviews = ({
     setShowReview(true);
   }, []);
 
+  if (!productId) return null;
+
   return (
     <div className="container-main mb-main flex flex-col items-center justify-center">
       <ReviewSummary

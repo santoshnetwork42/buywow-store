@@ -5,14 +5,15 @@ import CartSidebar from "@/components/partials/MyCart/CartSidebar";
 import MainCartSection from "@/components/partials/MyCart/MainCartSection";
 import DeliveryInfoSection from "@/components/partials/Others/DeliveryInfoSection";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import { useNavBarState } from "@/utils/context/navbar";
 import { deliveryInfoData } from "@/utils/data/homeData";
 import { myCartData } from "@/utils/data/myCartData";
 import { useCartItems, useCartTotal, useInventory } from "@wow-star/utils";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function MyCart() {
   const dispatch = useDispatch();
+
+  const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
   const cartData = useCartItems({
     showLTOProducts: false,
@@ -28,8 +29,6 @@ export default function MyCart() {
 
   const inventory = useInventory({ validateCart });
   const { inventoryMapping } = inventory;
-
-  const { isRewardApplied } = useNavBarState();
 
   const {
     totalListingPrice,

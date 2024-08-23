@@ -1,9 +1,10 @@
-import React from "react";
 import { Img, Text } from "@/components/elements";
 import { toDecimal } from "@/utils/helpers";
+import React from "react";
 
-const Cashback = ({ cashbackAmount, amountNeeded }) => {
-  if (!cashbackAmount) return null;
+const Cashback = React.memo(({ cashbackAmount, amountNeeded }) => {
+  if (!cashbackAmount && !(amountNeeded > 0)) return null;
+
   return (
     <div className="flex w-[calc(100%+24px)] -translate-x-3 items-center justify-center gap-0.5 bg-blue-50 px-2 py-1.5 shadow-sm sm:w-[calc(100%+32px)] sm:-translate-x-4">
       <Img
@@ -13,21 +14,23 @@ const Cashback = ({ cashbackAmount, amountNeeded }) => {
         alt="cashback icon"
         className="aspect-square w-[24px] object-cover"
       />
-      {cashbackAmount ? (
-        <Text size="base" as="p">
-          You will earn{" "}
-          <span className="font-semibold">₹{toDecimal(cashbackAmount)}</span>{" "}
-          cashback with this order.
-        </Text>
-      ) : amountNeeded ? (
-        <Text size="base" as="p">
-          Add items worth{" "}
-          <span className="font-semibold">₹{toDecimal(amountNeeded)}</span> to
-          earn WOW Cash
-        </Text>
-      ) : null}
+      <Text size="base" as="p">
+        {cashbackAmount ? (
+          <>
+            You will earn <strong>₹{toDecimal(cashbackAmount)}</strong> cashback
+            with this order.
+          </>
+        ) : amountNeeded > 0 ? (
+          <>
+            Add items worth <strong>₹{toDecimal(amountNeeded)}</strong> to earn
+            WOW Cash
+          </>
+        ) : null}
+      </Text>
     </div>
   );
-};
+});
+
+Cashback.displayName = "Cashback";
 
 export default Cashback;

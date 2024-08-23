@@ -15,7 +15,7 @@ const AnnouncementContent = ({ announcement }) => {
     return null;
 
   return (
-    <div className="flex min-h-8 flex-1 items-center justify-between gap-5 py-1 md:py-2">
+    <div className="flex min-h-8 flex-1 items-center justify-between gap-5 py-1 sm:min-h-9 md:py-2 lg:min-h-10">
       <Text
         as="p"
         className="shrink-0 text-white-a700_01 max-lg:hidden lg:w-[28%]"

@@ -9,7 +9,6 @@ import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
-import { useNavBarState } from "@/utils/context/navbar";
 import { RESTRICT_SEARCH_AND_CART_TO_SHOW } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
@@ -74,28 +73,33 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
         isStatic
         className="aspect-[86/48] w-[86px] object-contain"
       />
-      <div className="h-[35px] w-[0.5px] bg-gray-300_01" />
-      <Img
-        src={vipUrl}
-        width={70}
-        height={28}
-        alt={vipAlt}
-        isStatic
-        className="aspect-[70/28] w-[70px] object-contain"
-      />
+      {vipUrl && (
+        <>
+          <div className="h-[35px] w-[0.5px] bg-gray-300_01" />
+          <Img
+            src={vipUrl}
+            width={70}
+            height={28}
+            alt={vipAlt}
+            isStatic
+            className="aspect-[70/28] w-[70px] object-contain"
+          />
+        </>
+      )}
     </div>
   </Link>
 ));
 
 const Header = ({ data, ...props }) => {
+  const router = useRouter();
   const pathname = usePathname();
   const showHeader = pathname?.includes("blog");
-  const router = useRouter();
-  const user = useSelector((state) => state.user.user);
+
+  const user = useSelector((state) => state.user?.user);
+  const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
   const isRestricted = RESTRICT_SEARCH_AND_CART_TO_SHOW?.includes(pathname);
   const { handlePasswordLessModal, handleCartVisibility } = useModalDispatch();
-  const { isRewardApplied } = useNavBarState();
   const { totalItems: totalCartItems } = useCartTotal({
     paymentType: "PREPAID",
     isRewardApplied: isRewardApplied,

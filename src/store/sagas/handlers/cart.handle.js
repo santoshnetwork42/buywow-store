@@ -97,8 +97,6 @@ export function* removeFromCartHandler(action) {
     coupon: state.cart.coupon,
   }));
 
-  const { product: tmpProduct } = action.payload;
-
   const filteredCart = cart.filter(
     (product) =>
       product.recordKey !== removedProduct.recordKey &&
@@ -157,6 +155,8 @@ export function* removeCouponHandler() {
 
 export function* emptyCartHandler() {
   yield put(emptyCart());
+  console.log(123);
+
   yield put({ type: cartSagaActions.MANAGE_CART });
 }
 

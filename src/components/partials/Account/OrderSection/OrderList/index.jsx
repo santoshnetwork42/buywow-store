@@ -13,13 +13,13 @@ import OrderSkeleton from "./OrderSkeleton";
 
 const client = generateClient();
 
-const OrderList = () => {
+const OrderList = React.memo(() => {
   const { user } = useSelector((state) => state.user);
   const [orders, setOrders] = useState([]);
   const [totalOrder, setTotalOrder] = useState(0);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const perPage = 4;
+  const perPage = 10;
 
   const getOrders = useCallback(
     async (reset = false) => {
@@ -33,7 +33,10 @@ const OrderList = () => {
             filter: {
               userId: { eq: user.id },
               storeId: { eq: STORE_ID },
-              status: { ne: "PENDING" },
+              and: [
+                { status: { ne: "TIMEDOUT" } },
+                { status: { ne: "PENDING" } },
+              ],
             },
             sort: [{ field: "orderDate", direction: "desc" }],
             limit: perPage,
@@ -43,13 +46,7 @@ const OrderList = () => {
         });
 
         const { items, total, nextToken } = data.searchOrders;
-        const filteredItems = items.filter(
-          ({ status }) => status !== "TIMEDOUT",
-        );
-
-        setOrders((prev) =>
-          reset ? filteredItems : [...prev, ...filteredItems],
-        );
+        setOrders((prev) => (reset ? items : [...prev, ...items]));
         setTotalOrder(total);
         setToken(nextToken);
       } catch (error) {
@@ -65,7 +62,7 @@ const OrderList = () => {
     if (user) {
       getOrders(true);
     }
-  }, [user, getOrders]);
+  }, [user]);
 
   const memoizedOrders = useMemo(
     () => orders.map((order) => <OrderRow key={order.id} order={order} />),
@@ -81,7 +78,7 @@ const OrderList = () => {
   );
 
   return (
-    <div className="container-main">
+    <>
       <div className="mb-4 grid grid-cols-1 gap-1 sm:gap-2 md:gap-0">
         <OrderListHeader />
         {isLoading && orders.length === 0 ? skeletons : memoizedOrders}
@@ -93,8 +90,10 @@ const OrderList = () => {
         nextToken={token}
         content="orders"
       />
-    </div>
+    </>
   );
-};
+});
 
-export default React.memo(OrderList);
+OrderList.displayName = "OrderList";
+
+export default OrderList;

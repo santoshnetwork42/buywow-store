@@ -6,6 +6,7 @@ import {
   getProductMeta,
   getProductPrice,
 } from "@wow-star/utils";
+import Cookies from "js-cookie";
 import { v4 as uuid } from "uuid";
 import { getPublicImageURL } from "../helpers/img-loader";
 
@@ -109,11 +110,14 @@ export const itemMapper = (
     "Product ID": id,
     "Variant ID": variantId,
     "Product Subcategory": subCategory?.name || null,
-    "Product Title": product.title,
-    SKU: product.sku,
-    "Image URL": getPublicImageURL(thumbImage?.imageKey),
+    "Product Title": product?.title,
+    SKU: product?.sku,
+    "Image URL": getPublicImageURL({
+      key: thumbImage?.imageKey,
+      addPrefix: true,
+    }),
     "Product Category": category?.name,
-    "Product URL": `${currentURL}/products/${product.slug}`,
+    "Product URL": `${currentURL}/products/${product?.slug}`,
     "Vendor name": vendor,
     "Product Price": price,
     Currency: "INR",
@@ -311,7 +315,7 @@ export const analyticsMetaDataMapper = () => {
       queryParams: location.search,
     },
     utmParameters: getUTMParameters(),
-    sessionId: Cookie.get(`${STORE_PREFIX}_session_id`),
+    sessionId: Cookies.get(`${STORE_PREFIX}_session_id`),
     timestamp: new Date().toISOString(),
   };
 };
@@ -428,7 +432,10 @@ export const moEngagedOrderMapper = (
         checkoutSource,
       );
       const { thumbImage } = getProductMeta(product);
-      const url = getPublicImageURL(thumbImage?.imageKey);
+      const url = getPublicImageURL({
+        key: thumbImage?.imageKey,
+        addPrefix: true,
+      });
       totalDiscount = totalDiscount + mrpValue - valueNew;
       return {
         "Total Price": Total_Price + valueNew,

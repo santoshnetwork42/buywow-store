@@ -244,3 +244,18 @@ span.ripple {
     transform: scaleY(-1) rotate(-135deg);
   }
 }
+
+/*  */
+.woot--bubble-holder {
+  z-index: 2000 !important;
+}
+
+.woot--bubble-holder-hidden {
+  visibility: hidden !important;
+}
+
+@media (max-width: 575px) {
+  body {
+    bottom: 70px !important;
+  }
+}

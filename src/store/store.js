@@ -1,34 +1,36 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import createSagaMiddleware from "redux-saga";
-import { authSlice } from "@/store/slices/auth.slice";
-import { userSlice } from "@/store/slices/user.slice";
-import { modalSlice } from "@/store/slices/modal.slice";
-import { cartSlice } from "@/store/slices/cart.slice";
+import { STORE_PREFIX } from "@/config";
 import { addressSlice } from "@/store/slices/address.slice";
+import { authSlice } from "@/store/slices/auth.slice";
+import { cartSlice } from "@/store/slices/cart.slice";
 import { eventsSlice } from "@/store/slices/events.slice";
+import { modalSlice } from "@/store/slices/modal.slice";
 import { recentlyViewedSlice } from "@/store/slices/recentlyViewed.slice";
-import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import rootSaga from "./sagas";
+import { systemSlice } from "@/store/slices/system.slice";
+import { userSlice } from "@/store/slices/user.slice";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
+  REHYDRATE,
 } from "redux-persist";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "./sagas";
 
-const rootReducer = combineReducers({
-  [authSlice.name]: authSlice.reducer,
-  [userSlice.name]: userSlice.reducer,
-  [modalSlice.name]: modalSlice.reducer,
-  [cartSlice.name]: cartSlice.reducer,
-  [addressSlice.name]: addressSlice.reducer,
-  [eventsSlice.name]: eventsSlice.reducer,
-  [recentlyViewedSlice.name]: recentlyViewedSlice.reducer,
-});
+export const actionTypes = {
+  DESTROY_SESSION: "DESTROY_SESSION",
+};
+
+export const rootActions = {
+  destroySession: () => ({
+    type: actionTypes.DESTROY_SESSION,
+  }),
+};
 
 const createNoopStorage = () => {
   return {
@@ -49,18 +51,60 @@ const storage =
     ? createWebStorage("local")
     : createNoopStorage();
 
-const sagaMiddleware = createSagaMiddleware();
-
-const persistConfig = {
-  key: "wow",
-  whitelist: ["auth", "user", "cart", "address", "recentlyViewed"],
+const createPersistConfig = (key) => ({
+  keyPrefix: `${STORE_PREFIX}-`,
+  key,
   storage,
+});
+
+const persistedReducers = {
+  [authSlice.name]: persistReducer(
+    createPersistConfig("auth"),
+    authSlice.reducer,
+  ),
+  [userSlice.name]: persistReducer(
+    createPersistConfig("user"),
+    userSlice.reducer,
+  ),
+  [cartSlice.name]: persistReducer(
+    createPersistConfig("cart"),
+    cartSlice.reducer,
+  ),
+  [addressSlice.name]: persistReducer(
+    createPersistConfig("address"),
+    addressSlice.reducer,
+  ),
+  [recentlyViewedSlice.name]: persistReducer(
+    createPersistConfig("recentlyViewed"),
+    recentlyViewedSlice.reducer,
+  ),
+  [systemSlice.name]: persistReducer(
+    createPersistConfig("system"),
+    systemSlice.reducer,
+  ),
+  // Non-persisted reducers
+  [modalSlice.name]: modalSlice.reducer,
+  [eventsSlice.name]: eventsSlice.reducer,
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const appReducer = combineReducers(persistedReducers);
+
+const rootReducer = (state, action) => {
+  if (action.type === actionTypes.DESTROY_SESSION) {
+    Object.keys(persistedReducers).forEach((key) => {
+      if (storage.removeItem) {
+        storage.removeItem(`${STORE_PREFIX}-${key}`);
+      }
+    });
+    state = undefined;
+  }
+  return appReducer(state, action);
+};
+
+const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

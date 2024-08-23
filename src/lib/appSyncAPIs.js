@@ -16,10 +16,10 @@ import {
   getProductById,
   getReviews,
   getReviewsAnalytics,
+  getStore,
   getUser,
   getUserRewards,
   searchCMSCollectionProducts,
-  searchCMSProducts,
   updateReview,
   updateUser,
   updateUserAddress,
@@ -37,23 +37,18 @@ Amplify.configure({
 
 const client = generateClient();
 
-export const searchCMSProductsAPI = async (
-  productSlugs = [
-    "brightening-vitamin-c-foaming-face-wash-with-built-in-brush",
-  ],
-) => {
+export const getStoreAPI = async () => {
   try {
     const response = await client.graphql({
-      query: searchCMSProducts,
+      query: getStore,
       authMode: "apiKey",
       variables: {
-        storeId: STORE_ID,
-        products: productSlugs,
+        id: STORE_ID,
+        deviceType: "WEB",
       },
     });
 
-    const products = response?.data?.searchCMSProducts?.items || [];
-    return products;
+    return response?.data?.getStore || {};
   } catch (err) {
     errorHandler(err, "Search CMS Products API");
     return null;
@@ -100,7 +95,7 @@ export const getPageBySlugAPI = async (slugId) => {
       },
     });
 
-    return JSON.parse(response?.data?.getPageBySlug || "[]");
+    return JSON.parse(response?.data?.getPageBySlug || "{}");
   } catch (err) {
     errorHandler(err, "Get Page By Slug API");
     return null;
@@ -133,7 +128,7 @@ export const getUserAPI = async () => {
 
     return response?.data?.getUser || null;
   } catch (err) {
-    errorHandler(err, "Get User API");
+    errorHandler(err, "Get User API", true);
     return null;
   }
 };

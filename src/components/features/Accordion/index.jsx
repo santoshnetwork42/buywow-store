@@ -65,9 +65,11 @@ const Accordion = ({
               />
             </div>
           )}
-          <Heading as="h4" size="lg" className="text-base" responsive>
-            {title}
-          </Heading>
+          {!!title && (
+            <Heading as="h4" size="lg" className="text-base" responsive>
+              {title}
+            </Heading>
+          )}
           {header}
         </div>
         {!!title && (
