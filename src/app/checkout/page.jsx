@@ -1,6 +1,6 @@
 "use client";
 
-import { BagIcon } from "@/assets/svg/icons";
+import { ArrowIconSVG, BagIcon } from "@/assets/svg/icons";
 import PaymentMethods from "@/components/blocks/PaymentMethods/paymentMethod";
 import SummaryItem from "@/components/common/CheckoutSummaryItem";
 import { showToast } from "@/components/common/ToastComponent";
@@ -8,10 +8,15 @@ import { Button, Heading, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import AddressSection from "@/components/partials/Account/AddressSection";
+import Cashback from "@/components/partials/CartDrawer/Cashback";
+import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
+import ProductPricing from "@/components/partials/CartDrawer/MainCartSection/ProductItem/ProductDetails/ProductPricing";
+import PaymentLoader from "@/components/partials/Checkout/PaymentLoader";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
-import { useGuestCheckout, useNavBarState } from "@/utils/context/navbar";
+import { useGuestCheckout } from "@/utils/context/navbar";
 import {
   COD_ENABLED,
   MAX_COD_AMOUNT,
@@ -22,18 +27,23 @@ import {
 import {
   checkAffiseValidity,
   checkFormValidity,
+  isValidAddress,
   nameSplitter,
   toDecimal,
 } from "@/utils/helpers";
 import loadScript from "@/utils/loadScript";
 import {
   MAX_PREPAID_DISCOUNT,
+  useCartItems,
   useCartTotal,
   useConfiguration,
+  useFreeProducts,
+  useInventory,
+  useNavbar,
   useOrders,
 } from "@wow-star/utils";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
@@ -41,19 +51,23 @@ let razorpayMethod;
 
 const Checkout = () => {
   const router = useRouter();
+
   const { handlePasswordLessModal } = useModalDispatch();
-  const { cartData, currentAddress, user, customUser } = useSelector(
+  const { validateCart, emptyCart } = useCartDispatch();
+
+  const { currentAddress, user, customUser, isRewardApplied } = useSelector(
     (state) => ({
-      cartData: state.cart,
-      currentAddress: state.address.currentAddress,
-      user: state.user.user,
-      customUser: state.user.customUser,
+      currentAddress: state.address?.currentAddress,
+      user: state.user?.user,
+      customUser: state.user?.customUser,
+      isRewardApplied: state.cart?.isRewardApplied,
     }),
   );
 
-  const [selectedMethod, setSelectedMethod] = useState("PREPAID");
-  const [pageLoading, setPageLoading] = useState(true);
-  const guestCheckout = useGuestCheckout();
+  const cartList = useCartItems({
+    showLTOProducts: true,
+    showNonApplicableFreeProducts: false,
+  });
 
   const maxCOD = useConfiguration(MAX_COD_AMOUNT, -1);
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
@@ -61,6 +75,22 @@ const Checkout = () => {
   const codEnabled = useConfiguration(COD_ENABLED, true);
   const ppcodEnabled = useConfiguration(PPCOD_ENABLED, false);
   const ppcodAmount = useConfiguration(PPCOD_AMOUNT, 0);
+
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
+    prepaidEnabled ? "PREPAID" : "COD",
+  );
+  const [pageLoading, setPageLoading] = useState(true);
+  const guestCheckout = useGuestCheckout();
+  const { isReady, userWithRewardPoints, setUserWithRewardPoints } =
+    useNavbar();
+
+  const { ready: isInventoryCheckReady, inventoryMapping } = useInventory({
+    validateCart,
+  });
+
+  useEffect(() => {
+    // startCheckout();
+  }, []);
 
   useEffect(() => {
     setPageLoading(true);
@@ -75,17 +105,24 @@ const Checkout = () => {
 
   useEffect(() => {
     if (prepaidEnabled) {
-      setSelectedMethod("PREPAID");
+      setSelectedPaymentMethod("PREPAID");
     } else if (codEnabled || ppcodEnabled) {
-      setSelectedMethod("COD");
+      setSelectedPaymentMethod("COD");
     }
   }, [codEnabled, prepaidEnabled, ppcodEnabled]);
 
   const handleMethodChange = (id) => {
-    setSelectedMethod(id);
+    setSelectedPaymentMethod(id);
   };
 
-  const { isRewardApplied } = useNavBarState();
+  const freeProductsResponse = useFreeProducts({
+    showNonApplicableFreeProducts: false,
+  });
+
+  const freeProducts = useMemo(
+    () => freeProductsResponse.map((f) => f.product),
+    [freeProductsResponse],
+  );
 
   const {
     totalListingPrice,
@@ -104,8 +141,10 @@ const Checkout = () => {
     totalAmount,
     codCashbackRewardsOnOrder,
     prepaidCashbackRewardsOnOrder,
+    amountNeededToAvailPrepaidCashback,
+    amountNeededToAvailCodCashback,
   } = useCartTotal({
-    paymentType: selectedMethod,
+    paymentType: selectedPaymentMethod,
     isRewardApplied,
   });
 
@@ -163,7 +202,7 @@ const Checkout = () => {
     };
 
     const variables = {
-      paymentMethod: selectedMethod,
+      paymentMethod: selectedPaymentMethod,
       address: shippingAddress,
       metadata: metaData,
       appliedRewardPoints: null,
@@ -171,7 +210,7 @@ const Checkout = () => {
       shoppingCartId: uuidv4(),
       source: "WEB",
       totalCashbackEarned:
-        selectedMethod === "COD"
+        selectedPaymentMethod === "COD"
           ? codCashbackRewardsOnOrder
           : prepaidCashbackRewardsOnOrder,
     };
@@ -251,21 +290,51 @@ const Checkout = () => {
 
   const afterOrderConfirm = useCallback(async () => {
     if (isConfirmed && finalOrder) {
+      // onPlaceOrder(
+      //   finalOrder,
+      //   [...freeProducts],
+      //   appliedCoupon,
+      //   currentAddress,
+      //   selectedPaymentMethod,
+      //   "BUYWOW",
+      // );
+
+      if (isRewardApplied)
+        setUserWithRewardPoints({
+          ...userWithRewardPoints,
+          totalRewards: Math.max(
+            userWithRewardPoints?.totalRewards - usableRewards,
+            0,
+          ),
+        });
+
       if (razorpayMethod) {
         razorpayMethod.close();
       }
       router.push(`/order/${finalOrder.id}`);
+
+      emptyCart();
     }
   }, [isConfirmed, finalOrder, router]);
 
   useEffect(() => {
     if (isConfirmed) {
-      void afterOrderConfirm(); // Using `void` to ignore the Promise returned by afterOrderConfirm
+      afterOrderConfirm();
     }
   }, [isConfirmed, afterOrderConfirm]);
 
-  //need to add condition based on applied coupon
-  const ppcodAmountToTake = ppcodAmount;
+  const { codCouponDisabled, onlineDisabled, ppcodCouponEnabled } =
+    useMemo(() => {
+      return {
+        codCouponDisabled: appliedCoupon?.paymentMethod === "ONLINE",
+        onlineDisabled: appliedCoupon?.paymentMethod === "COD",
+        ppcodCouponEnabled: appliedCoupon?.ppcodCouponAmount > 0,
+      };
+    }, [appliedCoupon]);
+
+  const ppcodAmountToTake = ppcodCouponEnabled
+    ? appliedCoupon?.ppcodCouponAmount
+    : ppcodAmount;
 
   const isMaxCODDisabled = maxCOD > -1 ? codGrandTotal > maxCOD : false;
 
@@ -275,73 +344,100 @@ const Checkout = () => {
     const [isOpen, setIsOpen] = useState(false);
     return (
       <Accordion
-        title=""
+        className=""
+        accordionMainContainerClassName="!px-1 "
         header={
           <div
-            className="flex w-full justify-between py-3"
+            className="flex w-full items-center justify-between py-3 text-left"
             onClick={() => setIsOpen(!isOpen)}
           >
-            <div className="flex w-full gap-2">
+            <div className="flex gap-2">
               <div className="mt-1">
-                <BagIcon size={18} />
+                <BagIcon />
               </div>
-              <div className="flex flex-col">
-                <Text>Order Summary</Text>
-                <Text className="font-light text-green-600" size="sm">
-                  You Saved ₹{totalSaved?.toFixed(2)}
+              <div className="flex flex-col gap-1">
+                <Text as="span" size="base">
+                  Order Summary
+                </Text>
+                <Text as="span" size="sm" className="text-green-600" responsive>
+                  You Saved ₹{toDecimal(totalSaved)}
                 </Text>
               </div>
               <ToggleArrow open={isOpen} />
             </div>
-            <div>
-              <Text>₹{grandTotal?.toFixed(2)}</Text>
-            </div>
+            <Text as="span" size="lg" className="text-base" responsive>
+              ₹{toDecimal(totalAmount)}
+            </Text>
           </div>
         }
         imgUrl={""}
         alternativeText={""}
       >
         <div className="flex flex-col gap-3">
-          {cartData?.data?.map((product, index) => {
-            const showStrikedPrice = product?.price < product?.listingPrice;
+          {cartList?.map((product, index) => {
+            const isFreeProduct =
+              product?.cartItemType === "FREE_PRODUCT" ||
+              product?.cartItemType === "AUTO_FREE_PRODUCT";
             return (
-              <div key={index} className="flex w-full gap-2 py-2 shadow-sm">
-                <div className="max-h-22 max-w-20 rounded-md bg-lime-50 p-1">
+              <div
+                key={index}
+                className="flex w-full gap-2.5 rounded-md border p-2 shadow-sm md:p-2.5"
+              >
+                <div className="max-h-22 max-w-20 overflow-hidden rounded bg-lime-50">
                   <ProductThumbnail
                     width={170}
                     height={170}
-                    imageKey={product?.images?.items[0]?.imageKey}
-                    className="aspect-[65/77] h-auto w-full object-contain md:aspect-square"
+                    imageKey={product?.thumbImage}
+                    className="aspect-square h-auto w-full object-contain"
                     isStatic
                     alt="Product Image"
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <Text responsive className="line-clamp-2">
+                  <Text
+                    as="span"
+                    size="base"
+                    className="line-clamp-2 text-sm"
+                    responsive
+                  >
                     {product?.title}
                   </Text>
-                  <div className="flex items-center gap-2">
-                    {!!showStrikedPrice && (
+                  {inventoryMapping &&
+                    (product.qty > inventoryMapping[product.recordKey] ? (
                       <Text
+                        as="span"
                         size="sm"
-                        as="p"
-                        className="capitalize line-through"
+                        className="mt-auto w-fit rounded-md bg-gray-400 px-2 py-0.5 text-white-a700"
                         responsive
                       >
-                        ₹{product?.listingPrice}
+                        Out of Stock
                       </Text>
-                    )}
-                    <Text responsive>{product?.price}</Text>
-                  </div>
-                  <div className="flex gap-2">
-                    <Text responsive>Qty:</Text>
-                    <Text responsive>{product?.qty}</Text>
-                  </div>
+                    ) : (
+                      <>
+                        <ProductPricing
+                          price={product?.price}
+                          listingPrice={product?.listingPrice}
+                          cartItemType={product?.cartItemType}
+                          isFreeProduct={isFreeProduct}
+                          slug={product?.slug}
+                        />
+                        {!!product?.qty && (
+                          <Text
+                            size="sm"
+                            as="p"
+                            className="my-1 text-gray-500"
+                            responsive
+                          >
+                            Qty: {product?.qty}
+                          </Text>
+                        )}
+                      </>
+                    ))}
                 </div>
               </div>
             );
           })}
-          <div className="flex flex-col gap-2">
+          <div className="mt-1 flex flex-col gap-2">
             <SummaryItem
               label="Subtotal"
               value={totalPrice}
@@ -354,7 +450,7 @@ const Checkout = () => {
                 color="text-green-600"
               />
             )}
-            {prepaidDiscount > 0 && (
+            {selectedPaymentMethod === "PREPAID" && prepaidDiscount > 0 && (
               <SummaryItem
                 label={`${prepaidDiscountPercent}% Online Payment Discount`}
                 value={-prepaidDiscount}
@@ -384,9 +480,9 @@ const Checkout = () => {
             )}
           </div>
           <div className="h-px bg-black-900" />
-          <div className="flex flex-col">
-            <div className="flex flex-col justify-between">
-              <div className="flex justify-between gap-1">
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-col justify-between gap-0.5">
+              <div className="flex justify-between gap-2">
                 <Heading size="xl" as="h3" responsive>
                   Total
                 </Heading>
@@ -394,15 +490,18 @@ const Checkout = () => {
                   ₹{grandTotal.toFixed(2)}
                 </Heading>
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <Text size="xs" as="span" className="text-[#696969]">
                   Inclusive of all taxes
                 </Text>
-                <Text className="font-light text-green-600" size="sm">
+                <Text className="text-green-600" size="sm">
                   You Saved ₹{totalSaved?.toFixed(2)}
                 </Text>
               </div>
             </div>
+            <Text as="span" size="sm" className="text-gray-600" responsive>
+              Estimated delivery within 3-5 days
+            </Text>
           </div>
         </div>
       </Accordion>
@@ -410,67 +509,135 @@ const Checkout = () => {
   };
 
   return (
-    <div className="container-main mb-8 flex w-full flex-col justify-center gap-8 py-4 sm:gap-10 md:flex-row lg:gap-12">
-      <div className="order-1 md:hidden">
-        <OrderSummary />
+    <main className="container-main my-4 flex min-h-[calc(100dvh-170px)] w-full flex-col gap-7 sm:my-6 sm:min-h-[calc(100dvh-180px)] md:min-h-[calc(100dvh-190px)] lg:my-8 lg:min-h-[calc(100dvh-200px)]">
+      <PaymentLoader loading={loading} />
+
+      <div className="hidden flex-wrap items-center justify-center gap-2 md:flex">
+        <Text as="h3" size="xl" className="uppercase text-gray-600/90">
+          1. Shopping Cart
+        </Text>
+        <ArrowIconSVG size={18} strokeColor="#666666bb" />
+        <Text as="h3" size="xl" className="uppercase">
+          2. Checkout
+        </Text>
+        <ArrowIconSVG size={18} />
+        <Text as="h3" size="xl" className="uppercase text-gray-600/90">
+          3. Order Complete
+        </Text>
       </div>
 
-      <div className="order-2 md:order-1 md:w-6/12">
-        <AddressSection variant="CHECKOUT" />
-      </div>
-      <div className="order-3 flex h-full flex-col justify-between gap-4 md:order-2">
-        <div className="hidden md:order-2 md:block">
-          <OrderSummary />
-        </div>
-
-        <div className="flex h-full flex-col justify-between gap-4 md:order-3">
-          <Heading size="2xl" as="h3" responsive>
-            Payment Methods
-          </Heading>
-          <div className="flex w-full flex-col gap-2">
-            {prepaidEnabled && (
-              <PaymentMethods
-                label="Pay Online"
-                id="PREPAID"
-                description="Pay using credit/debit cards, net-banking, UPI, or digital wallets."
-                total={prepaidGrandTotal}
-                selectedMethod={selectedMethod}
-                handleMethodChange={handleMethodChange}
-              />
-            )}
-            {(ppcodEnabled || codEnabled) && (
-              <PaymentMethods
-                label="Cash On Delivery"
-                id="COD"
-                description={
-                  ppcodEnabled && ppcodAmount
-                    ? `Pay ₹${toDecimal(
-                        ppcodAmountToTake,
-                      )} now (non-refundable). Rest ₹${toDecimal(
-                        codGrandTotal - ppcodAmountToTake,
-                      )} on delivery.`
-                    : "Pay using Cash on Delivery."
-                }
-                total={codGrandTotal}
-                selectedMethod={selectedMethod}
-                handleMethodChange={handleMethodChange}
-                disabled={isMaxCODDisabled}
-              />
-            )}
+      {cartList.length > 0 && totalListingPrice > 0 ? (
+        <div className="mb-14 grid w-full grid-cols-1 gap-5 sm:gap-6 md:mb-0 md:grid-cols-2 md:grid-rows-[auto_auto_1fr] md:gap-x-8 lg:gap-x-10 xl:gap-x-12">
+          <div className="md:row-span-3">
+            <AddressSection variant="CHECKOUT" />
           </div>
 
-          <Button
-            variant="primary"
-            className="p-3 text-xl"
-            onClick={placeOrderHandler}
-            loader={loading}
-            loaderClass="ml-2"
-          >
-            Place Order
-          </Button>
+          <OrderSummary />
+
+          <div className="overflow-hidden rounded-md">
+            <Cashback
+              cashbackAmount={
+                selectedPaymentMethod === "COD"
+                  ? codCashbackRewardsOnOrder
+                  : prepaidCashbackRewardsOnOrder
+              }
+              amountNeeded={
+                selectedPaymentMethod === "COD" &&
+                amountNeededToAvailCodCashback.isEnabled
+                  ? toDecimal(
+                      amountNeededToAvailCodCashback.amount - codGrandTotal,
+                    )
+                  : selectedPaymentMethod === "PREPAID" &&
+                      amountNeededToAvailPrepaidCashback.isEnabled
+                    ? toDecimal(
+                        amountNeededToAvailPrepaidCashback.amount -
+                          prepaidGrandTotal,
+                      )
+                    : 0
+              }
+            />
+          </div>
+
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2.5">
+              <Heading size="2xl" as="h3" className="font-medium" responsive>
+                Payment Methods
+              </Heading>
+              <div className="flex w-full flex-col gap-2 md:gap-2.5">
+                {prepaidEnabled && (
+                  <PaymentMethods
+                    label="Pay Online"
+                    id="PREPAID"
+                    tag={
+                      !!prepaidDiscount &&
+                      `EXTRA ${prepaidDiscountPercent}% OFF ${
+                        !!maxPrepaidDiscount && `UP TO ₹${maxPrepaidDiscount}`
+                      }`
+                    }
+                    tagVariant="success"
+                    description={
+                      onlineDisabled
+                        ? `Online payment disabled for you coupon "${appliedCoupon?.code}"`
+                        : "Pay using credit/debit cards, net-banking, UPI, or digital wallets."
+                    }
+                    total={prepaidGrandTotal}
+                    selectedPaymentMethod={selectedPaymentMethod}
+                    onMethodChange={handleMethodChange}
+                    disabled={onlineDisabled}
+                  />
+                )}
+                {(ppcodEnabled || codEnabled) && (
+                  <PaymentMethods
+                    label="Cash On Delivery"
+                    id="COD"
+                    tag={!!codCharges && `₹${toDecimal(codCharges)} EXTRA`}
+                    tagVariant="danger"
+                    description={
+                      codCouponDisabled
+                        ? `COD payment disabled for your coupon "${appliedCoupon?.code}"`
+                        : isMaxCODDisabled
+                          ? `COD payment is not allowed for orders above ₹${maxCOD}.`
+                          : (ppcodEnabled && ppcodAmount) || ppcodCouponEnabled
+                            ? `Pay ₹${toDecimal(
+                                ppcodAmountToTake,
+                              )} now (non-refundable). Rest ₹${toDecimal(
+                                codGrandTotal - ppcodAmountToTake,
+                              )} on delivery.`
+                            : "Pay using Cash on Delivery."
+                    }
+                    total={codGrandTotal}
+                    selectedPaymentMethod={selectedPaymentMethod}
+                    onMethodChange={handleMethodChange}
+                    disabled={codCouponDisabled || isMaxCODDisabled}
+                  />
+                )}
+              </div>
+            </div>
+
+            <div className="fixed bottom-0 left-0 w-full border-t bg-white-a700 px-3 py-2.5 sm:px-5 md:relative md:border-none md:p-0">
+              <Button
+                variant="primary"
+                size="large"
+                className="w-full py-2.5"
+                onClick={placeOrderHandler}
+                loader={loading}
+                loaderClass="ml-2"
+                disabled={
+                  !isReady ||
+                  !isValidAddress(currentAddress) ||
+                  !isInventoryCheckReady ||
+                  loading
+                }
+              >
+                Place Order
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <EmptyCart />
+      )}
+    </main>
   );
 };
 

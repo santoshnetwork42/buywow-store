@@ -53,16 +53,15 @@ const AddressForm = React.memo(() => {
         addressErrors={addressErrors}
         setAddressErrors={setAddressErrors}
       />
-      <div className="flex justify-center">
-        <Button
-          type="submit"
-          variant="primary"
-          className="w-full gap-2 p-2 px-4 text-xl"
-          loader={isLoading}
-        >
-          Add Address
-        </Button>
-      </div>
+      <Button
+        type="submit"
+        variant="primary"
+        size="medium"
+        className="h-[36px] w-full sm:h-[36px] sm:w-1/2 md:h-[44px] lg:h-[44px]"
+        loader={isLoading}
+      >
+        Add Address
+      </Button>
     </form>
   );
 });

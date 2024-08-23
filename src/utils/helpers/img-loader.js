@@ -2,16 +2,15 @@ import { MEDIA_BASE_URL } from "@/config";
 
 export const getPublicImageURL = ({
   key,
-  resize,
+  resize = 500,
   quality = 75,
   addPrefix = false,
-}) => {
-  if (resize) {
-    if (addPrefix) {
-      return `https://${MEDIA_BASE_URL}/public/${key}?w=${resize}&q=${Math.max(75, quality)}&f=webp`;
-    }
+} = {}) => {
+  if (!key) return "";
 
-    return `${key}?w=${resize}&q=${Math.max(75, quality)}&f=webp`;
-  }
-  return `${key}?f=webp`;
+  const baseUrl = addPrefix ? `https://${MEDIA_BASE_URL}/public/` : "";
+  const resizeParam = resize ? `w=${resize}&` : "";
+  const qualityParam = `q=${Math.max(75, quality)}&`;
+
+  return `${baseUrl}${key}?${resizeParam}${qualityParam}f=webp`;
 };

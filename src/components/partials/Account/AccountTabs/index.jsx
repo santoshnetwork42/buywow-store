@@ -20,12 +20,13 @@ const AccountTabButton = React.memo(({ item, isActive, onClick }) => (
   <Button
     onClick={onClick}
     size="large"
-    className={`items-center justify-between rounded-md px-3 py-3 hover:bg-amber-200/25 ${isActive ? "bg-amber-200 font-medium hover:bg-amber-200" : ""} ${item.component === "Logout" ? "justify-start" : ""}`}
+    className={`items-center justify-between rounded-md px-3 py-2 hover:bg-orange-500/50 ${isActive ? "bg-orange-500 font-medium hover:bg-orange-500" : ""} ${item.component === "Logout" ? "justify-start" : ""}`}
   >
     <Heading
       as="span"
       size="base"
-      className="flex items-center text-left md:gap-3"
+      className="flex items-center text-left text-sm font-normal md:gap-3"
+      responsive
     >
       <span className="hidden md:block">{item.icon}</span>
       {item.name}

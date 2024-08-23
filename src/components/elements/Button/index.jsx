@@ -57,7 +57,7 @@ const Button = ({
     (e) => {
       if (onClick && !disabled && !loader) {
         e.preventDefault();
-        if (!!redirectTo) {
+        if (redirectTo) {
           router.push(redirectTo);
         }
         onClick(e);

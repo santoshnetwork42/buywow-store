@@ -8,13 +8,13 @@ import {
   trackEvent,
   userMapper,
 } from "@/utils/events";
-import { v4 as uuid } from "uuid";
 import {
   analyticsMetaDataMapper,
   getRecordKey,
   getSource,
 } from "@/utils/helpers";
 import { select } from "redux-saga/effects";
+import { v4 as uuid } from "uuid";
 
 const eventSource = getSource();
 

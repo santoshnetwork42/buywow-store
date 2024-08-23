@@ -400,3 +400,12 @@ export const uploadImages = async (file, prefix = "wow", level = "public") => {
     return key;
   }
 };
+
+export const isValidAddress = (address) => {
+  const { name, city, pinCode, address: streetAddress } = address || {};
+
+  if (!name || !streetAddress || !city || !pinCode) {
+    return false;
+  }
+  return true;
+};

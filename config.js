@@ -1,3 +1,4 @@
+export const AUDITZ = process.env.NEXT_PUBLIC_AUDITZ === "true";
 export const STRAPI_API_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
 export const STRAPI_API_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL;
 export const AWS_CLIENT_ID = process.env.NEXT_PUBLIC_AWS_CLIENT_ID;
@@ -5,6 +6,7 @@ export const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH;
 export const MEDIA_BASE_URL = process.env.NEXT_PUBLIC_MEDIA_BASE_URL;
 export const STORE_ID = process.env.NEXT_PUBLIC_STORE_ID;
 export const STORE_PREFIX = process.env.NEXT_PUBLIC_STORE_PREFIX;
+export const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 export const GUEST_CHECKOUT = process.env.NEXT_PUBLIC_GUEST_CHECKOUT;
 export const RAZORPAY_SCRIPT = "https://checkout.razorpay.com/v1/checkout.js";
 export const RAZORPAY_KEY = process.env.NEXT_PUBLIC_RAZORPAY_KEY;
@@ -14,6 +16,12 @@ export const GEOCODING_API_URL =
 export const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 export const GOKWIK_MID = process.env.NEXT_PUBLIC_GOKWIK_MID;
 export const GOKWIK_SCRIPT = process.env.NEXT_PUBLIC_GOKWIK_SCRIPT;
+export const LIMECHAT_BASE_URL = process.env.NEXT_PUBLIC_LIMECHAT_BASE_URL;
+export const LIMECHAT_ENABLED =
+  process.env.NEXT_PUBLIC_LIMECHAT_ENABLED === "true";
+export const LIMECHAT_WEBSITE_TOKEN =
+  process.env.NEXT_PUBLIC_LIMECHAT_WEBSITE_TOKEN;
+export const WISEPOPS_KEY = process.env.NEXT_PUBLIC_WISEPOPS_KEY;
 export const WORDPRESS_URL = process.env.NEXT_PUBLIC_WP_URL;
 export const WORDPRESS_MEDIA_URL = process.env.NEXT_PUBLIC_WP_MEDIA_URL;
 export const WORDPRESS_IP = process.env.NEXT_PUBLIC_WP_IP;

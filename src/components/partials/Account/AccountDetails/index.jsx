@@ -131,7 +131,7 @@ const AccountDetails = React.memo(() => {
         type="submit"
         variant="primary"
         size="medium"
-        className="h-[36px] w-full sm:h-[36px] sm:w-36 md:h-[44px] md:w-44 lg:h-[44px] lg:w-48"
+        className="h-[36px] w-full sm:h-[36px] sm:w-1/2 md:h-[44px] lg:h-[44px]"
       >
         Save Changes
       </Button>

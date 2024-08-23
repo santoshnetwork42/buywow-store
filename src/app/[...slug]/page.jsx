@@ -74,9 +74,7 @@ const Breadcrumb = dynamic(() => import("@/components/blocks/Breadcrumb"));
 const VideoSection = dynamic(
   () => import("@/components/partials/Others/VideoSection"),
 );
-const BlogSection = dynamic(
-  () => import("@/components/partials/Others/BlogSection"),
-);
+const BlogSection = dynamic(() => import("@/components/blocks/BlogSection"));
 const RecentlyViewed = dynamic(
   () => import("@/components/blocks/RecentlyViewed"),
 );

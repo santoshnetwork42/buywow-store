@@ -4,7 +4,8 @@ import ToastComponent from "@/components/common/ToastComponent";
 import CartDrawer from "@/components/partials/CartDrawer";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
-import { AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
+import Scripts from "@/components/scripts";
+import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
   getCartUpsellProductsAPI,
   getNavbarAndFooterAPI,
@@ -17,6 +18,7 @@ import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 import GoKwikProvider from "@/utils/context/gokwik";
 import NavbarProvider from "@/utils/context/navbar";
 import { Amplify } from "aws-amplify";
+import Script from "next/script";
 
 Amplify.configure({
   ...awsExport,
@@ -47,7 +49,7 @@ async function RootLayout({ children }) {
       </head>
       <body>
         <Provider>
-          <NavbarProvider ignoreLazyLoadNavbar={false}>
+          <NavbarProvider>
             <GoKwikProvider>
               <AnnouncementProvider>
                 <div className="flex min-h-dvh w-full flex-col bg-white-a700">
@@ -58,6 +60,20 @@ async function RootLayout({ children }) {
                   <div className="flex-1">{children}</div>
                   {footerData?.data && <Footer data={footerData} />}
                 </div>
+                {AUDITZ && (
+                  <Script
+                    id="adz_rum"
+                    strategy="beforeInteractive"
+                    dangerouslySetInnerHTML={{
+                      __html: `(() => {
+                          const s = document.createElement("script");
+                          s.src = "https://rum.auditzy.com/GcPricZc-www.buywow.in.js";
+                          document.head.appendChild(s);
+                          })()`,
+                    }}
+                  />
+                )}
+                <Scripts />
               </AnnouncementProvider>
             </GoKwikProvider>
           </NavbarProvider>

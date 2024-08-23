@@ -4,6 +4,13 @@ import { addressSagaActions } from "../sagaActions/address.actions";
 export const useAddressDispatch = () => {
   const dispatch = useDispatch();
 
+  const getAddressList = (userID) => {
+    dispatch({
+      type: addressSagaActions.GET_ADDRESS_LIST,
+      payload: { id: userID },
+    });
+  };
+
   const updateCurrentAddress = (item) => {
     if (item === null) {
       dispatch({
@@ -53,6 +60,7 @@ export const useAddressDispatch = () => {
   };
 
   return {
+    getAddressList,
     updateCurrentAddress,
     deleteAddress,
   };

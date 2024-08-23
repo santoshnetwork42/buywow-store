@@ -1,24 +1,24 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import createSagaMiddleware from "redux-saga";
-import { authSlice } from "@/store/slices/auth.slice";
-import { userSlice } from "@/store/slices/user.slice";
-import { modalSlice } from "@/store/slices/modal.slice";
-import { cartSlice } from "@/store/slices/cart.slice";
 import { addressSlice } from "@/store/slices/address.slice";
+import { authSlice } from "@/store/slices/auth.slice";
+import { cartSlice } from "@/store/slices/cart.slice";
 import { eventsSlice } from "@/store/slices/events.slice";
+import { modalSlice } from "@/store/slices/modal.slice";
 import { recentlyViewedSlice } from "@/store/slices/recentlyViewed.slice";
-import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import rootSaga from "./sagas";
+import { userSlice } from "@/store/slices/user.slice";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
+  REHYDRATE,
 } from "redux-persist";
+import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "./sagas";
 
 const rootReducer = combineReducers({
   [authSlice.name]: authSlice.reducer,
@@ -53,7 +53,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const persistConfig = {
   key: "wow",
-  whitelist: ["auth", "user", "cart", "address", "recentlyViewed"],
+  whitelist: ["auth", "user", "cart", "address", "recentlyViewed", "events"],
   storage,
 };
 

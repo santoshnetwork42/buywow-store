@@ -27,9 +27,25 @@ export const useEventsDispatch = () => {
     });
   };
 
+  const spinTheWheelPlayed = (payload) => {
+    dispatch({
+      type: eventsSagaActions.SPIN_THE_WHEEL_PLAYED,
+      payload,
+    });
+  };
+
+  const spinTheWheelReward = (payload) => {
+    dispatch({
+      type: eventsSagaActions.SPIN_THE_WHEEL_REWARD,
+      payload,
+    });
+  };
+
   return {
     handleOutOfStock,
     handleProceedToCheckout,
     viewCart,
+    spinTheWheelPlayed,
+    spinTheWheelReward,
   };
 };

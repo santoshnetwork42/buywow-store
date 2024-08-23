@@ -1,15 +1,15 @@
 "use client";
 
 import { Button, Heading, Text } from "@/components/elements";
-import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
+import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AddressForm from "./AddressForm";
 import AddressList from "./AddressList";
 import AddressModal from "./AddressModal";
 
 const AddressSection = React.memo(({ variant }) => {
-  const dispatch = useDispatch();
+  const { getAddressList } = useAddressDispatch();
   const { user } = useSelector((state) => state.user);
   const { addressList } = useSelector((state) => state.address);
 
@@ -18,12 +18,9 @@ const AddressSection = React.memo(({ variant }) => {
 
   useEffect(() => {
     if (user?.id) {
-      dispatch({
-        type: addressSagaActions.GET_ADDRESS_LIST,
-        payload: { id: user.id },
-      });
+      getAddressList(user?.id);
     }
-  }, [user, dispatch]);
+  }, [user]);
 
   useEffect(() => {
     if (Array.isArray(addressList) && addressList.length === 0) {
@@ -41,13 +38,16 @@ const AddressSection = React.memo(({ variant }) => {
   }, []);
 
   return (
-    <div className="flex w-full flex-col gap-4 py-1">
+    <div
+      className={`flex w-full flex-col py-1 ${variant === "CHECKOUT" ? "gap-3 md:gap-4" : "gap-4"}`}
+    >
       <div
-        className={`flex items-center justify-between ${variant === "CHECKOUT" && "rounded-md bg-blue-50 px-4 py-1.5"}`}
+        className={`flex min-h-10 items-center justify-between md:min-h-11 ${variant === "CHECKOUT" && "rounded-md bg-blue-50 px-4 py-1.5"}`}
       >
         <Heading
           as="h3"
           size={variant === "CHECKOUT" ? "xl" : "2xl"}
+          className="font-medium"
           responsive
         >
           Address

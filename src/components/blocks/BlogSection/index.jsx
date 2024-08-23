@@ -25,12 +25,13 @@ const BlogCard = ({
   return (
     <Link href={`/blog/${blog.slug}`}>
       <div className="flex h-full flex-col rounded-xl">
-        <div className="relative aspect-[16/9] w-[400px]">
+        <div className="relative aspect-[328/212] w-[328px] md:aspect-[434/228] md:w-[434px]">
           <Image
             src={blog.featuredImage?.node?.mediaItemUrl}
             alt={blog.title}
-            fill
-            className="rounded-xl"
+            width={434}
+            height={227}
+            className="aspect-[328/212] h-auto w-full rounded-md object-cover md:aspect-[434/228]"
           />
         </div>
         <Heading
@@ -41,14 +42,14 @@ const BlogCard = ({
           {blog.title}
         </Heading>
 
-        <Text
-          as={"p"}
-          className="mt-3 line-clamp-3 flex justify-between"
-          size="sm"
-        >
-          <p>{blog?.author?.node?.name}</p>
-          <p>{dayjs(blog.date).format("MMMM DD, YYYY")} </p>
-        </Text>
+        <div className="mt-3 line-clamp-3 flex justify-between">
+          <Text as="span" size="sm">
+            {blog?.author?.node?.name}
+          </Text>
+          <Text as="span" size="sm">
+            {dayjs(blog.date).format("MMMM DD, YYYY")}{" "}
+          </Text>
+        </div>
       </div>
     </Link>
   );
