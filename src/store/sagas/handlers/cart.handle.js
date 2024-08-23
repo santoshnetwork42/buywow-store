@@ -155,8 +155,6 @@ export function* removeCouponHandler() {
 
 export function* emptyCartHandler() {
   yield put(emptyCart());
-  console.log(123);
-
   yield put({ type: cartSagaActions.MANAGE_CART });
 }
 

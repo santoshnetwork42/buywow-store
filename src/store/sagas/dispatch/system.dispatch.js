@@ -12,12 +12,20 @@ export const useSystemDispatch = () => {
     });
   };
 
+  const setStore = (payload) => {
+    dispatch({
+      type: systemSagaActions.SET_STORE,
+      payload,
+    });
+  };
+
   const destroySession = () => {
     dispatch(rootActions.destroySession());
   };
 
   return {
     updateMeta,
+    setStore,
     destroySession,
   };
 };

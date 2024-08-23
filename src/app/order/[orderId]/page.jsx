@@ -119,7 +119,6 @@ export default async function OrderPage({ params, searchParams }) {
   const { paymentId = null } = searchParams;
 
   const order = await getOrderData(orderId, paymentId);
-  console.log("order :>> ", order);
 
   if (!order) {
     return <div>Order not found or unauthorized access.</div>;

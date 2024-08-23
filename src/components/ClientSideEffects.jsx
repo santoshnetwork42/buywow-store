@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from "uuid";
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
 
-  const { updateMeta, destroySession } = useSystemDispatch();
+  const { updateMeta, setStore, destroySession } = useSystemDispatch();
   const { setUser } = useUserDispatch();
   const { auth } = useEventsDispatch();
 
@@ -98,6 +98,17 @@ const ClientSideEffects = () => {
     }
   }, [setUser, destroySession]);
 
+  const setStoreData = useCallback(() => {
+    const storeData = {
+      id: "6eb42c89-4955-4fc8-8a87-b4ff92e0908c",
+      imageUrl: "imageUrl/1709542716771-logoo.webp",
+      name: "Buy Wow",
+      title: "Wow Skin Science India",
+      webUrl: "https://wow-frontend-git-develop-wowhealth123.vercel.app",
+    };
+    setStore(storeData);
+  }, [setStore]);
+
   useEffect(() => {
     const hubListenerCancelToken = Hub.listen("auth", async (authEvent) => {
       const { event } = authEvent.payload;
@@ -119,7 +130,8 @@ const ClientSideEffects = () => {
   useEffect(() => {
     setMetaData();
     setGuestCheckout();
-  }, [setMetaData, setGuestCheckout]);
+    setStoreData();
+  }, [setMetaData, setGuestCheckout, setStoreData]);
 
   return null;
 };
