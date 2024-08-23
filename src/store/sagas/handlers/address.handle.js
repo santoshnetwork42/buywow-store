@@ -1,3 +1,4 @@
+import { showToast } from "@/components/common/ToastComponent";
 import {
   createUserAddressAPI,
   getUserAddressAPI,
@@ -32,6 +33,12 @@ export function* createAddressHandler(action) {
       const userAddress = yield call(() =>
         createUserAddressAPI(addressPayload),
       );
+
+      if (!userAddress?.data && userAddress?.errors[0]?.message) {
+        showToast.error(userAddress?.errors[0]?.message);
+        return;
+      }
+
       const { id, address, city, country, state, email, name, phone, pinCode } =
         userAddress.data.createUserAddress;
 
@@ -82,6 +89,12 @@ export function* editAddressHandler(action) {
       const userAddress = yield call(() =>
         updateUserAddressAPI(addressPayload),
       );
+
+      if (!userAddress?.data && userAddress?.errors[0]?.message) {
+        showToast.error(userAddress?.errors[0]?.message);
+        return;
+      }
+
       const { id, address, city, country, state, email, name, phone, pinCode } =
         userAddress.data.updateUserAddress;
 

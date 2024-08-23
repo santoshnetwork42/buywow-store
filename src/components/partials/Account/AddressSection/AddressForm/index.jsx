@@ -1,12 +1,12 @@
 import { Button } from "@/components/elements";
-import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
-import { addPhonePrefix } from "@/utils/helpers";
+import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddressFormFields from "./AddressFormFields";
 
 const AddressForm = React.memo(() => {
   const dispatch = useDispatch();
+  const { createAddress } = useAddressDispatch();
   const { user } = useSelector((state) => state.user);
   const { isLoading } = useSelector((state) => state.address);
 
@@ -32,15 +32,7 @@ const AddressForm = React.memo(() => {
         return;
       }
 
-      dispatch({
-        type: addressSagaActions.CREATE_ADDRESS,
-        payload: {
-          ...address,
-          userID: user?.id || null,
-          phone: addPhonePrefix(address?.phone),
-          country: address?.country || "IN",
-        },
-      });
+      createAddress(address, user?.id);
     },
     [address, user, dispatch, checkFormValidity],
   );

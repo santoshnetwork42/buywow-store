@@ -54,6 +54,13 @@ export const useEventsDispatch = () => {
     });
   };
 
+  const addPaymentInfo = (checkoutSource = "BUYWOW") => {
+    dispatch({
+      type: eventsSagaActions.ADD_PAYMENT_INFO,
+      payload: { checkoutSource },
+    });
+  };
+
   return {
     handleOutOfStock,
     handleProceedToCheckout,
@@ -61,5 +68,6 @@ export const useEventsDispatch = () => {
     spinTheWheelPlayed,
     spinTheWheelReward,
     auth,
+    addPaymentInfo,
   };
 };
