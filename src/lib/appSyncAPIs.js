@@ -23,7 +23,7 @@ import {
   updateReview,
   updateUser,
   updateUserAddress,
-  verifyCustomOTP
+  verifyCustomOTP,
 } from "@/graphql/appSync/api";
 import { errorHandler } from "@/utils/errorHandler";
 import { Amplify } from "aws-amplify";
@@ -128,7 +128,7 @@ export const getUserAPI = async () => {
 
     return response?.data?.getUser || null;
   } catch (err) {
-    errorHandler(err, "Get User API");
+    errorHandler(err, "Get User API", true);
     return null;
   }
 };

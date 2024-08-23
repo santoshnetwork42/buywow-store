@@ -1,5 +1,6 @@
 import awsExport from "@/aws-exports";
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
+import ClientSideEffects from "@/components/ClientSideEffects";
 import ToastComponent from "@/components/common/ToastComponent";
 import CartDrawer from "@/components/partials/CartDrawer";
 import Footer from "@/components/partials/Footer";
@@ -52,6 +53,7 @@ async function RootLayout({ children }) {
           <NavbarProvider>
             <GoKwikProvider>
               <AnnouncementProvider>
+                <ClientSideEffects />
                 <div className="flex min-h-dvh w-full flex-col bg-white-a700">
                   <AnnouncementBar data={announcementData} />
                   {headerData?.data && <Header data={headerData} />}

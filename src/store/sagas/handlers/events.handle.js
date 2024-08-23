@@ -1,3 +1,4 @@
+import { getUser } from "@/graphql/appSync/api";
 import { errorHandler } from "@/utils/errorHandler";
 import {
   getClientSource,
@@ -13,10 +14,12 @@ import {
   getRecordKey,
   getSource,
 } from "@/utils/helpers";
+import { generateClient } from "aws-amplify/api";
 import { select } from "redux-saga/effects";
 import { v4 as uuid } from "uuid";
 
 const eventSource = getSource();
+const client = generateClient();
 
 export function* outOfStockEventHandler({ payload }) {
   try {
@@ -113,7 +116,7 @@ export function* searchEventHandler({ payload }) {
   }
 }
 
-export function* authEventHandler({ payload = {} }) {
+export function* authEventHandler({ payload }) {
   try {
     const eventSource = getClientSource();
     const { action } = payload;
@@ -123,7 +126,7 @@ export function* authEventHandler({ payload = {} }) {
     const analyticsMeta = analyticsMetaDataMapper();
 
     if (action === "signup") {
-      const { phone } = e.payload;
+      const { phone } = payload;
       const mobile = phone?.split("+91")[1];
       initializeMoengageAndAddInfo({
         phone,

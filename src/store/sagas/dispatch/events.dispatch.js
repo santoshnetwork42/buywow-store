@@ -41,11 +41,25 @@ export const useEventsDispatch = () => {
     });
   };
 
+  const auth = (payload) => {
+    const { action, moe } = payload;
+    dispatch({
+      type: eventsSagaActions.AUTH,
+      payload: {
+        action,
+        userId: moe?.userId,
+        query: moe?.query,
+        phone: moe?.phone,
+      },
+    });
+  };
+
   return {
     handleOutOfStock,
     handleProceedToCheckout,
     viewCart,
     spinTheWheelPlayed,
     spinTheWheelReward,
+    auth,
   };
 };

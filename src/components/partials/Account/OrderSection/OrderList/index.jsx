@@ -19,7 +19,7 @@ const OrderList = React.memo(() => {
   const [totalOrder, setTotalOrder] = useState(0);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const perPage = 4;
+  const perPage = 10;
 
   const getOrders = useCallback(
     async (reset = false) => {
@@ -33,7 +33,10 @@ const OrderList = React.memo(() => {
             filter: {
               userId: { eq: user.id },
               storeId: { eq: STORE_ID },
-              status: { ne: "PENDING" },
+              and: [
+                { status: { ne: "TIMEDOUT" } },
+                { status: { ne: "PENDING" } },
+              ],
             },
             sort: [{ field: "orderDate", direction: "desc" }],
             limit: perPage,
@@ -43,13 +46,7 @@ const OrderList = React.memo(() => {
         });
 
         const { items, total, nextToken } = data.searchOrders;
-        const filteredItems = items.filter(
-          ({ status }) => status !== "TIMEDOUT",
-        );
-
-        setOrders((prev) =>
-          reset ? filteredItems : [...prev, ...filteredItems],
-        );
+        setOrders((prev) => (reset ? items : [...prev, ...items]));
         setTotalOrder(total);
         setToken(nextToken);
       } catch (error) {
@@ -65,7 +62,7 @@ const OrderList = React.memo(() => {
     if (user) {
       getOrders(true);
     }
-  }, [user, getOrders]);
+  }, [user]);
 
   const memoizedOrders = useMemo(
     () => orders.map((order) => <OrderRow key={order.id} order={order} />),
