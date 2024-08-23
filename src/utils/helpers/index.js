@@ -401,6 +401,10 @@ export const uploadImages = async (file, prefix = "wow", level = "public") => {
   }
 };
 
+export const removeHtmlTags = (input) => {
+  return input ? input?.replace(/<\/?[^>]+>/g, "") : input;
+};
+
 export const isValidAddress = (address) => {
   const { name, city, pinCode, address: streetAddress } = address || {};
 

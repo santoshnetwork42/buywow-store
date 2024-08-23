@@ -16,14 +16,14 @@ import {
   getProductById,
   getReviews,
   getReviewsAnalytics,
+  getStore,
   getUser,
   getUserRewards,
   searchCMSCollectionProducts,
-  searchCMSProducts,
   updateReview,
   updateUser,
   updateUserAddress,
-  verifyCustomOTP,
+  verifyCustomOTP
 } from "@/graphql/appSync/api";
 import { errorHandler } from "@/utils/errorHandler";
 import { Amplify } from "aws-amplify";
@@ -37,23 +37,18 @@ Amplify.configure({
 
 const client = generateClient();
 
-export const searchCMSProductsAPI = async (
-  productSlugs = [
-    "brightening-vitamin-c-foaming-face-wash-with-built-in-brush",
-  ],
-) => {
+export const getStoreAPI = async () => {
   try {
     const response = await client.graphql({
-      query: searchCMSProducts,
+      query: getStore,
       authMode: "apiKey",
       variables: {
-        storeId: STORE_ID,
-        products: productSlugs,
+        id: STORE_ID,
+        deviceType: "WEB",
       },
     });
 
-    const products = response?.data?.searchCMSProducts?.items || [];
-    return products;
+    return response?.data?.getStore || {};
   } catch (err) {
     errorHandler(err, "Search CMS Products API");
     return null;
