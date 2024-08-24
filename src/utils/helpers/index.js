@@ -168,9 +168,14 @@ export const checkAffiseValidity = () => {
 export const toDecimal = (price, fixedCount = 2) => {
   let num = parseFloat(price);
   if (isNaN(num)) {
-    num = 0;
+    return "0";
   }
-  return parseFloat(num.toFixed(fixedCount));
+
+  if (Number.isInteger(num)) {
+    return num.toString();
+  }
+
+  return num.toFixed(fixedCount);
 };
 
 export const formatTotalRatings = (totalRatings) => {

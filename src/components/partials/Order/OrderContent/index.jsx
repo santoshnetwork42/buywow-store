@@ -1,9 +1,9 @@
 "use client";
 
 import { showToast } from "@/components/common/ToastComponent";
-import OrderDetails from "@/components/partials/Order/OrderDetails";
-import OrderSummary from "@/components/partials/Order/OrderSummary";
-import ProductList from "@/components/partials/Order/ProductList";
+import OrderDetails from "@/components/partials/Order/OrderContent/OrderDetails";
+import OrderSummary from "@/components/partials/Order/OrderContent/OrderSummary";
+import ProductList from "@/components/partials/Order/OrderContent/ProductList";
 import ProgressSteps from "@/components/partials/Others/ProgressSteps";
 import { getOrderByIdAPI, validateTransactionAPI } from "@/lib/appSyncAPIs";
 import States from "@/utils/data/states.json";
@@ -11,12 +11,13 @@ import { errorHandler } from "@/utils/errorHandler";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import Cashback from "../../CartDrawer/Cashback";
 
 const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   const [order, setOrder] = useState(initialOrderData);
   const user = useSelector((state) => state.user?.user);
-  const [timer, setTimer] = useState(null);
-  const [counter, setCounter] = useState(0);
+  const [fetchAttempts, setFetchAttempts] = useState(0);
+  const allStatus = ["CANCELLED", "DISPATCHED", "COURIER_RETURN", "DELIVERED"];
 
   const fetchUpdatedOrder = useCallback(async () => {
     try {
@@ -52,29 +53,24 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
 
   const isPaymentProcessing = useMemo(
     () =>
-      (currentOrder?.status === "PENDING" ||
-        currentOrder?.status === "TIMEDOUT") &&
-      currentOrder?.paymentType === "PREPAID" &&
+      (order?.status === "PENDING" || order?.status === "TIMEDOUT") &&
+      order?.paymentType === "PREPAID" &&
       paymentId,
-    [currentOrder, paymentId],
+    [order, paymentId],
   );
 
   const isStatusProcessing = useMemo(
     () =>
-      (currentOrder?.status === "PENDING" ||
-        currentOrder?.status === "TIMEDOUT") &&
-      currentOrder?.checkoutChannel === "GOKWIK",
-    [currentOrder],
+      (order?.status === "PENDING" || order?.status === "TIMEDOUT") &&
+      order?.checkoutChannel === "GOKWIK",
+    [order],
   );
 
   useEffect(() => {
-    if (
-      (isStatusProcessing || isPaymentProcessing) &&
-      fetchAttempts < MAX_FETCH_ATTEMPTS
-    ) {
+    if ((isStatusProcessing || isPaymentProcessing) && fetchAttempts < 3) {
       const timerId = setTimeout(() => {
         if (isPaymentProcessing) {
-          showToast("Hold On! We're updating your payment status...", "info");
+          showToast.custom("Hold On! We're updating your payment status...");
           checkPaymentStatus();
         } else {
           fetchUpdatedOrder();
@@ -84,35 +80,25 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
 
       return () => clearTimeout(timerId);
     }
-  }, [
-    isStatusProcessing,
-    isPaymentProcessing,
-    fetchAttempts,
-    checkPaymentStatus,
-    fetchUpdatedOrder,
-  ]);
+  }, [order, paymentId]);
 
   useEffect(() => {
-    if (
-      currentUser?.id &&
-      currentOrder?.userId &&
-      currentUser.id === currentOrder.userId
-    ) {
+    if (user?.id && order?.userId && user.id === order.userId) {
       fetchUpdatedOrder();
     }
-  }, [currentUser, currentOrder, fetchUpdatedOrder]);
+  }, [user]);
 
   const { formattedState, country } = useMemo(() => {
-    if (currentOrder?.shippingAddress?.state) {
+    if (order?.shippingAddress?.state) {
       return {
         formattedState:
-          States.find((s) => s.value === currentOrder.shippingAddress.state)
+          States.find((state) => state.value === order.shippingAddress.state)
             ?.name || "",
         country: "India",
       };
     }
     return { formattedState: "", country: "" };
-  }, [currentOrder?.shippingAddress]);
+  }, [order?.shippingAddress]);
 
   const getOrderStatusType = (status) => {
     const statusMap = {
@@ -124,21 +110,6 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
     return statusMap[status] || "";
   };
 
-  const calculateOrderTotals = useMemo(() => {
-    const orderItems = currentOrder?.products?.items || [];
-    return {
-      activeItemsTotalPrice: orderItems.reduce(
-        (total, item) => total + item.quantity * item.price,
-        0,
-      ),
-      itemsTotalPrice: orderItems.reduce(
-        (total, item) =>
-          total + (item.quantity + (item.cancelledQuantity || 0)) * item.price,
-        0,
-      ),
-    };
-  }, [currentOrder?.products?.items]);
-
   if (!order) return null;
 
   return (
@@ -149,20 +120,17 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
         status={order.status}
         paymentType={order.paymentType}
         createdAt={order.createdAt}
-        shippingAddress={{ ...order.shippingAddress, state, country }}
-        statusType={getStatusType(order.status)}
+        shippingAddress={{ ...order.shippingAddress, formattedState, country }}
+        statusType={getOrderStatusType(order.status)}
       />
-      <ProductList productItems={order.products?.items || []} />
-      <OrderSummary
-        activeItemsTotalPrice={activeItemsTotalPrice}
-        itemsTotalPrice={itemsTotalPrice}
-        prepaidDiscount={order.prepaidDiscount}
-        totalDiscount={order.totalDiscount}
-        totalShippingCharges={order.totalShippingCharges}
-        totalCashOnDeliveryCharges={order.totalCashOnDeliveryCharges}
-        totalAmount={order.totalAmount}
-        appliedRewardPoints={order.appliedRewardPoints}
-        totalCashbackRefunded={order.totalCashbackRefunded}
+      <ProductList
+        productItems={order.products?.items || []}
+        allStatus={allStatus}
+      />
+      <OrderSummary order={order} />
+      <Cashback
+        cashbackAmount={order.cashbackEarned}
+        className="shadow-none sm:w-full sm:translate-x-0 sm:rounded-md"
       />
       <ActionButtons />
     </>
@@ -170,16 +138,24 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
 };
 
 const ActionButtons = React.memo(() => (
-  <div className="flex justify-between">
+  <div className="flex flex-wrap justify-center gap-2 sm:justify-between">
+    <div className="flex gap-2">
+      <Link
+        href="/account"
+        className="rounded-full bg-yellow-900 px-4 py-2 text-sm uppercase text-white-a700_01 md:px-6 md:py-3 md:text-base"
+      >
+        Your Orders
+      </Link>
+      <Link
+        href="/contact-us"
+        className="rounded-full bg-gray-200 px-4 py-2 text-sm uppercase md:px-6 md:py-3 md:text-base"
+      >
+        CONTACT US
+      </Link>
+    </div>
     <Link
-      href="/"
-      className="rounded-full bg-yellow-900 p-3 px-6 text-white-a700_01"
-    >
-      CONTACT US
-    </Link>
-    <Link
-      href="/"
-      className="rounded-full bg-yellow-900 p-3 px-6 text-white-a700_01"
+      href="/collections/all"
+      className="rounded-full bg-yellow-900 px-4 py-2 text-sm uppercase text-white-a700_01 md:px-6 md:py-3 md:text-base"
     >
       RETURN TO SHOP
     </Link>

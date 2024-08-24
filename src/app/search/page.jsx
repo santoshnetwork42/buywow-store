@@ -13,7 +13,6 @@ const Search = () => {
 
   // If you need to access specific search parameters
   const query = searchParams.get("q");
-  console.log("Search query:", query);
 
   const getProducts = useCallback(async (search) => {
     try {
