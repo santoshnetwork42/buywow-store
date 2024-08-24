@@ -29,4 +29,7 @@ export const WORDPRESS_AUTH = process.env.NEXT_PUBLIC_WP_AUTH;
 export const WORDPRESS_USERNAME = process.env.NEXT_PUBLIC_WP_USERNAME;
 export const WORDPRESS_PASSWORD = process.env.NEXT_PUBLIC_WP_PASSWORD;
 export const WORDPRESS_AVATAR_URL = process.env.NEXT_PUBLIC_WP_AVATAR_URL;
-export const STORE_NAME = process.env.NEXT_PUBLIC_STORE_NAME;
+export const TTM_CLIENT_URL = process.env.NEXT_PUBLIC_TTM_CLIENT_URL;
+export const TTM_CLIENT_API_KEY = process.env.NEXT_PUBLIC_TTM_CLIENT_API_KEY;
+export const TTM_CLIENT_THRESHOLD =
+  process.env.NEXT_PUBLIC_TTM_CLIENT_THRESHOLD;
