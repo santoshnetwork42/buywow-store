@@ -1,6 +1,264 @@
 // ==================================================
 // NEW APIs
 
+export const getInitialData = /* GraphQL */ `
+  query getInitialData(
+    $getStoreSettingInput: GetStoreSettingInput!
+    $storeId: ID!
+    $deviceType: DeviceType!
+    $couponNextToken: String
+    $ruleEngineLimit: Int
+    $ruleEngineNextToken: String
+    $shippingTierFilter: SearchableShippingTierFilterInput!
+  ) {
+    getStoreSetting(input: $getStoreSettingInput) {
+      id
+      configurations {
+        ORDER_COUNT
+        COD_CHARGES
+        PREPAID_DISCOUNT_PERCENT
+        MAX_COD_AMOUNT
+        MAX_PREPAID_DISCOUNT
+        GUEST_CHECKOUT
+        COD_ENABLED
+        PREPAID_ENABLED
+        TIMER_TTILE
+        TIMER_DESCRIPTION
+        TIMER_COLOR
+        TIMER_BG_COLOR
+        TIMER_END_TIME
+        TIMER_START_TIME
+        IS_DAILY_TIMER
+        TIMER_ENABLED
+        BLOCK_INVENTORY
+        GOKWIK_ENABLED
+        PPCOD_ENABLED
+        PPCOD_AMOUNT
+      }
+    }
+
+    getStore(id: $storeId, deviceType: $deviceType) {
+      id
+      name
+      title
+      description
+      isActive
+      webUrl
+      trackingUrl
+      imageUrl
+      darkImageUrl
+      banners {
+        webKey
+        mobileKey
+        link
+        name
+        isArchive
+        priority
+        deviceType
+      }
+      announcements {
+        label
+        link
+        color
+        textColor
+        deviceType
+        isArchive
+      }
+      socialLinks {
+        instagram
+        facebook
+        twitter
+        youtube
+        pinterest
+      }
+    }
+
+    searchShippingTiers(filter: $shippingTierFilter) {
+      items {
+        id
+        storeId
+        paymentType
+        amount
+        minOrderValue
+        maxOrderValue
+        createdAt
+        updatedAt
+        __typename
+      }
+    }
+
+    listVariantGroups(storeId: $storeId) {
+      id
+      label
+      variantOptions {
+        id
+        label
+      }
+    }
+
+    getTopCoupons(
+      storeId: $storeId
+      deviceType: $deviceType
+      nextToken: $couponNextToken
+    ) {
+      items {
+        id
+        description
+        couponNote
+        tAndC
+        couponTitle
+        code
+        priority
+        couponType
+        buyXQuantity
+        getYAmount
+        getYPercentage
+        getYQuantity
+        getYProduct
+        getYStoreProduct {
+          id
+          title
+          price
+          listingPrice
+          sku
+          subCategory {
+            name
+            slug
+          }
+          category {
+            name
+            slug
+          }
+          images {
+            items {
+              id
+              imageKey
+              alt
+            }
+          }
+        }
+        minOrderValue
+        maxDiscount
+        expirationDate
+        autoApply
+        applicableCollections
+        applicableProducts
+        paymentMethod
+        isAffiliated
+        applyPrepaidDiscount
+        applyOnAllVariants
+        isPDPFeatured
+        isFeatured
+      }
+    }
+
+    searchProducts {
+      items {
+        id
+        title
+        collections
+        vendor
+        status
+        minimumOrderQuantity
+        maximumOrderQuantity
+        subCategory {
+          name
+          slug
+        }
+        isFeatured
+        category {
+          name
+          slug
+        }
+        slug
+        price
+        sku
+        position
+        listingPrice
+        tags
+        inventory
+        blockedInventory
+        continueSellingOutOfStock
+        rating
+        totalRatings
+        thumbImages
+        isInventoryEnabled
+        totalOrders
+        recommended
+        recommendPriority
+        recommendPrice
+        variants {
+          items {
+            id
+            title
+            minimumOrderQuantity
+            maximumOrderQuantity
+            price
+            position
+            listingPrice
+            images {
+              items {
+                id
+              }
+            }
+            inventory
+            blockedInventory
+            status
+          }
+        }
+        images {
+          items {
+            id
+            position
+            alt
+            width
+            height
+            imageKey
+            isThumb
+          }
+        }
+      }
+      nextToken
+      total
+    }
+
+    byStoreIdRuleEngine(
+      storeId: $storeId
+      limit: $ruleEngineLimit
+      nextToken: $ruleEngineNextToken
+    ) {
+      items {
+        id
+        storeId
+        name
+        description
+        event
+        enabled
+        type
+        minOrderValue
+        maxCashbackAllowed
+        cashbackPercentage
+        expirePeriodInDays
+        cashbackPoint
+        couponName
+        maxDebitableCashbackPerMonth
+        maxCreditableCashbackPerMonth
+        conditions {
+          event
+          attributes {
+            key
+            operator
+            value
+          }
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
 export const getCartUpsellProducts = /* GraphQL */ `
   query getCartUpsellProducts($storeId: String!) {
     getCartUpsellProducts(storeId: $storeId)

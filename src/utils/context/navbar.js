@@ -12,7 +12,7 @@ const client = generateClient();
 
 export const NavbarContext = createContext();
 
-function NavbarProvider({ children }) {
+function NavbarProvider({ children, initialData }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
@@ -73,6 +73,19 @@ function NavbarProvider({ children }) {
       appliedCoupon={appliedCoupon}
       user={user}
       deviceType="WEB"
+      listVariantGroups={initialData?.listVariantGroups}
+      byStoreIdRuleEngine={initialData?.byStoreIdRuleEngine?.items}
+      getStoreSetting={initialData?.getStoreSetting?.configurations}
+      searchShippingTiers={initialData?.searchShippingTiers?.items}
+      getTopCoupons={
+        initialData?.getTopCoupons?.items?.filter((coupon) => {
+          const { expirationDate } = coupon;
+          return (
+            !expirationDate ||
+            new Date(expirationDate).getTime() >= new Date().getTime()
+          );
+        }) || []
+      }
     >
       <NavbarContext.Provider value={contextValue}>
         {children}
