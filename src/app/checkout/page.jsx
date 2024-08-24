@@ -5,10 +5,10 @@ import { Button } from "@/components/elements";
 import AddressSection from "@/components/partials/Account/AddressSection";
 import Cashback from "@/components/partials/CartDrawer/Cashback";
 import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
-import CheckoutHeader from "@/components/partials/Checkout/CheckoutHeader";
 import OrderSummary from "@/components/partials/Checkout/OrderSummary";
 import PaymentLoader from "@/components/partials/Checkout/PaymentLoader";
 import PaymentMethodsSection from "@/components/partials/Checkout/PaymentMethodsSection";
+import ProgressSteps from "@/components/partials/Others/ProgressSteps";
 import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -213,13 +213,13 @@ const Checkout = () => {
       }
 
       setPaymentLoader(true);
-      const [
-        { success, code, error, formError, order, payment, transaction },
-        rzpEnabled,
-      ] = await Promise.all([
+      const [orderResult, rzpEnabled] = await Promise.all([
         placeOrderV1(variables),
         loadScript(RAZORPAY_SCRIPT),
       ]);
+
+      const { success, code, error, formError, order, payment, transaction } =
+        orderResult;
 
       if (code === "INVALID_ADDRESS") {
         showToast.error(
@@ -339,7 +339,7 @@ const Checkout = () => {
     <main className="container-main my-4 flex min-h-[calc(100dvh-170px)] w-full flex-col gap-7 sm:my-6 sm:min-h-[calc(100dvh-180px)] md:min-h-[calc(100dvh-190px)] lg:my-8 lg:min-h-[calc(100dvh-200px)]">
       <PaymentLoader loading={paymentLoader || loading} />
 
-      <CheckoutHeader />
+      <ProgressSteps activeStep={2} />
 
       {cartList.length > 0 && totalListingPrice > 0 ? (
         <div className="mb-14 grid w-full grid-cols-1 gap-5 sm:gap-6 md:mb-0 md:grid-cols-2 md:grid-rows-[auto_auto_1fr] md:gap-x-8 lg:gap-x-10 xl:gap-x-12">
