@@ -410,6 +410,7 @@ const Checkout = () => {
               ppcodAmount={ppcodAmount}
               ppcodAmountToTake={ppcodAmountToTake}
               codGrandTotal={codGrandTotal}
+              maxCOD={maxCOD}
             />
 
             <div className="fixed bottom-0 left-0 w-full border-t bg-white-a700 px-3 py-2.5 sm:px-5 md:relative md:border-none md:p-0">
