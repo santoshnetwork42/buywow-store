@@ -5,6 +5,7 @@ import ToastComponent from "@/components/common/ToastComponent";
 import CartDrawer from "@/components/partials/CartDrawer";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
+import StickyViewCart from "@/components/partials/StickyViewCart";
 import Scripts from "@/components/scripts";
 import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
@@ -58,6 +59,7 @@ async function RootLayout({ children }) {
                   <AnnouncementBar data={announcementData} />
                   {headerData?.data && <Header data={headerData} />}
                   <CartDrawer upsellProducts={upsellProducts} />
+                  <StickyViewCart />
                   <ToastComponent />
                   <div className="flex-1">{children}</div>
                   {footerData?.data && <Footer data={footerData} />}
