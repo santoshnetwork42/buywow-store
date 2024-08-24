@@ -9,6 +9,7 @@ import {
   findUserAddresses,
   getCartUpsellProducts,
   getCMSPages,
+  getInitialData,
   getLoyalty,
   getNavbarAndFooter,
   getOrder,
@@ -542,5 +543,30 @@ export const validateTransactionAPI = async (orderId, paymentId) => {
   } catch (error) {
     errorHandler(error, "Validate Transaction API");
     return null;
+  }
+};
+
+export const getInitialDataAPI = async (storeId, deviceType) => {
+  try {
+    const response = await client.graphql({
+      query: getInitialData,
+      variables: {
+        storeId,
+        deviceType,
+        getStoreSettingInput: {
+          storeId: storeId,
+          deviceType: deviceType,
+        },
+        shippingTierFilter: {
+          storeId: { eq: storeId },
+        },
+      },
+      authMode: "apiKey",
+    });
+
+    return response;
+  } catch (error) {
+    errorHandler("Error Updating User", error);
+    return error;
   }
 };
