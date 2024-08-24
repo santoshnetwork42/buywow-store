@@ -115,7 +115,7 @@ const ProductCard = memo(
       >
         <div
           className="relative overflow-hidden rounded-lg"
-          style={{ backgroundColor: imageBgColor || "#FFFFFF" }}
+          style={{ backgroundColor: imageBgColor || "#F7F7E7" }}
         >
           <ProductThumbnail
             width={500}

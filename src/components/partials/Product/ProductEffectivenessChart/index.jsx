@@ -3,7 +3,7 @@ import CircularProgressBar from "./CircularProgress";
 
 const EffectivenessSection = ({ number, text, isReversed }) => (
   <div
-    className={`flex h-1/2 items-center gap-6 ${isReversed ? "flex-row-reverse" : ""}`}
+    className={`flex h-1/2 w-full items-center gap-6 ${isReversed ? "flex-row-reverse" : ""}`}
   >
     <CircularProgressBar
       percentage={number}
@@ -24,7 +24,7 @@ const ProductEffectivenessChart = ({ effectivenessChart }) => {
     return null;
 
   return (
-    <div className="flex w-[80%] flex-1 flex-col items-center overflow-hidden rounded-lg md:max-w-[50%]">
+    <div className="flex w-[90%] max-w-[420px] flex-1 flex-col items-center overflow-hidden rounded-lg sm:w-[80%] md:max-w-[50%]">
       {effectivenessChart.map((item, index) => (
         <EffectivenessSection
           key={index}

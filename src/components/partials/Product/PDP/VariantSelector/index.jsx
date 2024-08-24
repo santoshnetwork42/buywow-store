@@ -1,5 +1,5 @@
-import React, { useMemo } from "react";
 import { Heading, Img, Text } from "@/components/elements";
+import React, { useMemo } from "react";
 
 const VariantSelector = React.memo(({ variantGroups, onVariantChange }) => {
   const sortedVariantGroups = useMemo(
@@ -52,15 +52,14 @@ const VariantGroup = React.memo(({ group, onVariantChange }) => {
 });
 
 const VariantItem = React.memo(({ variant, onChange }) => {
-  const { title, price, listingPrice, selected, label, thumbImage } = variant;
+  const { title, price, listingPrice, selected, label, thumbImage, images } =
+    variant;
 
-  const containerClassName = useMemo(
-    () =>
-      `flex max-w-[112px] cursor-pointer flex-col gap-2 rounded bg-orange-50_01 p-1.5 sm:max-w-[130px] md:p-2 ${
-        selected ? "outline outline-2 outline-black-900" : ""
-      }`,
-    [selected],
-  );
+  const productImage = thumbImage || images?.items[0]?.imageKey;
+
+  const containerClassName = `flex max-w-[112px] cursor-pointer flex-col gap-2 rounded bg-orange-50_01 p-1.5 sm:max-w-[130px] md:p-2 ${
+    selected ? "outline outline-2 outline-black-900" : ""
+  }`;
 
   const discount = useMemo(
     () =>
@@ -74,10 +73,10 @@ const VariantItem = React.memo(({ variant, onChange }) => {
 
   return (
     <div className={containerClassName} onClick={onChange}>
-      {thumbImage && (
+      {productImage && (
         <div className="aspect-[114/92] rounded bg-white-a700">
           <Img
-            src={thumbImage}
+            src={productImage}
             width={300}
             height={300}
             alt={title || "Variant image"}
