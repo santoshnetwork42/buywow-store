@@ -1,4 +1,5 @@
 import { Text } from "@/components/elements";
+import { toDecimal } from "@/utils/helpers";
 import React, { useMemo } from "react";
 
 const SummaryRow = React.memo(
@@ -17,7 +18,7 @@ const SummaryRow = React.memo(
         <Text
           as="span"
           size={valueSize}
-          className={`text-sm ${valueClassName}`}
+          className={`text-sm text-gray-600 ${valueClassName}`}
           responsive
         >
           {value}
@@ -70,10 +71,15 @@ const OrderSummary = React.memo(
                 className="font-light text-gray-600 line-through"
                 responsive
               >
-                ₹{itemsTotalPrice.toFixed(2)}
+                ₹{toDecimal(itemsTotalPrice)}
               </Text>
-              <Text as="span" size="base" className="text-sm" responsive>
-                ₹{activeItemsTotalPrice.toFixed(2)}
+              <Text
+                as="span"
+                size="base"
+                className="text-sm text-gray-600"
+                responsive
+              >
+                ₹{toDecimal(activeItemsTotalPrice)}
               </Text>
             </div>
           }
@@ -90,7 +96,7 @@ const OrderSummary = React.memo(
         {!!totalDiscount && (
           <SummaryRow
             label="Discount:"
-            value={`-₹${totalDiscount.toFixed(2)}`}
+            value={`-₹${toDecimal(totalDiscount)}`}
           />
         )}
 
@@ -98,7 +104,7 @@ const OrderSummary = React.memo(
           label="Shipping:"
           value={
             totalShippingCharges
-              ? `₹${totalShippingCharges.toFixed(2)}`
+              ? `₹${toDecimal(totalShippingCharges)}`
               : "Free shipping"
           }
         />
@@ -106,14 +112,14 @@ const OrderSummary = React.memo(
         {!!totalCashOnDeliveryCharges && (
           <SummaryRow
             label="COD Charges:"
-            value={`₹${totalCashOnDeliveryCharges.toFixed(2)}`}
+            value={`₹${toDecimal(totalCashOnDeliveryCharges)}`}
           />
         )}
 
         <SummaryRow
           label="Total:"
           value={`₹${formattedTotal}`}
-          valueClassName="text-base"
+          valueClassName="text-base text-black-900"
           valueSize="xl"
           showBorder={false}
         />

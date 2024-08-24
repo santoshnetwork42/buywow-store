@@ -1,16 +1,12 @@
-import OrderDetails from "@/components/partials/Order/OrderDetails";
-import OrderSummary from "@/components/partials/Order/OrderSummary";
-import ProductList from "@/components/partials/Order/ProductList";
-import ProgressSteps from "@/components/partials/Others/ProgressSteps";
+import OrderContent from "@/components/partials/Order/OrderContent";
 import { STORE_ID } from "@/config";
 import { getOrderByIdAPI } from "@/lib/appSyncAPIs";
-import { calculateTotals } from "@/utils/helpers";
-import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 const getOrderData = async (orderId, paymentId) => {
   try {
-    const { getOrder: response } = await getOrderByIdAPI({ id: orderId });
+    const response = await getOrderByIdAPI({ id: orderId });
 
     if (!response || response.storeId !== STORE_ID) {
       return null;
@@ -25,18 +21,7 @@ const getOrderData = async (orderId, paymentId) => {
       return null;
     }
 
-    const products =
-      response.products?.items?.map((item) => ({
-        ...item,
-        thumbImage:
-          item.variant?.images?.items?.[0]?.imageKey ||
-          item.product?.images?.items?.[0]?.imageKey,
-      })) || [];
-
-    return {
-      ...response,
-      products: { ...response.products, items: products },
-    };
+    return response;
   } catch (error) {
     console.error("Error fetching order data:", error);
     return null;
@@ -55,87 +40,24 @@ const OrderSkeleton = () => (
   </div>
 );
 
-const OrderContent = ({ order }) => {
-  const {
-    code,
-    status,
-    paymentType,
-    createdAt,
-    prepaidDiscount,
-    totalDiscount,
-    totalAmount,
-    appliedRewardPoints,
-    totalCashbackRefunded,
-    totalShippingCharges,
-    products,
-    totalCashOnDeliveryCharges,
-  } = order;
-
-  const productItems = products?.items || [];
-  const { activeItemsTotalPrice, itemsTotalPrice } =
-    calculateTotals(productItems);
-
-  return (
-    <>
-      <ProgressSteps activeStep={3} className="mb-5 mt-4" />
-
-      <OrderDetails
-        code={code}
-        status={status}
-        paymentType={paymentType}
-        createdAt={createdAt}
-      />
-
-      <ProductList productItems={productItems} />
-
-      <OrderSummary
-        activeItemsTotalPrice={activeItemsTotalPrice}
-        itemsTotalPrice={itemsTotalPrice}
-        prepaidDiscount={prepaidDiscount}
-        totalDiscount={totalDiscount}
-        totalShippingCharges={totalShippingCharges}
-        totalCashOnDeliveryCharges={totalCashOnDeliveryCharges}
-        totalAmount={totalAmount}
-        appliedRewardPoints={appliedRewardPoints}
-        totalCashbackRefunded={totalCashbackRefunded}
-      />
-
-      <ActionButtons />
-    </>
-  );
-};
-
-const ActionButtons = () => (
-  <div className="flex justify-between">
-    <Link
-      href="/"
-      className="rounded-full bg-yellow-900 p-3 px-6 text-white-a700_01"
-    >
-      CONTACT US
-    </Link>
-    <Link
-      href="/"
-      className="rounded-full bg-yellow-900 p-3 px-6 text-white-a700_01"
-    >
-      RETURN TO SHOP
-    </Link>
-  </div>
-);
-
 export default async function OrderPage({ params, searchParams }) {
   const { orderId } = params;
   const { paymentId = null } = searchParams;
 
-  const order = await getOrderData(orderId, paymentId);
+  const initialOrderData = await getOrderData(orderId, paymentId);
 
-  if (!order) {
-    return <div>Order not found or unauthorized access.</div>;
+  if (!initialOrderData) {
+    redirect("/404");
   }
 
   return (
     <div className="container-main mb-main flex max-w-4xl flex-col gap-5 py-5 md:gap-6">
       <Suspense fallback={<OrderSkeleton />}>
-        <OrderContent order={order} />
+        <OrderContent
+          initialOrderData={initialOrderData}
+          orderId={orderId}
+          paymentId={paymentId}
+        />
       </Suspense>
     </div>
   );

@@ -4,12 +4,16 @@ import Link from "next/link";
 import React, { useMemo } from "react";
 
 const ProductItem = React.memo(({ item }) => {
-  const { product, variant, quantity, price, cancelledQuantity, thumbImage } =
-    item || {};
+  const { product, variant, quantity, price, cancelledQuantity } = item || {};
   const totalPrice = useMemo(
     () => toDecimal((quantity || 0) * (price || 0)),
     [quantity, price],
   );
+
+  const thumbImage =
+    variant?.images?.items?.[0]?.imageKey ||
+    product?.images?.items?.[0]?.imageKey ||
+    "";
 
   return (
     <Link

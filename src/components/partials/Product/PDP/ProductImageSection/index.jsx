@@ -1,5 +1,3 @@
-"use client";
-
 import { VideoDotIcon } from "@/assets/svg/icons";
 import { Button, Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
@@ -75,7 +73,7 @@ const DotButton = React.memo(({ isSelected, onClick, isVideo }) => {
 
 const PlayPauseButton = React.memo(({ isPlaying, onClick }) => (
   <div
-    className={`absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black-900 bg-opacity-50 p-4 text-white-a700 transition-all duration-300 ease-in-out ${isPlaying ? "scale-95" : "scale-100"}`}
+    className={`absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-black-900 bg-opacity-50 p-4 text-white-a700 transition-all duration-300 ease-in-out ${isPlaying ? "scale-95" : "scale-100"}`}
     onClick={onClick}
   >
     {isPlaying ? (
@@ -102,6 +100,94 @@ const PlayPauseButton = React.memo(({ isPlaying, onClick }) => (
     )}
   </div>
 ));
+
+const ProductImage = React.memo(
+  ({
+    image,
+    index,
+    isPlaying,
+    showPlayButton,
+    togglePlayPause,
+    promotionTag,
+    productBenefitTags,
+    videoRefs,
+  }) => (
+    <div
+      className="main-image relative flex-[0_0_100%] overflow-hidden"
+      onClick={() => image.isVideo && togglePlayPause(index)}
+    >
+      {image.isVideo ? (
+        <>
+          <video
+            ref={(el) => {
+              videoRefs.current[index] = el;
+            }}
+            src={getPublicImageURL({
+              key: image.imageKey,
+              resize: 820,
+              addPrefix: true,
+            })}
+            className="main-image m-auto aspect-square cursor-pointer rounded-lg border object-contain shadow-sm"
+            loop
+            muted
+            playsInline
+          />
+          {(showPlayButton[index] || !isPlaying[index]) && (
+            <PlayPauseButton
+              isPlaying={isPlaying[index]}
+              onClick={(e) => {
+                e.stopPropagation();
+                togglePlayPause(index);
+              }}
+            />
+          )}
+        </>
+      ) : (
+        <Img
+          src={image?.imageKey}
+          width={820}
+          height={480}
+          alt={`Product image ${index + 1}`}
+          isStatic
+          priority={index === 0}
+          className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
+          addPrefix
+        />
+      )}
+      {promotionTag?.data && index === 0 && (
+        <Text
+          as="span"
+          size="xs"
+          className="absolute left-2.5 top-2 z-10 rounded px-2 py-1 capitalize text-white-a700 md:top-2.5 md:px-2.5"
+          style={{
+            backgroundColor:
+              extractAttributes(promotionTag).bgColor || "#DD8434",
+          }}
+        >
+          {extractAttributes(promotionTag).tag}
+        </Text>
+      )}
+      {productBenefitTags?.data && index === 0 && (
+        <div className="absolute right-2.5 top-2 z-10 flex flex-col items-end gap-2 capitalize md:top-2.5">
+          {productBenefitTags.data.map((benefitTag, idx) => {
+            const { tag, bgColor } = benefitTag?.attributes || {};
+            return (
+              <Text
+                key={idx}
+                as="span"
+                size="xs"
+                className="w-fit rounded px-2 py-1 md:px-2.5"
+                style={{ backgroundColor: bgColor || "#DD8434" }}
+              >
+                {tag}
+              </Text>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  ),
+);
 
 const ProductImageSection = ({
   imageList,
@@ -139,22 +225,20 @@ const ProductImageSection = ({
         const newState = { ...prev, [index]: !prev[index] };
         const video = videoRefs.current[index];
         if (video) {
+          console.log(video);
+
           newState[index] ? video.play() : video.pause();
         }
         return newState;
       });
 
-      // Show play button
       setShowPlayButton((prev) => ({ ...prev, [index]: true }));
 
-      // Clear any existing timeout
       if (controlTimeoutRefs.current[index]) {
         clearTimeout(controlTimeoutRefs.current[index]);
       }
 
-      // Set a new timeout to hide play button after 2 seconds if the video is playing
       if (!isPlaying[index]) {
-        // Only set timeout if changing to play state
         controlTimeoutRefs.current[index] = setTimeout(() => {
           setShowPlayButton((prev) => ({ ...prev, [index]: false }));
         }, 1000);
@@ -187,12 +271,11 @@ const ProductImageSection = ({
 
     // Play the selected video if it exists
     const selectedVideo = videoRefs.current[newIndex];
-    if (selectedVideo && imageList[newIndex].isVideo) {
+    if (selectedVideo && imageList[newIndex]?.isVideo) {
       selectedVideo.play();
       setIsPlaying((prev) => ({ ...prev, [newIndex]: true }));
       setShowPlayButton((prev) => ({ ...prev, [newIndex]: true }));
 
-      // Hide play button after 2 seconds
       controlTimeoutRefs.current[newIndex] = setTimeout(() => {
         setShowPlayButton((prev) => ({ ...prev, [newIndex]: false }));
       }, 1000);
@@ -272,93 +355,25 @@ const ProductImageSection = ({
   const renderMainImages = useMemo(
     () =>
       imageList?.map((image, index) => (
-        <div
+        <ProductImage
           key={image?.imageKey || index}
-          className="main-image relative flex-[0_0_100%] overflow-hidden"
-          onClick={() => image.isVideo && togglePlayPause(index)}
-        >
-          {image.isVideo ? (
-            <>
-              <video
-                ref={(el) => {
-                  videoRefs.current[index] = el;
-                }}
-                src={getPublicImageURL({
-                  key: image.imageKey,
-                  resize: 820,
-                  addPrefix: true,
-                })}
-                className="main-image m-auto aspect-square cursor-pointer rounded-lg border object-contain shadow-sm"
-                loop
-                muted
-                playsInline
-              />
-              {(showPlayButton[index] || !isPlaying[index]) && (
-                <PlayPauseButton
-                  isPlaying={isPlaying[index]}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    togglePlayPause(index);
-                  }}
-                />
-              )}
-            </>
-          ) : (
-            <Img
-              src={image?.imageKey}
-              width={820}
-              height={480}
-              alt={`Product image ${index + 1}`}
-              isStatic
-              priority={index === 0}
-              className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
-              addPrefix
-            />
-          )}
-          {promotionTag?.data &&
-            index === 0 &&
-            (() => {
-              const { tag, bgColor } = extractAttributes(promotionTag);
-              return (
-                <Text
-                  as="span"
-                  size="base"
-                  className="absolute left-2.5 top-2 z-10 rounded px-2 py-1 text-sm capitalize text-white-a700 md:top-2.5 md:px-3"
-                  responsive
-                  style={{ backgroundColor: bgColor || "#DD8434" }}
-                >
-                  {tag}
-                </Text>
-              );
-            })()}
-          {productBenefitTags?.data && (
-            <div className="absolute right-2.5 top-2 z-10 flex flex-col items-end gap-2 capitalize md:top-2.5">
-              {productBenefitTags.data.map((benefitTag, index) => {
-                const { tag, bgColor } = benefitTag?.attributes || {};
-                return (
-                  <Text
-                    key={index}
-                    as="span"
-                    size="sm"
-                    className="w-fit rounded px-2 py-1 md:px-3"
-                    responsive
-                    style={{ backgroundColor: bgColor || "#DD8434" }}
-                  >
-                    {tag}
-                  </Text>
-                );
-              })}
-            </div>
-          )}
-        </div>
+          image={image}
+          index={index}
+          isPlaying={isPlaying}
+          showPlayButton={showPlayButton}
+          togglePlayPause={togglePlayPause}
+          promotionTag={promotionTag}
+          productBenefitTags={productBenefitTags}
+          videoRefs={videoRefs}
+        />
       )),
     [
       imageList,
-      promotionTag,
-      productBenefitTags,
       isPlaying,
       showPlayButton,
       togglePlayPause,
+      promotionTag,
+      productBenefitTags,
     ],
   );
 
@@ -378,28 +393,32 @@ const ProductImageSection = ({
   if (!imageList?.length) return null;
 
   return (
-    <div
-      ref={mainContainerRef}
-      className="main-container sticky top-20 flex flex-col-reverse gap-1 sm:flex-row sm:gap-2 md:gap-3 lg:gap-4"
-    >
-      <div ref={thumbsContainerRef} className="w-20 max-sm:hidden">
-        <div
-          ref={thumbViewportRef}
-          className="no-scrollbar thumbs-container h-full overflow-y-scroll"
-          role="tablist"
-          aria-label="Product image thumbnails"
-        >
-          <div className="flex h-full flex-col gap-2">{renderThumbs}</div>
-        </div>
+    <div ref={mainContainerRef} className="main-container sticky top-20">
+      <div className="hidden md:grid md:grid-cols-2 md:gap-4">
+        {renderMainImages}
       </div>
-      <div
-        className="flex flex-1 flex-col items-center justify-center overflow-hidden md:gap-1"
-        ref={mainViewportRef}
-      >
-        <div ref={mainImageContainerRef} className="flex w-full gap-2">
-          {renderMainImages}
+      <div className="md:hidden">
+        <div className="flex flex-col-reverse gap-1 sm:flex-row sm:gap-2">
+          <div ref={thumbsContainerRef} className="w-20 max-sm:hidden">
+            <div
+              ref={thumbViewportRef}
+              className="no-scrollbar thumbs-container h-full overflow-y-scroll"
+              role="tablist"
+              aria-label="Product image thumbnails"
+            >
+              <div className="flex h-full flex-col gap-2">{renderThumbs}</div>
+            </div>
+          </div>
+          <div
+            className="flex flex-1 flex-col items-center justify-center overflow-hidden md:gap-1"
+            ref={mainViewportRef}
+          >
+            <div ref={mainImageContainerRef} className="flex w-full gap-2">
+              {renderMainImages}
+            </div>
+            <div className="mt-4 flex justify-center">{renderDotButtons}</div>
+          </div>
         </div>
-        <div className="mt-4 flex justify-center">{renderDotButtons}</div>
       </div>
     </div>
   );
@@ -408,6 +427,7 @@ const ProductImageSection = ({
 Thumb.displayName = "Thumb";
 DotButton.displayName = "DotButton";
 PlayPauseButton.displayName = "PlayPauseButton";
+ProductImage.displayName = "ProductImage";
 ProductImageSection.displayName = "ProductImageSection";
 
 export default React.memo(ProductImageSection);
