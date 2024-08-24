@@ -28,8 +28,6 @@ DetailRow.displayName = "DetailRow";
 
 const OrderDetails = React.memo(
   ({ code, status, paymentType, createdAt, shippingAddress }) => {
-    // console.log(shippingAddress);
-
     return (
       <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
         <div className="flex items-center justify-between">
@@ -51,7 +49,7 @@ const OrderDetails = React.memo(
           <DetailRow
             label="Status:"
             value={status || ""}
-            valueClassName="text-green-600"
+            valueClassName={status === "CONFIRMED" && "text-green-600"}
           />
           <DetailRow
             label="Payment method:"
@@ -70,7 +68,7 @@ const OrderDetails = React.memo(
                   shippingAddress?.address,
                   shippingAddress?.location,
                   shippingAddress?.city,
-                  shippingAddress?.state,
+                  shippingAddress?.formattedState,
                   shippingAddress?.country,
                   shippingAddress?.pinCode,
                 ]
