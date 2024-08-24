@@ -34,10 +34,10 @@ const Thumb = React.memo(({ isSelected, image, onClick }) => (
       ) : (
         <Img
           src={image?.imageKey}
-          width={300}
-          height={300}
+          width={200}
+          height={200}
           alt="Thumbnail"
-          className="aspect-square w-full rounded-lg object-cover"
+          className="aspect-square w-full rounded-lg object-contain"
           isStatic
           addPrefix
         />
@@ -110,18 +110,19 @@ const ProductImage = React.memo(
     togglePlayPause,
     promotionTag,
     productBenefitTags,
-    videoRefs,
+    videoRef,
+    layout,
   }) => (
     <div
-      className="main-image relative flex-[0_0_100%] overflow-hidden"
-      onClick={() => image.isVideo && togglePlayPause(index)}
+      className={`main-image relative overflow-hidden ${
+        layout === "grid" ? "w-full" : "flex-[0_0_100%]"
+      }`}
+      onClick={() => image.isVideo && togglePlayPause(index, layout)}
     >
       {image.isVideo ? (
         <>
           <video
-            ref={(el) => {
-              videoRefs.current[index] = el;
-            }}
+            ref={videoRef}
             src={getPublicImageURL({
               key: image.imageKey,
               resize: 820,
@@ -132,27 +133,29 @@ const ProductImage = React.memo(
             muted
             playsInline
           />
-          {(showPlayButton[index] || !isPlaying[index]) && (
+          {(showPlayButton || !isPlaying) && (
             <PlayPauseButton
-              isPlaying={isPlaying[index]}
+              isPlaying={isPlaying}
               onClick={(e) => {
                 e.stopPropagation();
-                togglePlayPause(index);
+                togglePlayPause(index, layout);
               }}
             />
           )}
         </>
       ) : (
-        <Img
-          src={image?.imageKey}
-          width={820}
-          height={480}
-          alt={`Product image ${index + 1}`}
-          isStatic
-          priority={index === 0}
-          className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
-          addPrefix
-        />
+        <div className="aspect-square overflow-hidden rounded-lg border shadow-sm">
+          <Img
+            src={image?.imageKey}
+            width={400}
+            height={400}
+            alt={`Product image ${index + 1}`}
+            isStatic
+            priority={index === 0}
+            className="main-image m-auto aspect-square h-auto w-full object-contain"
+            addPrefix
+          />
+        </div>
       )}
       {promotionTag?.data && index === 0 && (
         <Text
@@ -195,8 +198,8 @@ const ProductImageSection = ({
   productBenefitTags,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState({});
-  const [showPlayButton, setShowPlayButton] = useState({});
+  const [playingStates, setPlayingStates] = useState({});
+  const [showPlayButtons, setShowPlayButtons] = useState({});
   const [mainViewportRef, emblaMainApi] = useEmblaCarousel({
     skipSnaps: false,
   });
@@ -209,7 +212,8 @@ const ProductImageSection = ({
   const mainContainerRef = useRef(null);
   const mainImageContainerRef = useRef(null);
   const thumbsContainerRef = useRef(null);
-  const videoRefs = useRef({});
+  const carouselVideoRefs = useRef({});
+  const gridVideoRefs = useRef({});
   const controlTimeoutRefs = useRef({});
 
   const onThumbClick = useCallback(
@@ -219,33 +223,34 @@ const ProductImageSection = ({
     [emblaMainApi],
   );
 
-  const togglePlayPause = useCallback(
-    (index) => {
-      setIsPlaying((prev) => {
-        const newState = { ...prev, [index]: !prev[index] };
-        const video = videoRefs.current[index];
-        if (video) {
-          console.log(video);
+  const togglePlayPause = useCallback((index, layout) => {
+    const videoRefs = layout === "grid" ? gridVideoRefs : carouselVideoRefs;
 
-          newState[index] ? video.play() : video.pause();
-        }
-        return newState;
-      });
-
-      setShowPlayButton((prev) => ({ ...prev, [index]: true }));
-
-      if (controlTimeoutRefs.current[index]) {
-        clearTimeout(controlTimeoutRefs.current[index]);
+    setPlayingStates((prev) => {
+      const newState = {
+        ...prev,
+        [`${layout}-${index}`]: !prev[`${layout}-${index}`],
+      };
+      const video = videoRefs.current[index];
+      if (video) {
+        newState[`${layout}-${index}`] ? video.play() : video.pause();
       }
+      return newState;
+    });
 
-      if (!isPlaying[index]) {
-        controlTimeoutRefs.current[index] = setTimeout(() => {
-          setShowPlayButton((prev) => ({ ...prev, [index]: false }));
-        }, 1000);
-      }
-    },
-    [isPlaying],
-  );
+    setShowPlayButtons((prev) => ({ ...prev, [`${layout}-${index}`]: true }));
+
+    if (controlTimeoutRefs.current[`${layout}-${index}`]) {
+      clearTimeout(controlTimeoutRefs.current[`${layout}-${index}`]);
+    }
+
+    controlTimeoutRefs.current[`${layout}-${index}`] = setTimeout(() => {
+      setShowPlayButtons((prev) => ({
+        ...prev,
+        [`${layout}-${index}`]: false,
+      }));
+    }, 1000);
+  }, []);
 
   const onSelect = useCallback(() => {
     if (!emblaMainApi) return;
@@ -253,31 +258,28 @@ const ProductImageSection = ({
     setSelectedIndex(newIndex);
     emblaThumbsApi?.scrollTo(newIndex);
 
-    // Pause all videos and update playing state
-    Object.keys(videoRefs.current).forEach((key) => {
-      const video = videoRefs.current[key];
+    // Pause all carousel videos
+    Object.entries(carouselVideoRefs.current).forEach(([key, video]) => {
       if (video) {
         video.pause();
+        setPlayingStates((prev) => ({ ...prev, [`carousel-${key}`]: false }));
       }
     });
 
-    setIsPlaying((prev) => {
-      const newState = { ...prev };
-      Object.keys(newState).forEach((key) => {
-        newState[key] = false;
-      });
-      return newState;
-    });
-
-    // Play the selected video if it exists
-    const selectedVideo = videoRefs.current[newIndex];
+    const selectedVideo = carouselVideoRefs.current[newIndex];
     if (selectedVideo && imageList[newIndex]?.isVideo) {
       selectedVideo.play();
-      setIsPlaying((prev) => ({ ...prev, [newIndex]: true }));
-      setShowPlayButton((prev) => ({ ...prev, [newIndex]: true }));
+      setPlayingStates((prev) => ({ ...prev, [`carousel-${newIndex}`]: true }));
+      setShowPlayButtons((prev) => ({
+        ...prev,
+        [`carousel-${newIndex}`]: true,
+      }));
 
-      controlTimeoutRefs.current[newIndex] = setTimeout(() => {
-        setShowPlayButton((prev) => ({ ...prev, [newIndex]: false }));
+      controlTimeoutRefs.current[`carousel-${newIndex}`] = setTimeout(() => {
+        setShowPlayButtons((prev) => ({
+          ...prev,
+          [`carousel-${newIndex}`]: false,
+        }));
       }, 1000);
     }
   }, [emblaMainApi, emblaThumbsApi, imageList]);
@@ -352,25 +354,32 @@ const ProductImageSection = ({
     [imageList, selectedIndex, onThumbClick],
   );
 
-  const renderMainImages = useMemo(
-    () =>
+  const renderMainImages = useCallback(
+    (layout) =>
       imageList?.map((image, index) => (
         <ProductImage
           key={image?.imageKey || index}
           image={image}
           index={index}
-          isPlaying={isPlaying}
-          showPlayButton={showPlayButton}
+          isPlaying={playingStates[`${layout}-${index}`]}
+          showPlayButton={showPlayButtons[`${layout}-${index}`]}
           togglePlayPause={togglePlayPause}
           promotionTag={promotionTag}
           productBenefitTags={productBenefitTags}
-          videoRefs={videoRefs}
+          videoRef={(el) => {
+            if (layout === "grid") {
+              gridVideoRefs.current[index] = el;
+            } else {
+              carouselVideoRefs.current[index] = el;
+            }
+          }}
+          layout={layout}
         />
       )),
     [
       imageList,
-      isPlaying,
-      showPlayButton,
+      playingStates,
+      showPlayButtons,
       togglePlayPause,
       promotionTag,
       productBenefitTags,
@@ -395,7 +404,7 @@ const ProductImageSection = ({
   return (
     <div ref={mainContainerRef} className="main-container sticky top-20">
       <div className="hidden md:grid md:grid-cols-2 md:gap-4">
-        {renderMainImages}
+        {renderMainImages("grid")}
       </div>
       <div className="md:hidden">
         <div className="flex flex-col-reverse gap-1 sm:flex-row sm:gap-2">
@@ -414,7 +423,7 @@ const ProductImageSection = ({
             ref={mainViewportRef}
           >
             <div ref={mainImageContainerRef} className="flex w-full gap-2">
-              {renderMainImages}
+              {renderMainImages("carousel")}
             </div>
             <div className="mt-4 flex justify-center">{renderDotButtons}</div>
           </div>
