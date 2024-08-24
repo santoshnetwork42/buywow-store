@@ -20,7 +20,7 @@ const AddressSection = React.memo(({ variant }) => {
     if (user?.id) {
       getAddressList(user?.id);
     }
-  }, [user]);
+  }, [user, getAddressList]);
 
   useEffect(() => {
     if (Array.isArray(addressList) && addressList.length === 0) {

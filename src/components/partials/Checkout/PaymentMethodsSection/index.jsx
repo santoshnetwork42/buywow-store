@@ -23,6 +23,7 @@ const PaymentMethodsSection = React.memo(
     ppcodAmount,
     ppcodAmountToTake,
     codGrandTotal,
+    maxCOD,
   }) => (
     <div className="flex flex-col gap-2.5">
       <Heading size="2xl" as="h3" className="font-medium" responsive>
@@ -78,5 +79,7 @@ const PaymentMethodsSection = React.memo(
     </div>
   ),
 );
+
+PaymentMethodsSection.displayName = "PaymentMethodsSection";
 
 export default PaymentMethodsSection;
