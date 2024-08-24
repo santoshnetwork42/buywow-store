@@ -9,6 +9,7 @@ import {
   findUserAddresses,
   getCartUpsellProducts,
   getCMSPages,
+  getInitialData,
   getLoyalty,
   getNavbarAndFooter,
   getOrder,
@@ -23,6 +24,7 @@ import {
   updateReview,
   updateUser,
   updateUserAddress,
+  validateTransaction,
   verifyCustomOTP,
 } from "@/graphql/appSync/api";
 import { errorHandler } from "@/utils/errorHandler";
@@ -178,15 +180,15 @@ export const verifyCustomOTPAPI = async ({ phone, otp }) => {
   }
 };
 
-export const getOrderByIdAPI = async ({ id }) => {
+export const getOrderByIdAPI = async ({ id, userId }) => {
   try {
-    const { data } = await client.graphql({
+    const response = await client.graphql({
       query: getOrder,
       variables: { id },
-      authMode: "apiKey",
+      authMode: userId ? "userPool" : "apiKey",
     });
 
-    return data;
+    return response?.data?.getOrder || null;
   } catch (error) {
     errorHandler(error, "Get Order By Id API");
     return false;
@@ -520,6 +522,46 @@ export const updateUserAPI = async (user) => {
         },
       },
       authMode: "userPool",
+    });
+
+    return response;
+  } catch (error) {
+    errorHandler("Error Updating User", error);
+    return error;
+  }
+};
+
+export const validateTransactionAPI = async (orderId, paymentId) => {
+  try {
+    const response = await client.graphql({
+      query: validateTransaction,
+      variables: { orderId, razorpayPaymentId: paymentId },
+      authMode: "apiKey",
+    });
+
+    return response?.data?.validateTransaction || null;
+  } catch (error) {
+    errorHandler(error, "Validate Transaction API");
+    return null;
+  }
+};
+
+export const getInitialDataAPI = async (storeId, deviceType) => {
+  try {
+    const response = await client.graphql({
+      query: getInitialData,
+      variables: {
+        storeId,
+        deviceType,
+        getStoreSettingInput: {
+          storeId: storeId,
+          deviceType: deviceType,
+        },
+        shippingTierFilter: {
+          storeId: { eq: storeId },
+        },
+      },
+      authMode: "apiKey",
     });
 
     return response;

@@ -2,10 +2,10 @@
 
 import { Button } from "@/components/elements";
 import Modal from "@/components/features/Modal";
-import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
-import { addPhonePrefix, removePhonePrefix } from "@/utils/helpers";
+import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
+import { removePhonePrefix } from "@/utils/helpers";
 import { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AddressFormFields from "../AddressForm/AddressFormFields";
 
 const AddressModal = ({
@@ -15,7 +15,7 @@ const AddressModal = ({
   action = null,
   addressItem = {},
 }) => {
-  const dispatch = useDispatch();
+  const { createAddress, editAddress } = useAddressDispatch();
   const { user } = useSelector((state) => state.user);
   const { isLoading } = useSelector((state) => state.address);
 
@@ -57,24 +57,15 @@ const AddressModal = ({
         return;
       }
 
-      const payload = {
-        ...address,
-        userID: user?.id || null,
-        phone: addPhonePrefix(address?.phone),
-        country: address?.country || "IN",
-      };
-
-      dispatch({
-        type:
-          action === "CREATE"
-            ? addressSagaActions.CREATE_ADDRESS
-            : addressSagaActions.EDIT_ADDRESS,
-        payload,
-      });
+      if (action === "CREATE") {
+        createAddress(address, user?.id);
+      } else {
+        editAddress(address, user?.id);
+      }
 
       closeModal();
     },
-    [address, user, dispatch, action, checkFormValidity, closeModal],
+    [address, user, action, checkFormValidity, closeModal],
   );
 
   return (

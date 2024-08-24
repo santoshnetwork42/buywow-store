@@ -107,7 +107,7 @@ const ProductCard = memo(
 
     return (
       <Link
-        href={slug ? `/products/${slug}` : "#"}
+        href={`/products/${slug || packageProduct?.slug || "#"}`}
         className={twMerge(
           `flex h-full flex-col justify-start gap-2 self-stretch rounded-lg p-[5px] shadow-xs md:gap-3 md:p-2`,
           className,

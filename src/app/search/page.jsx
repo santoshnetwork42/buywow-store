@@ -1,40 +1,55 @@
 "use client";
 
+import ProductCard from "@/components/partials/Card/ProductCard";
 import { fetchSearchItems } from "@/utils/helpers";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 
 const Search = () => {
-  const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  console.log("Current pathname:", pathname);
-  console.log("Search params:", searchParams.toString());
+  const [loading, setLoading] = useState(false);
+  const [fetchedItems, setFetchedItems] = useState([]);
 
+  // If you need to access specific search parameters
   const query = searchParams.get("q");
-  console.log("Search query:", query);
 
-  const getProducts = useCallback(async (query) => {
+  const getProducts = useCallback(async (search) => {
     try {
-      const searchTerm = query?.trim();
+      setLoading(true);
+      const searchTerm = search?.trim();
 
       if (searchTerm) {
-        fetchSearchItems(query, 30).then((fetchedItems) => {
-          console.log("fetchedItems :>> ", fetchedItems);
+        fetchSearchItems(search, 30).then((fetchedItems) => {
+          setFetchedItems(fetchedItems);
         });
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
     getProducts(query);
-  }, [query]);
+  }, [query, getProducts]);
 
   return (
-    <div>
-      <h1>Search Page</h1>
-      <p>Current path: {pathname}</p>
-      {query && <p>Search query: {query}</p>}
+    <div className="">
+      {!loading && !!fetchedItems?.length && (
+        <div className="flex flex-wrap justify-center gap-5 py-4">
+          {fetchedItems?.map((product, index) => (
+            <div key={index}>
+              <ProductCard
+                key={`product-${index}`}
+                className="w-[calc(50vw-16px)] max-w-[356px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
+                {...product}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+      {loading && <div>Loading</div>}
     </div>
   );
 };
