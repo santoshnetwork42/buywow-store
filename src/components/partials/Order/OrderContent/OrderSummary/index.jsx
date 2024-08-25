@@ -60,8 +60,6 @@ const SubtotalRow = React.memo(({ itemsTotalPrice, activeItemsTotalPrice }) => (
 SubtotalRow.displayName = "SubtotalRow";
 
 const OrderSummary = React.memo(({ order }) => {
-  if (!order) return null;
-
   const {
     prepaidDiscount = 0,
     totalDiscount = 0,
@@ -73,7 +71,7 @@ const OrderSummary = React.memo(({ order }) => {
     paymentType = "",
     totalPrepaidAmount = 0,
     products = { items: [] },
-  } = order;
+  } = order || {};
 
   const { itemsTotalPrice, activeItemsTotalPrice } = useMemo(() => {
     const orderItems = products?.items || [];
@@ -107,6 +105,8 @@ const OrderSummary = React.memo(({ order }) => {
     () => totalWithRewardsAndCashback - totalPrepaidAmount,
     [totalWithRewardsAndCashback, totalPrepaidAmount],
   );
+
+  if (!order) return null;
 
   return (
     <div className="flex flex-col gap-3 rounded-md border p-4 md:gap-4 md:p-5">

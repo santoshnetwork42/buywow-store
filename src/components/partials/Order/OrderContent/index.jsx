@@ -162,4 +162,6 @@ const ActionButtons = React.memo(() => (
   </div>
 ));
 
+ActionButtons.displayName = "ActionButtons";
+
 export default OrderContent;
