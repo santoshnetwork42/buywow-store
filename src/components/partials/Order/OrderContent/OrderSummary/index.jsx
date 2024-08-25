@@ -153,8 +153,8 @@ const OrderSummary = React.memo(({ order }) => {
       <SummaryRow
         label="Total:"
         value={`₹${toDecimal(totalWithRewardsAndCashback)}`}
-        valueClassName="text-base text-black-900"
-        valueSize="xl"
+        valueClassName="text-black-900"
+        valueSize="lg"
         showBorder={paymentType === "PPCOD"}
       />
 
@@ -167,8 +167,8 @@ const OrderSummary = React.memo(({ order }) => {
           <SummaryRow
             label="To Pay:"
             value={`₹${toDecimal(remainingAmount)}`}
-            valueClassName="text-base text-black-900"
-            valueSize="xl"
+            valueClassName="text-black-900"
+            valueSize="lg"
             showBorder={false}
           />
         </>

@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddressFormFields from "./AddressFormFields";
 
-const AddressForm = React.memo(() => {
+const AddressForm = React.memo(({ className }) => {
   const dispatch = useDispatch();
   const { createAddress } = useAddressDispatch();
   const { user } = useSelector((state) => state.user);
@@ -38,7 +38,10 @@ const AddressForm = React.memo(() => {
   );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit}
+      className={`flex flex-col gap-4 ${className}`}
+    >
       <AddressFormFields
         address={address}
         setAddress={setAddress}

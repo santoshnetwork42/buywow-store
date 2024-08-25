@@ -7,8 +7,9 @@ import { put } from "redux-saga/effects";
 import { cartSagaActions } from "../sagaActions/cart.actions";
 
 export function* setUserHandler(action) {
+  const { user } = action.payload;
   try {
-    yield put(setUser(action.payload));
+    yield put(setUser(user));
     yield put({ type: cartSagaActions.MANAGE_CART });
   } catch (error) {
     console.log("error", error);
@@ -16,8 +17,9 @@ export function* setUserHandler(action) {
 }
 
 export function* setCustomUserHandler(action) {
+  const { phone } = action.payload;
   try {
-    yield put(setCustomUser(action.payload));
+    yield put(setCustomUser({ phone }));
   } catch (error) {
     console.log("error", error);
   }

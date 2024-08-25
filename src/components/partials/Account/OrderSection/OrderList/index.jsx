@@ -79,7 +79,7 @@ const OrderList = React.memo(() => {
 
   return (
     <>
-      <div className="mb-4 grid grid-cols-1 gap-1 sm:gap-2 md:gap-0">
+      <div className="mb-4 grid grid-cols-1">
         <OrderListHeader />
         {isLoading && orders.length === 0 ? skeletons : memoizedOrders}
       </div>

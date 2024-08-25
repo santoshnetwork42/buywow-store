@@ -141,17 +141,21 @@ export function* editAddressHandler(action) {
 
 export function* getAddressListHandler(action) {
   try {
+    yield put(updateAddressLoading(true));
+
     const { id = null } = action.payload;
     const { currentAddress, addressList } = yield select(
       (state) => state.address,
     );
     if (id) {
       // User is logged in, fetch addresses from API
-      const userAddresses = yield call(() => getUserAddressAPI({ id }));
-      yield put(updateAddressList(userAddresses?.items || []));
+      const userAddresses = yield call(getUserAddressAPI, { id });
+      const fetchedAddresses = userAddresses?.items || [];
 
-      if (userAddresses?.items?.length > 0 && !currentAddress) {
-        yield put(updateCurrentAddress(userAddresses.items[0]));
+      yield put(updateAddressList(fetchedAddresses));
+
+      if (fetchedAddresses.length > 0 && !currentAddress) {
+        yield put(updateCurrentAddress(fetchedAddresses[0]));
       }
     } else {
       // User is not logged in, use addresses from Redux store
@@ -161,6 +165,8 @@ export function* getAddressListHandler(action) {
     }
   } catch (error) {
     console.log("error getting address", error);
+  } finally {
+    yield put(updateAddressLoading(false));
   }
 }
 

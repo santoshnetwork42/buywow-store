@@ -12,11 +12,11 @@ import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { RESTRICT_SEARCH_AND_CART_TO_SHOW } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
-import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import StickyViewCart from "../StickyViewCart";
 
 const MenuItem = React.memo(({ item, index, linkPrefix }) => {
   if (!item) return null;
@@ -123,14 +123,11 @@ const Header = ({ data, ...props }) => {
   const openMobileMenu = () => setIsMobileMenuOpen(true);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const handleUserClisk = async () => {
+  const handleUserClick = async () => {
     try {
-      //check if user is logged in
-      const currentUser = await getCurrentUser();
-      if (!!currentUser) {
+      if (user?.id) {
         router.push("/account");
       } else {
-        //open passwordless if user is not logged in
         handlePasswordLessModal(true, false, null);
       }
     } catch (error) {
@@ -195,11 +192,7 @@ const Header = ({ data, ...props }) => {
             {!isRestricted && (
               <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
             )}
-            <Link
-              href="#"
-              className="ml-auto flex-shrink-0"
-              onClick={handleUserClisk}
-            >
+            <Button className="ml-auto flex-shrink-0" onClick={handleUserClick}>
               <Img
                 src="img_user.svg"
                 width={24}
@@ -207,7 +200,7 @@ const Header = ({ data, ...props }) => {
                 alt="user icon"
                 className="aspect-square w-[24px] object-contain"
               />
-            </Link>
+            </Button>
             {!isRestricted && (
               <Link
                 href="#"
@@ -241,6 +234,7 @@ const Header = ({ data, ...props }) => {
         isLoggedin={!!user?.id}
       />
 
+      <StickyViewCart />
       <PasswordLess />
     </header>
   );
