@@ -40,6 +40,7 @@ const SearchResults = ({ initialProducts = [] }) => {
   const [isInitialData, setIsInitialData] = useState(true);
 
   const fetchProducts = useCallback(async (searchTerm) => {
+    console.log("searchTerm :>> ", searchTerm);
     if (!searchTerm) return;
 
     setLoading(true);
