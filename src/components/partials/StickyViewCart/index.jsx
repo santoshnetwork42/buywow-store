@@ -9,16 +9,19 @@ import { usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 
-const CartSummary = React.memo(({ totalItems, totalPrice }) => (
-  <div className="flex flex-col gap-1">
-    <Text as="p" size="md" className="text-black-900" responsive>
-      {totalItems > 1 ? `${totalItems} Items` : "1 Item"}
-    </Text>
-    <Heading size="xl" as="h3" className="m-auto w-fit font-medium" responsive>
-      ₹ {toDecimal(totalPrice)}
-    </Heading>
-  </div>
-));
+const CartSummary = React.memo(
+  ({ totalItems, grandTotal, prepaidDiscountPercent, prepaidDiscount }) => (
+    <div className="flex flex-col gap-1">
+      <Heading size="lg" as="h3" className="w-fit font-medium" responsive>
+        {totalItems > 1 ? `${totalItems} Items` : "1 Item"} | ₹{" "}
+        {toDecimal(grandTotal)}
+      </Heading>
+      <Text as="p" size="sm" className="text-black-900" responsive>
+        Including {prepaidDiscountPercent}% prepaid discount
+      </Text>
+    </div>
+  ),
+);
 
 CartSummary.displayName = "CartSummary";
 
@@ -40,10 +43,11 @@ const StickyViewCart = () => {
     [pathname],
   );
 
-  const { totalPrice, totalItems } = useCartTotal({
-    paymentType: "PREPAID",
-    isRewardApplied,
-  });
+  const { grandTotal, totalItems, prepaidDiscountPercent, prepaidDiscount } =
+    useCartTotal({
+      paymentType: "PREPAID",
+      isRewardApplied,
+    });
 
   const openCart = useCallback(() => {
     handleCartVisibility(true);
@@ -53,7 +57,12 @@ const StickyViewCart = () => {
 
   return (
     <div className="fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 items-center justify-between bg-white-a700 px-4 py-2 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">
-      <CartSummary totalItems={totalItems} totalPrice={totalPrice} />
+      <CartSummary
+        totalItems={totalItems}
+        grandTotal={grandTotal}
+        prepaidDiscountPercent={prepaidDiscountPercent}
+        prepaidDiscount={prepaidDiscount}
+      />
       <Button
         variant="primary"
         size="none"
