@@ -64,7 +64,7 @@ const ContactUs = () => {
             <Text>
               Our 70% of Customers Choose Chat for Quicker Resolutions!
             </Text>
-            <Link prefetch={false} href="/pages/query-us">
+            <Link prefetch={false} href="/query-us">
               <Button className="p-4" variant="primary">
                 Send a Query
               </Button>
