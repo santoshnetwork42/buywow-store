@@ -1,11 +1,12 @@
-import { all, fork } from "redux-saga/effects";
-import { authWatcher } from "@/store/sagas/watchers/auth.watcher";
-import { modalWatcher } from "@/store/sagas/watchers/modal.watcher";
-import { userWatcher } from "@/store/sagas/watchers/user.watcher";
-import { cartWatcher } from "@/store/sagas/watchers/cart.watcher";
 import { addressWatcher } from "@/store/sagas/watchers/address.watcher";
-import { eventsWatcher } from "./watchers/events.watcher";
-import { recentlyViewedWatcher } from "./watchers/recentlyViewed.watcher";
+import { authWatcher } from "@/store/sagas/watchers/auth.watcher";
+import { cartWatcher } from "@/store/sagas/watchers/cart.watcher";
+import { eventsWatcher } from "@/store/sagas/watchers/events.watcher";
+import { modalWatcher } from "@/store/sagas/watchers/modal.watcher";
+import { recentlyViewedWatcher } from "@/store/sagas/watchers/recentlyViewed.watcher";
+import { systemWatcher } from "@/store/sagas/watchers/system.watcher";
+import { userWatcher } from "@/store/sagas/watchers/user.watcher";
+import { all, fork } from "redux-saga/effects";
 
 export default function* rootSaga() {
   yield all([
@@ -16,6 +17,7 @@ export default function* rootSaga() {
     fork(eventsWatcher),
     fork(addressWatcher),
     fork(eventsWatcher),
+    fork(systemWatcher),
     fork(recentlyViewedWatcher),
   ]);
 }

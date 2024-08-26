@@ -4,7 +4,7 @@ import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import { Button, Input, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
@@ -13,9 +13,9 @@ import {
   getUserAPI,
   verifyCustomOTPAPI,
 } from "@/lib/appSyncAPIs";
-import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
-import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
-import { userSagaActions } from "@/store/sagas/sagaActions/user.actions";
+import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import {
   addPhonePrefix,
   isPhoneNumberValid,
@@ -24,8 +24,18 @@ import {
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 const PasswordLess = ({ enableOutsideClick = true }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
+
+  const { setUser, setCustomUser } = useUserDispatch();
+  const {
+    setConfirmationStatus,
+    setAuthLoader,
+    signInAwsAccount,
+    createAwsAccount,
+    confirmSignIn,
+    confirmSignUp,
+  } = useAuthDispatch();
+  const { handlePasswordLessModal } = useModalDispatch();
 
   const { confirmationStatus, loading } = useSelector((state) => state.auth);
   const { user } = useSelector((state) => state.user);
@@ -70,38 +80,22 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       const currentUser = await getCurrentUser();
       if (currentUser?.userId && user && !user.id) {
         const userData = await getUserAPI();
-        dispatch({
-          type: userSagaActions.SET_USER,
-          payload: userData,
-        });
+        setUser(userData);
         // for signup as well as for signin it will run
         auth("login", { userId: userData?.id, phone: userData?.phone });
       }
       if (!currentUser) {
-        dispatch({
-          type: authSagaActions.SET_CONFIRMATION_STATUS,
-          payload: null,
-        });
+        setConfirmationStatus(null);
       }
     } catch (error) {
       console.error("Error updating user state:", error);
-      dispatch({
-        type: authSagaActions.SET_CONFIRMATION_STATUS,
-        payload: null,
-      });
+      setConfirmationStatus(null);
     }
-  }, [dispatch, user]);
+  }, [user]);
 
   const handleAuthClose = async () => {
     await updateUserState();
-    dispatch({
-      type: modalSagaActions.SET_PASSWORDLESS_MODAL,
-      payload: {
-        isPasswordLessOpen: false,
-        customLogin: false,
-        redirectTo: null,
-      },
-    });
+    handlePasswordLessModal(false, false, null);
     setAuthData({
       phone: "",
       confirmationCode: new Array(6).fill(""),
@@ -117,13 +111,6 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
 
   const isPhoneValid = isPhoneNumberValid(authData.phone);
 
-  const setAuthLoader = (isLoading) => {
-    dispatch({
-      type: authSagaActions.SET_AUTH_LOADER,
-      payload: isLoading,
-    });
-  };
-
   const handleSignIn = async () => {
     if (!isPhoneValid) return;
 
@@ -134,12 +121,9 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       try {
         const isExistingUser = await checkIfExistingUserAPI({ phone });
         if (isExistingUser) {
-          handleSignInWithAWS({ phone });
+          signInAwsAccount(phone);
         } else {
-          dispatch({
-            type: authSagaActions.SET_CONFIRMATION_STATUS,
-            payload: "UNCONFIRMED_CUSTOM_SIGNIN",
-          });
+          setConfirmationStatus("UNCONFIRMED_CUSTOM_SIGNIN");
         }
       } catch (error) {
         console.error("Error during custom login:", error);
@@ -151,27 +135,15 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     if (customLogin) {
       await handleCustomLogin();
     } else {
-      handleSignInWithAWS({ phone });
+      signInAwsAccount(phone);
     }
 
     setCountdown(30);
   };
 
-  const handleSignInWithAWS = ({ phone }) => {
-    dispatch({
-      type: authSagaActions.SIGNIN_AWS_ACCOUNT,
-      payload: { phone },
-    });
-  };
-
   const handleSignUp = () => {
     if (confirmationStatus === "SIGNUP") {
-      dispatch({
-        type: authSagaActions.CREATE_AWS_ACCOUNT,
-        payload: {
-          phone: addPhonePrefix(authData.phone),
-        },
-      });
+      createAwsAccount(authData.phone);
       setCountdown(30);
     }
   };
@@ -181,26 +153,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     const phone = addPhonePrefix(authData.phone);
 
     const actions = {
-      UNCONFIRMED_SIGNIN: () => {
-        try {
-          dispatch({
-            type: authSagaActions.CONFIRM_SIGNIN,
-            payload: { confirmationCode },
-          });
-        } catch (error) {
-          console.error("Error while confirming for signIn", error);
-        }
-      },
-      UNCONFIRMED_SIGNUP: () => {
-        try {
-          dispatch({
-            type: authSagaActions.CONFIRM_SIGNUP,
-            payload: { username: phone, confirmationCode },
-          });
-        } catch (error) {
-          console.error("Error while confirming for singUp", error);
-        }
-      },
+      UNCONFIRMED_SIGNIN: () => confirmSignIn(confirmationCode),
+      UNCONFIRMED_SIGNUP: () => confirmSignUp(phone, confirmationCode),
       UNCONFIRMED_CUSTOM_SIGNIN: async () => {
         setAuthLoader(true);
         try {
@@ -209,14 +163,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
             otp: confirmationCode,
           });
           if (isVerified) {
-            dispatch({
-              type: authSagaActions.SET_CONFIRMATION_STATUS,
-              payload: "DONE",
-            });
-            dispatch({
-              type: userSagaActions.SET_CUSTOM_USER,
-              payload: { phone },
-            });
+            setConfirmationStatus("DONE");
+            setCustomUser(phone);
             // our custom signup
             auth("signup", { userId: null, phone });
           } else {
@@ -275,7 +223,6 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         prefix="+91"
         onChange={handlePhoneChange}
         maxLength={10}
-        autocomplete="on"
         value={authData.phone}
         onBlur={(e) => {
           const newState = e.target.value.trim();

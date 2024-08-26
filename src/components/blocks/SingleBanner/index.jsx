@@ -16,10 +16,8 @@ const SingleBanner = ({ banner, slug }) => {
     mWebImageAttrs.alternativeText ||
     webImageAttrs.alternativeText ||
     "Promo Banner";
-  const imageWidth = mWebImageAttrs.width || webImageAttrs.width;
-  const imageHeight = mWebImageAttrs.height || webImageAttrs.height;
 
-  if (!imageUrl || !imageWidth || !imageHeight) return null;
+  if (!imageUrl) return null;
 
   return (
     <LinkClickTracker
@@ -42,20 +40,17 @@ const SingleBanner = ({ banner, slug }) => {
         {!!webImageAttrs.url && (
           <source
             media="(min-width: 576px)"
-            srcSet={webImageAttrs.url}
-            width={webImageAttrs.width}
-            height={webImageAttrs.height}
+            srcSet={`${webImageAttrs.url}?w=1800&q=75&f=webp`}
           />
         )}
         <Img
           src={imageUrl}
           alt={imageAlt}
-          width={imageWidth}
-          height={imageHeight}
+          width={500}
+          height={500}
           priority
-          className="h-auto w-full object-contain"
           isStatic
-          sizes="100vw"
+          className="h-auto w-full object-contain"
         />
       </picture>
     </LinkClickTracker>

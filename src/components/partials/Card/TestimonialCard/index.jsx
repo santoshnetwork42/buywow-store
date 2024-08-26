@@ -1,7 +1,6 @@
-import React from "react";
 import { Heading, Img, Text } from "@/components/elements";
-import { extractAttributes } from "@/utils/helpers";
 import TestimonialProductCard from "@/components/partials/Card/TestimonialProductCard";
+import { extractAttributes } from "@/utils/helpers";
 
 const TestimonialCard = ({
   name,
@@ -78,16 +77,14 @@ const TestimonialCard = ({
 
   return (
     <div
-      className={`aspect-[320/192 flex h-full w-[82vw] min-w-[324px] max-w-[502px] flex-col gap-2 sm:aspect-[502/250] sm:w-[70vw] md:w-[58vw] md:gap-3 lg:w-[46vw] ${className}`}
+      className={`flex aspect-[320/192] h-full w-[82vw] min-w-[324px] max-w-[502px] flex-col gap-2 sm:aspect-[502/250] sm:w-[70vw] md:w-[58vw] md:gap-3 lg:w-[46vw] ${className}`}
       {...props}
     >
       <div className="overflow-hidden rounded sm:rounded-md lg:rounded-lg">
         <picture>
           <source
             media="(min-width: 576px)"
-            srcSet={webImageUrl}
-            width={502}
-            height={250}
+            srcSet={`${webImageUrl}?w=700&q=75&f=webp`}
           />
           <Img
             src={mWebImageUrl || webImageUrl}
@@ -96,8 +93,8 @@ const TestimonialCard = ({
               webImageAlternativeText ||
               "Testimonial Image"
             }
-            height={284}
-            width={472}
+            height={500}
+            width={500}
             priority
             isStatic
             className="h-auto w-full object-contain"

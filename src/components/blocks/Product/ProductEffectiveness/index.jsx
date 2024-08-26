@@ -16,7 +16,7 @@ const ProductEffectiveness = ({ title, image, EffectivenessChart }) => {
             return (
               <div
                 key="product-effectiveness-image"
-                className="aspect-[600/346] w-full overflow-hidden rounded-lg md:max-w-[48%]"
+                className="aspect-[600/346] w-full max-w-[500px] overflow-hidden rounded-lg md:max-w-[48%]"
               >
                 <Img
                   src={url}

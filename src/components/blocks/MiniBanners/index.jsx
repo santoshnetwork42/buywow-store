@@ -1,9 +1,7 @@
-import React from "react";
-import Link from "next/link";
+import LinkClickTracker from "@/components/common/LinkClickTracker";
+import { Img } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
-import { Img } from "@/components/elements";
-import LinkClickTracker from "@/components/common/LinkClickTracker";
 
 const MiniBanners = ({ miniBannerItems: banners }) => {
   if (!Array.isArray(banners) || banners.length === 0) return null;
@@ -24,6 +22,12 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
 
         if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
+        const imageUrl = mWebImageAttrs.url || webImageAttrs.url;
+        const imageAlt =
+          mWebImageAttrs.alternativeText ||
+          webImageAttrs.alternativeText ||
+          `Promo Banner ${index + 1}`;
+
         return (
           <LinkClickTracker
             href={link || "#"}
@@ -38,19 +42,18 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
             }}
           >
             <picture className="relative block aspect-[298/120] w-[80vw] sm:w-[46vw] md:aspect-[650/166]">
-              <source media="(min-width: 768px)" srcSet={webImageAttrs.url} />
+              <source
+                media="(min-width: 768px)"
+                srcSet={`${webImageAttrs.url}?w=1100&q=75&f=webp`}
+              />
               <Img
-                src={mWebImageAttrs.url || webImageAttrs.url}
-                alt={
-                  mWebImageAttrs.alternativeText ||
-                  webImageAttrs.alternativeText ||
-                  `Promo Banner ${index + 1}`
-                }
-                fill
-                sizes="(min-width: 768px) 650px, (min-width: 640px) 46vw, 80vw"
+                src={imageUrl}
+                alt={imageAlt}
+                width={500}
+                height={500}
                 priority
                 isStatic
-                className="h-auto w-full object-contain"
+                className="aspect-[298/120] h-auto w-full object-contain md:aspect-[650/166]"
               />
             </picture>
           </LinkClickTracker>

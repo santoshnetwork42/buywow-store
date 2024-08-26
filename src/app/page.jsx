@@ -74,9 +74,7 @@ const Breadcrumb = dynamic(() => import("@/components/blocks/Breadcrumb"));
 const VideoSection = dynamic(
   () => import("@/components/partials/Others/VideoSection"),
 );
-const BlogSection = dynamic(
-  () => import("@/components/partials/Others/BlogSection"),
-);
+const BlogSection = dynamic(() => import("@/components/blocks/BlogSection"));
 const RecentlyViewed = dynamic(
   () => import("@/components/blocks/RecentlyViewed"),
 );
@@ -116,7 +114,7 @@ const componentMap = {
   ComponentAccordionFaQsSection: AccordionFaQs,
   ComponentBlocksBreadcrumb: Breadcrumb,
   ComponentVideoSection: VideoSection,
-  ComponentBlogSection: BlogSection,
+  ComponentBlocksBlogSection: BlogSection,
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
@@ -129,13 +127,8 @@ const renderBlock = (block, index, slug) => {
   return <Component key={index} slug={slug} {...block} />;
 };
 
-// const getPageData = unstable_cache(getPageBySlugAPI, ["pageData"], {
-//   revalidate: 1800,
-// });
-
 export default async function Page() {
   try {
-    // const pageData = await getPageData("index");
     const pageData = await getPageBySlugAPI("index");
     const { blocks } = pageData || {};
 

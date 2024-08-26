@@ -10,7 +10,7 @@ import { GOKWIK_MID, STORE_PREFIX } from "@/config";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
-import { useGuestCheckout, useNavBarState } from "@/utils/context/navbar";
+import { useGuestCheckout } from "@/utils/context/navbar";
 import { GOKWIK_ENABLED, PREPAID_ENABLED } from "@/utils/data/constants";
 import {
   useCartItems,
@@ -43,17 +43,19 @@ const CartDrawer = ({ upsellProducts }) => {
     cartList,
     isShoppingCartIdLoading,
     isCartOpen,
+    isRewardApplied,
   } = useSelector((state) => ({
-    appliedCoupon: state?.cart?.coupon,
-    shoppingCartId: state?.cart?.cartId,
-    isShoppingCartIdLoading: state?.cart?.isShoppingCartIdLoading,
-    user: state?.user?.user,
-    customUser: state?.customUser,
-    cartList: state?.cart?.data,
-    isCartOpen: state?.modal?.modal?.cart?.isCartOpen,
+    appliedCoupon: state.cart?.coupon,
+    shoppingCartId: state.cart?.cartId,
+    isShoppingCartIdLoading: state.cart?.isShoppingCartIdLoading,
+    user: state.user?.user,
+    customUser: state.user?.customUser,
+    cartList: state.cart?.data,
+    isCartOpen: state.modal?.modal?.cart?.isCartOpen,
+    isRewardApplied: state.cart?.isRewardApplied,
   }));
 
-  const { validateCart, fetchAndAddProductsFromEncodedCart } =
+  const { validateCart, fetchAndAddProductsFromEncodedCart, applyRewardPoint } =
     useCartDispatch();
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
   const { handleOutOfStock, handleProceedToCheckout, viewCart } =
@@ -66,7 +68,6 @@ const CartDrawer = ({ upsellProducts }) => {
     inventoryMapping,
     outOfStockItems,
   } = inventory;
-  const { isRewardApplied, handleRewardApply } = useNavBarState();
   const guestCheckout = useGuestCheckout();
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
@@ -93,7 +94,9 @@ const CartDrawer = ({ upsellProducts }) => {
   });
 
   const amountNeededToAvailCashback =
-    amountNeededToAvailPrepaidCashback?.amount - grandTotal;
+    amountNeededToAvailPrepaidCashback?.isEnabled
+      ? amountNeededToAvailPrepaidCashback?.amount - grandTotal
+      : 0;
 
   const validateAndGoToCheckout = useCallback(async () => {
     if (!isInventoryCheckSuccess) {
@@ -132,7 +135,7 @@ const CartDrawer = ({ upsellProducts }) => {
     }
 
     handleProceedToCheckout("BUYWOW");
-    if (user?.id || guestCheckout || customUser) {
+    if (user?.id || guestCheckout || customUser?.phone) {
       router.push("/checkout");
       return Promise.resolve(true);
     }
@@ -214,7 +217,7 @@ const CartDrawer = ({ upsellProducts }) => {
                 showLoyalty={showLoyalty}
                 usableRewards={usableRewards}
                 isRewardApplied={isRewardApplied}
-                handleRewardApply={handleRewardApply}
+                handleRewardApply={applyRewardPoint}
                 totalRewardPointsOfUser={totalRewardPointsOfUser}
               />
               {/* done */}

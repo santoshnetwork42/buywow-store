@@ -1,10 +1,12 @@
 import { applyCouponAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
+import { AUTO_APPLY_COUPON_PATHNAMES } from "@/utils/data/constants";
 import {
   getCouponDiscount,
   useBestCoupon,
   useFeaturedCoupons,
 } from "@wow-star/utils";
+import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import CouponDrawer from "./CouponDrawer";
@@ -12,6 +14,8 @@ import CouponHeader from "./CouponHeader";
 import CouponModal from "./CouponModal";
 
 const CouponsAndOffers = () => {
+  const pathname = usePathname();
+
   const { applyCoupon, removeCoupon, removeFromCart } = useCartDispatch();
   const [couponCode, setCouponCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -74,27 +78,33 @@ const CouponsAndOffers = () => {
   );
 
   useEffect(() => {
-    if (cartList || cartList !== previousCartList.current) {
+    if (cartList && cartList !== previousCartList.current) {
       previousCartList.current = cartList;
 
-      if (
-        storedCouponCode &&
-        (!appliedCoupon || appliedCoupon?.autoApplied) &&
-        appliedCoupon?.code !== storedCouponCode
-      ) {
-        applyCouponCode(storedCouponCode, true);
-      } else if (
-        bestCouponCode &&
-        (!appliedCoupon || appliedCoupon?.autoApplied) &&
-        appliedCoupon?.code !== bestCouponCode
-      ) {
-        applyCouponCode(bestCouponCode, true);
-      } else if (appliedCoupon?.autoApplied) {
-        removeCoupon();
+      const shouldAutoApply = AUTO_APPLY_COUPON_PATHNAMES.some((path) =>
+        pathname.startsWith(path),
+      );
+
+      if (shouldAutoApply) {
+        if (
+          storedCouponCode &&
+          (!appliedCoupon || appliedCoupon?.autoApplied) &&
+          appliedCoupon?.code !== storedCouponCode
+        ) {
+          applyCouponCode(storedCouponCode, true);
+        } else if (
+          bestCouponCode &&
+          (!appliedCoupon || appliedCoupon?.autoApplied) &&
+          appliedCoupon?.code !== bestCouponCode
+        ) {
+          applyCouponCode(bestCouponCode, true);
+        } else if (appliedCoupon?.autoApplied) {
+          removeCoupon();
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bestCouponCode, cartList]);
+  }, [bestCouponCode, cartList, pathname]);
 
   const handleCouponRemove = useCallback(() => {
     cartList.forEach((item) => {

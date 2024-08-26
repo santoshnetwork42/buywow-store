@@ -9,6 +9,7 @@ import {
   findUserAddresses,
   getCartUpsellProducts,
   getCMSPages,
+  getInitialData,
   getLoyalty,
   getNavbarAndFooter,
   getOrder,
@@ -16,13 +17,14 @@ import {
   getProductById,
   getReviews,
   getReviewsAnalytics,
+  getStore,
   getUser,
   getUserRewards,
   searchCMSCollectionProducts,
-  searchCMSProducts,
   updateReview,
   updateUser,
   updateUserAddress,
+  validateTransaction,
   verifyCustomOTP,
 } from "@/graphql/appSync/api";
 import { errorHandler } from "@/utils/errorHandler";
@@ -37,23 +39,18 @@ Amplify.configure({
 
 const client = generateClient();
 
-export const searchCMSProductsAPI = async (
-  productSlugs = [
-    "brightening-vitamin-c-foaming-face-wash-with-built-in-brush",
-  ],
-) => {
+export const getStoreAPI = async () => {
   try {
     const response = await client.graphql({
-      query: searchCMSProducts,
+      query: getStore,
       authMode: "apiKey",
       variables: {
-        storeId: STORE_ID,
-        products: productSlugs,
+        id: STORE_ID,
+        deviceType: "WEB",
       },
     });
 
-    const products = response?.data?.searchCMSProducts?.items || [];
-    return products;
+    return response?.data?.getStore || {};
   } catch (err) {
     errorHandler(err, "Search CMS Products API");
     return null;
@@ -81,8 +78,6 @@ export const searchCMSCollectionProductsAPI = async ({
       },
     });
 
-    // console.log(response);
-
     return JSON.parse(response?.data?.searchCMSCollectionProducts || {});
   } catch (err) {
     errorHandler(err, "Search CMS Collection Products API");
@@ -102,7 +97,7 @@ export const getPageBySlugAPI = async (slugId) => {
       },
     });
 
-    return JSON.parse(response?.data?.getPageBySlug || "[]");
+    return JSON.parse(response?.data?.getPageBySlug || "{}");
   } catch (err) {
     errorHandler(err, "Get Page By Slug API");
     return null;
@@ -135,7 +130,7 @@ export const getUserAPI = async () => {
 
     return response?.data?.getUser || null;
   } catch (err) {
-    errorHandler(err, "Get User API");
+    errorHandler(err, "Get User API", true);
     return null;
   }
 };
@@ -185,15 +180,15 @@ export const verifyCustomOTPAPI = async ({ phone, otp }) => {
   }
 };
 
-export const getOrderByIdAPI = async ({ id }) => {
+export const getOrderByIdAPI = async ({ id, userId }) => {
   try {
-    const { data } = await client.graphql({
+    const response = await client.graphql({
       query: getOrder,
       variables: { id },
-      authMode: "apiKey",
+      authMode: userId ? "userPool" : "apiKey",
     });
 
-    return data;
+    return response?.data?.getOrder || null;
   } catch (error) {
     errorHandler(error, "Get Order By Id API");
     return false;
@@ -478,7 +473,7 @@ export const submitReviewAPI = async (reviewData, userId, productId) => {
             userId,
             productId,
             storeId: STORE_ID,
-            images,
+            images: images.slice(0, 10),
           },
         },
       });
@@ -511,7 +506,6 @@ export const submitReviewAPI = async (reviewData, userId, productId) => {
     }
   } catch (error) {
     errorHandler(error, "Submit Review API");
-    return null;
   }
 };
 
@@ -528,6 +522,46 @@ export const updateUserAPI = async (user) => {
         },
       },
       authMode: "userPool",
+    });
+
+    return response;
+  } catch (error) {
+    errorHandler("Error Updating User", error);
+    return error;
+  }
+};
+
+export const validateTransactionAPI = async (orderId, paymentId) => {
+  try {
+    const response = await client.graphql({
+      query: validateTransaction,
+      variables: { orderId, razorpayPaymentId: paymentId },
+      authMode: "apiKey",
+    });
+
+    return response?.data?.validateTransaction || null;
+  } catch (error) {
+    errorHandler(error, "Validate Transaction API");
+    return null;
+  }
+};
+
+export const getInitialDataAPI = async (storeId, deviceType) => {
+  try {
+    const response = await client.graphql({
+      query: getInitialData,
+      variables: {
+        storeId,
+        deviceType,
+        getStoreSettingInput: {
+          storeId: storeId,
+          deviceType: deviceType,
+        },
+        shippingTierFilter: {
+          storeId: { eq: storeId },
+        },
+      },
+      authMode: "apiKey",
     });
 
     return response;

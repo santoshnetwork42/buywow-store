@@ -50,4 +50,6 @@ const MainCartSection = ({
   );
 };
 
+MainCartSection.displayName = "MainCartSection";
+
 export default MainCartSection;

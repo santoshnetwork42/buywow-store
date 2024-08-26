@@ -14,6 +14,7 @@ const Accordion = ({
   className,
   accordionButtonClassName,
   toggleArrowClassName,
+  accordionMainContainerClassName,
   variant,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +42,7 @@ const Accordion = ({
   }, []);
 
   return (
-    <div className={`flex w-full flex-col border-b ${className}`}>
+    <div className={twMerge(`flex w-full flex-col border-b`, className)}>
       <button
         className={twMerge(
           "flex w-full cursor-pointer items-center justify-between",
@@ -53,7 +54,7 @@ const Accordion = ({
       >
         <div className="flex w-full items-center gap-2 md:gap-2.5">
           {imgUrl && (
-            <div className="aspect-square w-6">
+            <div className="aspect-square w-6 md:w-7">
               <Img
                 src={imgUrl}
                 width={26}
@@ -64,9 +65,11 @@ const Accordion = ({
               />
             </div>
           )}
-          <Heading as="h4" size="lg" className="text-base" responsive>
-            {title}
-          </Heading>
+          {!!title && (
+            <Heading as="h4" size="lg" className="text-base" responsive>
+              {title}
+            </Heading>
+          )}
           {header}
         </div>
         {!!title && (
@@ -84,6 +87,7 @@ const Accordion = ({
           isOpen ? "visible" : "invisible",
           isOpen ? (variant === "small" ? "mb-2" : "mb-5") : "mb-0",
           isOpen ? "mt-2.5" : "mt-0",
+          accordionMainContainerClassName,
         )}
         style={{ maxHeight: isOpen ? contentHeight : "0px" }}
       >

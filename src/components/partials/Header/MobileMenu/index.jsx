@@ -2,17 +2,18 @@ import { CloseSVG, UserSVG } from "@/assets/images";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import Sidebar from "@/components/features/Drawer";
 import MobileMenuItem from "@/components/partials/Header/MobileMenuItem";
-// import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
-import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
+import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
-import { useDispatch } from "react-redux";
+import { useCallback } from "react";
 
 const HeaderSection = ({
   mWebUrl,
   mWebAlternativeText,
   onClose,
   isLoggedin,
+  onLoginClick,
 }) => (
   <div className="flex items-center justify-between bg-yellow-900 p-4">
     <Link href="/" onClick={onClose}>
@@ -30,10 +31,9 @@ const HeaderSection = ({
         <Heading as="h4" size="lg" className="text-white-a700_01">
           Hi Guest
         </Heading>
-        <Link
-          href="/login"
+        <div
           className="relative flex w-fit items-center gap-1"
-          onClick={onClose}
+          onClick={onLoginClick}
         >
           <Text size="sm" as="p" className="text-white-a700_01">
             Login
@@ -46,7 +46,7 @@ const HeaderSection = ({
             className="aspect-square w-[18px] object-contain"
           />
           <div className="absolute -bottom-[3px] left-0 h-[0.5px] w-[55px] bg-white-a700_01"></div>
-        </Link>
+        </div>
       </div>
     )}
     <Button onClick={onClose}>
@@ -75,17 +75,9 @@ const MenuList = ({ items, closeMenu, linkPrefix }) => (
 MenuList.displayName = "MenuList";
 
 const FooterSection = ({ onClose }) => {
-  const dispatch = useDispatch();
-  // const { logout } = useEventsDispatch();
+  const { handleSignOut } = useAuthDispatch();
   const handleLogoutClick = () => {
-    dispatch({
-      type: authSagaActions.SIGNOUT,
-    });
-    //   .then(() => {
-    //   logout({
-    //     URL: window.location.href,
-    //   });
-    // });
+    handleSignOut();
     onClose();
   };
 
@@ -117,8 +109,14 @@ const MobileMenu = ({
   logo,
   isLoggedin,
 }) => {
+  const { handlePasswordLessModal } = useModalDispatch();
   const { url: mWebUrl, alternativeText: mWebAlternativeText = "logo" } =
     extractAttributes(logo);
+
+  const onLoginClick = useCallback(() => {
+    handlePasswordLessModal(true, false, "/");
+    onClose();
+  }, [handlePasswordLessModal, onClose]);
 
   const menuContent = (
     <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
@@ -152,6 +150,7 @@ const MobileMenu = ({
         mWebAlternativeText={mWebAlternativeText}
         onClose={onClose}
         isLoggedin={isLoggedin}
+        onLoginClick={onLoginClick}
       />
       {menuContent}
       {isLoggedin && <FooterSection onClose={onClose} />}

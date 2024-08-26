@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import { Button, Text } from "@/components/elements";
+import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { showToast } from "../ToastComponent";
 
@@ -57,7 +57,7 @@ const Quantity = ({
     "h-full rounded-none bg-lime-50 text-black-900 md:text-lg";
 
   const containerClassName = twMerge(
-    "grid h-[26px] min-h-5 shrink-0 grid-cols-3 items-center overflow-hidden rounded-md border bg-white-a700 sm:h-7 md:h-8 lg:h-9",
+    "grid h-[25.5px] min-h-5 shrink-0 grid-cols-3 items-center overflow-hidden rounded-md border bg-white-a700 sm:h-7 md:h-8 lg:h-[34.5px]",
     className,
   );
 

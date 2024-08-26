@@ -97,8 +97,6 @@ export function* removeFromCartHandler(action) {
     coupon: state.cart.coupon,
   }));
 
-  const { product: tmpProduct } = action.payload;
-
   const filteredCart = cart.filter(
     (product) =>
       product.recordKey !== removedProduct.recordKey &&

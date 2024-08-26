@@ -96,7 +96,7 @@ const ProductCollectionByTab = ({
 
         const response = await searchCMSCollectionProductsAPI({
           collectionSlug: slug[slug.length - 1],
-          tabSelected: activeTab?.tab?.data?.id,
+          tabSelected: activeTab?.tab?.data?.id || null,
           defaultSorting: newSortOption.value,
           page: 1,
           limit: activeTab?.pagination?.pageSize ?? 10,
@@ -196,7 +196,7 @@ const ProductCollectionByTab = ({
     try {
       const response = await searchCMSCollectionProductsAPI({
         collectionSlug: slug[slug.length - 1],
-        tabSelected: activeTab?.tab?.data?.id,
+        tabSelected: activeTab?.tab?.data?.id || null,
         defaultSorting: sortOption.value,
         page: nextPage,
         limit: activeTab?.pagination?.pageSize ?? 10,
@@ -284,12 +284,13 @@ const ProductCollectionByTab = ({
       <TabList className="flex w-max gap-2 sm:gap-3 md:gap-4 xl:gap-5">
         {productCollectionTabItems.map((category, index) => {
           const tabTitle = category?.tab?.data?.attributes?.title;
+          if (!tabTitle) return null;
           return (
             <Tab
               key={`tab-${index}`}
               className="w-max rounded-full border-[0.5px] border-lime-100 px-2.5 py-1 text-sm font-light capitalize !leading-[1.25] md:border md:px-3 md:py-1.5 md:text-base"
             >
-              {tabTitle || `Tab ${index + 1}`}
+              {tabTitle}
             </Tab>
           );
         })}
@@ -336,7 +337,7 @@ const ProductCollectionByTab = ({
         selectedTabPanelClassName="relative tab-panel--selected"
         onSelect={handleTabSelect}
       >
-        <div className="mb-5 grid grid-cols-[1fr_auto] items-center gap-4 sm:mb-6 sm:gap-5 lg:mb-7 lg:grid-cols-[auto_1fr_auto] xl:gap-8">
+        <div className="mb-4 grid grid-cols-[1fr_auto] items-center gap-4 sm:mb-6 sm:gap-5 lg:mb-7 lg:grid-cols-[auto_1fr_auto] xl:gap-8">
           <Heading
             as="h2"
             size="2xl"
@@ -346,14 +347,16 @@ const ProductCollectionByTab = ({
             {title}
           </Heading>
           <SortDropdown
-            className="shrink-0 lg:order-3"
+            className="ml-auto w-fit shrink-0 lg:order-3"
             value={sortOption}
             options={SORT_OPTIONS}
             onOptionChange={handleSortChange}
           />
-          <div className="no-scrollbar col-span-full w-full overflow-x-auto max-lg:[text-align:-webkit-center] lg:order-2 lg:col-span-1">
-            {renderTabList}
-          </div>
+          {productCollectionTabItems[activeTabIndex].tab.data && (
+            <div className="no-scrollbar col-span-full w-full overflow-x-auto max-lg:[text-align:-webkit-center] lg:order-2 lg:col-span-1">
+              {renderTabList}
+            </div>
+          )}
         </div>
 
         {productCollectionTabItems.map((category, index) => (

@@ -17,7 +17,7 @@ export default async function Search(req, res) {
       headers: {
         Authorization: `Bearer ${TTM_CLIENT_API_KEY}`,
       },
-    }
+    },
   ).then((resp) => resp.json());
 
   res.json(response);

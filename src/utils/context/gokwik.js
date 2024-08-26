@@ -19,7 +19,6 @@ import {
 } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
-import { useNavBarState } from "@/utils/context/navbar";
 import { PREPAID_ENABLED } from "@/utils/data/constants";
 import { errorHandler } from "@/utils/errorHandler";
 import { addPhonePrefix, formatUserAddress } from "@/utils/helpers";
@@ -30,13 +29,14 @@ export const GKContext = createContext();
 
 function GoKwikProvider({ children }) {
   const router = useRouter();
-  const { isRewardApplied } = useNavBarState();
+
   const { userWithRewardPoints, setUserWithRewardPoints } = useNavbar();
   const { applyCoupon, removeCoupon, emptyCart, removeFromCart } =
     useCartDispatch();
   const { setIsLoggedinViaGokwik, setCustomUser } = useUserDispatch();
   const { cartList } = useSelector((state) => state.cart);
   const { id = "" } = useSelector((state) => state.user.user) || {};
+  const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const { totalPrice } = useCartTotal({

@@ -1,6 +1,5 @@
-import React from "react";
-import { Heading, Img } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
+import { Heading, Img } from "@/components/elements";
 import { extractAttributes, getBgColor } from "@/utils/helpers";
 
 const AdditionalIngredient = ({ title, image }) => {
@@ -36,13 +35,11 @@ const PrimaryIngredient = ({ webImage, mWebImage }) => {
   const mWebImageAttrs = extractAttributes(mWebImage);
 
   return (
-    <picture className="w-[90%] max-w-[498px] shrink-0 md:w-[55%] md:max-w-[725px] xl:w-[60%]">
+    <picture className="aspect-square w-[90%] max-w-[498px] shrink-0 md:aspect-[725/274] md:w-[55%] md:max-w-[725px] xl:w-[60%]">
       {!!webImageAttrs.url && (
         <source
           media="(min-width: 768px)"
-          srcSet={webImageAttrs.url}
-          width={725}
-          height={274}
+          srcSet={`${webImageAttrs.url}?w=600&q=75&f=webp`}
         />
       )}
       <Img

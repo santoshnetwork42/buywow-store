@@ -1,0 +1,104 @@
+"use client";
+
+import { Button, Heading, Text } from "@/components/elements";
+import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import AddressForm from "./AddressForm";
+import AddressList from "./AddressList";
+import AddressModal from "./AddressModal";
+
+const AddressSkeleton = () => (
+  <div className="animate-pulse space-y-4">
+    <div className="h-10 w-full rounded-md bg-gray-200"></div>
+    <div className="h-40 w-full rounded-md bg-gray-200"></div>
+    <div className="h-4 w-1/2 rounded bg-gray-200"></div>
+  </div>
+);
+
+const AddressSection = React.memo(({ variant }) => {
+  const { getAddressList } = useAddressDispatch();
+  const { user } = useSelector((state) => state.user);
+  const { addressList, isLoading } = useSelector((state) => state.address);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (user?.id) {
+      getAddressList(user?.id);
+    }
+  }, [user]);
+
+  const handleAddNewAddress = useCallback(() => {
+    setIsModalOpen(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
+
+  if (isLoading) {
+    return <AddressSkeleton />;
+  }
+
+  return (
+    <div
+      className={`flex w-full flex-col py-1 ${variant === "CHECKOUT" ? "gap-3 md:gap-4" : "gap-4"}`}
+    >
+      <div
+        className={`flex min-h-10 items-center justify-between rounded-md bg-blue-50 px-4 py-1.5 md:min-h-11`}
+      >
+        <Heading as="h3" size="xl" className="font-medium" responsive>
+          Address
+        </Heading>
+        {(addressList?.length > 0 || variant === "CHECKOUT") && (
+          <Button
+            variant="none"
+            size="small"
+            onClick={handleAddNewAddress}
+            className={`rounded-none underline ${addressList?.length === 0 ? "md:hidden" : ""}`}
+          >
+            + New Address
+          </Button>
+        )}
+      </div>
+
+      {addressList?.length > 0 ? (
+        <>
+          <AddressList addressList={addressList} variant={variant} />
+          {isModalOpen && (
+            <AddressModal
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              enableOutsideClick={true}
+              action="CREATE"
+            />
+          )}
+        </>
+      ) : (
+        <>
+          <AddressForm
+            className={variant === "CHECKOUT" ? "hidden md:flex" : ""}
+          />
+          {isModalOpen && (
+            <AddressModal
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              enableOutsideClick={true}
+              action="CREATE"
+            />
+          )}
+        </>
+      )}
+      {variant !== "CHECKOUT" && (
+        <Text as="p" size="sm" className="mt-2">
+          The following addresses can be used on the checkout page.
+        </Text>
+      )}
+    </div>
+  );
+});
+
+AddressSection.displayName = "AddressSection";
+
+export default AddressSection;

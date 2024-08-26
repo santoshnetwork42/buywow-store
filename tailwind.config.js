@@ -42,6 +42,7 @@ module.exports = {
           300: "#dcdcdc",
           400: "#c2c3c7",
           500: "#aaaaaa",
+          600: "#666666",
           700: "#575757",
           "300_01": "#dddddd",
           "300_02": "#dadada",
@@ -71,7 +72,7 @@ module.exports = {
       },
       boxShadow: {
         xs: "0 4px 4px 0 #0000000c",
-        sm: "0 1px 1px 0 #00000019",
+        sm: "0 4px 4px 0 #0000000D",
         md: "0 0 13px 5px #00000029",
       },
       fontFamily: {

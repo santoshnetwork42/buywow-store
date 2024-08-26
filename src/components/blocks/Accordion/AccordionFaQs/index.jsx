@@ -1,10 +1,10 @@
 "use client";
 
-import React, { memo, useEffect, useRef, useState } from "react";
 import { Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import PlusMinusToggle from "@/components/features/Accordion/PlusMinusToggle";
 import { extractAttributes } from "@/utils/helpers";
+import { memo, useEffect, useRef, useState } from "react";
 
 const FaqItem = memo(({ question, answer, showDivider }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -88,6 +88,7 @@ const AccordionFaQs = ({ accordionFAQsTitle, image, FAQs }) => {
       title={accordionFAQsTitle}
       imgUrl={accordionImageUrl}
       alternativeText={accordionImageAlt}
+      className="lg:w-[90%]"
     >
       <div className="flex flex-col gap-2 md:gap-2.5">
         {FAQs.map((faq, index) => (

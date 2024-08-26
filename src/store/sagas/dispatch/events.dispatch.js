@@ -45,18 +45,6 @@ export const useEventsDispatch = () => {
     });
   };
 
-  const auth = (action, moe) => {
-    dispatch({
-      type: eventsSagaActions.AUTH,
-      payload: {
-        action,
-        userId: moe?.userId,
-        query: moe?.query,
-        phone: moe?.phone,
-      },
-    });
-  };
-
   const search = (term) => {
     dispatch({ type: eventsSagaActions.SEARCH, payload: { term } });
   };
@@ -223,6 +211,33 @@ export const useEventsDispatch = () => {
   //   });
   // };
 
+  const spinTheWheelPlayed = (payload) => {
+    dispatch({
+      type: eventsSagaActions.SPIN_THE_WHEEL_PLAYED,
+      payload,
+    });
+  };
+
+  const spinTheWheelReward = (payload) => {
+    dispatch({
+      type: eventsSagaActions.SPIN_THE_WHEEL_REWARD,
+      payload,
+    });
+  };
+
+  const auth = (payload) => {
+    const { action, moe } = payload;
+    dispatch({
+      type: eventsSagaActions.AUTH,
+      payload: {
+        action,
+        userId: moe?.userId,
+        query: moe?.query,
+        phone: moe?.phone,
+      },
+    });
+  };
+
   return {
     viewItem,
     handleOutOfStock,
@@ -250,5 +265,7 @@ export const useEventsDispatch = () => {
     viewList,
     priceMismatch,
     // customEventVercel,
+    spinTheWheelPlayed,
+    spinTheWheelReward,
   };
 };

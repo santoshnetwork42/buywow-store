@@ -1,6 +1,264 @@
 // ==================================================
 // NEW APIs
 
+export const getInitialData = /* GraphQL */ `
+  query getInitialData(
+    $getStoreSettingInput: GetStoreSettingInput!
+    $storeId: ID!
+    $deviceType: DeviceType!
+    $couponNextToken: String
+    $ruleEngineLimit: Int
+    $ruleEngineNextToken: String
+    $shippingTierFilter: SearchableShippingTierFilterInput!
+  ) {
+    getStoreSetting(input: $getStoreSettingInput) {
+      id
+      configurations {
+        ORDER_COUNT
+        COD_CHARGES
+        PREPAID_DISCOUNT_PERCENT
+        MAX_COD_AMOUNT
+        MAX_PREPAID_DISCOUNT
+        GUEST_CHECKOUT
+        COD_ENABLED
+        PREPAID_ENABLED
+        TIMER_TTILE
+        TIMER_DESCRIPTION
+        TIMER_COLOR
+        TIMER_BG_COLOR
+        TIMER_END_TIME
+        TIMER_START_TIME
+        IS_DAILY_TIMER
+        TIMER_ENABLED
+        BLOCK_INVENTORY
+        GOKWIK_ENABLED
+        PPCOD_ENABLED
+        PPCOD_AMOUNT
+      }
+    }
+
+    getStore(id: $storeId, deviceType: $deviceType) {
+      id
+      name
+      title
+      description
+      isActive
+      webUrl
+      trackingUrl
+      imageUrl
+      darkImageUrl
+      banners {
+        webKey
+        mobileKey
+        link
+        name
+        isArchive
+        priority
+        deviceType
+      }
+      announcements {
+        label
+        link
+        color
+        textColor
+        deviceType
+        isArchive
+      }
+      socialLinks {
+        instagram
+        facebook
+        twitter
+        youtube
+        pinterest
+      }
+    }
+
+    searchShippingTiers(filter: $shippingTierFilter) {
+      items {
+        id
+        storeId
+        paymentType
+        amount
+        minOrderValue
+        maxOrderValue
+        createdAt
+        updatedAt
+        __typename
+      }
+    }
+
+    listVariantGroups(storeId: $storeId) {
+      id
+      label
+      variantOptions {
+        id
+        label
+      }
+    }
+
+    getTopCoupons(
+      storeId: $storeId
+      deviceType: $deviceType
+      nextToken: $couponNextToken
+    ) {
+      items {
+        id
+        description
+        couponNote
+        tAndC
+        couponTitle
+        code
+        priority
+        couponType
+        buyXQuantity
+        getYAmount
+        getYPercentage
+        getYQuantity
+        getYProduct
+        getYStoreProduct {
+          id
+          title
+          price
+          listingPrice
+          sku
+          subCategory {
+            name
+            slug
+          }
+          category {
+            name
+            slug
+          }
+          images {
+            items {
+              id
+              imageKey
+              alt
+            }
+          }
+        }
+        minOrderValue
+        maxDiscount
+        expirationDate
+        autoApply
+        applicableCollections
+        applicableProducts
+        paymentMethod
+        isAffiliated
+        applyPrepaidDiscount
+        applyOnAllVariants
+        isPDPFeatured
+        isFeatured
+      }
+    }
+
+    searchProducts {
+      items {
+        id
+        title
+        collections
+        vendor
+        status
+        minimumOrderQuantity
+        maximumOrderQuantity
+        subCategory {
+          name
+          slug
+        }
+        isFeatured
+        category {
+          name
+          slug
+        }
+        slug
+        price
+        sku
+        position
+        listingPrice
+        tags
+        inventory
+        blockedInventory
+        continueSellingOutOfStock
+        rating
+        totalRatings
+        thumbImages
+        isInventoryEnabled
+        totalOrders
+        recommended
+        recommendPriority
+        recommendPrice
+        variants {
+          items {
+            id
+            title
+            minimumOrderQuantity
+            maximumOrderQuantity
+            price
+            position
+            listingPrice
+            images {
+              items {
+                id
+              }
+            }
+            inventory
+            blockedInventory
+            status
+          }
+        }
+        images {
+          items {
+            id
+            position
+            alt
+            width
+            height
+            imageKey
+            isThumb
+          }
+        }
+      }
+      nextToken
+      total
+    }
+
+    byStoreIdRuleEngine(
+      storeId: $storeId
+      limit: $ruleEngineLimit
+      nextToken: $ruleEngineNextToken
+    ) {
+      items {
+        id
+        storeId
+        name
+        description
+        event
+        enabled
+        type
+        minOrderValue
+        maxCashbackAllowed
+        cashbackPercentage
+        expirePeriodInDays
+        cashbackPoint
+        couponName
+        maxDebitableCashbackPerMonth
+        maxCreditableCashbackPerMonth
+        conditions {
+          event
+          attributes {
+            key
+            operator
+            value
+          }
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+
 export const getCartUpsellProducts = /* GraphQL */ `
   query getCartUpsellProducts($storeId: String!) {
     getCartUpsellProducts(storeId: $storeId)
@@ -721,6 +979,7 @@ export const applyCoupon = /* GraphQL */ `
       getYPercentage
       getYQuantity
       getYProduct
+      couponTitle
       getYStoreProduct {
         id
         title
@@ -2438,24 +2697,38 @@ export const sendAffiseAnalytics = /* GraphQL */ `
 `;
 
 export const getFeaturedBlogs = /* GraphQL */ `
-  query FeatueredBlogs {
-    posts(first: 3, where: { tagSlugIn: "english", status: PUBLISH }) {
-      edges {
-        node {
-          date
-          id
-          databaseId
-          slug
-          status
-          title
-          uri
-          excerpt
-          toPing
-          link
-          featuredImage {
-            node {
-              mediaItemUrl
+  query FeatueredBlogs($first: Int) {
+    posts(first: $first, where: { tagSlugIn: "english", status: PUBLISH }) {
+      nodes {
+        date
+        id
+        databaseId
+        slug
+        status
+        title
+        uri
+        excerpt
+        toPing
+        link
+        author {
+          node {
+            name
+            slug
+            avatar {
+              url
+              height
+              width
             }
+            username
+            nicename
+          }
+        }
+        seo {
+          readingTime
+        }
+        featuredImage {
+          node {
+            mediaItemUrl
           }
         }
       }
@@ -2466,13 +2739,11 @@ export const getFeaturedBlogs = /* GraphQL */ `
 export const getCategories = /* GraphQL */ `
   query GetCategories {
     categories {
-      edges {
-        node {
-          id
-          databaseId
-          slug
-          name
-        }
+      nodes {
+        id
+        databaseId
+        slug
+        name
       }
     }
   }
@@ -2492,12 +2763,11 @@ export const getCategory = /* GraphQL */ `
 export const getTags = /* GraphQL */ `
   query GetTags {
     tags {
-      edges {
-        node {
-          id
-          slug
-          name
-        }
+      nodes {
+        id
+        databaseId
+        slug
+        name
       }
     }
   }
@@ -2507,6 +2777,7 @@ export const getTag = `
 query GetTag($id: ID!) {
   tag(id: $id, idType: SLUG) {
     id
+    databaseId
     slug
     name
   }
@@ -2516,14 +2787,20 @@ query GetTag($id: ID!) {
 export const getBlogs = /* GraphQL */ `
   query GetBlogs(
     $category: String
-    $tag: [String]
+    $author: String
+    $tags: [String]
     $first: Int
     $last: Int
     $after: String
     $before: String
   ) {
     posts(
-      where: { categoryName: $category, tagSlugIn: $tag, status: PUBLISH }
+      where: {
+        categoryName: $category
+        tagSlugIn: $tags
+        authorName: $author
+        status: PUBLISH
+      }
       first: $first
       last: $last
       after: $after
@@ -2541,9 +2818,11 @@ export const getBlogs = /* GraphQL */ `
           id
           databaseId
           slug
+          seo {
+            readingTime
+          }
           title
           uri
-          readingTime
           excerpt
           link
           date
@@ -2555,9 +2834,27 @@ export const getBlogs = /* GraphQL */ `
           author {
             node {
               name
+              slug
               avatar {
                 url
+                height
+                width
               }
+              seo {
+                social {
+                  facebook
+                  instagram
+                  mySpace
+                  linkedIn
+                  pinterest
+                  soundCloud
+                  twitter
+                  wikipedia
+                  youTube
+                }
+              }
+              username
+              nicename
             }
           }
         }
@@ -2606,11 +2903,11 @@ export const getBlog = /* GraphQL */ `
       title
       uri
       excerpt
-      readingTime
       link
       date
       seo {
         metaDesc
+        readingTime
       }
       featuredImage {
         node {
@@ -2633,11 +2930,69 @@ export const getBlog = /* GraphQL */ `
       author {
         node {
           name
+          slug
           description
           avatar {
             url
           }
+          seo {
+            social {
+              linkedIn
+            }
+          }
         }
+      }
+    }
+  }
+`;
+
+export const getAuthors = /* GraphQL */ `
+  query GetAuthors {
+    users {
+      nodes {
+        slug
+        databaseId
+        nicename
+        name
+      }
+    }
+  }
+`;
+
+export const getAuthor = /* GraphQL */ `
+  query Author($id: ID!, $idType: UserNodeIdTypeEnum!) {
+    user(id: $id, idType: $idType) {
+      nicename
+      email
+      databaseId
+      description
+      firstName
+      lastName
+      name
+      nickname
+      slug
+      username
+      url
+      uri
+      avatar {
+        url
+        height
+        width
+      }
+      seo {
+        social {
+          facebook
+          instagram
+          linkedIn
+          mySpace
+          pinterest
+          soundCloud
+          twitter
+          wikipedia
+          youTube
+        }
+        title
+        canonical
       }
     }
   }
@@ -2674,6 +3029,21 @@ export const getBlogsByCategory = /* GraphQL */ `
               }
             }
           }
+        }
+      }
+    }
+  }
+`;
+
+export const getTopMenu = /* GraphQL */ `
+  query GetMenu($id: ID!) {
+    menu(id: $id, idType: ID) {
+      id
+      menuItems {
+        nodes {
+          id
+          label
+          path
         }
       }
     }

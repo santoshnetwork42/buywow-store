@@ -1,44 +1,196 @@
-"use client";
-
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef,
-} from "react";
-import useEmblaCarousel from "embla-carousel-react";
+import { VideoDotIcon } from "@/assets/svg/icons";
 import { Button, Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
+import { getPublicImageURL } from "@/utils/helpers/img-loader";
+import useEmblaCarousel from "embla-carousel-react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 const Thumb = React.memo(({ isSelected, image, onClick }) => (
   <div
-    className={`flex aspect-square cursor-pointer items-center justify-center ${isSelected ? "border border-black-900" : ""}`}
+    className={`relative flex aspect-square cursor-pointer items-center justify-center rounded-lg ${isSelected ? "border border-black-900" : ""}`}
   >
     <button onClick={onClick} type="button" className="w-full p-0">
-      <Img
-        src={image?.imageKey}
-        width={300}
-        height={300}
-        alt="Thumbnail"
-        className="aspect-square w-full rounded-lg object-cover"
-        isStatic
-        addPrefix
-      />
+      {image.isVideo ? (
+        <>
+          <video
+            src={getPublicImageURL({
+              key: image.imageKey,
+              resize: 300,
+              addPrefix: true,
+            })}
+            className="aspect-square w-full rounded-lg object-cover"
+            muted
+          />
+          <div className="absolute left-1/2 top-1/2 size-8 -translate-x-1/2 -translate-y-1/2">
+            <VideoDotIcon className="h-full w-full" />
+          </div>
+        </>
+      ) : (
+        <Img
+          src={image?.imageKey}
+          width={200}
+          height={200}
+          alt="Thumbnail"
+          className="aspect-square w-full rounded-lg object-contain"
+          isStatic
+          addPrefix
+        />
+      )}
     </button>
   </div>
 ));
 
-const DotButton = React.memo(({ isSelected, onClick }) => (
-  <Button
-    className={`mr-1.5 inline-block h-1.5 cursor-pointer rounded-full transition-all duration-300 ease-in-out ${
-      isSelected ? "w-3 bg-black-900" : "w-1.5 bg-gray-300_01 hover:bg-gray-400"
-    }`}
-    size="none"
-    variant="none"
+const DotButton = React.memo(({ isSelected, onClick, isVideo }) => {
+  const baseClassName = `
+    mr-1.5 
+    inline-block 
+    size-2.5 
+    cursor-pointer 
+    rounded-full 
+    transition-all 
+    duration-300 
+    ease-in-out
+    ${isSelected ? "bg-black-900" : "bg-gray-300_01 hover:bg-gray-400"}
+  `;
+
+  return (
+    <Button
+      className={baseClassName}
+      size="none"
+      variant="none"
+      onClick={onClick}
+    >
+      {isVideo && <VideoDotIcon color={isSelected ? "black" : undefined} />}
+    </Button>
+  );
+});
+
+const PlayPauseButton = React.memo(({ isPlaying, onClick }) => (
+  <div
+    className={`absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-black-900 bg-opacity-50 p-4 text-white-a700 transition-all duration-300 ease-in-out ${isPlaying ? "scale-95" : "scale-100"}`}
     onClick={onClick}
-  />
+  >
+    {isPlaying ? (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <rect x="6" y="4" width="4" height="16" />
+        <rect x="14" y="4" width="4" height="16" />
+      </svg>
+    ) : (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="28"
+        height="28"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+      >
+        <path d="M8 5v14l11-7z" />
+      </svg>
+    )}
+  </div>
 ));
+
+const ProductImage = React.memo(
+  ({
+    image,
+    index,
+    isPlaying,
+    showPlayButton,
+    togglePlayPause,
+    promotionTag,
+    productBenefitTags,
+    videoRef,
+    layout,
+  }) => (
+    <div
+      className={`main-image relative overflow-hidden ${
+        layout === "grid" ? "w-full" : "flex-[0_0_100%]"
+      }`}
+      onClick={() => image.isVideo && togglePlayPause(index, layout)}
+    >
+      {image.isVideo ? (
+        <>
+          <video
+            ref={videoRef}
+            src={getPublicImageURL({
+              key: image.imageKey,
+              resize: 820,
+              addPrefix: true,
+            })}
+            className="main-image m-auto aspect-square cursor-pointer rounded-lg border object-contain shadow-sm"
+            loop
+            muted
+            playsInline
+          />
+          {(showPlayButton || !isPlaying) && (
+            <PlayPauseButton
+              isPlaying={isPlaying}
+              onClick={(e) => {
+                e.stopPropagation();
+                togglePlayPause(index, layout);
+              }}
+            />
+          )}
+        </>
+      ) : (
+        <div className="aspect-square overflow-hidden rounded-lg border shadow-sm">
+          <Img
+            src={image?.imageKey}
+            width={400}
+            height={400}
+            alt={`Product image ${index + 1}`}
+            isStatic
+            priority={index === 0}
+            className="main-image m-auto aspect-square h-auto w-full object-contain"
+            addPrefix
+          />
+        </div>
+      )}
+      {promotionTag?.data && index === 0 && (
+        <Text
+          as="span"
+          size="xs"
+          className="absolute left-2.5 top-2 z-10 rounded px-2 py-1 capitalize text-white-a700 md:top-2.5 md:px-2.5"
+          style={{
+            backgroundColor:
+              extractAttributes(promotionTag).bgColor || "#DD8434",
+          }}
+        >
+          {extractAttributes(promotionTag).tag}
+        </Text>
+      )}
+      {productBenefitTags?.data && index === 0 && (
+        <div className="absolute right-2.5 top-2 z-10 flex flex-col items-end gap-2 capitalize md:top-2.5">
+          {productBenefitTags.data.map((benefitTag, idx) => {
+            const { tag, bgColor } = benefitTag?.attributes || {};
+            return (
+              <Text
+                key={idx}
+                as="span"
+                size="xs"
+                className="w-fit rounded px-2 py-1 md:px-2.5"
+                style={{ backgroundColor: bgColor || "#DD8434" }}
+              >
+                {tag}
+              </Text>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  ),
+);
 
 const ProductImageSection = ({
   imageList,
@@ -46,6 +198,8 @@ const ProductImageSection = ({
   productBenefitTags,
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [playingStates, setPlayingStates] = useState({});
+  const [showPlayButtons, setShowPlayButtons] = useState({});
   const [mainViewportRef, emblaMainApi] = useEmblaCarousel({
     skipSnaps: false,
   });
@@ -58,6 +212,9 @@ const ProductImageSection = ({
   const mainContainerRef = useRef(null);
   const mainImageContainerRef = useRef(null);
   const thumbsContainerRef = useRef(null);
+  const carouselVideoRefs = useRef({});
+  const gridVideoRefs = useRef({});
+  const controlTimeoutRefs = useRef({});
 
   const onThumbClick = useCallback(
     (index) => {
@@ -66,12 +223,66 @@ const ProductImageSection = ({
     [emblaMainApi],
   );
 
+  const togglePlayPause = useCallback((index, layout) => {
+    const videoRefs = layout === "grid" ? gridVideoRefs : carouselVideoRefs;
+
+    setPlayingStates((prev) => {
+      const newState = {
+        ...prev,
+        [`${layout}-${index}`]: !prev[`${layout}-${index}`],
+      };
+      const video = videoRefs.current[index];
+      if (video) {
+        newState[`${layout}-${index}`] ? video.play() : video.pause();
+      }
+      return newState;
+    });
+
+    setShowPlayButtons((prev) => ({ ...prev, [`${layout}-${index}`]: true }));
+
+    if (controlTimeoutRefs.current[`${layout}-${index}`]) {
+      clearTimeout(controlTimeoutRefs.current[`${layout}-${index}`]);
+    }
+
+    controlTimeoutRefs.current[`${layout}-${index}`] = setTimeout(() => {
+      setShowPlayButtons((prev) => ({
+        ...prev,
+        [`${layout}-${index}`]: false,
+      }));
+    }, 1000);
+  }, []);
+
   const onSelect = useCallback(() => {
     if (!emblaMainApi) return;
     const newIndex = emblaMainApi.selectedScrollSnap();
     setSelectedIndex(newIndex);
     emblaThumbsApi?.scrollTo(newIndex);
-  }, [emblaMainApi, emblaThumbsApi]);
+
+    // Pause all carousel videos
+    Object.entries(carouselVideoRefs.current).forEach(([key, video]) => {
+      if (video) {
+        video.pause();
+        setPlayingStates((prev) => ({ ...prev, [`carousel-${key}`]: false }));
+      }
+    });
+
+    const selectedVideo = carouselVideoRefs.current[newIndex];
+    if (selectedVideo && imageList[newIndex]?.isVideo) {
+      selectedVideo.play();
+      setPlayingStates((prev) => ({ ...prev, [`carousel-${newIndex}`]: true }));
+      setShowPlayButtons((prev) => ({
+        ...prev,
+        [`carousel-${newIndex}`]: true,
+      }));
+
+      controlTimeoutRefs.current[`carousel-${newIndex}`] = setTimeout(() => {
+        setShowPlayButtons((prev) => ({
+          ...prev,
+          [`carousel-${newIndex}`]: false,
+        }));
+      }, 1000);
+    }
+  }, [emblaMainApi, emblaThumbsApi, imageList]);
 
   const setThumbsHeight = useCallback(() => {
     const mainContainer = mainContainerRef.current;
@@ -143,61 +354,36 @@ const ProductImageSection = ({
     [imageList, selectedIndex, onThumbClick],
   );
 
-  const renderMainImages = useMemo(
-    () =>
+  const renderMainImages = useCallback(
+    (layout) =>
       imageList?.map((image, index) => (
-        <div
+        <ProductImage
           key={image?.imageKey || index}
-          className="main-image flex-[0_0_100%] overflow-hidden"
-        >
-          <Img
-            src={image?.imageKey}
-            width={820}
-            height={480}
-            alt={`Product image ${index + 1}`}
-            isStatic
-            priority={index === 0}
-            className="main-image m-auto aspect-square rounded-lg border object-contain shadow-sm"
-            addPrefix
-          />
-          {promotionTag?.data &&
-            index === 0 &&
-            (() => {
-              const { tag, bgColor } = extractAttributes(promotionTag);
-              return (
-                <Text
-                  as="span"
-                  size="base"
-                  className="absolute left-2.5 top-2 z-10 rounded px-2 py-1 text-sm capitalize text-white-a700 md:top-2.5 md:px-3"
-                  responsive
-                  style={{ backgroundColor: bgColor || "#DD8434" }}
-                >
-                  {tag}
-                </Text>
-              );
-            })()}
-          {productBenefitTags?.data && (
-            <div className="absolute right-2.5 top-2 z-10 flex flex-col items-end gap-2 capitalize md:top-2.5">
-              {productBenefitTags.data.map((benefitTag, index) => {
-                const { tag, bgColor } = benefitTag?.attributes || {};
-                return (
-                  <Text
-                    key={index}
-                    as="span"
-                    size="sm"
-                    className="w-fit rounded px-2 py-1 md:px-3"
-                    responsive
-                    style={{ backgroundColor: bgColor || "#DD8434" }}
-                  >
-                    {tag}
-                  </Text>
-                );
-              })}
-            </div>
-          )}
-        </div>
+          image={image}
+          index={index}
+          isPlaying={playingStates[`${layout}-${index}`]}
+          showPlayButton={showPlayButtons[`${layout}-${index}`]}
+          togglePlayPause={togglePlayPause}
+          promotionTag={promotionTag}
+          productBenefitTags={productBenefitTags}
+          videoRef={(el) => {
+            if (layout === "grid") {
+              gridVideoRefs.current[index] = el;
+            } else {
+              carouselVideoRefs.current[index] = el;
+            }
+          }}
+          layout={layout}
+        />
       )),
-    [imageList, promotionTag, productBenefitTags],
+    [
+      imageList,
+      playingStates,
+      showPlayButtons,
+      togglePlayPause,
+      promotionTag,
+      productBenefitTags,
+    ],
   );
 
   const renderDotButtons = useMemo(
@@ -206,6 +392,7 @@ const ProductImageSection = ({
         <DotButton
           key={index}
           onClick={() => onThumbClick(index)}
+          isVideo={imageList[index]?.isVideo}
           isSelected={index === selectedIndex}
         />
       )),
@@ -215,28 +402,32 @@ const ProductImageSection = ({
   if (!imageList?.length) return null;
 
   return (
-    <div
-      ref={mainContainerRef}
-      className="main-container sticky top-20 flex flex-col-reverse gap-1 sm:flex-row sm:gap-2 md:gap-3 lg:gap-4"
-    >
-      <div ref={thumbsContainerRef} className="w-20 max-sm:hidden">
-        <div
-          ref={thumbViewportRef}
-          className="no-scrollbar thumbs-container h-full overflow-y-scroll"
-          role="tablist"
-          aria-label="Product image thumbnails"
-        >
-          <div className="flex h-full flex-col gap-2">{renderThumbs}</div>
-        </div>
+    <div ref={mainContainerRef} className="main-container sticky top-20">
+      <div className="hidden md:grid md:grid-cols-2 md:gap-4">
+        {renderMainImages("grid")}
       </div>
-      <div
-        className="flex flex-1 flex-col items-center justify-center overflow-hidden md:gap-1"
-        ref={mainViewportRef}
-      >
-        <div ref={mainImageContainerRef} className="flex w-full gap-2">
-          {renderMainImages}
+      <div className="md:hidden">
+        <div className="flex flex-col-reverse gap-1 sm:flex-row sm:gap-2">
+          <div ref={thumbsContainerRef} className="w-20 max-sm:hidden">
+            <div
+              ref={thumbViewportRef}
+              className="no-scrollbar thumbs-container h-full overflow-y-scroll"
+              role="tablist"
+              aria-label="Product image thumbnails"
+            >
+              <div className="flex h-full flex-col gap-2">{renderThumbs}</div>
+            </div>
+          </div>
+          <div
+            className="flex flex-1 flex-col items-center justify-center overflow-hidden md:gap-1"
+            ref={mainViewportRef}
+          >
+            <div ref={mainImageContainerRef} className="flex w-full gap-2">
+              {renderMainImages("carousel")}
+            </div>
+            <div className="mt-4 flex justify-center">{renderDotButtons}</div>
+          </div>
         </div>
-        <div className="mt-4 flex justify-center">{renderDotButtons}</div>
       </div>
     </div>
   );
@@ -244,6 +435,8 @@ const ProductImageSection = ({
 
 Thumb.displayName = "Thumb";
 DotButton.displayName = "DotButton";
+PlayPauseButton.displayName = "PlayPauseButton";
+ProductImage.displayName = "ProductImage";
 ProductImageSection.displayName = "ProductImageSection";
 
 export default React.memo(ProductImageSection);
