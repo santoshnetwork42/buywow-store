@@ -22,7 +22,7 @@ export default function Scripts() {
       {isInteractive && source !== "app" && (
         <>
           {!!LIMECHAT_ENABLED && <LimeChat />}
-          {!WISEPOPS_KEY && <Wisepops />}
+          {!!WISEPOPS_KEY && <Wisepops />}
         </>
       )}
     </>

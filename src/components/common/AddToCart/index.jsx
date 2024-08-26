@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { twMerge } from "tailwind-merge";
 
 import Quantity from "@/components/common/Quantity";
@@ -19,7 +19,6 @@ const AddToCart = ({
   quantityClassName,
   showGoToCart = false,
 }) => {
-  const dispatch = useDispatch();
   const { addToCart, updateCart, removeFromCart } = useCartDispatch();
   const { handleCartVisibility } = useModalDispatch();
   const cartItems = useSelector((state) => state?.cart?.data || []);
@@ -56,7 +55,7 @@ const AddToCart = ({
         removeFromCart(cartItem);
       }
     },
-    [cartItem, cartItems, dispatch, product, selectedVariant?.id],
+    [cartItem, cartItems, product, selectedVariant?.id],
   );
 
   const minimumOrderQuantity =

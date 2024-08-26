@@ -5,3 +5,4 @@ export const GOKWIK_ENABLED = "GOKWIK_ENABLED";
 export const PRODUCT_COLLECTION_PAGE_SIZE = 10;
 export const MAX_RECENTLY_VIEWED_PRODUCTS = 5;
 export const STICKY_VIEW_CART_TO_SHOW = ["/", "/search", "/collections"];
+export const AUTO_APPLY_COUPON_PATHNAMES = ["/", "/products", "/collections"];

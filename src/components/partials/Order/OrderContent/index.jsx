@@ -100,16 +100,6 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
     return { formattedState: "", country: "" };
   }, [order?.shippingAddress]);
 
-  const getOrderStatusType = (status) => {
-    const statusMap = {
-      DISPATCHED: "info",
-      CANCELLED: "cancel",
-      COURIER_RETURN: "cancel",
-      DELIVERED: "success",
-    };
-    return statusMap[status] || "";
-  };
-
   if (!order) return null;
 
   return (
@@ -121,7 +111,6 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
         paymentType={order.paymentType}
         createdAt={order.createdAt}
         shippingAddress={{ ...order.shippingAddress, formattedState, country }}
-        statusType={getOrderStatusType(order.status)}
       />
       <ProductList
         productItems={order.products?.items || []}

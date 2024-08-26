@@ -135,7 +135,7 @@ const ProductItem = React.memo(({ item, allStatus }) => {
           price={price}
           allStatus={allStatus}
         />
-        <div className="mb-1 flex flex-col gap-1 md:mb-2">
+        <div className="mb-1 flex flex-col gap-1">
           <Text
             as="p"
             size="base"

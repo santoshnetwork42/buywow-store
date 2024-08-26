@@ -50,7 +50,8 @@ const PaymentMethod = React.memo(
                 as="label"
                 size="base"
                 htmlFor={id}
-                className="shrink-0 cursor-pointer"
+                className="shrink-0 cursor-pointer text-sm"
+                responsive
               >
                 {label}
               </Text>

@@ -6,14 +6,14 @@ import React from "react";
 const DetailRow = React.memo(
   ({ label, value, valueClassName = "", showBorder = true }) => (
     <>
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-5">
         <Text as="span" size="base" className="text-sm" responsive>
           {label}
         </Text>
         <Text
           as="span"
           size="base"
-          className={`text-sm text-gray-600 ${valueClassName}`}
+          className={`line-clamp-2 text-right text-sm text-gray-600 ${valueClassName}`}
           responsive
         >
           {value}

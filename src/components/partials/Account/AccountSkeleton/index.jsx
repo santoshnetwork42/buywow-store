@@ -7,7 +7,7 @@ const AccountSkeleton = () => (
         {[1, 2, 3, 4, 5].map((i) => (
           <div
             key={i}
-            className="h-12 w-28 animate-pulse rounded-md bg-gray-200 md:w-full"
+            className="h-8 w-28 animate-pulse rounded-md bg-gray-200 sm:h-10 md:w-full lg:h-12"
           ></div>
         ))}
       </div>

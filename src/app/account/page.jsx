@@ -35,8 +35,8 @@ const Account = () => {
   }, [user, router]);
 
   const handleLogout = useCallback(() => {
-    setIsLoading(true);
     router.push("/");
+    setIsLoading(true);
     handleSignOut();
   }, [router, handleSignOut]);
 
@@ -111,7 +111,7 @@ const TabContent = ({ activeTab }) => {
     case "My Orders":
       return <OrderSection />;
     case "My Addresses":
-      return <AddressSection variant="CHECKOUT" />;
+      return <AddressSection />;
     case "Account Details":
       return <AccountDetails />;
     case "WOW Cash":

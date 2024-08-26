@@ -1,11 +1,10 @@
 import { Button } from "@/components/elements";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AddressFormFields from "./AddressFormFields";
 
-const AddressForm = React.memo(() => {
-  const dispatch = useDispatch();
+const AddressForm = React.memo(({ className }) => {
   const { createAddress } = useAddressDispatch();
   const { user } = useSelector((state) => state.user);
   const { isLoading } = useSelector((state) => state.address);
@@ -34,11 +33,14 @@ const AddressForm = React.memo(() => {
 
       createAddress(address, user?.id);
     },
-    [address, user, dispatch, checkFormValidity],
+    [address, user, checkFormValidity],
   );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit}
+      className={`flex flex-col gap-4 ${className}`}
+    >
       <AddressFormFields
         address={address}
         setAddress={setAddress}

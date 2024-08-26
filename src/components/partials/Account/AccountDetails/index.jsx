@@ -22,12 +22,24 @@ const VALIDATION_FIELDS = [
   { key: "email", validate: validateEmail },
 ];
 
+const AccountDetailsSkeleton = () => (
+  <div className="animate-pulse space-y-4">
+    <div className="h-10 w-3/4 rounded bg-gray-200"></div>
+    <div className="h-10 w-3/4 rounded bg-gray-200"></div>
+    <div className="h-10 w-3/4 rounded bg-gray-200"></div>
+    <div className="h-10 w-3/4 rounded bg-gray-200"></div>
+    <div className="h-10 w-1/2 rounded bg-gray-200"></div>
+  </div>
+);
+
 const AccountDetails = React.memo(() => {
   const { setUser } = useUserDispatch();
   const { user: userState } = useSelector((state) => state.user);
 
   const [user, setUserState] = useState(INITIAL_USER_STATE);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -42,6 +54,8 @@ const AccountDetails = React.memo(() => {
         }
       } catch (error) {
         console.error("Error fetching user:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchUser();
@@ -96,6 +110,7 @@ const AccountDetails = React.memo(() => {
       );
       if (!isValid) return;
 
+      setIsSubmitting(true);
       try {
         const currentUser = await getCurrentUser();
         if (currentUser?.userId && user.id) {
@@ -114,10 +129,16 @@ const AccountDetails = React.memo(() => {
       } catch (error) {
         console.error("Error updating user:", error);
         showToast.error("Error updating user");
+      } finally {
+        setIsSubmitting(false);
       }
     },
     [user, validateField, setUser, userState],
   );
+
+  if (isLoading) {
+    return <AccountDetailsSkeleton />;
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5 py-1">
@@ -132,8 +153,9 @@ const AccountDetails = React.memo(() => {
         variant="primary"
         size="medium"
         className="h-[36px] w-full sm:h-[36px] sm:w-1/2 md:h-[44px] lg:h-[44px]"
+        loader={isSubmitting}
       >
-        Save Changes
+        {isSubmitting ? "Saving..." : "Save Changes"}
       </Button>
     </form>
   );

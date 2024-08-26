@@ -336,37 +336,39 @@ const Checkout = () => {
   if (pageLoading) return null;
 
   return (
-    <main className="container-main my-4 flex min-h-[calc(100dvh-170px)] w-full flex-col gap-7 sm:my-6 sm:min-h-[calc(100dvh-180px)] md:min-h-[calc(100dvh-190px)] lg:my-8 lg:min-h-[calc(100dvh-200px)]">
+    <main className="container-main mb-main mt-2 flex min-h-[calc(100dvh-170px)] w-full flex-col gap-7 sm:mt-4 sm:min-h-[calc(100dvh-180px)] md:mt-6 md:min-h-[calc(100dvh-190px)] lg:mt-8 lg:min-h-[calc(100dvh-200px)]">
       <PaymentLoader loading={paymentLoader || loading} />
 
       <ProgressSteps activeStep={2} />
 
       {cartList.length > 0 && totalListingPrice > 0 ? (
         <div className="mb-14 grid w-full grid-cols-1 gap-5 sm:gap-6 md:mb-0 md:grid-cols-2 md:grid-rows-[auto_auto_1fr] md:gap-x-8 lg:gap-x-10 xl:gap-x-12">
-          <div className="md:row-span-3">
+          <div className="order-3 md:order-1 md:row-span-3">
             <AddressSection variant="CHECKOUT" />
           </div>
 
-          <OrderSummary
-            cartList={cartList}
-            totalPrice={totalPrice}
-            totalListingPrice={totalListingPrice}
-            appliedCoupon={appliedCoupon}
-            couponTotal={couponTotal}
-            selectedPaymentMethod={selectedPaymentMethod}
-            prepaidDiscount={prepaidDiscount}
-            prepaidDiscountPercent={prepaidDiscountPercent}
-            codCharges={codCharges}
-            appliedCODCharges={appliedCODCharges}
-            shippingTotal={shippingTotal}
-            usableRewards={usableRewards}
-            isRewardApplied={isRewardApplied}
-            grandTotal={grandTotal}
-            totalSaved={totalSaved}
-            inventoryMapping={inventoryMapping}
-          />
+          <div className="order-1 md:order-2">
+            <OrderSummary
+              cartList={cartList}
+              totalPrice={totalPrice}
+              totalListingPrice={totalListingPrice}
+              appliedCoupon={appliedCoupon}
+              couponTotal={couponTotal}
+              selectedPaymentMethod={selectedPaymentMethod}
+              prepaidDiscount={prepaidDiscount}
+              prepaidDiscountPercent={prepaidDiscountPercent}
+              codCharges={codCharges}
+              appliedCODCharges={appliedCODCharges}
+              shippingTotal={shippingTotal}
+              usableRewards={usableRewards}
+              isRewardApplied={isRewardApplied}
+              grandTotal={grandTotal}
+              totalSaved={totalSaved}
+              inventoryMapping={inventoryMapping}
+            />
+          </div>
 
-          <div className="overflow-hidden rounded-md">
+          <div className="order-2 overflow-hidden rounded-md md:order-3">
             <Cashback
               cashbackAmount={
                 selectedPaymentMethod === "COD"
@@ -390,7 +392,7 @@ const Checkout = () => {
             />
           </div>
 
-          <div className="flex flex-col gap-5">
+          <div className="order-4 flex flex-col gap-5">
             <PaymentMethodsSection
               prepaidEnabled={prepaidEnabled}
               codEnabled={codEnabled}

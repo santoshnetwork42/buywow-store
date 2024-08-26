@@ -11,7 +11,7 @@ const CartHeader = React.memo(({ totalItems, cartClose, text, className }) => {
       <Heading size="xl" as="h2" className="text-lg" responsive>
         {text} {totalItems > 0 && `(${totalItems})`}
       </Heading>
-      <Button onClick={cartClose}>
+      <Button onClick={cartClose} className="z-10">
         <CloseSVG height={24} width={24} fillColor="#000000" />
       </Button>
     </div>
