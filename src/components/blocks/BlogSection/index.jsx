@@ -4,6 +4,7 @@
 import { Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { getFeaturedBlogs } from "@/graphql/appSync/api";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,9 +22,21 @@ const BlogCard = ({
       readingTime,
     },
   },
+  index,
 }) => {
+  const { blogClicked } = useEventsDispatch();
   return (
-    <Link href={`/blog/${blog.slug}`}>
+    <Link
+      href={`/blog/${blog.slug}`}
+      onClick={(e) => {
+        blogClicked({
+          item_name: blog.title,
+          item_id: index + 1,
+          item_slug: blog.slug,
+          item_parent_category: "Explore Blogs",
+        });
+      }}
+    >
       <div className="flex h-full flex-col rounded-xl">
         <div className="relative aspect-[328/212] w-[328px] md:aspect-[434/228] md:w-[434px]">
           <Image
@@ -93,7 +106,7 @@ const BlogSection = ({ title = "Explore Blogs", buttonText = "Read More" }) => {
           sliderClassName="gap-[10px] sm:gap-3 lg:gap-5"
         >
           {featuredBlogs.map((blog, index) => (
-            <BlogCard key={blog.id} blog={blog} />
+            <BlogCard key={blog.id} blog={blog} index={index} />
           ))}
         </Slider>
       </div>

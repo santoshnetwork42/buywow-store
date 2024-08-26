@@ -6,16 +6,26 @@ import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AddressModal from "../AddressModal";
+import { useCartTotal } from "@wow-star/utils";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 const AddressList = React.memo(({ addressList, variant }) => {
   const { currentAddress } = useSelector((state) => state.address);
   const { user } = useSelector((state) => state.user);
   const { updateCurrentAddress, deleteAddress } = useAddressDispatch();
 
+  const { addressSelected } = useEventsDispatch();
+  const { totalPrice } = useCartTotal({
+    paymentType: "PREPAID",
+    isRewardApplied: false,
+  });
+
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
   useEffect(() => {
     setSelectedAddressId(currentAddress?.id);
+    if (currentAddress?.id)
+      addressSelected(currentAddress, totalPrice, "BUYWOW");
   }, [currentAddress]);
 
   const handleAddressDelete = useCallback(

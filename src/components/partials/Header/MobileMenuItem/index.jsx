@@ -1,16 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { Text, Heading } from "@/components/elements";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import { Heading, Text } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
-const SubMenuItem = ({
-  subItem,
-  linkPrefix,
-  closeMenu,
-  isLast,
-  topNavbarClicked,
-}) => {
+const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
+  const { topNavbarClicked } = useEventsDispatch();
   if (!subItem) return null;
 
   return (
@@ -20,8 +15,8 @@ const SubMenuItem = ({
         href={`/${linkPrefix ? linkPrefix + "/" : ""}${subItem.slug || ""}`}
         onClick={() => {
           topNavbarClicked({
-            banner_name: subItem.label,
-            item_id: subItem.slug,
+            banner_name: subItem.title || "",
+            item_id: subItem.slug || "",
             Source: "Mobile",
             "Section Name": "Mobile Navbar",
           });
@@ -39,12 +34,12 @@ const SubMenuItem = ({
 SubMenuItem.displayName = "SubMenuItem";
 
 const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
+  const { topNavbarClicked } = useEventsDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [height, setHeight] = useState(0);
   const contentRef = useRef(null);
 
   const toggleOpen = () => setIsOpen((prev) => !prev);
-  const { topNavbarClicked } = useEventsDispatch();
 
   useEffect(() => {
     if (contentRef.current) {
@@ -91,7 +86,6 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
                 linkPrefix={linkPrefix}
                 closeMenu={closeMenu}
                 isLast={index === item.subMenu.length - 1}
-                topNavbarClicked={topNavbarClicked}
               />
             ))}
           </ul>

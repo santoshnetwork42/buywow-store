@@ -50,7 +50,11 @@ const Checkout = () => {
   const router = useRouter();
   const { handlePasswordLessModal } = useModalDispatch();
   const { validateCart, emptyCart } = useCartDispatch();
-  const { addPaymentInfo } = useEventsDispatch();
+  const {
+    addPaymentInfo,
+    placeOrder: onPlaceOrder,
+    startCheckout,
+  } = useEventsDispatch();
 
   const currentAddress = useSelector((state) => state.address?.currentAddress);
   const user = useSelector((state) => state.user?.user);
@@ -285,14 +289,14 @@ const Checkout = () => {
 
   const afterOrderConfirm = useCallback(async () => {
     if (isConfirmed && finalOrder) {
-      // onPlaceOrder(
-      //   finalOrder,
-      //   [...freeProducts],
-      //   appliedCoupon,
-      //   currentAddress,
-      //   selectedPaymentMethod,
-      //   "BUYWOW",
-      // );
+      onPlaceOrder(
+        finalOrder,
+        [...freeProducts],
+        appliedCoupon,
+        currentAddress,
+        selectedPaymentMethod,
+        "BUYWOW",
+      );
 
       if (isRewardApplied)
         setUserWithRewardPoints({
@@ -317,6 +321,10 @@ const Checkout = () => {
       afterOrderConfirm();
     }
   }, [isConfirmed, afterOrderConfirm]);
+
+  useEffect(() => {
+    startCheckout();
+  }, []);
 
   const { codCouponDisabled, onlineDisabled, ppcodCouponEnabled } =
     useMemo(() => {

@@ -82,7 +82,10 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         const userData = await getUserAPI();
         setUser(userData);
         // for signup as well as for signin it will run
-        auth("login", { userId: userData?.id, phone: userData?.phone });
+        auth({
+          action: "login",
+          moe: { userId: userData?.id, phone: userData?.phone },
+        });
       }
       if (!currentUser) {
         setConfirmationStatus(null);
@@ -166,7 +169,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
             setConfirmationStatus("DONE");
             setCustomUser(phone);
             // our custom signup
-            auth("signup", { userId: null, phone });
+            auth({ action: "signup", moe: { userId: null, phone } });
           } else {
             // Handle unverified OTP
             console.error("OTP verification failed");
