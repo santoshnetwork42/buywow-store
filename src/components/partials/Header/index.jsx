@@ -20,7 +20,6 @@ import { useSelector } from "react-redux";
 import StickyViewCart from "../StickyViewCart";
 
 const MenuItem = React.memo(({ item, index, linkPrefix }) => {
-  if (!item) return null;
   const { topNavbarClicked } = useEventsDispatch();
   const key = item.id || index;
   const title = (
@@ -28,6 +27,8 @@ const MenuItem = React.memo(({ item, index, linkPrefix }) => {
       {item.title}
     </Text>
   );
+
+  if (!item) return null;
 
   if (item.subMenu && item.subMenu.length > 0) {
     return (

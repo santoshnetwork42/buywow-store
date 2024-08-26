@@ -1,9 +1,5 @@
 import { MEDIA_BASE_URL } from "@/config";
-import {
-  getCMSPagesAPI,
-  getPageBySlugAPI,
-  getStoreAPI,
-} from "@/lib/appSyncAPIs";
+import { getPageBySlugAPI, getStoreAPI } from "@/lib/appSyncAPIs";
 import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import dynamic from "next/dynamic";
@@ -138,7 +134,6 @@ export async function generateStaticParams() {
     LANDING: "",
   };
 
-  
   return pages.map((page) => ({
     slug: [pageType[page.attributes.type], page.attributes.slug].filter(
       Boolean,

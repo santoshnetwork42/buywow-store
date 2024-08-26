@@ -19,8 +19,6 @@ const CarouselImage = React.memo(
     const webImageAttrs = extractAttributes(webImage);
     const mWebImageAttrs = extractAttributes(mWebImage);
 
-    if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
-
     const imageUrl = mWebImageAttrs.url || webImageAttrs.url;
     const imageAlt =
       mWebImageAttrs.alternativeText ||
@@ -35,7 +33,9 @@ const CarouselImage = React.memo(
         homeViewed();
         eventTriggered.current = true;
       }
-    }, []);
+    }, [homeViewed]);
+
+    if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
     return (
       <Link
@@ -52,9 +52,9 @@ const CarouselImage = React.memo(
         <picture className="relative block w-full">
           {!!webImageAttrs.url && (
             <source
-            media="(min-width: 576px)"
-            srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}
-          />
+              media="(min-width: 576px)"
+              srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}
+            />
           )}
           <Img
             src={imageUrl}
