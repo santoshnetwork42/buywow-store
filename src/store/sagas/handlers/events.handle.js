@@ -921,11 +921,6 @@ export function* homeViewedEventHandler(e) {
       source: eventSource,
       ...analyticsMeta,
     });
-
-    console.log("Home Viewed", {
-      URL: window.location.href,
-      Source: eventSource,
-    });
   } catch (e) {
     errorHandler(e);
   }

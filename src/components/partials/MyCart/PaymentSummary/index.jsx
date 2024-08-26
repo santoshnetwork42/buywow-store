@@ -1,6 +1,5 @@
 "use client";
 // components/MyCart/PaymentSummary.jsx
-import PasswordLess from "@/components/common/Passwordless";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useGuestCheckout } from "@/utils/context/navbar";
@@ -21,8 +20,8 @@ export default function PaymentSummary({
 }) {
   const router = useRouter();
 
-  const { user } = useSelector((state) => state.user);
-  const { customUser } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user?.user);
+  const customUser = useSelector((state) => state.user?.customUser);
   const { handlePasswordLessModal } = useModalDispatch();
   const guestCheckout = useGuestCheckout();
 
@@ -31,11 +30,7 @@ export default function PaymentSummary({
   const handleCheckoutClick = async () => {
     //check if user or custom user exists
     try {
-      if (
-        (user && user.id) ||
-        (customUser && customUser.phone) ||
-        guestCheckout
-      ) {
+      if (user?.id || customUser?.phone || guestCheckout) {
         router.push("/checkout");
       } else {
         handlePasswordLessModal(true, true, "/checkout");
@@ -133,7 +128,6 @@ export default function PaymentSummary({
               Checkout
             </Heading>
           </Button>
-          <PasswordLess />
           <Text size="base" as="p" className="text-sm" responsive>
             Estimated delivery within 3-5 days
           </Text>

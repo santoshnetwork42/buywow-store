@@ -16,8 +16,8 @@ const AddressModal = ({
   addressItem = {},
 }) => {
   const { createAddress, editAddress } = useAddressDispatch();
-  const { user } = useSelector((state) => state.user);
-  const { isLoading } = useSelector((state) => state.address);
+  const user = useSelector((state) => state.user?.user);
+  const isLoading = useSelector((state) => state.address?.isLoading);
 
   const ButtonText = action === "CREATE" ? "Add Address" : "Update Address";
 
@@ -65,6 +65,7 @@ const AddressModal = ({
 
       closeModal();
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [address, user, action, checkFormValidity, closeModal],
   );
 

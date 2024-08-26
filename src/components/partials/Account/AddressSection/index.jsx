@@ -18,8 +18,9 @@ const AddressSkeleton = () => (
 
 const AddressSection = React.memo(({ variant }) => {
   const { getAddressList } = useAddressDispatch();
-  const { user } = useSelector((state) => state.user);
-  const { addressList, isLoading } = useSelector((state) => state.address);
+  const user = useSelector((state) => state.user?.user);
+  const addressState = useSelector((state) => state.address);
+  const { addressList, isLoading } = addressState;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -27,6 +28,7 @@ const AddressSection = React.memo(({ variant }) => {
     if (user?.id) {
       getAddressList(user?.id);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const handleAddNewAddress = useCallback(() => {

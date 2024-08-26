@@ -20,8 +20,10 @@ import { useSelector } from "react-redux";
 import StickyViewCart from "../StickyViewCart";
 
 const MenuItem = React.memo(({ item, index, linkPrefix }) => {
-  if (!item) return null;
   const { topNavbarClicked } = useEventsDispatch();
+
+  if (!item) return null;
+
   const key = item.id || index;
   const title = (
     <Text size="base" as="p" className="capitalize" responsive>

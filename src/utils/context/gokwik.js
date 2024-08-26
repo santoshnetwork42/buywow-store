@@ -18,12 +18,12 @@ import {
   getUserRewardsAPI,
 } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import { PREPAID_ENABLED } from "@/utils/data/constants";
 import { errorHandler } from "@/utils/errorHandler";
 import { addPhonePrefix, formatUserAddress } from "@/utils/helpers";
 import { useSelector } from "react-redux";
-import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 export const GKContext = createContext();
 
@@ -34,8 +34,8 @@ function GoKwikProvider({ children }) {
   const { applyCoupon, removeCoupon, emptyCart, removeFromCart } =
     useCartDispatch();
   const { setIsLoggedinViaGokwik, setCustomUser } = useUserDispatch();
-  const { cartList } = useSelector((state) => state.cart);
-  const { id = "" } = useSelector((state) => state.user.user) || {};
+  const cartList = useSelector((state) => state.cart?.cartList);
+  const userId = useSelector((state) => state.user?.user?.id) || {};
   const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
@@ -97,7 +97,7 @@ function GoKwikProvider({ children }) {
         console.error("Coupon not found");
       }
     },
-    [id, cartList],
+    [userId, cartList],
   );
 
   const onGokwikClose = () => {
@@ -197,7 +197,7 @@ function GoKwikProvider({ children }) {
               if (orderDetails?.applied_discount)
                 coupon = await fetchCoupon(
                   orderDetails?.applied_discount?.code,
-                  id,
+                  userId,
                 );
 
               placeOrder(

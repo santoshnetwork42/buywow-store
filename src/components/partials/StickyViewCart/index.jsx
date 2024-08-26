@@ -23,9 +23,9 @@ const CartSummary = React.memo(({ totalItems, totalPrice }) => (
 CartSummary.displayName = "CartSummary";
 
 const StickyViewCart = () => {
-  const cartList = useSelector((state) => state?.cart?.data || []);
+  const cartList = useSelector((state) => state.cart?.data || []);
   const isRewardApplied = useSelector(
-    (state) => state?.cart?.isRewardApplied || false,
+    (state) => state.cart?.isRewardApplied || false,
   );
   const { handleCartVisibility } = useModalDispatch();
   const pathname = usePathname();

@@ -6,8 +6,8 @@ import AddressFormFields from "./AddressFormFields";
 
 const AddressForm = React.memo(({ className }) => {
   const { createAddress } = useAddressDispatch();
-  const { user } = useSelector((state) => state.user);
-  const { isLoading } = useSelector((state) => state.address);
+  const user = useSelector((state) => state.user?.user);
+  const isLoading = useSelector((state) => state.address?.isLoading);
 
   const [address, setAddress] = useState({
     email: "",
@@ -33,6 +33,7 @@ const AddressForm = React.memo(({ className }) => {
 
       createAddress(address, user?.id);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [address, user, checkFormValidity],
   );
 

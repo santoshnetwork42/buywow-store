@@ -2,7 +2,7 @@ import { Img, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import { extractAttributes } from "@/utils/helpers";
 
-const IngredientItem = ({ text, subText, imageUrl, imageAlt }) => (
+const IngredientItem = ({ text, imageUrl, imageAlt }) => (
   <div className="flex gap-2">
     <Img
       src={imageUrl}
@@ -12,9 +12,7 @@ const IngredientItem = ({ text, subText, imageUrl, imageAlt }) => (
       className="aspect-square h-auto w-6 object-contain"
     />
     <div>
-      <Text as="span" size="sm">
-        <span className="font-semibold capitalize">{text}</span> {subText}
-      </Text>
+      <Text as="span" size="sm" dangerouslySetInnerHTML={{ __html: text }} />
     </div>
   </div>
 );
@@ -60,7 +58,6 @@ const AccordionIngredients = ({
             <IngredientItem
               key={`ingredient-${index}`}
               text={text}
-              subText={subText}
               imageUrl={ingredientImageUrl}
               imageAlt={ingredientImageAlt}
             />

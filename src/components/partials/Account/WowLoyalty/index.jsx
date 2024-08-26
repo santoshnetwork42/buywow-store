@@ -18,15 +18,15 @@ const INITIAL_WOW_CASH_STATE = {
 };
 
 const WowLoyalty = React.memo(() => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user?.user);
   const [wowCash, setWowCash] = useState(INITIAL_WOW_CASH_STATE);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchLoyalty = useCallback(async () => {
-    if (!user) return;
+    if (!user?.id) return;
     setIsLoading(true);
     try {
-      const { data } = await getLoyaltyAPI({ user });
+      const { data } = await getLoyaltyAPI({ userId: user?.id });
       if (data?.getLoyalty) {
         setWowCash({
           ...data.getLoyalty,

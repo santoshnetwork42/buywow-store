@@ -135,11 +135,11 @@ export const getUserAPI = async () => {
   }
 };
 
-export const getLoyaltyAPI = async ({ user }) => {
+export const getLoyaltyAPI = async ({ userId }) => {
   try {
     const response = await client.graphql({
       query: getLoyalty,
-      variables: { input: { storeId: STORE_ID, userId: user?.id } },
+      variables: { input: { storeId: STORE_ID, userId: userId } },
       authMode: "userPool",
     });
 

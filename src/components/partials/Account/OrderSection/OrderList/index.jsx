@@ -14,7 +14,7 @@ import OrderSkeleton from "./OrderSkeleton";
 const client = generateClient();
 
 const OrderList = React.memo(() => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user?.user);
   const [orders, setOrders] = useState([]);
   const [totalOrder, setTotalOrder] = useState(0);
   const [token, setToken] = useState(null);
@@ -59,9 +59,10 @@ const OrderList = React.memo(() => {
   );
 
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       getOrders(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const memoizedOrders = useMemo(

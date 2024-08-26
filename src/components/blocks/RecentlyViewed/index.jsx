@@ -4,7 +4,6 @@ import SectionHeading from "@/components/common/SectionHeading";
 import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import { getBgColor } from "@/utils/helpers";
-import React from "react";
 import { useSelector } from "react-redux";
 
 const RecentlyViewed = ({
@@ -12,7 +11,7 @@ const RecentlyViewed = ({
   recentlyViewedBgColor: bgColor,
 }) => {
   const products = useSelector((state) =>
-    state.recentlyViewed?.recentlyViewedProducts.slice(1),
+    state.recentlyViewed?.recentlyViewedProducts?.slice(1),
   );
 
   if (!Array.isArray(products) || products.length === 0) return null;

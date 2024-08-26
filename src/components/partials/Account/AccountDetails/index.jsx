@@ -34,7 +34,7 @@ const AccountDetailsSkeleton = () => (
 
 const AccountDetails = React.memo(() => {
   const { setUser } = useUserDispatch();
-  const { user: userState } = useSelector((state) => state.user);
+  const userState = useSelector((state) => state.user?.user);
 
   const [user, setUserState] = useState(INITIAL_USER_STATE);
   const [errors, setErrors] = useState({});
@@ -44,7 +44,7 @@ const AccountDetails = React.memo(() => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const currentUser = await getCurrentUser();
+        const currentUser = await getCurrentUser().catch(() => null);
         if (currentUser?.userId) {
           setUserState((prevUser) => ({
             ...prevUser,
@@ -62,7 +62,7 @@ const AccountDetails = React.memo(() => {
   }, []);
 
   useEffect(() => {
-    if (userState) {
+    if (userState?.id) {
       setUserState((prevUser) => ({
         ...prevUser,
         firstName: userState.firstName || "",
@@ -112,7 +112,7 @@ const AccountDetails = React.memo(() => {
 
       setIsSubmitting(true);
       try {
-        const currentUser = await getCurrentUser();
+        const currentUser = await getCurrentUser().catch(() => null);
         if (currentUser?.userId && user.id) {
           const response = await updateUserAPI(user);
           const updateUser = response?.data?.updateUser;

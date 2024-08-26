@@ -1,36 +1,33 @@
-import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
-import { all, fork, takeEvery, takeLatest } from "redux-saga/effects";
 import {
-  authEventHandler,
-  outOfStockEventHandler,
-  proceedToCheckoutEventHandler,
-  searchEventHandler,
-  viewItemEventHandler,
-  placeOrderEventHandler,
-  checkoutStartedEventHandler,
-  viewCartEventHandler,
+  addPaymentInfoEventHandler,
   addressAddedEventHandler,
   addressSelectedEventHandler,
-  categoryViewedEventHandler,
-  homeViewedEventHandler,
-  addPaymentInfoEventHandler,
+  addToCartEventHandler,
+  applyCouponsEventHandler,
+  authEventHandler,
   bannerClickedEventHandler,
+  blogClickEventHandler,
+  categoryViewedEventHandler,
+  checkoutStartedEventHandler,
+  homeViewedEventHandler,
+  logOutEventHandler,
   otpRequestedEventHandler,
+  outOfStockEventHandler,
+  placeOrderEventHandler,
+  proceedToCheckoutEventHandler,
+  removeFromCartEventHandler,
+  searchEventHandler,
+  shopByClickEventHandler,
   // productSearchedEventHandler,
   tileClickedEventHandler,
-  logOutEventHandler,
   topNavbarClickedEventHandler,
-  shopByClickEventHandler,
-  blogClickEventHandler,
-  applyCouponsEventHandler,
-  spinTheWheelPlayedEventHandler,
-  spinTheWheelRewardEventHandler,
-  customEventVercelEventHandler,
+  viewCartEventHandler,
+  viewItemEventHandler,
   viewListItemEventHandler,
-  addToCartEventHandler,
-  removeFromCartEventHandler,
 } from "@/store/sagas/handlers/events.handle";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
+import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
+import { all, fork, takeEvery, takeLatest } from "redux-saga/effects";
 
 function* outOfStock() {
   yield takeEvery(eventsSagaActions.OUT_OF_STOCK, outOfStockEventHandler);
@@ -69,7 +66,6 @@ function* removeFromCartEvent() {
 }
 
 function* viewItem() {
-  console.log("WATCHER VIEWITEM");
   yield takeEvery(eventsSagaActions.VIEW_ITEM, viewItemEventHandler);
 }
 

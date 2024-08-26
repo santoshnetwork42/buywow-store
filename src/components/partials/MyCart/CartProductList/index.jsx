@@ -115,7 +115,7 @@ ProductItemSkeleton.displayName = "ProductItemSkeleton";
 
 const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
   const dispatch = useDispatch();
-  const cartList = useSelector((state) => state?.cart?.data || []);
+  const cartList = useSelector((state) => state.cart?.data || []);
 
   const [isLoading, setIsLoading] = useState(true);
 

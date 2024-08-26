@@ -14,6 +14,7 @@ import {
   verifyCustomOTPAPI,
 } from "@/lib/appSyncAPIs";
 import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import {
@@ -21,12 +22,12 @@ import {
   isPhoneNumberValid,
   validatePhoneNumber,
 } from "@/utils/helpers";
-import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 const PasswordLess = ({ enableOutsideClick = true }) => {
   const router = useRouter();
 
   const { setUser, setCustomUser } = useUserDispatch();
+  const { handlePasswordLessModal } = useModalDispatch();
   const {
     setConfirmationStatus,
     setAuthLoader,
@@ -35,17 +36,25 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     confirmSignIn,
     confirmSignUp,
   } = useAuthDispatch();
-  const { handlePasswordLessModal } = useModalDispatch();
 
-  const { confirmationStatus, loading } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.user);
-  const {
-    modal: {
-      passwordLess: { isPasswordLessOpen, customLogin, redirectTo },
-    },
-  } = useSelector((state) => state.modal);
+  const confirmationStatus = useSelector(
+    (state) => state.auth?.confirmationStatus,
+  );
+  const loading = useSelector((state) => state.auth?.loading);
+  const user = useSelector((state) => state.user?.user);
+  const isPasswordLessOpen = useSelector(
+    (state) => state.modal?.modal?.passwordLess?.isPasswordLessOpen,
+  );
+  const customLogin = useSelector(
+    (state) => state.modal?.modal?.passwordLess?.customLogin,
+  );
+  const redirectTo = useSelector(
+    (state) => state.modal?.modal?.passwordLess?.redirectTo,
+  );
+
   const { auth, otpRequested } = useEventsDispatch();
 
+  const phoneInputRef = useRef(null);
   const otpInputRefs = useRef([]);
 
   const [authData, setAuthData] = useState({
@@ -55,15 +64,15 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
   const [authErrors, setAuthErrors] = useState({
     phone: "",
   });
-
   const [countdown, setCountdown] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (countdown > 0) setCountdown(countdown - 1);
-    }, 1000);
+    let timer;
+    if (isPasswordLessOpen && countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
     return () => clearTimeout(timer);
-  }, [countdown]);
+  }, [countdown, isPasswordLessOpen]);
 
   useEffect(() => {
     if (confirmationStatus === "SIGNUP") {
@@ -75,13 +84,69 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [confirmationStatus]);
 
+  useEffect(() => {
+    if (authData.confirmationCode.join("").length === 6) {
+      handleSubmitOTP();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authData.confirmationCode]);
+
+  useEffect(() => {
+    if (isPasswordLessOpen) {
+      setTimeout(() => phoneInputRef.current?.focus(), 0);
+    }
+  }, [isPasswordLessOpen]);
+
+  useEffect(() => {
+    if (confirmationStatus && confirmationStatus !== "SIGNUP") {
+      // Focus on first OTP input when OTP step is rendered
+      setTimeout(() => otpInputRefs.current[0]?.focus(), 0);
+    }
+  }, [confirmationStatus]);
+
+  useEffect(() => {
+    let abortController;
+    if (
+      confirmationStatus &&
+      confirmationStatus !== "SIGNUP" &&
+      typeof window !== "undefined" &&
+      "OTPCredential" in window
+    ) {
+      abortController = new AbortController();
+      navigator.credentials
+        .get({
+          otp: { transport: ["sms"] },
+          signal: abortController.signal,
+        })
+        .then((otp) => {
+          if (otp && otp.code) {
+            const otpArray = otp.code.split("").slice(0, 6);
+            setAuthData((prev) => ({
+              ...prev,
+              confirmationCode: otpArray,
+            }));
+            // Focus on the last input after autofill
+            otpInputRefs.current[5]?.focus();
+          }
+        })
+        .catch((err) => {
+          if (err.name !== "AbortError") {
+            console.error("Error auto-filling OTP:", err);
+          }
+        });
+    }
+
+    return () => {
+      if (abortController) abortController.abort();
+    };
+  }, [confirmationStatus]);
+
   const updateUserState = useCallback(async () => {
     try {
-      const currentUser = await getCurrentUser();
-      if (currentUser?.userId && user && !user.id) {
+      const currentUser = await getCurrentUser().catch(() => null);
+      if (currentUser?.userId && !user?.id) {
         const userData = await getUserAPI();
         setUser(userData);
-        // for signup as well as for signin it will run
         auth("login", { userId: userData?.id, phone: userData?.phone });
       }
       if (!currentUser) {
@@ -91,6 +156,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       console.error("Error updating user state:", error);
       setConfirmationStatus(null);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const handleAuthClose = async () => {
@@ -100,6 +166,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       phone: "",
       confirmationCode: new Array(6).fill(""),
     });
+    setAuthErrors({ phone: "" });
+    setCountdown(0);
   };
 
   const handlePhoneChange = (event) => {
@@ -112,6 +180,13 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
   const isPhoneValid = isPhoneNumberValid(authData.phone);
 
   const handleSignIn = async () => {
+    const phoneValidation = validatePhoneNumber(authData.phone);
+    if (phoneValidation.error) {
+      setAuthErrors({ phone: phoneValidation.message });
+      return;
+    }
+    setAuthErrors({ phone: "" });
+
     if (!isPhoneValid) return;
 
     const phone = addPhonePrefix(authData.phone);
@@ -120,8 +195,6 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       setAuthLoader(true);
       try {
         const isExistingUser = await checkIfExistingUserAPI({ phone });
-        console.log("isExistingUser", isExistingUser, phone);
-
         if (isExistingUser) {
           signInAwsAccount(phone);
         } else {
@@ -167,10 +240,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
           if (isVerified) {
             setConfirmationStatus("DONE");
             setCustomUser(phone);
-            // our custom signup
             auth("signup", { userId: null, phone });
           } else {
-            // Handle unverified OTP
             console.error("OTP verification failed");
           }
         } catch (error) {
@@ -217,24 +288,52 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     [authData.confirmationCode],
   );
 
+  const handlePhoneKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleSignIn();
+    }
+  };
+
+  const handleOTPInputKeyDown = (event, index) => {
+    if (event.key === "Enter") {
+      if (index === 5) {
+        handleSubmitOTP();
+      } else {
+        otpInputRefs.current[index + 1]?.focus();
+      }
+    }
+  };
+
+  const handlePaste = useCallback((event) => {
+    event.preventDefault();
+    const pastedData = event.clipboardData.getData("Text");
+    const otpArray = pastedData
+      .split("")
+      .filter((char) => /\d/.test(char))
+      .slice(0, 6);
+    setAuthData((prev) => ({
+      ...prev,
+      confirmationCode: Array(6)
+        .fill("")
+        .map((_x, i) => otpArray[i] || ""),
+    }));
+    const focusIndex = Math.min(otpArray.length, 5);
+    otpInputRefs.current[focusIndex]?.focus();
+  }, []);
+
   const renderSignInStep = (
     <div className="flex flex-col items-center gap-3 px-8 py-4">
       <Input
         placeholder="Enter Mobile Number"
         className="flex flex-grow gap-2 rounded-full border p-2"
         prefix="+91"
+        type="tel"
         onChange={handlePhoneChange}
+        onKeyDown={handlePhoneKeyDown}
         maxLength={10}
         value={authData.phone}
-        onBlur={(e) => {
-          const newState = e.target.value.trim();
-          const res = validatePhoneNumber(newState);
-          setAuthErrors({
-            ...authErrors,
-            phone: res.error ? res.message : null,
-          });
-        }}
-        error={authErrors.phone}
+        ref={phoneInputRef}
+        error={authErrors?.phone}
       />
       <Button
         loader={loading}
@@ -254,14 +353,19 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         {authData.confirmationCode.map((data, index) => (
           <Input
             key={index}
-            type="text"
+            type="number"
             maxLength="1"
             value={data}
             onChange={(e) => handleOTPChange(e.target, index)}
-            onKeyDown={(e) => handleOTPKeyDown(e, index)}
+            autoComplete="one-time-code"
+            onKeyDown={(e) => {
+              handleOTPKeyDown(e, index);
+              handleOTPInputKeyDown(e, index);
+            }}
             ref={(el) => (otpInputRefs.current[index] = el)}
             className="flex h-10 w-10 flex-grow rounded-md border"
             inputClassName="text-center"
+            onPaste={handlePaste}
           />
         ))}
       </div>
@@ -276,16 +380,14 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       </Button>
       <div className="flex w-full">
         {countdown > 0 ? (
-          <Text
-            as="p"
-            className="font-light"
-          >{`Didn't receive it? Resend in ${countdown}`}</Text>
+          <Text as="p" className="font-light">
+            {`Didn't receive it? Resend in ${countdown}`}
+          </Text>
         ) : (
           <Link href="" onClick={handleSignIn}>
-            <Text
-              as="p"
-              className="font-light underline"
-            >{`Didn't get the code? Resend OTP`}</Text>
+            <Text as="p" className="font-light underline">
+              {`Didn't get the code? Resend OTP`}
+            </Text>
           </Link>
         )}
       </div>
