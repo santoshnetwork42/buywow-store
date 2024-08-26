@@ -23,6 +23,7 @@ import { PREPAID_ENABLED } from "@/utils/data/constants";
 import { errorHandler } from "@/utils/errorHandler";
 import { addPhonePrefix, formatUserAddress } from "@/utils/helpers";
 import { useSelector } from "react-redux";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 export const GKContext = createContext();
 
@@ -42,6 +43,13 @@ function GoKwikProvider({ children }) {
     isRewardApplied: isRewardApplied,
     paymentType: prepaidEnabled ? "PREPAID" : "COD",
   });
+  const {
+    addressAdded,
+    placeOrder,
+    addressSelected,
+    addPaymentInfo,
+    startCheckout,
+  } = useEventsDispatch();
 
   const setRewardPoints = useCallback(async () => {
     console.log("set reward points of user");
@@ -192,15 +200,15 @@ function GoKwikProvider({ children }) {
                   id,
                 );
 
-              // placeOrder(
-              //   order,
-              //   orderResponse?.products?.items,
-              //   coupon,
-              //   orderDetails.shipping_address,
-              //   orderResponse?.paymentType ||
-              //     orderDetails.payment_method.toUpperCase(),
-              //   "GOKWIK",
-              // );
+              placeOrder(
+                order,
+                orderResponse?.products?.items,
+                coupon,
+                orderDetails.shipping_address,
+                orderResponse?.paymentType ||
+                  orderDetails.payment_method.toUpperCase(),
+                "GOKWIK",
+              );
 
               setRewardPoints();
 
@@ -237,8 +245,8 @@ function GoKwikProvider({ children }) {
       gokwikSdk.on("address-add", (address) => {
         console.log("address-add>>>", address);
         const formattedAddress = formatUserAddress(address);
-        //   addressAdded(formattedAddress, totalPrice, "GOKWIK");
-        //   addressSelected(formattedAddress, totalPrice, "GOKWIK");
+        addressAdded(formattedAddress, totalPrice, "GOKWIK");
+        addressSelected(formattedAddress, totalPrice, "GOKWIK");
       });
 
       gokwikSdk.on("address-selected", (address) => {
@@ -250,7 +258,7 @@ function GoKwikProvider({ children }) {
       gokwikSdk.on("payment-method-selected", (payment) => {
         console.log("payment>>>", payment);
         const checkoutSource = "GOKWIK";
-        //   addPaymentInfo(checkoutSource);
+        addPaymentInfo(checkoutSource);
       });
 
       gokwikSdk.on("checkout-initiation-failure", (checkout) => {
@@ -261,7 +269,7 @@ function GoKwikProvider({ children }) {
 
       gokwikSdk.on("user-login-successful", async (event) => {
         console.log("user-login-successful>>>", event);
-        //   await startCheckout("GOKWIK");
+        startCheckout("GOKWIK");
         await manageUserAuthEvent(event.phone_no, event.user_token);
       });
     });

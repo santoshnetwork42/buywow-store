@@ -21,6 +21,7 @@ import {
   isPhoneNumberValid,
   validatePhoneNumber,
 } from "@/utils/helpers";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 const PasswordLess = ({ enableOutsideClick = true }) => {
   const router = useRouter();
@@ -43,6 +44,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       passwordLess: { isPasswordLessOpen, customLogin, redirectTo },
     },
   } = useSelector((state) => state.modal);
+  const { auth, otpRequested } = useEventsDispatch();
 
   const otpInputRefs = useRef([]);
 
@@ -79,6 +81,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       if (currentUser?.userId && user && !user.id) {
         const userData = await getUserAPI();
         setUser(userData);
+        // for signup as well as for signin it will run
+        auth("login", { userId: userData?.id, phone: userData?.phone });
       }
       if (!currentUser) {
         setConfirmationStatus(null);
@@ -111,7 +115,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     if (!isPhoneValid) return;
 
     const phone = addPhonePrefix(authData.phone);
-
+    otpRequested({ phone });
     const handleCustomLogin = async () => {
       setAuthLoader(true);
       try {
@@ -163,6 +167,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
           if (isVerified) {
             setConfirmationStatus("DONE");
             setCustomUser(phone);
+            // our custom signup
+            auth("signup", { userId: null, phone });
           } else {
             // Handle unverified OTP
             console.error("OTP verification failed");

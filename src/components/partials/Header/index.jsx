@@ -8,6 +8,7 @@ import { Button, Img, Text } from "@/components/elements";
 import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { RESTRICT_SEARCH_AND_CART_TO_SHOW } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
@@ -20,7 +21,7 @@ import StickyViewCart from "../StickyViewCart";
 
 const MenuItem = React.memo(({ item, index, linkPrefix }) => {
   if (!item) return null;
-
+  const { topNavbarClicked } = useEventsDispatch();
   const key = item.id || index;
   const title = (
     <Text size="base" as="p" className="capitalize" responsive>
@@ -37,6 +38,14 @@ const MenuItem = React.memo(({ item, index, linkPrefix }) => {
               ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
               : item.link || "#"
           }
+          onClick={() => {
+            topNavbarClicked({
+              banner_name: item.title,
+              item_id: item.slug,
+              Source: "Web",
+              "Section Name": "Top Navbar",
+            });
+          }}
           className="flex cursor-pointer items-center gap-1"
         >
           {title}
@@ -55,6 +64,14 @@ const MenuItem = React.memo(({ item, index, linkPrefix }) => {
             ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
             : item.link || "#"
         }
+        onClick={() => {
+          topNavbarClicked({
+            banner_name: item.title,
+            item_id: item.slug,
+            Source: "Web",
+            "Section Name": "Top Navbar",
+          });
+        }}
       >
         {title}
       </Link>

@@ -28,7 +28,7 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
-export const revalidate = 30;
+export const revalidate = 5;
 
 async function RootLayout({ children }) {
   const { data } = await getNavbarAndFooterAPI();

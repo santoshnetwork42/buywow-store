@@ -1,7 +1,7 @@
+import LinkClickTracker from "@/components/common/LinkClickTracker";
 import { Img } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
-import Link from "next/link";
 
 const MiniBanners = ({ miniBannerItems: banners }) => {
   if (!Array.isArray(banners) || banners.length === 0) return null;
@@ -29,7 +29,18 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
           `Promo Banner ${index + 1}`;
 
         return (
-          <Link href={link || "#"} key={`mini-banner-${index}`}>
+          <LinkClickTracker
+            href={link || "#"}
+            key={`mini-banner-${index}`}
+            trackingType="BANNER_CLICKED"
+            trackingEventPayload={{
+              id: index + 1,
+              moeText:
+                banner?.moeText ||
+                webImageAttrs?.alternativeText ||
+                mWebImageAttrs?.alternativeText,
+            }}
+          >
             <picture className="relative block aspect-[298/120] w-[80vw] sm:w-[46vw] md:aspect-[650/166]">
               <source
                 media="(min-width: 768px)"
@@ -44,7 +55,7 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
                 className="aspect-[298/120] h-auto w-full object-contain md:aspect-[650/166]"
               />
             </picture>
-          </Link>
+          </LinkClickTracker>
         );
       })}
     </Slider>

@@ -1,10 +1,10 @@
+import LinkClickTracker from "@/components/common/LinkClickTracker";
 import SectionHeading from "@/components/common/SectionHeading";
 import { Heading, Img } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
-import Link from "next/link";
 
-const CategoryItem = ({ category, size }) => {
+const CategoryItem = ({ category, size, parentCategoryTitle }) => {
   const { image, slug, title } = category;
   const { url, alternativeText } = extractAttributes(image);
 
@@ -18,7 +18,16 @@ const CategoryItem = ({ category, size }) => {
       : "w-[calc(33vw-12px)] sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]";
 
   return (
-    <Link href={`/collections/${slug}` || "#"} className={linkClassName}>
+    <LinkClickTracker
+      href={`/collections/${slug}` || "#"}
+      className={linkClassName}
+      trackingType="SHOP_BY_CLICK"
+      trackingEventPayload={{
+        slug,
+        name: title,
+        parentCategory: parentCategoryTitle,
+      }}
+    >
       <div
         className={`overflow-hidden rounded sm:rounded-md lg:rounded-lg ${aspectRatio}`}
       >
@@ -38,7 +47,7 @@ const CategoryItem = ({ category, size }) => {
       >
         {title}
       </Heading>
-    </Link>
+    </LinkClickTracker>
   );
 };
 
@@ -66,9 +75,17 @@ const FeaturedCategories = ({
                 key={`group-${index}`}
                 className="flex flex-col max-sm:gap-y-6"
               >
-                <CategoryItem category={category} size={itemSize} />
+                <CategoryItem
+                  category={category}
+                  size={itemSize}
+                  parentCategoryTitle={title}
+                />
                 {!!arr[index + 1] && (
-                  <CategoryItem category={arr[index + 1]} size={itemSize} />
+                  <CategoryItem
+                    category={arr[index + 1]}
+                    size={itemSize}
+                    parentCategoryTitle={title}
+                  />
                 )}
               </div>,
             );
@@ -82,6 +99,7 @@ const FeaturedCategories = ({
             key={`category-${index}`}
             category={category}
             size={itemSize}
+            parentCategoryTitle={title}
           />
         ))}
       </Slider>

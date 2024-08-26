@@ -2,8 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Text, Heading } from "@/components/elements";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
-const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
+const SubMenuItem = ({
+  subItem,
+  linkPrefix,
+  closeMenu,
+  isLast,
+  topNavbarClicked,
+}) => {
   if (!subItem) return null;
 
   return (
@@ -11,7 +18,15 @@ const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
       <Link
         className={isLast ? "py-2.5" : "pb-2.5 pt-1.5"}
         href={`/${linkPrefix ? linkPrefix + "/" : ""}${subItem.slug || ""}`}
-        onClick={closeMenu}
+        onClick={() => {
+          topNavbarClicked({
+            banner_name: subItem.label,
+            item_id: subItem.slug,
+            Source: "Mobile",
+            "Section Name": "Mobile Navbar",
+          });
+          closeMenu();
+        }}
       >
         <Text size="sm" as="p" className="capitalize">
           {subItem.title}
@@ -29,6 +44,7 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
   const contentRef = useRef(null);
 
   const toggleOpen = () => setIsOpen((prev) => !prev);
+  const { topNavbarClicked } = useEventsDispatch();
 
   useEffect(() => {
     if (contentRef.current) {
@@ -43,7 +59,15 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
       <div>
         <div
           className="flex cursor-pointer items-center justify-between pb-3 pr-3 pt-2"
-          onClick={toggleOpen}
+          onClick={() => {
+            topNavbarClicked({
+              banner_name: item.title,
+              item_id: item.slug,
+              Source: "Mobile",
+              "Section Name": "Mobile Navbar",
+            });
+            toggleOpen();
+          }}
         >
           <Heading size="base" as="h4" className="font-semibold">
             {item.title}
@@ -67,6 +91,7 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
                 linkPrefix={linkPrefix}
                 closeMenu={closeMenu}
                 isLast={index === item.subMenu.length - 1}
+                topNavbarClicked={topNavbarClicked}
               />
             ))}
           </ul>
@@ -78,7 +103,15 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
   return (
     <Link
       href={`/${linkPrefix ? linkPrefix + "/" : ""}${item.slug || ""}`}
-      onClick={closeMenu}
+      onClick={() => {
+        topNavbarClicked({
+          banner_name: item.title,
+          item_id: item.slug,
+          Source: "Mobile",
+          "Section Name": "Mobile Navbar",
+        });
+        closeMenu();
+      }}
       className="pb-3 pt-2"
     >
       <Heading size="base" as="h4" className="font-semibold">
