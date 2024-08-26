@@ -31,6 +31,7 @@ const SliderButton = React.memo(({ src, alt, onClick }) => (
     alt={alt}
     className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
     onClick={onClick}
+    isStatic
   />
 ));
 

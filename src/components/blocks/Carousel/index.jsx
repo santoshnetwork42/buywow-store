@@ -34,7 +34,6 @@ const CarouselImage = React.memo(({ webImage, mWebImage, link }) => {
           priority
           width={500}
           height={500}
-          isStatic
           className="h-auto w-full object-contain"
         />
       </picture>

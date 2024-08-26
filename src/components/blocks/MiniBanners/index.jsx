@@ -41,7 +41,6 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
                 width={500}
                 height={500}
                 priority
-                isStatic
                 className="aspect-[298/120] h-auto w-full object-contain md:aspect-[650/166]"
               />
             </picture>

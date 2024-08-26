@@ -9,7 +9,6 @@ const IngredientItem = ({ text, subText, imageUrl, imageAlt }) => (
       width={22}
       height={22}
       alt={imageAlt}
-      isStatic
       className="aspect-square h-auto w-6 object-contain"
     />
     <div>

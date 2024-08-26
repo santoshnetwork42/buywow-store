@@ -13,6 +13,7 @@ const SearchIcon = memo(() => (
     height={24}
     alt="search"
     className="aspect-square w-6 cursor-pointer object-contain"
+    isStatic
   />
 ));
 

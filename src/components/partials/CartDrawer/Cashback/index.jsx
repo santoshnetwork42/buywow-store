@@ -19,6 +19,7 @@ const Cashback = React.memo(({ cashbackAmount, amountNeeded, className }) => {
         height={24}
         alt="cashback icon"
         className="aspect-square w-[24px] object-cover"
+        isStatic
       />
       <Text size="base" as="p">
         {cashbackAmount > 0 ? (

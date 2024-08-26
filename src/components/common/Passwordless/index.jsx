@@ -116,6 +116,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       setAuthLoader(true);
       try {
         const isExistingUser = await checkIfExistingUserAPI({ phone });
+        console.log("isExistingUser", isExistingUser, phone);
+
         if (isExistingUser) {
           signInAwsAccount(phone);
         } else {

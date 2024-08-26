@@ -7,6 +7,7 @@ import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
 import ShippingProgress from "@/components/partials/Others/ShippingProgress";
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
+import { getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
@@ -106,6 +107,14 @@ const CartDrawer = ({ upsellProducts }) => {
     }
 
     handleCartVisibility(false);
+
+    if (user?.id) {
+      const getUserResponse = await getUserAPI();
+      if (!getUserResponse?.isActive) {
+        router.push("/404");
+        return Promise.resolve(false);
+      }
+    }
 
     const lscart = localStorage.getItem(`${STORE_PREFIX}-cartId`) || "";
     const cartId = lscart || shoppingCartId;

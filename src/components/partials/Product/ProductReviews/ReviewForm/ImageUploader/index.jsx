@@ -67,7 +67,6 @@ const ImageUploader = React.memo(({ images, onPhotoChange }) => {
                 className="aspect-square h-auto w-full object-contain p-1"
                 width={100}
                 height={100}
-                isStatic
                 addPrefix
                 alt="Review image"
               />

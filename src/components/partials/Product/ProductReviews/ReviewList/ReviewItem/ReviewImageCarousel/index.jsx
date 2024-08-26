@@ -11,7 +11,6 @@ const CarouselImage = React.memo(({ src, alt }) => (
       alt={alt}
       width={400}
       height={400}
-      isStatic
       addPrefix
       className="aspect-[100/80] h-auto w-full object-contain sm:aspect-[100/70] md:aspect-square"
     />
@@ -45,6 +44,7 @@ const SliderButton = React.memo(({ src, alt, onClick, className }) => (
       height={28}
       alt={alt}
       className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
+      isStatic
     />
   </Button>
 ));

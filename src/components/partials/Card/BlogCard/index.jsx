@@ -55,7 +55,6 @@ const BlogCard = ({
             src={url}
             className="h-full w-full object-cover"
             alt={alternativeText || "Blog Image"}
-            isStatic
             width={isVertical ? 356 : 182}
             height={isVertical ? 356 : 114}
           />

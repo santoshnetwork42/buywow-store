@@ -22,6 +22,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
             width={28}
             height={28}
             className="aspect-square h-auto w-full object-contain"
+            isStatic
           />
         </div>
         <div className="flex flex-col justify-center gap-1">

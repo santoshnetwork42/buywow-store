@@ -50,7 +50,6 @@ const OrderSummary = ({
                 height={170}
                 imageKey={product?.thumbImage}
                 className="aspect-square h-auto w-full object-contain"
-                isStatic
                 alt="Product Image"
               />
             </div>

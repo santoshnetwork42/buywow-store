@@ -1,5 +1,5 @@
 // components/MyCart/CartItem.jsx
-import { Img, Text, Heading, Button } from "@/components/elements";
+import { Button, Heading, Img, Text } from "@/components/elements";
 
 export default function CartItem({ product }) {
   return (
@@ -12,6 +12,7 @@ export default function CartItem({ product }) {
             height={124}
             alt="product thumbnail"
             className="h-[124px] w-[124px] object-contain"
+            isStatic
           />
           <div className="flex w-[51%] flex-col gap-[55px] sm:gap-[27px]">
             <div className="flex flex-col items-start gap-[3px]">
@@ -39,7 +40,7 @@ export default function CartItem({ product }) {
                 </Text>
               </div>
               <Button className="flex h-[27px] w-[27px] items-center justify-center rounded border border-solid border-gray-400_02 px-1.5">
-                <Img src="img_thumbs_up.svg" width={10} height={14} />
+                <Img src="img_thumbs_up.svg" width={10} height={14} isStatic />
               </Button>
             </div>
           </div>

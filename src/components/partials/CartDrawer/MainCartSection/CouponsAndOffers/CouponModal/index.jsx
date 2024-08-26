@@ -31,6 +31,7 @@ const CouponModal = ({ isOpen, onClose, appliedCoupon }) => (
           height={68}
           alt="Coupon"
           className="aspect-square h-auto w-full"
+          isStatic
         />
       </div>
     </div>

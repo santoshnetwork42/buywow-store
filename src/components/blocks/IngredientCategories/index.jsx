@@ -1,9 +1,8 @@
-import React from "react";
-import Link from "next/link";
-import { Img } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
+import { Img } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
+import Link from "next/link";
 
 const IngredientItem = ({ ingredient }) => {
   const { slug, image } = ingredient;
@@ -19,7 +18,6 @@ const IngredientItem = ({ ingredient }) => {
         width={248}
         height={76}
         alt={alternativeText || `${slug} Image`}
-        isStatic
         className="aspect-[248/76] h-auto w-full object-cover"
       />
     </Link>
