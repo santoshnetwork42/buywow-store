@@ -1,5 +1,9 @@
 import { MEDIA_BASE_URL } from "@/config";
-import { getPageBySlugAPI, getStoreAPI } from "@/lib/appSyncAPIs";
+import {
+  getCMSPagesAPI,
+  getPageBySlugAPI,
+  getStoreAPI,
+} from "@/lib/appSyncAPIs";
 import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import dynamic from "next/dynamic";
