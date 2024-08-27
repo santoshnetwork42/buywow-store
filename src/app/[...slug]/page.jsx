@@ -49,6 +49,9 @@ const ProductKeyIngredients = dynamic(
 const InfoDropdown = dynamic(
   () => import("@/components/blocks/Accordion/InfoDropdown"),
 );
+const ProductLegalInfo = dynamic(
+  () => import("@/components/blocks/Accordion/ProductLegalInfo"),
+);
 const CollectionLinks = dynamic(
   () => import("@/components/blocks/CollectionLinks"),
 );
@@ -103,6 +106,7 @@ const componentMap = {
   ComponentProductProductBenefits: ProductBenefits,
   ComponentProductProductKeyIngredientImages: ProductKeyIngredients,
   ComponentAccordionInfoDropdownSection: InfoDropdown,
+  ComponentProductProductLegalInfo: ProductLegalInfo,
   ComponentBlocksCollectionLinks: CollectionLinks,
   ComponentBlocksPdp: ProductDetailView,
   ComponentBlocksProductCollectionByTab: ProductCollectionSection,
