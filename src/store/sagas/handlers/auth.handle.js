@@ -66,6 +66,7 @@ export function* confirmSignInHandler(action) {
     const user = yield call(() => confirmSignInRequest({ confirmationCode }));
     yield put(setAuthLoading(false));
 
+    //user?.nextStep?.signInStep = DONE if user is verified successfully
     yield put(setConfirmationStatus(user?.nextStep?.signInStep));
     yield put(
       setPasswordLessModal({
