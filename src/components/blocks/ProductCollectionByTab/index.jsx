@@ -8,6 +8,8 @@ import BlogCard from "@/components/partials/Card/BlogCard";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { getSource } from "@/utils/helpers";
 import React, {
   useCallback,
   useEffect,
@@ -16,8 +18,6 @@ import React, {
   useState,
 } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
-import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
-import { getSource } from "@/utils/helpers";
 
 const SORT_OPTIONS = [
   { value: "RECOMMENDED", label: "Recommended" },
@@ -134,6 +134,7 @@ const ProductCollectionByTab = ({
         setIsLoading(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [activeTabIndex, productCollectionTabItems, slug],
   );
 
@@ -183,7 +184,7 @@ const ProductCollectionByTab = ({
       });
       viewListItemEventTriggered.current = true;
     }
-    //  event passed
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productCollectionTabItems]);
 
   const loadMoreProducts = useCallback(async () => {
@@ -242,6 +243,7 @@ const ProductCollectionByTab = ({
     } finally {
       setIsLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isLoading,
     hasMore,
@@ -274,6 +276,7 @@ const ProductCollectionByTab = ({
         );
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [productCollectionTabItems],
   );
 

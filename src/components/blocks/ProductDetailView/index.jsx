@@ -36,6 +36,7 @@ const ProductDetailView = ({ product }) => {
 
   useEffect(() => {
     addRecentlyViewedProduct(extractAttributes(product?.pdpProduct));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
 
   useEffect(() => {
@@ -46,9 +47,10 @@ const ProductDetailView = ({ product }) => {
       });
       viewItemEventTriggered.current = true;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchedProduct]);
 
-  if (!fetchedProduct) {
+  if (!fetchedProduct?.id) {
     return <div>Product not found</div>;
   }
 

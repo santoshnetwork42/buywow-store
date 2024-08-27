@@ -104,7 +104,7 @@ const ProductCard = memo(
 
     const { url } = extractAttributes(image);
 
-    if (!fetchedProduct || !packageProduct) return null;
+    if (!fetchedProduct?.id || !packageProduct) return null;
 
     return (
       <Link
@@ -154,9 +154,9 @@ const ProductCard = memo(
           )}
         </div>
 
-        {!!showBenefitTags && !!productBenefitTags?.data?.length && (
+        {!!showBenefitTags && productBenefitTags?.data?.length > 0 && (
           <div className="flex max-h-12 flex-wrap gap-[4px] overflow-hidden md:max-h-[52px]">
-            {productBenefitTags?.data?.map((benefitTag, index) => (
+            {productBenefitTags?.data?.slice(0, 2).map((benefitTag, index) => (
               <BenefitTag key={index} {...benefitTag.attributes} />
             ))}
           </div>

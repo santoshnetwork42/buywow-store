@@ -13,7 +13,7 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
   const { price, listingPrice, title, slug, thumbImage } = packageProduct || {};
   const showStrikePrice = listingPrice && price < listingPrice;
 
-  if (!fetchedProduct || !packageProduct) return null;
+  if (!fetchedProduct?.id || !packageProduct) return null;
 
   return (
     <Link

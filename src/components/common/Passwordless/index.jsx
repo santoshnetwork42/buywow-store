@@ -1,6 +1,5 @@
 "use client";
 
-import { getCurrentUser } from "aws-amplify/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -8,20 +7,12 @@ import { useSelector } from "react-redux";
 
 import { Button, Input, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
-import {
-  checkIfExistingUserAPI,
-  getUserAPI,
-  verifyCustomOTPAPI,
-} from "@/lib/appSyncAPIs";
+import { verifyCustomOTPAPI } from "@/lib/appSyncAPIs";
 import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
-import {
-  addPhonePrefix,
-  isPhoneNumberValid,
-  validatePhoneNumber,
-} from "@/utils/helpers";
+import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 
 const PasswordLess = ({ enableOutsideClick = true }) => {
   const router = useRouter();
@@ -79,7 +70,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       handleSignUp();
     }
     if (confirmationStatus === "DONE") {
-      handleAuthClose();
+      handlePasswordLessModal(false, false, null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [confirmationStatus]);
@@ -141,34 +132,18 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     };
   }, [confirmationStatus]);
 
-  const updateUserState = useCallback(async () => {
-    try {
-      const currentUser = await getCurrentUser().catch(() => null);
-      if (currentUser?.userId && !user?.id) {
-        const userData = await getUserAPI();
-        setUser(userData);
-        auth("login", { userId: userData?.id, phone: userData?.phone });
-      }
-      if (!currentUser) {
-        setConfirmationStatus(null);
-      }
-    } catch (error) {
-      console.error("Error updating user state:", error);
+  useEffect(() => {
+    if (!isPasswordLessOpen) {
+      setAuthData({
+        phone: "",
+        confirmationCode: new Array(6).fill(""),
+      });
       setConfirmationStatus(null);
+      setAuthErrors({ phone: "" });
+      setCountdown(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
-
-  const handleAuthClose = async () => {
-    await updateUserState();
-    handlePasswordLessModal(false, false, null);
-    setAuthData({
-      phone: "",
-      confirmationCode: new Array(6).fill(""),
-    });
-    setAuthErrors({ phone: "" });
-    setCountdown(0);
-  };
+  }, [isPasswordLessOpen]);
 
   const handlePhoneChange = (event) => {
     setAuthData((prev) => ({
@@ -177,42 +152,19 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     }));
   };
 
-  const isPhoneValid = isPhoneNumberValid(authData.phone);
-
   const handleSignIn = async () => {
     const phoneValidation = validatePhoneNumber(authData.phone);
     if (phoneValidation.error) {
       setAuthErrors({ phone: phoneValidation.message });
       return;
     }
-    setAuthErrors({ phone: "" });
 
-    if (!isPhoneValid) return;
+    setAuthErrors((prev) => ({ ...prev, phone: "" }));
 
     const phone = addPhonePrefix(authData.phone);
+    signInAwsAccount(phone);
+
     otpRequested({ phone });
-    const handleCustomLogin = async () => {
-      setAuthLoader(true);
-      try {
-        const isExistingUser = await checkIfExistingUserAPI({ phone });
-        if (isExistingUser) {
-          signInAwsAccount(phone);
-        } else {
-          setConfirmationStatus("UNCONFIRMED_CUSTOM_SIGNIN");
-        }
-      } catch (error) {
-        console.error("Error during custom login:", error);
-      } finally {
-        setAuthLoader(false);
-      }
-    };
-
-    if (customLogin) {
-      await handleCustomLogin();
-    } else {
-      signInAwsAccount(phone);
-    }
-
     setCountdown(30);
   };
 
@@ -335,6 +287,11 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         ref={phoneInputRef}
         error={authErrors?.phone}
       />
+      {authErrors?.phone && (
+        <Text as="p" size="base" className="text-sm text-red-500" responsive>
+          {authErrors?.phone}
+        </Text>
+      )}
       <Button
         loader={loading}
         loaderClass="ml-2"
@@ -397,17 +354,12 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
   return (
     <Modal
       isOpen={isPasswordLessOpen}
-      onClose={handleAuthClose}
+      onClose={() => handlePasswordLessModal(false, false, null)}
       showMobileView
       title="Signup"
       enableOutsideClick={enableOutsideClick}
     >
-      {confirmationStatus === null && renderSignInStep}
-      {[
-        "UNCONFIRMED_SIGNUP",
-        "UNCONFIRMED_SIGNIN",
-        "UNCONFIRMED_CUSTOM_SIGNIN",
-      ].includes(confirmationStatus) && renderOTPStep}
+      {!confirmationStatus ? renderSignInStep : renderOTPStep}
     </Modal>
   );
 };

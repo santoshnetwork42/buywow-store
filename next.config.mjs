@@ -61,7 +61,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/my-cart",
+        source: "/cart",
         destination: "/?cart=1",
         permanent: false,
       },
@@ -82,7 +82,7 @@ const nextConfig = {
       },
       {
         source: "/buywow/orders",
-        destination: "/pages/orders",
+        destination: "/account",
         permanent: true,
       },
       {
@@ -92,7 +92,7 @@ const nextConfig = {
       },
       {
         source: "/buywow/account",
-        destination: "/pages/account",
+        destination: "/account",
         permanent: true,
       },
       {

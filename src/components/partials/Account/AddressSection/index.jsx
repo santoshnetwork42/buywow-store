@@ -20,7 +20,7 @@ const AddressSection = React.memo(({ variant }) => {
   const { getAddressList } = useAddressDispatch();
   const user = useSelector((state) => state.user?.user);
   const addressState = useSelector((state) => state.address);
-  const { addressList, isLoading } = addressState;
+  const { addressList, initialLoading } = addressState;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -39,7 +39,7 @@ const AddressSection = React.memo(({ variant }) => {
     setIsModalOpen(false);
   }, []);
 
-  if (isLoading) {
+  if (initialLoading) {
     return <AddressSkeleton />;
   }
 

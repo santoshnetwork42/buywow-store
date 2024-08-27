@@ -16,7 +16,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   const [selectedVariant] = useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
-  if (!fetchedProduct || !packageProduct) return null;
+  if (!fetchedProduct?.id || !packageProduct) return null;
 
   const { price, listingPrice } = packageProduct || {};
 
@@ -104,7 +104,7 @@ const UpsellProducts = ({
       default:
         return "bg-white-a700_01";
     }
-  }, [upsellProductsBgColor]);
+  }, [upsellProductsBgColor, isCartUpsell]);
 
   const isPaddedColor =
     upsellProductsBgColor === "LIME" || upsellProductsBgColor === "BLUE";

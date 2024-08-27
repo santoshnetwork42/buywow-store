@@ -21,6 +21,7 @@ import {
   getUser,
   getUserRewards,
   searchCMSCollectionProducts,
+  searchOrders,
   updateReview,
   updateUser,
   updateUserAddress,
@@ -568,5 +569,29 @@ export const getInitialDataAPI = async (storeId, deviceType) => {
   } catch (error) {
     errorHandler("Error Updating User", error);
     return error;
+  }
+};
+
+export const getOrdersAPI = async (userId, token = null, perPage = 10) => {
+  try {
+    const response = await client.graphql({
+      query: searchOrders,
+      variables: {
+        filter: {
+          userId: { eq: userId },
+          storeId: { eq: STORE_ID },
+          and: [{ status: { ne: "TIMEDOUT" } }, { status: { ne: "PENDING" } }],
+        },
+        sort: [{ field: "orderDate", direction: "desc" }],
+        limit: perPage,
+        nextToken: token,
+      },
+      authMode: "userPool",
+    });
+
+    return response?.data?.searchOrders;
+  } catch (error) {
+    errorHandler(error, "Get Orders API");
+    return null;
   }
 };

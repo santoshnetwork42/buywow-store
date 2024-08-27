@@ -1,16 +1,16 @@
-import { generateRandomString } from "@/utils/helpers";
-import {
-  signUp,
-  signIn,
-  resendSignUpCode,
-  confirmSignIn,
-  confirmSignUp,
-  autoSignIn,
-  signOut,
-} from "aws-amplify/auth";
-import { Amplify } from "aws-amplify";
 import awsExport from "@/aws-exports";
 import { AWS_CLIENT_ID } from "@/config";
+import { generateRandomString } from "@/utils/helpers";
+import { Amplify } from "aws-amplify";
+import {
+  autoSignIn,
+  confirmSignIn,
+  confirmSignUp,
+  resendSignUpCode,
+  signIn,
+  signOut,
+  signUp,
+} from "aws-amplify/auth";
 
 Amplify.configure({
   ...awsExport,
@@ -38,13 +38,13 @@ export const signUpWithAwsRequest = async ({ phone }) => {
 
 export const signInWithAwsRequest = async ({ phone }) => {
   try {
-    const cu = await signIn({
+    const user = await signIn({
       username: phone,
       options: {
         authFlowType: "CUSTOM_WITHOUT_SRP",
       },
     });
-    return cu;
+    return user;
   } catch (error) {
     throw error;
   }

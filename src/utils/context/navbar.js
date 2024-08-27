@@ -67,7 +67,7 @@ function NavbarProvider({ children, initialData }) {
       storeId={STORE_ID}
       resolve={apiResolve}
       isInteractive={
-        isInteractive || pathname === "/checkout" || pathname === "/my-cart"
+        isInteractive || pathname === "/checkout" || pathname === "/cart"
       }
       cartItems={cartList}
       appliedCoupon={appliedCoupon}

@@ -4,6 +4,7 @@ const initialState = {
   currentAddress: null,
   addressList: [],
   isLoading: false,
+  initialLoading: false,
 };
 
 export const addressSlice = createSlice({
@@ -20,9 +21,17 @@ export const addressSlice = createSlice({
     updateAddressList: (state, action) => {
       state.addressList = action.payload;
     },
+    updateInitialLoading: (state, action) => {
+      state.initialLoading = action.payload;
+    },
   },
 });
 
-export const { updateCurrentAddress, updateAddressLoading, updateAddressList } =
-  addressSlice.actions;
+export const {
+  updateCurrentAddress,
+  updateAddressLoading,
+  updateAddressList,
+  updateInitialLoading,
+  resetAddress,
+} = addressSlice.actions;
 export default addressSlice.reducer;

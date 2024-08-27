@@ -9,6 +9,7 @@ import {
   updateAddressList,
   updateAddressLoading,
   updateCurrentAddress,
+  updateInitialLoading,
 } from "@/store/slices/address.slice";
 import { call, put, select } from "redux-saga/effects";
 import { v4 as uuidv4 } from "uuid";
@@ -141,7 +142,7 @@ export function* editAddressHandler(action) {
 
 export function* getAddressListHandler(action) {
   try {
-    yield put(updateAddressLoading(true));
+    yield put(updateInitialLoading(true));
 
     const { id = null } = action.payload;
     const { currentAddress, addressList } = yield select(
@@ -166,12 +167,13 @@ export function* getAddressListHandler(action) {
   } catch (error) {
     console.log("error getting address", error);
   } finally {
-    yield put(updateAddressLoading(false));
+    yield put(updateInitialLoading(false));
   }
 }
 
 export function* deleteAddressHandler(action) {
   try {
+    yield put(updateAddressLoading(true));
     const { id, userID = null } = action.payload;
 
     // Get the current state
@@ -213,5 +215,7 @@ export function* deleteAddressHandler(action) {
   } catch (error) {
     console.log("Error deleting address", error);
     // yield put(deleteAddressFailure(error));
+  } finally {
+    yield put(updateAddressLoading(false));
   }
 }

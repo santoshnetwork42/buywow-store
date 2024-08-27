@@ -1,8 +1,8 @@
 "use client";
 
+import { Text } from "@/components/elements";
 import TokenPagination from "@/components/features/TokenPagination";
-import { STORE_ID } from "@/config";
-import { searchOrders } from "@/graphql/appSync/api";
+import { getOrdersAPI } from "@/lib/appSyncAPIs";
 import { errorHandler } from "@/utils/errorHandler";
 import { generateClient } from "aws-amplify/api";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -19,6 +19,7 @@ const OrderList = React.memo(() => {
   const [totalOrder, setTotalOrder] = useState(0);
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const perPage = 10;
 
   const getOrders = useCallback(
@@ -27,32 +28,23 @@ const OrderList = React.memo(() => {
 
       setIsLoading(true);
       try {
-        const { data } = await client.graphql({
-          query: searchOrders,
-          variables: {
-            filter: {
-              userId: { eq: user.id },
-              storeId: { eq: STORE_ID },
-              and: [
-                { status: { ne: "TIMEDOUT" } },
-                { status: { ne: "PENDING" } },
-              ],
-            },
-            sort: [{ field: "orderDate", direction: "desc" }],
-            limit: perPage,
-            nextToken: reset ? null : token,
-          },
-          authMode: "userPool",
-        });
+        const result = await getOrdersAPI(
+          user.id,
+          reset ? null : token,
+          perPage,
+        );
 
-        const { items, total, nextToken } = data.searchOrders;
-        setOrders((prev) => (reset ? items : [...prev, ...items]));
-        setTotalOrder(total);
-        setToken(nextToken);
+        if (result) {
+          const { items, total, nextToken } = result;
+          setOrders((prev) => (reset ? items : [...prev, ...items]));
+          setTotalOrder(total);
+          setToken(nextToken);
+        }
       } catch (error) {
         errorHandler(error);
       } finally {
         setIsLoading(false);
+        setIsInitialLoad(false);
       }
     },
     [user, token],
@@ -78,19 +70,42 @@ const OrderList = React.memo(() => {
     [perPage],
   );
 
+  const renderContent = () => {
+    if (isLoading && isInitialLoad) {
+      return skeletons;
+    }
+    if (orders.length === 0 && !isLoading) {
+      return (
+        <div className="flex h-40 items-center justify-center">
+          <Text
+            as="p"
+            size="lg"
+            className="text-center text-base text-gray-600/80"
+            responsive
+          >
+            No orders placed yet. Start shopping to see your orders here!
+          </Text>
+        </div>
+      );
+    }
+    return memoizedOrders;
+  };
+
   return (
     <>
       <div className="mb-4 grid grid-cols-1">
         <OrderListHeader />
-        {isLoading && orders.length === 0 ? skeletons : memoizedOrders}
+        {renderContent()}
       </div>
-      <TokenPagination
-        onPage={() => getOrders(false)}
-        total={totalOrder}
-        loaded={orders?.length}
-        nextToken={token}
-        content="orders"
-      />
+      {orders.length > 0 && (
+        <TokenPagination
+          onPage={() => getOrders(false)}
+          total={totalOrder}
+          loaded={orders?.length}
+          nextToken={token}
+          content="orders"
+        />
+      )}
     </>
   );
 });
