@@ -1,7 +1,7 @@
+import LinkClickTracker from "@/components/common/LinkClickTracker";
 import { Heading, Text } from "@/components/elements";
 import dayjs from "dayjs";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function BlogCard2({
   blog = {
@@ -14,7 +14,16 @@ export default function BlogCard2({
   },
 }) {
   return (
-    <Link href={`/blog/${blog.slug}`}>
+    <LinkClickTracker
+      href={`/blog/${blog.slug}`}
+      trackingType="BLOG_CLICK"
+      trackingEventPayload={{
+        id: blog.id,
+        slug: blog.slug,
+        name: blog.title,
+        parentCategory: "top-blogs",
+      }}
+    >
       <div className="grid grid-cols-[1fr_3fr] gap-x-3">
         <div className="relative aspect-[4/3] w-full">
           <Image
@@ -40,6 +49,6 @@ export default function BlogCard2({
           </Heading>
         </div>
       </div>
-    </Link>
+    </LinkClickTracker>
   );
 }

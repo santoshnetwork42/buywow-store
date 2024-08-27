@@ -252,7 +252,7 @@ function GoKwikProvider({ children }) {
       gokwikSdk.on("address-selected", (address) => {
         console.log("address-selected>>>", address);
         const formattedAddress = formatUserAddress(address);
-        // addressSelected(formattedAddress, totalPrice, "GOKWIK");
+        addressSelected(formattedAddress, totalPrice, "GOKWIK");
       });
 
       gokwikSdk.on("payment-method-selected", (payment) => {
@@ -269,7 +269,7 @@ function GoKwikProvider({ children }) {
 
       gokwikSdk.on("user-login-successful", async (event) => {
         console.log("user-login-successful>>>", event);
-        startCheckout("GOKWIK");
+        startCheckout("GOKWIK", event);
         await manageUserAuthEvent(event.phone_no, event.user_token);
       });
     });
