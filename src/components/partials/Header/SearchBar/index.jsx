@@ -2,10 +2,22 @@
 
 import { CloseSVG } from "@/assets/images";
 import { Img, Input } from "@/components/elements";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { usePathname, useRouter } from "next/navigation";
 import { memo, useCallback, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+
+const TYPING_SPEED = 100;
+const DELETING_SPEED = 30;
+const PAUSE_DURATION = 500;
+
+const dataText = [
+  "Search for Ubtan",
+  "Search for Face Serum",
+  "Search for Vitamin C",
+  "Search for Face Wash",
+  "Search for Face Mask",
+];
 
 const SearchIcon = memo(() => (
   <Img
@@ -35,6 +47,44 @@ const SearchBar = memo(({ className }) => {
   const pathname = usePathname();
   const [search, setSearch] = useState("");
   const { search: searchEvent } = useEventsDispatch();
+  const [placeholderState, setPlaceholderState] = useState({
+    text: "",
+    isDeleting: false,
+    loopNum: 0,
+    typingSpeed: TYPING_SPEED,
+  });
+
+  const handleType = useCallback(() => {
+    const { text, isDeleting, loopNum } = placeholderState;
+    const i = loopNum % dataText.length;
+    const fullText = dataText[i];
+
+    setPlaceholderState((prevState) => ({
+      ...prevState,
+      text: isDeleting
+        ? fullText.substring(0, text.length - 1)
+        : fullText.substring(0, text.length + 1),
+      typingSpeed: isDeleting ? DELETING_SPEED : TYPING_SPEED,
+    }));
+
+    if (!isDeleting && text === fullText) {
+      setTimeout(
+        () => setPlaceholderState((prev) => ({ ...prev, isDeleting: true })),
+        PAUSE_DURATION,
+      );
+    } else if (isDeleting && text === "") {
+      setPlaceholderState((prev) => ({
+        ...prev,
+        isDeleting: false,
+        loopNum: prev.loopNum + 1,
+      }));
+    }
+  }, [placeholderState]);
+
+  useEffect(() => {
+    const typingInterval = setTimeout(handleType, placeholderState.typingSpeed);
+    return () => clearTimeout(typingInterval);
+  }, [handleType, placeholderState.typingSpeed]);
 
   useEffect(() => {
     if (pathname !== "/search") {
@@ -104,7 +154,7 @@ const SearchBar = memo(({ className }) => {
     >
       <Input
         name="searchField"
-        placeholder="Search e.g. vitamin c face wash"
+        placeholder={placeholderState.text}
         autoComplete="off"
         value={search}
         onKeyDown={handleKeyDown}
