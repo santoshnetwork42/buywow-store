@@ -23,7 +23,6 @@ const ProductEffectiveness = ({ title, image, EffectivenessChart }) => {
                   alt={alternativeText || `Product Effectiveness Image`}
                   width={600}
                   height={376}
-                  isStatic
                   className="aspect-[600/346] h-auto w-full object-contain"
                 />
               </div>

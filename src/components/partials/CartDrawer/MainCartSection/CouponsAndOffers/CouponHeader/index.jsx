@@ -46,6 +46,7 @@ const CouponHeader = ({ openSidebar, appliedCoupon, removeCoupon }) => {
           height={32}
           alt="promo image"
           className="aspect-square w-[32px] object-contain"
+          isStatic
         />
         <div className="flex flex-col justify-center">
           <Heading
@@ -70,7 +71,7 @@ const CouponHeader = ({ openSidebar, appliedCoupon, removeCoupon }) => {
         className="relative flex h-9 w-9 shrink-0 rounded-full bg-white-a700_01 p-0"
         onClick={openSidebar}
       >
-        <Img src="img_group_1400002487.svg" width={7} height={20} />
+        <Img src="img_group_1400002487.svg" width={7} height={20} isStatic />
       </Button>
     </div>
   );

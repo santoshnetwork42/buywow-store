@@ -1,6 +1,5 @@
-import React from "react";
-import { Heading, Img, Text } from "@/components/elements";
 import SectionHeading from "@/components/common/SectionHeading";
+import { Heading, Img, Text } from "@/components/elements";
 import { extractAttributes, getBgColor } from "@/utils/helpers";
 
 const BenefitItem = ({ text, subText, image }) => {
@@ -13,7 +12,6 @@ const BenefitItem = ({ text, subText, image }) => {
         alt={alternativeText}
         width={100}
         height={96}
-        isStatic
         className="aspect-[100/96] w-20 sm:w-[84px] md:w-[88px] lg:w-[92px] xl:w-24"
       />
       <div className="flex flex-col items-center justify-center gap-1 md:gap-2">

@@ -14,6 +14,7 @@ const SearchIcon = memo(() => (
     height={24}
     alt="search"
     className="aspect-square w-6 cursor-pointer object-contain"
+    isStatic
   />
 ));
 
@@ -33,6 +34,7 @@ const SearchBar = memo(({ className }) => {
   const router = useRouter();
   const pathname = usePathname();
   const [search, setSearch] = useState("");
+  const { search: searchEvent } = useEventsDispatch();
 
   useEffect(() => {
     if (pathname !== "/search") {
@@ -47,12 +49,24 @@ const SearchBar = memo(({ className }) => {
     }
   }, [router, search]);
 
-  const { search: searchEvent } = useEventsDispatch();
+  useEffect(() => {
+    if (search.length >= 2) {
+      const debounceTimer = setTimeout(() => {
+        handleSubmit();
+      }, 300); // 300ms debounce
 
-  const handleChange = useCallback((e) => {
-    searchEvent(e.target.value); //search event passed
-    setSearch(e.target.value);
-  }, []);
+      return () => clearTimeout(debounceTimer);
+    }
+  }, [search, handleSubmit]);
+
+  const handleChange = useCallback(
+    (e) => {
+      const newValue = e.target.value;
+      searchEvent(newValue); // search event passed
+      setSearch(newValue);
+    },
+    [searchEvent],
+  );
 
   const clearSearch = useCallback(() => {
     setSearch("");

@@ -81,7 +81,6 @@ const VariantItem = React.memo(({ variant, onChange }) => {
             height={300}
             alt={title || "Variant image"}
             addPrefix
-            isStatic
             className="aspect-[114/92] h-auto w-full object-contain p-1"
           />
         </div>

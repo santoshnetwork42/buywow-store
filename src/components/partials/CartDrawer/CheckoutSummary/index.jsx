@@ -11,10 +11,8 @@ import { useSelector } from "react-redux";
 const CheckoutSummary = React.memo(() => {
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
 
-  const { appliedCoupon, isRewardApplied } = useSelector((state) => ({
-    appliedCoupon: state?.cart?.coupon,
-    isRewardApplied: state?.cart?.isRewardApplied,
-  }));
+  const appliedCoupon = useSelector((state) => state.cart?.coupon);
+  const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
   const {
     totalListingPrice,

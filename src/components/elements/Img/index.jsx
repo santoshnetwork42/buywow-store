@@ -5,7 +5,8 @@ import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import Image from "next/image";
 import React, { useCallback, useMemo, useState } from "react";
 
-const BASE_URL = "/images";
+const IMAGE_BASE_URL = "/images";
+const DEFAULT_IMAGE_QUALITY = 75;
 
 const Img = React.memo(
   ({
@@ -15,23 +16,22 @@ const Img = React.memo(
     isStatic = false,
     width,
     addPrefix = false,
-    quality = 75,
-    test,
+    quality = DEFAULT_IMAGE_QUALITY,
     ...restProps
   }) => {
     const [hasError, setHasError] = useState(false);
 
-    const imageData = useMemo(() => {
+    const imageConfig = useMemo(() => {
       if (!src) return { src: null, loader: undefined };
 
-      if (isStatic) {
-        const staticSrc = addPrefix ? src : encodeURI(src);
+      if (!isStatic) {
+        const processedSrc = addPrefix ? src : encodeURI(src);
         return {
-          src: staticSrc,
-          loader: ({ src, width: w }) => {
+          src: processedSrc,
+          loader: ({ src: imageSrc, width: imageWidth }) => {
             return getPublicImageURL({
-              key: src,
-              resize: w,
+              key: imageSrc,
+              resize: imageWidth,
               quality,
               addPrefix,
             });
@@ -39,7 +39,7 @@ const Img = React.memo(
         };
       }
 
-      return { src: `${BASE_URL}/${src}`, loader: undefined };
+      return { src: `${IMAGE_BASE_URL}/${src}`, loader: undefined };
     }, [src, isStatic, addPrefix, quality]);
 
     const handleError = useCallback(() => {
@@ -61,8 +61,8 @@ const Img = React.memo(
     return (
       <Image
         className={className}
-        loader={imageData.loader}
-        src={imageData.src}
+        loader={imageConfig.loader}
+        src={imageConfig.src}
         alt={alt || "Image"}
         width={width}
         onError={handleError}

@@ -24,7 +24,6 @@ const SocialLink = React.memo(({ item, index }) => {
         width={24}
         height={24}
         alt={alternativeText}
-        isStatic
         className="aspect-square w-6 object-contain"
       />
     </Link>
@@ -39,7 +38,6 @@ const FooterLogo = React.memo(({ logoUrl, logoAlternativeText }) => {
       width={200}
       height={100}
       alt={logoAlternativeText || "logo"}
-      isStatic
       className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
     />
   );

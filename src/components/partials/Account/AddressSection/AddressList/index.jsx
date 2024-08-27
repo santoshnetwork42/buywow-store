@@ -10,8 +10,8 @@ import { useCartTotal } from "@wow-star/utils";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 const AddressList = React.memo(({ addressList, variant }) => {
-  const { currentAddress } = useSelector((state) => state.address);
-  const { user } = useSelector((state) => state.user);
+  const currentAddress = useSelector((state) => state.address?.currentAddress);
+  const user = useSelector((state) => state.user?.user);
   const { updateCurrentAddress, deleteAddress } = useAddressDispatch();
 
   const { addressSelected } = useEventsDispatch();

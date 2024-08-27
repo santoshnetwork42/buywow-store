@@ -60,7 +60,6 @@ const Accordion = ({
                 width={26}
                 height={26}
                 alt={alternativeText || title}
-                isStatic
                 className="aspect-square h-auto w-full object-contain"
               />
             </div>

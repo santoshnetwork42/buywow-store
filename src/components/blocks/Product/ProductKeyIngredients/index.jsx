@@ -12,7 +12,6 @@ const AdditionalIngredient = ({ title, image }) => {
           width={114}
           height={100}
           alt={alternativeText || "Additional Ingredient"}
-          isStatic
           className="aspect-[114/100] h-auto w-full object-contain"
         />
       </div>
@@ -52,7 +51,6 @@ const PrimaryIngredient = ({ webImage, mWebImage }) => {
         height={576}
         width={576}
         priority
-        isStatic
         className="aspect-square h-auto w-full object-contain md:aspect-[725/274]"
       />
     </picture>

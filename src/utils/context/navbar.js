@@ -17,9 +17,9 @@ function NavbarProvider({ children, initialData }) {
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
 
-  const cartList = useSelector((state) => state?.cart?.data || []);
-  const appliedCoupon = useSelector((state) => state?.cart?.coupon);
-  const user = useSelector((state) => state?.user?.user);
+  const cartList = useSelector((state) => state.cart?.data || []);
+  const appliedCoupon = useSelector((state) => state.cart?.coupon);
+  const user = useSelector((state) => state.user?.user);
 
   const [isInteractive, setIsInteractive] = useState(false);
   const [source, setSource] = useState(_source);

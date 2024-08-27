@@ -19,6 +19,7 @@ export default function PaymentLoader({
           width="88"
           height="44"
           className="m-auto"
+          isStatic
         />
 
         <div className="loader size-9 rounded-full border-[3px] border-yellow-900"></div>

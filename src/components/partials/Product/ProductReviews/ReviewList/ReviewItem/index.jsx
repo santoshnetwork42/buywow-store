@@ -48,7 +48,6 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
                     width={100}
                     height={100}
                     alt={`Review image ${index + 1}`}
-                    isStatic
                     addPrefix
                     className="aspect-[110/80] h-auto w-full border object-contain transition-transform duration-300 ease-in-out hover:scale-110"
                   />
@@ -84,6 +83,7 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
               height={22}
               alt="search"
               className="aspect-square w-5 cursor-pointer object-contain md:w-6"
+              isStatic
             />
             <Text as="p" size="base" responsive>
               VERIFIED BUYER
@@ -118,6 +118,7 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
                     height={22}
                     alt="search"
                     className="aspect-square w-5 cursor-pointer object-contain md:w-6"
+                    isStatic
                   />
                   <Text as="p" size="sm" responsive>
                     VERIFIED

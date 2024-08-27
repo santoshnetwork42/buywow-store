@@ -49,7 +49,6 @@ const SingleBanner = ({ banner, slug }) => {
           width={500}
           height={500}
           priority
-          isStatic
           className="h-auto w-full object-contain"
         />
       </picture>

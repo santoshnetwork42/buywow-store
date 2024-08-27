@@ -52,9 +52,9 @@ const CarouselImage = React.memo(
         <picture className="relative block w-full">
           {!!webImageAttrs.url && (
             <source
-            media="(min-width: 576px)"
-            srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}
-          />
+              media="(min-width: 576px)"
+              srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}
+            />
           )}
           <Img
             src={imageUrl}
@@ -62,7 +62,6 @@ const CarouselImage = React.memo(
             priority
             width={500}
             height={500}
-            isStatic
             className="h-auto w-full object-contain"
           />
         </picture>

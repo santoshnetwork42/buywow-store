@@ -21,7 +21,7 @@ const AddToCart = ({
 }) => {
   const { addToCart, updateCart, removeFromCart } = useCartDispatch();
   const { handleCartVisibility } = useModalDispatch();
-  const cartItems = useSelector((state) => state?.cart?.data || []);
+  const cartItems = useSelector((state) => state.cart?.data || []);
 
   const addToCartHandler = useCallback(() => {
     if (!product) return;
@@ -31,6 +31,7 @@ const AddToCart = ({
       qty: product.minimumOrderQuantity || 1,
       variantId: selectedVariant?.id,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product, selectedVariant]);
 
   const cartItem = useMemo(() => {
@@ -55,6 +56,7 @@ const AddToCart = ({
         removeFromCart(cartItem);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [cartItem, cartItems, product, selectedVariant?.id],
   );
 

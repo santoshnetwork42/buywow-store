@@ -24,7 +24,6 @@ const IngredientItem = ({ ingredient }) => {
         width={248}
         height={76}
         alt={alternativeText || `${slug} Image`}
-        isStatic
         className="aspect-[248/76] h-auto w-full object-cover"
       />
     </LinkClickTracker>

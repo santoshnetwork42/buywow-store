@@ -64,7 +64,7 @@ const Checkout = () => {
   const storeData = useSelector((state) => state.system?.store);
   const shoppingCartId = useSelector((state) => state.cart?.cartId);
   const { appliedCoupon } = useSelector((state) => ({
-    appliedCoupon: state?.cart?.coupon,
+    appliedCoupon: state.cart?.coupon,
   }));
 
   const cartList = useCartItems({
@@ -140,6 +140,7 @@ const Checkout = () => {
     if (user?.id || guestCheckout || customUser?.phone) {
       setPageLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, guestCheckout, customUser, router]);
 
   useEffect(() => {
@@ -210,7 +211,11 @@ const Checkout = () => {
         variables.isAffiseTrackingValid = isAffiseTrackingValid;
       }
 
-      if (!guestCheckout && !customUser && (!user || !user.isActive)) {
+      if (
+        !guestCheckout &&
+        !customUser?.phone &&
+        (!user?.id || !user.isActive)
+      ) {
         emptyCart();
         router.replace("/");
         return;
@@ -314,6 +319,7 @@ const Checkout = () => {
       setPaymentLoader(false);
       emptyCart();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfirmed, finalOrder, router]);
 
   useEffect(() => {

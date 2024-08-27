@@ -41,7 +41,6 @@ const ProductImage = ({
         height={300}
         imageKey={imageKey}
         className="aspect-[66/88] h-auto w-full object-contain"
-        isStatic
         alt="Product Image"
       />
     </Link>

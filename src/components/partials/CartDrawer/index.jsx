@@ -7,11 +7,16 @@ import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
 import ShippingProgress from "@/components/partials/Others/ShippingProgress";
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
+import { getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useGuestCheckout } from "@/utils/context/navbar";
-import { GOKWIK_ENABLED, PREPAID_ENABLED } from "@/utils/data/constants";
+import {
+  GOKWIK_ENABLED,
+  PREPAID_ENABLED,
+  RESTRICT_SEARCH_AND_CART_TO_SHOW,
+} from "@/utils/data/constants";
 import {
   useCartItems,
   useCartTotal,
@@ -35,25 +40,18 @@ const CartDrawer = ({ upsellProducts }) => {
   const _cx = searchParams?.get("_cx");
   const forceOpenCart = searchParams?.get("cart");
 
-  const {
-    appliedCoupon,
-    shoppingCartId,
-    user,
-    customUser,
-    cartList,
-    isShoppingCartIdLoading,
-    isCartOpen,
-    isRewardApplied,
-  } = useSelector((state) => ({
-    appliedCoupon: state.cart?.coupon,
-    shoppingCartId: state.cart?.cartId,
-    isShoppingCartIdLoading: state.cart?.isShoppingCartIdLoading,
-    user: state.user?.user,
-    customUser: state.user?.customUser,
-    cartList: state.cart?.data,
-    isCartOpen: state.modal?.modal?.cart?.isCartOpen,
-    isRewardApplied: state.cart?.isRewardApplied,
-  }));
+  const appliedCoupon = useSelector((state) => state.cart?.coupon);
+  const shoppingCartId = useSelector((state) => state.cart?.cartId);
+  const isShoppingCartIdLoading = useSelector(
+    (state) => state.cart?.isShoppingCartIdLoading,
+  );
+  const user = useSelector((state) => state.user?.user);
+  const customUser = useSelector((state) => state.user?.customUser);
+  const cartList = useSelector((state) => state.cart?.data);
+  const isCartOpen = useSelector(
+    (state) => state.modal?.modal?.cart?.isCartOpen,
+  );
+  const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
   const { validateCart, fetchAndAddProductsFromEncodedCart, applyRewardPoint } =
     useCartDispatch();
@@ -106,6 +104,14 @@ const CartDrawer = ({ upsellProducts }) => {
     }
 
     handleCartVisibility(false);
+
+    if (user?.id) {
+      const getUserResponse = await getUserAPI();
+      if (!getUserResponse?.isActive) {
+        router.push("/404");
+        return Promise.resolve(false);
+      }
+    }
 
     const lscart = localStorage.getItem(`${STORE_PREFIX}-cartId`) || "";
     const cartId = lscart || shoppingCartId;
@@ -170,11 +176,20 @@ const CartDrawer = ({ upsellProducts }) => {
   }, [isCartOpen]);
 
   useEffect(() => {
-    if (!forceOpenCart) {
+    const shouldForceOpenCart =
+      forceOpenCart === "1" &&
+      !isCartOpen &&
+      !RESTRICT_SEARCH_AND_CART_TO_SHOW.some((path) =>
+        pathname.startsWith(path),
+      );
+
+    if (shouldForceOpenCart) {
+      handleCartVisibility(true);
+    } else {
       handleCartVisibility(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [forceOpenCart]);
 
   useEffect(() => {
     if (_cx) {
