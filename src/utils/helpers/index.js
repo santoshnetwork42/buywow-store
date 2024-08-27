@@ -426,19 +426,6 @@ export async function fetchSearchItems(search, limit = 1) {
   const NEXT_PUBLIC_TTM_CLIENT_THRESHOLD =
     process.env.NEXT_PUBLIC_TTM_CLIENT_THRESHOLD;
 
-  console.log(
-    "process.env.NEXT_PUBLIC_TTM_CLIENT_URL :>> ",
-    process.env.NEXT_PUBLIC_TTM_CLIENT_URL,
-  );
-  console.log(
-    "process.env.NEXT_PUBLIC_TTM_CLIENT_API_KEY :>> ",
-    process.env.NEXT_PUBLIC_TTM_CLIENT_API_KEY,
-  );
-  console.log(
-    "process.env.NEXT_PUBLIC_TTM_CLIENT_THRESHOLD :>> ",
-    process.env.NEXT_PUBLIC_TTM_CLIENT_THRESHOLD,
-  );
-
   try {
     const response = await fetch(
       `${NEXT_PUBLIC_TTM_CLIENT_URL}/search?query=${encodeURIComponent(
