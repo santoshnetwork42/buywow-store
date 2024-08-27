@@ -31,7 +31,7 @@ Amplify.configure({
 export const revalidate = 5;
 
 async function RootLayout({ children }) {
-  const { data } = await getNavbarAndFooterAPI();
+  const { data } = (await getNavbarAndFooterAPI()) || {};
   const initialData = await getInitialDataAPI(
     "6eb42c89-4955-4fc8-8a87-b4ff92e0908c",
     "WEB",

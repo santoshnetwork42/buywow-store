@@ -142,8 +142,7 @@ export async function generateStaticParams() {
     LANDING: "",
   };
 
-  
-  return pages.map((page) => ({
+  return pages?.map((page) => ({
     slug: [pageType[page.attributes.type], page.attributes.slug].filter(
       Boolean,
     ),
