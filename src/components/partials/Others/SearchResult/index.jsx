@@ -2,6 +2,7 @@
 
 import ProductCard from "@/components/partials/Card/ProductCard";
 import { fetchSearchItems } from "@/utils/helpers";
+import { setSoldOutLast } from "@/utils/helpers/products";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import ProductCardSkeleton from "../../Card/ProductCard/ProductCardSkeleton";
@@ -45,7 +46,7 @@ const SearchResults = ({ initialProducts = [] }) => {
     setLoading(true);
     try {
       const items = await fetchSearchItems(searchTerm, 50);
-      setProducts(items || []);
+      setProducts(setSoldOutLast(items || []) || []);
       setIsInitialData(false);
     } catch (error) {
       console.error("Error fetching search results:", error);
