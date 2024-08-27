@@ -19,10 +19,10 @@ const CarouselImage = React.memo(
     const webImageAttrs = extractAttributes(webImage);
     const mWebImageAttrs = extractAttributes(mWebImage);
 
-    const imageUrl = mWebImageAttrs.url || webImageAttrs.url;
+    const imageUrl = mWebImageAttrs?.url || webImageAttrs?.url;
     const imageAlt =
-      mWebImageAttrs.alternativeText ||
-      webImageAttrs.alternativeText ||
+      mWebImageAttrs?.alternativeText ||
+      webImageAttrs?.alternativeText ||
       "Carousel Banner";
 
     const { homeViewed, bannerClicked } = useEventsDispatch();
@@ -33,7 +33,7 @@ const CarouselImage = React.memo(
         homeViewed();
         eventTriggered.current = true;
       }
-    }, [homeViewed]);
+    }, []);
 
     if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
