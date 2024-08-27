@@ -33,7 +33,6 @@ const SkeletonGrid = React.memo(() => (
 SkeletonGrid.displayName = "SkeletonGrid";
 
 const SearchResults = ({ initialProducts = [] }) => {
-  console.log("reachedInSearch :>> ", initialProducts);
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
   const [loading, setLoading] = useState(false);
@@ -41,7 +40,6 @@ const SearchResults = ({ initialProducts = [] }) => {
   const [isInitialData, setIsInitialData] = useState(true);
 
   const fetchProducts = useCallback(async (searchTerm) => {
-    console.log("searchTerm :>> ", searchTerm);
     if (!searchTerm) return;
 
     setLoading(true);
@@ -58,9 +56,7 @@ const SearchResults = ({ initialProducts = [] }) => {
   }, []);
 
   useEffect(() => {
-    console.log("query :>> ", query);
     const trimmedQuery = query?.trim();
-    console.log("trimmedQuery :>> ", trimmedQuery);
     if (trimmedQuery) {
       fetchProducts(trimmedQuery);
     } else {
