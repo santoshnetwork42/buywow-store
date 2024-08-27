@@ -34,7 +34,6 @@ const ProductLegalInfo = ({
   legalInfoItems = [],
   accordionInfoDropdownBgColor: bgColor,
 }) => {
-  console.log("reached :>> ", legalInfoItems);
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
   const [contentHeight, setContentHeight] = useState("auto");
