@@ -18,7 +18,6 @@ const ProductThumbnail = React.memo(
         width={width}
         height={height}
         alt={alt}
-        isStatic
         className={mergedClassName}
         addPrefix={url ? false : true}
         {...props}

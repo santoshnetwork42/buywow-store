@@ -23,14 +23,10 @@ const CouponsAndOffers = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
 
-  const { cartList, appliedCoupon, storedCouponCode, user } = useSelector(
-    (state) => ({
-      cartList: state.cart.data || [],
-      appliedCoupon: state.cart.coupon,
-      storedCouponCode: state.cart.storedCouponCode,
-      user: state.user.user,
-    }),
-  );
+  const cartList = useSelector((state) => state.cart?.data || []);
+  const appliedCoupon = useSelector((state) => state.cart?.coupon);
+  const storedCouponCode = useSelector((state) => state.cart?.storedCouponCode);
+  const user = useSelector((state) => state.user?.user);
 
   const { filteredFeaturedCoupons: featuredCoupons = [] } =
     useFeaturedCoupons();

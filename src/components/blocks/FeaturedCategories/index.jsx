@@ -1,10 +1,8 @@
-import React from "react";
-import Link from "next/link";
-import SectionHeading from "@/components/common/SectionHeading";
-import Slider from "@/components/features/Slider";
-import { Heading, Img } from "@/components/elements";
-import { extractAttributes } from "@/utils/helpers";
 import LinkClickTracker from "@/components/common/LinkClickTracker";
+import SectionHeading from "@/components/common/SectionHeading";
+import { Heading, Img } from "@/components/elements";
+import Slider from "@/components/features/Slider";
+import { extractAttributes } from "@/utils/helpers";
 
 const CategoryItem = ({ category, size, parentCategoryTitle }) => {
   const { image, slug, title } = category;
@@ -38,7 +36,6 @@ const CategoryItem = ({ category, size, parentCategoryTitle }) => {
           width={imageSize}
           height={imageHeight}
           alt={alternativeText || `${slug} Image`}
-          isStatic
           className="h-auto w-full object-contain"
         />
       </div>

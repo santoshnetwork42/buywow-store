@@ -25,7 +25,6 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
           width={200}
           imageKey={thumbImage?.imageKey}
           height={56}
-          isStatic
           alt={"Product Image"}
         />
       </div>

@@ -22,7 +22,6 @@ const HeaderSection = ({
         width={100}
         height={48}
         alt={mWebAlternativeText}
-        isStatic
         className="aspect-[100/48] w-[100px] object-contain"
       />
     </Link>
@@ -44,6 +43,7 @@ const HeaderSection = ({
             height={18}
             alt={`Login arrow`}
             className="aspect-square w-[18px] object-contain"
+            isStatic
           />
           <div className="absolute -bottom-[3px] left-0 h-[0.5px] w-[55px] bg-white-a700_01"></div>
         </div>

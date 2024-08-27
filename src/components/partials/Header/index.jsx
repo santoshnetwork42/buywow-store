@@ -21,6 +21,9 @@ import StickyViewCart from "../StickyViewCart";
 
 const MenuItem = React.memo(({ item, index, linkPrefix }) => {
   const { topNavbarClicked } = useEventsDispatch();
+
+  if (!item) return null;
+
   const key = item.id || index;
   const title = (
     <Text size="base" as="p" className="capitalize" responsive>
@@ -88,7 +91,6 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
         width={86}
         height={48}
         alt={logoAlt}
-        isStatic
         className="aspect-[86/48] w-[86px] object-contain"
       />
       {vipUrl && (
@@ -99,7 +101,6 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
             width={70}
             height={28}
             alt={vipAlt}
-            isStatic
             className="aspect-[70/28] w-[70px] object-contain"
           />
         </>
@@ -217,6 +218,7 @@ const Header = ({ data, ...props }) => {
                 height={24}
                 alt="user icon"
                 className="aspect-square w-[24px] object-contain"
+                isStatic
               />
             </Button>
             {!isRestricted && (

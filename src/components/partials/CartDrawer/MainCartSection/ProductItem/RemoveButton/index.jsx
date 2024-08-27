@@ -1,5 +1,5 @@
-import React from "react";
 import { Button, Img } from "@/components/elements";
+import React from "react";
 
 const RemoveButton = ({ onClick }) => (
   <Button
@@ -14,6 +14,7 @@ const RemoveButton = ({ onClick }) => (
         width={10}
         height={14}
         className="aspect-[10/14] h-auto w-full object-contain"
+        isStatic
       />
     </div>
   </Button>

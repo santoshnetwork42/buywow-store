@@ -8,8 +8,8 @@ import { useSelector } from "react-redux";
 import AddressModal from "../AddressModal";
 
 const AddressList = React.memo(({ addressList, variant }) => {
-  const { currentAddress } = useSelector((state) => state.address);
-  const { user } = useSelector((state) => state.user);
+  const currentAddress = useSelector((state) => state.address?.currentAddress);
+  const user = useSelector((state) => state.user?.user);
   const { updateCurrentAddress, deleteAddress } = useAddressDispatch();
 
   const [selectedAddressId, setSelectedAddressId] = useState(null);

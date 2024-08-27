@@ -1,14 +1,14 @@
-import React, { useMemo, useCallback, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Heading, Img, Text } from "@/components/elements";
-import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import Quantity from "@/components/common/Quantity";
+import { Button, Heading, Img, Text } from "@/components/elements";
+import ProductPricing from "@/components/partials/MyCart/CartProductList/ProductPricing";
+import VariantSelector from "@/components/partials/Others/VariantSelector";
+import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getUpdatedCart, toDecimal } from "@/utils/helpers";
-import Link from "next/link";
-import VariantSelector from "@/components/partials/Others/VariantSelector";
-import ProductPricing from "@/components/partials/MyCart/CartProductList/ProductPricing";
 import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
+import Link from "next/link";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProductImage = React.memo(({ slug, outOfStock, imageKey }) => (
   <Link
@@ -34,7 +34,6 @@ const ProductImage = React.memo(({ slug, outOfStock, imageKey }) => (
       height={300}
       imageKey={imageKey}
       className="aspect-[65/77] h-auto w-full object-contain md:aspect-square"
-      isStatic
       alt="Product Image"
     />
   </Link>
@@ -88,6 +87,7 @@ const RemoveButton = React.memo(({ onRemove }) => (
         width={10}
         height={14}
         className="aspect-[10/14] h-auto w-full object-contain"
+        isStatic
       />
     </div>
   </Button>
@@ -115,7 +115,7 @@ ProductItemSkeleton.displayName = "ProductItemSkeleton";
 
 const ProductItem = React.memo(({ item, inventory = 99, inventoryMapping }) => {
   const dispatch = useDispatch();
-  const cartList = useSelector((state) => state?.cart?.data || []);
+  const cartList = useSelector((state) => state.cart?.data || []);
 
   const [isLoading, setIsLoading] = useState(true);
 

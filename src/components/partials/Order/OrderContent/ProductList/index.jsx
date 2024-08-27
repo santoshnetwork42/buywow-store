@@ -36,7 +36,6 @@ const ProductImage = React.memo(({ thumbImage, title }) => (
       width={80}
       height={80}
       addPrefix
-      isStatic
     />
   </div>
 ));

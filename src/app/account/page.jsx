@@ -22,7 +22,7 @@ import { useSelector } from "react-redux";
 const Account = () => {
   const router = useRouter();
   const { handleSignOut } = useAuthDispatch();
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector((state) => state.user?.user);
   const [activeTab, setActiveTab] = useState("My Orders");
   const [isLoading, setIsLoading] = useState(true);
 

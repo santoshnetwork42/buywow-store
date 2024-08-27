@@ -30,7 +30,7 @@ const Reviews = ({
   reviews: initialReviews = {},
   analytics: initialAnalytics = [],
 }) => {
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user?.user);
   const { handlePasswordLessModal } = useModalDispatch();
 
   const processedAnalytics = useMemo(
@@ -84,7 +84,7 @@ const Reviews = ({
   const submitReview = useCallback(
     async (e) => {
       e.preventDefault();
-      if (!productId || !user) return;
+      if (!productId || !user?.id) return;
       setLoading(true);
       try {
         const result = await submitReviewAPI(reviewState, user?.id, productId);

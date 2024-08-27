@@ -1,6 +1,5 @@
 // src/components/DeliveryInfoSection.jsx
-import { Text, Img } from "@/components/elements";
-import React from "react";
+import { Img, Text } from "@/components/elements";
 
 const DeliveryInfoItem = ({ icon, text }) => (
   <div className="flex flex-col items-center justify-center gap-1.5 sm:w-1/3 sm:gap-2 md:flex-row md:gap-3 lg:gap-4">
@@ -11,6 +10,7 @@ const DeliveryInfoItem = ({ icon, text }) => (
         height={60}
         alt="delivery icon"
         className="aspect-square h-auto w-full object-contain"
+        isStatic
       />
     </div>
     <Text

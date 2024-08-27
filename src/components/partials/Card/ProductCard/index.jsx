@@ -40,6 +40,7 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
           height={16}
           alt="Rating stars"
           className="aspect-square w-[12px] sm:w-[14px] lg:w-[16px]"
+          isStatic
         />
         <Text as="span" size="sm" className="capitalize" responsive>
           {toDecimal(rating, 1)}
@@ -123,7 +124,6 @@ const ProductCard = memo(
             url={url}
             imageKey={thumbImage?.imageKey}
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
-            isStatic
             alt={title || "Product image"}
           />
           {!!promotionTag?.data &&

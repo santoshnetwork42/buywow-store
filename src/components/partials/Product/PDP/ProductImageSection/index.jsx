@@ -38,7 +38,6 @@ const Thumb = React.memo(({ isSelected, image, onClick }) => (
           height={200}
           alt="Thumbnail"
           className="aspect-square w-full rounded-lg object-contain"
-          isStatic
           addPrefix
         />
       )}
@@ -150,7 +149,6 @@ const ProductImage = React.memo(
             width={400}
             height={400}
             alt={`Product image ${index + 1}`}
-            isStatic
             priority={index === 0}
             className="main-image m-auto aspect-square h-auto w-full object-contain"
             addPrefix

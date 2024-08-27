@@ -1,7 +1,6 @@
 import { Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
-import React from "react";
 
 const CategoryItem = ({ image, title, link }) => {
   const { url, alternativeText } = extractAttributes(image);
@@ -16,7 +15,6 @@ const CategoryItem = ({ image, title, link }) => {
           alt={alternativeText}
           width={56}
           height={56}
-          isStatic
           className="aspect-square w-14 object-contain"
         />
       </div>
