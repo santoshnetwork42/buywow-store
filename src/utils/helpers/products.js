@@ -75,21 +75,27 @@ export const getProductInventory = (product, selectedVariantId = null) => {
 export const setSoldOutLast = (items) => {
   let soldOutProducts = [];
   if (items) {
-    const products = items.filter(Boolean).reduce((acc, item) => {
+    const products = items?.filter(Boolean)?.reduce((acc, item) => {
       const { fetchedProduct: prod } = item;
       if (!("hasInventory" in prod)) {
         const { hasInventory } = getProductInventory(prod);
         if (hasInventory) {
-          return [...acc, { ...{ fetchedProduct: prod, hasInventory } }];
+          return [
+            ...acc,
+            { ...item, fetchedProduct: { ...prod, hasInventory } },
+          ];
         } else {
-          soldOutProducts.push({ ...{ fetchedProduct: prod, hasInventory } });
+          soldOutProducts.push({
+            ...item,
+            fetchedProduct: { ...prod, hasInventory },
+          });
           return acc;
         }
       } else {
         if (prod.hasInventory) {
-          return [...acc, { fetchedProduct: prod }];
+          return [...acc, { ...item, fetchedProduct: prod }];
         } else {
-          soldOutProducts.push({ fetchedProduct: prod });
+          soldOutProducts.push({ ...item, fetchedProduct: prod });
           return acc;
         }
       }
