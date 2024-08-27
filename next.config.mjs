@@ -139,7 +139,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: process.env.NEXT_PUBLIC_MEDIA_URL,
+        hostname: process.env.NEXT_PUBLIC_MEDIA_BASE_URL,
         port: "",
         pathname: "/public/wow-cms/**",
       },
