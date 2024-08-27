@@ -12,9 +12,8 @@ import {
   getProductPrice,
 } from "@wow-star/utils";
 import Cookies from "js-cookie";
-import { v4 as uuid } from "uuid";
-import { getPublicImageURL } from "../helpers/img-loader";
 import { v4 as uuidv4 } from "uuid";
+import { getPublicImageURL } from "../helpers/img-loader";
 
 export const getFbpCookie = () => {
   const name = "_fbp=";
@@ -331,6 +330,10 @@ export const trackClickStream = async (payload) => {
   try {
     const NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL =
       process.env.NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL;
+
+    if (!NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL) {
+      return;
+    }
 
     const response = await fetch(NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL, {
       method: "POST",

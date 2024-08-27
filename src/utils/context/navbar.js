@@ -71,7 +71,7 @@ function NavbarProvider({ children, initialData }) {
       }
       cartItems={cartList}
       appliedCoupon={appliedCoupon}
-      user={user}
+      user={user?.id ? user : null}
       deviceType="WEB"
       listVariantGroups={initialData?.listVariantGroups}
       byStoreIdRuleEngine={initialData?.byStoreIdRuleEngine?.items}
