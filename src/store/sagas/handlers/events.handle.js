@@ -130,8 +130,18 @@ export function* searchEventHandler({ payload }) {
       source: eventSource,
       ...analyticsMeta,
     });
-
-    console.log(term, "userSEArched", user);
+    console.log(
+      {
+        event: "search",
+        eventID: uuidv4(),
+        userId: user?.id || "",
+        user: user || {},
+        search_term: term,
+        source: eventSource,
+        ...analyticsMeta,
+      },
+      "SEARCH",
+    );
   } catch (e) {
     console.error("Error in searchHandler:", e);
   }
@@ -1309,6 +1319,14 @@ export function* blogClickEventHandler({ payload }) {
     trackClickStream({
       event: "blogs_clicked",
       eventID: uuidv4(),
+      userId: user?.id || "",
+      user: user || {},
+      ...payload,
+      source: eventSource,
+      ...analyticsMeta,
+    });
+    console.log("blogs_clicked", {
+      event: "blogs_clicked",
       userId: user?.id || "",
       user: user || {},
       ...payload,

@@ -49,6 +49,9 @@ const ProductKeyIngredients = dynamic(
 const InfoDropdown = dynamic(
   () => import("@/components/blocks/Accordion/InfoDropdown"),
 );
+const ProductLegalInfo = dynamic(
+  () => import("@/components/blocks/Accordion/ProductLegalInfo"),
+);
 const CollectionLinks = dynamic(
   () => import("@/components/blocks/CollectionLinks"),
 );
@@ -103,6 +106,7 @@ const componentMap = {
   ComponentProductProductBenefits: ProductBenefits,
   ComponentProductProductKeyIngredientImages: ProductKeyIngredients,
   ComponentAccordionInfoDropdownSection: InfoDropdown,
+  ComponentProductProductLegalInfo: ProductLegalInfo,
   ComponentBlocksCollectionLinks: CollectionLinks,
   ComponentBlocksPdp: ProductDetailView,
   ComponentBlocksProductCollectionByTab: ProductCollectionSection,
@@ -138,8 +142,7 @@ export async function generateStaticParams() {
     LANDING: "",
   };
 
-  
-  return pages.map((page) => ({
+  return pages?.map((page) => ({
     slug: [pageType[page.attributes.type], page.attributes.slug].filter(
       Boolean,
     ),

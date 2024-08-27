@@ -31,6 +31,8 @@ const MenuItem = React.memo(({ item, index, linkPrefix }) => {
     </Text>
   );
 
+  if (!item) return null;
+
   if (item.subMenu && item.subMenu.length > 0) {
     return (
       <li key={key} className="group relative">

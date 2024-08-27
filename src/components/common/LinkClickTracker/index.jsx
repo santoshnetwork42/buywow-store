@@ -13,7 +13,8 @@ const LinkClickTracker = ({
   trackingEventPayload = "",
 }) => {
   const source = getSource();
-  const { bannerClicked, shopByClicked } = useEventsDispatch();
+  const { bannerClicked, shopByClicked, blogClicked, topNavbarClicked } =
+    useEventsDispatch();
   const handleClick = useCallback(
     (e) => {
       // console.log(`${trackingType} clicked: ${trackingId}`);
@@ -35,6 +36,25 @@ const LinkClickTracker = ({
           });
           break;
         }
+        case "BLOG_CLICK": {
+          blogClicked({
+            item_name: trackingEventPayload.name,
+            item_id: trackingEventPayload?.id,
+            item_slug: trackingEventPayload.slug,
+            item_parent_category: trackingEventPayload?.parentCategory,
+          });
+          break;
+        }
+        case "TOP_NAVBAR_CLICKED": {
+          topNavbarClicked({
+            banner_name: trackingEventPayload?.name,
+            item_id: trackingEventPayload?.slug,
+            Source: "Web",
+            "Section Name": "Top Navbar",
+          });
+          break;
+        }
+
         default:
           break;
       }

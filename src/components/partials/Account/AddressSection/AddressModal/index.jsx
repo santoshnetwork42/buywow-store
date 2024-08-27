@@ -3,7 +3,9 @@
 import { Button } from "@/components/elements";
 import Modal from "@/components/features/Modal";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { removePhonePrefix } from "@/utils/helpers";
+import { useCartTotal } from "@wow-star/utils";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import AddressFormFields from "../AddressForm/AddressFormFields";
@@ -20,6 +22,7 @@ const AddressModal = ({
   const isLoading = useSelector((state) => state.address?.isLoading);
 
   const ButtonText = action === "CREATE" ? "Add Address" : "Update Address";
+  const { addressAdded } = useEventsDispatch();
 
   const [address, setAddress] = useState({
     id: addressItem?.id || null,
@@ -46,6 +49,11 @@ const AddressModal = ({
     onClose();
   }, [onClose]);
 
+  const { totalPrice } = useCartTotal({
+    paymentType: "PREPAID",
+    isRewardApplied: false,
+  });
+
   const checkFormValidity = useCallback(() => {
     return Object.values(addressErrors).every((error) => !error);
   }, [addressErrors]);
@@ -62,6 +70,7 @@ const AddressModal = ({
       } else {
         editAddress(address, user?.id);
       }
+      addressAdded(address, totalPrice, "BUYWOW");
 
       closeModal();
     },

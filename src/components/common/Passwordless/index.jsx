@@ -192,7 +192,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
           if (isVerified) {
             setConfirmationStatus("DONE");
             setCustomUser(phone);
-            auth("signup", { userId: null, phone });
+            auth({ action: "signup", moe: { userId: null, phone } });
           } else {
             console.error("OTP verification failed");
           }
