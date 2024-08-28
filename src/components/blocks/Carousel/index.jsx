@@ -16,7 +16,7 @@ import React, {
 } from "react";
 
 const CarouselImage = React.memo(
-  ({ webImage, mWebImage, link, index, moeText, isInteractive }) => {
+  ({ webImage, mWebImage, link, index, moeText }) => {
     const webImageAttrs = extractAttributes(webImage);
     const mWebImageAttrs = extractAttributes(mWebImage);
 
@@ -42,7 +42,7 @@ const CarouselImage = React.memo(
     return (
       <Link
         href={link || "#"}
-        className="flex-[0_0_100%]"
+        className="w-full flex-[0_0_100%]"
         onClick={() => {
           bannerClicked({
             Source: source,
@@ -55,14 +55,14 @@ const CarouselImage = React.memo(
           {!!webImageAttrs.url && (
             <source
               media="(min-width: 576px)"
-              srcSet={`${webImageAttrs.url}?w=${isInteractive ? 1200 : 100}&q=75&f=webp`}
+              srcSet={`${webImageAttrs.url}?w=1200&q=75&f=webp`}
             />
           )}
           <Img
             src={imageUrl}
             alt={imageAlt}
             priority
-            width={isInteractive ? 500 : 100}
+            width={500}
             height={500}
             className="h-auto w-full object-contain"
           />
@@ -125,7 +125,6 @@ const Carousel = ({
           key={`carousel-image-${index}`}
           {...banner}
           index={index}
-          isInteractive={isInteractive}
         />
       )),
     [banners, isInteractive],
@@ -147,11 +146,21 @@ const Carousel = ({
 
   return (
     <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex">{carouselImages}</div>
-      </div>
-      <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
-        {dotButtons}
+      <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">
+        {isInteractive ? (
+          <>
+            <div className="overflow-hidden" ref={emblaRef}>
+              <div className="flex">{carouselImages}</div>
+            </div>
+            <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
+              {dotButtons}
+            </div>
+          </>
+        ) : (
+          <div className="overflow-hidden">
+            {<CarouselImage {...banners[0]} index={0} />}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@
 import { CloseSVG } from "@/assets/images";
 import { Img, Input } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { useIsInteractive } from "@/utils/context/navbar";
 import { usePathname, useRouter } from "next/navigation";
 import { memo, useCallback, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -45,10 +46,11 @@ const ClearIcon = memo(({ onClick }) => (
 const SearchBar = memo(({ className }) => {
   const router = useRouter();
   const pathname = usePathname();
+  const isInteractive = useIsInteractive();
   const [search, setSearch] = useState("");
   const { search: searchEvent } = useEventsDispatch();
   const [placeholderState, setPlaceholderState] = useState({
-    text: "",
+    text: "Search for Ubtan",
     isDeleting: false,
     loopNum: 0,
     typingSpeed: TYPING_SPEED,
@@ -82,9 +84,10 @@ const SearchBar = memo(({ className }) => {
   }, [placeholderState]);
 
   useEffect(() => {
+    if (!isInteractive) return;
     const typingInterval = setTimeout(handleType, placeholderState.typingSpeed);
     return () => clearTimeout(typingInterval);
-  }, [handleType, placeholderState.typingSpeed]);
+  }, [handleType, placeholderState.typingSpeed, isInteractive]);
 
   useEffect(() => {
     if (pathname !== "/search") {
