@@ -7,17 +7,21 @@ import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import ProductCardSkeleton from "../../Card/ProductCard/ProductCardSkeleton";
 
-const ProductGrid = React.memo(({ products, isInitialData }) => (
-  <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-4 sm:grid-cols-2 sm:gap-x-2 sm:gap-y-5 md:grid-cols-3 lg:gap-x-3 lg:gap-y-6 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
-    {products.map((product, index) => (
-      <ProductCard
-        key={`product-${product?.id || index}`}
-        className="w-[calc(50vw-16px)] max-w-[356px] sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
-        {...(isInitialData ? product?.attributes : product)}
-      />
-    ))}
-  </div>
-));
+const ProductGrid = React.memo(({ products, isInitialData }) => {
+  const sortedProducts = setSoldOutLast(products, isInitialData);
+
+  return (
+    <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-4 sm:grid-cols-2 sm:gap-x-2 sm:gap-y-5 md:grid-cols-3 lg:gap-x-3 lg:gap-y-6 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
+      {sortedProducts.map((product, index) => (
+        <ProductCard
+          key={`product-${product?.id || index}`}
+          className="w-[calc(50vw-16px)] max-w-[356px] sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
+          {...product}
+        />
+      ))}
+    </div>
+  );
+});
 
 ProductGrid.displayName = "ProductGrid";
 
@@ -46,7 +50,7 @@ const SearchResults = ({ initialProducts = [] }) => {
     setLoading(true);
     try {
       const items = await fetchSearchItems(searchTerm, 50);
-      setProducts(setSoldOutLast(items || []) || []);
+      setProducts(items);
       setIsInitialData(false);
     } catch (error) {
       console.error("Error fetching search results:", error);
