@@ -14,18 +14,18 @@ const ProductImage = ({
   return (
     <Link
       href={outOfStock ? "#" : `/product/${slug}`}
-      className={`relative flex aspect-[66/88] h-fit w-20 shrink-0 overflow-hidden rounded-lg bg-lime-50 md:w-24 ${
+      className={`relative flex aspect-[66/88] h-fit w-20 shrink-0 overflow-visible rounded-lg bg-lime-50 md:w-24 ${
         outOfStock ? "cursor-auto" : ""
       }`}
       onClick={outOfStock ? () => {} : handleCartClose}
     >
       {!!isFreeProduct && (
-        <div className="absolute left-0 top-0 z-20 size-8 -translate-x-1/4 -translate-y-1/4 sm:size-9 md:size-10">
+        <div className="absolute left-0 top-0 z-10 size-8 -translate-x-1/4 -translate-y-1/4 sm:size-9 md:size-10">
           <FreeIcon className="aspect-square h-auto w-full" />
         </div>
       )}
       {!!outOfStock && (
-        <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-black-900/55">
+        <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center rounded-lg bg-black-900/55">
           <Heading
             size="xl"
             as="h2"
@@ -40,7 +40,7 @@ const ProductImage = ({
         width={300}
         height={300}
         imageKey={imageKey}
-        className="aspect-[66/88] h-auto w-full object-contain"
+        className="aspect-[66/88] h-auto w-full rounded-lg object-contain"
         alt="Product Image"
       />
     </Link>

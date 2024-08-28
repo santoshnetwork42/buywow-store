@@ -10,6 +10,7 @@ import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { useIsInteractive } from "@/utils/context/navbar";
 import { RESTRICT_SEARCH_AND_CART_TO_SHOW } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
@@ -113,6 +114,7 @@ const Header = ({ data }) => {
   const router = useRouter();
   const pathname = usePathname();
   const showHeader = pathname?.includes("blog");
+  const isInteractive = useIsInteractive();
 
   const user = useSelector((state) => state.user?.user);
   const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
@@ -245,17 +247,19 @@ const Header = ({ data }) => {
         </div>
       </div>
 
-      <MobileMenu
-        isOpen={isMobileMenuOpen}
-        onClose={closeMobileMenu}
-        collectionMenus={collectionMenus}
-        otherLinks={otherLinks}
-        logo={mWebMenuLogo}
-        isLoggedin={!!user?.id}
-      />
+      {isInteractive && (
+        <MobileMenu
+          isOpen={isMobileMenuOpen}
+          onClose={closeMobileMenu}
+          collectionMenus={collectionMenus}
+          otherLinks={otherLinks}
+          logo={mWebMenuLogo}
+          isLoggedin={!!user?.id}
+        />
+      )}
 
-      <StickyViewCart />
-      <PasswordLess />
+      {isInteractive && <StickyViewCart />}
+      {isInteractive && <PasswordLess />}
     </header>
   );
 };

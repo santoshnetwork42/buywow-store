@@ -136,8 +136,7 @@ const Checkout = () => {
     if (!user?.id && !guestCheckout && !customUser?.phone) {
       router.push("/");
       handlePasswordLessModal(true, false, "/collections");
-    }
-    if (user?.id || guestCheckout || customUser?.phone) {
+    } else if (user?.id || guestCheckout || customUser?.phone) {
       setPageLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

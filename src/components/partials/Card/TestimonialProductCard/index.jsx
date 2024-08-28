@@ -11,7 +11,6 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
   const { price, listingPrice, title, slug, thumbImage } = packageProduct || {};
-  const showStrikePrice = listingPrice && price < listingPrice;
 
   if (!fetchedProduct?.id || !packageProduct) return null;
 
@@ -42,7 +41,7 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
             >
               ₹{price}
             </Text>
-            {!!showStrikePrice && (
+            {listingPrice > price && (
               <Text
                 size="sm"
                 as="p"

@@ -16,6 +16,7 @@ const Accordion = ({
   toggleArrowClassName,
   accordionMainContainerClassName,
   variant,
+  showToggleArrow = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
@@ -71,11 +72,11 @@ const Accordion = ({
           )}
           {header}
         </div>
-        {!!title && (
+        {showToggleArrow && (
           <ToggleArrow
             open={isOpen}
             variant={variant}
-            className={toggleArrowClassName}
+            className={twMerge("mr-1", toggleArrowClassName)}
           />
         )}
       </button>

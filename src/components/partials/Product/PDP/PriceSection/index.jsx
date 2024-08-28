@@ -1,6 +1,6 @@
-import React from "react";
 import { Text } from "@/components/elements";
 import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
+import React from "react";
 
 const PriceSection = React.memo(
   ({
@@ -20,7 +20,7 @@ const PriceSection = React.memo(
             <Text as="p" size="xl" className="font-semibold md:text-[22px]">
               ₹{toDecimal(price)}
             </Text>
-            {!!(listingPrice >= price) && (
+            {listingPrice > price && (
               <div className="flex items-center gap-1">
                 <Text
                   as="p"
@@ -55,7 +55,7 @@ const PriceSection = React.memo(
             MRP incl. of all taxes
           </Text>
         </div>
-        <div className="mt-3 flex items-center gap-3 md:mt-4">
+        <div className="mt-2 flex items-center gap-3 md:mt-3">
           {!!(totalOrders > 0) && (
             <Text
               as="p"

@@ -163,6 +163,7 @@ const OrderSummary = ({
   return (
     <Accordion
       accordionMainContainerClassName="!px-1"
+      showToggleArrow={false}
       header={
         <div
           className="flex w-full items-center justify-between py-3 text-left"

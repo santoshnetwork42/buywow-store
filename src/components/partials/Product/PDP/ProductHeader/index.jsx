@@ -5,17 +5,19 @@ import React from "react";
 
 const ProductHeader = React.memo(
   ({ title, benefits, rating, totalRatings }) => (
-    <div className="flex flex-col gap-1">
-      {title && (
-        <Heading className="line-clamp-2 md:text-[28px]" as="p" size="2xl">
-          {title}
-        </Heading>
-      )}
-      {benefits && (
-        <Text as="p" className="line-clamp-3" size="sm" responsive>
-          {benefits.join(" | ")}
-        </Text>
-      )}
+    <div className="flex flex-col gap-1 md:gap-1.5">
+      <div className="flex flex-col">
+        {title && (
+          <Heading className="line-clamp-2 md:text-[28px]" as="p" size="2xl">
+            {title}
+          </Heading>
+        )}
+        {benefits && (
+          <Text as="p" className="line-clamp-3" size="sm" responsive>
+            {benefits.join(" | ")}
+          </Text>
+        )}
+      </div>
       <div className="flex items-center gap-1">
         {rating > 0 && (
           <div className="flex items-center gap-1">

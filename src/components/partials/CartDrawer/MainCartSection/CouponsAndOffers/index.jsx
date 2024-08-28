@@ -82,20 +82,24 @@ const CouponsAndOffers = () => {
       );
 
       if (shouldAutoApply) {
-        if (
-          storedCouponCode &&
-          (!appliedCoupon || appliedCoupon?.autoApplied) &&
-          appliedCoupon?.code !== storedCouponCode
-        ) {
-          applyCouponCode(storedCouponCode, true);
-        } else if (
-          bestCouponCode &&
-          (!appliedCoupon || appliedCoupon?.autoApplied) &&
-          appliedCoupon?.code !== bestCouponCode
-        ) {
-          applyCouponCode(bestCouponCode, true);
-        } else if (appliedCoupon?.autoApplied) {
-          removeCoupon();
+        if (storedCouponCode) {
+          if (
+            (!appliedCoupon || appliedCoupon?.autoApplied) &&
+            appliedCoupon?.code !== storedCouponCode
+          ) {
+            applyCouponCode(storedCouponCode, true);
+          }
+        } else if (bestCouponCode) {
+          if (
+            (!appliedCoupon || appliedCoupon?.autoApplied) &&
+            appliedCoupon?.code !== bestCouponCode
+          ) {
+            applyCouponCode(bestCouponCode, true);
+          }
+        } else {
+          if (appliedCoupon?.autoApplied) {
+            removeCoupon();
+          }
         }
       }
     }

@@ -1,10 +1,8 @@
 import { CouponAndOffer, OfferTicket } from "@/assets/svg/icons";
 import { Heading, Img, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
-import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import { copyText, toDecimal } from "@/utils/helpers";
 import { useFeaturedCoupons, useFreebie } from "@wow-star/utils";
-import { useState } from "react";
 
 const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   const freeProduct = useFreebie();
@@ -14,7 +12,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   if (!bestCoupon || !hasInventory) return null;
 
   return (
-    <div className="flex justify-between rounded bg-gray-50 px-3 pb-2 pt-2.5 sm:w-[100%] md:w-full xl:w-[60%]">
+    <div className="flex h-fit w-full justify-between rounded bg-gray-50 px-3 pb-2 pt-2.5 sm:max-w-[60%] md:max-w-full xl:max-w-[60%]">
       <div className="flex gap-2">
         <div className="aspect-square w-6 md:w-7">
           <Img
@@ -63,65 +61,61 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
 };
 
 const AllOffers = ({ productId }) => {
-  const [isOpen, setIsOpen] = useState(false);
   const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, productId);
 
   if (pdpFeaturedCoupons?.length === 0) return null;
   return (
     <Accordion
-      title={""}
-      imgUrl={""}
-      className="flex flex-1 rounded-md bg-blue-50 px-3 sm:w-[100%] md:w-full xl:w-[60%]"
+      className="my-auto flex h-fit w-full shrink-0 rounded bg-blue-50 px-3 sm:w-[45%] md:w-full xl:w-[45%]"
       header={
-        <div
-          className="flex w-full items-center justify-between py-3 text-left"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <div className="flex items-center gap-2">
-            <CouponAndOffer className="h-4 w-4" size={28} />
-            <Text>{pdpFeaturedCoupons?.length} Offers Available</Text>
-          </div>
-          <ToggleArrow open={isOpen} />
+        <div className="flex items-center gap-2 py-2.5 md:py-3">
+          <CouponAndOffer className="size-6 md:size-7" size={28} />
+          <Heading as="h4" size="base" className="text-sm" responsive>
+            {pdpFeaturedCoupons?.length} Offers Available
+          </Heading>
         </div>
       }
-      accordionMainContainerClassName="mt-0 mb-0"
+      accordionMainContainerClassName="!my-0 !px-0"
     >
       <div className="flex flex-col pb-1">
-        {pdpFeaturedCoupons?.map((item, index) => {
+        {[1, 2]?.map((item, index) => {
           const { coupon } = item || {};
           const { couponTitle, code } = coupon || {};
           return (
             <div
               key={index}
-              className="border-black flex flex-row items-center justify-between gap-2 border-t-[0.25px] border-black-900 py-1.5"
+              className="flex items-center justify-between gap-2 border-t-[0.25px] border-black-900 py-1.5"
             >
-              <div className="flex place-items-start gap-2">
-                <OfferTicket size={16} color="#000000" />
-                <div className="flex flex-col gap-2">
-                  <Text as="span" size="sm" className="text-sm" responsive>
-                    {couponTitle}
-                  </Text>
-                  <Text as="span" size="sm" className="text-sm" responsive>
+              <div className="flex gap-2">
+                <OfferTicket
+                  className="mt-0.5 size-4 shrink-0"
+                  size={16}
+                  color="#000000"
+                />
+                <div className="flex flex-col gap-1.5">
+                  <Heading as="h4" size="sm">
+                    Buy 2 and get 30% OFF
+                  </Heading>
+                  <Text as="span" size="sm" responsive>
                     Applicable on certain products
                   </Text>
                 </div>
               </div>
-              <div className="flex flex-col place-items-end gap-2">
-                <Text size="sm" className="text-sm" responsive>
+              <div className="flex flex-col place-items-end gap-1">
+                <Text as="span" size="sm" className="font-light" responsive>
                   Use code
                 </Text>
-                <div className="h-fit rounded-full border-[1px] border-dashed border-black-900 bg-white-a700 px-2 py-1">
-                  <Text
-                    size="sm"
-                    className="cursor-pointer text-sm"
-                    responsive
-                    onClick={() =>
-                      copyText(code, `Coupon code copied: ${code}`)
-                    }
-                  >
-                    {code}
-                  </Text>
-                </div>
+                <Text
+                  as="span"
+                  size="sm"
+                  onClick={() =>
+                    copyText("BUYWOW30", `Coupon code copied: BUYWOW30`)
+                  }
+                  className="cursor-pointer rounded-full border border-dashed border-black-900 bg-white-a700 px-2 py-0.5"
+                  responsive
+                >
+                  BUYWOW30
+                </Text>
               </div>
             </div>
           );
@@ -134,7 +128,7 @@ const AllOffers = ({ productId }) => {
 const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, productId }) => {
   if (!bestCoupon || !hasInventory) return null;
   return (
-    <div className="mt-4 flex flex-col gap-2 sm:flex-col sm:items-center sm:gap-2.5 md:flex-col md:items-stretch lg:gap-3 xl:flex-row xl:items-center">
+    <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:gap-2.5 md:flex-col lg:gap-3 xl:flex-row">
       <BestPriceDisplay
         bestCoupon={bestCoupon}
         price={price}
