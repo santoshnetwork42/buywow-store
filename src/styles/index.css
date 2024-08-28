@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: Outfit;
+  font-family: var(--font-outfit), sans-serif;
 }
 
 * {

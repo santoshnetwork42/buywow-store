@@ -13,14 +13,20 @@ import {
   getNavbarAndFooterAPI,
 } from "@/lib/appSyncAPIs";
 import { Provider } from "@/store/Provider";
-import "@/styles/font.css";
 import "@/styles/index.css";
 import "@/styles/tailwind.css";
 import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 import GoKwikProvider from "@/utils/context/gokwik";
 import NavbarProvider from "@/utils/context/navbar";
 import { Amplify } from "aws-amplify";
+import { Outfit } from "next/font/google";
 import Script from "next/script";
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-outfit",
+});
 
 Amplify.configure({
   ...awsExport,
@@ -40,7 +46,7 @@ async function RootLayout({ children }) {
   } = data || {};
 
   return (
-    <html lang="en">
+    <html lang="en" className={outfit.variable} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />

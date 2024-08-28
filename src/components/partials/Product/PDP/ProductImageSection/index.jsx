@@ -146,7 +146,7 @@ const ProductImage = React.memo(
         <div className="aspect-square overflow-hidden rounded-lg border shadow-sm">
           <Img
             src={image?.imageKey}
-            width={100}
+            width={400}
             height={400}
             alt={`Product image ${index + 1}`}
             priority
