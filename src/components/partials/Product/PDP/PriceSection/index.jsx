@@ -51,7 +51,7 @@ const PriceSection = React.memo(
               </Text>
             )}
           </div>
-          <Text as="p" size="sm" className="font-light" responsive>
+          <Text as="p" size="sm" className="font-medium" responsive>
             MRP incl. of all taxes
           </Text>
         </div>
