@@ -8,6 +8,8 @@ import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import dynamic from "next/dynamic";
 
+export const revalidate = 900;
+
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),

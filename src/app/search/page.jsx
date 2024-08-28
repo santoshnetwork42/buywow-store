@@ -1,6 +1,8 @@
 import SearchResults from "@/components/partials/Others/SearchResult";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 
+export const revalidate = 900;
+
 async function getInitialSearchData() {
   try {
     const initialSearchData = await getPageBySlugAPI("search");

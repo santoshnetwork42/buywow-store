@@ -1,6 +1,8 @@
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import dynamic from "next/dynamic";
 
+export const revalidate = 900;
+
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),

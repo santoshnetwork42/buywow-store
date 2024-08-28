@@ -1,5 +1,4 @@
-import { Button, Heading, Img, Text } from "@/components/elements";
-import Link from "next/link";
+import { Heading, Text } from "@/components/elements";
 
 const QueryUs = () => {
   return (
