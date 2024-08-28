@@ -16,7 +16,7 @@ import React, {
 } from "react";
 
 const CarouselImage = React.memo(
-  ({ webImage, mWebImage, link, index, moeText }) => {
+  ({ webImage, mWebImage, link, index, moeText, isInteractive }) => {
     const webImageAttrs = extractAttributes(webImage);
     const mWebImageAttrs = extractAttributes(mWebImage);
 
@@ -55,14 +55,14 @@ const CarouselImage = React.memo(
           {!!webImageAttrs.url && (
             <source
               media="(min-width: 576px)"
-              srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}
+              srcSet={`${webImageAttrs.url}?w=${isInteractive ? 1200 : 100}&q=75&f=webp`}
             />
           )}
           <Img
             src={imageUrl}
             alt={imageAlt}
             priority
-            width={500}
+            width={isInteractive ? 500 : 100}
             height={500}
             className="h-auto w-full object-contain"
           />
@@ -125,9 +125,10 @@ const Carousel = ({
           key={`carousel-image-${index}`}
           {...banner}
           index={index}
+          isInteractive={isInteractive}
         />
       )),
-    [banners],
+    [banners, isInteractive],
   );
 
   const dotButtons = useMemo(
