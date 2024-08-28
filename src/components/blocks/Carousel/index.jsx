@@ -2,6 +2,7 @@
 
 import { Button, Img } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { useIsInteractive } from "@/utils/context/navbar";
 import { extractAttributes, getSource } from "@/utils/helpers";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
@@ -33,13 +34,14 @@ const CarouselImage = React.memo(
         homeViewed();
         eventTriggered.current = true;
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
     return (
       <Link
-        href={"#"}
+        href={link || "#"}
         className="flex-[0_0_100%]"
         onClick={() => {
           bannerClicked({
@@ -89,11 +91,14 @@ const Carousel = ({
   stopOnInteraction = false,
   carousalItems: banners,
 }) => {
+  const isInteractive = useIsInteractive();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true },
-    autoPlay ? [Autoplay({ delay: autoPlayInterval, stopOnInteraction })] : [],
+    autoPlay && isInteractive
+      ? [Autoplay({ delay: autoPlayInterval, stopOnInteraction })]
+      : [],
   );
 
   const scrollTo = useCallback(
