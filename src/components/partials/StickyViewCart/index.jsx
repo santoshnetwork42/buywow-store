@@ -2,6 +2,7 @@
 
 import { Button, Heading, Text } from "@/components/elements";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { useIsInteractive } from "@/utils/context/navbar";
 import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
@@ -26,6 +27,8 @@ const CartSummary = React.memo(
 CartSummary.displayName = "CartSummary";
 
 const StickyViewCart = () => {
+  const isInteractive = useIsInteractive();
+
   const cartList = useSelector((state) => state.cart?.data || []);
   const isRewardApplied = useSelector(
     (state) => state.cart?.isRewardApplied || false,
@@ -53,7 +56,7 @@ const StickyViewCart = () => {
     handleCartVisibility(true);
   }, [handleCartVisibility]);
 
-  if (!cartList.length || !isAllowed) return null;
+  if (!cartList.length || !isAllowed || !isInteractive) return null;
 
   return (
     <div className="fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 items-center justify-between bg-white-a700 px-4 py-2 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">

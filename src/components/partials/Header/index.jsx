@@ -109,7 +109,7 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
   </Link>
 ));
 
-const Header = ({ data, ...props }) => {
+const Header = ({ data }) => {
   const router = useRouter();
   const pathname = usePathname();
   const showHeader = pathname?.includes("blog");
@@ -181,7 +181,7 @@ const Header = ({ data, ...props }) => {
   return showHeader ? (
     <></>
   ) : (
-    <header className={`${props.className} relative`}>
+    <header className="relative">
       <div className="container-main flex border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
         <div className="flex flex-1 flex-wrap items-center justify-between gap-x-5 gap-y-2.5 md:flex-nowrap">
           <div className="flex flex-shrink-0 items-stretch gap-5">

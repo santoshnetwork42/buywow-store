@@ -100,7 +100,7 @@ export const useSource = () => {
 };
 
 export const useIsInteractive = () => {
-  const { isInteractive } = useContext(NavbarContext);
+  const { isInteractive } = useContext(NavbarContext) || {};
   return isInteractive;
 };
 
