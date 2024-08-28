@@ -4,15 +4,14 @@ import dynamic from "next/dynamic";
 export const revalidate = 900;
 
 // Dynamically import components
+import Carousal from "@/components/blocks/Carousel";
+import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
+import TrendingCategories from "@/components/blocks/TrendingCategories";
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
 );
-const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
 const SingleBanner = dynamic(() => import("@/components/blocks/SingleBanner"));
 const MiniBanners = dynamic(() => import("@/components/blocks/MiniBanners"));
-const TrendingCategories = dynamic(
-  () => import("@/components/blocks/TrendingCategories"),
-);
 const FeaturedList = dynamic(() => import("@/components/blocks/FeaturedList"));
 const IngredientCategories = dynamic(
   () => import("@/components/blocks/IngredientCategories"),
@@ -25,9 +24,6 @@ const TestimonialSection = dynamic(
 );
 const FeaturedProducts = dynamic(
   () => import("@/components/blocks/FeaturedProducts"),
-);
-const FeaturedProductsByTab = dynamic(
-  () => import("@/components/blocks/FeaturedProductsByTab"),
 );
 const ProductEffectiveness = dynamic(
   () => import("@/components/blocks/Product/ProductEffectiveness"),
