@@ -1,11 +1,10 @@
-import React, { useMemo } from "react";
-import { Text, Heading } from "@/components/elements";
+import { Heading, Text } from "@/components/elements";
 import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
+import { useMemo } from "react";
 
 const ProductPricing = ({ price, listingPrice, cartItemType, slug }) => {
   const isFreeProduct =
     cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT";
-  const showStrikePrice = listingPrice && price < listingPrice;
 
   const discountPercentage = useMemo(
     () => getDiscountPercentage(price, listingPrice),
@@ -40,7 +39,7 @@ const ProductPricing = ({ price, listingPrice, cartItemType, slug }) => {
         <Heading as="h4" size="base" className="text-sm" responsive>
           ₹{toDecimal(price)}
         </Heading>
-        {showStrikePrice && (
+        {listingPrice > price && (
           <Text as="span" size="sm" className="line-through" responsive>
             ₹{toDecimal(listingPrice)}
           </Text>

@@ -9,7 +9,6 @@ const ProductPricing = ({
   isFreeProduct,
   slug,
 }) => {
-  const showStrikePrice = listingPrice && price < listingPrice;
   const discountPercentage = getDiscountPercentage(price, listingPrice);
 
   if (cartItemType === "AUTO_FREE_PRODUCT_DISABLED") return null;
@@ -44,7 +43,7 @@ const ProductPricing = ({
       <Heading as="h4" size="base" className="text-sm" responsive>
         ₹{toDecimal(price)}
       </Heading>
-      {!!showStrikePrice && (
+      {listingPrice > price && (
         <Text
           as="span"
           size="sm"

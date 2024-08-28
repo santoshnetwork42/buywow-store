@@ -2847,13 +2847,14 @@ export const WowCashIcon = ({ size = 20, color = "#000000" }) => {
   );
 };
 
-export const CouponAndOffer = ({ size = 30, color = "#000000" }) => {
+export const CouponAndOffer = ({ size = 30, color = "#000000", className }) => {
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 27 27"
       fill={color}
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
       <mask
@@ -2890,13 +2891,14 @@ export const CouponAndOffer = ({ size = 30, color = "#000000" }) => {
   );
 };
 
-export const OfferTicket = ({ size = 16, color = "#000000" }) => {
+export const OfferTicket = ({ size = 16, color = "#000000", className }) => {
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 16 16"
       fill={color}
+      className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
       <mask

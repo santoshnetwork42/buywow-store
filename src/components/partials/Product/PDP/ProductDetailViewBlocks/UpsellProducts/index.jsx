@@ -58,13 +58,15 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
               <Heading as="span" size="lg" className="text-base" responsive>
                 ₹{price}
               </Heading>
-              <Text
-                as="span"
-                size="sm"
-                className="font-light capitalize line-through"
-              >
-                ₹{listingPrice}
-              </Text>
+              {listingPrice > price && (
+                <Text
+                  as="span"
+                  size="sm"
+                  className="font-light capitalize line-through"
+                >
+                  ₹{listingPrice}
+                </Text>
+              )}
             </div>
             {discount && (
               <div className="flex h-6 min-w-[62px] items-center justify-center rounded-full bg-lime-50 px-2 text-xs capitalize">

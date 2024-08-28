@@ -62,10 +62,7 @@ const VariantItem = React.memo(({ variant, onChange }) => {
   }`;
 
   const discount = useMemo(
-    () =>
-      price && listingPrice && listingPrice > price
-        ? listingPrice - price
-        : null,
+    () => (listingPrice > price ? listingPrice - price : null),
     [price, listingPrice],
   );
 
@@ -106,7 +103,7 @@ const VariantItem = React.memo(({ variant, onChange }) => {
               <Heading as="h6" size="sm" className="font-semibold">
                 ₹{price}
               </Heading>
-              {listingPrice != null && (
+              {listingPrice > price && (
                 <Text as="p" size="xs" className="line-through">
                   ₹{listingPrice}
                 </Text>
