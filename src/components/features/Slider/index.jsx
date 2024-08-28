@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Img, Text } from "@/components/elements";
+import { useIsInteractive } from "@/utils/context/navbar";
 import useEmblaCarousel from "embla-carousel-react";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -120,13 +121,16 @@ const Slider = ({
   size,
   ...props
 }) => {
+  const isInteractive = useIsInteractive();
   const [emblaRef, emblaApi] = useEmblaCarousel(
-    {
-      dragFree: dragFree,
-      slidesToScroll: "auto",
-      inViewThreshold: 1,
-    },
-    [WheelGesturesPlugin()],
+    isInteractive
+      ? {
+          dragFree: dragFree,
+          slidesToScroll: "auto",
+          inViewThreshold: 1,
+        }
+      : false,
+    isInteractive ? [WheelGesturesPlugin()] : [],
   );
 
   const [sliderState, setSliderState] = useState({
@@ -171,7 +175,7 @@ const Slider = ({
   }, [emblaApi, sliderState.scrollbarWidth, updateSliderState]);
 
   useEffect(() => {
-    if (!emblaApi) return;
+    if (!isInteractive || !emblaApi) return;
 
     handleInit();
     emblaApi.on("init", handleInit);
@@ -185,7 +189,7 @@ const Slider = ({
       emblaApi.off("select", handleSelect);
       emblaApi.off("scroll", handleScroll);
     };
-  }, [emblaApi, handleInit, handleSelect, handleScroll]);
+  }, [isInteractive, emblaApi, handleInit, handleSelect, handleScroll]);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -221,27 +225,36 @@ const Slider = ({
     [totalSlides, currentSlideIndex, scrollTo],
   );
 
+  const sliderContent = (
+    <div
+      className={twMerge(
+        "mx-auto flex max-w-fit",
+        showDotButtons
+          ? "mb-2.5 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6"
+          : "mb-4 lg:mb-6",
+        sliderClassName,
+      )}
+    >
+      {React.Children.map(children, (child, index) => (
+        <div key={`carousel-slide-${index}`} className={slideClassName}>
+          {child}
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className={`w-full ${className}`} {...props}>
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div
-          className={twMerge(
-            "mx-auto flex max-w-fit",
-            showDotButtons
-              ? "mb-2.5 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6"
-              : "mb-4 lg:mb-6",
-            sliderClassName,
-          )}
-        >
-          {React.Children.map(children, (child, index) => (
-            <div key={`carousel-slide-${index}`} className={slideClassName}>
-              {child}
-            </div>
-          ))}
+      {isInteractive ? (
+        <div className="overflow-hidden" ref={emblaRef}>
+          {sliderContent}
         </div>
-      </div>
+      ) : (
+        <div className="overflow-hidden">{sliderContent}</div>
+      )}
 
-      {!isAllSlidesVisible &&
+      {isInteractive &&
+        !isAllSlidesVisible &&
         (!!showControls || !!showCounter || !!showDotButtons) && (
           <SliderControl
             showCounter={showCounter}
