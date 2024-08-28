@@ -72,11 +72,14 @@ export const getProductInventory = (product, selectedVariantId = null) => {
   };
 };
 
-export const setSoldOutLast = (items) => {
+export const setSoldOutLast = (items, isContainAttributes = false) => {
   let soldOutProducts = [];
   if (items) {
     const products = items?.filter(Boolean)?.reduce((acc, item) => {
-      const { fetchedProduct: prod } = item;
+      const { fetchedProduct: prod } = isContainAttributes
+        ? item?.attributes
+        : item;
+
       if (!("hasInventory" in prod)) {
         const { hasInventory } = getProductInventory(prod);
         if (hasInventory) {
