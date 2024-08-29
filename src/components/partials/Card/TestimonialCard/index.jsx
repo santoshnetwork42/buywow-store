@@ -95,7 +95,7 @@ const TestimonialCard = ({
             }
             height={500}
             width={500}
-            priority
+            loading="lazy"
             className="h-auto w-full object-contain"
           />
         </picture>
