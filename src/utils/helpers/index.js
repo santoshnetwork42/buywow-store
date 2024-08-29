@@ -1,6 +1,6 @@
 import { showToast } from "@/components/common/ToastComponent";
 import { STORE_PREFIX } from "@/config";
-import States from "@/utils/constants/states.json";
+import States from "@/utils/data/states.json";
 import { uploadData } from "aws-amplify/storage";
 import Cookies from "js-cookie";
 import platform from "platform";

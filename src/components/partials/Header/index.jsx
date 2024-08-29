@@ -92,9 +92,10 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
         width={86}
         height={48}
         alt={logoAlt}
+        priority
         className="aspect-[86/48] w-[86px] object-contain"
       />
-      {vipUrl && (
+      {/* {vipUrl && (
         <>
           <div className="h-[35px] w-[0.5px] bg-gray-300_01" />
           <Img
@@ -105,7 +106,7 @@ const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
             className="aspect-[70/28] w-[70px] object-contain"
           />
         </>
-      )}
+      )} */}
     </div>
   </Link>
 ));

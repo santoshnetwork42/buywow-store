@@ -9,7 +9,7 @@ import {
   getTag,
   getTags,
   getTopMenu,
-} from "@/graphql/appSync/api";
+} from "@/graphql/api";
 
 export const wordpressAuth = `Basic ${Buffer.from(
   `${process.env.NEXT_PUBLIC_WP_USERNAME}:${process.env.NEXT_PUBLIC_WP_PASSWORD}`,

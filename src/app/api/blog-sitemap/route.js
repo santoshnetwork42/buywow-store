@@ -1,5 +1,5 @@
 import { WORDPRESS_URL } from "@/config";
-import { getBlogsForSitemap } from "@/graphql/appSync/api";
+import { getBlogsForSitemap } from "@/graphql/api";
 import { wordpressAuth } from "@/lib/wordPressAPIs";
 import { NextResponse } from "next/server";
 

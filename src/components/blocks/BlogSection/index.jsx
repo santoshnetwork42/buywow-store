@@ -3,7 +3,7 @@
 
 import { Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
-import { getFeaturedBlogs } from "@/graphql/appSync/api";
+import { getFeaturedBlogs } from "@/graphql/api";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import dayjs from "dayjs";
 import Image from "next/image";
@@ -112,7 +112,7 @@ const BlogSection = ({ title = "Explore Blogs", buttonText = "Read More" }) => {
       </div>
       <Link
         href={`/blog`}
-        className="mt-2 rounded-[24px] bg-yellow-900 px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3"
+        className="rounded-[24px] bg-yellow-900 px-4 py-2 text-center md:px-5 md:py-3"
         aria-label="Read more blog articles"
       >
         <Heading as="h3" size="xl" className="text-white-a700_01" responsive>
