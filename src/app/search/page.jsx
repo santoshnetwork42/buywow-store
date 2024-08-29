@@ -3,6 +3,12 @@ import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 
 export const revalidate = 900;
 
+export const metadata = {
+  title: "Search",
+  description:
+    "Search for products using our advanced search engine. Start your search here.",
+};
+
 async function getInitialSearchData() {
   try {
     const initialSearchData = await getPageBySlugAPI("search");
