@@ -7,6 +7,7 @@ import {
 import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
 
 export const revalidate = 900;
 
@@ -144,11 +145,16 @@ export async function generateStaticParams() {
     LANDING: "",
   };
 
-  return pages?.map((page) => ({
-    slug: [pageType[page.attributes.type], page.attributes.slug].filter(
-      Boolean,
-    ),
-  }));
+  return pages?.map((page) => {
+    if (page.attributes.slug !== "search") {
+      return {
+        slug: [pageType[page.attributes.type], page.attributes.slug].filter(
+          Boolean,
+        ),
+      };
+    }
+    return null;
+  });
 }
 
 async function generateSEOAndJSONLD(params) {
@@ -393,15 +399,20 @@ export default async function Page({ params }) {
   const { slug } = params;
   try {
     const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
-    const { blocks } = pageData || {};
+
+    if (!pageData) {
+      notFound(); // This will trigger the 404 page
+    }
+
+    const { blocks } = pageData;
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
-      throw new Error("No blocks found or invalid blocks data");
+      return <div>No Block Added</div>;
     }
 
     return <>{blocks.map((block, index) => renderBlock(block, index, slug))}</>;
   } catch (error) {
     console.error("Error in Page component:", error);
-    // throw error;
+    notFound(); // This will trigger the 404 page for any errors
   }
 }
