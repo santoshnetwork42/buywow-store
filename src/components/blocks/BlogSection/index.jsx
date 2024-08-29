@@ -113,9 +113,11 @@ const BlogSection = ({ title = "Explore Blogs", buttonText = "Read More" }) => {
       <Link
         href={`/blog`}
         className="mt-2 rounded-[24px] bg-yellow-900 px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3"
+        aria-label="Read more blog articles"
       >
         <Heading as="h3" size="xl" className="text-white-a700_01" responsive>
           {buttonText}
+          <span className="sr-only">about our blog articles</span>
         </Heading>
       </Link>
     </div>
