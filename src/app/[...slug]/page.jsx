@@ -167,6 +167,7 @@ async function generateSEOAndJSONLD(params) {
     webUrl,
     collectionInfoSection,
     pageFaqs,
+    collectionProducts,
     MEDIA_BASE_URL,
     getPublicImageURL,
     name,
@@ -325,6 +326,28 @@ async function generateSEOAndJSONLD(params) {
     };
   }
 
+  const collectionPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    // numberOfItems: searchProducts?.total,
+    itemListOrder: "Unordered",
+    // itemListElement: [
+    //   ...searchProducts?.items?.map((product, index) => {
+    //     const { thumbImage } = getProductMeta(product);
+    //     return {
+    //       "@type": "ListItem",
+    //       position: index + 1,
+    //       name: product?.title,
+    //       url: `https://${MEDIA_BASE_URL}/products/${product?.slug}`,
+    //       image: {
+    //         "@type": "ImageObject",
+    //         contentUrl: getPublicImageURL(thumbImage?.imageKey),
+    //       },
+    //     };
+    //   }),
+    // ],
+  };
+
   return {
     siteName: name,
     url: extractedSlug,
@@ -345,6 +368,7 @@ async function generateSEOAndJSONLD(params) {
       title: seoComponent?.seoTitle,
       description: seoComponent?.seoDescription,
     },
+    collectionPageJsonLd,
   };
 }
 
@@ -375,6 +399,7 @@ export async function generateMetadata({ params }) {
   const collectionInfoSection = findBlock("ComponentBlocksInfoSection");
   const pdpSection = findBlock("ComponentBlocksPdp");
   const pageFaqs = findBlock("ComponentAccordionFaQsSection");
+  const collectionProducts = findBlock("ComponentBlocksProductCollectionByTab");
 
   const seoData =
     (await generateSEOAndJSONLD({
@@ -386,6 +411,7 @@ export async function generateMetadata({ params }) {
       webUrl,
       collectionInfoSection,
       pageFaqs,
+      collectionProducts,
       MEDIA_BASE_URL,
       getPublicImageURL,
       name,
