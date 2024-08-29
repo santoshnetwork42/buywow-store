@@ -396,8 +396,18 @@ export const searchCMSProducts = /* GraphQL */ `
 `;
 
 export const getPageBySlug = /* GraphQL */ `
-  query GetPageBySlug($pageType: String!, $slug: String!, $storeId: String!) {
-    getPageBySlug(pageType: $pageType, slug: $slug, storeId: $storeId)
+  query GetPageBySlug(
+    $pageType: String!
+    $slug: String!
+    $storeId: String!
+    $collectionDataLimit: Int
+  ) {
+    getPageBySlug(
+      pageType: $pageType
+      slug: $slug
+      storeId: $storeId
+      collectionDataLimit: $collectionDataLimit
+    )
   }
 `;
 

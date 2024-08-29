@@ -75,9 +75,10 @@ const ProductCollectionByTab = ({
   );
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef(null);
+  const viewListItemEventTriggered = useRef(false);
   const { viewList, categoryViewed } = useEventsDispatch();
   const source = getSource();
 
@@ -99,7 +100,7 @@ const ProductCollectionByTab = ({
           tabSelected: activeTab?.tab?.data?.id || null,
           defaultSorting: newSortOption.value,
           page: 1,
-          limit: activeTab?.pagination?.pageSize ?? 10,
+          limit: activeTab?.pagination?.pageSize ?? 100,
         });
 
         const newProducts = response?.items?.data ?? [];
@@ -146,8 +147,12 @@ const ProductCollectionByTab = ({
     [reloadProducts],
   );
 
-  const viewListItemEventTriggered = useRef(false);
   useEffect(() => {
+    const activeTab = productCollectionTabItems[activeTabIndex];
+    const calculatedHasMore =
+      activeTab?.pagination?.totalData > activeTab?.pagination?.pageSize;
+    setHasMore(calculatedHasMore);
+
     const handleResize = () => {
       if (containerRef.current && window.innerWidth >= 1200) {
         const containerWidth = containerRef.current.offsetWidth;
@@ -179,7 +184,7 @@ const ProductCollectionByTab = ({
       categoryViewed({
         URL: window.location.href,
         "Category Name": title,
-        "Item Count": 10,
+        "Item Count": 100,
         Source: source,
       });
       viewListItemEventTriggered.current = true;
@@ -200,7 +205,7 @@ const ProductCollectionByTab = ({
         tabSelected: activeTab?.tab?.data?.id || null,
         defaultSorting: sortOption.value,
         page: nextPage,
-        limit: activeTab?.pagination?.pageSize ?? 10,
+        limit: activeTab?.pagination?.pageSize ?? 100,
       });
 
       const newProducts = response?.items?.data ?? [];
@@ -262,7 +267,7 @@ const ProductCollectionByTab = ({
       if (selectedTab) {
         const productsInTab = selectedTab.products?.data?.length ?? 0;
         const totalProducts = selectedTab.pagination?.totalData ?? 0;
-        const pageSize = selectedTab.pagination?.pageSize ?? 10;
+        const pageSize = selectedTab.pagination?.pageSize ?? 100;
         const calculatedPage = Math.ceil(productsInTab / pageSize);
 
         setCurrentPage(calculatedPage);
@@ -305,7 +310,7 @@ const ProductCollectionByTab = ({
     (category) => {
       const currentProducts = category.products?.data || [];
       const totalProducts = category.pagination?.totalData || 0;
-      const pageSize = category.pagination?.pageSize || 10;
+      const pageSize = 16;
       const remainingProducts = Math.min(
         totalProducts - currentProducts.length,
         pageSize,

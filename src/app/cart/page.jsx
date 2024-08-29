@@ -5,8 +5,6 @@ import CartSidebar from "@/components/partials/MyCart/CartSidebar";
 import MainCartSection from "@/components/partials/MyCart/MainCartSection";
 import DeliveryInfoSection from "@/components/partials/Others/DeliveryInfoSection";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
-import { deliveryInfoData } from "@/utils/data/homeData";
-import { myCartData } from "@/utils/data/myCartData";
 import { useCartItems, useCartTotal, useInventory } from "@wow-star/utils";
 import { useSelector } from "react-redux";
 
@@ -61,8 +59,8 @@ export default function MyCart() {
 
           {/* Displays offers and payment summary */}
           <CartSidebar
-            offers={myCartData.offers}
-            cashback={myCartData.cashback}
+            offers={0}
+            cashback={0}
             totalPrice={totalPrice}
             totalListingPrice={totalListingPrice}
             couponTotal={couponTotal}
@@ -76,7 +74,7 @@ export default function MyCart() {
         </div>
 
         {/* Delivery information section */}
-        <DeliveryInfoSection data={deliveryInfoData} />
+        <DeliveryInfoSection data={null} />
       </div>
     </>
   );

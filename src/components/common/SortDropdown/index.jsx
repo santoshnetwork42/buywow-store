@@ -1,6 +1,5 @@
-import React from "react";
-import { Text, SelectBox } from "@/components/elements";
 import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import { SelectBox, Text } from "@/components/elements";
 import { twMerge } from "tailwind-merge";
 
 const SortDropdown = ({ value, options, onOptionChange, className }) => {
@@ -41,6 +40,10 @@ const SortDropdown = ({ value, options, onOptionChange, className }) => {
             "@media (max-width: 576px)": {
               minWidth: "100px",
             },
+          }),
+          menuPortal: (provided) => ({
+            ...provided,
+            zIndex: 10,
           }),
           option: (provided) => ({
             ...provided,
