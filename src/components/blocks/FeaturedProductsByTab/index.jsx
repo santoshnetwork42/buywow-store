@@ -43,6 +43,7 @@ const FeaturedProductsByTab = ({
     </TabPanel>
   );
 
+  
   if (!featuredProductsTabItems?.length) return null;
 
   return (
