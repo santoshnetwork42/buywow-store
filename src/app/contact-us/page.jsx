@@ -1,6 +1,12 @@
 import { Button, Heading, Img, Text } from "@/components/elements";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Contact Us",
+  description:
+    "Get in touch with us for any queries, feedback, or to place an order. We are here to help!",
+};
+
 const ContactUs = () => {
   return (
     <div className="container-main flex flex-col gap-6 py-4">

@@ -4,6 +4,12 @@ import { getOrderByIdAPI } from "@/lib/appSyncAPIs";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+export const metadata = {
+  title: "Order",
+  description:
+    "This page shows the details of the order, including order number, status, products, amount and shipping details.",
+};
+
 const getOrderData = async (orderId, paymentId) => {
   try {
     const response = await getOrderByIdAPI({ id: orderId });

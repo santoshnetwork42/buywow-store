@@ -426,14 +426,10 @@ export default async function Page({ params }) {
   try {
     const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
 
-    if (!pageData) {
-      notFound(); // This will trigger the 404 page
-    }
-
-    const { blocks } = pageData;
+    const { blocks } = pageData || {};
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
-      return <div>No Block Added</div>;
+      return notFound();
     }
 
     return <>{blocks.map((block, index) => renderBlock(block, index, slug))}</>;

@@ -1,5 +1,11 @@
 import { Heading, Text } from "@/components/elements";
 
+export const metadata = {
+  title: "Query Us",
+  description:
+    "Get in touch with us for any queries, feedback, or to place an order. We are here to help!",
+};
+
 const QueryUs = () => {
   return (
     <div className="container-main flex flex-col gap-6 py-4">
