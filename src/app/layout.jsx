@@ -22,11 +22,21 @@ import { Amplify } from "aws-amplify";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 
+export const revalidate = 900;
+
 const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-outfit",
 });
+
+export const metadata = {
+  title: {
+    default: "Buy Wow",
+    template: "Buy Wow | %s",
+  },
+  metadataBase: new URL("https://buywow.in"),
+};
 
 Amplify.configure({
   ...awsExport,
