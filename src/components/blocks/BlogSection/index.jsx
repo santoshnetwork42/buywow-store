@@ -3,7 +3,7 @@
 
 import { Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
-import { getFeaturedBlogs } from "@/graphql/appSync/api";
+import { getFeaturedBlogs } from "@/graphql/api";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import dayjs from "dayjs";
 import Image from "next/image";

@@ -1,4 +1,4 @@
-import { getUser } from "@/graphql/appSync/api";
+import { getUser } from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import {
   addressMapper,

@@ -27,7 +27,7 @@ import {
   updateUserAddress,
   validateTransaction,
   verifyCustomOTP,
-} from "@/graphql/appSync/api";
+} from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
