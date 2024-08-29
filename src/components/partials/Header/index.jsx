@@ -224,22 +224,19 @@ const Header = ({ data }) => {
               />
             </Button>
             {!isRestricted && (
-              <Link
-                href="#"
+              <div
+                className="relative cursor-pointer"
                 onClick={() => handleCartVisibility(true)}
-                className="flex-shrink-0"
               >
-                <div className="relative">
-                  <BagIcon size={20} />
-                  {!!totalCartItems && (
-                    <div className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
-                      <Text size="xxs" className="mx-1 text-white-a700_01">
-                        {totalCartItems}
-                      </Text>
-                    </div>
-                  )}
-                </div>
-              </Link>
+                <BagIcon size={20} />
+                {!!totalCartItems && (
+                  <div className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center overflow-hidden rounded-full bg-red-400">
+                    <Text size="xxs" className="mx-1 text-white-a700_01">
+                      {totalCartItems}
+                    </Text>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
