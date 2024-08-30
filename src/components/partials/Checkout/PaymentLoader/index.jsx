@@ -14,7 +14,7 @@ export default function PaymentLoader({
     >
       <div className="flex flex-col items-center gap-4 text-center md:gap-5">
         <Img
-          src="img_image_1724.png"
+          src="img_logo.png"
           alt="logo"
           width="88"
           height="44"

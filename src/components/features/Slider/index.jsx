@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Img, Text } from "@/components/elements";
+import { ArrowIconSVG } from "@/assets/svg/icons";
+import { Button, Text } from "@/components/elements";
 import { useIsInteractive } from "@/utils/context/navbar";
 import useEmblaCarousel from "embla-carousel-react";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
@@ -22,18 +23,6 @@ const Counter = React.memo(({ text }) => (
   >
     {text}
   </Text>
-));
-
-const SliderButton = React.memo(({ src, alt, onClick }) => (
-  <Img
-    src={src}
-    width={28}
-    height={28}
-    alt={alt}
-    className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
-    onClick={onClick}
-    isStatic
-  />
 ));
 
 const DotButton = React.memo(({ isSelected, onClick }) => (
@@ -88,14 +77,13 @@ const SliderControl = React.memo(
                     size === "small" && "!gap-2",
                   )}
                 >
-                  <SliderButton
-                    src="img_arrow_left.svg"
-                    alt="Previous slide"
+                  <ArrowIconSVG
+                    className="size-5 cursor-pointer md:size-6 lg:size-7"
+                    side="left"
                     onClick={onPrevClick}
                   />
-                  <SliderButton
-                    src="img_arrow_right_black_900.png"
-                    alt="Next slide"
+                  <ArrowIconSVG
+                    className="size-5 cursor-pointer md:size-6 lg:size-7"
                     onClick={onNextClick}
                   />
                 </div>
@@ -275,7 +263,6 @@ const Slider = ({
 
 Slider.displayName = "Slider";
 SliderControl.displayName = "SliderControl";
-SliderButton.displayName = "SliderButton";
 ProgressBar.displayName = "ProgressBar";
 Counter.displayName = "Counter";
 DotButton.displayName = "DotButton";

@@ -1,13 +1,12 @@
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
+import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
-
-export const revalidate = 900;
 
 // Dynamically import components
 import Carousal from "@/components/blocks/Carousel";
 import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
 import TrendingCategories from "@/components/blocks/TrendingCategories";
-import { unstable_cache } from "next/cache";
+import { notFound } from "next/navigation";
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
 );
@@ -81,6 +80,8 @@ const RecentlyViewed = dynamic(
   () => import("@/components/blocks/RecentlyViewed"),
 );
 
+export const revalidate = 900;
+
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
   description:
@@ -142,11 +143,12 @@ export default async function Page() {
     const { blocks } = pageData || {};
 
     if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-      throw new Error("No blocks found or invalid blocks data");
+      notFound();
     }
 
     return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
   } catch (error) {
-    console.error("Error in Page component:", error);
+    console.error("Error in Home Page component:", error);
+    notFound();
   }
 }

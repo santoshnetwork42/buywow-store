@@ -1,4 +1,4 @@
-import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import Link from "next/link";

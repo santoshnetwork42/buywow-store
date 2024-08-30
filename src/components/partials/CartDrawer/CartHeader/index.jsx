@@ -1,4 +1,4 @@
-import { CloseSVG } from "@/assets/images";
+import { CloseSVG } from "@/assets/svg/icons";
 import { Button, Heading } from "@/components/elements";
 import React from "react";
 

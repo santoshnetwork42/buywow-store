@@ -44,7 +44,7 @@ export default function PaymentSummary({
     <div className="flex flex-col gap-4">
       <div className="flex w-[calc(100%+24px)] flex-1 -translate-x-3 items-center justify-center gap-0.5 bg-blue-50 px-2 py-1.5 shadow-sm sm:w-[calc(100%+40px)] sm:-translate-x-5 md:w-full md:translate-x-0 md:rounded-lg">
         <Img
-          src="img_image_2037.png"
+          src="img_cashback.png"
           width={24}
           height={24}
           alt="cashback icon"

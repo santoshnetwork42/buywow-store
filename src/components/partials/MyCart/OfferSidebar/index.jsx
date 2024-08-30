@@ -1,9 +1,9 @@
 // components/MyCart/OfferSidebar.jsx
-import React, { useState } from "react";
+import { CloseSVG } from "@/assets/svg/icons";
 import { Button, Heading, Input, Text } from "@/components/elements";
 import Sidebar from "@/components/features/Drawer";
 import { CouponItem } from "@/components/partials/MyCart/SubOfferAndCouponItem";
-import { CloseSVG } from "@/assets/images";
+import { useState } from "react";
 
 export default function OfferSidebar({
   isOpen,

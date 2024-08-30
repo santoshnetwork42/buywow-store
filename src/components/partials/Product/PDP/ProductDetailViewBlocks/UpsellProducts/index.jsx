@@ -25,7 +25,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   return (
     <Link
       href={`/product/${slug}`}
-      className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded bg-white-a700 p-2.5 shadow md:p-3"
+      className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded-md bg-white-a700 p-2.5 shadow md:p-3"
     >
       <div
         className="flex aspect-[74/80] w-[74px] items-center overflow-hidden rounded"
