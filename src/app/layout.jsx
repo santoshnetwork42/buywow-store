@@ -19,10 +19,11 @@ import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 import GoKwikProvider from "@/utils/context/gokwik";
 import NavbarProvider from "@/utils/context/navbar";
 import { Amplify } from "aws-amplify";
+import { unstable_cache } from "next/cache";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 
-export const revalidate = 900;
+export const revalidate = 60;
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -44,11 +45,29 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
-async function RootLayout({ children }) {
-  const { data } = (await getNavbarAndFooterAPI()) || {};
-  const initialData = await getInitialDataAPI(STORE_ID, "WEB");
+const cachedGetNavbarAndFooterAPI = unstable_cache(
+  async () => getNavbarAndFooterAPI(),
+  ["navbar-footer"],
+  { revalidate: 60 },
+);
 
-  const upsellProducts = await getCartUpsellProductsAPI();
+const cachedGetInitialDataAPI = unstable_cache(
+  async (storeId, platform) => getInitialDataAPI(storeId, platform),
+  ["initial-data"],
+  { revalidate: 60 },
+);
+
+const cachedGetCartUpsellProductsAPI = unstable_cache(
+  async () => getCartUpsellProductsAPI(),
+  ["upsell-products"],
+  { revalidate: 60 },
+);
+
+async function RootLayout({ children }) {
+  const { data } = (await cachedGetNavbarAndFooterAPI()) || {};
+  const initialData = await cachedGetInitialDataAPI(STORE_ID, "WEB");
+  const upsellProducts = await cachedGetCartUpsellProductsAPI();
+
   const {
     announcementBar: announcementData = {},
     navbar: headerData = {},

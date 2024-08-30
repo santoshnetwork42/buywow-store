@@ -30,7 +30,7 @@ FeaturedItem.displayName = "FeaturedItem";
 
 const FeaturedList = ({
   featuredListItems: features,
-  isWebHorizontal,
+  isWebHorizontal = true,
   isInPDP = false,
 }) => {
   if (!Array.isArray(features) || features.length === 0) return null;
