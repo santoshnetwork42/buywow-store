@@ -35,7 +35,6 @@ const ContactUs = () => {
               className="chat-img"
               width={700}
               height={700}
-              isStatic={true}
             />
           </div>
           <div className="flex flex-col gap-2 md:w-1/2">
