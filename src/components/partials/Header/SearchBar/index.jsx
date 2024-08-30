@@ -55,30 +55,33 @@ const SearchBar = memo(({ className }) => {
   });
 
   const handleType = useCallback(() => {
-    const { text, isDeleting, loopNum } = placeholderState;
-    const i = loopNum % dataText.length;
-    const fullText = dataText[i];
+    setPlaceholderState((prevState) => {
+      const { text, isDeleting, loopNum } = prevState;
+      const i = loopNum % dataText.length;
+      const fullText = dataText[i];
 
-    setPlaceholderState((prevState) => ({
-      ...prevState,
-      text: isDeleting
-        ? fullText.substring(0, text.length - 1)
-        : fullText.substring(0, text.length + 1),
-      typingSpeed: isDeleting ? DELETING_SPEED : TYPING_SPEED,
-    }));
+      if (!isDeleting && text === fullText) {
+        return { ...prevState, isDeleting: true, typingSpeed: PAUSE_DURATION };
+      }
 
-    if (!isDeleting && text === fullText) {
-      setTimeout(
-        () => setPlaceholderState((prev) => ({ ...prev, isDeleting: true })),
-        PAUSE_DURATION,
-      );
-    } else if (isDeleting && text === "") {
-      setPlaceholderState((prev) => ({
-        ...prev,
-        isDeleting: false,
-        loopNum: prev.loopNum + 1,
-      }));
-    }
+      if (isDeleting && text === "") {
+        return {
+          ...prevState,
+          isDeleting: false,
+          loopNum: loopNum + 1,
+          typingSpeed: TYPING_SPEED,
+          text: fullText.charAt(0),
+        };
+      }
+
+      return {
+        ...prevState,
+        text: isDeleting
+          ? text.slice(0, -1)
+          : fullText.slice(0, text.length + 1),
+        typingSpeed: isDeleting ? DELETING_SPEED : TYPING_SPEED,
+      };
+    });
   }, [placeholderState]);
 
   useEffect(() => {
@@ -92,8 +95,6 @@ const SearchBar = memo(({ className }) => {
       setSearch("");
     }
   }, [pathname]);
-
-  console.log(1);
 
   useEffect(() => {
     if (search.length >= 3) {
