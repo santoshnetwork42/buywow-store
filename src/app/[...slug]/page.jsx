@@ -6,6 +6,7 @@ import {
 } from "@/lib/appSyncAPIs";
 import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
+import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 
@@ -126,6 +127,22 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
+const cachedGetCMSPagesAPI = unstable_cache(
+  async () => getCMSPagesAPI(),
+  ["cms-pages"],
+  { revalidate: 900 },
+);
+
+const cachedGetPageBySlugAPI = unstable_cache(
+  async (slug) => getPageBySlugAPI(slug),
+  ["page-by-slug"],
+  { revalidate: 900 },
+);
+
+const cachedGetStoreAPI = unstable_cache(async () => getStoreAPI(), ["store"], {
+  revalidate: 900,
+});
+
 const renderBlock = (block, index, slug) => {
   if (!block?.showComponent) return null;
 
@@ -136,7 +153,7 @@ const renderBlock = (block, index, slug) => {
 };
 
 export async function generateStaticParams() {
-  const pages = await getCMSPagesAPI();
+  const pages = await cachedGetCMSPagesAPI();
 
   const pageType = {
     HOME: "",
@@ -380,8 +397,8 @@ export async function generateMetadata({ params }) {
   }
 
   const extractedSlug = slug[slug.length - 1];
-  const pageData = await getPageBySlugAPI(extractedSlug);
-  const store = await getStoreAPI();
+  const pageData = await cachedGetPageBySlugAPI(extractedSlug);
+  const store = await cachedGetStoreAPI();
   const { webUrl, name } = store || {};
 
   const type = slug[0];
@@ -424,7 +441,7 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { slug } = params;
   try {
-    const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
+    const pageData = await cachedGetPageBySlugAPI(slug[slug.length - 1]);
 
     const { blocks } = pageData || {};
 

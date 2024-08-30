@@ -7,6 +7,7 @@ export const revalidate = 900;
 import Carousal from "@/components/blocks/Carousel";
 import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
 import TrendingCategories from "@/components/blocks/TrendingCategories";
+import { unstable_cache } from "next/cache";
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
 );
@@ -120,6 +121,12 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
+const cachedGetPageBySlugAPI = unstable_cache(
+  async (slug) => getPageBySlugAPI(slug),
+  ["page-by-slug"],
+  { revalidate: 900 },
+);
+
 const renderBlock = (block, index, slug) => {
   if (!block?.showComponent) return null;
 
@@ -131,7 +138,7 @@ const renderBlock = (block, index, slug) => {
 
 export default async function Page() {
   try {
-    const pageData = await getPageBySlugAPI("index");
+    const pageData = await cachedGetPageBySlugAPI("index");
     const { blocks } = pageData || {};
 
     if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
