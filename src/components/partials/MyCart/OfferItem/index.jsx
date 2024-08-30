@@ -1,4 +1,5 @@
 // components/MyCart/OfferItem.jsx
+import { ArrowIconSVG } from "@/assets/svg/icons";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import OfferSidebar from "@/components/partials/MyCart/OfferSidebar";
 import { useState } from "react";
@@ -59,7 +60,7 @@ export default function OfferItem({ offer }) {
           className="relative flex h-9 w-9 shrink-0 rounded-full bg-white-a700_01 p-0"
           onClick={openSidebar}
         >
-          <Img src="img_group_1400002487.svg" width={7} height={20} isStatic />
+          <ArrowIconSVG className="size-6" />
         </Button>
       </div>
 

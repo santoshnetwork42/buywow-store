@@ -1,6 +1,6 @@
 "use client";
 
-import { CloseSVG } from "@/assets/images";
+import { CloseSVG } from "@/assets/svg/icons";
 import { Img, Input } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";

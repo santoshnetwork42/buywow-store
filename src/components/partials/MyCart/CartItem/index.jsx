@@ -40,7 +40,7 @@ export default function CartItem({ product }) {
                 </Text>
               </div>
               <Button className="flex h-[27px] w-[27px] items-center justify-center rounded border border-solid border-gray-400_02 px-1.5">
-                <Img src="img_thumbs_up.svg" width={10} height={14} isStatic />
+                <Img src="img_remove.svg" width={10} height={14} isStatic />
               </Button>
             </div>
           </div>

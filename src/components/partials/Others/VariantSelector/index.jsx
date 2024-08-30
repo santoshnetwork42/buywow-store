@@ -1,6 +1,5 @@
-import React from "react";
+import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { SelectBox } from "@/components/elements";
-import { DownArrowIconSVG } from "@/assets/images/downArrow";
 import { twMerge } from "tailwind-merge";
 
 const VariantSelector = ({

@@ -1,8 +1,6 @@
 "use client";
 
-import { MenuSVG } from "@/assets/images";
-import { DownArrowIconSVG } from "@/assets/images/downArrow";
-import { BagIcon } from "@/assets/svg/icons";
+import { BagIcon, DownArrowIconSVG, MenuSVG } from "@/assets/svg/icons";
 import PasswordLess from "@/components/common/Passwordless";
 import { Button, Img, Text } from "@/components/elements";
 import MobileMenu from "@/components/partials/Header/MobileMenu";
@@ -252,7 +250,7 @@ const Header = ({ data }) => {
           collectionMenus={collectionMenus}
           otherLinks={otherLinks}
           logo={mWebMenuLogo}
-          isLoggedin={!!user?.id}
+          isLoggedIn={!!user?.id}
         />
       )}
 

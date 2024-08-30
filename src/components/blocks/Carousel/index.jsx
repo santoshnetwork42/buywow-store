@@ -29,6 +29,7 @@ const CarouselImage = React.memo(
     const { homeViewed, bannerClicked } = useEventsDispatch();
     const eventTriggered = useRef(false);
     const source = getSource();
+
     useEffect(() => {
       if (!eventTriggered.current) {
         homeViewed();
@@ -55,7 +56,7 @@ const CarouselImage = React.memo(
           {!!webImageAttrs.url && (
             <source
               media="(min-width: 576px)"
-              srcSet={`${webImageAttrs.url}?w=1200&q=75&f=webp`}
+              srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}
             />
           )}
           <Img
@@ -127,7 +128,8 @@ const Carousel = ({
           index={index}
         />
       )),
-    [banners, isInteractive],
+
+    [banners],
   );
 
   const dotButtons = useMemo(
@@ -146,22 +148,20 @@ const Carousel = ({
 
   return (
     <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">
-      <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">
-        {isInteractive ? (
-          <>
-            <div className="overflow-hidden" ref={emblaRef}>
-              <div className="flex">{carouselImages}</div>
-            </div>
-            <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
-              {dotButtons}
-            </div>
-          </>
-        ) : (
-          <div className="overflow-hidden">
-            {<CarouselImage {...banners[0]} index={0} />}
+      {isInteractive ? (
+        <>
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">{carouselImages}</div>
           </div>
-        )}
-      </div>
+          <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
+            {dotButtons}
+          </div>
+        </>
+      ) : (
+        <div className="overflow-hidden">
+          {<CarouselImage {...banners[0]} index={0} />}
+        </div>
+      )}
     </div>
   );
 };

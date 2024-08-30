@@ -94,7 +94,7 @@ const AllOffers = ({ productId }) => {
                 />
                 <div className="flex flex-col gap-1.5">
                   <Heading as="h4" size="sm">
-                    Buy 2 and get 30% OFF
+                    {couponTitle}
                   </Heading>
                   <Text as="span" size="sm" responsive>
                     Applicable on certain products
@@ -114,7 +114,7 @@ const AllOffers = ({ productId }) => {
                   className="cursor-pointer rounded-full border border-dashed border-black-900 bg-white-a700 px-2 py-0.5"
                   responsive
                 >
-                  BUYWOW30
+                  {code}
                 </Text>
               </div>
             </div>

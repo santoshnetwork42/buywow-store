@@ -1,4 +1,4 @@
-import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { fetchBlogs, fetchTopMenu } from "@/lib/wordPressAPIs";
 import Image from "next/image";
 import Link from "next/link";

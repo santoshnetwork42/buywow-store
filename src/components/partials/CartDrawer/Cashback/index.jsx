@@ -14,7 +14,7 @@ const Cashback = React.memo(({ cashbackAmount, amountNeeded, className }) => {
       )}
     >
       <Img
-        src="img_image_2037.png"
+        src="img_cashback.png"
         width={24}
         height={24}
         alt="cashback icon"

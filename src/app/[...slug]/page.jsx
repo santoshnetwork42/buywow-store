@@ -4,13 +4,12 @@ import {
   getPageBySlugAPI,
   getStoreAPI,
 } from "@/lib/appSyncAPIs";
+import handleRedirect from "@/utils/handleRedirect";
 import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
-
-export const revalidate = 900;
 
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
@@ -93,6 +92,9 @@ const RecentlyViewed = dynamic(
   () => import("@/components/blocks/RecentlyViewed"),
 );
 
+export const revalidate = 900;
+export const dynamicParams = false;
+
 const componentMap = {
   ComponentBlocksAnnouncementBar: PageAnnouncementBar,
   ComponentBannerCarousal: Carousal,
@@ -163,7 +165,7 @@ export async function generateStaticParams() {
   };
 
   return pages?.map((page) => {
-    if (page.attributes.slug !== "search") {
+    if (page.attributes.slug !== "search" || page.attributes.slug !== "index") {
       return {
         slug: [pageType[page.attributes.type], page.attributes.slug].filter(
           Boolean,
@@ -446,12 +448,12 @@ export default async function Page({ params }) {
     const { blocks } = pageData || {};
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
-      return notFound();
+      return await handleRedirect(slug.join("/"));
     }
 
     return <>{blocks.map((block, index) => renderBlock(block, index, slug))}</>;
   } catch (error) {
     console.error("Error in Page component:", error);
-    notFound(); // This will trigger the 404 page for any errors
+    return notFound();
   }
 }

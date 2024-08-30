@@ -35,7 +35,7 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
     <div className="flex items-center gap-1">
       <div className="flex items-center gap-[3px]">
         <Img
-          src="img_star_6.svg"
+          src="img_star.svg"
           width={16}
           height={16}
           alt="Rating stars"

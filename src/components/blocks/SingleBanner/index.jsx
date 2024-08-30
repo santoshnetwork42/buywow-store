@@ -40,7 +40,7 @@ const SingleBanner = ({ banner, slug }) => {
         {!!webImageAttrs.url && (
           <source
             media="(min-width: 576px)"
-            srcSet={`${webImageAttrs.url}?w=1800&q=75&f=webp`}
+            srcSet={`${webImageAttrs.url}?w=2500&q=75&f=webp`}
           />
         )}
         <Img

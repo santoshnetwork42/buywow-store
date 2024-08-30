@@ -2,6 +2,7 @@ import awsExport from "@/aws-exports";
 import { AWS_CLIENT_ID, STORE_ID } from "@/config";
 import {
   applyCoupon,
+  createRedirects,
   createReview,
   createUserAddress,
   deleteUserAddress,
@@ -15,6 +16,7 @@ import {
   getOrder,
   getPageBySlug,
   getProductById,
+  getRedirects,
   getReviews,
   getReviewsAnalytics,
   getStore,
@@ -22,6 +24,7 @@ import {
   getUserRewards,
   searchCMSCollectionProducts,
   searchOrders,
+  updateRedirects,
   updateReview,
   updateUser,
   updateUserAddress,
@@ -593,6 +596,64 @@ export const getOrdersAPI = async (userId, token = null, perPage = 10) => {
     return response?.data?.searchOrders;
   } catch (error) {
     errorHandler(error, "Get Orders API");
+    return null;
+  }
+};
+
+export const getRedirectsAPI = async (path) => {
+  try {
+    const response = await client.graphql({
+      query: getRedirects,
+      authMode: "apiKey",
+      variables: {
+        slug: path,
+        storeId: STORE_ID,
+      },
+    });
+
+    return response?.data?.getRedirects || null;
+  } catch (err) {
+    errorHandler(err, "Get Redirects API");
+    return null;
+  }
+};
+
+export const updateRedirectsAPI = async (path, hitCount) => {
+  try {
+    const response = await client.graphql({
+      query: updateRedirects,
+      authMode: "apiKey",
+      variables: {
+        input: {
+          storeId: STORE_ID,
+          slug: path,
+          hitCount: hitCount,
+        },
+      },
+    });
+    return response?.data?.updateRedirects || null;
+  } catch (err) {
+    errorHandler(err, "Update Redirects API");
+    return null;
+  }
+};
+
+export const createRedirectsAPI = async (path) => {
+  try {
+    const response = await client.graphql({
+      query: createRedirects,
+      authMode: "apiKey",
+      variables: {
+        input: {
+          storeId: STORE_ID,
+          slug: path,
+          hitCount: 1,
+        },
+      },
+    });
+    return response?.data?.createRedirects || null;
+  } catch (err) {
+    errorHandler(err, "Create Redirects API");
     return null;
   }
 };

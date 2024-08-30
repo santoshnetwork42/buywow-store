@@ -2,8 +2,7 @@ import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 import { fetchBlogs, fetchFeaturedBlogs, fetchTags } from "@/lib/wordPressAPIs";
-import { notFound } from "next/navigation";
-import React from "react";
+import handleRedirect from "@/utils/handleRedirect";
 
 export const revalidate = 60 * 60 * 24;
 
@@ -28,7 +27,7 @@ export default async function BlogsByTag({ params }) {
   });
 
   if (!blogs || blogs.length === 0) {
-    notFound();
+    return await handleRedirect(`/blog/tag/${slug}`);
   }
 
   const featuredBlogs = await fetchFeaturedBlogs(5);

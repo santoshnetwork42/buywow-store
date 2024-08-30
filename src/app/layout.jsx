@@ -95,7 +95,7 @@ async function RootLayout({ children }) {
                   {headerData?.data && <Header data={headerData} />}
                   <CartDrawer upsellProducts={upsellProducts} />
                   <ToastComponent />
-                  <div className="flex-1">{children}</div>
+                  <div className="flex flex-1 flex-col">{children}</div>
                   {footerData?.data && <Footer data={footerData} />}
                 </div>
                 {AUDITZ && (
