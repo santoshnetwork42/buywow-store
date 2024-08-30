@@ -1,19 +1,84 @@
+"use client";
+
 import SectionHeading from "@/components/common/SectionHeading";
-import { Heading } from "@/components/elements";
+import { Button, Heading } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
-import { getBgColor } from "@/utils/helpers";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
+import { getBgColor, getRecordKey, toDecimal } from "@/utils/helpers";
+import { useCallback, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 
 const UpsellProducts = ({
   title,
   upsellProductsBgColor: bgColor,
   upsellProductItems,
 }) => {
-  if (!Array.isArray(upsellProductItems) || upsellProductItems.length === 0)
-    return null;
-
   const bgColorClass = getBgColor(bgColor);
   const isPaddedColor = bgColor === "LIME" || bgColor === "BLUE";
+
+  const { addToCart } = useCartDispatch();
+  const cartList = useSelector((state) => state?.cart?.data || []);
+  const [packageProducts, setPackageProducts] = useState([]);
+  const [productPrices, setProductPrices] = useState([]);
+
+  const updateProducts = useCallback((productDetail, index) => {
+    setPackageProducts((prev) => {
+      const newArray = [...prev];
+      newArray[index] = productDetail;
+      return newArray;
+    });
+
+    setProductPrices((prevPrices) => {
+      const newPrices = [...prevPrices];
+      if (productDetail.packageProduct) {
+        const { minimumOrderQuantity, price } = productDetail.packageProduct;
+        const qty =
+          typeof minimumOrderQuantity === "number" ? minimumOrderQuantity : 1;
+        newPrices[index] = qty * (price || 0);
+      } else {
+        newPrices[index] = 0;
+      }
+      return newPrices;
+    });
+  }, []);
+
+  const bundleAddToCart = useCallback(() => {
+    packageProducts.forEach((productDetail) => {
+      if (productDetail.packageProduct) {
+        const { packageProduct, selectedVariantId } = productDetail || {};
+        const { hasInventory, minimumOrderQuantity } = packageProduct || {};
+
+        if (hasInventory) {
+          addToCart({
+            ...packageProduct,
+            qty: packageProduct.minimumOrderQuantity || 1,
+            variantId: selectedVariantId,
+          });
+        }
+      }
+    });
+  }, [addToCart, packageProducts]);
+
+  const calculateTotalPrice = useMemo(() => {
+    return productPrices.reduce((sum, price) => sum + price, 0);
+  }, [productPrices]);
+
+  const isBundleAddedToCart = useMemo(() => {
+    return packageProducts.every((productDetail) => {
+      const { packageProduct, selectedVariantId } = productDetail || {};
+      if (!packageProduct) return false;
+      if (cartList.length && packageProduct) {
+        const recordKey = getRecordKey(packageProduct, selectedVariantId);
+        const isExist = cartList.some((cl) => cl.recordKey === recordKey);
+        return isExist;
+      }
+      return false;
+    });
+  }, [cartList, packageProducts]);
+
+  if (!Array.isArray(upsellProductItems) || upsellProductItems.length === 0)
+    return null;
 
   const renderProductItem = (item, index) => {
     const { product, image, text } = item;
@@ -34,6 +99,9 @@ const UpsellProducts = ({
           showBenefitTags={false}
           image={image}
           {...product?.data?.attributes}
+          sendProductDataToParent={(productDetail) =>
+            updateProducts(productDetail, index)
+          }
         />
       </div>
     );
@@ -58,9 +126,18 @@ const UpsellProducts = ({
           renderProductItem(item, index),
         )}
       </div>
-      {/* <Button variant="primary" size="large" className="mt-2">
-        ₹1695 | Add 5 products to cart
-      </Button> */}
+      <Button
+        variant="primary"
+        size="large"
+        className="mt-2"
+        onClick={bundleAddToCart}
+      >
+        {isBundleAddedToCart
+          ? `₹${toDecimal(calculateTotalPrice)} | Bundle Added to Cart`
+          : `₹${toDecimal(calculateTotalPrice)} | Add ${
+              upsellProductItems.length
+            } Products to Cart`}
+      </Button>
     </div>
   );
 };
