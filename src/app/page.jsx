@@ -1,7 +1,7 @@
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import dynamic from "next/dynamic";
 
-export const revalidate = 60;
+export const revalidate = 900;
 
 // Dynamically import components
 import Carousal from "@/components/blocks/Carousel";
@@ -124,7 +124,7 @@ const componentMap = {
 const cachedGetPageBySlugAPI = unstable_cache(
   async (slug) => getPageBySlugAPI(slug),
   ["page-by-slug"],
-  { revalidate: 60 },
+  { revalidate: 900 },
 );
 
 const renderBlock = (block, index, slug) => {

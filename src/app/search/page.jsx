@@ -2,7 +2,7 @@ import SearchResults from "@/components/partials/Others/SearchResult";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import { unstable_cache } from "next/cache";
 
-export const revalidate = 60;
+export const revalidate = 900;
 
 export const metadata = {
   title: "Search",
@@ -13,7 +13,7 @@ export const metadata = {
 const cachedGetPageBySlugAPI = unstable_cache(
   async (slug) => getPageBySlugAPI(slug),
   ["page-by-slug-search"],
-  { revalidate: 60 },
+  { revalidate: 900 },
 );
 
 async function getInitialSearchData() {

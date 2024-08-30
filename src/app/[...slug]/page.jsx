@@ -10,7 +10,7 @@ import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
 
-export const revalidate = 60;
+export const revalidate = 900;
 
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
@@ -130,17 +130,17 @@ const componentMap = {
 const cachedGetCMSPagesAPI = unstable_cache(
   async () => getCMSPagesAPI(),
   ["cms-pages"],
-  { revalidate: 60 },
+  { revalidate: 900 },
 );
 
 const cachedGetPageBySlugAPI = unstable_cache(
   async (slug) => getPageBySlugAPI(slug),
   ["page-by-slug"],
-  { revalidate: 60 },
+  { revalidate: 900 },
 );
 
 const cachedGetStoreAPI = unstable_cache(async () => getStoreAPI(), ["store"], {
-  revalidate: 60,
+  revalidate: 900,
 });
 
 const renderBlock = (block, index, slug) => {
