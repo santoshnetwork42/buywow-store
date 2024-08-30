@@ -15,7 +15,7 @@ const handleRedirect = async (path) => {
     redirect(pageRedirect.redirect.replace("\r", ""));
   }
 
-  if (!!pageRedirect?.slug) {
+  if (pageRedirect?.slug) {
     await updateRedirectsAPI(path, (pageRedirect?.hitCount || 0) + 1);
   }
 
@@ -23,7 +23,8 @@ const handleRedirect = async (path) => {
     await createRedirectsAPI(path);
   }
 
-  notFound();
+  console.log("not found: ", path);
+  return notFound();
 };
 
 export default handleRedirect;

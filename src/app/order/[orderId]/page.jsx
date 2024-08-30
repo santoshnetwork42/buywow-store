@@ -1,7 +1,7 @@
 import OrderContent from "@/components/partials/Order/OrderContent";
 import { STORE_ID } from "@/config";
 import { getOrderByIdAPI } from "@/lib/appSyncAPIs";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 export const metadata = {
@@ -53,7 +53,7 @@ export default async function OrderPage({ params, searchParams }) {
   const initialOrderData = await getOrderData(orderId, paymentId);
 
   if (!initialOrderData) {
-    redirect("/404");
+    notFound();
   }
 
   return (

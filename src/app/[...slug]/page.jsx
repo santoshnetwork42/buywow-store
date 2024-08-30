@@ -93,7 +93,7 @@ const RecentlyViewed = dynamic(
 );
 
 export const revalidate = 900;
-export const dynamicParams = false;
+// export const dynamicParams = false;
 
 const componentMap = {
   ComponentBlocksAnnouncementBar: PageAnnouncementBar,
@@ -448,12 +448,11 @@ export default async function Page({ params }) {
     const { blocks } = pageData || {};
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
-      return await handleRedirect(slug.join("/"));
+      await handleRedirect(`/${slug.join("/")}`);
     }
 
     return <>{blocks.map((block, index) => renderBlock(block, index, slug))}</>;
   } catch (error) {
-    console.error("Error in Page component:", error);
-    return notFound();
+    notFound();
   }
 }

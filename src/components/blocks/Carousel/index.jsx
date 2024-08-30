@@ -7,6 +7,7 @@ import { extractAttributes, getSource } from "@/utils/helpers";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, {
   useCallback,
   useEffect,
@@ -91,7 +92,9 @@ const Carousel = ({
   autoPlayInterval = 3000,
   stopOnInteraction = false,
   carousalItems: banners,
+  isPersistLoading = false,
 }) => {
+  const pathname = usePathname();
   const isInteractive = useIsInteractive();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -144,7 +147,7 @@ const Carousel = ({
     [banners, selectedIndex, scrollTo],
   );
 
-  if (!banners?.length) return null;
+  if (!banners?.length || (isPersistLoading && pathname !== "/")) return null;
 
   return (
     <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">

@@ -6,6 +6,7 @@ import {
   fetchCategories,
   fetchFeaturedBlogs,
 } from "@/lib/wordPressAPIs";
+import handleRedirect from "@/utils/handleRedirect";
 
 export const revalidate = 60 * 60 * 24;
 

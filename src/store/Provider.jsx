@@ -42,6 +42,7 @@ export const Provider = ({ children, headerData }) => {
                   moeText: null,
                 },
               ]}
+              isPersistLoading
             />
           </>
         }
