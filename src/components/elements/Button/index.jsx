@@ -32,6 +32,7 @@ const Button = ({
   const variantClasses = {
     primary: "bg-yellow-900 text-white-a700_01",
     secondary: "bg-white text-black-900",
+
     outlined: "bg-transparent border border-black-900 rounded ",
     none: "",
   };
@@ -72,6 +73,7 @@ const Button = ({
       className={classes}
       onClick={handleClick}
       disabled={disabled || loader}
+      aria-label="Button-Name"
       {...restProps}
     >
       {leftIcon && <span>{leftIcon}</span>}
