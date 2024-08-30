@@ -18,7 +18,7 @@ const AccordionDescription = ({
       alternativeText={alternativeText}
       className="lg:w-[90%]"
     >
-      <ReadMore content={description} maxLength={100} isHtml />
+      <ReadMore content={description} maxLength={200} isHtml />
     </Accordion>
   );
 };

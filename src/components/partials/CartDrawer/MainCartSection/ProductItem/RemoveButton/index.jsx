@@ -1,5 +1,5 @@
-import React from "react";
 import { Button, Img } from "@/components/elements";
+import React from "react";
 
 const RemoveButton = ({ onClick }) => (
   <Button
@@ -10,10 +10,11 @@ const RemoveButton = ({ onClick }) => (
   >
     <div className="aspect-[10/14] w-2.5 md:w-3">
       <Img
-        src="img_thumbs_up.svg"
+        src="img_remove.svg"
         width={10}
         height={14}
         className="aspect-[10/14] h-auto w-full object-contain"
+        isStatic
       />
     </div>
   </Button>

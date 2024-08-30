@@ -4,9 +4,12 @@ import {
   getPageBySlugAPI,
   getStoreAPI,
 } from "@/lib/appSyncAPIs";
+import handleRedirect from "@/utils/handleRedirect";
 import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
+import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
 
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
@@ -49,6 +52,9 @@ const ProductKeyIngredients = dynamic(
 const InfoDropdown = dynamic(
   () => import("@/components/blocks/Accordion/InfoDropdown"),
 );
+const ProductLegalInfo = dynamic(
+  () => import("@/components/blocks/Accordion/ProductLegalInfo"),
+);
 const CollectionLinks = dynamic(
   () => import("@/components/blocks/CollectionLinks"),
 );
@@ -81,12 +87,13 @@ const Breadcrumb = dynamic(() => import("@/components/blocks/Breadcrumb"));
 const VideoSection = dynamic(
   () => import("@/components/partials/Others/VideoSection"),
 );
-const BlogSection = dynamic(
-  () => import("@/components/partials/Others/BlogSection"),
-);
+const BlogSection = dynamic(() => import("@/components/blocks/BlogSection"));
 const RecentlyViewed = dynamic(
   () => import("@/components/blocks/RecentlyViewed"),
 );
+
+export const revalidate = 900;
+export const dynamicParams = false;
 
 const componentMap = {
   ComponentBlocksAnnouncementBar: PageAnnouncementBar,
@@ -105,6 +112,7 @@ const componentMap = {
   ComponentProductProductBenefits: ProductBenefits,
   ComponentProductProductKeyIngredientImages: ProductKeyIngredients,
   ComponentAccordionInfoDropdownSection: InfoDropdown,
+  ComponentProductProductLegalInfo: ProductLegalInfo,
   ComponentBlocksCollectionLinks: CollectionLinks,
   ComponentBlocksPdp: ProductDetailView,
   ComponentBlocksProductCollectionByTab: ProductCollectionSection,
@@ -121,6 +129,22 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
+const cachedGetCMSPagesAPI = unstable_cache(
+  async () => getCMSPagesAPI(),
+  ["cms-pages"],
+  { revalidate: 900 },
+);
+
+const cachedGetPageBySlugAPI = unstable_cache(
+  async (slug) => getPageBySlugAPI(slug),
+  ["page-by-slug"],
+  { revalidate: 900 },
+);
+
+const cachedGetStoreAPI = unstable_cache(async () => getStoreAPI(), ["store"], {
+  revalidate: 900,
+});
+
 const renderBlock = (block, index, slug) => {
   if (!block?.showComponent) return null;
 
@@ -131,7 +155,7 @@ const renderBlock = (block, index, slug) => {
 };
 
 export async function generateStaticParams() {
-  const pages = await getCMSPagesAPI();
+  const pages = await cachedGetCMSPagesAPI();
 
   const pageType = {
     HOME: "",
@@ -140,11 +164,16 @@ export async function generateStaticParams() {
     LANDING: "",
   };
 
-  return pages.map((page) => ({
-    slug: [pageType[page.attributes.type], page.attributes.slug].filter(
-      Boolean,
-    ),
-  }));
+  return pages?.map((page) => {
+    if (page.attributes.slug !== "search" || page.attributes.slug !== "index") {
+      return {
+        slug: [pageType[page.attributes.type], page.attributes.slug].filter(
+          Boolean,
+        ),
+      };
+    }
+    return null;
+  });
 }
 
 async function generateSEOAndJSONLD(params) {
@@ -157,6 +186,7 @@ async function generateSEOAndJSONLD(params) {
     webUrl,
     collectionInfoSection,
     pageFaqs,
+    collectionProducts,
     MEDIA_BASE_URL,
     getPublicImageURL,
     name,
@@ -315,24 +345,49 @@ async function generateSEOAndJSONLD(params) {
     };
   }
 
+  const collectionPageJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    // numberOfItems: searchProducts?.total,
+    itemListOrder: "Unordered",
+    // itemListElement: [
+    //   ...searchProducts?.items?.map((product, index) => {
+    //     const { thumbImage } = getProductMeta(product);
+    //     return {
+    //       "@type": "ListItem",
+    //       position: index + 1,
+    //       name: product?.title,
+    //       url: `https://${MEDIA_BASE_URL}/products/${product?.slug}`,
+    //       image: {
+    //         "@type": "ImageObject",
+    //         contentUrl: getPublicImageURL(thumbImage?.imageKey),
+    //       },
+    //     };
+    //   }),
+    // ],
+  };
+
   return {
     siteName: name,
     url: extractedSlug,
     title: seoComponent?.seoTitle,
     description: removeHtmlTags(seoComponent?.seoDescription),
-    canonical:
-      seoComponent?.seoCanonical ||
-      `${webUrl}/${isProduct ? "products" : "collections"}/${extractedSlug}`,
     metaTitle: seoComponent?.seoMetaTitle,
     noIndex: seoComponent?.noIndex,
     content: collectionInfoSection?.information || "",
     faqsPageJsonLd,
     breadcrumbListJsonLd,
     productJsonLd,
+    alternates: {
+      canonical:
+        seoComponent?.seoCanonical ||
+        `${webUrl}/${isProduct ? "products" : "collections"}/${extractedSlug}`,
+    },
     openGraph: {
       title: seoComponent?.seoTitle,
       description: seoComponent?.seoDescription,
     },
+    collectionPageJsonLd,
   };
 }
 
@@ -344,8 +399,8 @@ export async function generateMetadata({ params }) {
   }
 
   const extractedSlug = slug[slug.length - 1];
-  const pageData = await getPageBySlugAPI(extractedSlug);
-  const store = await getStoreAPI();
+  const pageData = await cachedGetPageBySlugAPI(extractedSlug);
+  const store = await cachedGetStoreAPI();
   const { webUrl, name } = store || {};
 
   const type = slug[0];
@@ -363,6 +418,7 @@ export async function generateMetadata({ params }) {
   const collectionInfoSection = findBlock("ComponentBlocksInfoSection");
   const pdpSection = findBlock("ComponentBlocksPdp");
   const pageFaqs = findBlock("ComponentAccordionFaQsSection");
+  const collectionProducts = findBlock("ComponentBlocksProductCollectionByTab");
 
   const seoData =
     (await generateSEOAndJSONLD({
@@ -374,49 +430,30 @@ export async function generateMetadata({ params }) {
       webUrl,
       collectionInfoSection,
       pageFaqs,
+      collectionProducts,
       MEDIA_BASE_URL,
       getPublicImageURL,
       name,
       removeHtmlTags,
     })) || {};
 
-  // metadata object
-  const metadata = {
-    title: seoData.title,
-    description: seoData.description,
-    openGraph: {
-      title: seoData?.openGraph?.title,
-      description: seoData?.openGraph?.description,
-      url: seoData.url,
-      siteName: seoData.siteName,
-      locale: "en_US",
-      type: "website",
-    },
-    alternates: {
-      canonical: seoData.canonical,
-    },
-  };
-
-  if (seoData.noIndex) {
-    metadata.robots = { index: false };
-  }
-
-  return metadata;
+  return seoData;
 }
 
 export default async function Page({ params }) {
   const { slug } = params;
   try {
-    const pageData = await getPageBySlugAPI(slug[slug.length - 1]);
+    const pageData = await cachedGetPageBySlugAPI(slug[slug.length - 1]);
+
     const { blocks } = pageData || {};
 
     if (!Array.isArray(blocks) || blocks.length === 0) {
-      throw new Error("No blocks found or invalid blocks data");
+      return await handleRedirect(slug.join("/"));
     }
 
     return <>{blocks.map((block, index) => renderBlock(block, index, slug))}</>;
   } catch (error) {
     console.error("Error in Page component:", error);
-    // throw error;
+    return notFound();
   }
 }

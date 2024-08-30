@@ -1,7 +1,6 @@
-import React from "react";
-import Link from "next/link";
-import { Img } from "@/components/elements";
+import LinkClickTracker from "@/components/common/LinkClickTracker";
 import SectionHeading from "@/components/common/SectionHeading";
+import { Img } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
 
@@ -10,19 +9,24 @@ const IngredientItem = ({ ingredient }) => {
   const { url, alternativeText } = extractAttributes(image);
 
   return (
-    <Link
+    <LinkClickTracker
       href={`/collections/${slug}` || "#"}
       className="aspect-[248/76] w-40 cursor-pointer sm:w-48 md:w-56 lg:w-60 xl:w-64"
+      trackingType="SHOP_BY_CLICK"
+      trackingEventPayload={{
+        slug: `/collections/${slug}`,
+        name: alternativeText || slug,
+        parentCategory: "shop by ingredients",
+      }}
     >
       <Img
         src={url}
         width={248}
         height={76}
         alt={alternativeText || `${slug} Image`}
-        isStatic
         className="aspect-[248/76] h-auto w-full object-cover"
       />
-    </Link>
+    </LinkClickTracker>
   );
 };
 

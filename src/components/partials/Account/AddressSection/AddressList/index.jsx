@@ -6,16 +6,26 @@ import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AddressModal from "../AddressModal";
+import { useCartTotal } from "@wow-star/utils";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
-const AddressList = React.memo(({ addressList }) => {
-  const { currentAddress } = useSelector((state) => state.address);
-  const { user } = useSelector((state) => state.user);
+const AddressList = React.memo(({ addressList, variant }) => {
+  const currentAddress = useSelector((state) => state.address?.currentAddress);
+  const user = useSelector((state) => state.user?.user);
   const { updateCurrentAddress, deleteAddress } = useAddressDispatch();
+
+  const { addressSelected } = useEventsDispatch();
+  const { totalPrice } = useCartTotal({
+    paymentType: "PREPAID",
+    isRewardApplied: false,
+  });
 
   const [selectedAddressId, setSelectedAddressId] = useState(null);
 
   useEffect(() => {
     setSelectedAddressId(currentAddress?.id);
+    if (currentAddress?.id)
+      addressSelected(currentAddress, totalPrice, "BUYWOW");
   }, [currentAddress]);
 
   const handleAddressDelete = useCallback(
@@ -59,7 +69,7 @@ const AddressList = React.memo(({ addressList }) => {
                 updateCurrentAddress(item);
               }}
               onDelete={() => handleAddressDelete(item.id)}
-              user={user}
+              variant={variant}
             />
           ))}
       </div>
@@ -68,7 +78,7 @@ const AddressList = React.memo(({ addressList }) => {
 });
 
 const AddressListComponent = React.memo(
-  ({ address, isSelected, onSelect, onDelete, user }) => {
+  ({ address, isSelected, onSelect, onDelete, variant }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleAddressEdit = useCallback((e) => {
@@ -87,7 +97,7 @@ const AddressListComponent = React.memo(
     return (
       <div
         onClick={onSelect}
-        className="flex w-72 cursor-pointer rounded-md border p-4 shadow-sm sm:w-80 lg:w-96"
+        className={`flex cursor-pointer rounded-md border p-2 shadow-sm sm:p-3 lg:p-4 ${variant === "CHECKOUT" ? "w-64 sm:w-72 lg:w-80" : "w-72 sm:w-80 lg:w-96"}`}
       >
         <div className="flex w-full gap-2 md:gap-3">
           <input

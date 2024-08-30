@@ -8,7 +8,7 @@ const CouponModal = ({ isOpen, onClose, appliedCoupon }) => (
     showMobileView={false}
     onClose={onClose}
     showConfetti={true}
-    modalContainerClassName="max-w-[min(400px,88vw)] w-full p-0 rounded overflow-hidden md:w-full"
+    modalContainerClassName="max-w-[min(400px,88vw)] z-10 w-full p-0 rounded overflow-hidden md:w-full"
   >
     <div className="flex items-center justify-between px-5 py-1">
       <div className="flex flex-col gap-1">
@@ -31,6 +31,7 @@ const CouponModal = ({ isOpen, onClose, appliedCoupon }) => (
           height={68}
           alt="Coupon"
           className="aspect-square h-auto w-full"
+          isStatic
         />
       </div>
     </div>

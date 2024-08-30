@@ -3,6 +3,7 @@
 import { Text } from "@/components/elements";
 import FlipClock from "@/components/partials/Others/FlipClock";
 import { useAnnouncementContext } from "@/utils/context/AnnouncementContext";
+import { useIsInteractive } from "@/utils/context/navbar";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -45,6 +46,7 @@ const AnnouncementContent = ({ announcement }) => {
 };
 
 const AnnouncementBar = ({ data }) => {
+  const isInteractive = useIsInteractive();
   const pathname = usePathname();
   const showAnnouncementBar = pathname?.includes("blog");
   const {
@@ -73,7 +75,11 @@ const AnnouncementBar = ({ data }) => {
     return pageAnnouncements || globalAnnouncement || {};
   }, [globalAnnouncement, pageAnnouncements]);
 
-  if (!announcement || Object.keys(announcement).length === 0) {
+  if (
+    !isInteractive ||
+    !announcement ||
+    Object.keys(announcement).length === 0
+  ) {
     return null;
   }
 

@@ -13,7 +13,6 @@ const FeaturedItem = ({ image, text, isWebHorizontal, isInPDP }) => {
         width={isInPDP ? 42 : 60}
         height={isInPDP ? 42 : 60}
         alt={alternativeText || "Feature Icon"}
-        isStatic
         className={`aspect-square w-full rounded-full object-contain ${!isInPDP ? "max-w-10 sm:max-w-12 md:max-w-14 lg:max-w-16" : "max-w-12"}`}
       />
       <Text
@@ -31,7 +30,7 @@ FeaturedItem.displayName = "FeaturedItem";
 
 const FeaturedList = ({
   featuredListItems: features,
-  isWebHorizontal,
+  isWebHorizontal = true,
   isInPDP = false,
 }) => {
   if (!Array.isArray(features) || features.length === 0) return null;

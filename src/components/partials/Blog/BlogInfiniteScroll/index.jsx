@@ -1,7 +1,7 @@
 "use client";
 
 import { LoaderIcon } from "@/assets/svg/icons";
-import { getBlogs } from "@/graphql/appSync/api";
+import { getBlogs } from "@/graphql/api";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import BlogCard from "../BlogCard";

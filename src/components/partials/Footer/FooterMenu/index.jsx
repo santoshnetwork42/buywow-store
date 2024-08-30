@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
-import Link from "next/link";
+import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
-import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import Link from "next/link";
+import React, { useMemo } from "react";
 
 const SubMenuItem = React.memo(({ item }) => {
   if (!item?.title || !item?.slug) return null;

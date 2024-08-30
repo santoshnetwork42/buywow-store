@@ -1,6 +1,6 @@
 import { showToast } from "@/components/common/ToastComponent";
 import { STORE_PREFIX } from "@/config";
-import States from "@/utils/constants/states.json";
+import States from "@/utils/data/states.json";
 import { uploadData } from "aws-amplify/storage";
 import Cookies from "js-cookie";
 import platform from "platform";
@@ -168,9 +168,14 @@ export const checkAffiseValidity = () => {
 export const toDecimal = (price, fixedCount = 2) => {
   let num = parseFloat(price);
   if (isNaN(num)) {
-    num = 0;
+    return "0";
   }
-  return parseFloat(num.toFixed(fixedCount));
+
+  if (Number.isInteger(num)) {
+    return num.toString();
+  }
+
+  return num.toFixed(fixedCount);
 };
 
 export const formatTotalRatings = (totalRatings) => {
@@ -404,3 +409,39 @@ export const uploadImages = async (file, prefix = "wow", level = "public") => {
 export const removeHtmlTags = (input) => {
   return input ? input?.replace(/<\/?[^>]+>/g, "") : input;
 };
+
+export const isValidAddress = (address) => {
+  const { name, city, pinCode, address: streetAddress } = address || {};
+
+  if (!name || !streetAddress || !city || !pinCode) {
+    return false;
+  }
+  return true;
+};
+
+export async function fetchSearchItems(search, limit = 1) {
+  const NEXT_PUBLIC_TTM_CLIENT_URL = process.env.NEXT_PUBLIC_TTM_CLIENT_URL;
+  const NEXT_PUBLIC_TTM_CLIENT_API_KEY =
+    process.env.NEXT_PUBLIC_TTM_CLIENT_API_KEY;
+  const NEXT_PUBLIC_TTM_CLIENT_THRESHOLD =
+    process.env.NEXT_PUBLIC_TTM_CLIENT_THRESHOLD;
+
+  try {
+    const response = await fetch(
+      `${NEXT_PUBLIC_TTM_CLIENT_URL}/search?query=${encodeURIComponent(
+        search,
+      )}&threshold=${NEXT_PUBLIC_TTM_CLIENT_THRESHOLD}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${NEXT_PUBLIC_TTM_CLIENT_API_KEY}`,
+        },
+      },
+    );
+    const data = await response.json();
+
+    return data?.results || [];
+  } catch (error) {
+    console.error("Error fetching items:", error);
+    return [];
+  }
+}

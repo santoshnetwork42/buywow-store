@@ -16,7 +16,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   const [selectedVariant] = useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
-  if (!fetchedProduct || !packageProduct) return null;
+  if (!fetchedProduct?.id || !packageProduct) return null;
 
   const { price, listingPrice } = packageProduct || {};
 
@@ -25,7 +25,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
   return (
     <Link
       href={`/product/${slug}`}
-      className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded bg-white-a700 p-2.5 shadow md:p-3"
+      className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded-md bg-white-a700 p-2.5 shadow md:p-3"
     >
       <div
         className="flex aspect-[74/80] w-[74px] items-center overflow-hidden rounded"
@@ -45,8 +45,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             className="line-clamp-1 text-sm font-semibold"
             responsive
           >
-            <span className="font-normal">Step {index + 1}:</span>
-            {" " + text}
+            {text}
           </Heading>
           <Text as="p" size="sm" className="line-clamp-2" responsive>
             {subText}
@@ -58,13 +57,15 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
               <Heading as="span" size="lg" className="text-base" responsive>
                 ₹{price}
               </Heading>
-              <Text
-                as="span"
-                size="sm"
-                className="font-light capitalize line-through"
-              >
-                ₹{listingPrice}
-              </Text>
+              {listingPrice > price && (
+                <Text
+                  as="span"
+                  size="sm"
+                  className="font-light capitalize line-through"
+                >
+                  ₹{listingPrice}
+                </Text>
+              )}
             </div>
             {discount && (
               <div className="flex h-6 min-w-[62px] items-center justify-center rounded-full bg-lime-50 px-2 text-xs capitalize">
@@ -104,7 +105,7 @@ const UpsellProducts = ({
       default:
         return "bg-white-a700_01";
     }
-  }, [upsellProductsBgColor]);
+  }, [upsellProductsBgColor, isCartUpsell]);
 
   const isPaddedColor =
     upsellProductsBgColor === "LIME" || upsellProductsBgColor === "BLUE";

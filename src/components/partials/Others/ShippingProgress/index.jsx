@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { Text, Img } from "@/components/elements";
+import { Img, Text } from "@/components/elements";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 const ShippingProgress = ({ freeShippingThreshold, cartValue, className }) => {
@@ -77,6 +77,7 @@ const ShippingProgress = ({ freeShippingThreshold, cartValue, className }) => {
             style={{
               left: animate ? `calc(${progressPercentage}% - 4px)` : "0",
             }}
+            isStatic
           />
         </div>
       </div>

@@ -11,9 +11,8 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
   const { price, listingPrice, title, slug, thumbImage } = packageProduct || {};
-  const showStrikePrice = listingPrice && price < listingPrice;
 
-  if (!fetchedProduct || !packageProduct) return null;
+  if (!fetchedProduct?.id || !packageProduct) return null;
 
   return (
     <Link
@@ -25,7 +24,6 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
           width={200}
           imageKey={thumbImage?.imageKey}
           height={56}
-          isStatic
           alt={"Product Image"}
         />
       </div>
@@ -43,7 +41,7 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
             >
               ₹{price}
             </Text>
-            {!!showStrikePrice && (
+            {listingPrice > price && (
               <Text
                 size="sm"
                 as="p"

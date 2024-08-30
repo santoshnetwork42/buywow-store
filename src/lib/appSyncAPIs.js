@@ -2,6 +2,7 @@ import awsExport from "@/aws-exports";
 import { AWS_CLIENT_ID, STORE_ID } from "@/config";
 import {
   applyCoupon,
+  createRedirects,
   createReview,
   createUserAddress,
   deleteUserAddress,
@@ -9,22 +10,27 @@ import {
   findUserAddresses,
   getCartUpsellProducts,
   getCMSPages,
+  getInitialData,
   getLoyalty,
   getNavbarAndFooter,
   getOrder,
   getPageBySlug,
   getProductById,
+  getRedirects,
   getReviews,
   getReviewsAnalytics,
   getStore,
   getUser,
   getUserRewards,
   searchCMSCollectionProducts,
+  searchOrders,
+  updateRedirects,
   updateReview,
   updateUser,
   updateUserAddress,
-  verifyCustomOTP
-} from "@/graphql/appSync/api";
+  validateTransaction,
+  verifyCustomOTP,
+} from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
@@ -92,6 +98,7 @@ export const getPageBySlugAPI = async (slugId) => {
         storeId: STORE_ID,
         pageType: "",
         slug: slugId,
+        collectionDataLimit: 100,
       },
     });
 
@@ -128,16 +135,16 @@ export const getUserAPI = async () => {
 
     return response?.data?.getUser || null;
   } catch (err) {
-    errorHandler(err, "Get User API");
+    errorHandler(err, "Get User API", true);
     return null;
   }
 };
 
-export const getLoyaltyAPI = async ({ user }) => {
+export const getLoyaltyAPI = async ({ userId }) => {
   try {
     const response = await client.graphql({
       query: getLoyalty,
-      variables: { input: { storeId: STORE_ID, userId: user?.id } },
+      variables: { input: { storeId: STORE_ID, userId: userId } },
       authMode: "userPool",
     });
 
@@ -178,15 +185,15 @@ export const verifyCustomOTPAPI = async ({ phone, otp }) => {
   }
 };
 
-export const getOrderByIdAPI = async ({ id }) => {
+export const getOrderByIdAPI = async ({ id, userId }) => {
   try {
-    const { data } = await client.graphql({
+    const response = await client.graphql({
       query: getOrder,
       variables: { id },
-      authMode: "apiKey",
+      authMode: userId ? "userPool" : "apiKey",
     });
 
-    return data;
+    return response?.data?.getOrder || null;
   } catch (error) {
     errorHandler(error, "Get Order By Id API");
     return false;
@@ -526,5 +533,127 @@ export const updateUserAPI = async (user) => {
   } catch (error) {
     errorHandler("Error Updating User", error);
     return error;
+  }
+};
+
+export const validateTransactionAPI = async (orderId, paymentId) => {
+  try {
+    const response = await client.graphql({
+      query: validateTransaction,
+      variables: { orderId, razorpayPaymentId: paymentId },
+      authMode: "apiKey",
+    });
+
+    return response?.data?.validateTransaction || null;
+  } catch (error) {
+    errorHandler(error, "Validate Transaction API");
+    return null;
+  }
+};
+
+export const getInitialDataAPI = async (storeId, deviceType) => {
+  try {
+    const response = await client.graphql({
+      query: getInitialData,
+      variables: {
+        storeId,
+        deviceType,
+        getStoreSettingInput: {
+          storeId: storeId,
+          deviceType: deviceType,
+        },
+        shippingTierFilter: {
+          storeId: { eq: storeId },
+        },
+      },
+      authMode: "apiKey",
+    });
+
+    return response;
+  } catch (error) {
+    errorHandler("Error Updating User", error);
+    return error;
+  }
+};
+
+export const getOrdersAPI = async (userId, token = null, perPage = 10) => {
+  try {
+    const response = await client.graphql({
+      query: searchOrders,
+      variables: {
+        filter: {
+          userId: { eq: userId },
+          storeId: { eq: STORE_ID },
+          and: [{ status: { ne: "TIMEDOUT" } }, { status: { ne: "PENDING" } }],
+        },
+        sort: [{ field: "orderDate", direction: "desc" }],
+        limit: perPage,
+        nextToken: token,
+      },
+      authMode: "userPool",
+    });
+
+    return response?.data?.searchOrders;
+  } catch (error) {
+    errorHandler(error, "Get Orders API");
+    return null;
+  }
+};
+
+export const getRedirectsAPI = async (path) => {
+  try {
+    const response = await client.graphql({
+      query: getRedirects,
+      authMode: "apiKey",
+      variables: {
+        slug: path,
+        storeId: STORE_ID,
+      },
+    });
+
+    return response?.data?.getRedirects || null;
+  } catch (err) {
+    errorHandler(err, "Get Redirects API");
+    return null;
+  }
+};
+
+export const updateRedirectsAPI = async (path, hitCount) => {
+  try {
+    const response = await client.graphql({
+      query: updateRedirects,
+      authMode: "apiKey",
+      variables: {
+        input: {
+          storeId: STORE_ID,
+          slug: path,
+          hitCount: hitCount,
+        },
+      },
+    });
+    return response?.data?.updateRedirects || null;
+  } catch (err) {
+    errorHandler(err, "Update Redirects API");
+    return null;
+  }
+};
+
+export const createRedirectsAPI = async (path) => {
+  try {
+    const response = await client.graphql({
+      query: createRedirects,
+      authMode: "apiKey",
+      variables: {
+        input: {
+          storeId: STORE_ID,
+          slug: path,
+          hitCount: 1,
+        },
+      },
+    });
+    return response?.data?.createRedirects || null;
+  } catch (err) {
+    errorHandler(err, "Create Redirects API");
+    return null;
   }
 };

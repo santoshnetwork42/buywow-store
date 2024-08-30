@@ -11,17 +11,21 @@ export const useUserDispatch = () => {
     });
   };
 
-  const setCustomUser = (payload) => {
+  const setCustomUser = (phone) => {
     dispatch({
       type: userSagaActions.SET_CUSTOM_USER,
-      payload,
+      payload: {
+        phone,
+      },
     });
   };
 
-  const setUser = (payload) => {
+  const setUser = (user) => {
     dispatch({
       type: userSagaActions.SET_USER,
-      payload,
+      payload: {
+        user,
+      },
     });
   };
 

@@ -1,7 +1,8 @@
+import { CouponAndOffer, OfferTicket } from "@/assets/svg/icons";
 import { Heading, Img, Text } from "@/components/elements";
+import Accordion from "@/components/features/Accordion";
 import { copyText, toDecimal } from "@/utils/helpers";
-import { useFreebie } from "@wow-star/utils";
-import React from "react";
+import { useFeaturedCoupons, useFreebie } from "@wow-star/utils";
 
 const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   const freeProduct = useFreebie();
@@ -11,7 +12,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   if (!bestCoupon || !hasInventory) return null;
 
   return (
-    <div className="flex justify-between rounded bg-gray-50 px-3 pb-2 pt-2.5 sm:w-[60%] md:w-full xl:w-[60%]">
+    <div className="flex h-fit w-full justify-between rounded bg-gray-50 px-3 pb-2 pt-2.5 sm:max-w-[60%] md:max-w-full xl:max-w-[60%]">
       <div className="flex gap-2">
         <div className="aspect-square w-6 md:w-7">
           <Img
@@ -19,6 +20,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
             width={28}
             height={28}
             className="aspect-square h-auto w-full object-contain"
+            isStatic
           />
         </div>
         <div className="flex flex-col justify-center gap-1">
@@ -58,22 +60,81 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   );
 };
 
-const AllOffers = ({ bestCoupon }) => {
+const AllOffers = ({ productId }) => {
+  const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, productId);
+
+  if (pdpFeaturedCoupons?.length === 0) return null;
   return (
-    <div className="flex flex-1 rounded bg-blue-50 px-3 py-2.5">All Offers</div>
+    <Accordion
+      className="my-auto flex h-fit w-full shrink-0 rounded bg-blue-50 px-3 sm:w-[45%] md:w-full xl:w-[45%]"
+      header={
+        <div className="flex items-center gap-2 py-2.5 md:py-3">
+          <CouponAndOffer className="size-6 md:size-7" size={28} />
+          <Heading as="h4" size="base" className="text-sm" responsive>
+            {pdpFeaturedCoupons?.length} Offers Available
+          </Heading>
+        </div>
+      }
+      accordionMainContainerClassName="!my-0 !px-0"
+    >
+      <div className="flex flex-col pb-1">
+        {[1, 2]?.map((item, index) => {
+          const { coupon } = item || {};
+          const { couponTitle, code } = coupon || {};
+          return (
+            <div
+              key={index}
+              className="flex items-center justify-between gap-2 border-t-[0.25px] border-black-900 py-1.5"
+            >
+              <div className="flex gap-2">
+                <OfferTicket
+                  className="mt-0.5 size-4 shrink-0"
+                  size={16}
+                  color="#000000"
+                />
+                <div className="flex flex-col gap-1.5">
+                  <Heading as="h4" size="sm">
+                    {couponTitle}
+                  </Heading>
+                  <Text as="span" size="sm" responsive>
+                    Applicable on certain products
+                  </Text>
+                </div>
+              </div>
+              <div className="flex flex-col place-items-end gap-1">
+                <Text as="span" size="sm" className="font-light" responsive>
+                  Use code
+                </Text>
+                <Text
+                  as="span"
+                  size="sm"
+                  onClick={() =>
+                    copyText("BUYWOW30", `Coupon code copied: BUYWOW30`)
+                  }
+                  className="cursor-pointer rounded-full border border-dashed border-black-900 bg-white-a700 px-2 py-0.5"
+                  responsive
+                >
+                  {code}
+                </Text>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </Accordion>
   );
 };
 
-const OffersAndDiscounts = ({ bestCoupon, price, hasInventory }) => {
+const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, productId }) => {
   if (!bestCoupon || !hasInventory) return null;
   return (
-    <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-2.5 md:flex-col md:items-stretch lg:gap-3 xl:flex-row xl:items-center">
+    <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:gap-2.5 md:flex-col lg:gap-3 xl:flex-row">
       <BestPriceDisplay
         bestCoupon={bestCoupon}
         price={price}
         hasInventory={hasInventory}
       />
-      {/* <AllOffers bestCoupon={bestCoupon} /> */}
+      <AllOffers productId={productId} />
     </div>
   );
 };

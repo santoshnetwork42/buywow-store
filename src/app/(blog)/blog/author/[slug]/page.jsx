@@ -1,6 +1,7 @@
 import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
+import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 import {
   fetchAuthor,
   fetchAuthors,
@@ -8,9 +9,6 @@ import {
   fetchFeaturedBlogs,
 } from "@/lib/wordPressAPIs";
 import { notFound } from "next/navigation";
-import React from "react";
-import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
-import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 export const revalidate = 60 * 60 * 24;
 
@@ -36,7 +34,7 @@ export async function generateMetadata({ params }) {
       description:
         "Discover the ultimate destination for expert skin & hair care tips, along with a curated selection of products for you. Explore our blog",
       canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/author/${author?.slug}`,
-      image: getPublicImageURL("/images/logo.png"),
+      image: "/images/logo.png",
     };
   }
 }

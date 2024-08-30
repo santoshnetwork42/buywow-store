@@ -1,6 +1,6 @@
-import React from "react";
-import { Text, Heading } from "@/components/elements";
+import { Heading, Text } from "@/components/elements";
 import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
+import React from "react";
 
 const ProductPricing = ({
   price,
@@ -9,7 +9,6 @@ const ProductPricing = ({
   isFreeProduct,
   slug,
 }) => {
-  const showStrikePrice = listingPrice && price < listingPrice;
   const discountPercentage = getDiscountPercentage(price, listingPrice);
 
   if (cartItemType === "AUTO_FREE_PRODUCT_DISABLED") return null;
@@ -18,7 +17,12 @@ const ProductPricing = ({
     return (
       <div className="flex items-center gap-1.5 md:gap-2">
         {price > 0 && slug !== "gift" && (
-          <Text as="span" size="sm" className="line-through" responsive>
+          <Text
+            as="span"
+            size="sm"
+            className="text-gray-600/75 line-through"
+            responsive
+          >
             ₹{toDecimal(price)}
           </Text>
         )}
@@ -39,8 +43,13 @@ const ProductPricing = ({
       <Heading as="h4" size="base" className="text-sm" responsive>
         ₹{toDecimal(price)}
       </Heading>
-      {!!showStrikePrice && (
-        <Text as="span" size="sm" className="line-through" responsive>
+      {listingPrice > price && (
+        <Text
+          as="span"
+          size="sm"
+          className="text-gray-600/75 line-through"
+          responsive
+        >
           ₹{toDecimal(listingPrice)}
         </Text>
       )}

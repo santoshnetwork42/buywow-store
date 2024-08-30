@@ -1,4 +1,4 @@
-import { createShoppingCart, manageShoppingCart } from "@/graphql/appSync/api";
+import { createShoppingCart, manageShoppingCart } from "@/graphql/api";
 import { generateClient } from "aws-amplify/api";
 
 const client = generateClient();

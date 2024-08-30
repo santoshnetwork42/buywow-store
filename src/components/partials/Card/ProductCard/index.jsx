@@ -35,11 +35,12 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
     <div className="flex items-center gap-1">
       <div className="flex items-center gap-[3px]">
         <Img
-          src="img_star_6.svg"
+          src="img_star.svg"
           width={16}
           height={16}
           alt="Rating stars"
           className="aspect-square w-[12px] sm:w-[14px] lg:w-[16px]"
+          isStatic
         />
         <Text as="span" size="sm" className="capitalize" responsive>
           {toDecimal(rating, 1)}
@@ -115,11 +116,11 @@ const ProductCard = memo(
 
     const { url } = extractAttributes(image);
 
-    if (!fetchedProduct || !packageProduct) return null;
+    if (!fetchedProduct?.id || !packageProduct) return null;
 
     return (
       <Link
-        href={slug ? `/products/${slug}` : "#"}
+        href={`/products/${slug || packageProduct?.slug || "#"}`}
         className={twMerge(
           `flex h-full flex-col justify-start gap-2 self-stretch rounded-lg p-[5px] shadow-xs md:gap-3 md:p-2`,
           className,
@@ -127,7 +128,7 @@ const ProductCard = memo(
       >
         <div
           className="relative overflow-hidden rounded-lg"
-          style={{ backgroundColor: imageBgColor || "#FFFFFF" }}
+          style={{ backgroundColor: imageBgColor || "#F7F7E7" }}
         >
           <ProductThumbnail
             width={500}
@@ -135,7 +136,6 @@ const ProductCard = memo(
             url={url}
             imageKey={thumbImage?.imageKey}
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
-            isStatic
             alt={title || "Product image"}
           />
           {!!promotionTag?.data &&
@@ -166,9 +166,9 @@ const ProductCard = memo(
           )}
         </div>
 
-        {!!showBenefitTags && !!productBenefitTags?.data?.length && (
+        {!!showBenefitTags && productBenefitTags?.data?.length > 0 && (
           <div className="flex max-h-12 flex-wrap gap-[4px] overflow-hidden md:max-h-[52px]">
-            {productBenefitTags?.data?.map((benefitTag, index) => (
+            {productBenefitTags?.data?.slice(0, 2).map((benefitTag, index) => (
               <BenefitTag key={index} {...benefitTag.attributes} />
             ))}
           </div>

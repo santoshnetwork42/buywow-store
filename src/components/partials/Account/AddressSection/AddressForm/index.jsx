@@ -1,14 +1,13 @@
 import { Button } from "@/components/elements";
-import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
-import { addPhonePrefix } from "@/utils/helpers";
+import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AddressFormFields from "./AddressFormFields";
 
-const AddressForm = React.memo(() => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
-  const { isLoading } = useSelector((state) => state.address);
+const AddressForm = React.memo(({ className }) => {
+  const { createAddress } = useAddressDispatch();
+  const user = useSelector((state) => state.user?.user);
+  const isLoading = useSelector((state) => state.address?.isLoading);
 
   const [address, setAddress] = useState({
     email: "",
@@ -32,37 +31,32 @@ const AddressForm = React.memo(() => {
         return;
       }
 
-      dispatch({
-        type: addressSagaActions.CREATE_ADDRESS,
-        payload: {
-          ...address,
-          userID: user?.id || null,
-          phone: addPhonePrefix(address?.phone),
-          country: address?.country || "IN",
-        },
-      });
+      createAddress(address, user?.id);
     },
-    [address, user, dispatch, checkFormValidity],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [address, user, checkFormValidity],
   );
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form
+      onSubmit={handleSubmit}
+      className={`flex flex-col gap-4 ${className}`}
+    >
       <AddressFormFields
         address={address}
         setAddress={setAddress}
         addressErrors={addressErrors}
         setAddressErrors={setAddressErrors}
       />
-      <div className="flex justify-center">
-        <Button
-          type="submit"
-          variant="primary"
-          className="w-full gap-2 p-2 px-4 text-xl"
-          loader={isLoading}
-        >
-          Add Address
-        </Button>
-      </div>
+      <Button
+        type="submit"
+        variant="primary"
+        size="medium"
+        className="h-[36px] w-full sm:h-[36px] sm:w-1/2 md:h-[44px] lg:h-[44px]"
+        loader={isLoading}
+      >
+        Add Address
+      </Button>
     </form>
   );
 });

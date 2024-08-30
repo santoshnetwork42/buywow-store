@@ -1,65 +1,64 @@
 "use client";
 
 import { Button, Heading, Text } from "@/components/elements";
-import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
+import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import AddressForm from "./AddressForm";
 import AddressList from "./AddressList";
 import AddressModal from "./AddressModal";
 
+const AddressSkeleton = () => (
+  <div className="animate-pulse space-y-4">
+    <div className="h-10 w-full rounded-md bg-gray-200"></div>
+    <div className="h-40 w-full rounded-md bg-gray-200"></div>
+    <div className="h-4 w-1/2 rounded bg-gray-200"></div>
+  </div>
+);
+
 const AddressSection = React.memo(({ variant }) => {
-  const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
-  const { addressList } = useSelector((state) => state.address);
+  const { getAddressList } = useAddressDispatch();
+  const user = useSelector((state) => state.user?.user);
+  const addressState = useSelector((state) => state.address);
+  const { addressList, initialLoading } = addressState;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [action, setAction] = useState(null);
 
   useEffect(() => {
     if (user?.id) {
-      dispatch({
-        type: addressSagaActions.GET_ADDRESS_LIST,
-        payload: { id: user.id },
-      });
+      getAddressList(user?.id);
     }
-  }, [user, dispatch]);
-
-  useEffect(() => {
-    if (Array.isArray(addressList) && addressList.length === 0) {
-      setAction("CREATE");
-    }
-  }, [addressList]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const handleAddNewAddress = useCallback(() => {
     setIsModalOpen(true);
-    setAction("CREATE");
   }, []);
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
   }, []);
 
+  if (initialLoading) {
+    return <AddressSkeleton />;
+  }
+
   return (
-    <div className="flex w-full flex-col gap-4 py-1">
+    <div
+      className={`flex w-full flex-col py-1 ${variant === "CHECKOUT" ? "gap-3 md:gap-4" : "gap-4"}`}
+    >
       <div
-        className={`flex items-center justify-between ${variant === "CHECKOUT" && "rounded-md bg-blue-50 px-4 py-1.5"}`}
+        className={`flex min-h-10 items-center justify-between rounded-md bg-blue-50 px-4 py-1.5 md:min-h-11`}
       >
-        <Heading
-          as="h3"
-          size={variant === "CHECKOUT" ? "xl" : "2xl"}
-          responsive
-        >
+        <Heading as="h3" size="xl" className="font-medium" responsive>
           Address
         </Heading>
-        {addressList?.length > 0 && (
+        {(addressList?.length > 0 || variant === "CHECKOUT") && (
           <Button
-            variant={variant === "CHECKOUT" ? "none" : "outlined"}
-            size={variant === "CHECKOUT" ? "small" : "medium"}
+            variant="none"
+            size="small"
             onClick={handleAddNewAddress}
-            className={
-              variant === "CHECKOUT" ? "rounded-none px-0 underline" : ""
-            }
+            className={`rounded-none underline ${addressList?.length === 0 ? "md:hidden" : ""}`}
           >
             + New Address
           </Button>
@@ -68,18 +67,30 @@ const AddressSection = React.memo(({ variant }) => {
 
       {addressList?.length > 0 ? (
         <>
-          <AddressList addressList={addressList} />
+          <AddressList addressList={addressList} variant={variant} />
           {isModalOpen && (
             <AddressModal
               isOpen={isModalOpen}
               onClose={handleCloseModal}
               enableOutsideClick={true}
-              action={action}
+              action="CREATE"
             />
           )}
         </>
       ) : (
-        <AddressForm />
+        <>
+          <AddressForm
+            className={variant === "CHECKOUT" ? "hidden md:flex" : ""}
+          />
+          {isModalOpen && (
+            <AddressModal
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              enableOutsideClick={true}
+              action="CREATE"
+            />
+          )}
+        </>
       )}
       {variant !== "CHECKOUT" && (
         <Text as="p" size="sm" className="mt-2">

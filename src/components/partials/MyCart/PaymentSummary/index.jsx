@@ -1,11 +1,10 @@
 "use client";
 // components/MyCart/PaymentSummary.jsx
-import PasswordLess from "@/components/common/Passwordless";
 import { Button, Heading, Img, Text } from "@/components/elements";
-import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useGuestCheckout } from "@/utils/context/navbar";
 import { useRouter } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function PaymentSummary({
   cashback,
@@ -19,11 +18,11 @@ export default function PaymentSummary({
   grandTotal,
   totalSaved,
 }) {
-  const dispatch = useDispatch();
   const router = useRouter();
 
-  const { user } = useSelector((state) => state.user);
-  const { customUser } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user?.user);
+  const customUser = useSelector((state) => state.user?.customUser);
+  const { handlePasswordLessModal } = useModalDispatch();
   const guestCheckout = useGuestCheckout();
 
   const showStrikePrice = totalListingPrice && totalPrice < totalListingPrice;
@@ -31,21 +30,10 @@ export default function PaymentSummary({
   const handleCheckoutClick = async () => {
     //check if user or custom user exists
     try {
-      if (
-        (user && user.id) ||
-        (customUser && customUser.phone) ||
-        guestCheckout
-      ) {
+      if (user?.id || customUser?.phone || guestCheckout) {
         router.push("/checkout");
       } else {
-        dispatch({
-          type: modalSagaActions.SET_PASSWORDLESS_MODAL,
-          payload: {
-            isPasswordLessOpen: true,
-            customLogin: true,
-            redirectTo: "/checkout",
-          },
-        });
+        handlePasswordLessModal(true, true, "/checkout");
       }
     } catch (error) {
       console.log("error :>> ", error);
@@ -56,11 +44,12 @@ export default function PaymentSummary({
     <div className="flex flex-col gap-4">
       <div className="flex w-[calc(100%+24px)] flex-1 -translate-x-3 items-center justify-center gap-0.5 bg-blue-50 px-2 py-1.5 shadow-sm sm:w-[calc(100%+40px)] sm:-translate-x-5 md:w-full md:translate-x-0 md:rounded-lg">
         <Img
-          src="img_image_2037.png"
+          src="img_cashback.png"
           width={24}
           height={24}
           alt="cashback icon"
           className="aspect-square w-[24px] object-cover"
+          isStatic
         />
         <Text size="base" as="p">
           You will earn {cashback} cashback with this order.
@@ -139,7 +128,6 @@ export default function PaymentSummary({
               Checkout
             </Heading>
           </Button>
-          <PasswordLess />
           <Text size="base" as="p" className="text-sm" responsive>
             Estimated delivery within 3-5 days
           </Text>

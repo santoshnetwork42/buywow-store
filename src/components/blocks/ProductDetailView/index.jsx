@@ -7,6 +7,7 @@ import ProductDetailViewBlocks from "@/components/partials/Product/PDP/ProductDe
 import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import VariantSelector from "@/components/partials/Product/PDP/VariantSelector";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
 import { extractAttributes } from "@/utils/helpers";
 import {
@@ -14,7 +15,7 @@ import {
   useProductCoupons,
   useProductVariantGroups,
 } from "@wow-star/utils";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const ProductDetailView = ({ product }) => {
   const {
@@ -30,10 +31,28 @@ const ProductDetailView = ({ product }) => {
     useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
+  const { viewItem } = useEventsDispatch();
+  const viewItemEventTriggered = useRef(false);
 
   useEffect(() => {
     addRecentlyViewedProduct(extractAttributes(product?.pdpProduct));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product]);
+
+  useEffect(() => {
+    if (fetchedProduct && !viewItemEventTriggered.current) {
+      viewItem({
+        ...fetchedProduct,
+        section: { id: "product-detail", name: "Product Detail" },
+      });
+      viewItemEventTriggered.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchedProduct]);
+
+  if (!fetchedProduct?.id) {
+    return <div>Product not found</div>;
+  }
 
   const {
     title,
@@ -52,12 +71,8 @@ const ProductDetailView = ({ product }) => {
     ? [...images.items].sort((a, b) => a.position - b.position)
     : [];
 
-  if (!fetchedProduct) {
-    return <div>Product not found</div>;
-  }
-
   return (
-    <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[calc(52%-2.5rem)_48%] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[calc(52%-3rem)_48%] lg:gap-x-12 xl:grid-cols-[calc(52%-4rem)_48%] xl:gap-x-16">
+    <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
       <div className="relative order-2 md:order-1 md:row-span-3">
         <ProductImageSection
           imageList={imageList}
@@ -88,6 +103,7 @@ const ProductDetailView = ({ product }) => {
           bestCoupon={bestCoupon}
           price={price}
           hasInventory={hasInventory}
+          productId={packageProduct?.id}
         />
         <VariantSelector
           variantGroups={variantGroup}

@@ -1,16 +1,21 @@
+import LinkClickTracker from "@/components/common/LinkClickTracker";
 import { Text } from "@/components/elements";
-import Link from "next/link";
 import React from "react";
 
 const MenuItem = ({ item, linkPrefix }) => (
-  <Link
+  <LinkClickTracker
     href={`/${linkPrefix ? linkPrefix + "/" : ""}${item?.slug}`}
     className="self-center"
+    trackingType="TOP_NAVBAR_CLICKED"
+    trackingEventPayload={{
+      slug: item?.slug,
+      name: item?.title,
+    }}
   >
     <Text size="sm" as="p" className="truncate capitalize" responsive>
       {item?.title}
     </Text>
-  </Link>
+  </LinkClickTracker>
 );
 
 MenuItem.displayName = "MenuItem";

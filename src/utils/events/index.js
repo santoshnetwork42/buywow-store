@@ -1,12 +1,18 @@
 import { STORE_PREFIX } from "@/config";
-import { addPhonePrefix, getFirstVariant, getSource } from "@/utils/helpers";
+import {
+  addPhonePrefix,
+  getFirstVariant,
+  getSource,
+  removePhonePrefix,
+} from "@/utils/helpers";
 import {
   getCouponDiscount,
   getProductInventory,
   getProductMeta,
   getProductPrice,
 } from "@wow-star/utils";
-import { v4 as uuid } from "uuid";
+import Cookies from "js-cookie";
+import { v4 as uuidv4 } from "uuid";
 import { getPublicImageURL } from "../helpers/img-loader";
 
 export const getFbpCookie = () => {
@@ -25,14 +31,15 @@ export const getFbpCookie = () => {
 };
 
 export const userMapper = (userData, address) => {
+  let [firstNamePart, ...lastNameParts] = address?.name?.split(" ") || [];
   const {
     city,
     state,
     country,
     pinCode = address?.pincode,
     phone: aP,
-    firstName: aF = address?.first_name,
-    lastName: aL = address?.last_name,
+    firstName: aF = address?.first_name || firstNamePart,
+    lastName: aL = address?.last_name || lastNameParts?.join(" "),
     email: aE,
     userId = address?.userId,
   } = address || {};
@@ -109,11 +116,14 @@ export const itemMapper = (
     "Product ID": id,
     "Variant ID": variantId,
     "Product Subcategory": subCategory?.name || null,
-    "Product Title": product.title,
-    SKU: product.sku,
-    "Image URL": getPublicImageURL(thumbImage?.imageKey),
-    "Product Category": category?.name,
-    "Product URL": `${currentURL}/products/${product.slug}`,
+    "Product Title": product?.title,
+    SKU: product?.sku,
+    "Image URL": getPublicImageURL({
+      key: thumbImage?.imageKey,
+      addPrefix: true,
+    }),
+    "Product Category": category?.name || "All products",
+    "Product URL": `${currentURL}/products/${product?.slug}`,
     "Vendor name": vendor,
     "Product Price": price,
     Currency: "INR",
@@ -129,7 +139,7 @@ export const itemMapper = (
     value: price * qty,
     mrpValue: listingPrice * qty,
     vercel: {
-      content_category: category?.name,
+      content_category: category?.name || "All products",
       content_subcategory: subCategory?.name,
       content_ids: sku,
       content_name: title,
@@ -160,7 +170,7 @@ export const itemMapper = (
       },
     },
     pixel: {
-      content_category: category?.name,
+      content_category: category?.name || "All products",
       content_subcategory: subCategory?.name,
       content_ids: [sku],
       content_name: title,
@@ -169,7 +179,7 @@ export const itemMapper = (
       num_items: 1,
       value: price,
       price: price,
-      external_id: user?.id || uuid(),
+      external_id: user?.id || uuidv4(),
       fbc: getFbpCookie(),
     },
     pinpoint: {
@@ -177,16 +187,16 @@ export const itemMapper = (
       item_name: title,
       affiliation: "",
       coupon: coupon?.code || "",
-      discount: (listingPrice - price).toString(),
+      discount: (listingPrice - price)?.toString(),
       item_brand: vendor,
-      item_category: category?.name || "",
+      item_category: category?.name || "All products",
       item_category2: subCategory?.name || "",
       item_list_id: section?.id || "",
       item_list_name: section?.name || "",
       item_variant: variantId,
       location_id: "",
-      price: price.toString(),
-      quantity: qty.toString(),
+      price: price?.toString(),
+      quantity: qty?.toString(),
     },
     ga: [
       {
@@ -197,7 +207,7 @@ export const itemMapper = (
         discount: listingPrice - price,
         index: 0,
         item_brand: vendor,
-        item_category: category?.name || "",
+        item_category: category?.name || "All products",
         item_category2: subCategory?.name || "",
         item_list_id: section?.id || "",
         item_list_name: section?.name || "",
@@ -227,7 +237,7 @@ export const orderMapper = (
     value: 0,
   };
 
-  const mappings = products.reduce(
+  const mappings = products?.reduce(
     ({ value, pinpoint, ga, pixel, vercel }, product, index) => {
       const {
         ga: [itemNew],
@@ -253,7 +263,7 @@ export const orderMapper = (
           content_ids: [...pixel.content_ids, ...pixelNew.content_ids],
           num_items: pixel.num_items + pixelNew.num_items,
           value: pixel.value + pixelNew.value,
-          external_id: user?.id || uuid(),
+          external_id: user?.id || uuidv4(),
           fbc: getFbpCookie(),
           coupon_code: coupon?.code || "",
         },
@@ -311,7 +321,7 @@ export const analyticsMetaDataMapper = () => {
       queryParams: location.search,
     },
     utmParameters: getUTMParameters(),
-    sessionId: Cookie.get(`${STORE_PREFIX}_session_id`),
+    sessionId: Cookies.get(`${STORE_PREFIX}_session_id`),
     timestamp: new Date().toISOString(),
   };
 };
@@ -320,6 +330,10 @@ export const trackClickStream = async (payload) => {
   try {
     const NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL =
       process.env.NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL;
+
+    if (!NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL) {
+      return;
+    }
 
     const response = await fetch(NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL, {
       method: "POST",
@@ -428,7 +442,10 @@ export const moEngagedOrderMapper = (
         checkoutSource,
       );
       const { thumbImage } = getProductMeta(product);
-      const url = getPublicImageURL(thumbImage?.imageKey);
+      const url = getPublicImageURL({
+        key: thumbImage?.imageKey,
+        addPrefix: true,
+      });
       totalDiscount = totalDiscount + mrpValue - valueNew;
       return {
         "Total Price": Total_Price + valueNew,
@@ -455,7 +472,10 @@ export const moEngagedOrderMapper = (
           ...Product_Subcategory,
           product?.subCategory?.name,
         ],
-        "Product Category": [...Product_Category, product?.category?.name],
+        "Product Category": [
+          ...Product_Category,
+          product?.category?.name || "All products",
+        ],
         "Product Range": null,
       };
     },
@@ -491,7 +511,7 @@ export const moEngagedOrderMapper = (
       "Order ID": order?.code,
       "Order Date": new Date().toISOString(),
       "Payment Mode": paymentMethod,
-      "Payment Status": paymentMethod === "COD" ? "Unpaid" : "Paid",
+      "Payment Status": paymentMethod === "PREPAID" ? "Paid" : "Unpaid",
     },
     cartViewed: {
       ...basicAttributes,
@@ -502,4 +522,110 @@ export const moEngagedOrderMapper = (
       "Payment Status": null,
     },
   };
+};
+
+export const moEngageItemPurchasedMapper = (
+  products,
+  coupon,
+  paymentMethod,
+  order,
+  isFirstTimeUser,
+  checkoutSource = "BUYWOW",
+) => {
+  const { discount: couponTotal } = getCouponDiscount(coupon, products) || {};
+  let currentURL = window.location.href.split("/").slice(0, 3).join("/");
+  const source = checkoutSource === "GOKWIK" ? "GoKwik" : getSource();
+  const basicAttributes = {
+    Currency: "INR",
+    Source: source,
+    "Cart URL": `${currentURL}/cart`,
+    "Coupon Applied": coupon?.code,
+    "First Time User": isFirstTimeUser,
+  };
+  const events = products.map((product) => {
+    const { value: valueNew, mrpValue } = itemMapper(
+      product,
+      coupon,
+      null,
+      checkoutSource,
+    );
+    const { thumbImage } = getProductMeta(product);
+    const url = getPublicImageURL(thumbImage?.imageKey);
+    const totalDiscount = mrpValue - valueNew;
+    const eventAttributes = {
+      ...basicAttributes,
+      "Total Discount": totalDiscount || 0,
+      "Total Price": valueNew,
+      "Vendor Name": product.vendor,
+      "Product Title": product.title,
+      SKU: product.sku,
+      "Image URL": url,
+      "Total Quantity": product.qty || 0,
+      "Product ID": product.id,
+      "Product Price": product.price,
+      "Product Quantity": product.qty,
+      "Variant ID": product.variantId ? product.variantId : product.id,
+      "Product URL": `${currentURL}/products/${product.slug}`,
+      "Total MRP": mrpValue,
+      "Product Subcategory": product.subCategory?.name,
+      "Product Category": product.category?.name || "All products",
+      "Product Range": null,
+    };
+
+    return {
+      ...eventAttributes,
+      "Order ID": order?.code,
+      "Order Date": new Date().toISOString(),
+      "Payment Mode": paymentMethod,
+      "Payment Status": paymentMethod === "PREPAID" ? "Paid" : "Unpaid",
+    };
+  });
+
+  return events;
+};
+
+export const addressMapper = (
+  address,
+  totalPrice,
+  checkoutSource = "BUYWOW",
+) => {
+  if (address) {
+    const source = checkoutSource === "GOKWIK" ? "GoKwik" : getSource();
+    const {
+      address: addressLine,
+      city,
+      country,
+      email,
+      name,
+      state,
+      pinCode,
+      phone,
+    } = address;
+    const phoneNo = removePhonePrefix(phone);
+    const [firstName, ...lastName] = name.split(" ");
+
+    const basicAttributes = {
+      Address: addressLine,
+      "Cart Total Price": totalPrice,
+      City: city,
+      Country: country,
+      Currency: "INR",
+      Email: email,
+      "First Name": firstName,
+      "Last Name": lastName?.join(" "),
+      "Mobile Number": phoneNo,
+      Pincode: pinCode,
+      State: state,
+      Source: source,
+    };
+
+    return {
+      addressAdded: {
+        ...basicAttributes,
+      },
+      addressSelected: {
+        ...basicAttributes,
+      },
+    };
+  }
 };

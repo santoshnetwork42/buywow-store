@@ -1,4 +1,4 @@
-import { CloseSVG } from "@/assets/images";
+import { ArrowIconSVG, CloseSVG } from "@/assets/svg/icons";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import React from "react";
 
@@ -41,11 +41,12 @@ const CouponHeader = ({ openSidebar, appliedCoupon, removeCoupon }) => {
     <div className="relative flex shrink items-center justify-between gap-2 rounded-lg bg-blue_gray-300_01 py-2 pl-2 pr-5 shadow-xs md:pl-2.5">
       <div className="flex items-center justify-center gap-2">
         <Img
-          src="img_image_2021.png"
+          src="img_coupons_and_offers.png"
           width={32}
           height={32}
           alt="promo image"
           className="aspect-square w-[32px] object-contain"
+          isStatic
         />
         <div className="flex flex-col justify-center">
           <Heading
@@ -70,7 +71,7 @@ const CouponHeader = ({ openSidebar, appliedCoupon, removeCoupon }) => {
         className="relative flex h-9 w-9 shrink-0 rounded-full bg-white-a700_01 p-0"
         onClick={openSidebar}
       >
-        <Img src="img_group_1400002487.svg" width={7} height={20} />
+        <ArrowIconSVG className="size-6" />
       </Button>
     </div>
   );

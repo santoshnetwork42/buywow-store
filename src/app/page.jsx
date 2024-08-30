@@ -1,16 +1,17 @@
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
+import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
 
 // Dynamically import components
+import Carousal from "@/components/blocks/Carousel";
+import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
+import TrendingCategories from "@/components/blocks/TrendingCategories";
+import { notFound } from "next/navigation";
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
 );
-const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
 const SingleBanner = dynamic(() => import("@/components/blocks/SingleBanner"));
 const MiniBanners = dynamic(() => import("@/components/blocks/MiniBanners"));
-const TrendingCategories = dynamic(
-  () => import("@/components/blocks/TrendingCategories"),
-);
 const FeaturedList = dynamic(() => import("@/components/blocks/FeaturedList"));
 const IngredientCategories = dynamic(
   () => import("@/components/blocks/IngredientCategories"),
@@ -23,9 +24,6 @@ const TestimonialSection = dynamic(
 );
 const FeaturedProducts = dynamic(
   () => import("@/components/blocks/FeaturedProducts"),
-);
-const FeaturedProductsByTab = dynamic(
-  () => import("@/components/blocks/FeaturedProductsByTab"),
 );
 const ProductEffectiveness = dynamic(
   () => import("@/components/blocks/Product/ProductEffectiveness"),
@@ -41,6 +39,9 @@ const ProductKeyIngredients = dynamic(
 );
 const InfoDropdown = dynamic(
   () => import("@/components/blocks/Accordion/InfoDropdown"),
+);
+const ProductLegalInfo = dynamic(
+  () => import("@/components/blocks/Accordion/ProductLegalInfo"),
 );
 const CollectionLinks = dynamic(
   () => import("@/components/blocks/CollectionLinks"),
@@ -74,12 +75,12 @@ const Breadcrumb = dynamic(() => import("@/components/blocks/Breadcrumb"));
 const VideoSection = dynamic(
   () => import("@/components/partials/Others/VideoSection"),
 );
-const BlogSection = dynamic(
-  () => import("@/components/partials/Others/BlogSection"),
-);
+const BlogSection = dynamic(() => import("@/components/blocks/BlogSection"));
 const RecentlyViewed = dynamic(
   () => import("@/components/blocks/RecentlyViewed"),
 );
+
+export const revalidate = 900;
 
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
@@ -104,6 +105,7 @@ const componentMap = {
   ComponentProductProductBenefits: ProductBenefits,
   ComponentProductProductKeyIngredientImages: ProductKeyIngredients,
   ComponentAccordionInfoDropdownSection: InfoDropdown,
+  ComponentProductProductLegalInfo: ProductLegalInfo,
   ComponentBlocksCollectionLinks: CollectionLinks,
   ComponentBlocksPdp: ProductDetailView,
   ComponentBlocksProductCollectionByTab: ProductCollectionSection,
@@ -120,6 +122,12 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
+const cachedGetPageBySlugAPI = unstable_cache(
+  async (slug) => getPageBySlugAPI(slug),
+  ["page-by-slug"],
+  { revalidate: 900 },
+);
+
 const renderBlock = (block, index, slug) => {
   if (!block?.showComponent) return null;
 
@@ -131,15 +139,16 @@ const renderBlock = (block, index, slug) => {
 
 export default async function Page() {
   try {
-    const pageData = await getPageBySlugAPI("index");
+    const pageData = await cachedGetPageBySlugAPI("index");
     const { blocks } = pageData || {};
 
     if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-      throw new Error("No blocks found or invalid blocks data");
+      notFound();
     }
 
     return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
   } catch (error) {
-    console.error("Error in Page component:", error);
+    console.error("Error in Home Page component:", error);
+    notFound();
   }
 }

@@ -16,6 +16,7 @@ const Accordion = ({
   toggleArrowClassName,
   accordionMainContainerClassName,
   variant,
+  showToggleArrow = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
@@ -60,21 +61,22 @@ const Accordion = ({
                 width={26}
                 height={26}
                 alt={alternativeText || title}
-                isStatic
                 className="aspect-square h-auto w-full object-contain"
               />
             </div>
           )}
-          <Heading as="h4" size="lg" className="text-base" responsive>
-            {title}
-          </Heading>
+          {!!title && (
+            <Heading as="h4" size="lg" className="text-base" responsive>
+              {title}
+            </Heading>
+          )}
           {header}
         </div>
-        {!!title && (
+        {showToggleArrow && (
           <ToggleArrow
             open={isOpen}
             variant={variant}
-            className={toggleArrowClassName}
+            className={twMerge("mr-1", toggleArrowClassName)}
           />
         )}
       </button>

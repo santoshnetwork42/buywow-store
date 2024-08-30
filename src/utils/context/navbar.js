@@ -3,44 +3,30 @@
 import { GUEST_CHECKOUT, STORE_ID, STORE_PREFIX } from "@/config";
 import { NavbarProvider as Navbar, useConfiguration } from "@wow-star/utils";
 import { generateClient } from "aws-amplify/api";
-import { getCurrentUser } from "aws-amplify/auth";
 import Cookie from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const client = generateClient();
 
 export const NavbarContext = createContext();
 
-function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
+function NavbarProvider({ children, initialData }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
 
-  const dispatch = useDispatch();
-  const cartList = useSelector((state) => state?.cart?.data || []);
-  const appliedCoupon = useSelector((state) => state?.cart?.coupon);
-  const user = useSelector((state) => state?.user?.user);
+  const cartList = useSelector((state) => state.cart?.data || []);
+  const appliedCoupon = useSelector((state) => state.cart?.coupon);
+  const user = useSelector((state) => state.user?.user);
 
   const [isInteractive, setIsInteractive] = useState(false);
-  const [isRewardApplied, setIsRewardApplied] = useState(true);
   const [source, setSource] = useState(_source);
 
   useEffect(() => {
     if (_source) setSource(_source);
   }, [_source]);
-
-  const handleRewardApply = useCallback((state) => {
-    setIsRewardApplied(state);
-  }, []);
 
   const apiResolve = async (query, variables, authMode) => {
     try {
@@ -73,8 +59,6 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
 
   const contextValue = {
     isInteractive,
-    isRewardApplied,
-    handleRewardApply,
     source,
   };
 
@@ -82,11 +66,26 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
     <Navbar
       storeId={STORE_ID}
       resolve={apiResolve}
-      isInteractive={true}
+      isInteractive={
+        isInteractive || pathname === "/checkout" || pathname === "/cart"
+      }
       cartItems={cartList}
       appliedCoupon={appliedCoupon}
-      user={user}
+      user={user?.id ? user : null}
       deviceType="WEB"
+      listVariantGroups={initialData?.listVariantGroups}
+      byStoreIdRuleEngine={initialData?.byStoreIdRuleEngine?.items}
+      getStoreSetting={initialData?.getStoreSetting?.configurations}
+      searchShippingTiers={initialData?.searchShippingTiers?.items}
+      getTopCoupons={
+        initialData?.getTopCoupons?.items?.filter((coupon) => {
+          const { expirationDate } = coupon;
+          return (
+            !expirationDate ||
+            new Date(expirationDate).getTime() >= new Date().getTime()
+          );
+        }) || []
+      }
     >
       <NavbarContext.Provider value={contextValue}>
         {children}
@@ -95,22 +94,14 @@ function NavbarProvider({ children, ignoreLazyLoadNavbar }) {
   );
 }
 
-export const useNavBarState = () => {
-  const context = useContext(NavbarContext);
-  if (!context) {
-    throw new Error("useNavBarState must be used within a NavbarProvider");
-  }
-  return context;
-};
-
 export const useSource = () => {
-  const { source } = useNavBarState();
+  const { source } = useContext(NavbarContext);
   return source;
 };
 
 export const useIsInteractive = () => {
-  const { isInteractive } = useNavBarState();
-  return !!isInteractive;
+  const { isInteractive } = useContext(NavbarContext) || {};
+  return isInteractive;
 };
 
 export const useGuestCheckout = () => {

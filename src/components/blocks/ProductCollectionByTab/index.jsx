@@ -8,6 +8,8 @@ import BlogCard from "@/components/partials/Card/BlogCard";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { getSource } from "@/utils/helpers";
 import React, {
   useCallback,
   useEffect,
@@ -73,9 +75,12 @@ const ProductCollectionByTab = ({
   );
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef(null);
+  const viewListItemEventTriggered = useRef(false);
+  const { viewList, categoryViewed } = useEventsDispatch();
+  const source = getSource();
 
   const reloadProducts = useCallback(
     async (newSortOption) => {
@@ -95,7 +100,7 @@ const ProductCollectionByTab = ({
           tabSelected: activeTab?.tab?.data?.id || null,
           defaultSorting: newSortOption.value,
           page: 1,
-          limit: activeTab?.pagination?.pageSize ?? 10,
+          limit: activeTab?.pagination?.pageSize ?? 100,
         });
 
         const newProducts = response?.items?.data ?? [];
@@ -117,12 +122,20 @@ const ProductCollectionByTab = ({
         setCurrentPage(1);
         const totalProducts = activeTab?.pagination?.totalData ?? 0;
         setHasMore(newProducts.length < totalProducts);
+        viewList(
+          slug[slug.length - 1],
+          "PLP",
+          newProducts
+            ?.filter((i) => i?.attributes?.fetchedProduct)
+            ?.map((i) => i.attributes.fetchedProduct),
+        ); // viewListItems event passed
       } catch (error) {
         console.error("Error reloading products:", error);
       } finally {
         setIsLoading(false);
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [activeTabIndex, productCollectionTabItems, slug],
   );
 
@@ -135,6 +148,11 @@ const ProductCollectionByTab = ({
   );
 
   useEffect(() => {
+    const activeTab = productCollectionTabItems[activeTabIndex];
+    const calculatedHasMore =
+      activeTab?.pagination?.totalData > activeTab?.pagination?.pageSize;
+    setHasMore(calculatedHasMore);
+
     const handleResize = () => {
       if (containerRef.current && window.innerWidth >= 1200) {
         const containerWidth = containerRef.current.offsetWidth;
@@ -149,6 +167,31 @@ const ProductCollectionByTab = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    // event passing
+    if (!viewListItemEventTriggered.current) {
+      const [_products] = productCollectionTabItems
+        ?.filter((i, index) => activeTabIndex === index)
+        .map((i) => i?.products);
+      viewList(
+        slug[slug.length - 1],
+        "PLP",
+        _products?.data
+          ?.filter((i) => i?.attributes?.fetchedProduct)
+          ?.map((i) => i.attributes.fetchedProduct),
+      );
+
+      categoryViewed({
+        URL: window.location.href,
+        "Category Name": title,
+        "Item Count": 100,
+        Source: source,
+      });
+      viewListItemEventTriggered.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productCollectionTabItems]);
+
   const loadMoreProducts = useCallback(async () => {
     if (isLoading || !hasMore) return;
 
@@ -162,7 +205,7 @@ const ProductCollectionByTab = ({
         tabSelected: activeTab?.tab?.data?.id || null,
         defaultSorting: sortOption.value,
         page: nextPage,
-        limit: activeTab?.pagination?.pageSize ?? 10,
+        limit: activeTab?.pagination?.pageSize ?? 100,
       });
 
       const newProducts = response?.items?.data ?? [];
@@ -190,6 +233,13 @@ const ProductCollectionByTab = ({
         const newTotalLoaded =
           (activeTab?.products?.data?.length ?? 0) + newProducts.length;
         setHasMore(newTotalLoaded < totalProducts);
+        viewList(
+          slug[slug.length - 1],
+          "PLP",
+          newProducts
+            ?.filter((i) => i?.attributes?.fetchedProduct)
+            ?.map((i) => i.attributes.fetchedProduct),
+        ); // event passed
       } else {
         setHasMore(false);
       }
@@ -198,6 +248,7 @@ const ProductCollectionByTab = ({
     } finally {
       setIsLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     isLoading,
     hasMore,
@@ -216,13 +267,21 @@ const ProductCollectionByTab = ({
       if (selectedTab) {
         const productsInTab = selectedTab.products?.data?.length ?? 0;
         const totalProducts = selectedTab.pagination?.totalData ?? 0;
-        const pageSize = selectedTab.pagination?.pageSize ?? 10;
+        const pageSize = selectedTab.pagination?.pageSize ?? 100;
         const calculatedPage = Math.ceil(productsInTab / pageSize);
 
         setCurrentPage(calculatedPage);
         setHasMore(productsInTab < totalProducts);
+        viewList(
+          slug[slug.length - 1],
+          "PLP",
+          selectedTab.products?.data
+            ?.filter((i) => i?.attributes?.fetchedProduct)
+            ?.map((i) => i.attributes.fetchedProduct),
+        );
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [productCollectionTabItems],
   );
 
@@ -251,7 +310,7 @@ const ProductCollectionByTab = ({
     (category) => {
       const currentProducts = category.products?.data || [];
       const totalProducts = category.pagination?.totalData || 0;
-      const pageSize = category.pagination?.pageSize || 10;
+      const pageSize = 16;
       const remainingProducts = Math.min(
         totalProducts - currentProducts.length,
         pageSize,
@@ -314,7 +373,7 @@ const ProductCollectionByTab = ({
               loadMore={loadMoreProducts}
               hasMore={hasMore}
               isLoading={isLoading}
-              rootMargin="500px"
+              rootMargin="800px"
             >
               <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
                 {renderProductsAndSkeletons(category)}

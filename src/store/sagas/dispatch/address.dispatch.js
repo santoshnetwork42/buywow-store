@@ -1,8 +1,40 @@
+import { addPhonePrefix } from "@/utils/helpers";
 import { useDispatch } from "react-redux";
 import { addressSagaActions } from "../sagaActions/address.actions";
 
 export const useAddressDispatch = () => {
   const dispatch = useDispatch();
+
+  const getAddressList = (userID) => {
+    dispatch({
+      type: addressSagaActions.GET_ADDRESS_LIST,
+      payload: { id: userID },
+    });
+  };
+
+  const createAddress = (address, userId) => {
+    dispatch({
+      type: addressSagaActions.CREATE_ADDRESS,
+      payload: {
+        ...address,
+        userID: userId || null,
+        phone: addPhonePrefix(address?.phone),
+        country: address?.country || "IN",
+      },
+    });
+  };
+
+  const editAddress = (address, userId) => {
+    dispatch({
+      type: addressSagaActions.EDIT_ADDRESS,
+      payload: {
+        ...address,
+        userID: userId || null,
+        phone: addPhonePrefix(address?.phone),
+        country: address?.country || "IN",
+      },
+    });
+  };
 
   const updateCurrentAddress = (item) => {
     if (item === null) {
@@ -53,6 +85,9 @@ export const useAddressDispatch = () => {
   };
 
   return {
+    getAddressList,
+    createAddress,
+    editAddress,
     updateCurrentAddress,
     deleteAddress,
   };

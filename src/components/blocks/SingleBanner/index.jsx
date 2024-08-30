@@ -27,12 +27,20 @@ const SingleBanner = ({ banner, slug }) => {
           ? "container-main mb-5 sm:mb-6 lg:mb-7"
           : "mb-main"
       }`}
+      trackingType="BANNER_CLICKED"
+      trackingEventPayload={{
+        id: 1,
+        moeText:
+          banner?.moeText ||
+          webImageAttrs?.alternativeText ||
+          mWebImageAttrs?.alternativeText,
+      }}
     >
       <picture className="block w-full">
         {!!webImageAttrs.url && (
           <source
             media="(min-width: 576px)"
-            srcSet={`${webImageAttrs.url}?w=1800&q=75&f=webp`}
+            srcSet={`${webImageAttrs.url}?w=2500&q=75&f=webp`}
           />
         )}
         <Img
@@ -41,7 +49,6 @@ const SingleBanner = ({ banner, slug }) => {
           width={500}
           height={500}
           priority
-          isStatic
           className="h-auto w-full object-contain"
         />
       </picture>

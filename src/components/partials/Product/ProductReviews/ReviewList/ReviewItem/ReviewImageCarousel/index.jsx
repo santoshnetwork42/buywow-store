@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowIconSVG } from "@/assets/svg/icons";
 import { Button, Img } from "@/components/elements";
 import useEmblaCarousel from "embla-carousel-react";
 import React, { useCallback, useEffect, useState } from "react";
@@ -11,7 +12,6 @@ const CarouselImage = React.memo(({ src, alt }) => (
       alt={alt}
       width={400}
       height={400}
-      isStatic
       addPrefix
       className="aspect-[100/80] h-auto w-full object-contain sm:aspect-[100/70] md:aspect-square"
     />
@@ -32,24 +32,6 @@ const DotButton = React.memo(({ selected, onClick }) => (
 ));
 
 DotButton.displayName = "DotButton";
-
-const SliderButton = React.memo(({ src, alt, onClick, className }) => (
-  <Button
-    className={`absolute top-1/2 z-10 -translate-y-1/2 bg-white-a700/30 p-1 ${className}`}
-    onClick={onClick}
-    enableRipple={false}
-  >
-    <Img
-      src={src}
-      width={28}
-      height={28}
-      alt={alt}
-      className="aspect-square w-5 cursor-pointer md:w-6 lg:w-7"
-    />
-  </Button>
-));
-
-SliderButton.displayName = "SliderButton";
 
 const ReviewImageCarousel = ({ images, initialSlide = 0 }) => {
   const [selectedIndex, setSelectedIndex] = useState(initialSlide);
@@ -100,17 +82,14 @@ const ReviewImageCarousel = ({ images, initialSlide = 0 }) => {
           ))}
         </div>
       </div>
-      <SliderButton
-        src="img_arrow_left.svg"
-        alt="Previous slide"
+      <ArrowIconSVG
+        className="absolute left-1 top-1/2 z-10 size-5 -translate-y-1/2 cursor-pointer rounded-full bg-white-a700/50 md:size-6 lg:size-7"
+        side="left"
         onClick={scrollPrev}
-        className="left-0"
       />
-      <SliderButton
-        src="img_arrow_right_black_900.png"
-        alt="Next slide"
+      <ArrowIconSVG
+        className="absolute right-1 top-1/2 z-10 size-5 -translate-y-1/2 cursor-pointer rounded-full bg-white-a700/50 md:size-6 lg:size-7"
         onClick={scrollNext}
-        className="right-0"
       />
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 cursor-pointer">
         {images.map((_, index) => (

@@ -2,7 +2,6 @@
 
 import SummaryItem from "@/components/common/CheckoutSummaryItem";
 import { Heading, Text } from "@/components/elements";
-import { useNavBarState } from "@/utils/context/navbar";
 import { PREPAID_ENABLED } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
 import { useCartTotal, useConfiguration } from "@wow-star/utils";
@@ -10,12 +9,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 const CheckoutSummary = React.memo(() => {
-  const { isRewardApplied } = useNavBarState();
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
 
-  const { appliedCoupon } = useSelector((state) => ({
-    appliedCoupon: state?.cart?.coupon,
-  }));
+  const appliedCoupon = useSelector((state) => state.cart?.coupon);
+  const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
   const {
     totalListingPrice,

@@ -1,3 +1,4 @@
+import { showToast } from "@/components/common/ToastComponent";
 import {
   createUserAddressAPI,
   getUserAddressAPI,
@@ -8,6 +9,7 @@ import {
   updateAddressList,
   updateAddressLoading,
   updateCurrentAddress,
+  updateInitialLoading,
 } from "@/store/slices/address.slice";
 import { call, put, select } from "redux-saga/effects";
 import { v4 as uuidv4 } from "uuid";
@@ -32,6 +34,12 @@ export function* createAddressHandler(action) {
       const userAddress = yield call(() =>
         createUserAddressAPI(addressPayload),
       );
+
+      if (!userAddress?.data && userAddress?.errors[0]?.message) {
+        showToast.error(userAddress?.errors[0]?.message);
+        return;
+      }
+
       const { id, address, city, country, state, email, name, phone, pinCode } =
         userAddress.data.createUserAddress;
 
@@ -82,6 +90,12 @@ export function* editAddressHandler(action) {
       const userAddress = yield call(() =>
         updateUserAddressAPI(addressPayload),
       );
+
+      if (!userAddress?.data && userAddress?.errors[0]?.message) {
+        showToast.error(userAddress?.errors[0]?.message);
+        return;
+      }
+
       const { id, address, city, country, state, email, name, phone, pinCode } =
         userAddress.data.updateUserAddress;
 
@@ -128,17 +142,21 @@ export function* editAddressHandler(action) {
 
 export function* getAddressListHandler(action) {
   try {
+    yield put(updateInitialLoading(true));
+
     const { id = null } = action.payload;
     const { currentAddress, addressList } = yield select(
       (state) => state.address,
     );
     if (id) {
       // User is logged in, fetch addresses from API
-      const userAddresses = yield call(() => getUserAddressAPI({ id }));
-      yield put(updateAddressList(userAddresses?.items || []));
+      const userAddresses = yield call(getUserAddressAPI, { id });
+      const fetchedAddresses = userAddresses?.items || [];
 
-      if (userAddresses?.items?.length > 0 && !currentAddress) {
-        yield put(updateCurrentAddress(userAddresses.items[0]));
+      yield put(updateAddressList(fetchedAddresses));
+
+      if (fetchedAddresses.length > 0 && !currentAddress) {
+        yield put(updateCurrentAddress(fetchedAddresses[0]));
       }
     } else {
       // User is not logged in, use addresses from Redux store
@@ -148,11 +166,14 @@ export function* getAddressListHandler(action) {
     }
   } catch (error) {
     console.log("error getting address", error);
+  } finally {
+    yield put(updateInitialLoading(false));
   }
 }
 
 export function* deleteAddressHandler(action) {
   try {
+    yield put(updateAddressLoading(true));
     const { id, userID = null } = action.payload;
 
     // Get the current state
@@ -194,5 +215,7 @@ export function* deleteAddressHandler(action) {
   } catch (error) {
     console.log("Error deleting address", error);
     // yield put(deleteAddressFailure(error));
+  } finally {
+    yield put(updateAddressLoading(false));
   }
 }
