@@ -15,14 +15,8 @@ const handleRedirect = async (path) => {
     redirect(pageRedirect.redirect.replace("\r", ""));
   }
 
-  console.log("pageRedirect?.slug:> ", pageRedirect?.slug);
   if (!!pageRedirect?.slug) {
-    console.log("reached to update");
-    const res = await updateRedirectsAPI(
-      path,
-      (pageRedirect?.hitCount || 0) + 1,
-    );
-    console.log("res :>> ", res);
+    await updateRedirectsAPI(path, (pageRedirect?.hitCount || 0) + 1);
   }
 
   if (!pageRedirect && !extension) {

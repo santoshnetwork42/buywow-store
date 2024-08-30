@@ -45,8 +45,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             className="line-clamp-1 text-sm font-semibold"
             responsive
           >
-            <span className="font-normal">Step {index + 1}:</span>
-            {" " + text}
+            {text}
           </Heading>
           <Text as="p" size="sm" className="line-clamp-2" responsive>
             {subText}
