@@ -122,7 +122,7 @@ export const itemMapper = (
       key: thumbImage?.imageKey,
       addPrefix: true,
     }),
-    "Product Category": category?.name,
+    "Product Category": category?.name || "All products",
     "Product URL": `${currentURL}/products/${product?.slug}`,
     "Vendor name": vendor,
     "Product Price": price,
@@ -139,7 +139,7 @@ export const itemMapper = (
     value: price * qty,
     mrpValue: listingPrice * qty,
     vercel: {
-      content_category: category?.name,
+      content_category: category?.name || "All products",
       content_subcategory: subCategory?.name,
       content_ids: sku,
       content_name: title,
@@ -170,7 +170,7 @@ export const itemMapper = (
       },
     },
     pixel: {
-      content_category: category?.name,
+      content_category: category?.name || "All products",
       content_subcategory: subCategory?.name,
       content_ids: [sku],
       content_name: title,
@@ -189,7 +189,7 @@ export const itemMapper = (
       coupon: coupon?.code || "",
       discount: (listingPrice - price)?.toString(),
       item_brand: vendor,
-      item_category: category?.name || "",
+      item_category: category?.name || "All products",
       item_category2: subCategory?.name || "",
       item_list_id: section?.id || "",
       item_list_name: section?.name || "",
@@ -207,7 +207,7 @@ export const itemMapper = (
         discount: listingPrice - price,
         index: 0,
         item_brand: vendor,
-        item_category: category?.name || "",
+        item_category: category?.name || "All products",
         item_category2: subCategory?.name || "",
         item_list_id: section?.id || "",
         item_list_name: section?.name || "",
@@ -472,7 +472,10 @@ export const moEngagedOrderMapper = (
           ...Product_Subcategory,
           product?.subCategory?.name,
         ],
-        "Product Category": [...Product_Category, product?.category?.name],
+        "Product Category": [
+          ...Product_Category,
+          product?.category?.name || "All products",
+        ],
         "Product Range": null,
       };
     },
@@ -565,7 +568,7 @@ export const moEngageItemPurchasedMapper = (
       "Product URL": `${currentURL}/products/${product.slug}`,
       "Total MRP": mrpValue,
       "Product Subcategory": product.subCategory?.name,
-      "Product Category": product.category?.name,
+      "Product Category": product.category?.name || "All products",
       "Product Range": null,
     };
 

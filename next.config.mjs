@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   async rewrites() {
     const payload = [
       { source: "/blog/sitemap.xml", destination: "/api/blog-sitemap" },
