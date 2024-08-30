@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import Carousal from "@/components/blocks/Carousel";
 import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
 import TrendingCategories from "@/components/blocks/TrendingCategories";
+import handleRedirect from "@/utils/handleRedirect";
 import { notFound } from "next/navigation";
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
@@ -143,12 +144,11 @@ export default async function Page() {
     const { blocks } = pageData || {};
 
     if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-      notFound();
+      await handleRedirect("/");
     }
 
     return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
   } catch (error) {
-    console.error("Error in Home Page component:", error);
     notFound();
   }
 }

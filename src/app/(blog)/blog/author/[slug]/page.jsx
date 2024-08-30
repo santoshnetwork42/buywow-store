@@ -8,7 +8,7 @@ import {
   fetchBlogs,
   fetchFeaturedBlogs,
 } from "@/lib/wordPressAPIs";
-import { notFound } from "next/navigation";
+import handleRedirect from "@/utils/handleRedirect";
 
 export const revalidate = 60 * 60 * 24;
 
@@ -45,7 +45,7 @@ export default async function BlogsByAuthor({ params }) {
   const author = await fetchAuthor(slug);
 
   if (!author) {
-    notFound();
+    await handleRedirect(`/blog/author/${slug}`);
   }
 
   const { blogs, pageInfo } = await fetchBlogs({
@@ -54,7 +54,7 @@ export default async function BlogsByAuthor({ params }) {
   });
 
   if (!blogs || blogs.length === 0) {
-    notFound();
+    await handleRedirect(`/blog/author/${slug}`);
   }
 
   const featuredBlogs = await fetchFeaturedBlogs(5);
