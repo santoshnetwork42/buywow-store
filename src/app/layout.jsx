@@ -54,7 +54,7 @@ const cachedGetNavbarAndFooterAPI = unstable_cache(
 const cachedGetInitialDataAPI = unstable_cache(
   async (storeId, platform) => getInitialDataAPI(storeId, platform),
   ["initial-data"],
-  { revalidate: 900 },
+  { revalidate: 30 },
 );
 
 const cachedGetCartUpsellProductsAPI = unstable_cache(
@@ -65,7 +65,7 @@ const cachedGetCartUpsellProductsAPI = unstable_cache(
 
 async function RootLayout({ children }) {
   const { data } = (await cachedGetNavbarAndFooterAPI()) || {};
-  const initialData = await getInitialDataAPI(STORE_ID, "WEB");
+  const initialData = await cachedGetInitialDataAPI(STORE_ID, "WEB");
   const upsellProducts = await cachedGetCartUpsellProductsAPI();
 
   const {
