@@ -23,7 +23,7 @@ import { unstable_cache } from "next/cache";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 
-export const revalidate = 900;
+export const revalidate = 60;
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -48,19 +48,19 @@ Amplify.configure({
 const cachedGetNavbarAndFooterAPI = unstable_cache(
   async () => getNavbarAndFooterAPI(),
   ["navbar-footer"],
-  { revalidate: 900 },
+  { revalidate: 60 },
 );
 
 const cachedGetInitialDataAPI = unstable_cache(
   async (storeId, platform) => getInitialDataAPI(storeId, platform),
   ["initial-data"],
-  { revalidate: 900 },
+  { revalidate: 60 },
 );
 
 const cachedGetCartUpsellProductsAPI = unstable_cache(
   async () => getCartUpsellProductsAPI(),
   ["upsell-products"],
-  { revalidate: 900 },
+  { revalidate: 60 },
 );
 
 async function RootLayout({ children }) {
