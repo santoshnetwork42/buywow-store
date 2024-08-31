@@ -235,8 +235,7 @@ export function* manageCartHandler(action) {
     const response = yield call(methodToCall, cartInput, authMode);
 
     const cartId = response?.shoppingCartId || null;
-
-    if (cartId) localStorage.setItem(`${STORE_PREFIX}-cartId`, cartId);
+    localStorage.setItem(`${STORE_PREFIX}-cartId`, cartId);
 
     yield put({ type: cartSagaActions.UPDATE_CART_ID, payload: cartId });
     yield put({ type: cartSagaActions.UPDATE_CART_ID_LOADING, payload: false });

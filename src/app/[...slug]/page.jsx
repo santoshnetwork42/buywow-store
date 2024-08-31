@@ -93,7 +93,7 @@ const RecentlyViewed = dynamic(
 );
 
 export const revalidate = 900;
-// export const dynamicParams = false;
+export const dynamicParams = false;
 
 const componentMap = {
   ComponentBlocksAnnouncementBar: PageAnnouncementBar,
