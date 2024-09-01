@@ -464,10 +464,13 @@ export default async function Page({ params }) {
   }
 
   if (
-    ((type === "PRODUCT" || type === "COLLECITON") &&
+    ((type === "PRODUCT" || type === "COLLECTION") &&
       (pages[0] !== pageType[type] || pages[1] !== slug)) ||
-    pages[0] !== slug
+    (type !== "PRODUCT" &&
+      type !== "COLLECTION" &&
+      (pages[0] !== slug || pages[0] === "index"))
   ) {
+    console.log("reached :>> ", slug, pages);
     return await handleRedirect(`/${fullSlug}`);
   }
 
