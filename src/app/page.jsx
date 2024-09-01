@@ -6,8 +6,6 @@ import dynamic from "next/dynamic";
 import Carousal from "@/components/blocks/Carousel";
 import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
 import TrendingCategories from "@/components/blocks/TrendingCategories";
-import handleRedirect from "@/utils/handleRedirect";
-import { notFound } from "next/navigation";
 import React from "react";
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
@@ -143,10 +141,6 @@ const renderBlock = (block, slug) => {
 export default async function Page() {
   const pageData = await cachedGetPageBySlugAPI("index");
   const { blocks, slug } = pageData || {};
-
-  if (!slug?.length) {
-    return await handleRedirect(`/${fullSlug}`);
-  }
 
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
     throw new Error("Blocks not found");
