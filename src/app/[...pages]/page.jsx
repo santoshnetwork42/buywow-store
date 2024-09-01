@@ -9,7 +9,7 @@ import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
-import { notFound } from "next/navigation";
+import React from "react";
 
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
@@ -93,7 +93,7 @@ const RecentlyViewed = dynamic(
 );
 
 export const revalidate = 900;
-export const dynamicParams = false;
+// export const dynamicParams = false;
 
 const componentMap = {
   ComponentBlocksAnnouncementBar: PageAnnouncementBar,
@@ -145,13 +145,14 @@ const cachedGetStoreAPI = unstable_cache(async () => getStoreAPI(), ["store"], {
   revalidate: 900,
 });
 
-const renderBlock = (block, index, slug) => {
-  if (!block?.showComponent) return null;
+const renderBlock = (block, slug) => {
+  const { showComponent, __typename, id } = block || {};
+  if (!showComponent) return null;
 
-  const Component = componentMap[block?.__typename];
+  const Component = componentMap[__typename];
   if (!Component) return null;
 
-  return <Component key={index} slug={slug} {...block} />;
+  return <Component key={`${__typename}-${id}`} slug={slug} {...block} />;
 };
 
 export async function generateStaticParams() {
@@ -164,10 +165,10 @@ export async function generateStaticParams() {
     LANDING: "",
   };
 
-  return pages?.map((page) => {
+  return (pages || []).map((page) => {
     if (page.attributes.slug !== "search" || page.attributes.slug !== "index") {
       return {
-        slug: [pageType[page.attributes.type], page.attributes.slug].filter(
+        pages: [pageType[page.attributes.type], page.attributes.slug].filter(
           Boolean,
         ),
       };
@@ -441,18 +442,42 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
-  const { slug } = params;
-  try {
-    const pageData = await cachedGetPageBySlugAPI(slug[slug.length - 1]);
+  const { pages } = params;
+  const fullSlug = pages.join("/");
 
-    const { blocks } = pageData || {};
-
-    if (!Array.isArray(blocks) || blocks.length === 0) {
-      await handleRedirect(`/${slug.join("/")}`);
-    }
-
-    return <>{blocks.map((block, index) => renderBlock(block, index, slug))}</>;
-  } catch (error) {
-    notFound();
+  if (pages?.length > 2) {
+    return await handleRedirect(`/${fullSlug}`);
   }
+
+  const pageData = await cachedGetPageBySlugAPI(pages[pages.length - 1]);
+  const pageType = {
+    HOME: "",
+    COLLECTION: "collections",
+    PRODUCT: "products",
+    LANDING: "",
+  };
+
+  const { blocks, slug, type } = pageData || {};
+
+  if (!slug) {
+    return await handleRedirect(`/${fullSlug}`);
+  }
+
+  if (
+    ((type === "PRODUCT" || type === "COLLECITON") &&
+      (pages[0] !== pageType[type] || pages[1] !== slug)) ||
+    pages[0] !== slug
+  ) {
+    return await handleRedirect(`/${fullSlug}`);
+  }
+
+  if (!blocks?.length) {
+    throw new Error("Blocks not found");
+  }
+
+  return (
+    <React.Fragment>
+      {blocks.map((block) => renderBlock(block, slug))}
+    </React.Fragment>
+  );
 }

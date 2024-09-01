@@ -8,6 +8,7 @@ import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
 import TrendingCategories from "@/components/blocks/TrendingCategories";
 import handleRedirect from "@/utils/handleRedirect";
 import { notFound } from "next/navigation";
+import React from "react";
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
 );
@@ -129,26 +130,31 @@ const cachedGetPageBySlugAPI = unstable_cache(
   { revalidate: 900 },
 );
 
-const renderBlock = (block, index, slug) => {
-  if (!block?.showComponent) return null;
+const renderBlock = (block, slug) => {
+  const { showComponent, __typename, id } = block || {};
+  if (!showComponent) return null;
 
-  const Component = componentMap[block?.__typename];
+  const Component = componentMap[__typename];
   if (!Component) return null;
 
-  return <Component key={index} slug={slug} {...block} />;
+  return <Component key={`${__typename}-${id}`} slug={slug} {...block} />;
 };
 
 export default async function Page() {
-  try {
-    const pageData = await cachedGetPageBySlugAPI("index");
-    const { blocks } = pageData || {};
+  const pageData = await cachedGetPageBySlugAPI("index");
+  const { blocks, slug } = pageData || {};
 
-    if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-      await handleRedirect("/");
-    }
-
-    return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
-  } catch (error) {
-    notFound();
+  if (!slug?.length) {
+    return await handleRedirect(`/${fullSlug}`);
   }
+
+  if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
+    throw new Error("Blocks not found");
+  }
+
+  return (
+    <React.Fragment>
+      {blocks.map((block) => renderBlock(block, slug))}
+    </React.Fragment>
+  );
 }
