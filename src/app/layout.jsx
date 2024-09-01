@@ -32,7 +32,7 @@ const outfit = Outfit({
 export const metadata = {
   title: {
     default: "Buy Wow",
-    template: "Buy Wow | %s",
+    template: "%s | Buy Wow",
   },
   metadataBase: new URL("https://buywow.in"),
 };

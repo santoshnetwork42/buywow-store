@@ -82,8 +82,6 @@ const ProductCollectionByTab = ({
   const { viewList, categoryViewed } = useEventsDispatch();
   const source = getSource();
 
-  console.log("productCollectionTabItems", slug);
-
   const reloadProducts = useCallback(
     async (newSortOption) => {
       setIsLoading(true);

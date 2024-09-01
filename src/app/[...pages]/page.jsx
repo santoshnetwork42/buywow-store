@@ -93,7 +93,6 @@ const RecentlyViewed = dynamic(
 );
 
 export const revalidate = 900;
-// export const dynamicParams = false;
 
 const componentMap = {
   ComponentBlocksAnnouncementBar: PageAnnouncementBar,
@@ -455,7 +454,6 @@ export default async function Page({ params }) {
   const { blocks, slug, type } = pageData;
 
   if (!slug) {
-    console.log(`No data found for slug: ${lastSlug}`);
     return await handleRedirect(`/${fullSlug}`);
   }
 
@@ -467,12 +465,11 @@ export default async function Page({ params }) {
   const actualPath = fullSlug === "index" ? "" : fullSlug;
 
   if (expectedPath !== actualPath) {
-    console.log(`Mismatch: expected ${expectedPath}, got ${actualPath}`);
     return handleRedirect(`/${expectedPath}`);
   }
 
-  if (!blocks || blocks.length === 0) {
-    throw new Error("Blocks not found");
+  if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
+    throw new Error(`Blocks not found on ${fullSlug} page`);
   }
 
   return (

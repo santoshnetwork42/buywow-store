@@ -7,7 +7,6 @@ import { Provider as ReactProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
 export const Provider = ({ children, data }) => {
-  console.log(data);
   const { headerData, carouselData } = data || {};
 
   return (

@@ -8,7 +8,6 @@ const CartProductList = React.memo(
 
     return (
       <div className="flex flex-col gap-3">
-        {/* done */}
         {cartItems.map((item, index) => (
           <ProductItem
             key={`cart-item-${item?.id}-${index}`}
@@ -45,7 +44,6 @@ const MainCartSection = ({
         endTime={upsellProducts?.endTime}
         isCartUpsell={true}
       />
-      {/* done */}
     </div>
   );
 };

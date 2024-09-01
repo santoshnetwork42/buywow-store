@@ -143,7 +143,7 @@ export default async function Page() {
   const { blocks, slug } = pageData || {};
 
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-    throw new Error("Blocks not found");
+    throw new Error("Blocks not found on Home page");
   }
 
   return (
