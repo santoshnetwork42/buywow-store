@@ -452,13 +452,12 @@ export default async function Page({ params }) {
   }
 
   const pageData = await cachedGetPageBySlugAPI(lastSlug);
+  const { blocks, slug, type } = pageData;
 
-  if (!pageData || !pageData?.slug) {
+  if (!slug) {
     console.log(`No data found for slug: ${lastSlug}`);
     return await handleRedirect(`/${fullSlug}`);
   }
-
-  const { blocks, slug, type } = pageData;
 
   const expectedPath =
     type === "PRODUCT" || type === "COLLECTION"
