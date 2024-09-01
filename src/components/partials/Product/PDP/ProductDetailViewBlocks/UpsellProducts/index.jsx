@@ -18,7 +18,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
 
   if (!fetchedProduct?.id || !packageProduct) return null;
 
-  const { price, listingPrice } = packageProduct || {};
+  const { price, listingPrice, title } = packageProduct || {};
 
   const discount = getDiscountPercentage(price, listingPrice);
 
@@ -48,7 +48,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             {text}
           </Heading>
           <Text as="p" size="sm" className="line-clamp-2" responsive>
-            {subText}
+            {title}
           </Text>
         </div>
         <div className="flex justify-between">
