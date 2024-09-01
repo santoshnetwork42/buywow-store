@@ -129,6 +129,13 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
+const pageType = {
+  HOME: "",
+  COLLECTION: "collections",
+  PRODUCT: "products",
+  LANDING: "",
+};
+
 const cachedGetCMSPagesAPI = unstable_cache(
   async () => getCMSPagesAPI(),
   ["cms-pages"],
@@ -157,13 +164,6 @@ const renderBlock = (block, slug) => {
 
 export async function generateStaticParams() {
   const pages = await cachedGetCMSPagesAPI();
-
-  const pageType = {
-    HOME: "",
-    COLLECTION: "collections",
-    PRODUCT: "products",
-    LANDING: "",
-  };
 
   return (pages || []).map((page) => {
     if (page.attributes.slug !== "search" || page.attributes.slug !== "index") {
@@ -444,43 +444,41 @@ export async function generateMetadata({ params }) {
 export default async function Page({ params }) {
   const { pages } = params;
   const fullSlug = pages.join("/");
+  const lastSlug = pages[pages.length - 1];
 
-  if (pages?.length > 2) {
+  // Handle redirects for paths with more than 2 segments
+  if (pages.length > 2) {
+    return handleRedirect(`/${fullSlug}`);
+  }
+
+  const pageData = await cachedGetPageBySlugAPI(lastSlug);
+
+  if (!pageData || !pageData?.slug) {
+    console.log(`No data found for slug: ${lastSlug}`);
     return await handleRedirect(`/${fullSlug}`);
   }
 
-  const pageData = await cachedGetPageBySlugAPI(pages[pages.length - 1]);
-  const pageType = {
-    HOME: "",
-    COLLECTION: "collections",
-    PRODUCT: "products",
-    LANDING: "",
-  };
+  const { blocks, slug, type } = pageData;
 
-  const { blocks, slug, type } = pageData || {};
+  const expectedPath =
+    type === "PRODUCT" || type === "COLLECTION"
+      ? `${pageType[type]}/${slug}`
+      : slug;
 
-  if (!slug) {
-    return await handleRedirect(`/${fullSlug}`);
+  const actualPath = fullSlug === "index" ? "" : fullSlug;
+
+  if (expectedPath !== actualPath) {
+    console.log(`Mismatch: expected ${expectedPath}, got ${actualPath}`);
+    return handleRedirect(`/${expectedPath}`);
   }
 
-  if (
-    ((type === "PRODUCT" || type === "COLLECTION") &&
-      (pages[0] !== pageType[type] || pages[1] !== slug)) ||
-    (type !== "PRODUCT" &&
-      type !== "COLLECTION" &&
-      (pages[0] !== slug || pages[0] === "index"))
-  ) {
-    console.log("reached :>> ", slug, pages);
-    return await handleRedirect(`/${fullSlug}`);
-  }
-
-  if (!blocks?.length) {
+  if (!blocks || blocks.length === 0) {
     throw new Error("Blocks not found");
   }
 
   return (
     <React.Fragment>
-      {blocks.map((block) => renderBlock(block, slug))}
+      {blocks.map((block, index) => renderBlock(block, slug, index))}
     </React.Fragment>
   );
 }
