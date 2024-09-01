@@ -400,7 +400,7 @@ const ProductImageSection = ({
   if (!imageList?.length) return null;
 
   return (
-    <div ref={mainContainerRef} className="main-container sticky top-20">
+    <div ref={mainContainerRef} className="main-container">
       <div className="hidden md:grid md:grid-cols-2 md:gap-4">
         {renderMainImages("grid")}
       </div>

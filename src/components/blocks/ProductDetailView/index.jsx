@@ -73,7 +73,14 @@ const ProductDetailView = ({ product }) => {
 
   return (
     <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
-      <div className="relative order-2 md:order-1 md:row-span-3">
+      <div className="relative md:row-span-3">
+        <ProductHeader
+          title={title}
+          benefits={benefits}
+          rating={rating}
+          totalRatings={totalRatings}
+          className="md:hidden"
+        />
         <ProductImageSection
           imageList={imageList}
           promotionTag={promotionTag}
@@ -81,16 +88,14 @@ const ProductDetailView = ({ product }) => {
         />
       </div>
 
-      <div className="order-1 md:order-2">
+      <div className="sticky top-10 flex flex-col">
         <ProductHeader
           title={title}
           benefits={benefits}
           rating={rating}
           totalRatings={totalRatings}
+          className="hidden md:flex"
         />
-      </div>
-
-      <div className="order-3 mt-2 flex flex-col">
         <PriceSection
           price={price}
           listingPrice={listingPrice}
@@ -113,13 +118,12 @@ const ProductDetailView = ({ product }) => {
           product={packageProduct}
           selectedVariant={selectedVariant}
         />
+        {!!(productDetailView?.length > 0) && (
+          <div className="mt-3 sm:mt-5 lg:mt-7">
+            <ProductDetailViewBlocks blocks={productDetailView} />
+          </div>
+        )}
       </div>
-
-      {!!(productDetailView?.length > 0) && (
-        <div className="order-4 mt-3 sm:mt-5 lg:mt-7">
-          <ProductDetailViewBlocks blocks={productDetailView} />
-        </div>
-      )}
     </div>
   );
 };

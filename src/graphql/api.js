@@ -990,6 +990,7 @@ export const applyCoupon = /* GraphQL */ `
       getYQuantity
       getYProduct
       couponTitle
+      description
       getYStoreProduct {
         id
         title

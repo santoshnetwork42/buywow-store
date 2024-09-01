@@ -478,7 +478,7 @@ export default async function Page({ params }) {
 
   return (
     <React.Fragment>
-      {blocks.map((block, index) => renderBlock(block, slug, index))}
+      {blocks.map((block, index) => renderBlock(block, pages, index))}
     </React.Fragment>
   );
 }
