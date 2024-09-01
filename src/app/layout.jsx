@@ -23,8 +23,6 @@ import { unstable_cache } from "next/cache";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 
-export const revalidate = 900;
-
 const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
