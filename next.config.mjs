@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: false,
   async rewrites() {
     const payload = [
+      { source: "/sitemap.xml", destination: "/api/sitemap" },
       { source: "/blog/sitemap.xml", destination: "/api/blog-sitemap" },
     ];
     return payload;
