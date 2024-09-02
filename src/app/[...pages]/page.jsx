@@ -92,8 +92,6 @@ const RecentlyViewed = dynamic(
   () => import("@/components/blocks/RecentlyViewed"),
 );
 
-export const revalidate = 900;
-
 const componentMap = {
   ComponentBlocksAnnouncementBar: PageAnnouncementBar,
   ComponentBannerCarousal: Carousal,
@@ -451,7 +449,7 @@ export default async function Page({ params }) {
     return handleRedirect(`/${fullSlug}`);
   }
 
-  const pageData = await cachedGetPageBySlugAPI(lastSlug);
+  const pageData = await getPageBySlugAPI(lastSlug);
   const { blocks, slug, type } = pageData;
 
   if (!slug) {
