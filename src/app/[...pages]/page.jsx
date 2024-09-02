@@ -142,7 +142,7 @@ const cachedGetCMSPagesAPI = unstable_cache(
 const cachedGetPageBySlugAPI = unstable_cache(
   async (slug) => getPageBySlugAPI(slug),
   ["page-by-slug"],
-  { revalidate: false },
+  { revalidate: 900 },
 );
 
 const cachedGetStoreAPI = unstable_cache(async () => getStoreAPI(), ["store"], {
@@ -449,7 +449,7 @@ export default async function Page({ params }) {
     return handleRedirect(`/${fullSlug}`);
   }
 
-  const pageData = await getPageBySlugAPI(lastSlug);
+  const pageData = await cachedGetPageBySlugAPI(lastSlug);
   const { blocks, slug, type } = pageData;
 
   if (!slug) {

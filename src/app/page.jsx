@@ -80,8 +80,6 @@ const RecentlyViewed = dynamic(
   () => import("@/components/blocks/RecentlyViewed"),
 );
 
-export const revalidate = 900;
-
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
   description:
