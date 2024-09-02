@@ -161,21 +161,21 @@ const renderBlock = (block, slug) => {
   return <Component key={`${__typename}-${id}`} slug={slug} {...block} />;
 };
 
-export async function generateStaticParams() {
-  const pages = await cachedGetCMSPagesAPI();
+// export async function generateStaticParams() {
+//   const pages = await cachedGetCMSPagesAPI();
 
-  return (pages || []).map((page, index) => {
-    console.log("index :>> ", index);
-    if (page.attributes.slug !== "search" || page.attributes.slug !== "index") {
-      return {
-        pages: [pageType[page.attributes.type], page.attributes.slug].filter(
-          Boolean,
-        ),
-      };
-    }
-    return null;
-  });
-}
+//   return (pages || []).map((page, index) => {
+//     console.log("index :>> ", index);
+//     if (page.attributes.slug !== "search" || page.attributes.slug !== "index") {
+//       return {
+//         pages: [pageType[page.attributes.type], page.attributes.slug].filter(
+//           Boolean,
+//         ),
+//       };
+//     }
+//     return null;
+//   });
+// }
 
 async function generateSEOAndJSONLD(params) {
   const {
