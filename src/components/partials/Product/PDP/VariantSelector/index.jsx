@@ -10,7 +10,7 @@ const VariantSelector = React.memo(({ variantGroups, onVariantChange }) => {
   if (!Array.isArray(variantGroups) || variantGroups.length === 0) return null;
 
   return (
-    <div className="mt-5 flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       <Heading as="h5" size="base">
         Select Pack
       </Heading>

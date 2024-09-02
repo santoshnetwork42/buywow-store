@@ -1,5 +1,6 @@
 import { Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
+import { twMerge } from "tailwind-merge";
 
 const FeaturedItem = ({ image, text, isWebHorizontal, isInPDP }) => {
   const { url, alternativeText } = extractAttributes(image);
@@ -48,7 +49,10 @@ const FeaturedList = ({
       style={{
         maxWidth: getMaxWidth(features?.length),
       }}
-      className={`mx-auto flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full ${isInPDP ? "mb-6 md:mb-7" : "mb-7 md:mb-8"}`}
+      className={twMerge(
+        `mx-auto flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full`,
+        isInPDP ? "justify-around md:justify-evenly" : "mb-7 md:mb-8",
+      )}
     >
       {features.map((feature, index) => (
         <FeaturedItem

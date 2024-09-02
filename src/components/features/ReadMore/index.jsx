@@ -24,7 +24,7 @@ const ReadMore = ({
 
     if (content.length <= maxLength) {
       return (
-        <Text as="p" size="base" className="text-sm" responsive>
+        <Text as="p" size="base" className="overflow-hidden text-sm" responsive>
           {isHtml ? (
             <span
               className="text-sm"

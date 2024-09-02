@@ -57,7 +57,7 @@ const CarouselImage = React.memo(
           {!!webImageAttrs.url && (
             <source
               media="(min-width: 576px)"
-              srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}
+              srcSet={`${webImageAttrs.url}?w=1920&q=75&f=webp`}
             />
           )}
           <Img

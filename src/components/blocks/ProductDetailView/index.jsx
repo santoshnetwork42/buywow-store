@@ -73,7 +73,7 @@ const ProductDetailView = ({ product }) => {
 
   return (
     <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
-      <div className="relative md:row-span-3">
+      <div className="relative flex flex-col gap-2 md:row-span-3">
         <ProductHeader
           title={title}
           benefits={benefits}
@@ -88,7 +88,7 @@ const ProductDetailView = ({ product }) => {
         />
       </div>
 
-      <div className="sticky top-10 flex flex-col">
+      <div className="sticky top-10 z-10 flex flex-col">
         <ProductHeader
           title={title}
           benefits={benefits}
@@ -110,19 +110,19 @@ const ProductDetailView = ({ product }) => {
           hasInventory={hasInventory}
           productId={packageProduct?.id}
         />
-        <VariantSelector
-          variantGroups={variantGroup}
-          onVariantChange={onVariantChange}
-        />
-        <AddToCartSection
-          product={packageProduct}
-          selectedVariant={selectedVariant}
-        />
-        {!!(productDetailView?.length > 0) && (
-          <div className="mt-3 sm:mt-5 lg:mt-7">
+        <div className="mt-5 flex flex-col gap-6 md:gap-7">
+          <VariantSelector
+            variantGroups={variantGroup}
+            onVariantChange={onVariantChange}
+          />
+          <AddToCartSection
+            product={packageProduct}
+            selectedVariant={selectedVariant}
+          />
+          {!!(productDetailView?.length > 0) && (
             <ProductDetailViewBlocks blocks={productDetailView} />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
