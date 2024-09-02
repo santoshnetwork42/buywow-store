@@ -45,12 +45,7 @@ const TestimonialCard = ({
   const renderDescription = () => {
     if (!description) return null;
     return (
-      <Text
-        size="base"
-        as="p"
-        className="line-clamp-3 w-full flex-1"
-        responsive
-      >
+      <Text size="base" as="p" className="w-full flex-1" responsive>
         {description}
       </Text>
     );

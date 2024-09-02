@@ -33,13 +33,15 @@ const SocialLink = React.memo(({ item, index }) => {
 const FooterLogo = React.memo(({ logoUrl, logoAlternativeText }) => {
   if (!logoUrl) return null;
   return (
-    <Img
-      src={logoUrl}
-      width={200}
-      height={100}
-      alt={logoAlternativeText || "logo"}
-      className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
-    />
+    <Link href="/">
+      <Img
+        src={logoUrl}
+        width={200}
+        height={100}
+        alt={logoAlternativeText || "logo"}
+        className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
+      />
+    </Link>
   );
 });
 

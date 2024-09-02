@@ -10,6 +10,7 @@ import {
   setStoredCouponCode,
   setSubTotal,
 } from "@/store/slices/cart.slice";
+import { errorHandler } from "@/utils/errorHandler";
 import {
   checkAffiseValidity,
   getFirstVariant,
@@ -239,8 +240,8 @@ export function* manageCartHandler(action) {
 
     yield put({ type: cartSagaActions.UPDATE_CART_ID, payload: cartId });
     yield put({ type: cartSagaActions.UPDATE_CART_ID_LOADING, payload: false });
-  } catch (e) {
-    console.log("Error in manageCartHandler", e);
+  } catch (error) {
+    errorHandler(error, "Error while managing cart");
   }
 }
 

@@ -32,7 +32,7 @@ const outfit = Outfit({
 export const metadata = {
   title: {
     default: "Buy Wow",
-    template: "Buy Wow | %s",
+    template: "%s | Buy Wow",
   },
   metadataBase: new URL("https://buywow.in"),
 };
@@ -70,6 +70,7 @@ async function RootLayout({ children }) {
     announcementBar: announcementData = {},
     navbar: headerData = {},
     footer: footerData = {},
+    carousel: carouselData = {},
   } = data || {};
 
   return (
@@ -83,7 +84,7 @@ async function RootLayout({ children }) {
         {!!GOKWIK_SCRIPT && <script defer src={GOKWIK_SCRIPT} />}
       </head>
       <body>
-        <Provider headerData={headerData}>
+        <Provider data={{ headerData, carouselData }}>
           <NavbarProvider initialData={initialData?.data}>
             <GoKwikProvider>
               <AnnouncementProvider>
