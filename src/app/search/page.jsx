@@ -33,5 +33,3 @@ export default async function SearchPage() {
     </div>
   );
 }
-
-export const dynamic = "force-dynamic";
