@@ -1,6 +1,6 @@
 "use client";
 
-import { CloseSVG } from "@/assets/images";
+import { CloseSVG } from "@/assets/svg/icons";
 import { Img, Input } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
@@ -31,8 +31,6 @@ const SearchIcon = memo(() => (
   />
 ));
 
-SearchIcon.displayName = "SearchIcon";
-
 const ClearIcon = memo(({ onClick }) => (
   <CloseSVG
     onClick={onClick}
@@ -57,30 +55,33 @@ const SearchBar = memo(({ className }) => {
   });
 
   const handleType = useCallback(() => {
-    const { text, isDeleting, loopNum } = placeholderState;
-    const i = loopNum % dataText.length;
-    const fullText = dataText[i];
+    setPlaceholderState((prevState) => {
+      const { text, isDeleting, loopNum } = prevState;
+      const i = loopNum % dataText.length;
+      const fullText = dataText[i];
 
-    setPlaceholderState((prevState) => ({
-      ...prevState,
-      text: isDeleting
-        ? fullText.substring(0, text.length - 1)
-        : fullText.substring(0, text.length + 1),
-      typingSpeed: isDeleting ? DELETING_SPEED : TYPING_SPEED,
-    }));
+      if (!isDeleting && text === fullText) {
+        return { ...prevState, isDeleting: true, typingSpeed: PAUSE_DURATION };
+      }
 
-    if (!isDeleting && text === fullText) {
-      setTimeout(
-        () => setPlaceholderState((prev) => ({ ...prev, isDeleting: true })),
-        PAUSE_DURATION,
-      );
-    } else if (isDeleting && text === "") {
-      setPlaceholderState((prev) => ({
-        ...prev,
-        isDeleting: false,
-        loopNum: prev.loopNum + 1,
-      }));
-    }
+      if (isDeleting && text === "") {
+        return {
+          ...prevState,
+          isDeleting: false,
+          loopNum: loopNum + 1,
+          typingSpeed: TYPING_SPEED,
+          text: fullText.charAt(0),
+        };
+      }
+
+      return {
+        ...prevState,
+        text: isDeleting
+          ? text.slice(0, -1)
+          : fullText.slice(0, text.length + 1),
+        typingSpeed: isDeleting ? DELETING_SPEED : TYPING_SPEED,
+      };
+    });
   }, [placeholderState]);
 
   useEffect(() => {
@@ -95,44 +96,20 @@ const SearchBar = memo(({ className }) => {
     }
   }, [pathname]);
 
-  const handleSubmit = useCallback(() => {
-    const trimmedSearch = search.trim();
-    if (trimmedSearch) {
-      router.push(`/search?q=${encodeURIComponent(trimmedSearch)}`);
-    }
-  }, [router, search]);
-
   useEffect(() => {
-    if (search.length >= 2) {
+    if (search.length >= 3) {
       const debounceTimer = setTimeout(() => {
-        handleSubmit();
-      }, 300); // 300ms debounce
+        const trimmedSearch = search.trim();
+        if (trimmedSearch.length >= 3) {
+          searchEvent(trimmedSearch);
+          router.push(`/search?q=${encodeURIComponent(trimmedSearch)}`);
+        }
+      }, 300);
 
       return () => clearTimeout(debounceTimer);
     }
-  }, [search, handleSubmit]);
-
-  const handleChange = useCallback(
-    (e) => {
-      const newValue = e.target.value;
-      searchEvent(newValue); // search event passed
-      setSearch(newValue);
-    },
-    [searchEvent],
-  );
-
-  const clearSearch = useCallback(() => {
-    setSearch("");
-  }, []);
-
-  const handleKeyDown = useCallback(
-    (e) => {
-      if (e.key === "Enter") {
-        handleSubmit();
-      }
-    },
-    [handleSubmit],
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search, router]);
 
   const handleClick = useCallback(() => {
     if (pathname !== "/search") {
@@ -141,9 +118,9 @@ const SearchBar = memo(({ className }) => {
   }, [pathname, router]);
 
   const suffix = search ? (
-    <ClearIcon onClick={clearSearch} />
+    <ClearIcon onClick={() => setSearch("")} />
   ) : (
-    <SearchIcon onClick={pathname === "/search" ? handleSubmit : undefined} />
+    <SearchIcon />
   );
 
   return (
@@ -160,8 +137,7 @@ const SearchBar = memo(({ className }) => {
         placeholder={placeholderState.text}
         autoComplete="off"
         value={search}
-        onKeyDown={handleKeyDown}
-        onChange={handleChange}
+        onChange={(e) => setSearch(e.target.value)}
         suffix={suffix}
         autoFocus={pathname === "/search"}
         className={twMerge(

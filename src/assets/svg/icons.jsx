@@ -18,6 +18,135 @@ export const CloseIcon = ({ size = 30, color = "black", className }) => {
   );
 };
 
+export const CloseSVG = ({
+  fillColor = "#000000",
+  className = "",
+  ...props
+}) => {
+  return (
+    <svg
+      fill={fillColor}
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+      height={props?.width || 20}
+      width={props?.height || 20}
+      viewBox={`0 0 ${props?.width || 20} ${props?.height || 20}`}
+    >
+      <path
+        d="M18 6L6 18"
+        stroke={fillColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6 6L18 18"
+        stroke={fillColor}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
+export const DownArrowIconSVG = ({
+  fillColor = "#000000",
+  className = "",
+  strokeWidth = 1, // Default stroke width
+  ...props
+}) => {
+  const width = props?.width || 10;
+  const height = props?.height || 10;
+  const halfWidth = width / 2;
+  const halfHeight = height / 2;
+
+  return (
+    <svg
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+      height={height}
+      width={width}
+      viewBox={`0 0 ${width} ${height}`}
+    >
+      <path
+        d={`M${halfWidth - 4} ${halfHeight - 2} L${halfWidth} ${halfHeight + 2} L${halfWidth + 4} ${halfHeight - 2}`}
+        stroke={fillColor}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={strokeWidth} // Add strokeWidth here
+      />
+    </svg>
+  );
+};
+
+export const MenuSVG = ({
+  fillColor = "#000000",
+  className = "",
+  ...props
+}) => {
+  return (
+    <svg
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+      width={props?.width || 27}
+      height={props?.height || 22}
+      viewBox="0 0 27 22"
+    >
+      <path
+        d="M18.1207 4.125H1.38555C0.619757 4.125 0 3.81746 0 3.4375C0 3.05754 0.61979 2.75 1.38555 2.75H18.1207C18.8865 2.75 19.5063 3.05754 19.5063 3.4375C19.5063 3.81735 18.8865 4.125 18.121 4.125H18.1207Z"
+        fill={fillColor}
+      />
+      <path
+        d="M25.3398 11.499H1.38555C0.619757 11.499 0 11.1915 0 10.8115C0 10.4316 0.61979 10.124 1.38555 10.124L25.3398 10.1241C26.1056 10.1241 26.7254 10.4317 26.7254 10.8116C26.7251 11.1915 26.1053 11.499 25.3398 11.499Z"
+        fill={fillColor}
+      />
+      <path
+        d="M18.1207 18.8677H1.38555C0.619757 18.8677 0 18.5601 0 18.1802C0 17.8002 0.61979 17.4927 1.38555 17.4927H18.1207C18.8865 17.4927 19.5063 17.8002 19.5063 18.1802C19.5063 18.5601 18.8862 18.8677 18.1207 18.8677Z"
+        fill={fillColor}
+      />
+    </svg>
+  );
+};
+
+export const UserSVG = ({
+  fillColor = "#292D32",
+  className = "",
+  ...props
+}) => {
+  return (
+    <svg
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      {...props}
+      height={props?.width || 24}
+      width={props?.height || 24}
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12.1601 10.87C12.0601 10.86 11.9401 10.86 11.8301 10.87C9.45006 10.79 7.56006 8.84 7.56006 6.44C7.56006 3.99 9.54006 2 12.0001 2C14.4501 2 16.4401 3.99 16.4401 6.44C16.4301 8.84 14.5401 10.79 12.1601 10.87Z"
+        stroke={fillColor}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.16021 14.56C4.74021 16.18 4.74021 18.82 7.16021 20.43C9.91021 22.27 14.4202 22.27 17.1702 20.43C19.5902 18.81 19.5902 16.17 17.1702 14.56C14.4302 12.73 9.92021 12.73 7.16021 14.56Z"
+        stroke={fillColor}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+};
+
 export const StarIcon = ({ size = 30, color = "#FAB73B", className }) => {
   return (
     <svg
@@ -157,6 +286,7 @@ export const ArrowIconSVG = ({
   fillColor = "none",
   strokeColor = "currentColor",
   side = "right",
+  ...props
 }) => {
   const getPath = () => {
     switch (side) {
@@ -184,6 +314,7 @@ export const ArrowIconSVG = ({
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
+      {...props}
     >
       <path d={getPath()} />
     </svg>
@@ -2959,6 +3090,35 @@ export default function Checkmark({ size = 20, color = "#000000", className }) {
         className="checkmark__check"
         fill="none"
         d="M14.1 27.2l7.1 7.2 16.7-16.8"
+      />
+    </svg>
+  );
+}
+
+export function SearchIcon({ size = 20, color = "#000000", className }) {
+  return (
+    <svg
+      className={className}
+      width={size}
+      height={size}
+      color={color}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+        stroke="black"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M20.9984 20.9999L16.6484 16.6499"
+        stroke="black"
+        strokeWidth="1.25"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

@@ -28,7 +28,6 @@ export function* outOfStockEventHandler({ payload }) {
   try {
     const { products, inventory } = payload || {};
 
-    console.log(products, inventory, "OUT OF STOCK_____");
     if (!Array.isArray(products) || !inventory) {
       console.warn("Invalid payload structure in outOfStockHandler");
       return;
@@ -84,7 +83,6 @@ export function* proceedToCheckoutEventHandler({ payload }) {
       });
     }
 
-    console.log(userData, user, "PROCEED TO CHECKOUT");
     const analyticsMeta = analyticsMetaDataMapper();
 
     trackClickStream({
@@ -130,18 +128,6 @@ export function* searchEventHandler({ payload }) {
       source: eventSource,
       ...analyticsMeta,
     });
-    console.log(
-      {
-        event: "search",
-        eventID: uuidv4(),
-        userId: user?.id || "",
-        user: user || {},
-        search_term: term,
-        source: eventSource,
-        ...analyticsMeta,
-      },
-      "SEARCH",
-    );
   } catch (e) {
     console.error("Error in searchHandler:", e);
   }
@@ -149,7 +135,6 @@ export function* searchEventHandler({ payload }) {
 
 export function* authEventHandler({ payload }) {
   try {
-    console.log("payload auth+++", payload);
     const eventSource = getClientSource();
     const { action } = payload;
     const { userId } = payload;
@@ -255,7 +240,6 @@ export function* viewCartEventHandler() {
 
     const eventSource = getClientSource();
 
-    console.log("cartViewed", cartViewed);
     trackEvent("Cart Viewed", cartViewed);
 
     if (window && window.dataLayer) {
@@ -273,23 +257,9 @@ export function* viewCartEventHandler() {
       });
     }
 
-    console.log("Viewed  cart", ga, value, pixel);
-
     const analyticsMeta = analyticsMetaDataMapper();
 
     trackClickStream({
-      event: "view_cart",
-      eventID: uuidv4(),
-      userId: user?.id || "",
-      user: user || {},
-      items: ga,
-      value,
-      currency: "INR",
-      coupon: coupon?.code || "",
-      source: eventSource,
-      ...analyticsMeta,
-    });
-    console.log("CLKICK", {
       event: "view_cart",
       eventID: uuidv4(),
       userId: user?.id || "",
@@ -356,7 +326,6 @@ export function* viewItemEventHandler({ payload }) {
       null,
       user,
     );
-    console.log("Product Viewed", moengage.productViewed);
     trackEvent("Product Viewed", moengage.productViewed);
     const eventSource = getClientSource();
 
@@ -421,19 +390,6 @@ export function* viewListItemEventHandler({ payload }) {
         },
       });
     }
-    console.log(
-      {
-        event: "view_item_list",
-        eventID: uuidv4(),
-        attribute: pixel,
-        ecommerce: {
-          item_list_id: id,
-          item_list_name: name,
-          items: ga,
-        },
-      },
-      "viewList",
-    );
 
     const analyticsMeta = analyticsMetaDataMapper();
 
@@ -561,10 +517,8 @@ export function* placeOrderEventHandler({ payload }) {
       phone,
     });
 
-    console.log("Order Created", orderCreated);
     trackEvent("Order Created", orderCreated);
     itemPurchasedEvents.forEach((itemPurchased) => {
-      console.log("Item Purchased", itemPurchased);
       trackEvent("Item Purchased", itemPurchased);
     });
 
@@ -696,7 +650,6 @@ export function* checkoutStartedEventHandler({ payload }) {
 
     const user = userMapper(userData, currentAddress);
 
-    console.log("+++++checkoutStartedEventHandler", data, coupon, user, source);
     const { pinpoint, ga, value, pixel, vercel } = orderMapper(
       data,
       coupon,
@@ -713,7 +666,6 @@ export function* checkoutStartedEventHandler({ payload }) {
       source,
     );
 
-    console.log("Checkout Started", checkoutStarted);
     trackEvent("Checkout Started", checkoutStarted);
     if (window && window.dataLayer) {
       window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
@@ -734,18 +686,6 @@ export function* checkoutStartedEventHandler({ payload }) {
     const analyticsMeta = analyticsMetaDataMapper();
 
     trackClickStream({
-      event: "begin_checkout",
-      eventID: uuidv4(),
-      userId: user?.id || "",
-      user: user || {},
-      items: ga,
-      value,
-      currency: "INR",
-      coupon: coupon?.code || "",
-      source: source === "GOKWIK" ? "GoKwik" : eventSource,
-      ...analyticsMeta,
-    });
-    console.log("Checkout Started CLICK STREAM", {
       event: "begin_checkout",
       eventID: uuidv4(),
       userId: user?.id || "",
@@ -814,7 +754,6 @@ export function* addressAddedEventHandler({ payload }) {
     });
     const { addressAdded } = addressMapper(address, totalPrice, checkoutSource);
 
-    console.log("addressAdded", addressAdded);
     trackEvent("Address Added", addressAdded);
     const analyticsMeta = analyticsMetaDataMapper();
 
@@ -858,7 +797,6 @@ export function* addressSelectedEventHandler({ payload }) {
       trackEvent("Address Selected", addressSelected);
       const analyticsMeta = analyticsMetaDataMapper();
 
-      console.log("ADDRESS_SELECTED", addressSelected);
       trackClickStream({
         event: "address_selected",
         eventID: uuidv4(),
@@ -886,12 +824,6 @@ export function* categoryViewedEventHandler({ payload }) {
 
     const eventSource = getClientSource();
     const analyticsMeta = analyticsMetaDataMapper();
-    console.log(
-      {
-        ...payload,
-      },
-      "category_viewed",
-    );
 
     trackClickStream({
       event: "category_viewed",
@@ -962,17 +894,6 @@ export function* addPaymentInfoEventHandler({ payload }) {
       source: checkoutSource === "GOKWIK" ? "Gokwik" : eventSource,
       ...analyticsMeta,
     });
-    console.log(
-      {
-        event: "add_payment_info",
-        eventID: uuidv4(),
-        userId: user?.id || "",
-        user: user || {},
-        source: checkoutSource === "GOKWIK" ? "Gokwik" : eventSource,
-        ...analyticsMeta,
-      },
-      "ADD PAYMENT INFO",
-    );
   } catch (e) {
     errorHandler(e);
   }
@@ -990,7 +911,6 @@ export function* bannerClickedEventHandler({ payload }) {
 
     const eventSource = getClientSource();
     const analyticsMeta = analyticsMetaDataMapper();
-    console.log("BANNER clicked", payload);
     trackClickStream({
       event: "banner_clicked",
       eventID: uuidv4(),
@@ -1012,7 +932,6 @@ export function* otpRequestedEventHandler({ payload }) {
       ...payload,
     });
 
-    console.log("OTP requested", payload);
     const eventSource = getClientSource();
     const analyticsMeta = analyticsMetaDataMapper();
 
@@ -1045,7 +964,6 @@ export function* addToCartEventHandler({ payload }) {
     const eventName = qty > 0 ? "add_to_cart" : "remove_from_cart";
 
     trackEvent("Add To Cart", moengage.addToCart);
-    console.log("add to cart", value, pixel, vercel, ga, moengage);
     if (window && window.dataLayer) {
       window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
       window.dataLayer.push({
@@ -1092,7 +1010,6 @@ export function* removeFromCartEventHandler({ payload }) {
     );
 
     trackEvent("Removed From Cart", moengage.removedFromCart);
-    console.log("Removed From Cart", value, pixel, vercel, ga, moengage);
     if (window && window.dataLayer) {
       window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
       window.dataLayer.push({
@@ -1219,17 +1136,6 @@ export function* logOutEventHandler({ payload }) {
     });
     const analyticsMeta = analyticsMetaDataMapper();
 
-    console.log(
-      {
-        event: "customer_logged_out",
-        eventID: uuidv4(),
-        userId: user?.phone || user?.id || "",
-        user: user || {},
-        source: eventSource,
-        ...analyticsMeta,
-      },
-      "LOG________________OUT",
-    );
     trackClickStream({
       event: "customer_logged_out",
       eventID: uuidv4(),
@@ -1255,7 +1161,6 @@ export function* topNavbarClickedEventHandler({ payload }) {
       ...payload,
     });
 
-    console.log(payload, "Top Navbar Clicked");
     const analyticsMeta = analyticsMetaDataMapper();
 
     trackClickStream({
@@ -1293,15 +1198,6 @@ export function* shopByClickEventHandler({ payload }) {
       source: eventSource,
       ...analyticsMeta,
     });
-    console.log("shop_by_clicked", {
-      event: "shop_by_clicked",
-      eventID: uuidv4(),
-      userId: user?.id || "",
-      user: user || {},
-      ...payload,
-      source: eventSource,
-      ...analyticsMeta,
-    });
   } catch (e) {
     errorHandler(e);
   }
@@ -1319,14 +1215,6 @@ export function* blogClickEventHandler({ payload }) {
     trackClickStream({
       event: "blogs_clicked",
       eventID: uuidv4(),
-      userId: user?.id || "",
-      user: user || {},
-      ...payload,
-      source: eventSource,
-      ...analyticsMeta,
-    });
-    console.log("blogs_clicked", {
-      event: "blogs_clicked",
       userId: user?.id || "",
       user: user || {},
       ...payload,
@@ -1358,12 +1246,6 @@ export function* applyCouponsEventHandler({ payload }) {
         attribute: pixel,
       });
     }
-
-    console.log("COUPON APPLIED ", {
-      event: "add_coupon_code",
-      eventID: uuidv4(),
-      attribute: pixel,
-    });
   } catch (e) {
     errorHandler(e);
   }

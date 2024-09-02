@@ -1,4 +1,4 @@
-import { DownArrowIconSVG } from "@/assets/images/downArrow";
+import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { SelectBox, Text } from "@/components/elements";
 import { twMerge } from "tailwind-merge";
 

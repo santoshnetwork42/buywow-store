@@ -23,8 +23,6 @@ import { unstable_cache } from "next/cache";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 
-export const revalidate = 60;
-
 const outfit = Outfit({
   subsets: ["latin"],
   display: "swap",
@@ -34,7 +32,7 @@ const outfit = Outfit({
 export const metadata = {
   title: {
     default: "Buy Wow",
-    template: "Buy Wow | %s",
+    template: "%s | Buy Wow",
   },
   metadataBase: new URL("https://buywow.in"),
 };
@@ -48,19 +46,19 @@ Amplify.configure({
 const cachedGetNavbarAndFooterAPI = unstable_cache(
   async () => getNavbarAndFooterAPI(),
   ["navbar-footer"],
-  { revalidate: 60 },
+  { revalidate: 900 },
 );
 
 const cachedGetInitialDataAPI = unstable_cache(
   async (storeId, platform) => getInitialDataAPI(storeId, platform),
   ["initial-data"],
-  { revalidate: 60 },
+  { revalidate: 30 },
 );
 
 const cachedGetCartUpsellProductsAPI = unstable_cache(
   async () => getCartUpsellProductsAPI(),
   ["upsell-products"],
-  { revalidate: 60 },
+  { revalidate: 900 },
 );
 
 async function RootLayout({ children }) {
@@ -72,6 +70,7 @@ async function RootLayout({ children }) {
     announcementBar: announcementData = {},
     navbar: headerData = {},
     footer: footerData = {},
+    carousel: carouselData = {},
   } = data || {};
 
   return (
@@ -85,7 +84,7 @@ async function RootLayout({ children }) {
         {!!GOKWIK_SCRIPT && <script defer src={GOKWIK_SCRIPT} />}
       </head>
       <body>
-        <Provider headerData={headerData}>
+        <Provider data={{ headerData, carouselData }}>
           <NavbarProvider initialData={initialData?.data}>
             <GoKwikProvider>
               <AnnouncementProvider>
@@ -95,7 +94,7 @@ async function RootLayout({ children }) {
                   {headerData?.data && <Header data={headerData} />}
                   <CartDrawer upsellProducts={upsellProducts} />
                   <ToastComponent />
-                  <div className="flex-1">{children}</div>
+                  <div className="flex flex-1 flex-col">{children}</div>
                   {footerData?.data && <Footer data={footerData} />}
                 </div>
                 {AUDITZ && (

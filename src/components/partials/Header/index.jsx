@@ -1,8 +1,6 @@
 "use client";
 
-import { MenuSVG } from "@/assets/images";
-import { DownArrowIconSVG } from "@/assets/images/downArrow";
-import { BagIcon } from "@/assets/svg/icons";
+import { BagIcon, DownArrowIconSVG, MenuSVG } from "@/assets/svg/icons";
 import PasswordLess from "@/components/common/Passwordless";
 import { Button, Img, Text } from "@/components/elements";
 import MobileMenu from "@/components/partials/Header/MobileMenu";
@@ -212,7 +210,7 @@ const Header = ({ data }) => {
 
           <div className="flex max-w-[370px] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
             {!isRestricted && (
-              <SearchBar className="hidden min-w-[140px] max-w-[284px] shrink md:flex" />
+              <SearchBar className="hidden min-w-[200px] max-w-[284px] shrink md:flex" />
             )}
             <Button className="ml-auto flex-shrink-0" onClick={handleUserClick}>
               <Img
@@ -252,7 +250,7 @@ const Header = ({ data }) => {
           collectionMenus={collectionMenus}
           otherLinks={otherLinks}
           logo={mWebMenuLogo}
-          isLoggedin={!!user?.id}
+          isLoggedIn={!!user?.id}
         />
       )}
 

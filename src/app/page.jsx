@@ -1,13 +1,12 @@
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
+import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
-
-export const revalidate = 60;
 
 // Dynamically import components
 import Carousal from "@/components/blocks/Carousel";
 import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
 import TrendingCategories from "@/components/blocks/TrendingCategories";
-import { unstable_cache } from "next/cache";
+import React from "react";
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
 );
@@ -81,6 +80,8 @@ const RecentlyViewed = dynamic(
   () => import("@/components/blocks/RecentlyViewed"),
 );
 
+export const revalidate = 900;
+
 export const metadata = {
   title: "Natural Skincare Products - Flash Sale Up To 60% OFF",
   description:
@@ -124,29 +125,30 @@ const componentMap = {
 const cachedGetPageBySlugAPI = unstable_cache(
   async (slug) => getPageBySlugAPI(slug),
   ["page-by-slug"],
-  { revalidate: 60 },
+  { revalidate: 900 },
 );
 
-const renderBlock = (block, index, slug) => {
-  if (!block?.showComponent) return null;
+const renderBlock = (block, slug) => {
+  const { showComponent, __typename, id } = block || {};
+  if (!showComponent) return null;
 
-  const Component = componentMap[block?.__typename];
+  const Component = componentMap[__typename];
   if (!Component) return null;
 
-  return <Component key={index} slug={slug} {...block} />;
+  return <Component key={`${__typename}-${id}`} slug={slug} {...block} />;
 };
 
 export default async function Page() {
-  try {
-    const pageData = await cachedGetPageBySlugAPI("index");
-    const { blocks } = pageData || {};
+  const pageData = await cachedGetPageBySlugAPI("index");
+  const { blocks, slug } = pageData || {};
 
-    if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-      throw new Error("No blocks found or invalid blocks data");
-    }
-
-    return <>{blocks.map((block, index) => renderBlock(block, index))}</>;
-  } catch (error) {
-    console.error("Error in Page component:", error);
+  if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
+    throw new Error("Blocks not found on Home page");
   }
+
+  return (
+    <React.Fragment>
+      {blocks.map((block) => renderBlock(block, slug))}
+    </React.Fragment>
+  );
 }

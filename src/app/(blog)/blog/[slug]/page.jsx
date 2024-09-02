@@ -2,17 +2,16 @@ import "@wordpress/block-library/build-style/common.css";
 import "@wordpress/block-library/build-style/style.css";
 import "@wordpress/block-library/build-style/theme.css";
 
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import dayjs from "dayjs";
 import { Heading, Text } from "@/components/elements";
-import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
-import { fetchBlog, fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
 import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
+import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 import { replaceBlogLinks } from "@/lib/replaceBlogLinks";
+import { fetchBlog, fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
+import handleRedirect from "@/utils/handleRedirect";
+import dayjs from "dayjs";
+import Image from "next/image";
+import Link from "next/link";
 
 export const revalidate = 60 * 60 * 24;
 
@@ -50,7 +49,7 @@ export default async function ReadBlog({ params }) {
   const blog = await fetchBlog(slug);
 
   if (!blog) {
-    notFound();
+    return await handleRedirect(`/blog/${slug}`);
   }
 
   const featuredBlogs = await fetchFeaturedBlogs(5);

@@ -1,5 +1,3 @@
-"use client";
-
 import { Heading, Text } from "@/components/elements";
 import Link from "next/link";
 

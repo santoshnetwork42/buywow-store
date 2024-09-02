@@ -1,5 +1,7 @@
 "use client";
 
+import { SearchIcon } from "@/assets/svg/icons";
+import { Heading, Text } from "@/components/elements";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import { fetchSearchItems } from "@/utils/helpers";
 import { setSoldOutLast } from "@/utils/helpers/products";
@@ -11,7 +13,7 @@ const ProductGrid = React.memo(({ products, isInitialData }) => {
   const sortedProducts = setSoldOutLast(products, isInitialData);
 
   return (
-    <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-4 sm:grid-cols-2 sm:gap-x-2 sm:gap-y-5 md:grid-cols-3 lg:gap-x-3 lg:gap-y-6 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
+    <div className="grid flex-1 grid-cols-2 justify-center gap-x-1 gap-y-4 sm:grid-cols-2 sm:gap-x-2 sm:gap-y-5 md:grid-cols-3 lg:gap-x-3 lg:gap-y-6 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
       {sortedProducts.map((product, index) => (
         <ProductCard
           key={`product-${product?.id || index}`}
@@ -26,7 +28,7 @@ const ProductGrid = React.memo(({ products, isInitialData }) => {
 ProductGrid.displayName = "ProductGrid";
 
 const SkeletonGrid = React.memo(() => (
-  <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-4 sm:grid-cols-2 sm:gap-x-2 sm:gap-y-5 md:grid-cols-3 lg:gap-x-3 lg:gap-y-6 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
+  <div className="grid flex-1 grid-cols-2 justify-center gap-x-1 gap-y-4 sm:grid-cols-2 sm:gap-x-2 sm:gap-y-5 md:grid-cols-3 lg:gap-x-3 lg:gap-y-6 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
     {Array(16)
       .fill(0)
       .map((_, index) => (
@@ -36,6 +38,32 @@ const SkeletonGrid = React.memo(() => (
 ));
 
 SkeletonGrid.displayName = "SkeletonGrid";
+
+const NoProductsFound = React.memo(({ query }) => (
+  <div className="flex flex-1 flex-col items-center justify-center px-4 py-16">
+    <div className="mb-4 rounded-full bg-gray-100 p-4 sm:mb-5 lg:mb-6">
+      <SearchIcon className="size-8 text-gray-400 sm:size-9 lg:size-10" />
+    </div>
+    <Heading
+      as="h2"
+      size="3xl"
+      className="mb-3 text-center text-2xl text-gray-800"
+      responsive
+    >
+      No results found for &quot;{query}&quot;
+    </Heading>
+    <Text
+      as="p"
+      size="lg"
+      className="mb-8 max-w-md text-center text-base text-gray-600/70"
+      responsive
+    >
+      Please try a different term or explore our popular categories.
+    </Text>
+  </div>
+));
+
+NoProductsFound.displayName = "NoProductsFound";
 
 const SearchResults = ({ initialProducts = [] }) => {
   const searchParams = useSearchParams();
@@ -72,6 +100,10 @@ const SearchResults = ({ initialProducts = [] }) => {
 
   if (loading) {
     return <SkeletonGrid />;
+  }
+
+  if (products.length === 0 && query) {
+    return <NoProductsFound query={query} />;
   }
 
   return <ProductGrid products={products} isInitialData={isInitialData} />;

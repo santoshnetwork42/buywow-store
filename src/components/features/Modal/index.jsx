@@ -3,6 +3,7 @@
 import { CloseIcon } from "@/assets/svg/icons";
 import { Heading } from "@/components/elements";
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { twMerge } from "tailwind-merge";
 import Confetti from "./Confetti";
 
@@ -20,6 +21,10 @@ const Modal = ({
   enableCloseButton = true,
   modalContainerClassName,
 }) => {
+  const isCartDrawerOpen = useSelector(
+    (state) => state.modal.modal.cart.isCartOpen,
+  );
+
   const modalRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -33,14 +38,14 @@ const Modal = ({
       timer = setTimeout(() => {
         setIsVisible(false);
       }, 300);
-      document.body.style.overflow = "auto";
+      if (!isCartDrawerOpen) document.body.style.overflow = "auto";
     }
 
     return () => {
       if (timer) clearTimeout(timer);
-      document.body.style.overflow = "auto";
+      if (!isCartDrawerOpen) document.body.style.overflow = "auto";
     };
-  }, [isOpen]);
+  }, [isOpen, isCartDrawerOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

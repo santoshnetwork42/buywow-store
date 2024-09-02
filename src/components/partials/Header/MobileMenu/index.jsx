@@ -1,4 +1,4 @@
-import { CloseSVG, UserSVG } from "@/assets/images";
+import { ArrowIconSVG, CloseSVG, UserSVG } from "@/assets/svg/icons";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import Sidebar from "@/components/features/Drawer";
 import MobileMenuItem from "@/components/partials/Header/MobileMenuItem";
@@ -12,7 +12,7 @@ const HeaderSection = ({
   mWebUrl,
   mWebAlternativeText,
   onClose,
-  isLoggedin,
+  isLoggedIn,
   onLoginClick,
 }) => (
   <div className="flex items-center justify-between bg-yellow-900 p-4">
@@ -25,26 +25,19 @@ const HeaderSection = ({
         className="aspect-[100/48] w-[100px] object-contain"
       />
     </Link>
-    {!isLoggedin && (
+    {!isLoggedIn && (
       <div className="ml-2.5 flex flex-1 flex-col gap-0.5">
         <Heading as="h4" size="lg" className="text-white-a700_01">
           Hi Guest
         </Heading>
         <div
-          className="relative flex w-fit items-center gap-1"
+          className="relative flex w-fit cursor-pointer items-center gap-1"
           onClick={onLoginClick}
         >
           <Text size="sm" as="p" className="text-white-a700_01">
             Login
           </Text>
-          <Img
-            src="img_arrow_right_white.svg"
-            width={18}
-            height={18}
-            alt={`Login arrow`}
-            className="aspect-square w-[18px] object-contain"
-            isStatic
-          />
+          <ArrowIconSVG className="size-4" strokeColor="#ffffff" />
           <div className="absolute -bottom-[3px] left-0 h-[0.5px] w-[55px] bg-white-a700_01"></div>
         </div>
       </div>
@@ -107,7 +100,7 @@ const MobileMenu = ({
   collectionMenus,
   otherLinks,
   logo,
-  isLoggedin,
+  isLoggedIn,
 }) => {
   const { handlePasswordLessModal } = useModalDispatch();
   const { url: mWebUrl, alternativeText: mWebAlternativeText = "logo" } =
@@ -149,11 +142,11 @@ const MobileMenu = ({
         mWebUrl={mWebUrl}
         mWebAlternativeText={mWebAlternativeText}
         onClose={onClose}
-        isLoggedin={isLoggedin}
+        isLoggedIn={isLoggedIn}
         onLoginClick={onLoginClick}
       />
       {menuContent}
-      {isLoggedin && <FooterSection onClose={onClose} />}
+      {isLoggedIn && <FooterSection onClose={onClose} />}
     </Sidebar>
   );
 };

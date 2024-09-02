@@ -65,6 +65,7 @@ function GoKwikProvider({ children }) {
     } catch (e) {
       console.log("Error while upadating user points ");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userWithRewardPoints, setUserWithRewardPoints]);
 
   const applyCouponCode = useCallback(
@@ -97,6 +98,7 @@ function GoKwikProvider({ children }) {
         console.error("Coupon not found");
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [userId, cartList],
   );
 
@@ -219,11 +221,11 @@ function GoKwikProvider({ children }) {
           errorHandler(e);
         } finally {
           await gokwikSdk.close();
-          await emptyCart();
+          emptyCart();
           if (orderDetails.merchant_order_id) {
-            await router.push(`/order/${orderDetails.merchant_order_id}`);
+            router.push(`/order/${orderDetails.merchant_order_id}`);
           } else {
-            await router.push(`/`);
+            router.push(`/`);
           }
         }
       });
@@ -273,6 +275,7 @@ function GoKwikProvider({ children }) {
         await manageUserAuthEvent(event.phone_no, event.user_token);
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <GKContext.Provider value={{}}>{children}</GKContext.Provider>;

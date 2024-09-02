@@ -4,8 +4,8 @@ import { formatTotalRatings, toDecimal } from "@/utils/helpers";
 import React from "react";
 
 const ProductHeader = React.memo(
-  ({ title, benefits, rating, totalRatings }) => (
-    <div className="flex flex-col gap-1 md:gap-1.5">
+  ({ title, benefits, rating, totalRatings, className }) => (
+    <div className={`flex flex-col gap-1 md:gap-1.5 ${className}`}>
       <div className="flex flex-col">
         {title && (
           <Heading className="line-clamp-2 md:text-[28px]" as="p" size="2xl">

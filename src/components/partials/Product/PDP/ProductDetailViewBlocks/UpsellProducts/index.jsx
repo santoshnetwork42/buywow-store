@@ -10,7 +10,7 @@ import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-const UpsellProduct = React.memo(({ product, index, text, subText }) => {
+const UpsellProduct = React.memo(({ product, text, subText }) => {
   const { fetchedProduct, imageBgColor, slug } = extractAttributes(product);
 
   const [selectedVariant] = useProductVariantGroups(fetchedProduct);
@@ -18,14 +18,14 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
 
   if (!fetchedProduct?.id || !packageProduct) return null;
 
-  const { price, listingPrice } = packageProduct || {};
+  const { price, listingPrice, title } = packageProduct || {};
 
   const discount = getDiscountPercentage(price, listingPrice);
 
   return (
     <Link
       href={`/product/${slug}`}
-      className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded bg-white-a700 p-2.5 shadow md:p-3"
+      className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded-md bg-white-a700 p-2.5 shadow md:p-3"
     >
       <div
         className="flex aspect-[74/80] w-[74px] items-center overflow-hidden rounded"
@@ -45,12 +45,13 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             className="line-clamp-1 text-sm font-semibold"
             responsive
           >
-            <span className="font-normal">Step {index + 1}:</span>
-            {" " + text}
+            {text || title}
           </Heading>
-          <Text as="p" size="sm" className="line-clamp-2" responsive>
-            {subText}
-          </Text>
+          {text && (
+            <Text as="p" size="sm" className="line-clamp-2" responsive>
+              {title}
+            </Text>
+          )}
         </div>
         <div className="flex justify-between">
           <div className="flex items-center gap-1 md:gap-2">

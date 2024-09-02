@@ -46,7 +46,7 @@ const CouponModal = ({ isOpen, onClose, appliedCoupon }) => (
           {appliedCoupon?.couponTitle}
         </Heading>
         <Text as="span" size="sm" className="line-clamp-3" responsive>
-          Applicable on hair, skin, body and kids products.
+          {appliedCoupon?.description}
         </Text>
       </div>
       <Button variant="primary" size="small" onClick={onClose}>

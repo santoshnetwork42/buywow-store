@@ -53,7 +53,7 @@ const ProductBenefits = ({
       }`}
     >
       <SectionHeading title={title} />
-      <div className="flex flex-wrap justify-center gap-x-4 gap-y-6 sm:gap-x-5 md:gap-x-6 lg:gap-x-7 xl:gap-x-8">
+      <div className="flex w-full flex-wrap justify-center gap-x-4 gap-y-6 sm:gap-x-5 md:gap-x-6 lg:gap-x-7 xl:gap-x-8">
         {productBenefitItems.map((item, index) => (
           <div
             key={`benefit-${index}`}
