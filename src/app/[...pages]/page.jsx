@@ -450,7 +450,7 @@ export default async function Page({ params }) {
   }
 
   const pageData = await cachedGetPageBySlugAPI(lastSlug);
-  const { blocks, slug, type } = pageData;
+  const { blocks, slug, type } = pageData || {};
 
   if (!slug) {
     return await handleRedirect(`/${fullSlug}`);
@@ -468,7 +468,17 @@ export default async function Page({ params }) {
   }
 
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-    throw new Error(`Blocks not found on ${fullSlug} page`);
+    const pageData = await getPageBySlugAPI(lastSlug);
+    const { blocks } = pageData || {};
+
+    if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
+      throw new Error(`Blocks not found on ${fullSlug} page`);
+    }
+    return (
+      <React.Fragment>
+        {blocks.map((block, index) => renderBlock(block, pages, index))}
+      </React.Fragment>
+    );
   }
 
   return (
