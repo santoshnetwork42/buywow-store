@@ -144,7 +144,7 @@ const cachedGetCMSPagesAPI = unstable_cache(
 const cachedGetPageBySlugAPI = unstable_cache(
   async (slug) => getPageBySlugAPI(slug),
   ["page-by-slug"],
-  { revalidate: 900 },
+  { revalidate: false },
 );
 
 const cachedGetStoreAPI = unstable_cache(async () => getStoreAPI(), ["store"], {
