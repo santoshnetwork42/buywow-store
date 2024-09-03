@@ -468,17 +468,7 @@ export default async function Page({ params }) {
   }
 
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-    const pageData = await getPageBySlugAPI(lastSlug);
-    const { blocks } = pageData || {};
-
-    if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-      throw new Error(`Blocks not found on ${fullSlug} page`);
-    }
-    return (
-      <React.Fragment>
-        {blocks.map((block, index) => renderBlock(block, pages, index))}
-      </React.Fragment>
-    );
+    throw new Error(`Blocks not found on ${fullSlug} page`);
   }
 
   return (

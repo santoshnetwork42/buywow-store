@@ -88,7 +88,6 @@ const AccordionFaQs = ({ accordionFAQsTitle, image, FAQs }) => {
       title={accordionFAQsTitle}
       imgUrl={accordionImageUrl}
       alternativeText={accordionImageAlt}
-      className="lg:w-[90%]"
     >
       <div className="flex flex-col gap-2 md:gap-2.5">
         {FAQs.map((faq, index) => (

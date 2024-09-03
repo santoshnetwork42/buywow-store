@@ -110,7 +110,7 @@ const ProductDetailView = ({ product }) => {
           hasInventory={hasInventory}
           productId={packageProduct?.id}
         />
-        <div className="mt-5 flex flex-col gap-6 md:gap-7">
+        <div className="mt-5 flex flex-col">
           <VariantSelector
             variantGroups={variantGroup}
             onVariantChange={onVariantChange}
