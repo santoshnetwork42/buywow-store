@@ -90,7 +90,7 @@ const AnnouncementBar = ({ data }) => {
   ) : (
     <Link
       href={announcement?.link || "#"}
-      className="container-main flex justify-center"
+      className="container-secondary flex justify-center"
       style={{ backgroundColor: announcement?.bgColor || "#6E809A" }}
     >
       <AnnouncementContent announcement={announcement} />

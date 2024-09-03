@@ -1,6 +1,7 @@
 // src/components/BlogSection.jsx
 "use client";
 
+import SectionHeading from "@/components/common/SectionHeading";
 import { Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { getFeaturedBlogs } from "@/graphql/api";
@@ -96,15 +97,10 @@ const BlogSection = ({ title = "Explore Blogs", buttonText = "Read More" }) => {
   }, []);
 
   return (
-    <div className="container-main mb-main flex flex-col items-center justify-center gap-5">
-      <Heading size="heading" as="h1" responsive>
-        {title}
-      </Heading>
+    <div className="container-main mb-main flex flex-col items-center justify-center">
+      <SectionHeading title={title} />
       <div className="gap px-auto flex w-full justify-evenly overflow-scroll sm:gap-5 md:gap-6 lg:gap-7">
-        <Slider
-          controlsContainerClassName="mb-2 md:mb-3"
-          sliderClassName="gap-[10px] sm:gap-3 lg:gap-5"
-        >
+        <Slider sliderClassName="gap-[10px] sm:gap-3 lg:gap-5">
           {featuredBlogs.map((blog, index) => (
             <BlogCard key={blog.id} blog={blog} index={index} />
           ))}
@@ -112,7 +108,7 @@ const BlogSection = ({ title = "Explore Blogs", buttonText = "Read More" }) => {
       </div>
       <Link
         href={`/blog`}
-        className="rounded-[24px] bg-yellow-900 px-4 py-2 text-center md:px-5 md:py-3"
+        className="mt-4 rounded-[24px] bg-yellow-900 px-4 py-2 text-center md:mt-5 md:px-5 md:py-3"
         aria-label="Read more blog articles"
       >
         <Heading as="h3" size="xl" className="text-white-a700_01" responsive>
