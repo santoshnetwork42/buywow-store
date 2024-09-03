@@ -9,6 +9,7 @@ import ProductImageSection from "@/components/partials/Product/PDP/ProductImageS
 import VariantSelector from "@/components/partials/Product/PDP/VariantSelector";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
+import handleRedirect from "@/utils/handleRedirect";
 import { extractAttributes } from "@/utils/helpers";
 import {
   useProduct,
@@ -24,6 +25,7 @@ const ProductDetailView = ({ product }) => {
     offerTag,
     productDetailView,
     fetchedProduct,
+    slug,
   } = extractAttributes(product?.pdpProduct);
 
   const { addRecentlyViewedProduct } = useRecentlyViewedDispatch();
@@ -51,7 +53,7 @@ const ProductDetailView = ({ product }) => {
   }, [fetchedProduct]);
 
   if (!fetchedProduct?.id) {
-    return <div>Product not found</div>;
+    handleRedirect(`/products/${slug}`);
   }
 
   const {

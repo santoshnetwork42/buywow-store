@@ -2,43 +2,133 @@ import { IndiaMapIcon, VehicleIcon } from "@/assets/svg/icons";
 import AddToCart from "@/components/common/AddToCart";
 import { Button, Img, Text } from "@/components/elements";
 import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { twMerge } from "tailwind-merge";
+
+const ShippingInfo = () => (
+  <div className="hidden justify-evenly gap-2 md:flex">
+    <div className="flex items-center gap-1">
+      <VehicleIcon size={24} />
+      <Text as="p" size="sm" responsive>
+        Ships within 1-2 days
+      </Text>
+    </div>
+    <div className="flex items-center gap-1">
+      <IndiaMapIcon size={16} />
+      <Text as="p" size="sm" responsive>
+        Shipping Across India
+      </Text>
+    </div>
+  </div>
+);
+
+const PriceInfo = ({ price, listingPrice, discountPercentage }) => (
+  <div className="flex items-center gap-2">
+    <Text as="p" size="base">
+      ₹{toDecimal(price)}
+    </Text>
+    {listingPrice > price && (
+      <Text as="p" size="sm" className="text-gray-600 line-through">
+        ₹{toDecimal(listingPrice)}
+      </Text>
+    )}
+    {discountPercentage > 0 && (
+      <Text
+        as="p"
+        size="sm"
+        className="rounded-full bg-lime-100 px-2 py-1 text-[13px] md:font-medium"
+      >
+        {discountPercentage}% Off
+      </Text>
+    )}
+  </div>
+);
+
+const DesktopStickyBar = ({
+  isFixed,
+  hasInventory,
+  product,
+  selectedVariant,
+  thumbImage,
+  title,
+  price,
+  listingPrice,
+  discountPercentage,
+}) => {
+  if (!isFixed || !hasInventory) return null;
+
+  return (
+    <div className="fixed bottom-0 left-0 z-50 hidden w-full border-t bg-white-a700_01 py-3 shadow-md md:block">
+      <div className="container-main flex items-center justify-between gap-8">
+        <div className="flex items-center gap-4">
+          <div className="size-16 shrink-0 overflow-hidden rounded bg-lime-50">
+            <Img
+              src={thumbImage?.imageKey}
+              alt={title}
+              height={200}
+              width={200}
+              addPrefix
+              className="h-auto w-full object-contain mix-blend-darken"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Text as="h3" size="lg" className="font-semibold">
+              {title}
+            </Text>
+            <PriceInfo
+              price={price}
+              listingPrice={listingPrice}
+              discountPercentage={discountPercentage}
+            />
+          </div>
+        </div>
+        <div className="h-12 w-[50%] max-w-[500px] shrink-0">
+          <AddToCart
+            product={product}
+            selectedVariant={selectedVariant}
+            buttonText="Add To Cart"
+            buttonClassName="w-full py-2 text-lg h-full"
+            quantityClassName="flex-1 min-h-full"
+            showGoToCart
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const AddToCartSection = React.memo(({ product, selectedVariant }) => {
   const [isFixed, setIsFixed] = useState(false);
   const sectionRef = useRef(null);
-  const originalPositionRef = useRef(null);
   const borderRef = useRef(null);
 
-  const { hasInventory, thumbImage, title, price, listingPrice } = product;
+  const { hasInventory, thumbImage, title, price, listingPrice } =
+    product || {};
 
-  const discountPercentage = getDiscountPercentage(price, listingPrice);
+  const discountPercentage = useMemo(
+    () => getDiscountPercentage(price, listingPrice),
+    [price, listingPrice],
+  );
 
   const checkVisibility = useCallback(() => {
-    if (window.innerWidth < 768) {
-      if (borderRef.current) {
-        setIsFixed(
-          borderRef.current.getBoundingClientRect().top <
-            window.innerHeight - 49 - 11,
-        );
-      }
-    } else {
-      if (sectionRef.current) {
-        setIsFixed(sectionRef.current.getBoundingClientRect().bottom < 0);
-      }
+    if (typeof window === "undefined") return;
+
+    if (window.innerWidth < 768 && borderRef.current) {
+      setIsFixed(
+        borderRef.current.getBoundingClientRect().top < window.innerHeight - 60,
+      );
+    } else if (sectionRef.current) {
+      setIsFixed(sectionRef.current.getBoundingClientRect().bottom < 0);
     }
   }, []);
 
   useEffect(() => {
-    if (sectionRef.current) {
-      const rect = sectionRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-
-      originalPositionRef.current =
-        rect.bottom + window.scrollY - windowHeight + 12;
-    }
-
     window.addEventListener("scroll", checkVisibility);
     return () => window.removeEventListener("scroll", checkVisibility);
   }, [checkVisibility]);
@@ -53,31 +143,12 @@ const AddToCartSection = React.memo(({ product, selectedVariant }) => {
         quantityClassName="flex-1 min-h-full"
         showGoToCart
       />
-      <div className="hidden justify-evenly gap-2 md:flex">
-        <div className="flex items-center gap-1">
-          <VehicleIcon size={24} />
-          <Text as="p" size="sm" responsive>
-            Ships within 1-2 days
-          </Text>
-        </div>
-        <div className="flex items-center gap-1">
-          <IndiaMapIcon size={16} />
-          <Text as="p" size="sm" responsive>
-            Shipping Across india
-          </Text>
-        </div>
-      </div>
+      <ShippingInfo />
     </>
   );
 
   const renderOutOfStockContent = () => (
     <>
-      {/* <Text as="p" size="2xl" className="text-[#b10001]" responsive>
-        Temporarily out of stock.
-      </Text>
-      <Text as="p" size="base" className="font-light text-[#6F4632]" responsive>
-        We are working hard to be back in stock as soon as possible
-      </Text> */}
       <Button
         variant="primary"
         size="none"
@@ -112,63 +183,17 @@ const AddToCartSection = React.memo(({ product, selectedVariant }) => {
         {hasInventory ? renderAddToCartContent() : renderOutOfStockContent()}
       </div>
 
-      {/* Desktop sticky bar */}
-      {isFixed && hasInventory && (
-        <div className="fixed bottom-0 left-0 z-50 hidden w-full border-t bg-white-a700_01 py-3 shadow-md md:block">
-          <div className="container-main flex items-center justify-between gap-8">
-            <div className="flex items-center gap-4">
-              <div className="size-16 shrink-0 overflow-hidden rounded bg-lime-50">
-                <Img
-                  src={thumbImage?.imageKey}
-                  alt={title}
-                  height={200}
-                  width={200}
-                  addPrefix
-                  className="h-auto w-full object-contain mix-blend-darken"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <Text as="h3" size="lg" className="font-semibold">
-                  {title}
-                </Text>
-                <div className="flex items-center gap-2">
-                  <Text as="p" size="base">
-                    ₹{toDecimal(price)}
-                  </Text>
-                  {listingPrice > price && (
-                    <Text
-                      as="p"
-                      size="sm"
-                      className="text-gray-600 line-through"
-                    >
-                      ₹{toDecimal(listingPrice)}
-                    </Text>
-                  )}
-                  {discountPercentage > 0 && (
-                    <Text
-                      as="p"
-                      size="sm"
-                      className="rounded-full bg-lime-100 px-2 py-1 text-[13px] md:font-medium"
-                    >
-                      {discountPercentage}% Off
-                    </Text>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="h-12 w-[50%] max-w-[500px] shrink-0">
-              <AddToCart
-                product={product}
-                selectedVariant={selectedVariant}
-                buttonText="Add To Cart"
-                buttonClassName="w-full py-2 text-lg h-full"
-                quantityClassName="flex-1 min-h-full"
-                showGoToCart
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <DesktopStickyBar
+        isFixed={isFixed}
+        hasInventory={hasInventory}
+        product={product}
+        selectedVariant={selectedVariant}
+        thumbImage={thumbImage}
+        title={title}
+        price={price}
+        listingPrice={listingPrice}
+        discountPercentage={discountPercentage}
+      />
     </>
   );
 });
