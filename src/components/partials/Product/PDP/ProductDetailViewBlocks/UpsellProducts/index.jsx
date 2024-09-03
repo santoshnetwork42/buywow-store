@@ -10,7 +10,7 @@ import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-const UpsellProduct = React.memo(({ product, index, text, subText }) => {
+const UpsellProduct = React.memo(({ product, text, subText }) => {
   const { fetchedProduct, imageBgColor, slug } = extractAttributes(product);
 
   const [selectedVariant] = useProductVariantGroups(fetchedProduct);
@@ -18,7 +18,7 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
 
   if (!fetchedProduct?.id || !packageProduct) return null;
 
-  const { price, listingPrice } = packageProduct || {};
+  const { price, listingPrice, title } = packageProduct || {};
 
   const discount = getDiscountPercentage(price, listingPrice);
 
@@ -45,11 +45,13 @@ const UpsellProduct = React.memo(({ product, index, text, subText }) => {
             className="line-clamp-1 text-sm font-semibold"
             responsive
           >
-            {text}
+            {text || title}
           </Heading>
-          <Text as="p" size="sm" className="line-clamp-2" responsive>
-            {subText}
-          </Text>
+          {text && (
+            <Text as="p" size="sm" className="line-clamp-2" responsive>
+              {title}
+            </Text>
+          )}
         </div>
         <div className="flex justify-between">
           <div className="flex items-center gap-1 md:gap-2">

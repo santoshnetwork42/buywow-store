@@ -165,10 +165,10 @@ const ProductCollectionByTab = ({
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    // event passing
     if (!viewListItemEventTriggered.current) {
       const [_products] = productCollectionTabItems
         ?.filter((i, index) => activeTabIndex === index)

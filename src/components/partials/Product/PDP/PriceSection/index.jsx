@@ -15,7 +15,7 @@ const PriceSection = React.memo(
 
     return (
       <>
-        <div className="flex items-center justify-between gap-2 sm:gap-3 md:justify-normal md:gap-4 lg:gap-5">
+        <div className="mt-2 flex items-center justify-between gap-2 sm:gap-3 md:justify-normal md:gap-4 lg:gap-5">
           <div className="flex items-center gap-2">
             <Text as="p" size="xl" className="font-semibold md:text-[22px]">
               ₹{toDecimal(price)}

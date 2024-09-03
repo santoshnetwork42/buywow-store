@@ -15,6 +15,7 @@ import {
   getNavbarAndFooter,
   getOrder,
   getPageBySlug,
+  getPageMetadataBySlug,
   getProductById,
   getRedirects,
   getReviews,
@@ -103,6 +104,26 @@ export const getPageBySlugAPI = async (slugId) => {
     });
 
     return JSON.parse(response?.data?.getPageBySlug || "{}");
+  } catch (err) {
+    errorHandler(err, "Get Page By Slug API");
+    return null;
+  }
+};
+
+export const getPageMetadataBySlugAPI = async (slugId, pageType) => {
+  try {
+    const response = await client.graphql({
+      query: getPageMetadataBySlug,
+      authMode: "apiKey",
+      variables: {
+        storeId: STORE_ID,
+        pageType,
+        slug: slugId,
+        collectionDataLimit: 100,
+      },
+    });
+
+    return JSON.parse(response?.data?.getPageMetadataBySlug || "{}");
   } catch (err) {
     errorHandler(err, "Get Page By Slug API");
     return null;

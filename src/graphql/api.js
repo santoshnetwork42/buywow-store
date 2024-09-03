@@ -411,6 +411,22 @@ export const getPageBySlug = /* GraphQL */ `
   }
 `;
 
+export const getPageMetadataBySlug = /* GraphQL */ `
+  query GetPageMetadataBySlug(
+    $pageType: String!
+    $slug: String!
+    $storeId: String!
+    $collectionDataLimit: Int
+  ) {
+    getPageMetadataBySlug(
+      pageType: $pageType
+      slug: $slug
+      storeId: $storeId
+      collectionDataLimit: $collectionDataLimit
+    )
+  }
+`;
+
 export const getNavbarAndFooter = /* GraphQL */ `
   query GetNavbarAndFooter($storeId: String!) {
     getNavbarAndFooter(storeId: $storeId)
@@ -990,6 +1006,7 @@ export const applyCoupon = /* GraphQL */ `
       getYQuantity
       getYProduct
       couponTitle
+      description
       getYStoreProduct {
         id
         title

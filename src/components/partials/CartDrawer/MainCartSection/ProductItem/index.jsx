@@ -73,11 +73,13 @@ const ProductItem = ({
 
   const handleChangeQuantity = (newQuantity) => {
     const finalQuantity = newQuantity + extraQuantity;
-    const updatedCart = getUpdatedCart(cartList, recordKey, {
-      qty: finalQuantity,
-    });
-    updateCart(updatedCart);
-    if (!finalQuantity) {
+
+    if (finalQuantity > 0) {
+      const updatedCart = getUpdatedCart(cartList, recordKey, {
+        qty: finalQuantity,
+      });
+      updateCart(updatedCart);
+    } else {
       item.cartItemSource === "COUPON" ? removeCoupon() : removeFromCart(item);
     }
   };
