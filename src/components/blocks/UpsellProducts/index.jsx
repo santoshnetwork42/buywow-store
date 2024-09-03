@@ -116,6 +116,7 @@ const UpsellProducts = ({
         controlsContainerClassName="mb-2 md:mb-3"
         sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
         className="max-md:hidden"
+        isContainShadow
       >
         {upsellProductItems.map((item, index) =>
           renderProductItem(item, index),
@@ -129,7 +130,7 @@ const UpsellProducts = ({
       <Button
         variant="primary"
         size="large"
-        className="mt-2"
+        className="mt-1.5 sm:mt-1 md:mt-0"
         onClick={bundleAddToCart}
       >
         {isBundleAddedToCart

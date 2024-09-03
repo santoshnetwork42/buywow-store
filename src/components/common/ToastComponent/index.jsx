@@ -22,16 +22,26 @@ export const showToast = {
       duration: 3000,
     }),
   error: (message) =>
-    toast.error(message, {
-      style: {
-        background:
-          "radial-gradient(18.26% 56.66% at 50% 50%, #66442C 0%, #352215 100%)",
-        color: "white",
-        maxWidth: "min(100%, 936px)",
+    toast.error(
+      <Text
+        size="base"
+        as="p"
+        className="flex-1 text-sm text-white-a700"
+        responsive
+      >
+        {message}
+      </Text>,
+      {
+        style: {
+          background:
+            "radial-gradient(18.26% 56.66% at 50% 50%, #66442C 0%, #352215 100%)",
+          color: "white",
+          maxWidth: "min(100%, 700px)",
+        },
+        id: "error-toast",
+        duration: 3000,
       },
-      id: "error-toast",
-      duration: 3000,
-    }),
+    ),
   loading: (message) => toast.loading(message, { id: "loading-toast" }),
   custom: (message, options) =>
     toast.custom(

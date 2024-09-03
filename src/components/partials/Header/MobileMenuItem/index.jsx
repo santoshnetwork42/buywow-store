@@ -11,7 +11,7 @@ const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
   return (
     <li className={!isLast ? "border-b-[0.5px] border-b-gray-300" : ""}>
       <Link
-        className={isLast ? "py-2.5" : "pb-2.5 pt-1.5"}
+        className={isLast ? "py-2.5" : "py-2.5"}
         href={`/${linkPrefix ? linkPrefix + "/" : ""}${subItem.slug || ""}`}
         onClick={() => {
           topNavbarClicked({

@@ -375,7 +375,7 @@ const ProductCollectionByTab = ({
               isLoading={isLoading}
               rootMargin="800px"
             >
-              <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(356px,calc(25vw-34px)))]">
+              <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(326px,calc(25vw-34px)))]">
                 {renderProductsAndSkeletons(category)}
                 {verticalBlogSection?.verticalBlogItem && (
                   <BlogCard

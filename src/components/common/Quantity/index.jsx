@@ -34,7 +34,7 @@ const Quantity = ({
     if (!product?.isInventoryEnabled || quantity < max) {
       if (quantity < maximumOrderQuantity) {
         if (totalItemQuantity && totalItemQuantity >= maximumOrderQuantity) {
-          showToast.custom(
+          showToast.error(
             `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
           );
         } else {
@@ -43,13 +43,13 @@ const Quantity = ({
           onChangeQuantity(newQuantity);
         }
       } else {
-        showToast.custom(
+        showToast.error(
           `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
         );
       }
     } else {
-      showToast.custom(
-        `Product is out of stock`,
+      showToast.error(
+        `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
       );
     }
   };

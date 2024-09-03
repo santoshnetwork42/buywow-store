@@ -46,12 +46,10 @@ const FaqItem = memo(({ question, answer, showDivider }) => {
       }`}
     >
       <div
-        className="flex w-full cursor-pointer items-center justify-between"
+        className="flex w-full cursor-pointer items-center justify-between gap-5"
         onClick={toggleOpen}
       >
-        <Text as="p" size="sm">
-          {question}
-        </Text>
+        <Text as="p" size="sm" dangerouslySetInnerHTML={{ __html: question }} />
         <PlusMinusToggle open={isOpen} />
       </div>
       <div
@@ -59,9 +57,7 @@ const FaqItem = memo(({ question, answer, showDivider }) => {
         className="overflow-hidden transition-all duration-300 ease-in-out"
       >
         <div ref={contentRef}>
-          <Text as="p" size="sm">
-            {answer}
-          </Text>
+          <Text as="p" size="sm" dangerouslySetInnerHTML={{ __html: answer }} />
         </div>
       </div>
     </div>

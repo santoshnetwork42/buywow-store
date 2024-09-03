@@ -41,7 +41,7 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
                 mWebImageAttrs?.alternativeText,
             }}
           >
-            <picture className="relative block aspect-[298/120] w-[80vw] overflow-hidden rounded-lg sm:w-[46vw] md:aspect-[650/166]">
+            <picture className="relative block aspect-[298/120] w-[80vw] min-w-[298px] max-w-[352px] overflow-hidden rounded-lg sm:w-[46vw] sm:max-w-[662px] md:aspect-[650/166] md:w-[calc(50vw-36px)] lg:w-[calc(50vw-46px)] xl:w-[calc(50vw-58px)]">
               <source
                 media="(min-width: 768px)"
                 srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}

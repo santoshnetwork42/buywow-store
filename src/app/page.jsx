@@ -137,7 +137,7 @@ const renderBlock = (block, slug) => {
 };
 
 export default async function Page() {
-  const pageData = await cachedGetPageBySlugAPI("index");
+  const pageData = await getPageBySlugAPI("index");
   const { blocks, slug } = pageData || {};
 
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {

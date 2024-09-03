@@ -24,10 +24,7 @@ const RecentlyViewed = ({
       className={`container-main mb-main flex flex-col items-center justify-center ${bgColorClass} ${isPaddedColor ? "py-5" : ""}`}
     >
       <SectionHeading title={title} />
-      <Slider
-        controlsContainerClassName="mb-2 md:mb-3"
-        sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
-      >
+      <Slider sliderClassName="gap-[5px] sm:gap-2 lg:gap-3" isContainShadow>
         {products.map((product, index) => (
           <ProductCard
             key={`product-${index}`}

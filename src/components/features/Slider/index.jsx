@@ -51,15 +51,7 @@ const SliderControl = React.memo(
     className,
     size,
   }) => (
-    <div
-      className={twMerge(
-        `flex w-full items-center`,
-        showDotButtons
-          ? "mt-2.5 sm:mt-3 md:mt-4 lg:mt-5 xl:mt-6"
-          : "mt-4 lg:mt-6",
-        className,
-      )}
-    >
+    <div className={twMerge(`flex w-full items-center`, className)}>
       {showDotButtons ? (
         <div className="flex w-full justify-center">{dotButtons}</div>
       ) : (
@@ -114,6 +106,7 @@ const Slider = ({
   showControls = true,
   showDotButtons = false,
   dragFree = true,
+  isContainShadow,
   size,
   ...props
 }) => {
@@ -222,7 +215,16 @@ const Slider = ({
   );
 
   const sliderContent = (
-    <div className={twMerge("mx-auto flex max-w-fit", sliderClassName)}>
+    <div
+      className={twMerge(
+        "mx-auto flex max-w-fit",
+        (!isAllSlidesVisible || isContainShadow) &&
+          (showDotButtons
+            ? "mb-2.5 sm:mb-3 md:mb-4 lg:mb-5 xl:mb-6"
+            : "mb-4 lg:mb-6"),
+        sliderClassName,
+      )}
+    >
       {React.Children.map(children, (child, index) => (
         <div key={`carousel-slide-${index}`} className={slideClassName}>
           {child}

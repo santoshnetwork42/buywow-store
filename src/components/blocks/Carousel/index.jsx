@@ -78,7 +78,7 @@ CarouselImage.displayName = "CarouselImage";
 
 const DotButton = React.memo(({ selected, onClick }) => (
   <Button
-    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full transition-all duration-300 ease-in-out md:h-1.5 ${selected ? "w-2.5 bg-white-a700_01 md:w-3" : "w-1.5 bg-lime-50 hover:bg-lime-100"} `}
+    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full transition-all duration-300 ease-in-out md:h-1.5 ${selected ? "w-2.5 bg-white-a700_01 md:w-3" : "w-1 bg-lime-50 hover:bg-lime-100 md:w-1.5"} `}
     size="none"
     variant="none"
     onClick={onClick}
@@ -156,7 +156,7 @@ const Carousel = ({
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex">{carouselImages}</div>
           </div>
-          <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 cursor-pointer sm:bottom-1 md:bottom-1.5 lg:bottom-2 xl:bottom-2.5">
+          <div className="absolute bottom-1.5 left-1/2 flex -translate-x-1/2 cursor-pointer sm:bottom-2 md:bottom-2.5 lg:bottom-3">
             {dotButtons}
           </div>
         </>

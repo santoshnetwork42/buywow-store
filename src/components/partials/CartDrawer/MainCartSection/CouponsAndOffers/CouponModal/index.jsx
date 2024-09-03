@@ -45,9 +45,13 @@ const CouponModal = ({ isOpen, onClose, appliedCoupon }) => (
         >
           {appliedCoupon?.couponTitle}
         </Heading>
-        <Text as="span" size="sm" className="line-clamp-3" responsive>
-          {appliedCoupon?.description}
-        </Text>
+        <Text
+          as="span"
+          size="sm"
+          className="line-clamp-3"
+          dangerouslySetInnerHTML={{ __html: appliedCoupon?.description }}
+          responsive
+        />
       </div>
       <Button variant="primary" size="small" onClick={onClose}>
         Okay

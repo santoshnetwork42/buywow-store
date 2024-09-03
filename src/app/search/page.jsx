@@ -2,7 +2,7 @@ import SearchResults from "@/components/partials/Others/SearchResult";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import { unstable_cache } from "next/cache";
 
-export const revalidate = 60 * 60;
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Search",
@@ -18,7 +18,7 @@ const cachedGetPageBySlugAPI = unstable_cache(
 
 async function getInitialSearchData() {
   try {
-    const initialSearchData = await cachedGetPageBySlugAPI("search");
+    const initialSearchData = await getPageBySlugAPI("search");
     return initialSearchData?.blocks[0]?.products?.data || [];
   } catch (error) {
     console.error("Error fetching initial search data:", error);

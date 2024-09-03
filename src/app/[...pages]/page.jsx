@@ -126,11 +126,15 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
+export const revalidate = 900;
+
 const pageType = {
   HOME: "",
   COLLECTION: "collections",
   PRODUCT: "products",
   LANDING: "",
+  PAGES: "pages",
+  POLICIES: "policies",
 };
 
 const cachedGetCMSPagesAPI = unstable_cache(
@@ -160,7 +164,7 @@ const renderBlock = (block, slug) => {
 };
 
 // export async function generateStaticParams() {
-//   const pages = await cachedGetCMSPagesAPI();
+//   const pages = await getCMSPagesAPI();
 
 //   return (pages || []).map((page) => {
 //     if (page.attributes.slug !== "search" || page.attributes.slug !== "index") {
@@ -397,8 +401,8 @@ export async function generateMetadata({ params }) {
   }
 
   const extractedSlug = slug[slug.length - 1];
-  const pageData = await cachedGetPageBySlugAPI(extractedSlug);
-  const store = await cachedGetStoreAPI();
+  const pageData = await getPageBySlugAPI(extractedSlug);
+  const store = await getStoreAPI();
   const { webUrl, name } = store || {};
 
   const type = slug[0];
@@ -448,7 +452,7 @@ export default async function Page({ params }) {
     return handleRedirect(`/${fullSlug}`);
   }
 
-  const pageData = await cachedGetPageBySlugAPI(lastSlug);
+  const pageData = await getPageBySlugAPI(lastSlug);
   const { blocks, slug, type } = pageData || {};
 
   if (!slug) {
@@ -456,7 +460,10 @@ export default async function Page({ params }) {
   }
 
   const expectedPath =
-    type === "PRODUCT" || type === "COLLECTION"
+    type === "PRODUCT" ||
+    type === "COLLECTION" ||
+    type === "PAGES" ||
+    type === "POLICIES"
       ? `${pageType[type]}/${slug}`
       : slug;
 

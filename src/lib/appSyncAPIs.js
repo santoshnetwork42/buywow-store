@@ -33,6 +33,7 @@ import {
   verifyCustomOTP,
 } from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
+import fetchData from "@/utils/fetchData";
 import { Amplify } from "aws-amplify";
 import { generateClient } from "aws-amplify/api";
 
@@ -45,21 +46,17 @@ Amplify.configure({
 const client = generateClient();
 
 export const getStoreAPI = async () => {
-  try {
-    const response = await client.graphql({
-      query: getStore,
-      authMode: "apiKey",
-      variables: {
-        id: STORE_ID,
-        deviceType: "WEB",
-      },
-    });
+  const data = await fetchData(
+    getStore,
+    {
+      id: STORE_ID,
+      deviceType: "WEB",
+    },
+    900, // revalidate every 15 minutes
+    "Get Store API",
+  );
 
-    return response?.data?.getStore || {};
-  } catch (err) {
-    errorHandler(err, "Search CMS Products API");
-    return null;
-  }
+  return data?.getStore || {};
 };
 
 export const searchCMSCollectionProductsAPI = async ({
@@ -91,23 +88,19 @@ export const searchCMSCollectionProductsAPI = async ({
 };
 
 export const getPageBySlugAPI = async (slugId) => {
-  try {
-    const response = await client.graphql({
-      query: getPageBySlug,
-      authMode: "apiKey",
-      variables: {
-        storeId: STORE_ID,
-        pageType: "",
-        slug: slugId,
-        collectionDataLimit: 100,
-      },
-    });
+  const data = await fetchData(
+    getPageBySlug,
+    {
+      storeId: STORE_ID,
+      pageType: "",
+      slug: slugId,
+      collectionDataLimit: 100,
+    },
+    900, // revalidate every 15 minutes
+    "Get Page By Slug API",
+  );
 
-    return JSON.parse(response?.data?.getPageBySlug || "{}");
-  } catch (err) {
-    errorHandler(err, "Get Page By Slug API");
-    return null;
-  }
+  return JSON.parse(data?.getPageBySlug || "{}");
 };
 
 export const getPageMetadataBySlugAPI = async (slugId, pageType) => {
@@ -131,20 +124,16 @@ export const getPageMetadataBySlugAPI = async (slugId, pageType) => {
 };
 
 export const getNavbarAndFooterAPI = async () => {
-  try {
-    const response = await client.graphql({
-      query: getNavbarAndFooter,
-      authMode: "apiKey",
-      variables: {
-        storeId: STORE_ID,
-      },
-    });
+  const data = await fetchData(
+    getNavbarAndFooter,
+    {
+      storeId: STORE_ID,
+    },
+    900, // revalidate every 15 minutes
+    "Get Navbar And Footer API",
+  );
 
-    return JSON.parse(response?.data?.getNavbarAndFooter || "{}");
-  } catch (err) {
-    errorHandler(err, "Get Navbar And Footer API");
-    return null;
-  }
+  return JSON.parse(data?.getNavbarAndFooter || "{}");
 };
 
 export const getUserAPI = async () => {
@@ -325,38 +314,29 @@ export const fetchProductDetailsAPI = async (id) => {
 };
 
 export const getCartUpsellProductsAPI = async () => {
-  try {
-    const response = await client.graphql({
-      query: getCartUpsellProducts,
-      authMode: "apiKey",
-      variables: {
-        storeId: STORE_ID,
-      },
-    });
+  const data = await fetchData(
+    getCartUpsellProducts,
+    {
+      storeId: STORE_ID,
+    },
+    900, // revalidate every 15 minutes
+    "Get Cart Upsell Products API",
+  );
 
-    const products = JSON.parse(response?.data?.getCartUpsellProducts || "{}");
-    return products;
-  } catch (err) {
-    errorHandler(err, "Get Cart Upsell Products API");
-    return null;
-  }
+  return JSON.parse(data?.getCartUpsellProducts || "{}");
 };
 
 export const getCMSPagesAPI = async () => {
-  try {
-    const response = await client.graphql({
-      query: getCMSPages,
-      authMode: "apiKey",
-      variables: {
-        storeId: STORE_ID,
-      },
-    });
+  const data = await fetchData(
+    getCMSPages,
+    {
+      storeId: STORE_ID,
+    },
+    900, // revalidate every 15 minutes
+    "Get CMS Pages API",
+  );
 
-    return JSON.parse(response?.data?.getCMSPages || "[]");
-  } catch (err) {
-    errorHandler(err, "Get Cart Upsell Products API");
-    return null;
-  }
+  return JSON.parse(data?.getCMSPages || "[]");
 };
 
 export const getUserRewardsAPI = async () => {
@@ -571,6 +551,25 @@ export const validateTransactionAPI = async (orderId, paymentId) => {
     return null;
   }
 };
+
+// export const getInitialDataAPI = async (storeId, deviceType) => {
+//   return await fetchData(
+//     getInitialData,
+//     {
+//       storeId,
+//       deviceType,
+//       getStoreSettingInput: {
+//         storeId: storeId,
+//         deviceType: deviceType,
+//       },
+//       shippingTierFilter: {
+//         storeId: { eq: storeId },
+//       },
+//     },
+//     1,
+//     "Get Initial Data API",
+//   );
+// };
 
 export const getInitialDataAPI = async (storeId, deviceType) => {
   try {
