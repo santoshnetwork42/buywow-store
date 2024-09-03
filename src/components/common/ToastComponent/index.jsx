@@ -6,7 +6,7 @@ import { Toaster, toast } from "react-hot-toast";
 
 // Generic Toast Component
 const ToastComponent = () => {
-  return <Toaster position="bottom-center" reverseOrder={false} />;
+  return <Toaster position="top-center" reverseOrder={false} />;
 };
 
 export const showToast = {
@@ -37,8 +37,6 @@ export const showToast = {
             "radial-gradient(18.26% 56.66% at 50% 50%, #66442C 0%, #352215 100%)",
           color: "white",
           maxWidth: "min(100%, 700px)",
-          position: "relative",
-          bottom: "92px",
         },
         id: "error-toast",
         duration: 3000,

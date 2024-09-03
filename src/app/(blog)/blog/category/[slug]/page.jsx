@@ -1,26 +1,22 @@
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
-import {
-  fetchBlogs,
-  fetchCategories,
-  fetchFeaturedBlogs,
-} from "@/lib/wordPressAPIs";
+import { fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
 import handleRedirect from "@/utils/handleRedirect";
 
 export const revalidate = 60 * 60 * 24;
 
-export async function generateStaticParams() {
-  const categories = await fetchCategories();
+// export async function generateStaticParams() {
+//   const categories = await fetchCategories();
 
-  if (!categories || categories.length === 0) {
-    return [];
-  }
+//   if (!categories || categories.length === 0) {
+//     return [];
+//   }
 
-  return categories.map((category) => ({
-    slug: category.slug,
-  }));
-}
+//   return categories.map((category) => ({
+//     slug: category.slug,
+//   }));
+// }
 
 export default async function BlogsByCategory({ params }) {
   const { slug } = params;
