@@ -102,9 +102,6 @@ const UpsellProducts = ({
             updateProducts(productDetail, index)
           }
           {...product?.data?.attributes}
-          sendProductDataToParent={(productDetail) =>
-            updateProducts(productDetail, index)
-          }
         />
       </div>
     );

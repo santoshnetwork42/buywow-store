@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { useCallback } from "react";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { getSource } from "@/utils/helpers";
+import Link from "next/link";
+import { useCallback } from "react";
+
 const LinkClickTracker = ({
   href,
   className,
@@ -17,7 +18,6 @@ const LinkClickTracker = ({
     useEventsDispatch();
   const handleClick = useCallback(
     (e) => {
-      // console.log(`${trackingType} clicked: ${trackingId}`);
       switch (trackingType) {
         case "BANNER_CLICKED": {
           bannerClicked({
@@ -58,9 +58,8 @@ const LinkClickTracker = ({
         default:
           break;
       }
-      // You can send an analytics event here if needed
-      // Example: sendAnalyticsEvent(trackingType, trackingId);
     },
+    //  eslint-disable-next-line react-hooks/exhaustive-deps
     [trackingId, trackingType],
   );
 

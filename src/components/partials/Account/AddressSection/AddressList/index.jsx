@@ -3,11 +3,11 @@
 import { Button, Text } from "@/components/elements";
 import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem/RemoveButton";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { useCartTotal } from "@wow-star/utils";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AddressModal from "../AddressModal";
-import { useCartTotal } from "@wow-star/utils";
-import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 const AddressList = React.memo(({ addressList, variant }) => {
   const currentAddress = useSelector((state) => state.address?.currentAddress);
@@ -26,6 +26,7 @@ const AddressList = React.memo(({ addressList, variant }) => {
     setSelectedAddressId(currentAddress?.id);
     if (currentAddress?.id)
       addressSelected(currentAddress, totalPrice, "BUYWOW");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress]);
 
   const handleAddressDelete = useCallback(

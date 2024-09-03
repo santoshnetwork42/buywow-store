@@ -82,6 +82,7 @@ const SearchBar = memo(({ className }) => {
         typingSpeed: isDeleting ? DELETING_SPEED : TYPING_SPEED,
       };
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeholderState]);
 
   useEffect(() => {

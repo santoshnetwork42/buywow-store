@@ -120,6 +120,7 @@ const ProductCard = memo(
         };
         sendProductDataToParent(productDetail);
       }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedVariant?.id]);
 
     const discountPercentage = getDiscountPercentage(price, listingPrice);
