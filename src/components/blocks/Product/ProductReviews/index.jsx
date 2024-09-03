@@ -131,7 +131,10 @@ const Reviews = ({
   if (!productId) return null;
 
   return (
-    <div className="container-main mb-main flex flex-col items-center justify-center">
+    <div
+      className="container-main mb-main flex flex-col items-center justify-center"
+      id="product-reviews"
+    >
       <ReviewSummary
         title={title}
         rating={rating}

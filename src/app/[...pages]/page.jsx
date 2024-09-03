@@ -162,8 +162,7 @@ const renderBlock = (block, slug) => {
 export async function generateStaticParams() {
   const pages = await cachedGetCMSPagesAPI();
 
-  return (pages || []).map((page, index) => {
-    console.log("index :>> ", index);
+  return (pages || []).map((page) => {
     if (page.attributes.slug !== "search" || page.attributes.slug !== "index") {
       return {
         pages: [pageType[page.attributes.type], page.attributes.slug].filter(

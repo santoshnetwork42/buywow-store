@@ -1,6 +1,7 @@
 import { StarIcon } from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
 import { formatTotalRatings, toDecimal } from "@/utils/helpers";
+import Link from "next/link";
 import React from "react";
 
 const ProductHeader = React.memo(
@@ -18,7 +19,7 @@ const ProductHeader = React.memo(
           </Text>
         )}
       </div>
-      <div className="flex items-center gap-1">
+      <Link href="#product-reviews" className="flex w-fit items-center gap-1">
         {rating > 0 && (
           <div className="flex items-center gap-1">
             <StarIcon className="h-3 w-3 -translate-y-[1px] md:h-4 md:w-4" />
@@ -32,7 +33,7 @@ const ProductHeader = React.memo(
             ({formatTotalRatings(totalRatings)}) reviews
           </Text>
         )}
-      </div>
+      </Link>
     </div>
   ),
 );
