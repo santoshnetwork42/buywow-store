@@ -36,22 +36,11 @@ const FeaturedList = ({
 }) => {
   if (!Array.isArray(features) || features.length === 0) return null;
 
-  const getMaxWidth = (length) => {
-    if (length > 4) return "100%";
-    if (length > 3) return "88%";
-    if (length > 2) return "80%";
-    if (length > 1) return "72%";
-    return "100%";
-  };
-
   return (
     <div
-      style={{
-        maxWidth: getMaxWidth(features?.length),
-      }}
       className={twMerge(
-        `mx-auto flex w-full flex-wrap items-center justify-evenly gap-y-2 max-xl:!max-w-full`,
-        isInPDP ? "justify-around md:justify-evenly" : "mb-7 md:mb-8",
+        `container-main mx-auto flex w-full flex-wrap items-center justify-around gap-y-2 max-xl:!max-w-full md:justify-evenly`,
+        isInPDP ? "" : "mb-7 md:mb-8",
       )}
     >
       {features.map((feature, index) => (

@@ -14,8 +14,8 @@ const CategoryItem = ({ category, size, parentCategoryTitle }) => {
 
   const linkClassName =
     size === "SMALL"
-      ? "w-[28vw] sm:max-w-[260px] sm:w-[26vw] md:w-[24vw] lg:w-[22vw] xl:w-[20vw]"
-      : "w-[calc(33vw-12px)] sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]";
+      ? "w-[calc(33vw-20px)] min-w-[100px] max-w-[260px] sm:w-[26vw] md:w-[24vw] lg:w-[22vw] xl:w-[20vw]"
+      : "w-[calc(33vw-12px)] min-w-[112px] sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]";
 
   return (
     <LinkClickTracker

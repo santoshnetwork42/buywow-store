@@ -89,12 +89,14 @@ async function RootLayout({ children }) {
             <GoKwikProvider>
               <AnnouncementProvider>
                 <ClientSideEffects />
-                <div className="flex min-h-dvh w-full flex-col bg-white-a700">
+                <div className="flex min-h-dvh w-full flex-col">
                   <AnnouncementBar data={announcementData} />
                   {headerData?.data && <Header data={headerData} />}
                   <CartDrawer upsellProducts={upsellProducts} />
                   <ToastComponent />
-                  <div className="flex flex-1 flex-col">{children}</div>
+                  <div className="mx-auto flex w-full flex-1 flex-col bg-white-a700">
+                    {children}
+                  </div>
                   {footerData?.data && <Footer data={footerData} />}
                 </div>
                 {AUDITZ && (

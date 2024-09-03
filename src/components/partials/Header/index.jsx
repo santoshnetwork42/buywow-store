@@ -183,7 +183,7 @@ const Header = ({ data }) => {
     <></>
   ) : (
     <header className="relative">
-      <div className="container-main flex border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
+      <div className="container-secondary flex border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
         <div className="flex flex-1 flex-wrap items-center justify-between gap-x-5 gap-y-2.5 md:flex-nowrap">
           <div className="flex flex-shrink-0 items-stretch gap-5">
             <Button

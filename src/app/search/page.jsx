@@ -2,7 +2,7 @@ import SearchResults from "@/components/partials/Others/SearchResult";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import { unstable_cache } from "next/cache";
 
-export const revalidate = 60 * 60;
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Search",

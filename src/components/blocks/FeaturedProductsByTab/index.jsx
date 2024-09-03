@@ -23,7 +23,7 @@ const FeaturedProductsByTab = ({
   const renderProductCard = (product, index) => (
     <ProductCard
       key={`product-${product?.id || index}`}
-      className="w-[calc(50vw-16px)] max-w-[356px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
+      className="w-[calc(50vw-16px)] max-w-[326px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
       {...product?.attributes}
     />
   );
@@ -36,6 +36,7 @@ const FeaturedProductsByTab = ({
       <Slider
         controlsContainerClassName="mb-2 md:mb-3"
         sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
+        isContainShadow
       >
         {item?.products?.data?.map(renderProductCard)}
       </Slider>
@@ -73,7 +74,7 @@ const FeaturedProductsByTab = ({
       {!!button?.text && (
         <Link
           href={`/collections/${button.slug}`}
-          className="mt-2 rounded-[24px] bg-yellow-900 px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3"
+          className="mt-1.5 rounded-[24px] bg-yellow-900 px-4 py-2 text-center sm:mt-1 md:mt-0 md:px-5 md:py-3"
         >
           <Heading as="h3" size="xl" className="text-white-a700_01" responsive>
             {button.text}
