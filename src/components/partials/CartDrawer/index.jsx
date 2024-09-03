@@ -1,6 +1,7 @@
 "use client";
 
 import { showToast } from "@/components/common/ToastComponent";
+import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
 import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
@@ -244,7 +245,7 @@ const CartDrawer = ({ upsellProducts }) => {
               <CheckoutSummary />
             </div>
 
-            <div className="sticky bottom-0 left-3 z-10 flex flex-col gap-3 border-t bg-white-a700 px-3 pb-4 pt-1.5 md:gap-4 md:px-4">
+            <div className="sticky bottom-0 left-3 z-10 flex flex-col gap-3 border-t bg-white-a700 px-3 pb-2.5 pt-1.5 md:gap-4 md:px-4 md:pb-3">
               {/* done */}
               <CouponsAndOffers />
               {/* done */}
@@ -254,6 +255,13 @@ const CartDrawer = ({ upsellProducts }) => {
                 validateAndGoToCheckout={validateAndGoToCheckout}
                 checkoutButtonDisabled={checkoutButtonDisabled}
               />
+              <Text
+                size="sm"
+                as="p"
+                className="border-t-[0.25px] border-[#DDDDDD] pt-2 text-center"
+              >
+                Estimated delivery within 3-5 days
+              </Text>
             </div>
           </>
         ) : (

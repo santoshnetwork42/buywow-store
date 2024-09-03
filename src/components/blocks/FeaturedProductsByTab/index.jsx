@@ -1,13 +1,12 @@
 "use client";
 
-import React from "react";
 import SectionHeading from "@/components/common/SectionHeading";
-import { getBgColor } from "@/utils/helpers";
-import { TabPanel, TabList, Tab, Tabs } from "react-tabs";
+import { Heading } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
+import { getBgColor } from "@/utils/helpers";
 import Link from "next/link";
-import { Heading } from "@/components/elements";
+import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 const FeaturedProductsByTab = ({
   title,
@@ -43,15 +42,13 @@ const FeaturedProductsByTab = ({
     </TabPanel>
   );
 
-  
   if (!featuredProductsTabItems?.length) return null;
 
   return (
     <div
       className={`container-main mb-main flex flex-col items-center justify-center ${bgColorClass} ${isPaddedColor ? "py-5" : ""}`}
     >
-      <SectionHeading title={title} />
-
+      <SectionHeading title={title} className="mb-3 lg:mb-2" />
       <Tabs
         className="flex w-full flex-col items-center gap-3 sm:gap-4 lg:gap-5"
         selectedTabClassName="text-black-900 font-normal bg-amber-200 rounded-full"

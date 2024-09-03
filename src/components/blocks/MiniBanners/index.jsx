@@ -52,7 +52,7 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
                 width={500}
                 height={500}
                 priority
-                className="aspect-[298/120] h-auto w-full object-contain md:aspect-[650/166]"
+                className="aspect-[298/120] h-auto w-full object-cover md:aspect-[650/166]"
               />
             </picture>
           </LinkClickTracker>
