@@ -108,14 +108,14 @@ export default async function ReadBlog({ params }) {
           )}
 
           <hr className="my-6 border-t border-gray-300" />
-          {/* 
+
           <BlogAuthor
             name={blog?.author?.node?.name}
             avatar={blog?.author?.node.avatar?.url}
             description={blog?.author?.node?.description}
             slug={blog?.author?.node?.slug}
             linkedin={blog?.author?.node?.seo?.social?.linkedIn}
-          /> */}
+          />
         </div>
       </div>
 
