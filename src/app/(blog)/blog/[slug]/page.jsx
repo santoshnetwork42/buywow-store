@@ -17,7 +17,6 @@ export const revalidate = 60 * 60 * 24;
 
 export async function generateMetadata({ params }) {
   const blog = await fetchBlog(params.slug);
-  console.log("blog", blog);
 
   if (blog) {
     return {
