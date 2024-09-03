@@ -12,12 +12,7 @@ const AccordionDescription = ({
   const { url, alternativeText } = extractAttributes(image) || {};
 
   return (
-    <Accordion
-      title={title}
-      imgUrl={url}
-      alternativeText={alternativeText}
-      className="lg:w-[90%]"
-    >
+    <Accordion title={title} imgUrl={url} alternativeText={alternativeText}>
       <ReadMore content={description} maxLength={200} isHtml />
     </Accordion>
   );

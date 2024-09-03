@@ -101,6 +101,16 @@ const ProductCard = memo(
       thumbImage,
     } = packageProduct || {};
 
+    useEffect(() => {
+      if (packageProduct && sendProductDataToParent) {
+        const productDetail = {
+          packageProduct,
+          selectedVariantId: selectedVariant?.id,
+        };
+        sendProductDataToParent(productDetail);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedVariant?.id]);
 
     useEffect(() => {
       if (packageProduct && sendProductDataToParent) {

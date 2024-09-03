@@ -98,6 +98,9 @@ const UpsellProducts = ({
           className="w-[calc(50vw-16px)] max-w-[356px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
           showBenefitTags={false}
           image={image}
+          sendProductDataToParent={(productDetail) =>
+            updateProducts(productDetail, index)
+          }
           {...product?.data?.attributes}
           sendProductDataToParent={(productDetail) =>
             updateProducts(productDetail, index)

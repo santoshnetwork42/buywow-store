@@ -11,7 +11,7 @@ const IngredientItem = ({ ingredient }) => {
   return (
     <LinkClickTracker
       href={`/collections/${slug}` || "#"}
-      className="aspect-[248/76] w-40 cursor-pointer sm:w-48 md:w-56 lg:w-60 xl:w-64"
+      className="aspect-[248/76] w-40 max-w-80 cursor-pointer sm:w-44 md:w-48 lg:w-[calc(20vw-30px)] xl:w-[calc(20vw-35px)]"
       trackingType="SHOP_BY_CLICK"
       trackingEventPayload={{
         slug: `/collections/${slug}`,
@@ -48,7 +48,7 @@ const IngredientCategories = ({
   return (
     <div className="container-main mb-main flex flex-col items-center justify-center">
       <SectionHeading title={title} />
-      <Slider sliderClassName="gap-1.5 sm:gap-3 md:gap-4 lg:gap-5">
+      <Slider sliderClassName="gap-1.5 sm:gap-3 md:gap-4 lg:gap-5 mb-0 lg:mb-0">
         {ingredientGroups.map((group, index) => (
           <div
             key={`group-${index}`}

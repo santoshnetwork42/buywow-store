@@ -51,9 +51,6 @@ const CheckoutSummary = React.memo(() => {
         totalAmountSaved={totalAmountSaved}
         isRewardApplied={isRewardApplied}
       />
-      <Text size="base" as="p" className="mt-2 text-sm" responsive>
-        Estimated delivery within 3-5 days
-      </Text>
     </div>
   );
 });

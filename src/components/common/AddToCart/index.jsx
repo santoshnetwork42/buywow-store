@@ -90,7 +90,7 @@ const AddToCart = ({
 
   if (cartItem) {
     return (
-      <div className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-5">
+      <div className="flex h-full gap-2 sm:gap-3 md:gap-4 lg:gap-5">
         <div className={`flex ${showGoToCart ? "w-1/3" : "w-auto"}`}>
           <Quantity
             product={product}

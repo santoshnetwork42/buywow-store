@@ -40,7 +40,7 @@ const PriceSection = React.memo(
                 </Text>
               </div>
             )}
-            {!!offerTag?.showOfferTag && !!(discountPercentage > 0) && (
+            {!!offerTag?.showOfferTag && discountPercentage > 0 && (
               <Text
                 as="p"
                 size="sm"
