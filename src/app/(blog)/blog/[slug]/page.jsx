@@ -17,6 +17,7 @@ export const revalidate = 60 * 60 * 24;
 
 export async function generateMetadata({ params }) {
   const blog = await fetchBlog(params.slug);
+  console.log("blog", blog);
 
   if (blog) {
     return {
@@ -108,14 +109,14 @@ export default async function ReadBlog({ params }) {
           )}
 
           <hr className="my-6 border-t border-gray-300" />
-
+          {/* 
           <BlogAuthor
             name={blog?.author?.node?.name}
             avatar={blog?.author?.node.avatar?.url}
             description={blog?.author?.node?.description}
             slug={blog?.author?.node?.slug}
             linkedin={blog?.author?.node?.seo?.social?.linkedIn}
-          />
+          /> */}
         </div>
       </div>
 
