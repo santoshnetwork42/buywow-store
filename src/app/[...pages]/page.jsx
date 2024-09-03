@@ -133,6 +133,8 @@ const pageType = {
   COLLECTION: "collections",
   PRODUCT: "products",
   LANDING: "",
+  PAGES: "pages",
+  POLICIES: "policies",
 };
 
 const cachedGetCMSPagesAPI = unstable_cache(
@@ -458,7 +460,10 @@ export default async function Page({ params }) {
   }
 
   const expectedPath =
-    type === "PRODUCT" || type === "COLLECTION"
+    type === "PRODUCT" ||
+    type === "COLLECTION" ||
+    type === "PAGES" ||
+    type === "POLICIES"
       ? `${pageType[type]}/${slug}`
       : slug;
 
