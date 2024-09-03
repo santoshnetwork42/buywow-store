@@ -18,7 +18,7 @@ const cachedGetPageBySlugAPI = unstable_cache(
 
 async function getInitialSearchData() {
   try {
-    const initialSearchData = await cachedGetPageBySlugAPI("search");
+    const initialSearchData = await getPageBySlugAPI("search");
     return initialSearchData?.blocks[0]?.products?.data || [];
   } catch (error) {
     console.error("Error fetching initial search data:", error);

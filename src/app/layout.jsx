@@ -62,9 +62,9 @@ const cachedGetCartUpsellProductsAPI = unstable_cache(
 );
 
 async function RootLayout({ children }) {
-  const { data } = (await cachedGetNavbarAndFooterAPI()) || {};
-  const initialData = await cachedGetInitialDataAPI(STORE_ID, "WEB");
-  const upsellProducts = await cachedGetCartUpsellProductsAPI();
+  const { data } = (await getNavbarAndFooterAPI()) || {};
+  const initialData = await getInitialDataAPI(STORE_ID, "WEB");
+  const upsellProducts = await getCartUpsellProductsAPI();
 
   const {
     announcementBar: announcementData = {},
