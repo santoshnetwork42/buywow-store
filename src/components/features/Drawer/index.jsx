@@ -14,7 +14,7 @@ const Drawer = ({
 }) => {
   const [state, setState] = useState({
     isAnimating: false,
-    drawerSize: "0px",
+    positionValue: "-100%",
     bgOpacity: 0,
   });
 
@@ -29,7 +29,7 @@ const Drawer = ({
     setState((prev) => ({ ...prev, isAnimating: true }));
     const timers = [
       setTimeout(
-        () => setState((prev) => ({ ...prev, drawerSize: width })),
+        () => setState((prev) => ({ ...prev, positionValue: "0%" })),
         50,
       ),
       setTimeout(() => setState((prev) => ({ ...prev, bgOpacity: 0.2 })), 50),
@@ -38,7 +38,11 @@ const Drawer = ({
   };
 
   const closeDrawer = () => {
-    setState((prev) => ({ ...prev, drawerSize: "0px", bgOpacity: 0 }));
+    setState((prev) => ({
+      ...prev,
+      positionValue: "-100%",
+      bgOpacity: 0,
+    }));
     !isNestedDrawer && toggleScroll(false);
     const timer = setTimeout(
       () => setState((prev) => ({ ...prev, isAnimating: false })),
@@ -67,7 +71,7 @@ const Drawer = ({
       !isNestedDrawer && toggleScroll(false);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, width, toggleScroll]);
+  }, [isOpen, position, toggleScroll]);
 
   useEffect(() => {
     closeDrawer();
@@ -85,11 +89,10 @@ const Drawer = ({
       <div
         ref={drawerRef}
         style={{
-          [position]: 0,
-          [position === "left" || position === "right" ? "width" : "height"]:
-            state.drawerSize,
+          [position]: state.positionValue,
+          width: width,
         }}
-        className={`no-scrollbar absolute top-0 flex h-dvh max-w-full flex-col overflow-x-hidden bg-white-a700 shadow-lg transition-all duration-300 ease-in-out ${position === "right" ? "right-0" : "left-0"}`}
+        className={`no-scrollbar absolute top-0 flex h-dvh max-w-full flex-col overflow-x-hidden bg-white-a700 shadow-lg transition-all duration-300 ease-in-out`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}

@@ -25,7 +25,7 @@ import {
   useInventory,
 } from "@wow-star/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import Cashback from "./Cashback";
 import CheckoutButton from "./CheckoutButton";
@@ -59,6 +59,24 @@ const CartDrawer = ({ upsellProducts }) => {
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
   const { handleOutOfStock, handleProceedToCheckout, viewCart } =
     useEventsDispatch();
+
+  const [delayedIsOpen, setDelayedIsOpen] = useState(false);
+  const [checkoutSectionHeight, setCheckoutSectionHeight] = useState(0);
+  const fixedCheckoutRef = useRef(null);
+
+  useEffect(() => {
+    const checkoutElement = fixedCheckoutRef.current;
+    if (checkoutElement) {
+      setCheckoutSectionHeight(checkoutElement.offsetHeight);
+    }
+
+    if (isCartOpen) {
+      const timer = setTimeout(() => setDelayedIsOpen(true), 50);
+      return () => clearTimeout(timer);
+    } else {
+      setDelayedIsOpen(false);
+    }
+  }, [isCartOpen, appliedCoupon]);
 
   const inventory = useInventory({ validateCart });
   const {
@@ -134,8 +152,7 @@ const CartDrawer = ({ upsellProducts }) => {
         handleProceedToCheckout("GOKWIK");
         return Promise.resolve(true);
       } catch (e) {
-        console.log(e);
-        // await gokwikSdk.close();
+        await gokwikSdk.close();
         // errorHandler(e);
         router.push("/checkout");
       }
@@ -206,8 +223,10 @@ const CartDrawer = ({ upsellProducts }) => {
       position="right"
       onClose={handleCartClose}
     >
-      <div className="relative flex flex-1 flex-col gap-3 pt-4">
-        {/* done */}
+      <div
+        className="relative flex flex-1 flex-col gap-3 pt-4"
+        style={{ paddingBottom: `${checkoutSectionHeight}px` }}
+      >
         <CartHeader
           text="my Cart"
           totalItems={totalItems}
@@ -228,7 +247,6 @@ const CartDrawer = ({ upsellProducts }) => {
                 handleCartClose={handleCartClose}
                 upsellProducts={upsellProducts}
               />
-              {/* done */}
               <LoyaltyCash
                 showLoyalty={showLoyalty}
                 usableRewards={usableRewards}
@@ -236,19 +254,19 @@ const CartDrawer = ({ upsellProducts }) => {
                 handleRewardApply={applyRewardPoint}
                 totalRewardPointsOfUser={totalRewardPointsOfUser}
               />
-              {/* done */}
               <Cashback
                 cashbackAmount={prepaidCashbackRewardsOnOrder}
                 amountNeeded={amountNeededToAvailCashback}
               />
-              {/* done */}
               <CheckoutSummary />
             </div>
 
-            <div className="sticky bottom-0 left-3 z-10 flex flex-col gap-3 border-t bg-white-a700 px-3 pb-2.5 pt-1.5 md:gap-4 md:px-4 md:pb-3">
-              {/* done */}
+            <div
+              ref={fixedCheckoutRef}
+              className="fixed bottom-0 z-10 flex w-full max-w-[500px] flex-col gap-3 border-t bg-white-a700 px-3 pb-2.5 pt-1.5 transition-[right] duration-300 ease-in-out md:gap-4 md:px-4 md:pb-2.5"
+              style={{ right: delayedIsOpen ? "0" : "-100%" }}
+            >
               <CouponsAndOffers />
-              {/* done */}
               <CheckoutButton
                 grandTotal={grandTotal}
                 totalAmountSaved={totalAmountSaved}
@@ -265,7 +283,6 @@ const CartDrawer = ({ upsellProducts }) => {
             </div>
           </>
         ) : (
-          // done
           <EmptyCart cartClose={handleCartClose} />
         )}
       </div>

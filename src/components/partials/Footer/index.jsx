@@ -86,7 +86,9 @@ const Footer = ({ data, ...props }) => {
     extractAttributes(logo) || {};
 
   const prefixSlug = (prefix) => (item) =>
-    item ? { ...item, slug: `${prefix}${item.slug || ""}` } : null;
+    item
+      ? { ...item, slug: item.slug ? `${prefix}${item.slug || ""}` : "" }
+      : null;
 
   const processSubMenu = (items, prefix) =>
     items
@@ -176,7 +178,10 @@ const Footer = ({ data, ...props }) => {
           )}
           <div className="flex flex-col gap-3">
             {menu.itemsWithoutSubMenu.map((item, index) => (
-              <Link key={`footer-menu-link-${index}`} href={item?.slug || "#"}>
+              <Link
+                key={`footer-menu-link-${index}`}
+                href={item?.slug || item?.link}
+              >
                 <Heading
                   as="h5"
                   size="base"

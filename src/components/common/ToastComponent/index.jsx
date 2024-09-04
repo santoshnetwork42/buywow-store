@@ -10,7 +10,7 @@ const ToastComponent = () => {
     <Toaster
       position="top-center"
       reverseOrder={false}
-      containerStyle={{ transform: "translateY(22px)" }}
+      containerStyle={{ transform: "translateY(16px)" }}
     />
   );
 };

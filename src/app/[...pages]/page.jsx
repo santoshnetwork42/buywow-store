@@ -7,7 +7,6 @@ import {
 import handleRedirect from "@/utils/handleRedirect";
 import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
-import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
 import React from "react";
 
@@ -137,21 +136,21 @@ const pageType = {
   POLICIES: "policies",
 };
 
-const cachedGetCMSPagesAPI = unstable_cache(
-  async () => getCMSPagesAPI(),
-  ["cms-pages"],
-  { revalidate: 900 },
-);
+// const cachedGetCMSPagesAPI = unstable_cache(
+//   async () => getCMSPagesAPI(),
+//   ["cms-pages"],
+//   { revalidate: 900 },
+// );
 
-const cachedGetPageBySlugAPI = unstable_cache(
-  async (slug) => getPageBySlugAPI(slug),
-  ["page-by-slug"],
-  { revalidate: 900 },
-);
+// const cachedGetPageBySlugAPI = unstable_cache(
+//   async (slug) => getPageBySlugAPI(slug),
+//   ["page-by-slug"],
+//   { revalidate: 900 },
+// );
 
-const cachedGetStoreAPI = unstable_cache(async () => getStoreAPI(), ["store"], {
-  revalidate: 900,
-});
+// const cachedGetStoreAPI = unstable_cache(async () => getStoreAPI(), ["store"], {
+//   revalidate: 900,
+// });
 
 const renderBlock = (block, slug) => {
   const { showComponent, __typename, id } = block || {};
@@ -174,6 +173,7 @@ export async function generateStaticParams() {
       page.length === 2 &&
       allowedTypes.includes(page[0]) &&
       page[1] !== "search" &&
+      page[1] !== "health" &&
       page[1] !== "index",
   );
 
@@ -450,20 +450,21 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const { pages } = params;
-  console.log("pages", pages);
   const fullSlug = pages.join("/");
   const lastSlug = pages[pages.length - 1];
 
+  console.log(new Date(), "Page", fullSlug);
+
   // Handle redirects for paths with more than 2 segments
   if (pages.length > 2) {
-    return handleRedirect(`/${fullSlug}`);
+    return handleRedirect(`/${fullSlug}`, false);
   }
 
   const pageData = await getPageBySlugAPI(lastSlug);
   const { blocks, slug, type } = pageData || {};
 
   if (!slug) {
-    return await handleRedirect(`/${fullSlug}`);
+    return await handleRedirect(`/${fullSlug}`, false);
   }
 
   const expectedPath =

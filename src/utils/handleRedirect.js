@@ -6,7 +6,7 @@ import {
 import { notFound, redirect } from "next/navigation";
 import { extname } from "path";
 
-const handleRedirect = async (path) => {
+const handleRedirect = async (path, showNotFound = true) => {
   const extension = extname(path);
 
   const pageRedirect = await getRedirectsAPI(path);
@@ -24,7 +24,12 @@ const handleRedirect = async (path) => {
   }
 
   console.log("not found: ", path);
-  return notFound();
+
+  if (showNotFound) {
+    notFound();
+  }
+
+  throw new Error(`Page not found: ${path}`);
 };
 
 export default handleRedirect;

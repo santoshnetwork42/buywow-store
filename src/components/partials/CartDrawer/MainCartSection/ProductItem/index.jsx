@@ -174,7 +174,6 @@ const ProductItem = ({
 
   return (
     <div className="flex gap-3 rounded-lg border border-b p-2 pl-3 shadow-[0_4px_4px_#0000000D]">
-      {/* done */}
       <ProductImage
         slug={slug}
         outOfStock={outOfStock}
@@ -184,7 +183,6 @@ const ProductItem = ({
       />
       <div className="flex flex-1 flex-col gap-1">
         <div className="flex flex-1 justify-between gap-5">
-          {/* done */}
           <ProductDetails
             title={title}
             price={price}
@@ -198,14 +196,13 @@ const ProductItem = ({
             couponMessage={couponMessage}
             handleCartClose={handleCartClose}
           />
-          {/* done */}
+
           {!hideRemove && (
             <RemoveButton onClick={() => handleChangeQuantity(0)} />
           )}
         </div>
         <div className="flex flex-col justify-between gap-2">
           <div className="flex items-end justify-between gap-1">
-            {/* done */}
             <VariantSelector
               variantGroup={variantGroup}
               selectedVariantGroupOptions={selectedVariantGroupOptions}
@@ -216,7 +213,6 @@ const ProductItem = ({
               className="lg:gap-1"
             />
             <div className="flex items-center gap-2">
-              {/* done */}
               {!outOfStock && !isFreeProduct && !disableChange && (
                 <Quantity
                   product={item}
@@ -237,7 +233,7 @@ const ProductItem = ({
               )}
             </div>
           </div>
-          {/* done */}
+
           {(selectedVariant?.minimumOrderQuantity > 1 ||
             itemMinOrderQuantity > 1) && (
             <Text as="span" size="xs" className="font-light">
