@@ -117,7 +117,7 @@ const FlipClock = ({ timer, centerText }) => {
       )}
       {!!timeLeft && (
         <div className="flex items-center">
-          <FlipUnit digit={timeLeft.days} unit="DYS" />
+          <FlipUnit digit={timeLeft.days} unit="DAYS" />
           <Text className="mx-1 mb-1 text-white-a700_01">:</Text>
           <FlipUnit digit={timeLeft.hours} unit="HRS" />
           <Text className="mx-1 mb-1 text-white-a700_01">:</Text>

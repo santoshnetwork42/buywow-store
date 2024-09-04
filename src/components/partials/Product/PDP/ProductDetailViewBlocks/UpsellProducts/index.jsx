@@ -42,7 +42,7 @@ const UpsellProduct = React.memo(({ product, text, subText }) => {
           <Heading
             as="h4"
             size="base"
-            className="line-clamp-1 text-sm font-semibold"
+            className="line-clamp-2 text-sm font-semibold"
             responsive
           >
             {text || title}
@@ -95,6 +95,7 @@ const UpsellProducts = ({
   upsellProductItems,
   endTime,
   isCartUpsell,
+  isInPDP,
 }) => {
   const [timeLeft, setTimeLeft] = useState("");
 
@@ -169,6 +170,7 @@ const UpsellProducts = ({
         bgColorClass,
         isPaddedColor ? "py-3" : "",
         isCartUpsell && "!mb-0 rounded-lg shadow-[0_4px_4px_#0000000D]",
+        isInPDP && "mb-1 md:mb-2",
       )}
     >
       <Heading

@@ -18,10 +18,10 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import StickyViewCart from "../StickyViewCart";
 
-const MenuItem = React.memo(({ item, index, linkPrefix }) => {
+const MenuItem = React.memo(({ item, index, linkPrefix, showInWeb }) => {
   const { topNavbarClicked } = useEventsDispatch();
 
-  if (!item) return null;
+  if (!item || !item.title || !showInWeb) return null;
 
   const key = item.id || index;
   const title = (
@@ -30,9 +30,7 @@ const MenuItem = React.memo(({ item, index, linkPrefix }) => {
     </Text>
   );
 
-  if (!item) return null;
-
-  if (item.subMenu && item.subMenu.length > 0) {
+  if (item?.subMenu && item?.subMenu?.length > 0) {
     return (
       <li key={key} className="group relative">
         <Link
@@ -63,9 +61,9 @@ const MenuItem = React.memo(({ item, index, linkPrefix }) => {
     <li key={key}>
       <Link
         href={
-          item.slug
+          item?.slug
             ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
-            : item.link || "#"
+            : item?.link || "#"
         }
         onClick={() => {
           topNavbarClicked({
@@ -164,6 +162,7 @@ const Header = ({ data }) => {
           item={item}
           index={index}
           linkPrefix="collections"
+          showInWeb
         />
       ))}
       {otherLinks?.map((item, index) => (
@@ -172,6 +171,7 @@ const Header = ({ data }) => {
           item={item}
           index={index}
           linkPrefix=""
+          showInWeb={item?.showInWeb}
         />
       ))}
     </>

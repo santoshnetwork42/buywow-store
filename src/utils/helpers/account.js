@@ -3,9 +3,11 @@ import dayjs from "dayjs";
 export const EVENT_TITLES = {
   CREDIT_PREPAID_ORDER: "Cashback added",
   CREDIT_COD_ORDER: "Cashback added",
+  CREDIT_PPCOD_ORDER: "Cashback added",
   CREDIT_USER_SIGNUP: "Cashback added",
   DEBIT_PREPAID_ORDER: "Cashback debited",
   DEBIT_COD_ORDER: "Cashback debited",
+  DEBIT_PPCOD_ORDER: "Cashback debited",
   DEBIT_EXPIRED: "Cashback expired",
   DEBIT_BY_ADMIN: "Cashback debited",
   CREDIT_BY_ADMIN: "Promotional cashback",
@@ -16,9 +18,11 @@ export const EVENT_TITLES = {
 export const EVENT_DESCRIPTIONS = {
   CREDIT_PREPAID_ORDER: "Cashback for Order",
   CREDIT_COD_ORDER: "Cashback for Order",
+  CREDIT_PPCOD_ORDER: "Cashback for Order",
   CREDIT_USER_SIGNUP: "Joining Bonus",
   DEBIT_PREPAID_ORDER: "Used against Order",
   DEBIT_COD_ORDER: "Used against Order",
+  DEBIT_PPCOD_ORDER: "Used against Order",
   DEBIT_BY_ADMIN: "",
   CREDIT_BY_ADMIN: "",
   CREDIT_ORDER_REFUNDED: "Refunded against Order",

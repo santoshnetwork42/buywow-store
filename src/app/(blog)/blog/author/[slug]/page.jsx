@@ -4,6 +4,7 @@ import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2"
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 import {
   fetchAuthor,
+  fetchAuthors,
   fetchBlogs,
   fetchFeaturedBlogs,
 } from "@/lib/wordPressAPIs";
@@ -11,17 +12,17 @@ import handleRedirect from "@/utils/handleRedirect";
 
 export const revalidate = 60 * 60 * 24;
 
-// export async function generateStaticParams() {
-//   const authors = await fetchAuthors();
+export async function generateStaticParams() {
+  const authors = await fetchAuthors();
 
-//   if (!authors || authors.length === 0) {
-//     return [];
-//   }
+  if (!authors || authors.length === 0) {
+    return [];
+  }
 
-//   return authors.map((author) => ({
-//     slug: author.slug,
-//   }));
-// }
+  return authors.map((author) => ({
+    slug: author.slug,
+  }));
+}
 
 export async function generateMetadata({ params }) {
   const author = await fetchAuthor(params.slug);

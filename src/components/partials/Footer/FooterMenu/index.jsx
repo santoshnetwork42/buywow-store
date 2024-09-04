@@ -4,10 +4,10 @@ import Link from "next/link";
 import React, { useMemo } from "react";
 
 const SubMenuItem = React.memo(({ item }) => {
-  if (!item?.title || !item?.slug) return null;
+  if (!item?.title) return null;
   return (
     <li className="">
-      <Link href={item.slug}>
+      <Link href={item?.slug || item?.link}>
         <Text as="p" size="sm" className="capitalize text-white-a700_01">
           {item.title}
         </Text>
@@ -21,7 +21,7 @@ SubMenuItem.displayName = "SubMenuItem";
 const FooterMenu = ({ item, isOpen, onToggle }) => {
   const subMenuItems = useMemo(() => {
     if (!item.subMenu || !Array.isArray(item.subMenu)) return [];
-    return item.subMenu.filter((subItem) => subItem?.title && subItem?.slug);
+    return item.subMenu.filter((subItem) => subItem?.title);
   }, [item.subMenu]);
 
   if (!item) return null;

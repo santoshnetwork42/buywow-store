@@ -47,9 +47,9 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
     }
   }, [isOpen]);
 
-  if (!item) return null;
+  if (!item || !item?.title) return null;
 
-  if (item.subMenu && item.subMenu.length > 0) {
+  if (item?.subMenu && item?.subMenu?.length > 0) {
     return (
       <div>
         <div
@@ -96,7 +96,11 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
 
   return (
     <Link
-      href={`/${linkPrefix ? linkPrefix + "/" : ""}${item.slug || ""}`}
+      href={
+        item?.slug
+          ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
+          : item?.link || "#"
+      }
       onClick={() => {
         topNavbarClicked({
           banner_name: item.title,

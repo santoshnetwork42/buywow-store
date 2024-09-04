@@ -55,7 +55,7 @@ const ReadMore = ({
         </Text>
         <Button
           onClick={toggleExpand}
-          className={`absolute bottom-0 right-0 rounded-none bg-white-a700 px-3 text-sm underline ${
+          className={`ml-auto rounded-none bg-white-a700 px-3 text-sm underline ${
             buttonClassName
           }`}
         >

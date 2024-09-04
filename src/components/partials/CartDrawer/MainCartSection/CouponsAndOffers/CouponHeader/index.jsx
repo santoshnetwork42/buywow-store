@@ -38,7 +38,10 @@ const CouponHeader = ({ openSidebar, appliedCoupon, removeCoupon }) => {
   }
 
   return (
-    <div className="relative flex shrink items-center justify-between gap-2 rounded-lg bg-blue_gray-300_01 py-2 pl-2 pr-5 shadow-xs md:pl-2.5">
+    <div
+      onClick={openSidebar}
+      className="relative flex shrink items-center justify-between gap-2 rounded-lg bg-blue_gray-300_01 py-2 pl-2 pr-5 shadow-xs md:pl-2.5"
+    >
       <div className="flex items-center justify-center gap-2">
         <Img
           src="img_coupons_and_offers.png"

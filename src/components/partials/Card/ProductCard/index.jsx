@@ -43,7 +43,7 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
           isStatic
         />
         <Text as="span" size="sm" className="capitalize" responsive>
-          {toDecimal(rating, 1)}
+          {toDecimal(rating, 2)}
         </Text>
       </div>
       <Text as="span" size="sm" className="capitalize" responsive>
