@@ -24,7 +24,7 @@ const ProductHeader = React.memo(
           <div className="flex items-center gap-1">
             <StarIcon className="h-3 w-3 -translate-y-[1px] md:h-4 md:w-4" />
             <Text className="capitalize" size="sm" responsive>
-              {toDecimal(rating, 1)}
+              {toDecimal(rating, 2)}
             </Text>
           </div>
         )}

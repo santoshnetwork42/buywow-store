@@ -13,8 +13,13 @@ const ReviewSummary = React.memo(
         <div className="flex flex-col items-center justify-center gap-3">
           <ReviewStars rating={rating} />
           <div className="flex items-center gap-1">
-            <Heading as="h4" size="base" className="text-sm" responsive>
-              {toDecimal(rating, 1)} OutOf 5{" "}
+            <Heading
+              as="h4"
+              size="base"
+              className="text-sm normal-case"
+              responsive
+            >
+              {toDecimal(rating, 0)} out of 5{" "}
               {!!totalRating && `| ${totalRating} Customer Rating`}
             </Heading>
           </div>
