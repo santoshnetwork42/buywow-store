@@ -84,18 +84,9 @@ const VariantItem = React.memo(({ variant, onChange }) => {
       )}
       <div className="flex flex-1 flex-col gap-2">
         {(label || title) && (
-          <div className="flex-1">
-            {label && (
-              <Heading as="h6" size="sm" className="line-clamp-3">
-                {label}
-              </Heading>
-            )}
-            {title && (
-              <Text as="p" size="xs" className="line-clamp-2">
-                {title}
-              </Text>
-            )}
-          </div>
+          <Heading as="h6" size="sm" className="line-clamp-3">
+            {label || title}
+          </Heading>
         )}
         {price != null && (
           <div>

@@ -44,8 +44,7 @@ const PriceSection = React.memo(
               <Text
                 as="p"
                 size="sm"
-                className="rounded-full px-2 py-1 md:font-medium"
-                style={{ backgroundColor: offerTag?.bgColor || "#DD8434" }}
+                className="rounded-full bg-lime-50 px-2 py-1 md:font-medium"
               >
                 {discountPercentage}% Off
               </Text>
