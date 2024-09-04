@@ -163,20 +163,26 @@ const renderBlock = (block, slug) => {
   return <Component key={`${__typename}-${id}`} slug={slug} {...block} />;
 };
 
-// export async function generateStaticParams() {
-//   const pages = await getCMSPagesAPI();
+export async function generateStaticParams() {
+  const pages = await getCMSPagesAPI();
 
-//   return (pages || []).map((page) => {
-//     if (page.attributes.slug !== "search" || page.attributes.slug !== "index") {
-//       return {
-//         pages: [pageType[page.attributes.type], page.attributes.slug].filter(
-//           Boolean,
-//         ),
-//       };
-//     }
-//     return null;
-//   });
-// }
+  const allowedTypes = ["collections", "products", "pages", "policies"];
+
+  const filteredPages = (pages || []).filter(
+    (page) =>
+      Array.isArray(page) &&
+      page.length === 2 &&
+      allowedTypes.includes(page[0]) &&
+      page[1] !== "search" &&
+      page[1] !== "index",
+  );
+
+  const result = filteredPages.map((page) => ({
+    pages: page,
+  }));
+
+  return result;
+}
 
 async function generateSEOAndJSONLD(params) {
   const {
@@ -444,6 +450,7 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const { pages } = params;
+  console.log("pages", pages);
   const fullSlug = pages.join("/");
   const lastSlug = pages[pages.length - 1];
 

@@ -6,7 +6,13 @@ import { Toaster, toast } from "react-hot-toast";
 
 // Generic Toast Component
 const ToastComponent = () => {
-  return <Toaster position="top-center" reverseOrder={false} />;
+  return (
+    <Toaster
+      position="top-center"
+      reverseOrder={false}
+      containerStyle={{ transform: "translateY(22px)" }}
+    />
+  );
 };
 
 export const showToast = {
