@@ -125,7 +125,7 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-export const revalidate = 1800;
+export const revalidate = 60;
 
 const pageType = {
   HOME: "",
@@ -164,6 +164,8 @@ export async function generateStaticParams() {
   const result = filteredPages.map((page) => ({
     pages: page,
   }));
+
+  console.log("Static Params pages length: ", result.length);
 
   return result;
 }
@@ -447,6 +449,7 @@ export default async function Page({ params }) {
   const { blocks, slug, type } = pageData || {};
 
   if (!slug) {
+    console.log("Page not found: >>>", fullSlug);
     return await handleRedirect(`/${fullSlug}`, false);
   }
 

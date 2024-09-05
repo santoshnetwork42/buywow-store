@@ -9,6 +9,7 @@ const fetchData = async (query = "", variables = {}, options = {}) => {
       accept: "*/*",
       "content-type": "application/json; charset=UTF-8",
     },
+
     ...options,
   });
   const data = await response.json();
