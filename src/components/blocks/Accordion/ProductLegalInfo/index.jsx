@@ -14,14 +14,14 @@ const TableLikeStructure = ({ legalInfoItems }) => {
         ?.map((item) => (
           <div
             key={item?.id}
-            className="grid grid-cols-1 gap-2 border-b border-gray-200 pb-2 md:grid-cols-2"
+            className="grid grid-cols-2 gap-2 border-b border-gray-200 pb-2"
           >
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-row">
               <Text as="p" size="sm">
                 {item?.text}
               </Text>
             </div>
-            <div className="flex flex-col md:flex-row">
+            <div className="flex flex-row">
               <Text as="p" size="sm" className="line-clamp-4">
                 {item?.subText}
               </Text>
