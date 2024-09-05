@@ -39,8 +39,8 @@ const FeaturedList = ({
   return (
     <div
       className={twMerge(
-        `container-main mx-auto flex w-full flex-wrap items-center justify-around gap-y-2 max-xl:!max-w-full md:justify-evenly`,
-        isInPDP ? "" : "mb-7 md:mb-8",
+        `mx-auto flex w-full flex-wrap items-center justify-around gap-y-2 max-xl:!max-w-full md:justify-evenly`,
+        isInPDP ? "" : "container-main mb-7 md:mb-8",
       )}
     >
       {features.map((feature, index) => (

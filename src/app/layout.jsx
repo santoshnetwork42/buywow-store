@@ -6,7 +6,7 @@ import CartDrawer from "@/components/partials/CartDrawer";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
-import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT, STORE_ID } from "@/config";
+import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
   getCartUpsellProductsAPI,
   getInitialDataAPI,
@@ -19,7 +19,6 @@ import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 import GoKwikProvider from "@/utils/context/gokwik";
 import NavbarProvider from "@/utils/context/navbar";
 import { Amplify } from "aws-amplify";
-import { unstable_cache } from "next/cache";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 
@@ -43,27 +42,9 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
-const cachedGetNavbarAndFooterAPI = unstable_cache(
-  async () => getNavbarAndFooterAPI(),
-  ["navbar-footer"],
-  { revalidate: 900 },
-);
-
-const cachedGetInitialDataAPI = unstable_cache(
-  async (storeId, platform) => getInitialDataAPI(storeId, platform),
-  ["initial-data"],
-  { revalidate: 30 },
-);
-
-const cachedGetCartUpsellProductsAPI = unstable_cache(
-  async () => getCartUpsellProductsAPI(),
-  ["upsell-products"],
-  { revalidate: 900 },
-);
-
 async function RootLayout({ children }) {
   const { data } = (await getNavbarAndFooterAPI()) || {};
-  const initialData = await getInitialDataAPI(STORE_ID, "WEB");
+  const initialData = await getInitialDataAPI("WEB");
   const upsellProducts = await getCartUpsellProductsAPI();
 
   const {
@@ -85,7 +66,7 @@ async function RootLayout({ children }) {
       </head>
       <body>
         <Provider data={{ headerData, carouselData }}>
-          <NavbarProvider initialData={initialData?.data}>
+          <NavbarProvider initialData={initialData}>
             <GoKwikProvider>
               <AnnouncementProvider>
                 <ClientSideEffects />

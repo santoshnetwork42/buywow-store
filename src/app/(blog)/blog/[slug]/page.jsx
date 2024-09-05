@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
 
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 86400;
 
 export async function generateMetadata({ params }) {
   const blog = await fetchBlog(params.slug);

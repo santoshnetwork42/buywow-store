@@ -1,9 +1,8 @@
-import React from "react";
 import BlogInfiniteScroll from "@/components/partials/Blog/BlogInfiniteScroll";
-import { fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
+import { fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
 
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 86400;
 
 export function metadata() {
   return {

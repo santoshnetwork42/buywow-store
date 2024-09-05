@@ -25,11 +25,7 @@ const handleRedirect = async (path, showNotFound = true) => {
 
   console.log("not found: ", path);
 
-  if (showNotFound) {
-    notFound();
-  }
-
-  throw new Error(`Page not found: ${path}`);
+  notFound();
 };
 
 export default handleRedirect;
