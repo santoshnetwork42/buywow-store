@@ -9,23 +9,25 @@ const TableLikeStructure = ({ legalInfoItems }) => {
   return (
     <div className="mt-4 grid grid-cols-1 gap-4 pb-2">
       {/* Rows */}
-      {legalInfoItems?.map((item) => (
-        <div
-          key={item?.id}
-          className="grid grid-cols-1 gap-2 border-b border-gray-200 pb-2 md:grid-cols-2"
-        >
-          <div className="flex flex-col md:flex-row">
-            <Text as="p" size="sm">
-              {item?.text}
-            </Text>
+      {legalInfoItems
+        ?.filter((item) => item?.subText !== "N/A")
+        ?.map((item) => (
+          <div
+            key={item?.id}
+            className="grid grid-cols-1 gap-2 border-b border-gray-200 pb-2 md:grid-cols-2"
+          >
+            <div className="flex flex-col md:flex-row">
+              <Text as="p" size="sm">
+                {item?.text}
+              </Text>
+            </div>
+            <div className="flex flex-col md:flex-row">
+              <Text as="p" size="sm" className="line-clamp-4">
+                {item?.subText}
+              </Text>
+            </div>
           </div>
-          <div className="flex flex-col md:flex-row">
-            <Text as="p" size="sm" className="line-clamp-4">
-              {item?.subText}
-            </Text>
-          </div>
-        </div>
-      ))}
+        ))}
     </div>
   );
 };
@@ -84,7 +86,7 @@ const ProductLegalInfo = ({
         <ToggleArrow open={isOpen} />
       </button>
       <div
-        className="overflow-hidden transition-all duration-300 ease-in-out"
+        className="w-full overflow-hidden transition-all duration-300 ease-in-out"
         style={contentStyle}
       >
         <div ref={contentRef}>
