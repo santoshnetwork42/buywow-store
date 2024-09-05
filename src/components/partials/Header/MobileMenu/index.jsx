@@ -16,7 +16,7 @@ const HeaderSection = ({
   onLoginClick,
 }) => (
   <div className="flex items-center justify-between bg-yellow-900 p-4">
-    <Link prefetch={false} href="/" onClick={onClose}>
+    <Link prefetch href="/" onClick={onClose}>
       <Img
         src={mWebUrl}
         width={100}

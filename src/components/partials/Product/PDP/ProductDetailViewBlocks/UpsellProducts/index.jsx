@@ -24,7 +24,7 @@ const UpsellProduct = React.memo(({ product, text, subText }) => {
 
   return (
     <Link
-      prefetch={false}
+      prefetch
       href={`/product/${slug}`}
       className="flex h-full w-[76vw] min-w-[340px] max-w-[360px] gap-3 rounded-md bg-white-a700 p-2.5 shadow md:p-3"
     >

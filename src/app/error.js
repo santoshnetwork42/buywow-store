@@ -19,7 +19,7 @@ export default function Error({ error, reset }) {
               and we're working on a fix.`}
         </p>
         <Link
-          prefetch={false}
+          prefetch
           href="/"
           className="text-white transform rounded-full bg-yellow-900 px-6 py-3 font-semibold text-white-a700_01 transition duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-opacity-50"
         >

@@ -32,7 +32,7 @@ export default async function BlogHeader() {
     <header className="container-main flex flex-col gap-y-6 border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
       <div className="grid w-full grid-cols-[1fr,auto,1fr] items-center justify-center gap-x-4">
         <div></div>
-        <Link prefetch={false} href={`/`}>
+        <Link prefetch href={`/`}>
           <Image
             src="/images/img_wow_logo.png"
             alt="logo"
@@ -47,7 +47,7 @@ export default async function BlogHeader() {
           {menu.map((item) => (
             <div key={item.id} className="group relative">
               <Link
-                prefetch={false}
+                prefetch
                 className="flex cursor-pointer items-center gap-x-1 py-2"
                 href={`/blog/${item.path}`}
               >

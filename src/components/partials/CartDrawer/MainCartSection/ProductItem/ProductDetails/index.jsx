@@ -18,11 +18,7 @@ const ProductDetails = ({
 }) => (
   <div className="flex flex-1 flex-col justify-between gap-1">
     <div className="flex flex-col gap-1">
-      <Link
-        prefetch={false}
-        href={`/product/${slug}`}
-        onClick={handleCartClose}
-      >
+      <Link prefetch href={`/product/${slug}`} onClick={handleCartClose}>
         <Heading
           size="base"
           as="h4"

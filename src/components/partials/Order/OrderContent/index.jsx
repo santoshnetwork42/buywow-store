@@ -132,14 +132,14 @@ const ActionButtons = React.memo(() => (
   <div className="flex flex-wrap justify-center gap-2 sm:justify-between">
     <div className="flex gap-2">
       <Link
-        prefetch={false}
+        prefetch
         href="/account"
         className="rounded-full bg-yellow-900 px-4 py-2 text-sm uppercase text-white-a700_01 md:px-6 md:py-3 md:text-base"
       >
         Your Orders
       </Link>
       <Link
-        prefetch={false}
+        prefetch
         href="/contact-us"
         className="rounded-full bg-gray-200 px-4 py-2 text-sm uppercase md:px-6 md:py-3 md:text-base"
       >
@@ -147,7 +147,7 @@ const ActionButtons = React.memo(() => (
       </Link>
     </div>
     <Link
-      prefetch={false}
+      prefetch
       href="/collections/all"
       className="rounded-full bg-yellow-900 px-4 py-2 text-sm uppercase text-white-a700_01 md:px-6 md:py-3 md:text-base"
     >

@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Breadcrumb({ breadcrumbTitle: currentPageTitle }) {
   return (
     <div className={`container-main my-3 flex items-center`}>
-      <Link prefetch={false} href="/" className="flex">
+      <Link prefetch href="/" className="flex">
         <Text as="span" size="sm" className="font-light capitalize" responsive>
           Home
         </Text>

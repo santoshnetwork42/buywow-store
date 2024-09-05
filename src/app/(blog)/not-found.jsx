@@ -14,7 +14,7 @@ export default function NotFound() {
         {`Oops! The page you're looking for doesn't exist or has been moved.`}
       </Text>
       <Link
-        prefetch={false}
+        prefetch
         href="/"
         className="rounded-full bg-yellow-900 px-6 py-3 transition duration-300"
       >
