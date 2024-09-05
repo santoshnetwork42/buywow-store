@@ -329,6 +329,7 @@ const CheckoutClient = () => {
 
   useEffect(() => {
     startCheckout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { codCouponDisabled, onlineDisabled, ppcodCouponEnabled } =

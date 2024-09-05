@@ -80,12 +80,14 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
 
       return () => clearTimeout(timerId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order, paymentId]);
 
   useEffect(() => {
     if (user?.id && order?.userId && user.id === order.userId) {
       fetchUpdatedOrder();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const { formattedState, country } = useMemo(() => {
