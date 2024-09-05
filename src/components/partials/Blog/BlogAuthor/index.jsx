@@ -20,16 +20,20 @@ export default function BlogAuthor({
       />
       <div className="space-y-2">
         <div className="flex justify-between">
-          <Link href={`/blog/author/${slug}`}>
+          <Link prefetch={false} href={`/blog/author/${slug}`}>
             <Heading as="h4" size="lg">
               {name}
             </Heading>
           </Link>
 
-
           <div className="space-x-2">
             {linkedin && (
-              <Link href={linkedin} target="_blank" rel="noopener noreferrer">
+              <Link
+                prefetch={false}
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Image
                   src="/images/linkedin.svg"
                   alt="linkedin"

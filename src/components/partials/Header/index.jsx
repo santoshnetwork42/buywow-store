@@ -34,6 +34,7 @@ const MenuItem = React.memo(({ item, index, linkPrefix, showInWeb }) => {
     return (
       <li key={key} className="group relative">
         <Link
+          prefetch={false}
           href={
             item.slug
               ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
@@ -60,6 +61,7 @@ const MenuItem = React.memo(({ item, index, linkPrefix, showInWeb }) => {
   return (
     <li key={key}>
       <Link
+        prefetch={false}
         href={
           item?.slug
             ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
@@ -81,7 +83,7 @@ const MenuItem = React.memo(({ item, index, linkPrefix, showInWeb }) => {
 });
 
 const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
-  <Link href="/">
+  <Link prefetch={false} href="/">
     <div className="flex items-center gap-1">
       <Img
         src={logoUrl}

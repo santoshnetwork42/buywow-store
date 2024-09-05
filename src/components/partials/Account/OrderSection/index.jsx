@@ -13,11 +13,19 @@ const OrderSection = React.memo(() => {
       </div>
       <Text as="p" size="sm">
         For order history, please write to us @{" "}
-        <Link href="mailto:support@buywow.in" className="text-blue-600">
+        <Link
+          prefetch={false}
+          href="mailto:support@buywow.in"
+          className="text-blue-600"
+        >
           support@buywow.in
         </Link>{" "}
         with your order id and mobile number. Track your order{" "}
-        <Link href="https://track.buywow.in/" className="text-blue-600">
+        <Link
+          prefetch={false}
+          href="https://track.buywow.in/"
+          className="text-blue-600"
+        >
           here
         </Link>
         .

@@ -89,6 +89,7 @@ const AnnouncementBar = ({ data }) => {
     <></>
   ) : (
     <Link
+      prefetch={false}
       href={announcement?.link || "#"}
       className="container-secondary flex justify-center"
       style={{ backgroundColor: announcement?.bgColor || "#6E809A" }}

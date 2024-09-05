@@ -43,6 +43,7 @@ const CarouselImage = React.memo(
 
     return (
       <Link
+        prefetch={false}
         href={link || "#"}
         className="w-full flex-[0_0_100%]"
         onClick={() => {

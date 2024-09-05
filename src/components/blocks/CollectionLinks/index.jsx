@@ -6,6 +6,7 @@ import { getBgColor } from "@/utils/helpers";
 
 const CollectionLink = ({ text, slug, bgColorClass }) => (
   <Link
+    prefetch={false}
     href={`/collections/${slug}`}
     className={`flex w-full max-w-[352px] items-center justify-between rounded px-3 py-3.5 ${bgColorClass}`}
   >

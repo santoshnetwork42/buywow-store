@@ -58,6 +58,7 @@ export default function BlogSidebar({ featuredBlogs = [], tags = [] }) {
               <div className="flex flex-wrap gap-4">
                 {tags.map((tag) => (
                   <Link
+                    prefetch={false}
                     href={`/blog/tag/${tag.slug}`}
                     key={tag.id}
                     className="border border-yellow-900 px-2 py-1 text-sm text-yellow-900"

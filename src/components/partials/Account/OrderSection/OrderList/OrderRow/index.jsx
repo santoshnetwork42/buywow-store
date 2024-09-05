@@ -11,7 +11,7 @@ const OrderRow = React.memo(({ order }) => {
   };
 
   return (
-    <Link href={`/order/${order.id}`}>
+    <Link prefetch={false} href={`/order/${order.id}`}>
       <div className="grid grid-cols-[30%_70%] gap-2 border-b py-2 hover:bg-slate-100 md:grid-cols-[22%_36%_20%_auto] md:py-3 lg:py-4 xl:py-[14px]">
         <OrderCell label="Order:" value={`#${order.code}`} isLink />
         <OrderCell label="Date:" value={formateDate(order.orderDate)} />

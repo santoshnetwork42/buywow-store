@@ -19,7 +19,11 @@ const ProductHeader = React.memo(
           </Text>
         )}
       </div>
-      <Link href="#product-reviews" className="flex w-fit items-center gap-1">
+      <Link
+        prefetch={false}
+        href="#product-reviews"
+        className="flex w-fit items-center gap-1"
+      >
         {rating > 0 && (
           <div className="flex items-center gap-1">
             <StarIcon className="h-3 w-3 -translate-y-[1px] md:h-4 md:w-4" />

@@ -11,6 +11,7 @@ const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
   return (
     <li className={!isLast ? "border-b-[0.5px] border-b-gray-300" : ""}>
       <Link
+        prefetch={false}
         className={isLast ? "py-2.5" : "py-2.5"}
         href={`/${linkPrefix ? linkPrefix + "/" : ""}${subItem.slug || ""}`}
         onClick={() => {
@@ -96,6 +97,7 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
 
   return (
     <Link
+      prefetch={false}
       href={
         item?.slug
           ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`

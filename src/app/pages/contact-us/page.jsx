@@ -21,7 +21,7 @@ const ContactUs = () => {
               "If you're eager to track your order and receive up-to-date information, use our order tracking system."
             }
           </Text>
-          <Link href="https://track.buywow.in/">
+          <Link prefetch={false} href="https://track.buywow.in/">
             <Button variant="primary" className="p-4">
               Track Now
             </Button>
@@ -49,7 +49,7 @@ const ContactUs = () => {
             </Text>
             {/* href="https://wa.link/xs6kb5" */}
             <div className="mt-8">
-              <Link href="https://wa.link/xs6kb5">
+              <Link prefetch={false} href="https://wa.link/xs6kb5">
                 <Button className="p-3" variant="primary">
                   Chat With Us
                 </Button>
