@@ -125,8 +125,8 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-export const revalidate = 60;
 export const dynamicParams = true;
+// export const revalidate = 60;
 
 const pageType = {
   HOME: "",
@@ -165,8 +165,6 @@ export async function generateStaticParams() {
   const result = filteredPages.map((page) => ({
     pages: page,
   }));
-
-  console.log("Static Params pages length: ", result.length);
 
   return result;
 }
