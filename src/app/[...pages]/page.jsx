@@ -125,7 +125,7 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-export const revalidate = 900;
+export const revalidate = 1800;
 
 const pageType = {
   HOME: "",
@@ -135,22 +135,6 @@ const pageType = {
   PAGES: "pages",
   POLICIES: "policies",
 };
-
-// const cachedGetCMSPagesAPI = unstable_cache(
-//   async () => getCMSPagesAPI(),
-//   ["cms-pages"],
-//   { revalidate: 900 },
-// );
-
-// const cachedGetPageBySlugAPI = unstable_cache(
-//   async (slug) => getPageBySlugAPI(slug),
-//   ["page-by-slug"],
-//   { revalidate: 900 },
-// );
-
-// const cachedGetStoreAPI = unstable_cache(async () => getStoreAPI(), ["store"], {
-//   revalidate: 900,
-// });
 
 const renderBlock = (block, slug) => {
   const { showComponent, __typename, id } = block || {};
@@ -453,17 +437,17 @@ export default async function Page({ params }) {
   const fullSlug = pages.join("/");
   const lastSlug = pages[pages.length - 1];
 
-  console.log(new Date(), "Page", fullSlug);
+  console.log("Page: ", fullSlug);
 
-  // Handle redirects for paths with more than 2 segments
   if (pages.length > 2) {
-    return handleRedirect(`/${fullSlug}`, false);
+    return await handleRedirect(`/${fullSlug}`);
   }
 
   const pageData = await getPageBySlugAPI(lastSlug);
   const { blocks, slug, type } = pageData || {};
 
   if (!slug) {
+    revalidatePath(`/${fullSlug}`);
     return await handleRedirect(`/${fullSlug}`, false);
   }
 
@@ -478,7 +462,7 @@ export default async function Page({ params }) {
   const actualPath = fullSlug === "index" ? "" : fullSlug;
 
   if (expectedPath !== actualPath) {
-    return handleRedirect(`/${expectedPath}`);
+    return await handleRedirect(`/${expectedPath}`);
   }
 
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {

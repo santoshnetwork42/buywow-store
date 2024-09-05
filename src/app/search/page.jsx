@@ -1,20 +1,11 @@
 import SearchResults from "@/components/partials/Others/SearchResult";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
-import { unstable_cache } from "next/cache";
-
-export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Search",
   description:
     "Search for products using our advanced search engine. Start your search here.",
 };
-
-const cachedGetPageBySlugAPI = unstable_cache(
-  async (slug) => getPageBySlugAPI(slug),
-  ["page-by-slug-search"],
-  { revalidate: 900 },
-);
 
 async function getInitialSearchData() {
   try {

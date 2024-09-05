@@ -112,17 +112,6 @@ const ProductCard = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedVariant?.id]);
 
-    useEffect(() => {
-      if (packageProduct && sendProductDataToParent) {
-        const productDetail = {
-          packageProduct,
-          selectedVariantId: selectedVariant?.id,
-        };
-        sendProductDataToParent(productDetail);
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedVariant?.id]);
-
     const discountPercentage = getDiscountPercentage(price, listingPrice);
 
     const { url } = extractAttributes(image);

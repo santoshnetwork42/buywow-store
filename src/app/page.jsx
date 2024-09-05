@@ -1,5 +1,4 @@
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
-import { unstable_cache } from "next/cache";
 import dynamic from "next/dynamic";
 
 // Dynamically import components
@@ -120,12 +119,6 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-const cachedGetPageBySlugAPI = unstable_cache(
-  async (slug) => getPageBySlugAPI(slug),
-  ["page-by-slug"],
-  { revalidate: 900 },
-);
-
 const renderBlock = (block, slug) => {
   const { showComponent, __typename, id } = block || {};
   if (!showComponent) return null;
@@ -143,6 +136,8 @@ export default async function Page() {
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
     throw new Error("Blocks not found on Home page");
   }
+
+  console.log("Page: ", slug);
 
   return (
     <React.Fragment>

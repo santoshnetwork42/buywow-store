@@ -435,6 +435,7 @@ export async function fetchSearchItems(search, limit = 1) {
         headers: {
           Authorization: `Bearer ${NEXT_PUBLIC_TTM_CLIENT_API_KEY}`,
         },
+        next: { revalidate: 1800 },
       },
     );
     const data = await response.json();

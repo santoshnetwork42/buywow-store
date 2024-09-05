@@ -46,15 +46,10 @@ Amplify.configure({
 const client = generateClient();
 
 export const getStoreAPI = async () => {
-  const data = await fetchData(
-    getStore,
-    {
-      id: STORE_ID,
-      deviceType: "WEB",
-    },
-    900, // revalidate every 15 minutes
-    "Get Store API",
-  );
+  const data = await fetchData(getStore, {
+    id: STORE_ID,
+    deviceType: "WEB",
+  });
 
   return data?.getStore || {};
 };
@@ -88,17 +83,12 @@ export const searchCMSCollectionProductsAPI = async ({
 };
 
 export const getPageBySlugAPI = async (slugId) => {
-  const data = await fetchData(
-    getPageBySlug,
-    {
-      storeId: STORE_ID,
-      pageType: "",
-      slug: slugId,
-      collectionDataLimit: 100,
-    },
-    900, // revalidate every 15 minutes
-    "Get Page By Slug API",
-  );
+  const data = await fetchData(getPageBySlug, {
+    storeId: STORE_ID,
+    pageType: "",
+    slug: slugId,
+    collectionDataLimit: 100,
+  });
 
   return JSON.parse(data?.getPageBySlug || "{}");
 };
@@ -126,13 +116,11 @@ export const getPageMetadataBySlugAPI = async (slugId, pageType) => {
 export const getNavbarAndFooterAPI = async () => {
   const data = await fetchData(
     getNavbarAndFooter,
+    { storeId: STORE_ID },
     {
-      storeId: STORE_ID,
+      next: { revalidate: 1800 },
     },
-    900, // revalidate every 15 minutes
-    "Get Navbar And Footer API",
   );
-
   return JSON.parse(data?.getNavbarAndFooter || "{}");
 };
 
@@ -316,25 +304,18 @@ export const fetchProductDetailsAPI = async (id) => {
 export const getCartUpsellProductsAPI = async () => {
   const data = await fetchData(
     getCartUpsellProducts,
+    { storeId: STORE_ID },
     {
-      storeId: STORE_ID,
+      next: { revalidate: 1800 },
     },
-    900, // revalidate every 15 minutes
-    "Get Cart Upsell Products API",
   );
-
   return JSON.parse(data?.getCartUpsellProducts || "{}");
 };
 
 export const getCMSPagesAPI = async () => {
-  const data = await fetchData(
-    getCMSPages,
-    {
-      storeId: STORE_ID,
-    },
-    900, // revalidate every 15 minutes
-    "Get CMS Pages API",
-  );
+  const data = await fetchData(getCMSPages, {
+    storeId: STORE_ID,
+  });
 
   return JSON.parse(data?.getCMSPages || "[]");
 };
@@ -571,27 +552,22 @@ export const validateTransactionAPI = async (orderId, paymentId) => {
 //   );
 // };
 
-export const getInitialDataAPI = async (storeId, deviceType) => {
+export const getInitialDataAPI = async (deviceType) => {
   try {
-    const response = await client.graphql({
-      query: getInitialData,
-      variables: {
-        storeId,
+    const data = await fetchData(getInitialData, {
+      storeId: STORE_ID,
+      deviceType,
+      getStoreSettingInput: {
+        storeId: STORE_ID,
         deviceType,
-        getStoreSettingInput: {
-          storeId: storeId,
-          deviceType: deviceType,
-        },
-        shippingTierFilter: {
-          storeId: { eq: storeId },
-        },
       },
-      authMode: "apiKey",
+      shippingTierFilter: {
+        storeId: { eq: STORE_ID },
+      },
     });
-
-    return response;
+    return data;
   } catch (error) {
-    errorHandler("Error Updating User", error);
+    errorHandler("Error Fetching Initial Data", error);
     return error;
   }
 };
@@ -622,16 +598,11 @@ export const getOrdersAPI = async (userId, token = null, perPage = 10) => {
 
 export const getRedirectsAPI = async (path) => {
   try {
-    const response = await client.graphql({
-      query: getRedirects,
-      authMode: "apiKey",
-      variables: {
-        slug: path,
-        storeId: STORE_ID,
-      },
+    const data = await fetchData(getRedirects, {
+      slug: path,
+      storeId: STORE_ID,
     });
-
-    return response?.data?.getRedirects || null;
+    return data?.getRedirects || null;
   } catch (err) {
     errorHandler(err, "Get Redirects API");
     return null;
@@ -640,18 +611,14 @@ export const getRedirectsAPI = async (path) => {
 
 export const updateRedirectsAPI = async (path, hitCount) => {
   try {
-    const response = await client.graphql({
-      query: updateRedirects,
-      authMode: "apiKey",
-      variables: {
-        input: {
-          storeId: STORE_ID,
-          slug: path,
-          hitCount: hitCount,
-        },
+    const data = await fetchData(updateRedirects, {
+      input: {
+        storeId: STORE_ID,
+        slug: path,
+        hitCount: hitCount,
       },
     });
-    return response?.data?.updateRedirects || null;
+    return data?.updateRedirects || null;
   } catch (err) {
     errorHandler(err, "Update Redirects API");
     return null;
@@ -660,18 +627,14 @@ export const updateRedirectsAPI = async (path, hitCount) => {
 
 export const createRedirectsAPI = async (path) => {
   try {
-    const response = await client.graphql({
-      query: createRedirects,
-      authMode: "apiKey",
-      variables: {
-        input: {
-          storeId: STORE_ID,
-          slug: path,
-          hitCount: 1,
-        },
+    const data = await fetchData(createRedirects, {
+      input: {
+        storeId: STORE_ID,
+        slug: path,
+        hitCount: 1,
       },
     });
-    return response?.data?.createRedirects || null;
+    return data?.createRedirects || null;
   } catch (err) {
     errorHandler(err, "Create Redirects API");
     return null;
