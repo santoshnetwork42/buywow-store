@@ -13,7 +13,7 @@ const fetchData = async (query = "", variables = {}, options = {}) => {
     next: {
       revalidate: 600,
     },
-    // ...options,
+    // ...options
   });
   const data = await response.json();
   return data.data;
