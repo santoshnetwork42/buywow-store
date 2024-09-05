@@ -125,7 +125,7 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-export const revalidate = 60;
+// export const revalidate = 60;
 
 const pageType = {
   HOME: "",
