@@ -85,6 +85,8 @@ export const metadata = {
     "Revitalize your skin with Vitamin C face wash and natural ingredients. Cruelty-free, dermatologically tested skincare on sale. Free shipping on orders above ₹999.",
 };
 
+export const revalidate = 60;
+
 const componentMap = {
   ComponentBlocksAnnouncementBar: PageAnnouncementBar,
   ComponentBannerCarousal: Carousal,

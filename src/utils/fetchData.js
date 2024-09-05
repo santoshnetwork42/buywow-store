@@ -11,7 +11,7 @@ const fetchData = async (query = "", variables = {}, options = {}) => {
       "cache-control": "no-cache",
     },
     next: {
-      revalidate: 5,
+      revalidate: 60,
     },
     // ...options,
   });
