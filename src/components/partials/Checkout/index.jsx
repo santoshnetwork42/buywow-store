@@ -142,13 +142,28 @@ const CheckoutClient = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, guestCheckout, customUser, router]);
 
+  const { codCouponDisabled, onlineDisabled, ppcodCouponEnabled } =
+    useMemo(() => {
+      return {
+        codCouponDisabled: appliedCoupon?.paymentMethod === "ONLINE",
+        onlineDisabled: appliedCoupon?.paymentMethod === "COD",
+        ppcodCouponEnabled: appliedCoupon?.ppcodCouponAmount > 0,
+      };
+    }, [appliedCoupon]);
+
   useEffect(() => {
-    if (prepaidEnabled) {
-      setSelectedPaymentMethod("PREPAID");
-    } else if (codEnabled || ppcodEnabled) {
+    if (onlineDisabled && (codEnabled || ppcodCouponEnabled)) {
       setSelectedPaymentMethod("COD");
+    } else if (codCouponDisabled && prepaidEnabled) {
+      setSelectedPaymentMethod("PREPAID");
     }
-  }, [codEnabled, prepaidEnabled, ppcodEnabled]);
+  }, [
+    codCouponDisabled,
+    onlineDisabled,
+    ppcodCouponEnabled,
+    codEnabled,
+    prepaidEnabled,
+  ]);
 
   const handleMethodChange = useCallback((id) => {
     setSelectedPaymentMethod(id);
@@ -331,15 +346,6 @@ const CheckoutClient = () => {
     startCheckout();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const { codCouponDisabled, onlineDisabled, ppcodCouponEnabled } =
-    useMemo(() => {
-      return {
-        codCouponDisabled: appliedCoupon?.paymentMethod === "ONLINE",
-        onlineDisabled: appliedCoupon?.paymentMethod === "COD",
-        ppcodCouponEnabled: appliedCoupon?.ppcodCouponAmount > 0,
-      };
-    }, [appliedCoupon]);
 
   const ppcodAmountToTake = ppcodCouponEnabled
     ? appliedCoupon?.ppcodCouponAmount

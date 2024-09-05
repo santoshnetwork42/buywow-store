@@ -27,7 +27,7 @@ const PaymentMethod = React.memo(
       <div
         className={twMerge(
           "flex w-full items-center justify-between gap-4 rounded-md border bg-white-a700_01 p-3 shadow-sm",
-          disabled ? "cursor-not-allowed" : "cursor-pointer",
+          disabled ? "cursor-not-allowed bg-gray-200" : "cursor-pointer",
         )}
         onClick={handleClick}
       >

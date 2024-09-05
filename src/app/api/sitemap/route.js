@@ -13,7 +13,6 @@ const getEntiresForSitemap = async () => {
       page?.attributes?.type === "PRODUCT" ||
       page?.attributes?.type === "COLLECTION",
   );
-  console.log(pages, "_+________+++");
 
   for (const page of filteredPages) {
     const isProduct = page?.attributes?.type === "PRODUCT";
