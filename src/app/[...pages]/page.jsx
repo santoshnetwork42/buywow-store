@@ -125,7 +125,8 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-export const fetchCache = "only-cache";
+export const revalidate = 60;
+export const dynamicParams = true;
 
 const pageType = {
   HOME: "",
