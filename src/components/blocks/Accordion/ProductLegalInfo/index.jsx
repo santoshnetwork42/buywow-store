@@ -34,7 +34,7 @@ const TableLikeStructure = ({ legalInfoItems }) => {
 
 const ProductLegalInfo = ({
   legalInfoItems = [],
-  accordionInfoDropdownBgColor: bgColor,
+  productLegalInfoBgColor: bgColor,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
