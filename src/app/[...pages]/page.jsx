@@ -447,7 +447,6 @@ export default async function Page({ params }) {
   const { blocks, slug, type } = pageData || {};
 
   if (!slug) {
-    revalidatePath(`/${fullSlug}`);
     return await handleRedirect(`/${fullSlug}`, false);
   }
 
