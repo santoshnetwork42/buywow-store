@@ -8,11 +8,12 @@ const fetchData = async (query = "", variables = {}, options = {}) => {
       "x-api-key": awsmobile.aws_appsync_apiKey,
       accept: "*/*",
       "content-type": "application/json; charset=UTF-8",
+      "cache-control": "no-cache",
     },
-    // next: {
-    //   revalidate: 60,
-    // },
-    ...options,
+    next: {
+      revalidate: 5,
+    },
+    // ...options,
   });
   const data = await response.json();
   return data.data;
