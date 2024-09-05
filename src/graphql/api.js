@@ -47,30 +47,6 @@ export const getInitialData = /* GraphQL */ `
       trackingUrl
       imageUrl
       darkImageUrl
-      banners {
-        webKey
-        mobileKey
-        link
-        name
-        isArchive
-        priority
-        deviceType
-      }
-      announcements {
-        label
-        link
-        color
-        textColor
-        deviceType
-        isArchive
-      }
-      socialLinks {
-        instagram
-        facebook
-        twitter
-        youtube
-        pinterest
-      }
     }
 
     searchShippingTiers(filter: $shippingTierFilter) {
@@ -150,76 +126,6 @@ export const getInitialData = /* GraphQL */ `
         isPDPFeatured
         isFeatured
       }
-    }
-
-    searchProducts {
-      items {
-        id
-        title
-        collections
-        vendor
-        status
-        minimumOrderQuantity
-        maximumOrderQuantity
-        subCategory {
-          name
-          slug
-        }
-        isFeatured
-        category {
-          name
-          slug
-        }
-        slug
-        price
-        sku
-        position
-        listingPrice
-        tags
-        inventory
-        blockedInventory
-        continueSellingOutOfStock
-        rating
-        totalRatings
-        thumbImages
-        isInventoryEnabled
-        totalOrders
-        recommended
-        recommendPriority
-        recommendPrice
-        variants {
-          items {
-            id
-            title
-            minimumOrderQuantity
-            maximumOrderQuantity
-            price
-            position
-            listingPrice
-            images {
-              items {
-                id
-              }
-            }
-            inventory
-            blockedInventory
-            status
-          }
-        }
-        images {
-          items {
-            id
-            position
-            alt
-            width
-            height
-            imageKey
-            isThumb
-          }
-        }
-      }
-      nextToken
-      total
     }
 
     byStoreIdRuleEngine(
