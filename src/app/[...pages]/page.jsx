@@ -128,6 +128,7 @@ const componentMap = {
 export const dynamicParams = true;
 // export const revalidate = 60;
 
+//function for getting
 const pageType = {
   HOME: "",
   COLLECTION: "collections",
@@ -434,15 +435,18 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
+  console.log("Params>>>: ", params);
   const { pages } = params;
+
+  console.log("pages: ", pages);
   const fullSlug = pages.join("/");
   const lastSlug = pages[pages.length - 1];
 
   console.log("Page: ", fullSlug);
-
-  if (pages.length > 2) {
-    return await handleRedirect(`/${fullSlug}`);
-  }
+  console.log("lastSlug: ", lastSlug);
+  // if (pages.length > 2) {
+  //   return await handleRedirect(`/${fullSlug}`);
+  // }
 
   const pageData = await getPageBySlugAPI(lastSlug);
   const { blocks, slug, type } = pageData || {};
