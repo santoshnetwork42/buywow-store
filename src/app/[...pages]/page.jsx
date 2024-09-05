@@ -126,7 +126,7 @@ const componentMap = {
 };
 
 export const dynamicParams = true;
-export const revalidate = 60;
+export const revalidate = 600;
 
 //function for getting
 const pageType = {
