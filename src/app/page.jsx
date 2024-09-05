@@ -137,7 +137,7 @@ export default async function Page() {
     throw new Error("Blocks not found on Home page");
   }
 
-  console.log("Page: ", slug);
+  console.log("Page:", slug);
 
   return (
     <React.Fragment>
