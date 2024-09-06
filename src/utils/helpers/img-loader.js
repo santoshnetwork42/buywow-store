@@ -1,7 +1,7 @@
 import { MEDIA_BASE_URL } from "@/config";
 
 export const getPublicImageURL = ({
-  key = "",
+  key,
   resize = 500,
   quality = 75,
   addPrefix = false,
