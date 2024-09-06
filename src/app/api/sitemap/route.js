@@ -9,17 +9,17 @@ const getEntiresForSitemap = async () => {
   const allSitemapEntries = [];
 
   const filteredPages = pages?.filter(
-    (page) =>
-      page?.attributes?.type === "PRODUCT" ||
-      page?.attributes?.type === "COLLECTION",
+    ([type]) => type === "products" || type === "collections",
   );
 
   for (const page of filteredPages) {
-    const isProduct = page?.attributes?.type === "PRODUCT";
+    const [type, slug] = page;
+
+    const isProduct = type === "products";
 
     const metadata = await getPageMetadataBySlugAPI(
-      page?.attributes?.slug,
-      page?.attributes?.type,
+      slug,
+      type === "products" ? "PRODUCT" : "COLLECTION",
     );
     // if metadata is not empty object
     if (!!Object.keys(metadata)?.length) {
