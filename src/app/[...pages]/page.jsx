@@ -13,7 +13,7 @@ import React from "react";
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
-);  
+);
 const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
 const SingleBanner = dynamic(() => import("@/components/blocks/SingleBanner"));
 const MiniBanners = dynamic(() => import("@/components/blocks/MiniBanners"));
@@ -126,7 +126,7 @@ const componentMap = {
 };
 
 export const dynamicParams = true;
-export const revalidate = 600;
+export const revalidate = 100;
 
 //function for getting
 const pageType = {

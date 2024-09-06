@@ -6,6 +6,7 @@ import CartDrawer from "@/components/partials/CartDrawer";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
+import { ServiceWorkerUnregistration } from "@/components/scripts/ServiceWorkerUnregistration";
 import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
   getCartUpsellProductsAPI,
@@ -65,6 +66,7 @@ async function RootLayout({ children }) {
         {!!GOKWIK_SCRIPT && <script defer src={GOKWIK_SCRIPT} />}
       </head>
       <body>
+        <ServiceWorkerUnregistration />
         <Provider data={{ headerData, carouselData }}>
           <NavbarProvider initialData={initialData}>
             <GoKwikProvider>
