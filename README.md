@@ -40,5 +40,5 @@ Docker Commands
 
 docker build -t buy-wow-fe . --platform linux/amd64 -f Dockerfile && aws ecr get-login-password --region ap-south-1 --profile buywow | docker login --username AWS --password-stdin 069045078491.dkr.ecr.ap-south-1.amazonaws.com/wow-prod-fe && docker tag buy-wow-fe:latest 069045078491.dkr.ecr.ap-south-1.amazonaws.com/wow-prod-fe:latest && docker push 069045078491.dkr.ecr.ap-south-1.amazonaws.com/wow-prod-fe:latest
 
-
+## For running the docker image locally
 docker run -p 3000:3000 buy-wow-fe
