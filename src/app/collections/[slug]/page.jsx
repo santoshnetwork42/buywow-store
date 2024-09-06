@@ -1,8 +1,8 @@
 import { MEDIA_BASE_URL } from "@/config";
 import {
-  getCMSPagesAPI,
   getPageBySlugAPI,
-  getStoreAPI,
+  getPagesToPrebuildAPI,
+  getStoreAPI
 } from "@/lib/appSyncAPIs";
 import handleRedirect from "@/utils/handleRedirect";
 import { removeHtmlTags } from "@/utils/helpers";
@@ -138,7 +138,7 @@ const renderBlock = (block, slug) => {
 };
 
 export async function generateStaticParams() {
-  const pages = await getCMSPagesAPI();
+  const pages = await getPagesToPrebuildAPI();
   const result = pages
     .filter(([type]) => type === "collections")
     .map(([, slug]) => ({ slug }));

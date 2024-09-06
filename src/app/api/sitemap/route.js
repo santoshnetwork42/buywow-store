@@ -1,10 +1,10 @@
-import { getCMSPagesAPI, getPageMetadataBySlugAPI } from "@/lib/appSyncAPIs";
+import { getPageMetadataBySlugAPI } from "@/lib/appSyncAPIs";
 import { NextResponse } from "next/server";
 
 const { NEXT_PUBLIC_SITE_URL } = process.env;
 
 const getEntiresForSitemap = async () => {
-  const pages = await getCMSPagesAPI();
+  const pages = await getPagesToPrebuildAPI();
 
   const allSitemapEntries = [];
 
