@@ -26,7 +26,7 @@ const getEntiresForSitemap = async () => {
       // if metadata has noIndex false & not seoCanonical  then add to sitemap
       if (!metadata.noIndex && !metadata.seoCanonical) {
         allSitemapEntries.push({
-          loc: `${NEXT_PUBLIC_SITE_URL}/${isProduct ? "products" : "collections"}/${page?.attributes?.slug}`,
+          loc: `${NEXT_PUBLIC_SITE_URL}/${isProduct ? "products" : "collections"}/${slug}`,
           lastmod: metadata.updatedAt,
           changefreq: "daily",
         });
