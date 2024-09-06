@@ -320,6 +320,14 @@ export const getCMSPagesAPI = async () => {
   return JSON.parse(data?.getCMSPages || "[]");
 };
 
+export const getPagesToPrebuildAPI = async () => {
+  const data = await fetchData(getCMSPages, {
+    storeId: STORE_ID,
+  });
+
+  return JSON.parse(data?.getCMSPages || "[]");
+};
+
 export const getUserRewardsAPI = async () => {
   try {
     const response = await client.graphql({

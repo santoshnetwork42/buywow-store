@@ -1,6 +1,7 @@
 import LinkClickTracker from "@/components/common/LinkClickTracker";
 import { Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
+import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 const SingleBanner = ({ banner, slug }) => {
   if (!banner) return null;
@@ -40,11 +41,11 @@ const SingleBanner = ({ banner, slug }) => {
         {!!webImageAttrs.url && (
           <source
             media="(min-width: 576px)"
-            srcSet={`${webImageAttrs.url}?w=1920&q=75&f=webp`}
+            srcSet={getPublicImageURL({ key: webImageAttrs.url })}
           />
         )}
         <Img
-          src={imageUrl}
+          src={getPublicImageURL({ key: imageUrl })}
           alt={imageAlt}
           width={500}
           height={500}
