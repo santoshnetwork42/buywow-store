@@ -125,7 +125,6 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-export const dynamicParams = true;
 export const revalidate = 600;
 
 //function for getting
