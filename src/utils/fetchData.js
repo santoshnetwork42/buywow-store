@@ -10,9 +10,10 @@ const fetchData = async (query = "", variables = {}, options = {}) => {
       "content-type": "application/json; charset=UTF-8",
       "cache-control": "no-cache",
     },
-    next: {
-      revalidate: 600,
-    },
+    cache: "no-cache",
+    // next: {
+    //   revalidate: 600,
+    // },
     // ...options
   });
   const data = await response.json();
