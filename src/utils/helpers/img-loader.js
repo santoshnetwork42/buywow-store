@@ -6,21 +6,11 @@ export const getPublicImageURL = ({
   quality = 75,
   addPrefix = false,
 } = {}) => {
-  let finalPath = null;
-  try {
-    const { pathname } = new URL(key);
-    finalPath = pathname;
-  } catch {
-    finalPath = key;
-  }
+  if (!key) return "";
 
-  if (!finalPath) return "";
-
-  const baseUrl = addPrefix
-    ? `https://${MEDIA_BASE_URL}/public/`
-    : `https://${MEDIA_BASE_URL}`;
+  const baseUrl = addPrefix ? `https://${MEDIA_BASE_URL}/public/` : "";
   const resizeParam = resize ? `w=${resize}&` : "";
   const qualityParam = `q=${Math.max(75, quality)}&`;
 
-  return `${baseUrl}${finalPath}?${resizeParam}${qualityParam}`;
+  return `${baseUrl}${key}?${resizeParam}${qualityParam}f=webp`;
 };

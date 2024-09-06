@@ -1,7 +1,6 @@
 import SectionHeading from "@/components/common/SectionHeading";
 import { Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
-import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 const ProductHighlights = ({ title, images }) => {
   if (!Array.isArray(images) || images.length === 0) return null;
@@ -31,10 +30,10 @@ const ProductHighlights = ({ title, images }) => {
           >
             <source
               media="(min-width: 768px)"
-              srcSet={getPublicImageURL({ key: webImageAttrs.url })}
+              srcSet={`${webImageAttrs.url}?w=1200&q=75&f=webp`}
             />
             <Img
-              src={getPublicImageURL({ key: imageUrl })}
+              src={imageUrl}
               alt={imageAlt}
               width={500}
               height={500}

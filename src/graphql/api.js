@@ -172,8 +172,8 @@ export const getCartUpsellProducts = /* GraphQL */ `
 `;
 
 export const getCMSPages = /* GraphQL */ `
-  query getCMSPages($storeId: String!) {
-    getCMSPages(storeId: $storeId)
+  query getCMSPages($storeId: String!, $type: String) {
+    getCMSPages(storeId: $storeId, type: $type)
   }
 `;
 

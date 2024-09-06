@@ -312,9 +312,10 @@ export const getCartUpsellProductsAPI = async () => {
   return JSON.parse(data?.getCartUpsellProducts || "{}");
 };
 
-export const getCMSPagesAPI = async () => {
+export const getCMSPagesAPI = async (pageType) => {
   const data = await fetchData(getCMSPages, {
     storeId: STORE_ID,
+    type: pageType,
   });
 
   return JSON.parse(data?.getCMSPages || "[]");

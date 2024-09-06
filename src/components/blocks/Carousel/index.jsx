@@ -4,7 +4,6 @@ import { Button, Img } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { extractAttributes, getSource } from "@/utils/helpers";
-import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import Link from "next/link";
@@ -59,11 +58,11 @@ const CarouselImage = React.memo(
           {!!webImageAttrs.url && (
             <source
               media="(min-width: 576px)"
-              srcSet={getPublicImageURL({ key: webImageAttrs.url })}
+              srcSet={`${webImageAttrs.url}?w=1920&q=75&f=webp`}
             />
           )}
           <Img
-            src={getPublicImageURL({ key: imageUrl })}
+            src={imageUrl}
             alt={imageAlt}
             priority
             width={500}

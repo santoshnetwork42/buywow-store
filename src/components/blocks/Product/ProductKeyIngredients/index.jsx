@@ -1,7 +1,6 @@
 import SectionHeading from "@/components/common/SectionHeading";
 import { Heading, Img } from "@/components/elements";
 import { extractAttributes, getBgColor } from "@/utils/helpers";
-import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 const AdditionalIngredient = ({ title, image }) => {
   const { url, alternativeText } = extractAttributes(image);
@@ -39,13 +38,11 @@ const PrimaryIngredient = ({ webImage, mWebImage }) => {
       {!!webImageAttrs.url && (
         <source
           media="(min-width: 768px)"
-          srcSet={getPublicImageURL({ key: webImageAttrs.url })}
+          srcSet={`${webImageAttrs.url}?w=600&q=75&f=webp`}
         />
       )}
       <Img
-        src={getPublicImageURL({
-          key: mWebImageAttrs.url || webImageAttrs.url,
-        })}
+        src={mWebImageAttrs.url || webImageAttrs.url}
         alt={
           mWebImageAttrs.alternativeText ||
           webImageAttrs.alternativeText ||

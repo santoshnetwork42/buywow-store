@@ -1,5 +1,7 @@
 import { Heading, Text } from "@/components/elements";
 
+export const revalidate = 86400;
+
 export const metadata = {
   title: "Query Us",
   description:

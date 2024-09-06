@@ -2,7 +2,6 @@ import LinkClickTracker from "@/components/common/LinkClickTracker";
 import { Img } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
-import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 const MiniBanners = ({ miniBannerItems: banners }) => {
   if (!Array.isArray(banners) || banners.length === 0) return null;
@@ -45,10 +44,10 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
             <picture className="relative block aspect-[298/120] w-[80vw] min-w-[298px] max-w-[352px] overflow-hidden rounded-lg sm:w-[46vw] sm:max-w-[662px] md:aspect-[650/166] md:w-[calc(50vw-36px)] lg:w-[calc(50vw-46px)] xl:w-[calc(50vw-58px)]">
               <source
                 media="(min-width: 768px)"
-                srcSet={getPublicImageURL({ key: webImageAttrs.url })}
+                srcSet={`${webImageAttrs.url}?w=1500&q=75&f=webp`}
               />
               <Img
-                src={getPublicImageURL({ key: imageUrl })}
+                src={imageUrl}
                 alt={imageAlt}
                 width={500}
                 height={500}

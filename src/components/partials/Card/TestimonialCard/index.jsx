@@ -1,7 +1,6 @@
 import { Heading, Img, Text } from "@/components/elements";
 import TestimonialProductCard from "@/components/partials/Card/TestimonialProductCard";
 import { extractAttributes } from "@/utils/helpers";
-import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 const TestimonialCard = ({
   name,
@@ -80,10 +79,10 @@ const TestimonialCard = ({
         <picture>
           <source
             media="(min-width: 576px)"
-            srcSet={getPublicImageURL({ key: webImageUrl })}
+            srcSet={`${webImageUrl}?w=700&q=75&f=webp`}
           />
           <Img
-            src={getPublicImageURL({ key: mWebImageUrl || webImageUrl })}
+            src={mWebImageUrl || webImageUrl}
             alt={
               mWebImageAlternativeText ||
               webImageAlternativeText ||
