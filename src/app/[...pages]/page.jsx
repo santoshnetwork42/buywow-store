@@ -9,7 +9,7 @@ import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import dynamic from "next/dynamic";
 import React from "react";
-   
+    
 // Dynamically import components
 const PageAnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
