@@ -434,15 +434,11 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
-  console.log("Params>>>: ", params);
   const { pages } = params;
 
-  console.log("pages: ", pages);
   const fullSlug = pages.join("/");
   const lastSlug = pages[pages.length - 1];
 
-  console.log("Page: ", fullSlug);
-  console.log("lastSlug: ", lastSlug);
   // if (pages.length > 2) {
   //   return await handleRedirect(`/${fullSlug}`);
   // }
@@ -450,10 +446,10 @@ export default async function Page({ params }) {
   const pageData = await getPageBySlugAPI(lastSlug);
   const { blocks, slug, type } = pageData || {};
 
-  if (!slug) {
-    console.log("Page not found: >>>", fullSlug);
-    return await handleRedirect(`/${fullSlug}`, false);
-  }
+  // if (!slug) {
+  //   console.log("Page not found: >>>", fullSlug);
+  //   return await handleRedirect(`/${fullSlug}`, false);
+  // }
 
   const expectedPath =
     type === "PRODUCT" ||
