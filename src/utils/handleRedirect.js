@@ -6,7 +6,7 @@ import {
 import { notFound, redirect } from "next/navigation";
 import { extname } from "path";
 
-const handleRedirect = async (path, showNotFound = true) => {
+const handleRedirect = async (path) => {
   const extension = extname(path);
 
   const pageRedirect = await getRedirectsAPI(path);

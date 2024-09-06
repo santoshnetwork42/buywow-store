@@ -23,7 +23,6 @@ const AccordionIngredients = ({
   accordionIngredientsTitle,
   accordionIngredientsImage: image,
   ingredientItems,
-  ...props
 }) => {
   if (!accordionIngredientsTitle || !ingredientItems?.data) {
     return null;

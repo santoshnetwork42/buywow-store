@@ -3,7 +3,7 @@ import { Img } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
-const SingleBanner = ({ banner, slug }) => {
+const SingleBanner = ({ banner, pageType }) => {
   if (!banner) return null;
 
   const { webImage, mWebImage, link } = banner;
@@ -24,7 +24,7 @@ const SingleBanner = ({ banner, slug }) => {
     <LinkClickTracker
       href={link || "#"}
       className={`block w-full ${
-        slug?.[slug?.length - 2] === "collections"
+        pageType === "collections"
           ? "container-main mb-5 sm:mb-6 lg:mb-7"
           : "mb-main"
       }`}

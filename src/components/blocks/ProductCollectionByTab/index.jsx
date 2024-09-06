@@ -96,7 +96,7 @@ const ProductCollectionByTab = ({
         );
 
         const response = await searchCMSCollectionProductsAPI({
-          collectionSlug: slug[slug.length - 1],
+          collectionSlug: slug,
           tabSelected: activeTab?.tab?.data?.id || null,
           defaultSorting: newSortOption.value,
           page: 1,
@@ -123,7 +123,7 @@ const ProductCollectionByTab = ({
         const totalProducts = activeTab?.pagination?.totalData ?? 0;
         setHasMore(newProducts.length < totalProducts);
         viewList(
-          slug[slug.length - 1],
+          slug,
           "PLP",
           newProducts
             ?.filter((i) => i?.attributes?.fetchedProduct)
@@ -174,7 +174,7 @@ const ProductCollectionByTab = ({
         ?.filter((i, index) => activeTabIndex === index)
         .map((i) => i?.products);
       viewList(
-        slug[slug.length - 1],
+        slug,
         "PLP",
         _products?.data
           ?.filter((i) => i?.attributes?.fetchedProduct)
@@ -201,7 +201,7 @@ const ProductCollectionByTab = ({
 
     try {
       const response = await searchCMSCollectionProductsAPI({
-        collectionSlug: slug[slug.length - 1],
+        collectionSlug: slug,
         tabSelected: activeTab?.tab?.data?.id || null,
         defaultSorting: sortOption.value,
         page: nextPage,
@@ -234,7 +234,7 @@ const ProductCollectionByTab = ({
           (activeTab?.products?.data?.length ?? 0) + newProducts.length;
         setHasMore(newTotalLoaded < totalProducts);
         viewList(
-          slug[slug.length - 1],
+          slug,
           "PLP",
           newProducts
             ?.filter((i) => i?.attributes?.fetchedProduct)
@@ -273,7 +273,7 @@ const ProductCollectionByTab = ({
         setCurrentPage(calculatedPage);
         setHasMore(productsInTab < totalProducts);
         viewList(
-          slug[slug.length - 1],
+          slug,
           "PLP",
           selectedTab.products?.data
             ?.filter((i) => i?.attributes?.fetchedProduct)
