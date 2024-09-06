@@ -138,13 +138,13 @@ const renderBlock = (block, slug) => {
   return <Component key={`${__typename}-${id}`} slug={slug} {...block} />;
 };
 
-export async function generateStaticParams() {
-  const pages = await getPagesToPrebuildAPI();
-  const result = pages
-    .filter(([type]) => type === "products")
-    .map(([, slug]) => ({ slug }));
-  return result;
-}
+// export async function generateStaticParams() {
+//   const pages = await getPagesToPrebuildAPI();
+//   const result = pages
+//     .filter(([type]) => type === "products")
+//     .map(([, slug]) => ({ slug }));
+//   return result;
+// }
 
 async function generateSEOAndJSONLD(params) {
   const {

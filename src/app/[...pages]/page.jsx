@@ -147,28 +147,28 @@ const renderBlock = (block, slug) => {
   return <Component key={`${__typename}-${id}`} slug={slug} {...block} />;
 };
 
-export async function generateStaticParams() {
-  const pages = await getPagesToPrebuildAPI();
+// export async function generateStaticParams() {
+//   const pages = await getPagesToPrebuildAPI();
 
 
-  const allowedTypes = ["pages", "policies"];
+//   const allowedTypes = ["pages", "policies"];
 
-  const filteredPages = (pages || []).filter(
-    (page) =>
-      Array.isArray(page) &&
-      page.length === 2 &&
-      allowedTypes.includes(page[0]) &&
-      page[1] !== "search" &&
-      page[1] !== "health" &&
-      page[1] !== "index",
-  );
+//   const filteredPages = (pages || []).filter(
+//     (page) =>
+//       Array.isArray(page) &&
+//       page.length === 2 &&
+//       allowedTypes.includes(page[0]) &&
+//       page[1] !== "search" &&
+//       page[1] !== "health" &&
+//       page[1] !== "index",
+//   );
 
-  const result = filteredPages.map((page) => ({
-    pages: page,
-  }));
+//   const result = filteredPages.map((page) => ({
+//     pages: page,
+//   }));
 
-  return result;
-}
+//   return result;
+// }
 
 async function generateSEOAndJSONLD(params) {
   const {
