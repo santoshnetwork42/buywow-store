@@ -1,12 +1,12 @@
 import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { fetchBlogs, fetchTopMenu } from "@/lib/wordPressAPIs";
-import { useSource } from "@/utils/context/navbar";
+// import { useSource } from "@/utils/context/navbar";
 import Image from "next/image";
 import Link from "next/link";
 import BlogCard2 from "../BlogCard2";
 
 export default async function BlogHeader() {
-  const source = useSource();
+  const source = "app";
   const menu = await fetchTopMenu();
   const categoryBlogs = {};
 

@@ -127,16 +127,6 @@ const componentMap = {
 
 export const revalidate = 100;
 
-//function for getting
-const pageType = {
-  HOME: "",
-  COLLECTION: "collections",
-  PRODUCT: "products",
-  LANDING: "",
-  PAGES: "pages",
-  POLICIES: "policies",
-};
-
 const renderBlock = (block, slug) => {
   const { showComponent, __typename, id } = block || {};
   if (!showComponent) return null;
@@ -149,23 +139,9 @@ const renderBlock = (block, slug) => {
 
 export async function generateStaticParams() {
   const pages = await getCMSPagesAPI();
-
-  const allowedTypes = ["pages", "policies"];
-
-  const filteredPages = (pages || []).filter(
-    (page) =>
-      Array.isArray(page) &&
-      page.length === 2 &&
-      allowedTypes.includes(page[0]) &&
-      page[1] !== "search" &&
-      page[1] !== "health" &&
-      page[1] !== "index",
-  );
-
-  const result = filteredPages.map((page) => ({
-    pages: page,
-  }));
-
+  const result = pages
+    .filter(([type]) => type === "products")
+    .map(([, slug]) => ({ slug }));
   return result;
 }
 
@@ -434,39 +410,13 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
-  console.log("Params>>>: ", params);
-  const { pages } = params;
-
-  console.log("pages: ", pages);
-  const fullSlug = pages.join("/");
-  const lastSlug = pages[pages.length - 1];
-
-  console.log("Page: ", fullSlug);
-  console.log("lastSlug: ", lastSlug);
-  // if (pages.length > 2) {
-  //   return await handleRedirect(`/${fullSlug}`);
-  // }
+  const { slug: lastSlug } = params;
 
   const pageData = await getPageBySlugAPI(lastSlug);
   const { blocks, slug, type } = pageData || {};
 
   if (!slug) {
-    console.log("Page not found: >>>", fullSlug);
-    return await handleRedirect(`/${fullSlug}`, false);
-  }
-
-  const expectedPath =
-    type === "PRODUCT" ||
-    type === "COLLECTION" ||
-    type === "PAGES" ||
-    type === "POLICIES"
-      ? `${pageType[type]}/${slug}`
-      : slug;
-
-  const actualPath = fullSlug === "index" ? "" : fullSlug;
-
-  if (expectedPath !== actualPath) {
-    return await handleRedirect(`/${expectedPath}`);
+    return await handleRedirect(`/products/${lastSlug}`, false);
   }
 
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
@@ -475,7 +425,7 @@ export default async function Page({ params }) {
 
   return (
     <React.Fragment>
-      {blocks.map((block, index) => renderBlock(block, pages, index))}
+      {blocks.map((block) => renderBlock(block, ["products", slug]))}
     </React.Fragment>
   );
 }
