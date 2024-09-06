@@ -125,7 +125,7 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-export const revalidate = 100;
+export const revalidate = 900;
 
 const renderBlock = (block, slug) => {
   const { showComponent, __typename, id } = block || {};
