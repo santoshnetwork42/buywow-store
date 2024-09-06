@@ -1,10 +1,12 @@
 import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { fetchBlogs, fetchTopMenu } from "@/lib/wordPressAPIs";
+import { useSource } from "@/utils/context/navbar";
 import Image from "next/image";
 import Link from "next/link";
 import BlogCard2 from "../BlogCard2";
 
 export default async function BlogHeader() {
+  const source = useSource();
   const menu = await fetchTopMenu();
   const categoryBlogs = {};
 
@@ -32,7 +34,7 @@ export default async function BlogHeader() {
     <header className="container-main flex flex-col gap-y-6 border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
       <div className="grid w-full grid-cols-[1fr,auto,1fr] items-center justify-center gap-x-4">
         <div></div>
-        <Link prefetch href={`/`}>
+        <Link prefetch href={source === "app" ? "/blog" : "/"}>
           <Image
             src="/images/img_wow_logo.png"
             alt="logo"
