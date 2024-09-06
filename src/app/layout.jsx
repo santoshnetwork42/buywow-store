@@ -43,6 +43,8 @@ Amplify.configure({
   aws_user_pools_web_client_id: AWS_CLIENT_ID,
 });
 
+export const dynamic = "force-dynamic";
+
 async function RootLayout({ children }) {
   const { data } = (await getNavbarAndFooterAPI()) || {};
   const initialData = await getInitialDataAPI("WEB");
