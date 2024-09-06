@@ -127,7 +127,6 @@ const componentMap = {
 
 export const revalidate = 900;
 
-//function for getting
 const pageType = {
   HOME: "",
   COLLECTION: "collections",
@@ -150,7 +149,6 @@ const renderBlock = (block, slug) => {
 export async function generateStaticParams() {
   const pages = await getCMSPagesAPI();
 
-  
   const allowedTypes = ["pages", "policies"];
 
   const filteredPages = (pages || []).filter(
@@ -159,8 +157,7 @@ export async function generateStaticParams() {
       page.length === 2 &&
       allowedTypes.includes(page[0]) &&
       page[1] !== "search" &&
-      page[1] !== "health" &&
-      page[1] !== "index",
+      page[1] !== "health",
   );
 
   const result = filteredPages.map((page) => ({
@@ -435,34 +432,28 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
-  const { pages } = params;
+  const { pages = ["index"] } = params;
 
   const fullSlug = pages.join("/");
   const lastSlug = pages[pages.length - 1];
 
-  // if (pages.length > 2) {
-  //   return await handleRedirect(`/${fullSlug}`);
-  // }
+  if (pages.length > 2) {
+    return await handleRedirect(`/${fullSlug}`);
+  }
 
   const pageData = await getPageBySlugAPI(lastSlug);
   const { blocks, slug, type } = pageData || {};
 
-  // if (!slug) {
-  //   console.log("Page not found: >>>", fullSlug);
-  //   return await handleRedirect(`/${fullSlug}`, false);
-  // }
-
-  const expectedPath =
-    type === "PRODUCT" ||
-    type === "COLLECTION" ||
-    type === "PAGES" ||
-    type === "POLICIES"
+  const expectedPath = slug
+    ? type === "PRODUCT" ||
+      type === "COLLECTION" ||
+      type === "PAGES" ||
+      type === "POLICIES"
       ? `${pageType[type]}/${slug}`
-      : slug;
+      : slug
+    : "";
 
-  const actualPath = fullSlug === "index" ? "" : fullSlug;
-
-  if (expectedPath !== actualPath) {
+  if (expectedPath !== fullSlug) {
     return await handleRedirect(`/${expectedPath}`);
   }
 
