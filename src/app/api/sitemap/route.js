@@ -1,4 +1,4 @@
-import { getPageMetadataBySlugAPI } from "@/lib/appSyncAPIs";
+import { getPageMetadataBySlugAPI, getPagesToPrebuildAPI } from "@/lib/appSyncAPIs";
 import { NextResponse } from "next/server";
 
 const { NEXT_PUBLIC_SITE_URL } = process.env;
