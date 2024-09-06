@@ -8,15 +8,8 @@ const fetchData = async (query = "", variables = {}, options = {}) => {
       "x-api-key": awsmobile.aws_appsync_apiKey,
       accept: "*/*",
       "content-type": "application/json; charset=UTF-8",
-      "Cache-Control": "public, s-maxage=1, no-cache",
-      "CDN-Cache-Control": "public, s-maxage=10",
-      "Vercel-CDN-Cache-Control": "public, s-maxage=60",
     },
-    cache: "default",
-    // next: {
-    //   revalidate: 600,
-    // },
-    // ...options
+    ...options,
   });
   const data = await response.json();
   return data.data;
