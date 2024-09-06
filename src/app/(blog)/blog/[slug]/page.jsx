@@ -69,7 +69,7 @@ export default async function ReadBlog({ params }) {
             <div className="flex flex-wrap gap-4">
               {blog?.categories?.nodes?.map((category) => (
                 <Link
-                  prefetch
+                  prefetch={false}
                   href={`/blog/category/${category?.slug}`}
                   key={category?.id}
                   className="rounded bg-yellow-900 px-2 py-1 text-sm text-white-a700"

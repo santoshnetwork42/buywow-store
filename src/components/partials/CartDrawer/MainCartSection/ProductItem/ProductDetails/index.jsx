@@ -1,7 +1,7 @@
-import React from "react";
-import Link from "next/link";
 import { Heading, Text } from "@/components/elements";
 import ProductPricing from "@/components/partials/CartDrawer/MainCartSection/ProductItem/ProductDetails/ProductPricing";
+import Link from "next/link";
+import React from "react";
 
 const ProductDetails = ({
   title,
@@ -18,7 +18,11 @@ const ProductDetails = ({
 }) => (
   <div className="flex flex-1 flex-col justify-between gap-1">
     <div className="flex flex-col gap-1">
-      <Link prefetch href={`/product/${slug}`} onClick={handleCartClose}>
+      <Link
+        prefetch={false}
+        href={`/product/${slug}`}
+        onClick={handleCartClose}
+      >
         <Heading
           size="base"
           as="h4"

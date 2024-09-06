@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const ProductImage = React.memo(({ slug, outOfStock, imageKey }) => (
   <Link
-    prefetch
+    prefetch={false}
     href={outOfStock ? "#" : `/product/${slug}`}
     className={`relative flex aspect-[65/77] h-fit w-16 shrink-0 overflow-hidden rounded-lg bg-lime-50 sm:w-20 sm:p-1 md:aspect-square md:w-24 md:p-1.5 lg:w-28 lg:p-2 xl:w-32 ${
       outOfStock ? "cursor-auto" : ""
@@ -51,7 +51,11 @@ const ProductDetails = React.memo(
     isFreeProduct,
     quantity,
   }) => (
-    <Link prefetch href={`/product/${slug}`} className="flex flex-col gap-1">
+    <Link
+      prefetch={false}
+      href={`/product/${slug}`}
+      className="flex flex-col gap-1"
+    >
       <Heading size="base" as="h4" className="line-clamp-3" responsive>
         {title}
       </Heading>

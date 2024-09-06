@@ -13,7 +13,7 @@ const ProductImage = ({
 }) => {
   return (
     <Link
-      prefetch
+      prefetch={false}
       href={outOfStock ? "#" : `/product/${slug}`}
       className={`relative flex aspect-[66/88] h-fit w-20 shrink-0 overflow-visible rounded-lg bg-lime-50 md:w-24 ${
         outOfStock ? "cursor-auto" : ""

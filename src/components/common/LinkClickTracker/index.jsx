@@ -64,7 +64,12 @@ const LinkClickTracker = ({
   );
 
   return (
-    <Link prefetch href={href} className={className} onClick={handleClick}>
+    <Link
+      prefetch={false}
+      href={href}
+      className={className}
+      onClick={handleClick}
+    >
       {children}
     </Link>
   );

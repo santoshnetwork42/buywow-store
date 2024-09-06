@@ -1,12 +1,11 @@
-import React from "react";
-import Link from "next/link";
 import { ArrowIconSVG } from "@/assets/svg/icons";
 import { Heading } from "@/components/elements";
 import { getBgColor } from "@/utils/helpers";
+import Link from "next/link";
 
 const CollectionLink = ({ text, slug, bgColorClass }) => (
   <Link
-    prefetch
+    prefetch={false}
     href={`/collections/${slug}`}
     className={`flex w-full max-w-[352px] items-center justify-between rounded px-3 py-3.5 ${bgColorClass}`}
   >

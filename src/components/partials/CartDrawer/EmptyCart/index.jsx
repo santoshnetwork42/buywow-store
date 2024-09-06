@@ -1,7 +1,6 @@
 import { CartIcon } from "@/assets/svg/icons";
 import { Text } from "@/components/elements";
 import Link from "next/link";
-import React from "react";
 
 const EmptyCart = ({ cartClose }) => {
   return (
@@ -16,7 +15,7 @@ const EmptyCart = ({ cartClose }) => {
         Your cart is currently empty.
       </Text>
       <Link
-        prefetch
+        prefetch={false}
         href="/"
         className="rounded-full bg-yellow-900 px-4 py-2 text-base font-medium text-white-a700_01 sm:text-lg md:px-5 md:py-3 lg:text-xl"
         onClick={cartClose}

@@ -40,7 +40,7 @@ const BlogCard = ({
         )}
         {!!button?.text && (
           <Link
-            prefetch
+            prefetch={false}
             href={button?.link}
             className="w-fit rounded-full bg-yellow-900 px-3 py-1 md:px-4 md:py-2"
           >

@@ -5,7 +5,7 @@ import React from "react";
 export default function BlogBreadCrumb({ links = [{ label: "", url: "/" }] }) {
   return (
     <div>
-      <Link prefetch href="/">
+      <Link prefetch={false} href="/">
         <Text as="span" size="sm" className="font-light capitalize" responsive>
           Home
         </Text>
@@ -43,7 +43,7 @@ export default function BlogBreadCrumb({ links = [{ label: "", url: "/" }] }) {
               {" / "}
             </Text>
 
-            <Link prefetch href={link.url}>
+            <Link prefetch={false} href={link.url}>
               <Text
                 as="span"
                 size="sm"

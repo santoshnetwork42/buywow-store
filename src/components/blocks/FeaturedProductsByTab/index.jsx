@@ -73,7 +73,7 @@ const FeaturedProductsByTab = ({
       </Tabs>
       {!!button?.text && (
         <Link
-          prefetch
+          prefetch={false}
           href={`/collections/${button.slug}`}
           className="mt-1.5 rounded-[24px] bg-yellow-900 px-4 py-2 text-center sm:mt-1 md:mt-0 md:px-5 md:py-3"
         >

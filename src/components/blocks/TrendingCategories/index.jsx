@@ -6,7 +6,7 @@ const CategoryItem = ({ image, title, link }) => {
   const { url, alternativeText } = extractAttributes(image);
   return (
     <Link
-      prefetch
+      prefetch={false}
       href={`/collections/${link}`}
       className="flex w-20 grow-0 flex-col items-center gap-1.5"
     >

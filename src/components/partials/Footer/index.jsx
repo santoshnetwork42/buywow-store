@@ -14,7 +14,7 @@ const SocialLink = React.memo(({ item, index }) => {
   if (!url) return null;
   return (
     <Link
-      prefetch
+      prefetch={false}
       key={item.id || index}
       href={item.link || "#"}
       target="_blank"
@@ -34,7 +34,7 @@ const SocialLink = React.memo(({ item, index }) => {
 const FooterLogo = React.memo(({ logoUrl, logoAlternativeText }) => {
   if (!logoUrl) return null;
   return (
-    <Link prefetch href="/">
+    <Link prefetch={false} href="/">
       <Img
         src={logoUrl}
         width={200}
@@ -180,7 +180,7 @@ const Footer = ({ data, ...props }) => {
           <div className="flex flex-col gap-3">
             {menu.itemsWithoutSubMenu.map((item, index) => (
               <Link
-                prefetch
+                prefetch={false}
                 key={`footer-menu-link-${index}`}
                 href={item?.slug || item?.link}
               >

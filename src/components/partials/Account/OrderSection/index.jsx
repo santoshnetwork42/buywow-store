@@ -14,7 +14,7 @@ const OrderSection = React.memo(() => {
       <Text as="p" size="sm">
         For order history, please write to us @{" "}
         <Link
-          prefetch
+          prefetch={false}
           href="mailto:support@buywow.in"
           className="text-blue-600"
         >
@@ -22,7 +22,7 @@ const OrderSection = React.memo(() => {
         </Link>{" "}
         with your order id and mobile number. Track your order{" "}
         <Link
-          prefetch
+          prefetch={false}
           href="https://track.buywow.in/"
           className="text-blue-600"
         >
