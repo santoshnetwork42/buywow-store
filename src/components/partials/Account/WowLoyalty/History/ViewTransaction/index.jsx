@@ -56,7 +56,7 @@ const ViewTransaction = React.memo(({ data }) => {
             {getEventDescription(event, reason)}
             {!!orderCode && (
               <Link
-                prefetch={false}
+                prefetch
                 href={`/order/${orderId}`}
                 className="ml-1 text-blue-500 hover:underline"
               >

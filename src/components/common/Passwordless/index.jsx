@@ -341,7 +341,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
             {`Didn't receive it? Resend in ${countdown}`}
           </Text>
         ) : (
-          <Link prefetch={false} href="" onClick={handleSignIn}>
+          <Link prefetch href="" onClick={handleSignIn}>
             <Text as="p" className="font-light underline">
               {`Didn't get the code? Resend OTP`}
             </Text>

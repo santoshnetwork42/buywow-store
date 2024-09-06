@@ -20,7 +20,7 @@ const ProductHeader = React.memo(
         )}
       </div>
       <Link
-        prefetch={false}
+        prefetch
         href="#product-reviews"
         className="flex w-fit items-center gap-1"
       >

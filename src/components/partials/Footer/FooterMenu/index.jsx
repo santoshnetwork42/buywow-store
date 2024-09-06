@@ -7,7 +7,7 @@ const SubMenuItem = React.memo(({ item }) => {
   if (!item?.title) return null;
   return (
     <li className="">
-      <Link prefetch={false} href={item?.slug || item?.link}>
+      <Link prefetch href={item?.slug || item?.link}>
         <Text as="p" size="sm" className="capitalize text-white-a700_01">
           {item.title}
         </Text>

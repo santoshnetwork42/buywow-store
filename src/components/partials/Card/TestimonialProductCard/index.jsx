@@ -16,7 +16,7 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
 
   return (
     <Link
-      prefetch={false}
+      prefetch
       href={`/products/${slug}`}
       className="flex max-w-[75%] justify-center gap-2 rounded bg-lime-100_01 p-2 md:max-w-[70%]"
     >

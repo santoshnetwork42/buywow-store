@@ -8,7 +8,7 @@ const fetchData = async (query = "", variables = {}, options = {}) => {
       "x-api-key": awsmobile.aws_appsync_apiKey,
       accept: "*/*",
       "content-type": "application/json; charset=UTF-8",
-      "cache-control": "no-cache",
+      // "cache-control": "no-cache",
     },
     cache: "no-cache",
     // next: {

@@ -121,7 +121,7 @@ const ProductItem = React.memo(({ item, allStatus }) => {
 
   return (
     <Link
-      prefetch={false}
+      prefetch
       className="flex w-full gap-2 rounded-md border p-2 shadow-xs sm:gap-3 sm:p-3 lg:gap-4 lg:p-4"
       href={`/products/${product.slug || ""}`}
     >
