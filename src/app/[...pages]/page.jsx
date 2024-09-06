@@ -150,6 +150,7 @@ const renderBlock = (block, slug) => {
 export async function generateStaticParams() {
   const pages = await getCMSPagesAPI();
 
+  
   const allowedTypes = ["pages", "policies"];
 
   const filteredPages = (pages || []).filter(
