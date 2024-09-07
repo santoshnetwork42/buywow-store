@@ -17,7 +17,7 @@ const CouponHeader = ({ openSidebar, appliedCoupon, removeCoupon }) => {
             onClick={openSidebar}
             responsive
           >
-            View more Offers +
+            View More Offers +
           </Text>
         </div>
         <div className="flex justify-between rounded-lg bg-orange-500/75 p-2 py-1.5 md:py-2">
