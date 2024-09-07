@@ -4,7 +4,7 @@ import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 import { fetchBlogs, fetchFeaturedBlogs, fetchTags } from "@/lib/wordPressAPIs";
 import handleRedirect from "@/utils/handleRedirect";
 
-// export const revalidate = 86400;
+export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const tags = await fetchTags();

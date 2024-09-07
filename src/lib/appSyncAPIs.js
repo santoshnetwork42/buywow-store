@@ -118,7 +118,7 @@ export const getNavbarAndFooterAPI = async () => {
     getNavbarAndFooter,
     { storeId: STORE_ID },
     {
-      next: { revalidate: 1800 },
+      next: { revalidate: 86400, tags: ["header"] },
     },
   );
   return JSON.parse(data?.getNavbarAndFooter || "{}");
@@ -563,25 +563,17 @@ export const validateTransactionAPI = async (orderId, paymentId) => {
 
 export const getInitialDataAPI = async (deviceType) => {
   try {
-    const data = await fetchData(
-      getInitialData,
-      {
+    const data = await fetchData(getInitialData, {
+      storeId: STORE_ID,
+      deviceType,
+      getStoreSettingInput: {
         storeId: STORE_ID,
         deviceType,
-        getStoreSettingInput: {
-          storeId: STORE_ID,
-          deviceType,
-        },
-        shippingTierFilter: {
-          storeId: { eq: STORE_ID },
-        },
       },
-      {
-        next: {
-          revalidate: 0,
-        },
+      shippingTierFilter: {
+        storeId: { eq: STORE_ID },
       },
-    );
+    });
     return data;
   } catch (error) {
     errorHandler("Error Fetching Initial Data", error);

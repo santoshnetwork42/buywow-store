@@ -8,7 +8,7 @@ import {
 } from "@/lib/wordPressAPIs";
 import handleRedirect from "@/utils/handleRedirect";
 
-// export const revalidate = 86400;
+export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const categories = await fetchCategories();

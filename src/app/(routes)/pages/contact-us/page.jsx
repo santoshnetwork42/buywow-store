@@ -1,7 +1,7 @@
 import { Button, Heading, Img, Text } from "@/components/elements";
 import Link from "next/link";
 
-// export const revalidate = 86400;
+export const revalidate = 86400;
 
 export const metadata = {
   title: "Contact Us",

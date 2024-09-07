@@ -1,7 +1,7 @@
 import BlogHeader from "@/components/partials/Blog/BlogHeader";
 import "@/styles/blog.css";
 
-// export const revalidate = 86400; // 24 hours
+export const revalidate = 86400; // 24 hours
 
 export default async function BlogLayout({ children }) {
   return (
