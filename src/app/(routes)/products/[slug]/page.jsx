@@ -1,5 +1,9 @@
 import PageBlock from "@/components/page";
-import { getPageBySlugAPI, getStoreAPI } from "@/lib/appSyncAPIs";
+import {
+  getCMSPagesAPI,
+  getPageBySlugAPI,
+  getStoreAPI,
+} from "@/lib/appSyncAPIs";
 import { generateSEOAndJSONLD } from "@/utils/helpers/generateSEOAndJSONLD";
 
 export const revalidate = 1800;
@@ -38,10 +42,10 @@ export async function generateMetadata({ params }) {
   return seoData;
 }
 
-// export async function generateStaticParams() {
-//   const pages = await getCMSPagesAPI("product");
-//   return pages.map((slug) => ({ slug }));
-// }
+export async function generateStaticParams() {
+  const pages = await getCMSPagesAPI("product");
+  return pages.map((slug) => ({ slug }));
+}
 
 export default async function Page({ params }) {
   return <PageBlock {...params} pageType="products" />;
