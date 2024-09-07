@@ -1,6 +1,6 @@
 import { Button, Text } from "@/components/elements";
 import React from "react";
-import ReviewItem from "./ReviewItem";
+import ReviewItem from "@/components/partials/Product/ProductReviews/ReviewList/ReviewItem";
 
 const ReviewList = React.memo(
   ({

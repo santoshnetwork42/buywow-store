@@ -1,6 +1,6 @@
 import ProductItem from "@/components/partials/CartDrawer/MainCartSection/ProductItem";
 import React from "react";
-import UpsellProducts from "../../Product/PDP/ProductDetailViewBlocks/UpsellProducts";
+import UpsellProducts from "@/components/partials/Product/PDP/ProductDetailViewBlocks/UpsellProducts";
 
 const CartProductList = React.memo(
   ({ cartItems, inventoryMapping, handleCartClose }) => {

@@ -1,8 +1,8 @@
 import { Button, Input, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
 import React, { useCallback } from "react";
-import ReviewStars from "../ReviewStars";
-import ImageUploader from "./ImageUploader";
+import ReviewStars from "@/components/partials/Product/ProductReviews/ReviewStars";
+import ImageUploader from "@/components/partials/Product/ProductReviews/ReviewForm/ImageUploader";
 
 const ReviewForm = React.memo(
   ({ isOpen, onClose, reviewState, setReview, onSubmit, loading }) => {

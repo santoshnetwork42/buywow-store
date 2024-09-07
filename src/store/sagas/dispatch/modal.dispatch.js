@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { modalSagaActions } from "../sagaActions/modal.actions";
+import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
 
 export const useModalDispatch = () => {
   const dispatch = useDispatch();

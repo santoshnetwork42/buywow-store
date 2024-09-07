@@ -4,7 +4,7 @@ import {
   setUser,
 } from "@/store/slices/user.slice";
 import { put } from "redux-saga/effects";
-import { cartSagaActions } from "../sagaActions/cart.actions";
+import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 
 export function* setUserHandler(action) {
   const { user } = action.payload;

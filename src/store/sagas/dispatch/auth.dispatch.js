@@ -1,6 +1,6 @@
 import { addPhonePrefix } from "@/utils/helpers";
 import { useDispatch } from "react-redux";
-import { authSagaActions } from "../sagaActions/auth.actions";
+import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 
 export const useAuthDispatch = () => {
   const dispatch = useDispatch();

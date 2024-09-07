@@ -2,8 +2,8 @@ import SectionHeading from "@/components/common/SectionHeading";
 import { Button, Heading } from "@/components/elements";
 import { toDecimal } from "@/utils/helpers";
 import React from "react";
-import ReviewStars from "../ReviewStars";
-import RatingBar from "./RatingBar";
+import ReviewStars from "@/components/partials/Product/ProductReviews/ReviewStars";
+import RatingBar from "@/components/partials/Product/ProductReviews/ReviewSummary/RatingBar";
 
 const ReviewSummary = React.memo(
   ({ title, rating, totalRating, reviewAnalytics, onReviewClick }) => (

@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { eventsSagaActions } from "../sagaActions/events.actions";
+import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
 
 export const useEventsDispatch = () => {
   const dispatch = useDispatch();

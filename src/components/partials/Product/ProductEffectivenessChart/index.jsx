@@ -1,5 +1,5 @@
 import { Text } from "@/components/elements";
-import CircularProgressBar from "./CircularProgress";
+import CircularProgressBar from "@/components/partials/Product/ProductEffectivenessChart/CircularProgress";
 
 const EffectivenessSection = ({ number, text, isReversed }) => (
   <div

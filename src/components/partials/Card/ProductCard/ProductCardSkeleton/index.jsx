@@ -1,5 +1,3 @@
-import React from "react";
-
 const ProductCardSkeleton = () => (
   <div className="flex animate-pulse flex-col justify-start gap-2 self-stretch rounded-lg p-[5px] shadow-xs md:gap-3 md:p-2">
     {/* <!-- Image placeholder --> */}

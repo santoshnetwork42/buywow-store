@@ -2,7 +2,7 @@ import { ArrowIconSVG } from "@/assets/svg/icons";
 import { Button, Heading, Input, Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import React from "react";
-import CouponItem from "./CouponItem";
+import CouponItem from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer/CouponItem";
 
 const CouponDrawer = ({
   isOpen,

@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { recentlyViewedSagaActions } from "../sagaActions/recentlyViewed.actions";
+import { recentlyViewedSagaActions } from "@/store/sagas/sagaActions/recentlyViewed.actions";
 
 export const useRecentlyViewedDispatch = () => {
   const dispatch = useDispatch();

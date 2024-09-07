@@ -16,7 +16,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import StickyViewCart from "../StickyViewCart";
+import StickyViewCart from "@/components/partials/StickyViewCart";
 
 const MenuItem = React.memo(({ item, index, linkPrefix, showInWeb }) => {
   const { topNavbarClicked } = useEventsDispatch();
