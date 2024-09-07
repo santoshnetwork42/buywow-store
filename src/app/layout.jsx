@@ -9,7 +9,6 @@ import Scripts from "@/components/scripts";
 import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
   getCartUpsellProductsAPI,
-  getInitialDataAPI,
   getNavbarAndFooterAPI,
 } from "@/lib/appSyncAPIs";
 import { Provider } from "@/store/Provider";
@@ -46,7 +45,6 @@ Amplify.configure({
 
 async function RootLayout({ children }) {
   const { data } = (await getNavbarAndFooterAPI()) || {};
-  const initialData = await getInitialDataAPI("WEB");
   const upsellProducts = await getCartUpsellProductsAPI();
 
   const {
@@ -68,7 +66,7 @@ async function RootLayout({ children }) {
       </head>
       <body>
         <Provider data={{ headerData, carouselData }}>
-          <NavbarProvider initialData={initialData}>
+          <NavbarProvider>
             <GoKwikProvider>
               <AnnouncementProvider>
                 <ClientSideEffects />

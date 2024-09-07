@@ -12,10 +12,39 @@ const client = generateClient();
 
 export const NavbarContext = createContext();
 
-function NavbarProvider({ children, initialData }) {
+async function fetchInitialData() {
+  const response = await fetch(`/api/getInitialData?deviceType=WEB`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+}
+
+function NavbarProvider({ children }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
+
+  const [initialData, setInitialData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const getInitialData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchInitialData();
+        setInitialData(data);
+      } catch (err) {
+        console.error("Error fetching initial data:", err);
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getInitialData();
+  }, []);
 
   const cartList = useSelector((state) => state.cart?.data || []);
   const appliedCoupon = useSelector((state) => state.cart?.coupon);
@@ -61,6 +90,9 @@ function NavbarProvider({ children, initialData }) {
     isInteractive,
     source,
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <Navbar

@@ -17,9 +17,11 @@ const CartSummary = React.memo(
         {totalItems > 1 ? `${totalItems} Items` : "1 Item"} | ₹{" "}
         {toDecimal(grandTotal)}
       </Heading>
-      <Text as="p" size="sm" className="text-black-900" responsive>
-        Including {prepaidDiscountPercent}% prepaid discount
-      </Text>
+      {!!prepaidDiscountPercent && (
+        <Text as="p" size="sm" className="text-black-900" responsive>
+          Including {prepaidDiscountPercent}% prepaid discount
+        </Text>
+      )}
     </div>
   ),
 );
