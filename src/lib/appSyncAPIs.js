@@ -563,18 +563,23 @@ export const validateTransactionAPI = async (orderId, paymentId) => {
 
 export const getInitialDataAPI = async (deviceType) => {
   try {
-    const data = await fetchData(getInitialData, {
-      storeId: STORE_ID,
-      deviceType,
-      getStoreSettingInput: {
+    const data = await fetchData(
+      getInitialData,
+      {
         storeId: STORE_ID,
         deviceType,
+        getStoreSettingInput: {
+          storeId: STORE_ID,
+          deviceType,
+        },
+        shippingTierFilter: {
+          storeId: { eq: STORE_ID },
+        },
       },
-      shippingTierFilter: {
-        storeId: { eq: STORE_ID },
+      {
+        cache: "no-store",
       },
-      cache: "no-store",
-    });
+    );
     return data;
   } catch (error) {
     errorHandler("Error Fetching Initial Data", error);
