@@ -2,8 +2,9 @@ import { all, fork, takeLatest } from "redux-saga/effects";
 import {
   addRecentlyViewedProductHandler,
   clearRecentlyViewedProductsHandler,
-} from "../handlers/recentlyViewed.handle";
-import { recentlyViewedSagaActions } from "../sagaActions/recentlyViewed.actions";
+} from "@/store/sagas/handlers/recentlyViewed.handle";
+import { recentlyViewedSagaActions } from "@/store/sagas/sagaActions/recentlyViewed.actions";
+
 
 function* addRecentlyViewedProduct() {
   yield takeLatest(

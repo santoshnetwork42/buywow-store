@@ -20,7 +20,7 @@ import {
 } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import createSagaMiddleware from "redux-saga";
-import rootSaga from "./sagas";
+import rootSaga from "@/store/sagas";
 
 export const actionTypes = {
   DESTROY_SESSION: "DESTROY_SESSION",
