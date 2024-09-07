@@ -69,7 +69,7 @@ const Copyright = React.memo(({ copyrightText }) => {
 
 const Footer = ({ data, ...props }) => {
   const [openSections, setOpenSections] = useState({});
-  console.log("Footer data>>>>>>", data);
+
   //check if footer is restricted to show on specific pages
   const pathname = usePathname();
   const isRestricted = RESTRICT_FOOTER_TO_SHOW?.includes(pathname);

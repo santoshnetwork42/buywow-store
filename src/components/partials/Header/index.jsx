@@ -114,7 +114,7 @@ const Header = ({ data }) => {
   const pathname = usePathname();
   const showHeader = pathname?.includes("blog");
   const isInteractive = useIsInteractive();
-  console.log("Header data>>>>>>", data);
+
   const user = useSelector((state) => state.user?.user);
   const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 

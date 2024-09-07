@@ -22,8 +22,6 @@ const ProductItem = ({
 
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log(item);
-
   const {
     id,
     recordKey,

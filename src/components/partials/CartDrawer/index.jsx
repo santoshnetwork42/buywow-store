@@ -54,8 +54,6 @@ const CartDrawer = ({ upsellProducts }) => {
   );
   const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
-  console.log(cartList, "cartList");
-
   const { validateCart, fetchAndAddProductsFromEncodedCart, applyRewardPoint } =
     useCartDispatch();
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
