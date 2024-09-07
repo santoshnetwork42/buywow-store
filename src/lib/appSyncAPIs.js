@@ -573,6 +573,7 @@ export const getInitialDataAPI = async (deviceType) => {
       shippingTierFilter: {
         storeId: { eq: STORE_ID },
       },
+      cache: "no-store",
     });
     return data;
   } catch (error) {
