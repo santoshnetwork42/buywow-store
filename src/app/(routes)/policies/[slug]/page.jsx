@@ -2,7 +2,7 @@ import PageBlock from "@/components/page";
 import { getPageBySlugAPI, getStoreAPI } from "@/lib/appSyncAPIs";
 import { generateSEOAndJSONLD } from "@/utils/helpers/generateSEOAndJSONLD";
 
-export const revalidate = 86400;
+// export const revalidate = 86400;
 
 export async function generateMetadata({ params }) {
   const { slug } = params;

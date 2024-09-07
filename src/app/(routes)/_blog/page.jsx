@@ -2,7 +2,7 @@ import BlogInfiniteScroll from "@/components/partials/Blog/BlogInfiniteScroll";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 import { fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
 
-export const revalidate = 86400;
+// export const revalidate = 86400;
 
 export function metadata() {
   return {
