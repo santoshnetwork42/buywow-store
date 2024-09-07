@@ -27,11 +27,11 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import Cashback from "./Cashback";
-import CheckoutButton from "./CheckoutButton";
-import EmptyCart from "./EmptyCart";
-import LoyaltyCash from "./LoyaltyCash";
-import CouponsAndOffers from "./MainCartSection/CouponsAndOffers";
+import Cashback from "@/components/partials/CartDrawer/Cashback";
+import CheckoutButton from "@/components/partials/CartDrawer/CheckoutButton";
+import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
+import LoyaltyCash from "@/components/partials/CartDrawer/LoyaltyCash";
+import CouponsAndOffers from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers";
 
 const CartDrawer = ({ upsellProducts }) => {
   const router = useRouter();

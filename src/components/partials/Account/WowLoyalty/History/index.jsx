@@ -1,6 +1,6 @@
 import { Heading } from "@/components/elements";
 import React from "react";
-import ViewTransaction from "./ViewTransaction";
+import ViewTransaction from "@/components/partials/Account/WowLoyalty/History/ViewTransaction";
 
 const History = React.memo(({ transactions, title }) => {
   if (!transactions || transactions.length === 0) return null;

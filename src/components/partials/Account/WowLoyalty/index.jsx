@@ -6,8 +6,8 @@ import { EllipsisIcon, WalletIcon } from "@/src/assets/svg/icons";
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import History from "./History";
-import WowLoyaltySkeleton from "./WowLoyaltySkeleton";
+import History from "@/components/partials/Account/WowLoyalty/History";
+import WowLoyaltySkeleton from "@/components/partials/Account/WowLoyalty/WowLoyaltySkeleton";
 
 const INITIAL_WOW_CASH_STATE = {
   transactions: [],
