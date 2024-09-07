@@ -2,7 +2,7 @@ import { Button } from "@/components/elements";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
-import AddressFormFields from "./AddressFormFields";
+import AddressFormFields from "@/components/partials/Account/AddressSection/AddressForm/AddressFormFields";
 
 const AddressForm = React.memo(({ className }) => {
   const { createAddress } = useAddressDispatch();

@@ -1,7 +1,7 @@
-import { Img } from "./Img";
-import { Text } from "./Text";
-import { Heading } from "./Heading";
-import { Button } from "./Button";
-import { Input } from "./Input";
-import { SelectBox } from "./SelectBox";
+import { Img } from "@/components/elements/Img";
+import { Text } from "@/components/elements/Text";
+import { Heading } from "@/components/elements/Heading";
+import { Button } from "@/components/elements/Button";
+import { Input } from "@/components/elements/Input";
+import { SelectBox } from "@/components/elements/SelectBox";
 export { Img, Text, Heading, Button, Input, SelectBox };
