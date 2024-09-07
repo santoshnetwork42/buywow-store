@@ -1,7 +1,7 @@
 import { Heading } from "@/components/elements";
 import { toDecimal } from "@/utils/helpers";
 import React from "react";
-import PaymentMethod from "./PaymentMethod/paymentMethod";
+import PaymentMethod from "@/components/partials/Checkout/PaymentMethodsSection/PaymentMethod/paymentMethod";
 
 const PaymentMethodsSection = React.memo(
   ({

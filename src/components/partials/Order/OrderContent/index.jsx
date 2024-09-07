@@ -11,7 +11,7 @@ import { errorHandler } from "@/utils/errorHandler";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import Cashback from "../../CartDrawer/Cashback";
+import Cashback from "@/components/partials/CartDrawer/Cashback";
 
 const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   const [order, setOrder] = useState(initialOrderData);

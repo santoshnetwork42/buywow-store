@@ -7,7 +7,7 @@ import { fetchSearchItems } from "@/utils/helpers";
 import { setSoldOutLast } from "@/utils/helpers/products";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-import ProductCardSkeleton from "../../Card/ProductCard/ProductCardSkeleton";
+import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
 
 const ProductGrid = React.memo(({ products, isInitialData }) => {
   const sortedProducts = setSoldOutLast(products, isInitialData);

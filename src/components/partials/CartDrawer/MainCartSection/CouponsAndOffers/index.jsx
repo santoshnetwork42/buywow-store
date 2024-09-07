@@ -9,9 +9,9 @@ import {
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import CouponDrawer from "./CouponDrawer";
-import CouponHeader from "./CouponHeader";
-import CouponModal from "./CouponModal";
+import CouponDrawer from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer";
+import CouponHeader from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponHeader";
+import CouponModal from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponModal";
 
 const CouponsAndOffers = () => {
   const pathname = usePathname();

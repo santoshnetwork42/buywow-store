@@ -4,9 +4,9 @@ import { GTM_ID, LIMECHAT_ENABLED, WISEPOPS_KEY } from "@/config";
 import { useIsInteractive, useSource } from "@/utils/context/navbar";
 import { useEffect } from "react";
 import GTM from "react-gtm-module";
-import Affise from "./affise";
-import LimeChat from "./limechat";
-import Wisepops from "./wisepops";
+import Affise from "@/components/scripts/affise";
+import LimeChat from "@/components/scripts/limechat";
+import Wisepops from "@/components/scripts/wisepops";
 
 export default function Scripts() {
   const isInteractive = useIsInteractive();

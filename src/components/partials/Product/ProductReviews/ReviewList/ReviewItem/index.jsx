@@ -3,9 +3,9 @@ import { Button, Heading, Img, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
 import { formatTimeAgo } from "@/utils/helpers";
 import React, { useCallback, useState } from "react";
-import ReadMore from "../../../../../features/ReadMore";
-import ReviewStars from "../../ReviewStars";
-import ReviewImageCarousel from "./ReviewImageCarousel";
+import ReadMore from "@/components/features/ReadMore";
+import ReviewStars from "@/components/partials/Product/ProductReviews/ReviewStars";
+import ReviewImageCarousel from "@/components/partials/Product/ProductReviews/ReviewList/ReviewItem/ReviewImageCarousel";
 
 const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);

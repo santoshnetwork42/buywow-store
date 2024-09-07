@@ -4,7 +4,7 @@ import { useUpdateUserCoupon } from "@wow-star/utils";
 import Script from "next/script";
 import { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { showToast } from "../common/ToastComponent";
+import { showToast } from "@/components/common/ToastComponent";
 
 function Wisepops() {
   const user = useSelector((state) => state.user?.user);
