@@ -6,7 +6,7 @@ import { validateEmail, validateString } from "@/utils/helpers";
 import { getCurrentUser } from "aws-amplify/auth";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import AccountFormFields from "./AccountFormFields";
+import AccountFormFields from "@/components/partials/Account/AccountDetails/AccountFormFields";
 
 const INITIAL_USER_STATE = {
   email: "",

@@ -4,9 +4,9 @@ import { Button, Heading, Text } from "@/components/elements";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import AddressForm from "./AddressForm";
-import AddressList from "./AddressList";
-import AddressModal from "./AddressModal";
+import AddressForm from "@/components/partials/Account/AddressSection/AddressForm";
+import AddressList from "@/components/partials/Account/AddressSection/AddressList";
+import AddressModal from "@/components/partials/Account/AddressSection/AddressModal";
 
 const AddressSkeleton = () => (
   <div className="animate-pulse space-y-4">

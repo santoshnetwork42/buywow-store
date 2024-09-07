@@ -8,7 +8,7 @@ import { removePhonePrefix } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
-import AddressFormFields from "../AddressForm/AddressFormFields";
+import AddressFormFields from "@/components/partials/Account/AddressSection/AddressForm/AddressFormFields";
 
 const AddressModal = ({
   isOpen = false,

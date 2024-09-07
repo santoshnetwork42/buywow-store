@@ -3,7 +3,7 @@
 import { Button, Text } from "@/components/elements";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { showToast } from "../ToastComponent";
+import { showToast } from "@/components/common/ToastComponent";
 
 const Quantity = ({
   max,

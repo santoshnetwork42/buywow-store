@@ -7,7 +7,7 @@ import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useCartTotal } from "@wow-star/utils";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import AddressModal from "../AddressModal";
+import AddressModal from "@/components/partials/Account/AddressSection/AddressModal";
 
 const AddressList = React.memo(({ addressList, variant }) => {
   const currentAddress = useSelector((state) => state.address?.currentAddress);

@@ -5,7 +5,7 @@ import { Heading } from "@/components/elements";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { twMerge } from "tailwind-merge";
-import Confetti from "./Confetti";
+import Confetti from "@/components/features/Modal/Confetti";
 
 const Modal = ({
   title = "",
