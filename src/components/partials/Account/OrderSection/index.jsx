@@ -3,7 +3,7 @@
 import { Text } from "@/components/elements";
 import Link from "next/link";
 import React from "react";
-import OrderList from "./OrderList";
+import OrderList from "@/components/partials/Account/OrderSection/OrderList";
 
 const OrderSection = React.memo(() => {
   return (

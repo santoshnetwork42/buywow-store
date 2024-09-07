@@ -7,9 +7,9 @@ import { errorHandler } from "@/utils/errorHandler";
 import { generateClient } from "aws-amplify/api";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import OrderListHeader from "./OrderListHeader";
-import OrderRow from "./OrderRow";
-import OrderSkeleton from "./OrderSkeleton";
+import OrderListHeader from "@/components/partials/Account/OrderSection/OrderList/OrderListHeader";
+import OrderRow from "@/components/partials/Account/OrderSection/OrderList/OrderRow";
+import OrderSkeleton from "@/components/partials/Account/OrderSection/OrderList/OrderSkeleton";
 
 const client = generateClient();
 

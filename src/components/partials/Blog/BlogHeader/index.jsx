@@ -1,5 +1,5 @@
 import { fetchBlogs, fetchTopMenu } from "@/lib/wordPressAPIs";
-import BlogHeaderClient from "./BlogHeaderClient";
+import BlogHeaderClient from "@/components/partials/Blog/BlogHeader/BlogHeaderClient";
 
 export default async function BlogHeader() {
   const menu = await fetchTopMenu();

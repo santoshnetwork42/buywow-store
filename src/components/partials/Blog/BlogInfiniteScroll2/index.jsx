@@ -4,7 +4,7 @@ import { LoaderIcon } from "@/assets/svg/icons";
 import { getBlogs } from "@/graphql/api";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import BlogCard3 from "../BlogCard3";
+import BlogCard3 from "@/components/partials/Blog/BlogCard3";
 
 export default function BlogInfiniteScroll2({
   blogsData,

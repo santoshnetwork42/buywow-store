@@ -4,7 +4,7 @@ import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { useSource } from "@/utils/context/navbar";
 import Image from "next/image";
 import Link from "next/link";
-import BlogCard2 from "../../BlogCard2";
+import BlogCard2 from "@/components/partials/Blog/BlogCard2";
 
 export default function BlogHeaderClient({ menu, categoryBlogs }) {
   const source = useSource();
