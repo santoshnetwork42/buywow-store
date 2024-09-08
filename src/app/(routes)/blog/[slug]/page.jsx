@@ -34,7 +34,7 @@ export async function generateMetadata({ params }) {
 export async function generateStaticParams() {
   const { blogs } = await fetchBlogs({});
 
-  if (!blogs || blogs.length === 0) {
+  if (!blogs?.length) {
     return [];
   }
 
