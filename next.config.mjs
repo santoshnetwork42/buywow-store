@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  async rewrites() {
-    const payload = [];
-    return payload;
-  },
 
   async redirects() {
     const allRedirects = [
