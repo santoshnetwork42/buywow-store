@@ -6,6 +6,7 @@ import { Heading, Text } from "@/components/elements";
 import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
+import { PREBUILD_ALL_PAGES } from "@/config";
 import { replaceBlogLinks } from "@/lib/replaceBlogLinks";
 import {
   fetchAllBlogSlugs,
@@ -35,9 +36,11 @@ export async function generateMetadata({ params }) {
   }
 }
 
-export const dynamicParams = true;
-
 export async function generateStaticParams() {
+  if (!PREBUILD_ALL_PAGES) {
+    return [];
+  }
+
   const { blogs } = await fetchAllBlogSlugs({});
   return blogs.map((blog) => ({
     slug: blog?.node?.slug,
@@ -46,8 +49,6 @@ export async function generateStaticParams() {
 
 export default async function ReadBlog({ params }) {
   const { slug } = params;
-
-  console.log("slug", slug);
   const blog = await fetchBlog(slug);
 
   if (!blog) {
