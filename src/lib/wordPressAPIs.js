@@ -150,7 +150,7 @@ export const fetchBlog = async (slug) => {
       throw new Error("Failed to fetch data");
     }
 
-    return data?.data?.post || {};
+    return data?.data?.post;
   } catch (err) {
     console.error(err);
     return false;
