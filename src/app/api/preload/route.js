@@ -7,7 +7,6 @@ import fetchData from "@/utils/fetchData";
 
 export async function GET() {
   try {
-    console.log("Fetching initial data with params:", { STORE_ID });
     const data = await fetchData(getInitialData, {
       storeId: STORE_ID,
       deviceType: "WEB",
