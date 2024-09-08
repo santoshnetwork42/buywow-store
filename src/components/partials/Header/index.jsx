@@ -10,7 +10,10 @@ import StickyViewCart from "@/components/partials/StickyViewCart";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
-import { RESTRICT_SEARCH_AND_CART_TO_SHOW } from "@/utils/data/constants";
+import {
+  PAGETYPE,
+  RESTRICT_SEARCH_AND_CART_TO_SHOW,
+} from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
 import Link from "next/link";
@@ -18,8 +21,10 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-const MenuItem = React.memo(({ item, index, linkPrefix, showInWeb }) => {
+const MenuItem = React.memo(({ item, index, showInWeb }) => {
   const { topNavbarClicked } = useEventsDispatch();
+
+  const linkPrefix = PAGETYPE[item?.slugType] || "";
 
   if (!item || !item.title || !showInWeb) return null;
 
@@ -53,7 +58,7 @@ const MenuItem = React.memo(({ item, index, linkPrefix, showInWeb }) => {
           {title}
           <DownArrowIconSVG />
         </Link>
-        <NavMenu menuItems={item.subMenu} linkPrefix={linkPrefix} />
+        <NavMenu menuItems={item.subMenu} />
       </li>
     );
   }
@@ -163,20 +168,13 @@ const Header = ({ data }) => {
   const renderMenuItems = () => (
     <>
       {collectionMenus?.map((item, index) => (
-        <MenuItem
-          key={`menu-${index}`}
-          item={item}
-          index={index}
-          linkPrefix="collections"
-          showInWeb
-        />
+        <MenuItem key={`menu-${index}`} item={item} index={index} showInWeb />
       ))}
       {otherLinks?.map((item, index) => (
         <MenuItem
           key={`other-menu-${index}`}
           item={item}
           index={index}
-          linkPrefix=""
           showInWeb={item?.showInWeb}
         />
       ))}

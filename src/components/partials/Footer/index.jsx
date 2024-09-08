@@ -2,7 +2,7 @@
 
 import { Heading, Img, Text } from "@/components/elements";
 import FooterMenu from "@/components/partials/Footer/FooterMenu";
-import { RESTRICT_FOOTER_TO_SHOW } from "@/utils/data/constants";
+import { PAGETYPE, RESTRICT_FOOTER_TO_SHOW } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -70,7 +70,6 @@ const Copyright = React.memo(({ copyrightText }) => {
 const Footer = ({ data, ...props }) => {
   const [openSections, setOpenSections] = useState({});
 
-  //check if footer is restricted to show on specific pages
   const pathname = usePathname();
   const isRestricted = RESTRICT_FOOTER_TO_SHOW.some(
     (allowedPath) =>
@@ -90,18 +89,25 @@ const Footer = ({ data, ...props }) => {
   const { url: logoUrl, alternativeText: logoAlternativeText } =
     extractAttributes(logo) || {};
 
-  const prefixSlug = (prefix) => (item) =>
-    item
-      ? { ...item, slug: item.slug ? `${prefix}${item.slug || ""}` : "" }
+  const prefixSlug = (item) => {
+    const prefix = PAGETYPE[item?.slugType];
+    return item
+      ? {
+          ...item,
+          slug: item.slug
+            ? `/${prefix ? prefix + "/" : ""}${item.slug || ""}`
+            : "",
+        }
       : null;
+  };
 
-  const processSubMenu = (items, prefix) =>
+  const processSubMenu = (items) =>
     items
       ?.map((item) =>
         item
           ? {
               ...item,
-              subMenu: item.subMenu?.map(prefixSlug(prefix)).filter(Boolean),
+              subMenu: item.subMenu?.map(prefixSlug).filter(Boolean),
             }
           : null,
       )
@@ -112,21 +118,15 @@ const Footer = ({ data, ...props }) => {
 
   const menu = {
     itemsWithSubMenu: [
-      ...processSubMenu(
-        (collectionMenus || []).filter(hasSubMenu),
-        "/collections/",
-      ),
-      ...processSubMenu((otherLinks || []).filter(hasSubMenu), "/"),
+      ...processSubMenu((collectionMenus || []).filter(hasSubMenu)),
+      ...processSubMenu((otherLinks || []).filter(hasSubMenu)),
     ],
     itemsWithoutSubMenu: [
       ...(collectionMenus || [])
         .filter(noSubMenu)
-        .map(prefixSlug("/collections/"))
+        .map(prefixSlug)
         .filter(Boolean),
-      ...(otherLinks || [])
-        .filter(noSubMenu)
-        .map(prefixSlug("/"))
-        .filter(Boolean),
+      ...(otherLinks || []).filter(noSubMenu).map(prefixSlug).filter(Boolean),
     ],
   };
 

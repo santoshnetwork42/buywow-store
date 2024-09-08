@@ -23,6 +23,7 @@ export async function generateMetadata() {
     generateSEOAndJSONLD({
       isProduct: false,
       isCollection: false,
+      isMain: true,
       seoComponent,
       extractedSlug: "index",
       webUrl,

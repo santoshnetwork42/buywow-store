@@ -6,6 +6,7 @@ export function generateSEOAndJSONLD(params) {
   const {
     isProduct,
     isCollection,
+    isMain,
     pdpSection,
     seoComponent,
     extractedSlug,
@@ -23,7 +24,8 @@ export function generateSEOAndJSONLD(params) {
 
   let breadcrumbListJsonLd = {};
   let productJsonLd = {};
-
+  let organizationJsonLd = {};
+  let websiteJsonLd = {};
   if (isProduct) {
     const { fetchedProduct, productDetailView } =
       pdpSection?.product?.pdpProduct?.data?.attributes || {};
@@ -165,6 +167,56 @@ export function generateSEOAndJSONLD(params) {
         },
       ],
     };
+  } else if (isMain) {
+    organizationJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: seoComponent?.seoTitle,
+      Description: seoComponent?.seoDescription,
+      url: seoComponent?.seoCanonical,
+      Logo: "https://media.buywow.in/public/wow-cms/thumbnail_img_header_logo_9aeb8a1417.png",
+      sameAs: [
+        "https://www.facebook.com/wowskinscienceindia",
+        "https://www.instagram.com/wowskinscienceindia/",
+        "https://www.pinterest.com/wowskinsciencein/",
+        "https://twitter.com/buywow_in",
+        "https://www.youtube.com/channel/UCz3yLP_63OUzsBcT0n3xcxA/videos",
+      ],
+      Founder: [
+        {
+          "@type": "Person",
+          name: "Manish Chowdhary & Karan Chowdhary",
+        },
+      ],
+      foundingDate: "",
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          telephone: "+917996123484",
+          contactType: "Customer Service",
+          email: "support@buywow.in",
+        },
+      ],
+      Address: {
+        type: "PostalAddress",
+        streetAddress:
+          "Prestige Dotcom 4 th floor, Field Marshal Cariappa Rd, Srinivas Nagar, Shanthala Nagar, Ashok Nagar",
+        addressLocality: "Bengaluru",
+        addressRegion: "Karnataka",
+        postalCode: "560025",
+        addressCountry: "IN",
+      },
+    };
+    websiteJsonLd = {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      url: seoComponent?.seoCanonical,
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${seoComponent?.seoCanonical}/search?query={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
+    };
   }
 
   const collectionPageJsonLd = {
@@ -210,5 +262,7 @@ export function generateSEOAndJSONLD(params) {
       description: seoComponent?.seoDescription,
     },
     collectionPageJsonLd,
+    organizationJsonLd,
+    websiteJsonLd,
   };
 }

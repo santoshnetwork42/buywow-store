@@ -61,7 +61,7 @@ const StickyViewCart = () => {
   if (!cartList.length || !isAllowed || !isInteractive) return null;
 
   return (
-    <div className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 items-center justify-between bg-white-a700 bg-opacity-90 px-4 py-2 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">
+    <div className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 items-center justify-between bg-white-a700 bg-opacity-95 px-4 py-2 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">
       <CartSummary
         totalItems={totalItems}
         grandTotal={grandTotal}
