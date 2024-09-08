@@ -47,7 +47,7 @@ const FeaturedProductsByTab = ({
 
   return (
     <div
-      className={`container-main mb-main flex flex-col items-center justify-center ${bgColorClass} ${isPaddedColor ? "py-5" : ""}`}
+      className={`container-main mb-4 flex flex-col items-center justify-center sm:mb-5 md:mb-6 lg:mb-5 xl:mb-6 ${bgColorClass} ${isPaddedColor ? "py-5" : ""}`}
     >
       <SectionHeading title={title} className="mb-3 lg:mb-2" />
       <Tabs
@@ -75,7 +75,7 @@ const FeaturedProductsByTab = ({
         <Link
           prefetch={false}
           href={`/collections/${button.slug}`}
-          className="mt-1.5 rounded-[24px] bg-yellow-900 px-4 py-2 text-center sm:mt-1 md:mt-0 md:px-5 md:py-3"
+          className="mb-4 mt-1.5 rounded-[24px] bg-yellow-900 px-4 py-2 text-center sm:mt-1 md:mt-0 md:px-5 md:py-3 lg:mb-6"
         >
           <Heading as="h3" size="xl" className="text-white-a700_01" responsive>
             {button.text}

@@ -122,8 +122,8 @@ const componentMap = {
   ComponentAccordionUsageInstructionsSection: AccordionUsageInstructions,
   ComponentAccordionFaQsSection: AccordionFaQs,
   ComponentBlocksBreadcrumb: Breadcrumb,
-  ComponentVideoSection: VideoSection,
-  ComponentBlogSection: BlogSection,
+  ComponentBlocksVideoSection: VideoSection,
+  ComponentBlocksBlogSection: BlogSection,
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
