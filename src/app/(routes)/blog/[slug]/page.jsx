@@ -2,10 +2,11 @@ import "@wordpress/block-library/build-style/common.css";
 import "@wordpress/block-library/build-style/style.css";
 import "@wordpress/block-library/build-style/theme.css";
 
-import { Heading, Text } from "@/components/elements";
+import { Heading, Img, Text } from "@/components/elements";
 import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
+import { PREBUILD_ALL_PAGES } from "@/config";
 import { replaceBlogLinks } from "@/lib/replaceBlogLinks";
 import {
   fetchAllBlogSlugs,
@@ -14,9 +15,7 @@ import {
 } from "@/lib/wordPressAPIs";
 import handleRedirect from "@/utils/handleRedirect";
 import dayjs from "dayjs";
-import Image from "next/image";
 import Link from "next/link";
-import { PREBUILD_ALL_PAGES } from "@/config";
 
 export const revalidate = 86400;
 
@@ -69,11 +68,11 @@ export default async function ReadBlog({ params }) {
 
           <div className="blog-font-size-convention space-y-3">
             <div className="flex flex-wrap gap-4">
-              {blog?.categories?.nodes?.map((category) => (
+              {blog?.categories?.nodes?.map((category, index) => (
                 <Link
                   prefetch={false}
                   href={`/blog/category/${category?.slug}`}
-                  key={category?.id}
+                  key={category?.id || index}
                   className="rounded bg-yellow-900 px-2 py-1 text-sm text-white-a700"
                 >
                   {category?.name}
@@ -93,7 +92,7 @@ export default async function ReadBlog({ params }) {
           </div>
 
           <div className="blog-font-size-convention relative aspect-video w-full">
-            <Image
+            <Img
               src={blog?.featuredImage?.node?.mediaItemUrl}
               alt={blog?.title}
               fill

@@ -1,7 +1,6 @@
 import LinkClickTracker from "@/components/common/LinkClickTracker";
-import { Heading, Text } from "@/components/elements";
+import { Heading, Img, Text } from "@/components/elements";
 import dayjs from "dayjs";
-import Image from "next/image";
 
 export default function BlogCard3({
   blog = {
@@ -30,7 +29,7 @@ export default function BlogCard3({
     >
       <div className="grid items-center gap-4 md:grid-cols-[2fr,4fr]">
         <div className="relative aspect-video w-full">
-          <Image
+          <Img
             src={blog.featuredImage?.node?.mediaItemUrl}
             alt={blog.title}
             fill

@@ -1,11 +1,11 @@
 "use client";
 
 import { LoaderIcon } from "@/assets/svg/icons";
+import { Text } from "@/components/elements";
+import BlogCard3 from "@/components/partials/Blog/BlogCard3";
 import { getBlogs } from "@/graphql/api";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import BlogCard3 from "@/components/partials/Blog/BlogCard3";
-import { Text } from "@/components/elements";
 
 export default function BlogInfiniteScroll2({
   blogsData,
@@ -71,8 +71,8 @@ export default function BlogInfiniteScroll2({
       }
     >
       <div className="grid gap-4">
-        {blogs.map((blog) => (
-          <BlogCard3 key={blog.node.id} blog={blog.node} />
+        {blogs.map((blog, index) => (
+          <BlogCard3 key={blog.node.id || index} blog={blog.node} />
         ))}
       </div>
     </InfiniteScroll>
