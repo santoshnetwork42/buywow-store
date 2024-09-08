@@ -1,5 +1,9 @@
+import CouponDrawer from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer";
+import CouponHeader from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponHeader";
+import CouponModal from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponModal";
 import { applyCouponAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
+import { useIsInteractive } from "@/utils/context/navbar";
 import { AUTO_APPLY_COUPON_PATHNAMES } from "@/utils/data/constants";
 import {
   getCouponDiscount,
@@ -9,9 +13,6 @@ import {
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import CouponDrawer from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer";
-import CouponHeader from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponHeader";
-import CouponModal from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponModal";
 
 const CouponsAndOffers = () => {
   const pathname = usePathname();
@@ -27,6 +28,8 @@ const CouponsAndOffers = () => {
   const appliedCoupon = useSelector((state) => state.cart?.coupon);
   const storedCouponCode = useSelector((state) => state.cart?.storedCouponCode);
   const user = useSelector((state) => state.user?.user);
+
+  const isInteractive = useIsInteractive();
 
   const { filteredFeaturedCoupons: featuredCoupons = [] } =
     useFeaturedCoupons();
@@ -74,14 +77,16 @@ const CouponsAndOffers = () => {
   );
 
   useEffect(() => {
-    if (cartList && cartList !== previousCartList.current) {
+    if (cartList || cartList !== previousCartList.current) {
       previousCartList.current = cartList;
 
-      const shouldAutoApply = AUTO_APPLY_COUPON_PATHNAMES.some((path) =>
-        pathname.startsWith(path),
+      const shouldAutoApply = AUTO_APPLY_COUPON_PATHNAMES.some(
+        (allowedPath) =>
+          pathname === allowedPath ||
+          (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
       );
 
-      if (shouldAutoApply) {
+      if (shouldAutoApply && isInteractive) {
         if (storedCouponCode) {
           if (
             (!appliedCoupon || appliedCoupon?.autoApplied) &&
@@ -104,7 +109,7 @@ const CouponsAndOffers = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bestCouponCode, cartList, pathname]);
+  }, [bestCouponCode, storedCouponCode, cartList]);
 
   const handleCouponRemove = useCallback(() => {
     cartList.forEach((item) => {

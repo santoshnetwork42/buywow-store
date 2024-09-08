@@ -197,8 +197,10 @@ const CartDrawer = ({ upsellProducts }) => {
     const shouldForceOpenCart =
       forceOpenCart === "1" &&
       !isCartOpen &&
-      !RESTRICT_SEARCH_AND_CART_TO_SHOW.some((path) =>
-        pathname.startsWith(path),
+      !RESTRICT_SEARCH_AND_CART_TO_SHOW.some(
+        (allowedPath) =>
+          allowedPath === pathname ||
+          (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
       );
 
     if (shouldForceOpenCart) {

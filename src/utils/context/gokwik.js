@@ -178,7 +178,6 @@ function GoKwikProvider({ children }) {
   };
 
   useEffect(() => {
-    console.log("Waiting gokwikSdk:");
     awaitGlobal("gokwikSdk", 1000, 30).then((gokwikSdk) => {
       gokwikSdk.on("order-complete", async (orderDetails) => {
         try {
