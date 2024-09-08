@@ -40,7 +40,6 @@ const MenuItem = React.memo(({ item, index, linkPrefix, showInWeb }) => {
               ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
               : item.link || "#"
           }
-          shallow
           onClick={() => {
             topNavbarClicked({
               banner_name: item.title,
