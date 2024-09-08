@@ -123,19 +123,18 @@ const Carousel = ({
     return () => emblaApi.off("select", onSelect);
   }, [emblaApi, onSelect]);
 
-  const carouselImages = useMemo(
-    () =>
-      banners?.map((banner, index) => (
-        <CarouselImage
-          key={`carousel-image-${index}`}
-          {...banner}
-          index={index}
-          isInteractive={isInteractive}
-        />
-      )),
+  const carouselImages = useMemo(() => {
+    const imagesToRender = isInteractive ? banners : [banners[0]];
 
-    [banners, isInteractive],
-  );
+    return imagesToRender.map((banner, index) => (
+      <CarouselImage
+        key={`carousel-image-${banner.id || index}`}
+        {...banner}
+        index={index}
+        isInteractive={isInteractive}
+      />
+    ));
+  }, [banners, isInteractive]);
 
   const dotButtons = useMemo(
     () =>
@@ -153,26 +152,12 @@ const Carousel = ({
 
   return (
     <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">
-      {isInteractive ? (
-        <>
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex">{carouselImages}</div>
-          </div>
-          <div className="absolute bottom-1.5 left-1/2 flex -translate-x-1/2 cursor-pointer sm:bottom-2 md:bottom-2.5 lg:bottom-3">
-            {dotButtons}
-          </div>
-        </>
-      ) : (
-        <div className="overflow-hidden">
-          {
-            <CarouselImage
-              {...banners[0]}
-              index={0}
-              isInteractive={isInteractive}
-            />
-          }
-        </div>
-      )}
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">{carouselImages}</div>
+      </div>
+      <div className="absolute bottom-1.5 left-1/2 flex -translate-x-1/2 cursor-pointer sm:bottom-2 md:bottom-2.5 lg:bottom-3">
+        {dotButtons}
+      </div>
     </div>
   );
 };
