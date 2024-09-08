@@ -1,12 +1,13 @@
 // src/components/VideoSection.jsx
 "use client";
 
-import React from "react";
 import { Button, Heading } from "@/components/elements";
-import InstagramFeedItem from "@/components/partials/Card/InstagramFeedCard";
 import SliderComponent from "@/components/features/Slider";
+import InstagramFeedItem from "@/components/partials/Card/InstagramFeedCard";
 
 const VideoSection = ({ sectionData, className, ...props }) => {
+  return null;
+
   const { title, buttonText, images, playButtonIcon } = sectionData;
 
   const renderInstagramFeedItem = (image) => (

@@ -45,7 +45,7 @@ const TestimonialCard = ({
   const renderDescription = () => {
     if (!description) return null;
     return (
-      <Text size="base" as="p" className="w-full flex-1" responsive>
+      <Text size="base" as="p" className="w-full" responsive>
         {description}
       </Text>
     );
@@ -72,7 +72,7 @@ const TestimonialCard = ({
 
   return (
     <div
-      className={`flex aspect-[320/192] h-full w-[82vw] min-w-[324px] max-w-[502px] flex-col gap-2 sm:aspect-[502/250] sm:w-[70vw] md:w-[58vw] md:gap-3 lg:w-[46vw] ${className}`}
+      className={`flex aspect-[320/192] w-[82vw] min-w-[324px] max-w-[502px] flex-1 flex-col gap-2 sm:aspect-[502/250] sm:w-[70vw] md:w-[58vw] md:gap-3 lg:w-[46vw] ${className}`}
       {...props}
     >
       <div className="overflow-hidden rounded sm:rounded-md lg:rounded-lg">
