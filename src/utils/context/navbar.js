@@ -30,7 +30,6 @@ function NavbarProvider({ children }) {
   useEffect(() => {
     fetchInitialData()
       .then((data) => {
-        console.log("Initial data fetched successfully:", data);
         setInitialData(data);
       })
       .catch((err) => {

@@ -6,6 +6,7 @@ import { Button, Img, Text } from "@/components/elements";
 import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
+import StickyViewCart from "@/components/partials/StickyViewCart";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
@@ -16,7 +17,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import StickyViewCart from "@/components/partials/StickyViewCart";
 
 const MenuItem = React.memo(({ item, index, linkPrefix, showInWeb }) => {
   const { topNavbarClicked } = useEventsDispatch();
@@ -118,7 +118,11 @@ const Header = ({ data }) => {
   const user = useSelector((state) => state.user?.user);
   const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
-  const isRestricted = RESTRICT_SEARCH_AND_CART_TO_SHOW?.includes(pathname);
+  const isRestricted = RESTRICT_SEARCH_AND_CART_TO_SHOW.some(
+    (allowedPath) =>
+      allowedPath === pathname ||
+      (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
+  );
   const { handlePasswordLessModal, handleCartVisibility } = useModalDispatch();
   const { totalItems: totalCartItems } = useCartTotal({
     paymentType: "PREPAID",

@@ -45,8 +45,9 @@ export async function generateStaticParams() {
 
 export default async function ReadBlog({ params }) {
   const { slug } = params;
-
   const blog = await fetchBlog(slug);
+
+  console.log(blog);
 
   if (!blog) {
     return await handleRedirect(`/blog/${slug}`);
