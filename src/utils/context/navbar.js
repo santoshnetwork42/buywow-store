@@ -13,7 +13,7 @@ const client = generateClient();
 export const NavbarContext = createContext();
 
 async function fetchInitialData() {
-  const response = await fetch(`/api/getInitialData?deviceType=WEB`);
+  const response = await fetch(`/api/preload`);
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }

@@ -5,18 +5,15 @@ import { getInitialData } from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import fetchData from "@/utils/fetchData";
 
-export async function GET(request) {
-  const { searchParams } = new URL(request.url);
-  const deviceType = searchParams.get("deviceType");
-
+export async function GET() {
   try {
-    console.log("Fetching initial data with params:", { STORE_ID, deviceType });
+    console.log("Fetching initial data with params:", { STORE_ID });
     const data = await fetchData(getInitialData, {
       storeId: STORE_ID,
-      deviceType,
+      deviceType: "WEB",
       getStoreSettingInput: {
         storeId: STORE_ID,
-        deviceType,
+        deviceType: "WEB",
       },
       shippingTierFilter: {
         storeId: { eq: STORE_ID },
