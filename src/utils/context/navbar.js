@@ -26,24 +26,16 @@ function NavbarProvider({ children }) {
   const _source = searchParams.get("_source");
 
   const [initialData, setInitialData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getInitialData = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchInitialData();
+    fetchInitialData()
+      .then((data) => {
+        console.log("Initial data fetched successfully:", data);
         setInitialData(data);
-      } catch (err) {
+      })
+      .catch((err) => {
         console.error("Error fetching initial data:", err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getInitialData();
+      });
   }, []);
 
   const cartList = useSelector((state) => state.cart?.data || []);
@@ -90,9 +82,6 @@ function NavbarProvider({ children }) {
     isInteractive,
     source,
   };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
 
   return (
     <Navbar
