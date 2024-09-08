@@ -115,6 +115,7 @@ export const fetchBlog = async (slug) => {
       throw new Error("Failed to fetch data");
     }
 
+    console.log(JSON.stringify(data));
     return data?.data?.post || {};
   } catch (err) {
     console.log(err);
