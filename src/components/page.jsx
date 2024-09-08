@@ -1,88 +1,39 @@
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import handleRedirect from "@/utils/handleRedirect";
-import dynamic from "next/dynamic";
 import React from "react";
 
 // Dynamically import components
-const PageAnnouncementBar = dynamic(
-  () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
-);
-const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
-const SingleBanner = dynamic(() => import("@/components/blocks/SingleBanner"));
-const MiniBanners = dynamic(() => import("@/components/blocks/MiniBanners"));
-const TrendingCategories = dynamic(
-  () => import("@/components/blocks/TrendingCategories"),
-);
-const FeaturedList = dynamic(() => import("@/components/blocks/FeaturedList"));
-const IngredientCategories = dynamic(
-  () => import("@/components/blocks/IngredientCategories"),
-);
-const FeaturedCategories = dynamic(
-  () => import("@/components/blocks/FeaturedCategories"),
-);
-const TestimonialSection = dynamic(
-  () => import("@/components/blocks/TestimonialSection"),
-);
-const FeaturedProducts = dynamic(
-  () => import("@/components/blocks/FeaturedProducts"),
-);
-const FeaturedProductsByTab = dynamic(
-  () => import("@/components/blocks/FeaturedProductsByTab"),
-);
-const ProductEffectiveness = dynamic(
-  () => import("@/components/blocks/Product/ProductEffectiveness"),
-);
-const ProductHighlights = dynamic(
-  () => import("@/components/blocks/Product/ProductHighlights"),
-);
-const ProductBenefits = dynamic(
-  () => import("@/components/blocks/Product/ProductBenefits"),
-);
-const ProductKeyIngredients = dynamic(
-  () => import("@/components/blocks/Product/ProductKeyIngredients"),
-);
-const InfoDropdown = dynamic(
-  () => import("@/components/blocks/Accordion/InfoDropdown"),
-);
-const ProductLegalInfo = dynamic(
-  () => import("@/components/blocks/Accordion/ProductLegalInfo"),
-);
-const CollectionLinks = dynamic(
-  () => import("@/components/blocks/CollectionLinks"),
-);
-const ProductDetailView = dynamic(
-  () => import("@/components/blocks/ProductDetailView"),
-);
-const ProductCollectionSection = dynamic(
-  () => import("@/components/blocks/ProductCollectionByTab"),
-);
-const InfoSection = dynamic(() => import("@/components/blocks/InfoSection"));
-const Reviews = dynamic(
-  () => import("@/components/blocks/Product/ProductReviews"),
-);
-const UpsellProducts = dynamic(
-  () => import("@/components/blocks/UpsellProducts"),
-);
-const AccordionDescription = dynamic(
-  () => import("@/components/blocks/Accordion/AccordionDescription"),
-);
-const AccordionIngredients = dynamic(
-  () => import("@/components/blocks/Accordion/AccordionIngredients"),
-);
-const AccordionUsageInstructions = dynamic(
-  () => import("@/components/blocks/Accordion/AccordionUsageInstructions"),
-);
-const AccordionFaQs = dynamic(
-  () => import("@/components/blocks/Accordion/AccordionFaQs"),
-);
-const Breadcrumb = dynamic(() => import("@/components/blocks/Breadcrumb"));
-const VideoSection = dynamic(
-  () => import("@/components/partials/Others/VideoSection"),
-);
-const BlogSection = dynamic(() => import("@/components/blocks/BlogSection"));
-const RecentlyViewed = dynamic(
-  () => import("@/components/blocks/RecentlyViewed"),
-);
+import AccordionDescription from "@/components/blocks/Accordion/AccordionDescription";
+import AccordionFaQs from "@/components/blocks/Accordion/AccordionFaQs";
+import AccordionIngredients from "@/components/blocks/Accordion/AccordionIngredients";
+import AccordionUsageInstructions from "@/components/blocks/Accordion/AccordionUsageInstructions";
+import InfoDropdown from "@/components/blocks/Accordion/InfoDropdown";
+import ProductLegalInfo from "@/components/blocks/Accordion/ProductLegalInfo";
+import PageAnnouncementBar from "@/components/blocks/AnnouncementBar/PageAnnouncementBar";
+import BlogSection from "@/components/blocks/BlogSection";
+import Breadcrumb from "@/components/blocks/Breadcrumb";
+import Carousal from "@/components/blocks/Carousel";
+import CollectionLinks from "@/components/blocks/CollectionLinks";
+import FeaturedCategories from "@/components/blocks/FeaturedCategories";
+import FeaturedList from "@/components/blocks/FeaturedList";
+import FeaturedProducts from "@/components/blocks/FeaturedProducts";
+import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
+import InfoSection from "@/components/blocks/InfoSection";
+import IngredientCategories from "@/components/blocks/IngredientCategories";
+import MiniBanners from "@/components/blocks/MiniBanners";
+import ProductBenefits from "@/components/blocks/Product/ProductBenefits";
+import ProductEffectiveness from "@/components/blocks/Product/ProductEffectiveness";
+import ProductHighlights from "@/components/blocks/Product/ProductHighlights";
+import ProductKeyIngredients from "@/components/blocks/Product/ProductKeyIngredients";
+import Reviews from "@/components/blocks/Product/ProductReviews";
+import ProductCollectionSection from "@/components/blocks/ProductCollectionByTab";
+import ProductDetailView from "@/components/blocks/ProductDetailView";
+import RecentlyViewed from "@/components/blocks/RecentlyViewed";
+import SingleBanner from "@/components/blocks/SingleBanner";
+import TestimonialSection from "@/components/blocks/TestimonialSection";
+import TrendingCategories from "@/components/blocks/TrendingCategories";
+import UpsellProducts from "@/components/blocks/UpsellProducts";
+import VideoSection from "@/components/partials/Others/VideoSection";
 
 const PAGETYPE = {
   HOME: "home",
