@@ -1,21 +1,9 @@
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
-import { PREBUILD_ALL_PAGES } from "@/config";
-import { fetchBlogs, fetchFeaturedBlogs, fetchTags } from "@/lib/wordPressAPIs";
+import { fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
 
 export const revalidate = 86400;
-
-export async function generateStaticParams() {
-  if (!PREBUILD_ALL_PAGES) {
-    return [];
-  }
-
-  const tags = await fetchTags();
-  return tags.map((tag) => ({
-    slug: tag.slug,
-  }));
-}
 
 export default async function BlogsByTag({ params }) {
   const { slug } = params;
