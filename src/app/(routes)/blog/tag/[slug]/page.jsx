@@ -8,11 +8,6 @@ export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const tags = await fetchTags();
-
-  if (!tags || tags.length === 0) {
-    return [];
-  }
-
   return tags.map((tag) => ({
     slug: tag.slug,
   }));

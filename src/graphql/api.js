@@ -2713,6 +2713,44 @@ query GetTag($id: ID!) {
 }
 `;
 
+export const getAllBlogSlugs = /* GraphQL */ `
+  query GetBlogs(
+    $category: String
+    $author: String
+    $tags: [String]
+    $first: Int
+    $last: Int
+    $after: String
+    $before: String
+  ) {
+    posts(
+      where: {
+        categoryName: $category
+        tagSlugIn: $tags
+        authorName: $author
+        status: PUBLISH
+      }
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+    ) {
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          slug
+        }
+      }
+    }
+  }
+`;
+
 export const getBlogs = /* GraphQL */ `
   query GetBlogs(
     $category: String

@@ -12,11 +12,6 @@ export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const categories = await fetchCategories();
-
-  if (!categories || categories.length === 0) {
-    return [];
-  }
-
   return categories.map((category) => ({
     slug: category.slug,
   }));

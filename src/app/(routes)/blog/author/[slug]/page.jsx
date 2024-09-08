@@ -14,11 +14,6 @@ export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const authors = await fetchAuthors();
-
-  if (!authors || authors.length === 0) {
-    return [];
-  }
-
   return authors.map((author) => ({
     slug: author.slug,
   }));
