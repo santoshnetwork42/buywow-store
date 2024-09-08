@@ -1,101 +1,128 @@
+import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
 
 export const useEventsDispatch = () => {
   const dispatch = useDispatch();
 
-  const handleOutOfStock = (products, inventory) => {
-    dispatch({
-      type: eventsSagaActions.OUT_OF_STOCK,
-      payload: { products, inventory },
-    });
-  };
+  const handleOutOfStock = useCallback(
+    (products, inventory) => {
+      dispatch({
+        type: eventsSagaActions.OUT_OF_STOCK,
+        payload: { products, inventory },
+      });
+    },
+    [dispatch],
+  );
 
-  const viewItem = (product) => {
-    dispatch({ type: eventsSagaActions.VIEW_ITEM, payload: { product } });
-  };
+  const viewItem = useCallback(
+    (product) => {
+      dispatch({ type: eventsSagaActions.VIEW_ITEM, payload: { product } });
+    },
+    [dispatch],
+  );
 
-  const placeOrder = (
-    order,
-    products,
-    coupon,
-    address,
-    paymentType,
-    checkoutSource,
-  ) => {
-    dispatch({
-      type: eventsSagaActions.PLACE_ORDER,
-      payload: {
-        order,
-        products,
-        coupon,
-        address,
-        paymentType,
-        checkoutSource,
-      },
-    });
-  };
+  const placeOrder = useCallback(
+    (order, products, coupon, address, paymentType, checkoutSource) => {
+      dispatch({
+        type: eventsSagaActions.PLACE_ORDER,
+        payload: {
+          order,
+          products,
+          coupon,
+          address,
+          paymentType,
+          checkoutSource,
+        },
+      });
+    },
+    [dispatch],
+  );
 
-  const startCheckout = (source) => {
-    dispatch({
-      type: eventsSagaActions.CHECKOUT_STARTED,
-      payload: {
-        source: source || "BUYWOW",
-      },
-    });
-  };
+  const startCheckout = useCallback(
+    (source) => {
+      dispatch({
+        type: eventsSagaActions.CHECKOUT_STARTED,
+        payload: {
+          source: source || "BUYWOW",
+        },
+      });
+    },
+    [dispatch],
+  );
 
-  const search = (term) => {
-    dispatch({ type: eventsSagaActions.SEARCH, payload: { term } });
-  };
+  const search = useCallback(
+    (term) => {
+      dispatch({ type: eventsSagaActions.SEARCH, payload: { term } });
+    },
+    [dispatch],
+  );
 
-  const viewList = (id, name, products) => {
-    dispatch({
-      type: eventsSagaActions.VIEW_LIST_ITEM,
-      payload: { id, name, products },
-    });
-  };
+  const viewList = useCallback(
+    (id, name, products) => {
+      dispatch({
+        type: eventsSagaActions.VIEW_LIST_ITEM,
+        payload: { id, name, products },
+      });
+    },
+    [dispatch],
+  );
 
-  const addressSelected = (address, totalPrice, checkoutSource = "BUYWOW") => {
-    dispatch({
-      type: eventsSagaActions.ADDRESS_SELECTED,
-      payload: { address, totalPrice, checkoutSource },
-    });
-  };
+  const addressSelected = useCallback(
+    (address, totalPrice, checkoutSource = "BUYWOW") => {
+      dispatch({
+        type: eventsSagaActions.ADDRESS_SELECTED,
+        payload: { address, totalPrice, checkoutSource },
+      });
+    },
+    [dispatch],
+  );
 
-  const categoryViewed = (payload) => {
-    dispatch({
-      type: eventsSagaActions.CATEGORY_VIEWED,
-      payload,
-    });
-  };
+  const categoryViewed = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.CATEGORY_VIEWED,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const homeViewed = () => {
+  const homeViewed = useCallback(() => {
     dispatch({
       type: eventsSagaActions.HOME_VIEWED,
     });
-  };
+  }, [dispatch]);
 
-  const addPaymentInfo = (checkoutSource = "BUYWOW") => {
-    dispatch({
-      type: eventsSagaActions.ADD_PAYMENT_INFO,
-      payload: { checkoutSource },
-    });
-  };
+  const addPaymentInfo = useCallback(
+    (checkoutSource = "BUYWOW") => {
+      dispatch({
+        type: eventsSagaActions.ADD_PAYMENT_INFO,
+        payload: { checkoutSource },
+      });
+    },
+    [dispatch],
+  );
 
-  const bannerClicked = (payload) => {
-    dispatch({
-      type: eventsSagaActions.BANNER_CLICKED,
-      payload,
-    });
-  };
+  const bannerClicked = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.BANNER_CLICKED,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const otpRequested = (payload) => {
-    dispatch({
-      type: eventsSagaActions.OTP_REQUESTED,
-      payload,
-    });
-  };
+  const otpRequested = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.OTP_REQUESTED,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
   // const productSearched = (payload) => {
   //   dispatch({
@@ -104,59 +131,77 @@ export const useEventsDispatch = () => {
   //   });
   // };
 
-  const tileClicked = (payload) => {
-    dispatch({
-      type: eventsSagaActions.TILE_CLICKED,
-      payload,
-    });
-  };
+  const tileClicked = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.TILE_CLICKED,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const logout = (payload) => {
-    dispatch({
-      type: eventsSagaActions.LOG_OUT,
-      payload,
-    });
-  };
+  const logout = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.LOG_OUT,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const topNavbarClicked = (payload) => {
-    dispatch({
-      type: eventsSagaActions.TOP_NAVBAR_CLICKED,
-      payload,
-    });
-  };
+  const topNavbarClicked = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.TOP_NAVBAR_CLICKED,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const priceMismatch = (
-    products,
-    coupon,
-    paymentType,
-    mismatchedPrices,
-    mismatchedProductDetails,
-  ) => {
-    dispatch({
-      type: eventsSagaActions.PRICE_MISMATCH,
-      payload: {
-        products,
-        coupon,
-        paymentType,
-        mismatchedPrices,
-        mismatchedProductDetails,
-      },
-    });
-  };
+  const priceMismatch = useCallback(
+    (
+      products,
+      coupon,
+      paymentType,
+      mismatchedPrices,
+      mismatchedProductDetails,
+    ) => {
+      dispatch({
+        type: eventsSagaActions.PRICE_MISMATCH,
+        payload: {
+          products,
+          coupon,
+          paymentType,
+          mismatchedPrices,
+          mismatchedProductDetails,
+        },
+      });
+    },
+    [dispatch],
+  );
 
-  const shopByClicked = (payload) => {
-    dispatch({
-      type: eventsSagaActions.SHOP_BY_CLICK,
-      payload,
-    });
-  };
+  const shopByClicked = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.SHOP_BY_CLICK,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const blogClicked = (payload) => {
-    dispatch({
-      type: eventsSagaActions.BLOG_CLICK,
-      payload,
-    });
-  };
+  const blogClicked = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.BLOG_CLICK,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
   // const spinTheWheelPlayed = (payload) => {
   //   dispatch({
@@ -179,28 +224,34 @@ export const useEventsDispatch = () => {
   //   });
   // };
 
-  const handleProceedToCheckout = (source) => {
-    dispatch({
-      type: eventsSagaActions.PROCEED_TO_CHECKOUT,
-      payload: {
-        source: source || "BUYWOW",
-      },
-    });
-  };
+  const handleProceedToCheckout = useCallback(
+    (source) => {
+      dispatch({
+        type: eventsSagaActions.PROCEED_TO_CHECKOUT,
+        payload: {
+          source: source || "BUYWOW",
+        },
+      });
+    },
+    [dispatch],
+  );
 
-  const viewCart = () => {
+  const viewCart = useCallback(() => {
     dispatch({
       type: eventsSagaActions.VIEW_CART,
       payload: {},
     });
-  };
+  }, [dispatch]);
 
-  const addressAdded = (address, totalPrice, checkoutSource = "BUYWOW") => {
-    dispatch({
-      type: eventsSagaActions.ADDRESS_ADDED,
-      payload: { address, totalPrice, checkoutSource },
-    });
-  };
+  const addressAdded = useCallback(
+    (address, totalPrice, checkoutSource = "BUYWOW") => {
+      dispatch({
+        type: eventsSagaActions.ADDRESS_ADDED,
+        payload: { address, totalPrice, checkoutSource },
+      });
+    },
+    [dispatch],
+  );
 
   // You can add more dispatch functions here
   // For example:
@@ -211,32 +262,41 @@ export const useEventsDispatch = () => {
   //   });
   // };
 
-  const spinTheWheelPlayed = (payload) => {
-    dispatch({
-      type: eventsSagaActions.SPIN_THE_WHEEL_PLAYED,
-      payload,
-    });
-  };
+  const spinTheWheelPlayed = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.SPIN_THE_WHEEL_PLAYED,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const spinTheWheelReward = (payload) => {
-    dispatch({
-      type: eventsSagaActions.SPIN_THE_WHEEL_REWARD,
-      payload,
-    });
-  };
+  const spinTheWheelReward = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.SPIN_THE_WHEEL_REWARD,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const auth = (payload) => {
-    const { action, moe } = payload;
-    dispatch({
-      type: eventsSagaActions.AUTH,
-      payload: {
-        action,
-        userId: moe?.userId,
-        query: moe?.query,
-        phone: moe?.phone,
-      },
-    });
-  };
+  const auth = useCallback(
+    (payload) => {
+      const { action, moe } = payload;
+      dispatch({
+        type: eventsSagaActions.AUTH,
+        payload: {
+          action,
+          userId: moe?.userId,
+          query: moe?.query,
+          phone: moe?.phone,
+        },
+      });
+    },
+    [dispatch],
+  );
 
   return {
     viewItem,

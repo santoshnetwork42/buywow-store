@@ -1,27 +1,34 @@
 import { systemSagaActions } from "@/store/sagas/sagaActions/system.actions";
 import { rootActions } from "@/store/store";
+import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 export const useSystemDispatch = () => {
   const dispatch = useDispatch();
 
-  const updateMeta = (payload) => {
-    dispatch({
-      type: systemSagaActions.SET_META,
-      payload,
-    });
-  };
+  const updateMeta = useCallback(
+    (payload) => {
+      dispatch({
+        type: systemSagaActions.SET_META,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const setStore = (payload) => {
-    dispatch({
-      type: systemSagaActions.SET_STORE,
-      payload,
-    });
-  };
+  const setStore = useCallback(
+    (payload) => {
+      dispatch({
+        type: systemSagaActions.SET_STORE,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const destroySession = () => {
+  const destroySession = useCallback(() => {
     dispatch(rootActions.destroySession());
-  };
+  }, [dispatch]);
 
   return {
     updateMeta,

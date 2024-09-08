@@ -1,92 +1,123 @@
+import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 
 export const useCartDispatch = () => {
   const dispatch = useDispatch();
 
-  const addToCart = (product) => {
-    dispatch({
-      type: cartSagaActions.ADD_TO_CART,
-      payload: { product },
-    });
-  };
+  const addToCart = useCallback(
+    (product) => {
+      dispatch({
+        type: cartSagaActions.ADD_TO_CART,
+        payload: { product },
+      });
+    },
+    [dispatch],
+  );
 
-  const removeFromCart = (product) => {
-    dispatch({
-      type: cartSagaActions.REMOVE_FROM_CART,
-      payload: { product },
-    });
-  };
+  const removeFromCart = useCallback(
+    (product) => {
+      dispatch({
+        type: cartSagaActions.REMOVE_FROM_CART,
+        payload: { product },
+      });
+    },
+    [dispatch],
+  );
 
-  const updateCart = (data) => {
-    dispatch({
-      type: cartSagaActions.UPDATE_CART,
-      payload: { data },
-    });
-  };
+  const updateCart = useCallback(
+    (data) => {
+      dispatch({
+        type: cartSagaActions.UPDATE_CART,
+        payload: { data },
+      });
+    },
+    [dispatch],
+  );
 
-  const applyRewardPoint = (isRewardApplied) => {
-    dispatch({
-      type: cartSagaActions.APPLY_REWARD_POINT,
-      payload: { isRewardApplied },
-    });
-  };
+  const applyRewardPoint = useCallback(
+    (isRewardApplied) => {
+      dispatch({
+        type: cartSagaActions.APPLY_REWARD_POINT,
+        payload: { isRewardApplied },
+      });
+    },
+    [dispatch],
+  );
 
-  const applyCoupon = (coupon) => {
-    dispatch({
-      type: cartSagaActions.APPLY_COUPONS,
-      payload: { coupon },
-    });
-  };
+  const applyCoupon = useCallback(
+    (coupon) => {
+      dispatch({
+        type: cartSagaActions.APPLY_COUPONS,
+        payload: { coupon },
+      });
+    },
+    [dispatch],
+  );
 
-  const removeCoupon = () => {
+  const removeCoupon = useCallback(() => {
     dispatch({
       type: cartSagaActions.REMOVE_COUPON,
       payload: {},
     });
-  };
+  }, [dispatch]);
 
-  const emptyCart = () => {
+  const emptyCart = useCallback(() => {
     dispatch({
       type: cartSagaActions.EMPTY_CART,
       payload: {},
     });
-  };
+  }, [dispatch]);
 
-  const validateCart = (payload) => {
-    dispatch({
-      type: cartSagaActions.VALIDATE_CART,
-      payload,
-    });
-  };
+  const validateCart = useCallback(
+    (payload) => {
+      dispatch({
+        type: cartSagaActions.VALIDATE_CART,
+        payload,
+      });
+    },
+    [dispatch],
+  );
 
-  const updateCartId = (cartId) => {
-    dispatch({
-      type: cartSagaActions.UPDATE_CART_ID,
-      payload: { cartId },
-    });
-  };
+  const updateCartId = useCallback(
+    (cartId) => {
+      dispatch({
+        type: cartSagaActions.UPDATE_CART_ID,
+        payload: { cartId },
+      });
+    },
+    [dispatch],
+  );
 
-  const updateCartIdLoading = (isLoading) => {
-    dispatch({
-      type: cartSagaActions.UPDATE_CART_ID_LOADING,
-      payload: { isLoading },
-    });
-  };
+  const updateCartIdLoading = useCallback(
+    (isLoading) => {
+      dispatch({
+        type: cartSagaActions.UPDATE_CART_ID_LOADING,
+        payload: { isLoading },
+      });
+    },
+    [dispatch],
+  );
 
-  const storeCoupon = (couponCode) => {
-    dispatch({
-      type: cartSagaActions.STORE_COUPON,
-      payload: { couponCode },
-    });
-  };
+  const storeCoupon = useCallback(
+    (couponCode) => {
+      dispatch({
+        type: cartSagaActions.STORE_COUPON,
+        payload: { couponCode },
+      });
+    },
+    [dispatch],
+  );
 
-  const fetchAndAddProductsFromEncodedCart = (_cx) => {
-    dispatch({
-      type: cartSagaActions.FETCH_AND_ADD_PRODUCTS_FROM_ENCODED_CART,
-      payload: { _cx },
-    });
-  };
+  const fetchAndAddProductsFromEncodedCart = useCallback(
+    (_cx) => {
+      dispatch({
+        type: cartSagaActions.FETCH_AND_ADD_PRODUCTS_FROM_ENCODED_CART,
+        payload: { _cx },
+      });
+    },
+    [dispatch],
+  );
 
   return {
     addToCart,

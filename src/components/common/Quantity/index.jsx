@@ -1,9 +1,9 @@
 "use client";
 
+import { showToast } from "@/components/common/ToastComponent";
 import { Button, Text } from "@/components/elements";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { showToast } from "@/components/common/ToastComponent";
 
 const Quantity = ({
   max,
@@ -21,26 +21,31 @@ const Quantity = ({
     setCartQuantity(quantity || 1);
   }, [quantity]);
 
+  useEffect(() => {
+    onChangeQuantity &&
+      cartQuantity !== quantity &&
+      cartQuantity !== "" &&
+      onChangeQuantity(cartQuantity);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartQuantity]);
+
   const decreaseQuantity = () => {
-    if (quantity > 0) {
+    if (cartQuantity > 0) {
       const newQuantity =
-        quantity === minimumOrderQuantity ? 0 : parseInt(quantity) - 1;
+        cartQuantity === minimumOrderQuantity ? 0 : parseInt(cartQuantity) - 1;
       setCartQuantity(newQuantity);
-      onChangeQuantity(newQuantity);
     }
   };
 
   const increaseQuantity = () => {
-    if (!product?.isInventoryEnabled || quantity < max) {
-      if (quantity < maximumOrderQuantity) {
+    if (!product?.isInventoryEnabled || cartQuantity < max) {
+      if (cartQuantity < maximumOrderQuantity) {
         if (totalItemQuantity && totalItemQuantity >= maximumOrderQuantity) {
           showToast.error(
             `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
           );
         } else {
-          const newQuantity = quantity + 1;
-          setCartQuantity(newQuantity);
-          onChangeQuantity(newQuantity);
+          setCartQuantity(parseInt(cartQuantity) + 1);
         }
       } else {
         showToast.error(

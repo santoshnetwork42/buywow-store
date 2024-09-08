@@ -1,9 +1,9 @@
-import { all, fork, takeLatest } from "redux-saga/effects";
 import {
   setCartModalHandler,
   setPasswordLessModalHandler,
 } from "@/store/sagas/handlers/modal.handle";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
+import { all, fork, takeLatest } from "redux-saga/effects";
 
 function* setPasswordLessModal() {
   yield takeLatest(

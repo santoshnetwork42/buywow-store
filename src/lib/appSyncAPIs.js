@@ -100,9 +100,7 @@ export const getPageMetadataBySlugAPI = async (slugId, pageType) => {
       authMode: "apiKey",
       variables: {
         storeId: STORE_ID,
-        pageType,
         slug: slugId,
-        collectionDataLimit: 100,
       },
     });
 

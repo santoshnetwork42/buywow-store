@@ -1,16 +1,13 @@
 import { FreeIcon } from "@/assets/svg/icons";
 import { Heading } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import Link from "next/link";
 import React from "react";
 
-const ProductImage = ({
-  slug,
-  outOfStock,
-  imageKey,
-  handleCartClose,
-  isFreeProduct,
-}) => {
+const ProductImage = ({ slug, outOfStock, imageKey, isFreeProduct }) => {
+  const { handleCartVisibility } = useModalDispatch();
+
   return (
     <Link
       prefetch={false}
@@ -18,7 +15,7 @@ const ProductImage = ({
       className={`relative flex aspect-[66/88] h-fit w-20 shrink-0 overflow-visible rounded-lg bg-lime-50 md:w-24 ${
         outOfStock ? "cursor-auto" : ""
       }`}
-      onClick={outOfStock ? () => {} : handleCartClose}
+      onClick={outOfStock ? () => {} : () => handleCartVisibility(false)}
     >
       {!!isFreeProduct && (
         <div className="absolute left-0 top-0 z-10 size-8 -translate-x-1/4 -translate-y-1/4 sm:size-9 md:size-10">

@@ -244,7 +244,6 @@ const CartDrawer = ({ upsellProducts }) => {
               <MainCartSection
                 cartItems={cartItems}
                 inventoryMapping={inventoryMapping}
-                handleCartClose={handleCartClose}
                 upsellProducts={upsellProducts}
               />
               <LoyaltyCash

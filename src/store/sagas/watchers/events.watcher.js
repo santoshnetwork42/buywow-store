@@ -27,10 +27,10 @@ import {
 } from "@/store/sagas/handlers/events.handle";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
-import { all, fork, takeEvery, takeLatest } from "redux-saga/effects";
+import { all, fork, takeLatest } from "redux-saga/effects";
 
 function* outOfStock() {
-  yield takeEvery(eventsSagaActions.OUT_OF_STOCK, outOfStockEventHandler);
+  yield takeLatest(eventsSagaActions.OUT_OF_STOCK, outOfStockEventHandler);
 }
 
 function* search() {
@@ -66,7 +66,7 @@ function* removeFromCartEvent() {
 }
 
 function* viewItem() {
-  yield takeEvery(eventsSagaActions.VIEW_ITEM, viewItemEventHandler);
+  yield takeLatest(eventsSagaActions.VIEW_ITEM, viewItemEventHandler);
 }
 
 function* placeOrder() {
