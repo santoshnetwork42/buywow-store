@@ -30,7 +30,7 @@ export default function BlogHeaderClient({ menu, categoryBlogs }) {
               <Link
                 prefetch={false}
                 className="flex cursor-pointer items-center gap-x-1 py-2"
-                href={`/blog/${item.path}`}
+                href={`/blog${item.path}`}
               >
                 {item.label}
                 {item.path.includes("category") && <DownArrowIconSVG />}
