@@ -48,10 +48,6 @@ export default async function BlogsByAuthor({ params }) {
     first: 9,
   });
 
-  if (!blogs || blogs.length === 0) {
-    await handleRedirect(`/blog/author/${slug}`);
-  }
-
   const featuredBlogs = await fetchFeaturedBlogs(5);
 
   return (

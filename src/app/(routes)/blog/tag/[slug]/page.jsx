@@ -21,10 +21,6 @@ export default async function BlogsByTag({ params }) {
     tags: [slug],
   });
 
-  if (!blogs || blogs.length === 0) {
-    return await handleRedirect(`/blog/tag/${slug}`);
-  }
-
   const featuredBlogs = await fetchFeaturedBlogs(5);
 
   return (

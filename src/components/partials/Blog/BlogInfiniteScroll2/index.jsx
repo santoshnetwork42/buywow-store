@@ -5,6 +5,7 @@ import { getBlogs } from "@/graphql/api";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import BlogCard3 from "@/components/partials/Blog/BlogCard3";
+import { Text } from "@/components/elements";
 
 export default function BlogInfiniteScroll2({
   blogsData,
@@ -13,7 +14,7 @@ export default function BlogInfiniteScroll2({
   tags = [],
   author = "",
 }) {
-  const [blogs, setBlog] = useState(blogsData);
+  const [blogs, setBlog] = useState(blogsData || []);
   const [pageInfo, setPageInfo] = useState(pageInfoData);
 
   async function loadMore(fetchMore = false, after = "") {
@@ -52,6 +53,10 @@ export default function BlogInfiniteScroll2({
     }
   }
 
+  if (!blogs?.length) {
+    return <Text size="sm">No blogs were found matching your selection.</Text>;
+  }
+
   return (
     <InfiniteScroll
       dataLength={blogs?.length || 0}
@@ -66,11 +71,9 @@ export default function BlogInfiniteScroll2({
       }
     >
       <div className="grid gap-4">
-        {blogs &&
-          blogs.length > 0 &&
-          blogs.map((blog) => (
-            <BlogCard3 key={blog.node.id} blog={blog.node} />
-          ))}
+        {blogs.map((blog) => (
+          <BlogCard3 key={blog.node.id} blog={blog.node} />
+        ))}
       </div>
     </InfiniteScroll>
   );

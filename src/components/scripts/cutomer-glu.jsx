@@ -78,7 +78,7 @@
 //               customAttributes: {}      //add all your custom user properties here (key-value pair)
 //             },
 //             onLoadError: function () {  //error handling function if SDK fails to load
-//               console.log("error");
+//               console.error("error");
 //             }
 //           }`,
 //         }}

@@ -52,7 +52,6 @@ function GoKwikProvider({ children }) {
   } = useEventsDispatch();
 
   const setRewardPoints = useCallback(async () => {
-    console.log("set reward points of user");
     try {
       if (isRewardApplied)
         setUserWithRewardPoints({
@@ -63,16 +62,14 @@ function GoKwikProvider({ children }) {
           ),
         });
     } catch (e) {
-      console.log("Error while upadating user points ");
+      console.error("Error while upadating user points ");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userWithRewardPoints, setUserWithRewardPoints]);
 
   const applyCouponCode = useCallback(
     async (couponCode, autoApplied = false) => {
-      console.log("couponCode", couponCode);
       const response = await applyCouponAPI(code);
-      console.log("response", response);
       if (!response?.data?.applyCoupon) {
         console.error("Coupon not found");
       }
@@ -90,7 +87,6 @@ function GoKwikProvider({ children }) {
             autoApplied: !!autoApplied,
             checkoutSource: "GOKWIK",
           });
-          console.info("Applied coupon:", response);
         } else {
           console.error("Failed to apply coupon:", message);
         }
@@ -114,7 +110,6 @@ function GoKwikProvider({ children }) {
     });
 
     removeCoupon();
-    console.info("Removed coupon");
   };
 
   const fetchOrder = async (orderId) => {
@@ -231,7 +226,6 @@ function GoKwikProvider({ children }) {
       });
 
       gokwikSdk.on("coupon-applied", (data) => {
-        console.log("coupon-applied>>>", data);
         if (data.coupon_code) applyCouponCode(data.coupon_code);
       });
 
@@ -240,37 +234,31 @@ function GoKwikProvider({ children }) {
       });
 
       gokwikSdk.on("coupon-removed", (data) => {
-        console.log("coupon-removed>>>", data);
         if (data.coupon_code) onCouponRemove();
       });
 
       gokwikSdk.on("address-add", (address) => {
-        console.log("address-add>>>", address);
         const formattedAddress = formatUserAddress(address);
         addressAdded(formattedAddress, totalPrice, "GOKWIK");
         addressSelected(formattedAddress, totalPrice, "GOKWIK");
       });
 
       gokwikSdk.on("address-selected", (address) => {
-        console.log("address-selected>>>", address);
         const formattedAddress = formatUserAddress(address);
         addressSelected(formattedAddress, totalPrice, "GOKWIK");
       });
 
       gokwikSdk.on("payment-method-selected", (payment) => {
-        console.log("payment>>>", payment);
         const checkoutSource = "GOKWIK";
         addPaymentInfo(checkoutSource);
       });
 
       gokwikSdk.on("checkout-initiation-failure", (checkout) => {
-        console.log("checkout-initiation-failure>>>", checkout);
         gokwikSdk.close();
         router.push("/checkout");
       });
 
       gokwikSdk.on("user-login-successful", async (event) => {
-        console.log("user-login-successful>>>", event);
         startCheckout("GOKWIK", event);
         await manageUserAuthEvent(event.phone_no, event.user_token);
       });

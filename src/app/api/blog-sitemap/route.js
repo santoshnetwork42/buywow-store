@@ -62,7 +62,7 @@ export async function GET() {
       },
     });
   } catch (error) {
-    console.log("Error fetching data:", error);
+    console.error("Error fetching data:", error);
     return new NextResponse(
       JSON.stringify({ message: "Internal Server Error" }),
       {

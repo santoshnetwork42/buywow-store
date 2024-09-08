@@ -346,8 +346,6 @@ export const trackClickStream = async (payload) => {
     if (!response?.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    console.log("Clickstream event tracked successfully");
   } catch (error) {
     console.error("Failed to track clickstream event:", error);
   }

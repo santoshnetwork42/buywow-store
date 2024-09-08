@@ -8,7 +8,6 @@ import BlogCard2 from "@/components/partials/Blog/BlogCard2";
 
 export default function BlogHeaderClient({ menu, categoryBlogs }) {
   const source = useSource();
-  console.log("menu :>> ", menu);
   return (
     <header className="container-main flex flex-col gap-y-6 border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
       <div className="grid w-full grid-cols-[1fr,auto,1fr] items-center justify-center gap-x-4">

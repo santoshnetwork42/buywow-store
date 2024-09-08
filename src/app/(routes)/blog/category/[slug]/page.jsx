@@ -25,10 +25,6 @@ export default async function BlogsByCategory({ params }) {
     first: 9,
   });
 
-  if (!blogs || blogs.length === 0) {
-    return await handleRedirect(`/blog/category/${slug}`);
-  }
-
   const featuredBlogs = await fetchFeaturedBlogs(5);
 
   return (

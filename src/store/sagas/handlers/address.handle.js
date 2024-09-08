@@ -19,7 +19,7 @@ export function* updateCurrentAddressHandler(action) {
     const address = action.payload;
     yield put(updateCurrentAddress(address));
   } catch (error) {
-    console.log("error updating current address", error);
+    console.error("error updating current address", error);
   }
 }
 
@@ -73,7 +73,7 @@ export function* createAddressHandler(action) {
     const { addressList = [] } = yield select((state) => state.address);
     yield put(updateAddressList([...addressList, newAddress]));
   } catch (error) {
-    console.log("error creating address", error);
+    console.error("error creating address", error);
   } finally {
     yield put(updateAddressLoading(false));
   }
@@ -134,7 +134,7 @@ export function* editAddressHandler(action) {
 
     yield put(updateAddressList(updatedAddressList));
   } catch (error) {
-    console.log("error editing address", error);
+    console.error("error editing address", error);
   } finally {
     yield put(updateAddressLoading(false));
   }
@@ -165,7 +165,7 @@ export function* getAddressListHandler(action) {
       }
     }
   } catch (error) {
-    console.log("error getting address", error);
+    console.error("error getting address", error);
   } finally {
     yield put(updateInitialLoading(false));
   }
@@ -213,7 +213,7 @@ export function* deleteAddressHandler(action) {
       }
     }
   } catch (error) {
-    console.log("Error deleting address", error);
+    console.error("Error deleting address", error);
     // yield put(deleteAddressFailure(error));
   } finally {
     yield put(updateAddressLoading(false));

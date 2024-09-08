@@ -144,17 +144,15 @@ export const fetchBlog = async (slug) => {
       }),
     });
 
-    console.log(res);
     const data = await res.json();
 
     if (!res.ok) {
       throw new Error("Failed to fetch data");
     }
 
-    console.log(JSON.stringify(data));
     return data?.data?.post || {};
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return false;
   }
 };

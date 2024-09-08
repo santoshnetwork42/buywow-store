@@ -36,7 +36,7 @@ export default function PaymentSummary({
         handlePasswordLessModal(true, true, "/checkout");
       }
     } catch (error) {
-      console.log("error :>> ", error);
+      console.error("error :>> ", error);
     }
   };
 
