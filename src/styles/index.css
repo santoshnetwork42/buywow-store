@@ -85,6 +85,16 @@ span.ripple {
 }
 
 /* Info section */
+.info-section h1,
+.info-section h2,
+.info-section h3,
+.info-section h4,
+.info-section h5,
+.info-section h6,
+.info-section p {
+  margin: 0 0 20px;
+}
+
 .info-section p,
 .info-section li {
   font-weight: 300;
@@ -113,6 +123,21 @@ span.ripple {
   height: 4px;
   background-color: black;
   border-radius: 50%;
+}
+
+.info-section h3 {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  margin: 0 0 10px;
+}
+
+.info-section p strong {
+  font-weight: bolder !important;
+  font-weight: bold;
+}
+
+.info-section p {
+  line-height: 1.6;
 }
 
 @keyframes shake {

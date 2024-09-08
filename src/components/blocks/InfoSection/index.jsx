@@ -1,7 +1,7 @@
 import { Text } from "@/components/elements";
 
 const InfoSection = ({ information }) => (
-  <div className="container-main mb-main flex">
+  <div className="container-main mb-main mt-2 flex">
     <Text
       size="xl"
       as="p"
