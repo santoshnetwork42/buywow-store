@@ -18,7 +18,7 @@ export default function BlogCard4({ blog, index }) {
   };
 
   return (
-    <Link href={`/blog/${blog.slug}`} onClick={handleClick}>
+    <Link prefetch={false} href={`/blog/${blog.slug}`} onClick={handleClick}>
       <div className="flex h-full flex-col rounded-xl">
         <div className="relative aspect-[328/212] w-[328px] md:aspect-[434/228] md:w-[434px]">
           <Img

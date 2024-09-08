@@ -46,6 +46,7 @@ export default async function BlogSection({
         </Suspense>
       </div>
       <Link
+        prefetch={false}
         href="/blog"
         className="mt-4 rounded-[24px] bg-yellow-900 px-4 py-2 text-center md:mt-5 md:px-5 md:py-3"
         aria-label="Read more blog articles"
