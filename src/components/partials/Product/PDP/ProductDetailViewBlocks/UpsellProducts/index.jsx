@@ -70,7 +70,7 @@ const UpsellProduct = React.memo(({ product, text, subText }) => {
                 </Text>
               )}
             </div>
-            {discount && (
+            {discount > 0 && (
               <div className="flex h-6 min-w-[62px] items-center justify-center rounded-full bg-lime-50 px-2 text-xs capitalize">
                 {discount}% OFF
               </div>
@@ -184,7 +184,7 @@ const UpsellProducts = ({
         responsive
       >
         <span>{title}</span>
-        {timeLeft && (
+        {!!timeLeft && (
           <span className="ml-0.5 text-sm font-bold text-yellow-900 lg:text-base">
             {" "}
             {timeLeft}

@@ -1,5 +1,11 @@
 import { STORE_ID, STORE_PREFIX } from "@/config";
 import { fetchProductDetailsAPI } from "@/lib/appSyncAPIs";
+import { setCartModalHandler } from "@/store/sagas/handlers/modal.handle";
+import {
+  createShoppingCartAPI,
+  manageShoppingCartAPI,
+} from "@/store/sagas/requests/cart.request";
+import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import {
   emptyCart,
   setCart,
@@ -18,12 +24,6 @@ import {
 } from "@/utils/helpers";
 import { getCouponDiscount } from "@wow-star/utils";
 import { all, call, put, select } from "redux-saga/effects";
-import {
-  createShoppingCartAPI,
-  manageShoppingCartAPI,
-} from "@/store/sagas/requests/cart.request";
-import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
-import { setCartModalHandler } from "@/store/sagas/handlers/modal.handle";
 
 export function* addToCartHandler(action) {
   try {
