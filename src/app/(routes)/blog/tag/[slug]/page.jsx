@@ -13,11 +13,6 @@ export async function generateStaticParams() {
   }
 
   const tags = await fetchTags();
-
-  if (!tags || tags.length === 0) {
-    return [];
-  }
-
   return tags.map((tag) => ({
     slug: tag.slug,
   }));
@@ -30,10 +25,6 @@ export default async function BlogsByTag({ params }) {
     first: 9,
     tags: [slug],
   });
-
-  if (!blogs || blogs.length === 0) {
-    return await handleRedirect(`/blog/tag/${slug}`);
-  }
 
   const featuredBlogs = await fetchFeaturedBlogs(5);
 

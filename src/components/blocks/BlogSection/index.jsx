@@ -92,7 +92,7 @@ const BlogSection = ({ title = "Explore Blogs", buttonText = "Read More" }) => {
           setFeaturedBlogs(blogData.data.posts.nodes);
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     fetchFeaturedBlogs();

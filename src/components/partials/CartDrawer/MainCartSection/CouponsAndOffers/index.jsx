@@ -65,7 +65,7 @@ const CouponsAndOffers = () => {
           !autoApplied && setError(message);
         }
       } catch (error) {
-        console.log("Coupon not found", error);
+        console.error("Coupon not found", error);
         !autoApplied && setError("Coupon not found");
       } finally {
         setCouponCode("");

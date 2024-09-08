@@ -7,7 +7,11 @@ import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 import { replaceBlogLinks } from "@/lib/replaceBlogLinks";
-import { fetchBlog, fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
+import {
+  fetchAllBlogSlugs,
+  fetchBlog,
+  fetchFeaturedBlogs,
+} from "@/lib/wordPressAPIs";
 import handleRedirect from "@/utils/handleRedirect";
 import dayjs from "dayjs";
 import Image from "next/image";
@@ -36,13 +40,7 @@ export async function generateStaticParams() {
   if (!PREBUILD_ALL_PAGES) {
     return [];
   }
-
-  const { blogs } = await fetchBlogs({});
-
-  if (!blogs?.length) {
-    return [];
-  }
-
+  const { blogs } = await fetchAllBlogSlugs({});
   return blogs.map((blog) => ({
     slug: blog?.node?.slug,
   }));
@@ -51,8 +49,6 @@ export async function generateStaticParams() {
 export default async function ReadBlog({ params }) {
   const { slug } = params;
   const blog = await fetchBlog(slug);
-
-  console.log(blog);
 
   if (!blog) {
     return await handleRedirect(`/blog/${slug}`);

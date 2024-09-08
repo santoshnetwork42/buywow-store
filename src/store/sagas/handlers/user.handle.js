@@ -12,7 +12,7 @@ export function* setUserHandler(action) {
     yield put(setUser(user));
     yield put({ type: cartSagaActions.MANAGE_CART });
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 }
 
@@ -21,7 +21,7 @@ export function* setCustomUserHandler(action) {
   try {
     yield put(setCustomUser({ phone }));
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 }
 
@@ -30,6 +30,6 @@ export function* setIsLoggedinViaGokwikHandler(action) {
     yield put(setIsLoggedinViaGokwik(action.payload));
     yield put({ type: cartSagaActions.MANAGE_CART });
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 }

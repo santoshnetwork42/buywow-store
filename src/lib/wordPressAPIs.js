@@ -1,4 +1,5 @@
 import {
+  getAllBlogSlugs,
   getAuthor,
   getAuthors,
   getBlog,
@@ -39,27 +40,61 @@ export const fetchFeaturedBlogs = async (first = 3) => {
   }
 };
 
-export const fetchBlogs = async (
-  filters = {
-    category,
-    tags,
-    author,
-    first,
-    last,
-    after,
-    before,
-  },
-) => {
+export const fetchAllBlogSlugs = async (filters = {}) => {
   try {
     const variables = {};
+    if (filters?.category) variables.category = filters.category;
+    if (filters?.tags && filters.tags.length > 0) variables.tags = filters.tags;
+    if (filters?.first) variables.first = filters.first;
+    if (filters?.last) variables.last = filters.last;
+    if (filters?.after) variables.after = filters.after;
+    if (filters?.before) variables.before = filters.before;
+    if (filters?.author) variables.author = filters.author;
 
-    if (filters.category) variables.category = filters.category;
-    if (filters.tags && filters.tags.length > 0) variables.tags = filters.tags;
-    if (filters.first) variables.first = filters.first;
-    if (filters.last) variables.last = filters.last;
-    if (filters.after) variables.after = filters.after;
-    if (filters.before) variables.before = filters.before;
-    if (filters.author) variables.author = filters.author;
+    const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: wordpressAuth,
+      },
+      body: JSON.stringify({
+        query: getAllBlogSlugs,
+        variables: variables,
+      }),
+    });
+
+    const blogData = await res.json();
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch data");
+    }
+
+    return {
+      blogs: blogData?.data?.posts?.edges || [],
+      pageInfo: blogData?.data?.posts?.pageInfo,
+    };
+  } catch (error) {
+    console.error(JSON.stringify(error));
+    return {
+      blogs: [],
+      pageInfo: {
+        hasNextPage: false,
+        endCursor: null,
+      },
+    };
+  }
+};
+
+export const fetchBlogs = async (filters = {}) => {
+  try {
+    const variables = {};
+    if (filters?.category) variables.category = filters.category;
+    if (filters?.tags && filters.tags.length > 0) variables.tags = filters.tags;
+    if (filters?.first) variables.first = filters.first;
+    if (filters?.last) variables.last = filters.last;
+    if (filters?.after) variables.after = filters.after;
+    if (filters?.before) variables.before = filters.before;
+    if (filters?.author) variables.author = filters.author;
 
     const res = await fetch(process.env.NEXT_PUBLIC_WP_URL, {
       method: "POST",
@@ -115,10 +150,9 @@ export const fetchBlog = async (slug) => {
       throw new Error("Failed to fetch data");
     }
 
-    console.log(JSON.stringify(data));
-    return data?.data?.post || {};
+    return data?.data?.post;
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return false;
   }
 };

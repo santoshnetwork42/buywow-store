@@ -156,7 +156,7 @@ const Header = ({ data }) => {
       }
     } catch (error) {
       handlePasswordLessModal(true, false, null);
-      console.log("Something went wrong", error);
+      console.error("Something went wrong", error);
     }
   };
 

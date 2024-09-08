@@ -146,7 +146,7 @@ const renderBlock = ({ block, pageType, slug }) => {
 
 export default async function PageBlock({ pageType, slug }) {
   const pageData = await getPageBySlugAPI(slug);
-  const { blocks, slug: fetchedSlug, type: fetchedPageType } = pageData || {};
+  const { blocks, slug: fetchedSlug, type: fetchedPageType } = pageData;
 
   if (!fetchedSlug) {
     return handleRedirect(`/${pageType}/${slug}`);

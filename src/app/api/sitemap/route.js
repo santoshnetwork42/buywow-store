@@ -67,7 +67,7 @@ export async function GET(req, res) {
       },
     });
   } catch (error) {
-    console.log("Error fetching data:", error);
+    console.error("Error fetching data:", error);
     return new NextResponse(
       JSON.stringify({ message: "Error fetching data" }),
       {

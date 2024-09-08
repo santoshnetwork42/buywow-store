@@ -12,11 +12,6 @@ export const revalidate = 86400;
 
 export async function generateStaticParams() {
   const categories = await fetchCategories();
-
-  if (!categories || categories.length === 0) {
-    return [];
-  }
-
   return categories.map((category) => ({
     slug: category.slug,
   }));
@@ -29,10 +24,6 @@ export default async function BlogsByCategory({ params }) {
     category: slug,
     first: 9,
   });
-
-  if (!blogs || blogs.length === 0) {
-    return await handleRedirect(`/blog/category/${slug}`);
-  }
 
   const featuredBlogs = await fetchFeaturedBlogs(5);
 

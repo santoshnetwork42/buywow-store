@@ -47,8 +47,8 @@ const ExamplePage = () => {
         suffix={<span className="ml-2">Suffix</span>}
         error="This is an error message"
         onChange={(e) => setValue(e.target.value)}
-        onBlur={() => console.log("Input blurred")}
-        onFocus={() => console.log("Input focused")}
+        onBlur={() => {}}
+        onFocus={() => {}}
         required={true}
         ref={inputRef}
       />

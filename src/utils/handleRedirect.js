@@ -23,7 +23,7 @@ const handleRedirect = async (path) => {
     await createRedirectsAPI(path);
   }
 
-  console.log("not found: ", path);
+  console.error("not found: ", path);
 
   notFound();
 };

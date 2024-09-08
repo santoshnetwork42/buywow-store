@@ -1,18 +1,35 @@
 "use client";
 
-import { DownArrowIconSVG } from "@/assets/svg/icons";
+import { DownArrowIconSVG, MenuSVG } from "@/assets/svg/icons";
+import { Button } from "@/components/elements";
+import BlogCard2 from "@/components/partials/Blog/BlogCard2";
 import { useSource } from "@/utils/context/navbar";
 import Image from "next/image";
 import Link from "next/link";
-import BlogCard2 from "@/components/partials/Blog/BlogCard2";
+import { useState } from "react";
+import BlogMobileMenu from "../BlogMobileMenu";
 
 export default function BlogHeaderClient({ menu, categoryBlogs }) {
   const source = useSource();
+  const [isBlogMobileMenuOpen, setIsBlogMobileMenuOpen] = useState(false);
+
+  const openBlogMobileMenu = () => setIsBlogMobileMenuOpen(true);
+  const closeBlogMobileMenu = () => setIsBlogMobileMenuOpen(false);
+
   console.log("menu :>> ", menu);
   return (
     <header className="container-main flex flex-col gap-y-6 border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
       <div className="grid w-full grid-cols-[1fr,auto,1fr] items-center justify-center gap-x-4">
-        <div></div>
+        <div>
+          <Button
+            size="none"
+            variant="none"
+            className="mt-2 flex-1 lg:hidden"
+            onClick={openBlogMobileMenu}
+          >
+            <MenuSVG height={24} width={24} fillColor="#000000ff" />
+          </Button>
+        </div>
         <Link prefetch={false} href={source === "app" ? "/blog" : "/"}>
           <Image
             src="/images/img_wow_logo.png"
@@ -50,6 +67,12 @@ export default function BlogHeaderClient({ menu, categoryBlogs }) {
             ))}
         </nav>
       )}
+
+      <BlogMobileMenu
+        isOpen={isBlogMobileMenuOpen}
+        onClose={closeBlogMobileMenu}
+        menus={menu}
+      />
     </header>
   );
 }

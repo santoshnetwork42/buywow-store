@@ -12,7 +12,11 @@ export const metadata = {
 async function getInitialSearchData() {
   try {
     const initialSearchData = await getPageBySlugAPI("search");
-    return initialSearchData?.blocks[0]?.products?.data || [];
+    return (
+      (initialSearchData?.blocks &&
+        initialSearchData?.blocks[0]?.products?.data) ||
+      []
+    );
   } catch (error) {
     console.error("Error fetching initial search data:", error);
     return [];

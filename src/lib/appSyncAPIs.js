@@ -90,10 +90,10 @@ export const getPageBySlugAPI = async (slugId) => {
     collectionDataLimit: 100,
   });
 
-  return JSON.parse(data?.getPageBySlug || "{}");
+  return JSON.parse(data?.getPageBySlug);
 };
 
-export const getPageMetadataBySlugAPI = async (slugId, pageType) => {
+export const getPageMetadataBySlugAPI = async (slugId) => {
   try {
     const response = await client.graphql({
       query: getPageMetadataBySlug,

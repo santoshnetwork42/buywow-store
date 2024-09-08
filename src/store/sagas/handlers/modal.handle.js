@@ -8,7 +8,7 @@ export function* setPasswordLessModalHandler(action) {
       setPasswordLessModal({ isPasswordLessOpen, customLogin, redirectTo }),
     );
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 }
 
@@ -17,6 +17,6 @@ export function* setCartModalHandler(action) {
     const { isCartOpen } = action.payload;
     yield put(setCartModal({ isCartOpen }));
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 }

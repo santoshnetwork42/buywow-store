@@ -30,7 +30,7 @@ export function* createAwsAccountHandler(action) {
       yield put(setConfirmationStatus("UNCONFIRMED_SIGNUP"));
     }
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
     showToast.error(error.message);
   } finally {
     yield put(setAuthLoading(false));
@@ -171,7 +171,7 @@ export function* setConfirmationStatusHandler(action) {
   try {
     yield put(setConfirmationStatus(action.payload));
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 }
 
@@ -196,7 +196,7 @@ export function* signOutHandler() {
     );
     yield put(setCustomUser({ phone: null }));
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 }
 
@@ -204,6 +204,6 @@ export function* authLoaderHandler(action) {
   try {
     yield put(setAuthLoading(action.payload));
   } catch (error) {
-    console.log("error", error);
+    console.error("error", error);
   }
 }

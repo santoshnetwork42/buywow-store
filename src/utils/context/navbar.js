@@ -20,7 +20,7 @@ async function fetchInitialData() {
   return response.json();
 }
 
-function NavbarProvider({ children }) {
+function NavbarProvider({ children, headerData }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
@@ -80,6 +80,7 @@ function NavbarProvider({ children }) {
   const contextValue = {
     isInteractive,
     source,
+    headerData,
   };
 
   return (
@@ -113,6 +114,10 @@ function NavbarProvider({ children }) {
     </Navbar>
   );
 }
+
+export const useNavbar = () => {
+  return useContext(NavbarContext);
+};
 
 export const useSource = () => {
   const { source } = useContext(NavbarContext);

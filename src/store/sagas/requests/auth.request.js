@@ -78,7 +78,7 @@ export const confirmSignInRequest = async ({ confirmationCode }) => {
 
     return res;
   } catch (error) {
-    console.log("error :>> ", error);
+    console.error("error :>> ", error);
     throw error;
   }
 };
