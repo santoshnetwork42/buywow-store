@@ -64,7 +64,7 @@ async function RootLayout({ children }) {
       </head>
       <body>
         <Provider data={{ headerData, carouselData }}>
-          <NavbarProvider>
+          <NavbarProvider headerData={headerData}>
             <GoKwikProvider>
               <AnnouncementProvider>
                 <ClientSideEffects />

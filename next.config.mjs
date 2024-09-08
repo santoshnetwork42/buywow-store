@@ -185,12 +185,6 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: process.env.NEXT_PUBLIC_MEDIA_BASE_URL,
-        port: "",
-        pathname: "/public/wow-cms/**",
-      },
-      {
         protocol: "http",
         hostname: "localhost",
         port: "3000",

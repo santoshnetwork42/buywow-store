@@ -16,6 +16,7 @@ import handleRedirect from "@/utils/handleRedirect";
 import dayjs from "dayjs";
 import Image from "next/image";
 import Link from "next/link";
+import { PREBUILD_ALL_PAGES } from "@/config";
 
 export const revalidate = 86400;
 
@@ -36,6 +37,9 @@ export async function generateMetadata({ params }) {
 }
 
 export async function generateStaticParams() {
+  if (!PREBUILD_ALL_PAGES) {
+    return [];
+  }
   const { blogs } = await fetchAllBlogSlugs({});
   return blogs.map((blog) => ({
     slug: blog?.node?.slug,
