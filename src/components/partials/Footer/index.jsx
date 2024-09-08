@@ -16,7 +16,7 @@ const SocialLink = React.memo(({ item, index }) => {
     <Link
       prefetch={false}
       key={item.id || index}
-      href={item.link || "#"}
+      href={item?.link || "#"}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -186,7 +186,7 @@ const Footer = ({ data, ...props }) => {
               <Link
                 prefetch={false}
                 key={`footer-menu-link-${index}`}
-                href={item?.slug || item?.link}
+                href={item?.slug || item?.link || "#"}
               >
                 <Heading
                   as="h5"

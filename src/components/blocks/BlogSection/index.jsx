@@ -26,6 +26,7 @@ const BlogCard = ({
   index,
 }) => {
   const { blogClicked } = useEventsDispatch();
+
   return (
     <Link
       prefetch={false}
