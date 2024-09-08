@@ -33,3 +33,4 @@ export const TTM_CLIENT_URL = process.env.NEXT_PUBLIC_TTM_CLIENT_URL;
 export const TTM_CLIENT_API_KEY = process.env.NEXT_PUBLIC_TTM_CLIENT_API_KEY;
 export const TTM_CLIENT_THRESHOLD =
   process.env.NEXT_PUBLIC_TTM_CLIENT_THRESHOLD;
+export const PREBUILD_ALL_PAGES = process.env.NEXT_PREBUILD_ALL_PAGES

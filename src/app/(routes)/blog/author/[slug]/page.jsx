@@ -2,6 +2,7 @@ import BlogAuthor from "@/components/partials/Blog/BlogAuthor";
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
+import { PREBUILD_ALL_PAGES } from "@/config";
 import {
   fetchAuthor,
   fetchAuthors,
@@ -13,6 +14,10 @@ import handleRedirect from "@/utils/handleRedirect";
 export const revalidate = 86400;
 
 export async function generateStaticParams() {
+  if (!PREBUILD_ALL_PAGES) {
+    return [];
+  }
+
   const authors = await fetchAuthors();
 
   if (!authors || authors.length === 0) {

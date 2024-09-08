@@ -1,4 +1,5 @@
 import PageBlock from "@/components/page";
+import { PREBUILD_ALL_PAGES } from "@/config";
 import {
   getCMSPagesAPI,
   getPageBySlugAPI,
@@ -45,6 +46,9 @@ export async function generateMetadata({ params }) {
 }
 
 export async function generateStaticParams() {
+  if (!PREBUILD_ALL_PAGES) {
+    return [];
+  }
   const pages = await getCMSPagesAPI("collection");
   return pages.map((slug) => ({ slug }));
 }
