@@ -17,7 +17,7 @@ import React, {
 } from "react";
 
 const CarouselImage = React.memo(
-  ({ webImage, mWebImage, link, index, moeText }) => {
+  ({ webImage, mWebImage, link, index, moeText, isInteractive }) => {
     const webImageAttrs = extractAttributes(webImage);
     const mWebImageAttrs = extractAttributes(mWebImage);
 
@@ -32,12 +32,12 @@ const CarouselImage = React.memo(
     const source = getSource();
 
     useEffect(() => {
-      if (!eventTriggered.current) {
+      if (!eventTriggered.current && isInteractive) {
         homeViewed();
         eventTriggered.current = true;
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isInteractive]);
 
     if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
@@ -130,10 +130,11 @@ const Carousel = ({
           key={`carousel-image-${index}`}
           {...banner}
           index={index}
+          isInteractive={isInteractive}
         />
       )),
 
-    [banners],
+    [banners, isInteractive],
   );
 
   const dotButtons = useMemo(
@@ -163,7 +164,13 @@ const Carousel = ({
         </>
       ) : (
         <div className="overflow-hidden">
-          {<CarouselImage {...banners[0]} index={0} />}
+          {
+            <CarouselImage
+              {...banners[0]}
+              index={0}
+              isInteractive={isInteractive}
+            />
+          }
         </div>
       )}
     </div>
