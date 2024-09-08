@@ -3,11 +3,11 @@
 import { DownArrowIconSVG, MenuSVG } from "@/assets/svg/icons";
 import { Button } from "@/components/elements";
 import BlogCard2 from "@/components/partials/Blog/BlogCard2";
+import BlogMobileMenu from "@/components/partials/Blog/BlogHeader/BlogMobileMenu";
 import { useSource } from "@/utils/context/navbar";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import BlogMobileMenu from "../BlogMobileMenu";
 
 export default function BlogHeaderClient({ menu, categoryBlogs }) {
   const source = useSource();
