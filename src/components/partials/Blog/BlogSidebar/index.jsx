@@ -60,7 +60,7 @@ export default function BlogSidebar({ featuredBlogs = [], tags = [] }) {
                   <Link
                     prefetch={false}
                     href={`/blog/tag/${tag.slug}`}
-                    key={tag.id}
+                    key={tag.slug}
                     className="border border-yellow-900 px-2 py-1 text-sm text-yellow-900"
                   >
                     {tag.name}
