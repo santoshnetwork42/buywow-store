@@ -2,11 +2,7 @@
 const nextConfig = {
   reactStrictMode: false,
   async rewrites() {
-    const payload = [
-      { source: "/robots.txt", destination: "/api/robots" },
-      { source: "/sitemap.xml", destination: "/api/sitemap" },
-      { source: "/blog/sitemap.xml", destination: "/api/blog-sitemap" },
-    ];
+    const payload = [];
     return payload;
   },
 
