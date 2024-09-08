@@ -151,18 +151,6 @@ const nextConfig = {
       },
     ],
   },
-
-  i18n: {
-    locales: ["en"],
-    defaultLocale: "en",
-  },
-
-  experimental: {
-    staleTimes: {
-      dynamic: 0,
-      static: 180,
-    },
-  },
 };
 
 export default nextConfig;
