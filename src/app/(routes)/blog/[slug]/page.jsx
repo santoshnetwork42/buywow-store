@@ -35,6 +35,8 @@ export async function generateMetadata({ params }) {
   }
 }
 
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   const { blogs } = await fetchAllBlogSlugs({});
   return blogs.map((blog) => ({
