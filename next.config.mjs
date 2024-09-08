@@ -133,51 +133,6 @@ const nextConfig = {
     return allRedirects;
   },
 
-  // async headers() {
-  //   return [
-  //     {
-  //       source:
-  //         "/products/apple-cider-vinegar-foaming-face-wash-with-built-in-brush",
-  //       headers: [
-  //         {
-  //           key: "Cache-Control",
-  //           value: "s-maxage=80, stale-while-revalidate=80",
-  //         },
-  //         {
-  //           key: "Vercel-CDN-Cache-Control",
-  //           value: "s-maxage=80, stale-while-revalidate=80",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       source:
-  //         "/products/brightening-vitamin-c-foaming-face-wash-with-built-in-brush",
-  //       headers: [
-  //         {
-  //           key: "Cache-Control",
-  //           value: "s-maxage=80, stale-while-revalidate=80",
-  //         },
-  //         {
-  //           key: "Vercel-CDN-Cache-Control",
-  //           value: "s-maxage=80, stale-while-revalidate=80",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       source: "/collections/face-wash-men-and-women",
-  //       headers: [
-  //         {
-  //           key: "Cache-Control",
-  //           value: "s-maxage=80, stale-while-revalidate=80",
-  //         },
-  //         {
-  //           key: "Vercel-CDN-Cache-Control",
-  //           value: "s-maxage=80, stale-while-revalidate=80",
-  //         },
-  //       ],
-  //     },
-  //   ];
-  // },
   images: {
     remotePatterns: [
       {
@@ -200,6 +155,13 @@ const nextConfig = {
   i18n: {
     locales: ["en"],
     defaultLocale: "en",
+  },
+
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+      static: 180,
+    },
   },
 };
 
