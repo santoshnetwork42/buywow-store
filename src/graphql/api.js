@@ -324,18 +324,8 @@ export const getPageBySlug = /* GraphQL */ `
 `;
 
 export const getPageMetadataBySlug = /* GraphQL */ `
-  query GetPageMetadataBySlug(
-    $pageType: String!
-    $slug: String!
-    $storeId: String!
-    $collectionDataLimit: Int
-  ) {
-    getPageMetadataBySlug(
-      pageType: $pageType
-      slug: $slug
-      storeId: $storeId
-      collectionDataLimit: $collectionDataLimit
-    )
+  query GetPageMetadataBySlug($slug: String!, $storeId: String!) {
+    getPageMetadataBySlug(slug: $slug, storeId: $storeId)
   }
 `;
 

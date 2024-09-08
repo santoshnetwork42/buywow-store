@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { userSagaActions } from "../sagaActions/user.actions";
+import { userSagaActions } from "@/store/sagas/sagaActions/user.actions";
 
 export const useUserDispatch = () => {
   const dispatch = useDispatch();

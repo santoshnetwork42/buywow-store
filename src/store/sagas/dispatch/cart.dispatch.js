@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { cartSagaActions } from "../sagaActions/cart.actions";
+import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 
 export const useCartDispatch = () => {
   const dispatch = useDispatch();

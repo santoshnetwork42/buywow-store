@@ -13,7 +13,7 @@ import {
 } from "@wow-star/utils";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from "uuid";
-import { getPublicImageURL } from "../helpers/img-loader";
+import { getPublicImageURL } from "@/utils/helpers/img-loader";
 
 export const getFbpCookie = () => {
   const name = "_fbp=";

@@ -1,7 +1,7 @@
 import { addPhonePrefix } from "@/utils/helpers";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { addressSagaActions } from "../sagaActions/address.actions";
+import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
 
 export const useAddressDispatch = () => {
   const dispatch = useDispatch();

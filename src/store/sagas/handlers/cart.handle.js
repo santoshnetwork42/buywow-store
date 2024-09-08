@@ -21,9 +21,9 @@ import { all, call, put, select } from "redux-saga/effects";
 import {
   createShoppingCartAPI,
   manageShoppingCartAPI,
-} from "../requests/cart.request";
-import { cartSagaActions } from "../sagaActions/cart.actions";
-import { setCartModalHandler } from "./modal.handle";
+} from "@/store/sagas/requests/cart.request";
+import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
+import { setCartModalHandler } from "@/store/sagas/handlers/modal.handle";
 
 export function* addToCartHandler(action) {
   try {

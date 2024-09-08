@@ -100,9 +100,7 @@ export const getPageMetadataBySlugAPI = async (slugId, pageType) => {
       authMode: "apiKey",
       variables: {
         storeId: STORE_ID,
-        pageType,
         slug: slugId,
-        collectionDataLimit: 100,
       },
     });
 
@@ -118,7 +116,7 @@ export const getNavbarAndFooterAPI = async () => {
     getNavbarAndFooter,
     { storeId: STORE_ID },
     {
-      next: { revalidate: 1800 },
+      next: { revalidate: 86400, tags: ["header"] },
     },
   );
   return JSON.parse(data?.getNavbarAndFooter || "{}");
@@ -306,7 +304,7 @@ export const getCartUpsellProductsAPI = async () => {
     getCartUpsellProducts,
     { storeId: STORE_ID },
     {
-      next: { revalidate: 1800 },
+      next: { revalidate: 1800, tags: ["cartUpsell"] },
     },
   );
   return JSON.parse(data?.getCartUpsellProducts || "{}");
