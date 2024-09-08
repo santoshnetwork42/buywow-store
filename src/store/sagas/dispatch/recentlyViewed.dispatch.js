@@ -1,22 +1,26 @@
+import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { recentlyViewedSagaActions } from "../sagaActions/recentlyViewed.actions";
 
 export const useRecentlyViewedDispatch = () => {
   const dispatch = useDispatch();
 
-  const addRecentlyViewedProduct = (product) => {
-    dispatch({
-      type: recentlyViewedSagaActions.ADD_RECENTLY_VIEWED_PRODUCT,
-      payload: { product },
-    });
-  };
+  const addRecentlyViewedProduct = useCallback(
+    (product) => {
+      dispatch({
+        type: recentlyViewedSagaActions.ADD_RECENTLY_VIEWED_PRODUCT,
+        payload: { product },
+      });
+    },
+    [dispatch],
+  );
 
-  const clearRecentlyViewedProducts = () => {
+  const clearRecentlyViewedProducts = useCallback(() => {
     dispatch({
       type: recentlyViewedSagaActions.CLEAR_RECENTLY_VIEWED_PRODUCTS,
       payload: {},
     });
-  };
+  }, [dispatch]);
 
   return {
     addRecentlyViewedProduct,

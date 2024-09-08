@@ -11,12 +11,7 @@ import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
-const ProductItem = ({
-  item,
-  inventory = 99,
-  inventoryMapping,
-  handleCartClose,
-}) => {
+const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
   const cartList = useSelector((state) => state.cart?.data || []);
   const { updateCart, removeCoupon, removeFromCart } = useCartDispatch();
 
@@ -179,7 +174,6 @@ const ProductItem = ({
         outOfStock={outOfStock}
         imageKey={thumbImage}
         isFreeProduct={isFreeProduct}
-        handleCartClose={handleCartClose}
       />
       <div className="flex flex-1 flex-col gap-1">
         <div className="flex flex-1 justify-between gap-5">
@@ -194,7 +188,6 @@ const ProductItem = ({
             isFreeProduct={isFreeProduct}
             quantity={quantity}
             couponMessage={couponMessage}
-            handleCartClose={handleCartClose}
           />
 
           {!hideRemove && (

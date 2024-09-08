@@ -1,59 +1,78 @@
 import { addPhonePrefix } from "@/utils/helpers";
+import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { authSagaActions } from "../sagaActions/auth.actions";
 
 export const useAuthDispatch = () => {
   const dispatch = useDispatch();
 
-  const handleSignOut = () => {
+  const handleSignOut = useCallback(() => {
     dispatch({
       type: authSagaActions.SIGN_OUT,
     });
-  };
+  }, [dispatch]);
 
-  const setConfirmationStatus = (status) => {
-    dispatch({
-      type: authSagaActions.SET_CONFIRMATION_STATUS,
-      payload: status,
-    });
-  };
+  const setConfirmationStatus = useCallback(
+    (status) => {
+      dispatch({
+        type: authSagaActions.SET_CONFIRMATION_STATUS,
+        payload: status,
+      });
+    },
+    [dispatch],
+  );
 
-  const setAuthLoader = (isLoading) => {
-    dispatch({
-      type: authSagaActions.SET_AUTH_LOADER,
-      payload: isLoading,
-    });
-  };
+  const setAuthLoader = useCallback(
+    (isLoading) => {
+      dispatch({
+        type: authSagaActions.SET_AUTH_LOADER,
+        payload: isLoading,
+      });
+    },
+    [dispatch],
+  );
 
-  const signInAwsAccount = (phone) => {
-    dispatch({
-      type: authSagaActions.SIGNIN_AWS_ACCOUNT,
-      payload: { phone },
-    });
-  };
+  const signInAwsAccount = useCallback(
+    (phone) => {
+      dispatch({
+        type: authSagaActions.SIGNIN_AWS_ACCOUNT,
+        payload: { phone },
+      });
+    },
+    [dispatch],
+  );
 
-  const createAwsAccount = (phone) => {
-    dispatch({
-      type: authSagaActions.CREATE_AWS_ACCOUNT,
-      payload: {
-        phone: addPhonePrefix(phone),
-      },
-    });
-  };
+  const createAwsAccount = useCallback(
+    (phone) => {
+      dispatch({
+        type: authSagaActions.CREATE_AWS_ACCOUNT,
+        payload: {
+          phone: addPhonePrefix(phone),
+        },
+      });
+    },
+    [dispatch],
+  );
 
-  const confirmSignIn = (confirmationCode) => {
-    dispatch({
-      type: authSagaActions.CONFIRM_SIGNIN,
-      payload: { confirmationCode },
-    });
-  };
+  const confirmSignIn = useCallback(
+    (confirmationCode) => {
+      dispatch({
+        type: authSagaActions.CONFIRM_SIGNIN,
+        payload: { confirmationCode },
+      });
+    },
+    [dispatch],
+  );
 
-  const confirmSignUp = (phone, confirmationCode) => {
-    dispatch({
-      type: authSagaActions.CONFIRM_SIGNUP,
-      payload: { username: phone, confirmationCode },
-    });
-  };
+  const confirmSignUp = useCallback(
+    (phone, confirmationCode) => {
+      dispatch({
+        type: authSagaActions.CONFIRM_SIGNUP,
+        payload: { username: phone, confirmationCode },
+      });
+    },
+    [dispatch],
+  );
 
   return {
     handleSignOut,

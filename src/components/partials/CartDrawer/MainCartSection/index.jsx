@@ -1,52 +1,45 @@
 import ProductItem from "@/components/partials/CartDrawer/MainCartSection/ProductItem";
-import React from "react";
 import UpsellProducts from "@/components/partials/Product/PDP/ProductDetailViewBlocks/UpsellProducts";
+import React from "react";
 
-const CartProductList = React.memo(
-  ({ cartItems, inventoryMapping, handleCartClose }) => {
-    if (!cartItems || !Array.isArray(cartItems)) return null;
+const CartProductList = React.memo(({ cartItems, inventoryMapping }) => {
+  if (!cartItems || !Array.isArray(cartItems)) return null;
 
+  return (
+    <div className="flex flex-col gap-3">
+      {cartItems.map((item, index) => (
+        <ProductItem
+          key={`cart-item-${item?.id}-${index}`}
+          item={item}
+          inventory={inventoryMapping?.[item?.recordKey]}
+          inventoryMapping={inventoryMapping}
+        />
+      ))}
+    </div>
+  );
+});
+
+CartProductList.displayName = "CartProductList";
+
+const MainCartSection = React.memo(
+  ({ cartItems, upsellProducts, inventoryMapping }) => {
     return (
-      <div className="flex flex-col gap-3">
-        {cartItems.map((item, index) => (
-          <ProductItem
-            key={`cart-item-${item?.id}-${index}`}
-            item={item}
-            inventory={inventoryMapping?.[item?.recordKey]}
-            inventoryMapping={inventoryMapping}
-            handleCartClose={handleCartClose}
-          />
-        ))}
+      <div className="mb-7 flex flex-1 flex-col gap-4">
+        <CartProductList
+          cartItems={cartItems}
+          inventoryMapping={inventoryMapping}
+        />
+        <UpsellProducts
+          title={upsellProducts?.title}
+          upsellProductsBgColor={upsellProducts?.cartUpsellProductsBgColor}
+          upsellProductItems={upsellProducts?.cartUpsellProducts}
+          endTime={upsellProducts?.endTime}
+          isCartUpsell={true}
+        />
       </div>
     );
   },
 );
-
-CartProductList.displayName = "CartProductList";
-
-const MainCartSection = ({
-  cartItems,
-  upsellProducts,
-  inventoryMapping,
-  handleCartClose,
-}) => {
-  return (
-    <div className="mb-7 flex flex-1 flex-col gap-4">
-      <CartProductList
-        cartItems={cartItems}
-        inventoryMapping={inventoryMapping}
-        handleCartClose={handleCartClose}
-      />
-      <UpsellProducts
-        title={upsellProducts?.title}
-        upsellProductsBgColor={upsellProducts?.cartUpsellProductsBgColor}
-        upsellProductItems={upsellProducts?.cartUpsellProducts}
-        endTime={upsellProducts?.endTime}
-        isCartUpsell={true}
-      />
-    </div>
-  );
-};
 
 MainCartSection.displayName = "MainCartSection";
 

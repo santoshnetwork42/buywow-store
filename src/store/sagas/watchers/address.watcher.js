@@ -1,12 +1,12 @@
-import { all, fork, takeLatest } from "redux-saga/effects";
 import {
-  updateCurrentAddressHandler,
   createAddressHandler,
-  getAddressListHandler,
   deleteAddressHandler,
   editAddressHandler,
+  getAddressListHandler,
+  updateCurrentAddressHandler,
 } from "@/store/sagas/handlers/address.handle";
 import { addressSagaActions } from "@/store/sagas/sagaActions/address.actions";
+import { all, fork, takeLatest } from "redux-saga/effects";
 
 function* updateCurrentAddress() {
   yield takeLatest(
