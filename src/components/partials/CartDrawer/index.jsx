@@ -4,8 +4,13 @@ import { showToast } from "@/components/common/ToastComponent";
 import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
+import Cashback from "@/components/partials/CartDrawer/Cashback";
+import CheckoutButton from "@/components/partials/CartDrawer/CheckoutButton";
 import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
+import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
+import LoyaltyCash from "@/components/partials/CartDrawer/LoyaltyCash";
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
+import CouponsAndOffers from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers";
 import ShippingProgress from "@/components/partials/Others/ShippingProgress";
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
@@ -27,11 +32,6 @@ import {
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
-import Cashback from "@/components/partials/CartDrawer/Cashback";
-import CheckoutButton from "@/components/partials/CartDrawer/CheckoutButton";
-import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
-import LoyaltyCash from "@/components/partials/CartDrawer/LoyaltyCash";
-import CouponsAndOffers from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers";
 
 const CartDrawer = ({ upsellProducts }) => {
   const router = useRouter();
