@@ -35,3 +35,4 @@ export const TTM_CLIENT_THRESHOLD =
   process.env.NEXT_PUBLIC_TTM_CLIENT_THRESHOLD;
 export const PREBUILD_ALL_PAGES =
   process.env.NEXT_PREBUILD_ALL_PAGES === "true";
+export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;

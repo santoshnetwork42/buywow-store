@@ -1,6 +1,6 @@
 "use client";
 
-import { Text } from "@/components/elements";
+import { Heading, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import PlusMinusToggle from "@/components/features/Accordion/PlusMinusToggle";
 import { extractAttributes } from "@/utils/helpers";
@@ -49,7 +49,11 @@ const FaqItem = memo(({ question, answer, showDivider }) => {
         className="flex w-full cursor-pointer items-center justify-between gap-5"
         onClick={toggleOpen}
       >
-        <Text as="p" size="sm" dangerouslySetInnerHTML={{ __html: question }} />
+        <Heading
+          as="h5"
+          size="sm"
+          dangerouslySetInnerHTML={{ __html: question }}
+        />
         <PlusMinusToggle open={isOpen} />
       </div>
       <div
