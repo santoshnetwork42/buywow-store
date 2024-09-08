@@ -74,7 +74,7 @@ const CouponsAndOffers = () => {
   );
 
   useEffect(() => {
-    if (cartList && cartList !== previousCartList.current) {
+    if (cartList || cartList !== previousCartList.current) {
       previousCartList.current = cartList;
 
       const shouldAutoApply = AUTO_APPLY_COUPON_PATHNAMES.some((path) =>
