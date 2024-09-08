@@ -13,55 +13,64 @@ const ReadMore = ({
     setIsExpanded((prev) => !prev);
   }, []);
 
+  const processHtmlContent = useCallback((htmlContent) => {
+    return htmlContent.replace(/<p>/g, "<span>").replace(/<\/p>/g, "</span>");
+  }, []);
+
   const truncatedContent = useMemo(() => {
     if (!content) return "";
-    if (content.length <= maxLength) return content;
-    return `${content.slice(0, maxLength)}...`;
-  }, [content, maxLength]);
+    let processedContent = isHtml ? processHtmlContent(content) : content;
+
+    if (processedContent.length <= maxLength) return processedContent;
+    return `${processedContent.slice(0, maxLength)}...`;
+  }, [content, maxLength, isHtml, processHtmlContent]);
 
   const renderContent = useCallback(() => {
     if (!content) return null;
 
-    if (content.length <= maxLength) {
+    let displayContent = isHtml ? processHtmlContent(content) : content;
+
+    if (displayContent.length <= maxLength) {
       return (
-        <Text as="p" size="base" className="overflow-hidden text-sm" responsive>
+        <Text
+          as="span"
+          size="base"
+          className="overflow-hidden text-sm"
+          responsive
+        >
           {isHtml ? (
             <span
               className="text-sm"
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: displayContent }}
             />
           ) : (
-            content
+            displayContent
           )}
         </Text>
       );
     }
 
     return (
-      <div className="relative">
-        <Text as="p" size="base" className="text-sm" responsive>
-          {isHtml ? (
-            <span
-              className="text-sm"
-              dangerouslySetInnerHTML={{
-                __html: isExpanded ? content : truncatedContent,
-              }}
-            />
-          ) : isExpanded ? (
-            content
-          ) : (
-            truncatedContent
-          )}
-        </Text>
+      <Text as="p" size="base" className="text-sm" responsive>
+        {isHtml ? (
+          <span
+            dangerouslySetInnerHTML={{
+              __html: isExpanded ? displayContent : truncatedContent,
+            }}
+          />
+        ) : isExpanded ? (
+          displayContent
+        ) : (
+          truncatedContent
+        )}{" "}
         <Button
+          enableRipple={false}
           onClick={toggleExpand}
-          className={`ml-auto rounded-none bg-white-a700 px-3 text-sm underline ${
-            buttonClassName
-          }`}
+          className={`ml-1 inline-block rounded-none text-sm underline lg:text-base ${buttonClassName || ""}`}
         >
           {isExpanded ? "Read less" : "Read more"}
         </Button>
-      </div>
+      </Text>
     );
   }, [
     content,
@@ -71,6 +80,7 @@ const ReadMore = ({
     truncatedContent,
     toggleExpand,
     buttonClassName,
+    processHtmlContent,
   ]);
 
   return <div>{renderContent()}</div>;
