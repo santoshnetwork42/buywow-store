@@ -135,6 +135,11 @@ const nextConfig = {
         destination: "/search",
         permanent: true,
       },
+      {
+        source: "/query-us",
+        destination: "/pages/query-us",
+        permanent: true,
+      },
     ];
 
     return allRedirects;
