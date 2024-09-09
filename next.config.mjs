@@ -87,7 +87,7 @@ const nextConfig = {
       },
       {
         source: "/buywow/orders",
-        destination: "/account",
+        destination: "/pages/account",
         permanent: true,
       },
       {
@@ -97,7 +97,7 @@ const nextConfig = {
       },
       {
         source: "/buywow/account",
-        destination: "/account",
+        destination: "/pages/account",
         permanent: true,
       },
       {

@@ -1,6 +1,7 @@
 "use client";
 
 import { showToast } from "@/components/common/ToastComponent";
+import Cashback from "@/components/partials/CartDrawer/Cashback";
 import OrderDetails from "@/components/partials/Order/OrderContent/OrderDetails";
 import OrderSummary from "@/components/partials/Order/OrderContent/OrderSummary";
 import ProductList from "@/components/partials/Order/OrderContent/ProductList";
@@ -11,7 +12,6 @@ import { errorHandler } from "@/utils/errorHandler";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import Cashback from "@/components/partials/CartDrawer/Cashback";
 
 const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   const [order, setOrder] = useState(initialOrderData);
@@ -133,7 +133,7 @@ const ActionButtons = React.memo(() => (
     <div className="flex gap-2">
       <Link
         prefetch={false}
-        href="/account"
+        href="/pages/account"
         className="rounded-full bg-yellow-900 px-4 py-2 text-sm uppercase text-white-a700_01 md:px-6 md:py-3 md:text-base"
       >
         Your Orders
