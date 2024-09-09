@@ -9,7 +9,6 @@ import ProductImageSection from "@/components/partials/Product/PDP/ProductImageS
 import VariantSelector from "@/components/partials/Product/PDP/VariantSelector";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
-import handleRedirect from "@/utils/handleRedirect";
 import { extractAttributes } from "@/utils/helpers";
 import {
   useProduct,
@@ -54,6 +53,7 @@ const ProductDetailView = ({ product }) => {
 
   if (!fetchedProduct?.id) {
     handleRedirect(`/products/${slug}`);
+    return null;
   }
 
   const {

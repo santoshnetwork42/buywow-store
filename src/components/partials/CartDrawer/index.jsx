@@ -238,11 +238,11 @@ const CartDrawer = ({ upsellProducts }) => {
         {cartItems?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-col gap-3 px-3 md:px-4">
-              <ShippingProgress
+              {/* <ShippingProgress
                 freeShippingThreshold={targetAmountForFreeShipping}
                 cartValue={totalAmountForShippingCharge}
                 className="bg-[#F5E8DDBF] shadow-[0_4px_4px_#0000000D]"
-              />
+              /> */}
               <MainCartSection
                 cartItems={cartItems}
                 inventoryMapping={inventoryMapping}

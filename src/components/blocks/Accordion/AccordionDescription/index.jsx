@@ -8,11 +8,17 @@ const AccordionDescription = ({
   accordionDescriptionTitle: title,
   image,
   description,
+  isAccordionOpen = false,
 }) => {
   const { url, alternativeText } = extractAttributes(image) || {};
 
   return (
-    <Accordion title={title} imgUrl={url} alternativeText={alternativeText}>
+    <Accordion
+      title={title}
+      imgUrl={url}
+      alternativeText={alternativeText}
+      isAccordionOpen={isAccordionOpen}
+    >
       <ReadMore content={description} maxLength={200} isHtml />
     </Accordion>
   );

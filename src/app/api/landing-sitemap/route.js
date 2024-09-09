@@ -1,4 +1,4 @@
-import { getCMSPagesAPI } from "@/lib/appSyncAPIs";
+import { getCMSPagesForSitemapAPI } from "@/lib/appSyncAPIs";
 import { NextResponse } from "next/server";
 
 const buildSitemapXml = (fields) => {
@@ -23,7 +23,7 @@ const withXMLTemplate = (content) => {
 };
 
 export async function GET() {
-  const pages = (await getCMSPagesAPI("landing")) || [];
+  const pages = (await getCMSPagesForSitemapAPI("landing")) || [];
   const { NEXT_PUBLIC_SITE_URL } = process.env;
 
   try {

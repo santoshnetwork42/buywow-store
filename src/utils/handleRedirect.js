@@ -24,7 +24,6 @@ const handleRedirect = async (path) => {
   }
 
   console.error("not found: ", path);
-
   notFound();
 };
 
