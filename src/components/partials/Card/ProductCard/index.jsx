@@ -56,21 +56,19 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
 const PriceDisplay = memo(({ price, listingPrice }) => {
   if (!price) return null;
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex shrink items-center gap-1 md:gap-2">
-        <Heading as="span" size="lg" className="text-base" responsive>
-          ₹{toDecimal(price)}
-        </Heading>
-        {listingPrice > price && (
-          <Text
-            as="span"
-            size="sm"
-            className="font-light capitalize line-through"
-          >
-            ₹{toDecimal(listingPrice)}
-          </Text>
-        )}
-      </div>
+    <div className="flex shrink items-center gap-2">
+      <Heading as="span" size="lg" className="text-base" responsive>
+        ₹{toDecimal(price)}
+      </Heading>
+      {listingPrice > price && (
+        <Text
+          as="span"
+          size="sm"
+          className="font-light capitalize line-through"
+        >
+          ₹{toDecimal(listingPrice)}
+        </Text>
+      )}
     </div>
   );
 });
