@@ -3,7 +3,6 @@ import {
   getRedirectsAPI,
   updateRedirectsAPI,
 } from "@/lib/appSyncAPIs";
-import { revalidatePath } from "next/cache";
 import { notFound, redirect } from "next/navigation";
 import { extname } from "path";
 
@@ -25,7 +24,6 @@ const handleRedirect = async (path) => {
   }
 
   console.error("not found: ", path);
-  revalidatePath(path);
   notFound();
 };
 
