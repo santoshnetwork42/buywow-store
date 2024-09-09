@@ -2,6 +2,7 @@ import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 import { fetchBlogs, fetchFeaturedBlogs, fetchTag } from "@/lib/wordPressAPIs";
+import handleRedirect from "@/utils/handleRedirect";
 
 export const revalidate = 86400;
 
