@@ -329,7 +329,7 @@ export const getCMSPagesForSitemapAPI = async (pageType) => {
       type: pageType,
     },
     {
-      next: { revalidate: 1800 },
+      next: { revalidate: 86400 },
     },
   );
 
