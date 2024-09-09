@@ -60,6 +60,7 @@ const CartDrawer = ({ upsellProducts }) => {
 
   const [delayedIsOpen, setDelayedIsOpen] = useState(false);
   const [checkoutSectionHeight, setCheckoutSectionHeight] = useState(0);
+  const [isCouponsSidebarOpen, setIsCouponsSidebarOpen] = useState(false);
   const fixedCheckoutRef = useRef(null);
 
   const inventory = useInventory({ validateCart });
@@ -167,6 +168,7 @@ const CartDrawer = ({ upsellProducts }) => {
 
   const handleCartClose = useCallback(() => {
     handleCartVisibility(false);
+    if (typeof window !== "undefined") window.history.back();
   }, [handleCartVisibility]);
 
   useEffect(() => {
@@ -226,6 +228,7 @@ const CartDrawer = ({ upsellProducts }) => {
       const timer = setTimeout(() => setDelayedIsOpen(true), 50);
       return () => clearTimeout(timer);
     } else {
+      setIsCouponsSidebarOpen(false);
       setDelayedIsOpen(false);
     }
   }, [isCartOpen]);
@@ -286,7 +289,10 @@ const CartDrawer = ({ upsellProducts }) => {
               className="fixed bottom-0 z-10 flex w-full max-w-[500px] flex-col gap-3 border-t bg-white-a700 px-3 pb-2.5 pt-1.5 transition-[right] duration-300 ease-in-out md:gap-4 md:px-4 md:pb-2.5"
               style={{ right: delayedIsOpen ? "0" : "-100%" }}
             >
-              <CouponsAndOffers />
+              <CouponsAndOffers
+                isSidebarOpen={isCouponsSidebarOpen}
+                setIsSidebarOpen={setIsCouponsSidebarOpen}
+              />
               <CheckoutButton
                 grandTotal={grandTotal}
                 totalAmountSaved={totalAmountSaved}

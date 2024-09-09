@@ -15,13 +15,12 @@ import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { AUTO_APPLY_COUPON_PATHNAMES } from "@/utils/data/constants";
 
-const CouponsAndOffers = () => {
+const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const pathname = usePathname();
   const { applyCoupon, removeCoupon, removeFromCart } = useCartDispatch();
   const [couponCode, setCouponCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
 
   const cartList = useSelector((state) => state.cart?.data || []);
@@ -73,6 +72,15 @@ const CouponsAndOffers = () => {
     [cartList, user],
   );
 
+  const handleCouponRemove = useCallback(() => {
+    cartList.forEach((item) => {
+      if (item.cartItemSource === "COUPON") {
+        removeFromCart(item);
+      }
+    });
+    removeCoupon();
+  }, [cartList, removeFromCart, removeCoupon]);
+
   useEffect(() => {
     if (cartList !== previousCartList.current) {
       previousCartList.current = cartList;
@@ -108,42 +116,11 @@ const CouponsAndOffers = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bestCouponCode, storedCouponCode, cartList]);
 
-  const handleCouponRemove = useCallback(() => {
-    cartList.forEach((item) => {
-      if (item.cartItemSource === "COUPON") {
-        removeFromCart(item);
-      }
-    });
-    removeCoupon();
-  }, [cartList, removeFromCart, removeCoupon]);
-
   useEffect(() => {
     if (couponCode) {
       setError(null);
     }
   }, [couponCode]);
-
-  useEffect(() => {
-    const handlePopState = () => {
-      if (isSidebarOpen) {
-        setIsSidebarOpen(false);
-      }
-    };
-
-    if (typeof window !== "undefined") {
-      window.addEventListener("popstate", handlePopState);
-
-      if (isSidebarOpen) {
-        window.history.pushState({ couponDrawer: "open" }, "");
-      }
-    }
-
-    return () => {
-      if (typeof window !== "undefined") {
-        window.removeEventListener("popstate", handlePopState);
-      }
-    };
-  }, [isSidebarOpen]);
 
   return (
     <>
