@@ -17,8 +17,9 @@ const Accordion = ({
   accordionMainContainerClassName,
   variant,
   showToggleArrow = true,
+  isAccordionOpen = false,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(isAccordionOpen);
   const contentRef = useRef(null);
   const [contentHeight, setContentHeight] = useState("auto");
 
