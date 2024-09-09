@@ -6,27 +6,21 @@ export async function GET() {
   const sitemaps = [
     {
       loc: `${baseUrl}/landing/sitemap.xml`,
-      lastmod: new Date().toISOString(),
     },
     {
       loc: `${baseUrl}/products/sitemap.xml`,
-      lastmod: new Date().toISOString(),
     },
     {
       loc: `${baseUrl}/collections/sitemap.xml`,
-      lastmod: new Date().toISOString(),
     },
     {
       loc: `${baseUrl}/blog/sitemap.xml`,
-      lastmod: new Date().toISOString(),
     },
     {
       loc: `${baseUrl}/policies/sitemap.xml`,
-      lastmod: new Date().toISOString(),
     },
     {
       loc: `${baseUrl}/pages/sitemap.xml`,
-      lastmod: new Date().toISOString(),
     },
   ];
 

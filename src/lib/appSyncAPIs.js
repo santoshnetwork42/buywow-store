@@ -95,14 +95,16 @@ export const getPageBySlugAPI = async (slugId) => {
 
 export const getPageMetadataBySlugAPI = async (slugId) => {
   try {
-    const response = await client.graphql({
-      query: getPageMetadataBySlug,
-      authMode: "apiKey",
-      variables: {
+    const response = await fetchData(
+      getPageMetadataBySlug,
+      {
         storeId: STORE_ID,
         slug: slugId,
       },
-    });
+      {
+        next: { revalidate: 1800 },
+      },
+    );
 
     return JSON.parse(response?.data?.getPageMetadataBySlug || "{}");
   } catch (err) {
@@ -315,6 +317,21 @@ export const getCMSPagesAPI = async (pageType) => {
     storeId: STORE_ID,
     type: pageType,
   });
+
+  return JSON.parse(data?.getCMSPages || "[]");
+};
+
+export const getCMSPagesForSitemapAPI = async (pageType) => {
+  const data = await fetchData(
+    getCMSPages,
+    {
+      storeId: STORE_ID,
+      type: pageType,
+    },
+    {
+      next: { revalidate: 1800 },
+    },
+  );
 
   return JSON.parse(data?.getCMSPages || "[]");
 };
