@@ -6,6 +6,7 @@ import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/Produ
 import ProductItemSkeleton from "@/components/partials/CartDrawer/MainCartSection/ProductItem/ProductItemSkeleton";
 import VariantSelector from "@/components/partials/Others/VariantSelector";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
+import { useIsInteractive } from "@/utils/context/navbar";
 import { getUpdatedCart } from "@/utils/helpers";
 import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -14,6 +15,7 @@ import { useSelector } from "react-redux";
 const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
   const cartList = useSelector((state) => state.cart?.data || []);
   const { updateCart, removeCoupon, removeFromCart } = useCartDispatch();
+  const isInteractive = useIsInteractive();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -161,8 +163,15 @@ const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
     const hasRequiredFields = item && price !== undefined;
     const hasValidVariant =
       isFreeProduct || !variantId || (variantId && variantGroup?.length > 0);
-    setIsLoading(!(hasRequiredFields && hasValidVariant));
-  }, [item, price, variantId, variantGroup, isFreeProduct]);
+
+    setIsLoading(isInteractive && !(hasRequiredFields && hasValidVariant));
+
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [item, price, variantId, variantGroup, isFreeProduct, isInteractive]);
 
   if (!item) return null;
   if (isLoading) return <ProductItemSkeleton />;

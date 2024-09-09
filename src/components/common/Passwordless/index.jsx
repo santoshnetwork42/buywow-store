@@ -12,7 +12,6 @@ import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
-import { setAuthError } from "@/store/slices/auth.slice";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 
 const PasswordLess = ({ enableOutsideClick = true }) => {
@@ -27,12 +26,14 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     createAwsAccount,
     confirmSignIn,
     confirmSignUp,
+    setAuthError,
   } = useAuthDispatch();
 
   const confirmationStatus = useSelector(
     (state) => state.auth?.confirmationStatus,
   );
   const loading = useSelector((state) => state.auth?.loading);
+  const error = useSelector((state) => state.auth?.error);
   const user = useSelector((state) => state.user?.user);
   const isPasswordLessOpen = useSelector(
     (state) => state.modal?.modal?.passwordLess?.isPasswordLessOpen,
@@ -52,10 +53,6 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
   const [authData, setAuthData] = useState({
     phone: "",
     confirmationCode: new Array(6).fill(""),
-  });
-  const [authErrors, setAuthErrors] = useState({
-    phone: "",
-    otp: "",
   });
   const [countdown, setCountdown] = useState(0);
 
@@ -141,8 +138,9 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         confirmationCode: new Array(6).fill(""),
       });
       setConfirmationStatus(null);
-      setAuthErrors({ phone: "", otp: "" });
+      setAuthError({ phone: "", otp: "" });
       setCountdown(0);
+      setAuthLoader(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isPasswordLessOpen]);
@@ -157,11 +155,11 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
   const handleSignIn = async () => {
     const phoneValidation = validatePhoneNumber(authData.phone);
     if (phoneValidation.error) {
-      setAuthErrors({ phone: phoneValidation.message });
+      setAuthError({ phone: phoneValidation.message });
       return;
     }
 
-    setAuthErrors((prev) => ({ ...prev, phone: "" }));
+    setAuthError({ phone: "" });
 
     const phone = addPhonePrefix(authData.phone);
     signInAwsAccount(phone);
@@ -196,7 +194,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
             setCustomUser(phone);
             auth({ action: "signup", moe: { userId: null, phone } });
           } else {
-            setAuthError((prev) => ({ ...prev, otp: "Invalid OTP" }));
+            setAuthError({ otp: "Invalid OTP" });
             console.error("OTP verification failed");
           }
         } catch (error) {
@@ -288,11 +286,16 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         maxLength={10}
         value={authData.phone}
         ref={phoneInputRef}
-        error={authErrors?.phone}
+        error={error?.phone}
       />
-      {authErrors?.phone && (
-        <Text as="p" size="base" className="text-sm text-red-500" responsive>
-          {authErrors?.phone}
+      {error?.phone && (
+        <Text
+          as="p"
+          size="base"
+          className="w-full text-sm text-red-500"
+          responsive
+        >
+          {error?.phone}
         </Text>
       )}
       <Button
@@ -320,8 +323,9 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         {authData.confirmationCode.map((data, index) => (
           <Input
             key={index}
-            type="number"
-            maxLength="1"
+            type="text"
+            inputMode="numeric"
+            maxLength={1}
             value={data}
             onChange={(e) => handleOTPChange(e.target, index)}
             autoComplete="one-time-code"
@@ -330,12 +334,23 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
               handleOTPInputKeyDown(e, index);
             }}
             ref={(el) => (otpInputRefs.current[index] = el)}
-            className="flex h-10 w-10 flex-grow rounded-md border"
+            className={`flex h-10 w-10 flex-grow rounded-md border`}
             inputClassName="text-center"
             onPaste={handlePaste}
+            error={error?.otp}
           />
         ))}
       </div>
+      {error?.otp && (
+        <Text
+          as="p"
+          size="base"
+          className="w-full text-sm text-red-500"
+          responsive
+        >
+          {error?.otp}
+        </Text>
+      )}
       <Button
         loader={loading}
         loaderClass="ml-2"

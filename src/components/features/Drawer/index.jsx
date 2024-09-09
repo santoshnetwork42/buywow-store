@@ -1,6 +1,8 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const Drawer = ({
   isOpen,
@@ -12,11 +14,17 @@ const Drawer = ({
   isNestedDrawer = false,
   enableOutsideClick = true,
 }) => {
+  const pathname = usePathname();
+
   const [state, setState] = useState({
     isAnimating: false,
     positionValue: "-100%",
     bgOpacity: 0,
   });
+
+  const isCartOpen = useSelector(
+    (state) => state.modal?.modal?.cart?.isCartOpen,
+  );
 
   const drawerRef = useRef(null);
 
@@ -43,7 +51,7 @@ const Drawer = ({
       positionValue: "-100%",
       bgOpacity: 0,
     }));
-    !isNestedDrawer && toggleScroll(false);
+    !isNestedDrawer && !isCartOpen && toggleScroll(false);
     const timer = setTimeout(
       () => setState((prev) => ({ ...prev, isAnimating: false })),
       300,
@@ -76,7 +84,7 @@ const Drawer = ({
   useEffect(() => {
     closeDrawer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pathname]);
 
   return (
     <div

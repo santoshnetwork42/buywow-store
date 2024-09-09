@@ -11,7 +11,6 @@ import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
 import LoyaltyCash from "@/components/partials/CartDrawer/LoyaltyCash";
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
 import CouponsAndOffers from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers";
-import ShippingProgress from "@/components/partials/Others/ShippingProgress";
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";

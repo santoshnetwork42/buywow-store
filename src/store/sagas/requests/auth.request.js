@@ -79,7 +79,7 @@ export const confirmSignInRequest = async ({ confirmationCode }) => {
     return res;
   } catch (error) {
     console.error("error :>> ", error);
-    throw error;
+    return null;
   }
 };
 
@@ -92,7 +92,7 @@ export const confirmSignUpRequest = async ({ username, confirmationCode }) => {
 
     return res;
   } catch (error) {
-    throw error;
+    return null;
   }
 };
 

@@ -2,7 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   confirmationStatus: null,
-  error: false,
+  error: {
+    phone: "",
+    otp: "",
+  },
   loading: false,
 };
 
@@ -14,7 +17,7 @@ export const authSlice = createSlice({
       state.confirmationStatus = action.payload;
     },
     setAuthError: (state, action) => {
-      state.error = action.payload;
+      state.error = { ...state.error, ...action.payload };
     },
     setAuthLoading: (state, action) => {
       state.loading = action.payload;
