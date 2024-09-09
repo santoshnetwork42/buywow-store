@@ -32,7 +32,9 @@ const accordionTypes = [
 const AccordionComponent = ({ block, index }) => {
   switch (block.__typename) {
     case "ComponentAccordionDescriptionSection":
-      return <AccordionDescription key={index} {...block} isInPDP />;
+      return (
+        <AccordionDescription key={index} {...block} isInPDP isAccordionOpen />
+      );
     case "ComponentAccordionIngredientsSection":
       return <AccordionIngredients key={index} {...block} isInPDP />;
     case "ComponentAccordionUsageInstructionsSection":
