@@ -18,8 +18,6 @@ import React, {
 
 const CarouselImage = React.memo(
   ({ webImage, mWebImage, link, index, moeText, isInteractive }) => {
-    console.time(`CarouselImage ${index} Render`);
-
     const webImageAttrs = extractAttributes(webImage);
     const mWebImageAttrs = extractAttributes(mWebImage);
 
@@ -41,12 +39,8 @@ const CarouselImage = React.memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isInteractive]);
 
-    if (!mWebImageAttrs.url && !webImageAttrs.url) {
-      console.timeEnd(`CarouselImage ${index} Render`);
-      return null;
-    }
+    if (!mWebImageAttrs.url && !webImageAttrs.url) return null;
 
-    console.timeEnd(`CarouselImage ${index} Render`);
     return (
       <Link
         prefetch={false}
@@ -113,8 +107,6 @@ const Carousel = ({
   carousalItems: banners,
   isPersistLoading = false,
 }) => {
-  console.time("Carousel Component Render");
-
   const pathname = usePathname();
   const isInteractive = useIsInteractive();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -167,12 +159,8 @@ const Carousel = ({
     [banners, selectedIndex, scrollTo],
   );
 
-  if (!banners?.length || (isPersistLoading && pathname !== "/")) {
-    console.timeEnd("Carousel Component Render");
-    return null;
-  }
+  if (!banners?.length || (isPersistLoading && pathname !== "/")) return null;
 
-  console.timeEnd("Carousel Component Render");
   return (
     <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">
       <div className="overflow-hidden" ref={emblaRef}>
