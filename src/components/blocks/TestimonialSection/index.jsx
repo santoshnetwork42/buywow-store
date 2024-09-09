@@ -1,4 +1,3 @@
-import React from "react";
 import SectionHeading from "@/components/common/SectionHeading";
 import Slider from "@/components/features/Slider";
 import TestimonialCard from "@/components/partials/Card/TestimonialCard";

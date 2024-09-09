@@ -14,7 +14,7 @@ export default function Loading() {
       <div className="mb-12">
         <Skeleton className="mb-4 h-8 w-48" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {[...Array(6)].map((_, index) => (
+          {[...Array(3)].map((_, index) => (
             <Skeleton key={index} className="h-24 rounded-md" />
           ))}
         </div>
@@ -24,7 +24,7 @@ export default function Loading() {
       <div className="mb-12">
         <Skeleton className="mb-4 h-8 w-48" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-          {[...Array(8)].map((_, index) => (
+          {[...Array(4)].map((_, index) => (
             <div key={index} className="flex flex-col gap-2">
               <Skeleton className="aspect-square rounded-md" />
               <Skeleton className="h-4 w-3/4" />
@@ -43,7 +43,7 @@ export default function Loading() {
       <div className="mb-12">
         <Skeleton className="mb-4 h-8 w-48" />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {[...Array(5)].map((_, index) => (
+          {[...Array(4)].map((_, index) => (
             <div key={index} className="flex flex-col gap-2">
               <Skeleton className="aspect-square rounded-md" />
               <Skeleton className="h-4 w-3/4" />

@@ -12,7 +12,7 @@ const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
     <li className={!isLast ? "border-b-[0.5px] border-b-gray-300" : ""}>
       <Link
         prefetch={false}
-        className={isLast ? "py-2.5" : "py-2.5"}
+        className="w-full py-2.5"
         href={`/${linkPrefix ? linkPrefix + "/" : ""}${subItem.slug || ""}`}
         onClick={() => {
           topNavbarClicked({
@@ -112,7 +112,7 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
         });
         closeMenu();
       }}
-      className="pb-3 pt-2"
+      className="w-full pb-3 pt-2"
     >
       <Heading size="base" as="h4" className="font-semibold">
         {item.title}
