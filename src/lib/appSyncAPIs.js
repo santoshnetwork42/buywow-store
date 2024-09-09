@@ -95,16 +95,10 @@ export const getPageBySlugAPI = async (slugId) => {
 
 export const getPageMetadataBySlugAPI = async (slugId) => {
   try {
-    const response = await fetchData(
-      getPageMetadataBySlug,
-      {
-        storeId: STORE_ID,
-        slug: slugId,
-      },
-      {
-        next: { revalidate: 1800 },
-      },
-    );
+    const response = await fetchData(getPageMetadataBySlug, {
+      storeId: STORE_ID,
+      slug: slugId,
+    });
 
     return JSON.parse(response?.data?.getPageMetadataBySlug || "{}");
   } catch (err) {
