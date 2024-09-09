@@ -2,6 +2,16 @@
 const nextConfig = {
   reactStrictMode: false,
 
+  async rewrites() {
+    const paylolad = [
+      { source: "/sitemap.xml", destination: "/api/sitemap" },
+      {
+        source: "/landing-pages/sitemap.xml",
+        destination: "/api/landing-sitemap",
+      },
+    ];
+    return paylolad;
+  },
   async redirects() {
     const allRedirects = [
       {
