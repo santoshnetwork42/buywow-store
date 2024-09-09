@@ -87,8 +87,8 @@ const MenuItem = React.memo(({ item, index, showInWeb }) => {
   );
 });
 
-const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt }) => (
-  <Link prefetch={false} href="/">
+const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt, className }) => (
+  <Link href="/" className={className}>
     <div className="flex items-center gap-1">
       <Img
         src={logoUrl}
@@ -187,13 +187,13 @@ const Header = ({ data }) => {
     <></>
   ) : (
     <header className="relative">
-      <div className="container-secondary flex border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
+      <div className="container-main flex border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
         <div className="flex flex-1 flex-wrap items-center justify-between gap-x-5 gap-y-2.5 md:flex-nowrap">
-          <div className="flex flex-shrink-0 items-stretch gap-5">
+          <div className="flex flex-shrink-0 gap-5 max-md:w-[25%]">
             <Button
               size="none"
               variant="none"
-              className="mt-2 flex-1 lg:hidden"
+              className="ml-0.5 mt-2 md:flex-1 lg:hidden"
               onClick={openMobileMenu}
             >
               <MenuSVG height={24} width={24} fillColor="#000000ff" />
@@ -203,8 +203,17 @@ const Header = ({ data }) => {
               logoAlt={logoAlternativeText}
               vipUrl={vipUrl}
               vipAlt={vipAlternativeText}
+              className="hidden md:block"
             />
           </div>
+
+          <Logo
+            logoUrl={logoUrl}
+            logoAlt={logoAlternativeText}
+            vipUrl={vipUrl}
+            vipAlt={vipAlternativeText}
+            className="md:hidden"
+          />
 
           {(!!collectionMenus?.length || !!otherLinks?.length) && (
             <ul className="hidden flex-wrap gap-y-2 lg:flex lg:gap-x-3 xl:gap-x-4 xxl:gap-x-5">
@@ -212,7 +221,7 @@ const Header = ({ data }) => {
             </ul>
           )}
 
-          <div className="flex max-w-[370px] flex-grow items-center justify-end gap-4 lg:justify-center lg:gap-3 xl:gap-5">
+          <div className="flex items-center justify-end gap-4 max-md:w-[25%] md:max-w-[370px] md:flex-grow lg:justify-center lg:gap-3 xl:gap-5">
             {!isRestricted && (
               <SearchBar className="hidden min-w-[200px] max-w-[284px] shrink md:flex" />
             )}

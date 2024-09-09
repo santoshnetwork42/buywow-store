@@ -27,7 +27,7 @@ export default async function BlogsByCategory({ params }) {
   const category = await fetchCategory(slug);
 
   if (!category) {
-    return handleRedirect(`/blog/category/${slug}`);
+    await handleRedirect(`/blog/category/${slug}`);
   }
 
   const { blogs, pageInfo } = await fetchBlogs({

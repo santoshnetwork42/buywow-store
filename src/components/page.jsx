@@ -1,7 +1,6 @@
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 import handleRedirect from "@/utils/handleRedirect";
 import dynamic from "next/dynamic";
-import { notFound } from "next/navigation";
 import React from "react";
 
 // Dynamically import components
@@ -150,16 +149,15 @@ export default async function PageBlock({ pageType, slug }) {
   const { blocks, slug: fetchedSlug, type: fetchedPageType } = pageData;
 
   if (!fetchedSlug || fetchedSlug !== slug) {
-    return handleRedirect(`/${pageType}/${slug}`);
+    await handleRedirect(`/${pageType}/${slug}`);
   }
 
   if (!fetchedPageType || PAGETYPE[fetchedPageType] !== pageType) {
-    return handleRedirect(`/${pageType}/${slug}`);
+    await handleRedirect(`/${pageType}/${slug}`);
   }
 
   if (!Array.isArray(blocks)) {
-    console.log("Blocks not found: ", pageType, slug);
-    notFound();
+    await handleRedirect(`/${pageType}/${slug}`);
   }
 
   return (

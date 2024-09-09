@@ -29,7 +29,7 @@ export default async function BlogsByTag({ params }) {
   const tag = await fetchTag(slug);
 
   if (!tag) {
-    return handleRedirect(`/blog/tag/${slug}`);
+    await handleRedirect(`/blog/tag/${slug}`);
   }
 
   const { blogs, pageInfo } = await fetchBlogs({
