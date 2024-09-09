@@ -5,7 +5,6 @@ import { useIsInteractive, useSource } from "@/utils/context/navbar";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 
-const GTM = dynamic(() => import("react-gtm-module"), { ssr: false });
 const Affise = dynamic(() => import("@/components/scripts/affise"), {
   ssr: false,
 });
@@ -24,9 +23,13 @@ export default function Scripts() {
   useEffect(() => {
     if (isInteractive && source !== "app" && !gtmInitialized) {
       const initGTM = async () => {
-        const GTMModule = await GTM;
-        GTMModule.initialize({ gtmId: GTM_ID });
-        setGtmInitialized(true);
+        try {
+          const GTMModule = await import("react-gtm-module");
+          GTMModule.default.initialize({ gtmId: GTM_ID });
+          setGtmInitialized(true);
+        } catch (error) {
+          console.error("Failed to initialize GTM:", error);
+        }
       };
       initGTM();
     }
