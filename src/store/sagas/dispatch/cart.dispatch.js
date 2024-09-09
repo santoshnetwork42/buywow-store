@@ -1,6 +1,6 @@
+import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 
 export const useCartDispatch = () => {
   const dispatch = useDispatch();
@@ -102,7 +102,7 @@ export const useCartDispatch = () => {
   const storeCoupon = useCallback(
     (couponCode) => {
       dispatch({
-        type: cartSagaActions.STORE_COUPON,
+        type: cartSagaActions.STORED_COUPON_CODE,
         payload: { couponCode },
       });
     },

@@ -12,6 +12,7 @@ import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
+import { setAuthError } from "@/store/slices/auth.slice";
 import { addPhonePrefix, validatePhoneNumber } from "@/utils/helpers";
 
 const PasswordLess = ({ enableOutsideClick = true }) => {
@@ -54,6 +55,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
   });
   const [authErrors, setAuthErrors] = useState({
     phone: "",
+    otp: "",
   });
   const [countdown, setCountdown] = useState(0);
 
@@ -139,7 +141,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
         confirmationCode: new Array(6).fill(""),
       });
       setConfirmationStatus(null);
-      setAuthErrors({ phone: "" });
+      setAuthErrors({ phone: "", otp: "" });
       setCountdown(0);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -194,6 +196,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
             setCustomUser(phone);
             auth({ action: "signup", moe: { userId: null, phone } });
           } else {
+            setAuthError((prev) => ({ ...prev, otp: "Invalid OTP" }));
             console.error("OTP verification failed");
           }
         } catch (error) {
@@ -306,6 +309,13 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
 
   const renderOTPStep = (
     <div className="flex flex-col items-center gap-3 px-8 py-4">
+      <Text
+        as="p"
+        size="sm"
+        className="w-full font-light text-gray-600 md:text-[15px]"
+      >
+        Enter 6-Digit OTP sent to +91{authData.phone}
+      </Text>
       <div className="flex justify-between gap-3">
         {authData.confirmationCode.map((data, index) => (
           <Input
@@ -356,7 +366,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       isOpen={isPasswordLessOpen}
       onClose={() => handlePasswordLessModal(false, false, null)}
       showMobileView
-      title="Signup"
+      title={!confirmationStatus ? "Sign In" : "OTP Verification"}
       enableOutsideClick={enableOutsideClick}
     >
       {!confirmationStatus ? renderSignInStep : renderOTPStep}

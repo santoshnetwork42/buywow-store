@@ -29,7 +29,6 @@ export async function GET() {
       return `
           <sitemap>
             <loc>${sitemap.loc}</loc>
-            <lastmod>${sitemap.lastmod}</lastmod>
           </sitemap>`;
     })
     .join("\n");

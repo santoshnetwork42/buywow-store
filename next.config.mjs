@@ -12,6 +12,7 @@ const nextConfig = {
     ];
     return paylolad;
   },
+
   async redirects() {
     const allRedirects = [
       {
@@ -86,7 +87,7 @@ const nextConfig = {
       },
       {
         source: "/buywow/orders",
-        destination: "/account",
+        destination: "/pages/account",
         permanent: true,
       },
       {
@@ -96,7 +97,7 @@ const nextConfig = {
       },
       {
         source: "/buywow/account",
-        destination: "/account",
+        destination: "/pages/account",
         permanent: true,
       },
       {
@@ -132,6 +133,11 @@ const nextConfig = {
       {
         source: "/collections/search",
         destination: "/search",
+        permanent: true,
+      },
+      {
+        source: "/query-us",
+        destination: "/pages/query-us",
         permanent: true,
       },
     ];
