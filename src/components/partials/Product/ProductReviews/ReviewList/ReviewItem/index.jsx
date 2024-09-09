@@ -1,11 +1,11 @@
 import { CloseIcon } from "@/assets/svg/icons";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
+import ReadMore from "@/components/features/ReadMore";
+import ReviewImageCarousel from "@/components/partials/Product/ProductReviews/ReviewList/ReviewItem/ReviewImageCarousel";
+import ReviewStars from "@/components/partials/Product/ProductReviews/ReviewStars";
 import { formatTimeAgo } from "@/utils/helpers";
 import React, { useCallback, useState } from "react";
-import ReadMore from "@/components/features/ReadMore";
-import ReviewStars from "@/components/partials/Product/ProductReviews/ReviewStars";
-import ReviewImageCarousel from "@/components/partials/Product/ProductReviews/ReviewList/ReviewItem/ReviewImageCarousel";
 
 const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
@@ -55,7 +55,10 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
               ))}
             </div>
           )}
-          <ReadMore content={review?.comment} maxLength={300} />
+          <ReadMore
+            content={review?.comment.replace(/[^\x00-\x7F]/g, "'")}
+            maxLength={300}
+          />
           {isUserReview && (
             <Button
               onClick={handleEditClick}
@@ -132,7 +135,7 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
             </Text>
             <div className="h-full max-h-[136px] overflow-y-scroll sm:max-h-[120px] md:max-h-[300px]">
               <ReadMore
-                content={review?.comment}
+                content={review?.comment.replace(/[^\x00-\x7F]/g, "'")}
                 buttonClassName="bg-lime-50"
               />
             </div>

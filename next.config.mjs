@@ -12,6 +12,7 @@ const nextConfig = {
     ];
     return paylolad;
   },
+
   async redirects() {
     const allRedirects = [
       {

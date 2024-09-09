@@ -306,6 +306,13 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
 
   const renderOTPStep = (
     <div className="flex flex-col items-center gap-3 px-8 py-4">
+      <Text
+        as="p"
+        size="sm"
+        className="w-full font-light text-gray-600 md:text-[15px]"
+      >
+        Enter 6-Digit OTP sent to +91{authData.phone}
+      </Text>
       <div className="flex justify-between gap-3">
         {authData.confirmationCode.map((data, index) => (
           <Input

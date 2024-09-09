@@ -1,13 +1,13 @@
 "use client";
 
 import { Heading, Text } from "@/components/elements";
+import History from "@/components/partials/Account/WowLoyalty/History";
+import WowLoyaltySkeleton from "@/components/partials/Account/WowLoyalty/WowLoyaltySkeleton";
 import { getLoyaltyAPI } from "@/lib/appSyncAPIs";
 import { EllipsisIcon, WalletIcon } from "@/src/assets/svg/icons";
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import History from "@/components/partials/Account/WowLoyalty/History";
-import WowLoyaltySkeleton from "@/components/partials/Account/WowLoyalty/WowLoyaltySkeleton";
 
 const INITIAL_WOW_CASH_STATE = {
   transactions: [],
@@ -97,7 +97,7 @@ const WowLoyalty = React.memo(() => {
               responsive
             >
               Available Balance
-              <div className="group relative mt-0.5">
+              <div className="group relative z-10 mt-0.5">
                 <EllipsisIcon className="size-3 cursor-help" />
                 <Text
                   as="p"
@@ -135,15 +135,29 @@ const WowLoyalty = React.memo(() => {
         <Heading as="h3" size="lg">
           RECENT HISTORY
         </Heading>
-        <div className="space-y-5 md:space-y-6">
-          {groupedTransactions.map((group, index) => (
-            <History
-              key={index}
-              transactions={group.transactions}
-              title={group.title}
-            />
-          ))}
-        </div>
+        {groupedTransactions.length > 0 ? (
+          <div className="space-y-5 md:space-y-6">
+            {groupedTransactions.map((group, index) => (
+              <History
+                key={index}
+                transactions={group.transactions}
+                title={group.title}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center rounded-lg border px-6 py-10 text-center shadow-sm">
+            <Text
+              as="p"
+              size="base"
+              className="max-w-md text-sm text-gray-600"
+              responsive
+            >
+              Your WOW Cash history is empty. Start shopping to earn cashback
+              and see your transactions here!
+            </Text>
+          </div>
+        )}
       </div>
     </div>
   );
