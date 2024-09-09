@@ -193,14 +193,14 @@ const ProductCard = memo(
               </Text>
             )}
           </div>
-          <div className="flex flex-col justify-between gap-1">
+          <div className="flex flex-col gap-1">
             <RatingDisplay rating={rating} totalRatings={totalRatings} />
-            <div className="flex flex-1 justify-between gap-2">
+            <div className="flex items-center justify-between gap-2">
               <PriceDisplay price={price} listingPrice={listingPrice} />
               <AddToCart
                 product={packageProduct}
                 selectedVariant={selectedVariant}
-                buttonText={"Add"}
+                buttonText="Add"
                 buttonSize="medium"
                 quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] lg:grid-cols-[repeat(3,36px)]"
               />
