@@ -38,10 +38,13 @@ export default function robots() {
     ],
 
     sitemap: [
-      `${NEXT_PUBLIC_SITE_URL}/sitemap/product.xml`,
-      `${NEXT_PUBLIC_SITE_URL}/sitemap/static.xml`,
-      `${NEXT_PUBLIC_SITE_URL}/sitemap/collection.xml`,
-      `${NEXT_PUBLIC_SITE_URL}/sitemap/blog.xml`,
+      `${NEXT_PUBLIC_SITE_URL}/sitemap.xml`,
+      `${NEXT_PUBLIC_SITE_URL}/landing/sitemap.xml`,
+      `${NEXT_PUBLIC_SITE_URL}/products/sitemap.xml`,
+      `${NEXT_PUBLIC_SITE_URL}/collections/sitemap.xml`,
+      `${NEXT_PUBLIC_SITE_URL}/blog/sitemap.xml`,
+      `${NEXT_PUBLIC_SITE_URL}/policies/sitemap.xml`,
+      `${NEXT_PUBLIC_SITE_URL}/pages/sitemap.xml`,
     ],
   };
 }

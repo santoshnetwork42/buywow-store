@@ -6,7 +6,7 @@ const nextConfig = {
     const paylolad = [
       { source: "/sitemap.xml", destination: "/api/sitemap" },
       {
-        source: "/landing-pages/sitemap.xml",
+        source: "/landing/sitemap.xml",
         destination: "/api/landing-sitemap",
       },
     ];

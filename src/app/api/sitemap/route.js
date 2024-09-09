@@ -5,7 +5,7 @@ export async function GET() {
   // Define your sitemaps here
   const sitemaps = [
     {
-      loc: `${baseUrl}/landing-pages/sitemap.xml`,
+      loc: `${baseUrl}/landing/sitemap.xml`,
       lastmod: new Date().toISOString(),
     },
     {
