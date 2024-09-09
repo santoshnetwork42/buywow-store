@@ -61,7 +61,12 @@ const FooterDescription = React.memo(({ description }) => {
 const Copyright = React.memo(({ copyrightText }) => {
   if (!copyrightText) return null;
   return (
-    <Text as="p" size="sm" className="text-white-a700_01" responsive>
+    <Text
+      as="p"
+      size="sm"
+      className="text-[11px] text-white-a700_01"
+      responsive
+    >
       {copyrightText}
     </Text>
   );
@@ -197,9 +202,9 @@ const Footer = ({ data }) => {
             ))}
           </div>
         </div>
-        <div className="mt-5 flex items-center justify-between sm:hidden">
+        <div className="mt-5 flex items-center justify-between gap-2 sm:hidden">
           {socialLinks && socialLinks.length > 0 && (
-            <div className="flex gap-3 md:gap-4">
+            <div className="flex shrink-0 gap-3 md:gap-4">
               {socialLinks.map((item, index) => (
                 <SocialLink
                   key={`social-link-${index}`}
