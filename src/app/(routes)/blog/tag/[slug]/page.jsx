@@ -1,12 +1,18 @@
 import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogInfiniteScroll2 from "@/components/partials/Blog/BlogInfiniteScroll2";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
-import { fetchBlogs, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
+import { fetchBlogs, fetchFeaturedBlogs, fetchTag } from "@/lib/wordPressAPIs";
 
 export const revalidate = 86400;
 
 export default async function BlogsByTag({ params }) {
   const { slug } = params;
+
+  const tag = await fetchTag(slug);
+
+  if (!tag) {
+    return handleRedirect(`/blog/tag/${slug}`);
+  }
 
   const { blogs, pageInfo } = await fetchBlogs({
     first: 9,
