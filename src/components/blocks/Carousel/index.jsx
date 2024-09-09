@@ -64,7 +64,7 @@ const CarouselImage = React.memo(
           <Img
             src={imageUrl}
             alt={imageAlt}
-            priority={index === 0}
+            priority
             width={500}
             height={500}
             className="h-auto w-full object-contain"
