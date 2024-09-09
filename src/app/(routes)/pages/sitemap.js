@@ -1,10 +1,10 @@
-import { getCMSPagesForSitemapAPI } from "@/lib/appSyncAPIs";
+import { getCMSPagesAPI } from "@/lib/appSyncAPIs";
 
 const { NEXT_PUBLIC_SITE_URL } = process.env;
 
 export default async function sitemap() {
   try {
-    const pages = (await getCMSPagesForSitemapAPI("pages")) || [];
+    const pages = (await getCMSPagesAPI("pages")) || [];
 
     return pages.map((page) => ({
       url: `${NEXT_PUBLIC_SITE_URL}/${page}`,

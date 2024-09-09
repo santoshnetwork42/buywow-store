@@ -1,10 +1,10 @@
-import { getCMSPagesForSitemapAPI, getPageMetadataBySlugAPI } from "@/lib/appSyncAPIs";
+import { getCMSPagesAPI, getPageMetadataBySlugAPI } from "@/lib/appSyncAPIs";
 
 const { NEXT_PUBLIC_SITE_URL } = process.env;
 
 const collectionsLink = async () => {
   try {
-    const collectionsPages = (await getCMSPagesForSitemapAPI("collection")) || [];
+    const collectionsPages = (await getCMSPagesAPI("collection")) || [];
     const allSitemapEntries = (
       await Promise.all(
         collectionsPages.map((slug) => processPage(slug, "COLLECTION")),
