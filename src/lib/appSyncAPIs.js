@@ -622,10 +622,16 @@ export const getOrdersAPI = async (userId, token = null, perPage = 10) => {
 
 export const getRedirectsAPI = async (path) => {
   try {
-    const data = await fetchData(getRedirects, {
-      slug: path,
-      storeId: STORE_ID,
-    });
+    const data = await fetchData(
+      getRedirects,
+      {
+        slug: path,
+        storeId: STORE_ID,
+      },
+      {
+        next: { revalidate: 0 },
+      },
+    );
     return data?.getRedirects || null;
   } catch (err) {
     errorHandler(err, "Get Redirects API");
