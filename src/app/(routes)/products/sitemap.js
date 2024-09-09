@@ -1,10 +1,13 @@
-import { getCMSPagesAPI, getPageMetadataBySlugAPI } from "@/lib/appSyncAPIs";
+import {
+  getCMSPagesForSitemapAPI,
+  getPageMetadataBySlugAPI,
+} from "@/lib/appSyncAPIs";
 
 const { NEXT_PUBLIC_SITE_URL } = process.env;
 
 const productsLink = async () => {
   try {
-    const productsPages = (await getCMSPagesAPI("product")) || [];
+    const productsPages = (await getCMSPagesForSitemapAPI("product")) || [];
     const allSitemapEntries = (
       await Promise.all(productsPages.map((slug) => processPage(slug)))
     ).filter((entry) => entry !== null);
@@ -19,6 +22,7 @@ const productsLink = async () => {
 
 const processPage = async (slug) => {
   const metadata = await getPageMetadataBySlugAPI(slug);
+
   if (!!Object.keys(metadata)?.length) {
     // If metadata has noIndex false & not seoCanonical, then add to sitemap
     if (!metadata.noIndex && !metadata.seoCanonical) {
