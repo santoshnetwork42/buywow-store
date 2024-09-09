@@ -173,7 +173,7 @@ function GoKwikProvider({ children }) {
   };
 
   useEffect(() => {
-    awaitGlobal("gokwikSdk", 1000, 30).then((gokwikSdk) => {
+    awaitGlobal("gokwikSdk", 1000, 20).then((gokwikSdk) => {
       gokwikSdk.on("order-complete", async (orderDetails) => {
         try {
           if (orderDetails.merchant_order_id) {
