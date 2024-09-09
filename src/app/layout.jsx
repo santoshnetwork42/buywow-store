@@ -6,7 +6,8 @@ import CartDrawer from "@/components/partials/CartDrawer";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
-import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
+import AuditzyLoader from "@/components/scripts/auditzyLoader";
+import { AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
   getCartUpsellProductsAPI,
   getNavbarAndFooterAPI,
@@ -19,7 +20,6 @@ import GoKwikProvider from "@/utils/context/gokwik";
 import NavbarProvider from "@/utils/context/navbar";
 import { Amplify } from "aws-amplify";
 import { Outfit } from "next/font/google";
-import Script from "next/script";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -78,7 +78,7 @@ async function RootLayout({ children }) {
                   </div>
                   {footerData?.data && <Footer data={footerData} />}
                 </div>
-                {AUDITZ && (
+                {/* {AUDITZ && (
                   <Script
                     id="adz_rum"
                     strategy="beforeInteractive"
@@ -90,7 +90,8 @@ async function RootLayout({ children }) {
                           })()`,
                     }}
                   />
-                )}
+                )} */}
+                <AuditzyLoader />
                 <Scripts />
               </AnnouncementProvider>
             </GoKwikProvider>
