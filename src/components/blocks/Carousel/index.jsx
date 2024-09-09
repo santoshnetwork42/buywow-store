@@ -39,7 +39,7 @@ const CarouselImage = React.memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isInteractive]);
 
-    if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
+    if (!mWebImageAttrs.url && !webImageAttrs.url) return null;
 
     return (
       <Link
@@ -55,19 +55,27 @@ const CarouselImage = React.memo(
         }}
       >
         <picture className="relative block w-full">
+          <source
+            media="(max-width: 575px)"
+            srcSet={`${mWebImageAttrs.url}?w=640&q=75&f=webp`}
+            type="image/webp"
+          />
           {!!webImageAttrs.url && (
             <source
               media="(min-width: 576px)"
-              srcSet={`${webImageAttrs.url}?w=1920&q=75&f=webp`}
+              srcSet={`${webImageAttrs.url}?w=1900&q=75&f=webp`}
+              type="image/webp"
             />
           )}
           <Img
             src={imageUrl}
             alt={imageAlt}
             priority={index === 0}
-            width={500}
-            height={500}
+            width={640}
+            height={360}
             className="h-auto w-full object-contain"
+            loading={index === 0 ? "eager" : "lazy"}
+            sizes="100vw"
           />
         </picture>
       </Link>
