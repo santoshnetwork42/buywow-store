@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  useCartItems,
+  useCartTotal,
+  useConfiguration,
+  useInventory,
+} from "@wow-star/utils";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+
 import { showToast } from "@/components/common/ToastComponent";
 import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
@@ -11,6 +21,7 @@ import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
 import LoyaltyCash from "@/components/partials/CartDrawer/LoyaltyCash";
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
 import CouponsAndOffers from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers";
+
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
@@ -22,23 +33,11 @@ import {
   PREPAID_ENABLED,
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
-import {
-  useCartItems,
-  useCartTotal,
-  useConfiguration,
-  useInventory,
-} from "@wow-star/utils";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
 
 const CartDrawer = ({ upsellProducts }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const _cx = searchParams?.get("_cx");
-  const forceOpenCart = searchParams?.get("cart");
 
   const appliedCoupon = useSelector((state) => state.cart?.coupon);
   const shoppingCartId = useSelector((state) => state.cart?.cartId);
@@ -63,27 +62,7 @@ const CartDrawer = ({ upsellProducts }) => {
   const [checkoutSectionHeight, setCheckoutSectionHeight] = useState(0);
   const fixedCheckoutRef = useRef(null);
 
-  useEffect(() => {
-    const checkoutElement = fixedCheckoutRef.current;
-    if (checkoutElement) {
-      setCheckoutSectionHeight(checkoutElement.offsetHeight);
-    }
-
-    if (isCartOpen) {
-      const timer = setTimeout(() => setDelayedIsOpen(true), 50);
-      return () => clearTimeout(timer);
-    } else {
-      setDelayedIsOpen(false);
-    }
-  }, [isCartOpen, appliedCoupon]);
-
   const inventory = useInventory({ validateCart });
-  const {
-    ready: isInventoryCheckReady,
-    success: isInventoryCheckSuccess,
-    inventoryMapping,
-    outOfStockItems,
-  } = inventory;
   const guestCheckout = useGuestCheckout();
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
@@ -103,6 +82,13 @@ const CartDrawer = ({ upsellProducts }) => {
     paymentType: prepaidEnabled ? "PREPAID" : "COD",
     isRewardApplied,
   });
+
+  const {
+    ready: isInventoryCheckReady,
+    success: isInventoryCheckSuccess,
+    inventoryMapping,
+    outOfStockItems,
+  } = inventory;
 
   const cartItems = useCartItems({
     showLTOProducts: false,
@@ -127,13 +113,12 @@ const CartDrawer = ({ upsellProducts }) => {
       const getUserResponse = await getUserAPI();
       if (!getUserResponse?.isActive) {
         router.push("/404");
-        return Promise.resolve(false);
+        return false;
       }
     }
 
-    const lscart = localStorage.getItem(`${STORE_PREFIX}-cartId`) || "";
-    const cartId = lscart || shoppingCartId;
-
+    const cartId =
+      localStorage.getItem(`${STORE_PREFIX}-cartId`) || shoppingCartId;
     const isGKCXEnabled = !!(GOKWIK_MID && cartId && gokwikEnabled);
 
     if (isGKCXEnabled) {
@@ -149,10 +134,9 @@ const CartDrawer = ({ upsellProducts }) => {
         });
 
         handleProceedToCheckout("GOKWIK");
-        return Promise.resolve(true);
+        return true;
       } catch (e) {
         await gokwikSdk.close();
-        // errorHandler(e);
         router.push("/checkout");
       }
     }
@@ -160,11 +144,11 @@ const CartDrawer = ({ upsellProducts }) => {
     handleProceedToCheckout("BUYWOW");
     if (user?.id || guestCheckout || customUser?.phone) {
       router.push("/checkout");
-      return Promise.resolve(true);
+      return true;
     }
 
     handlePasswordLessModal(true, true, "/checkout");
-    return Promise.resolve(false);
+    return false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     user,
@@ -186,36 +170,72 @@ const CartDrawer = ({ upsellProducts }) => {
   }, [handleCartVisibility]);
 
   useEffect(() => {
-    if (isCartOpen) {
-      viewCart();
+    const handlePopState = () => {
+      if (isCartOpen) {
+        handleCartVisibility(false);
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("popstate", handlePopState);
+
+      // Push a new state when the cart opens
+      if (isCartOpen) {
+        window.history.pushState({ cart: "open" }, "");
+      }
     }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("popstate", handlePopState);
+      }
+    };
+  }, [isCartOpen, handleCartVisibility]);
+
+  useEffect(() => {
+    if (isCartOpen) viewCart();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCartOpen]);
 
   useEffect(() => {
+    handleCartVisibility(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  useEffect(() => {
+    const forceOpenCart = searchParams?.get("cart") === "1";
+    const _cx = searchParams?.get("_cx");
+
     const shouldForceOpenCart =
-      forceOpenCart === "1" &&
+      forceOpenCart &&
       !isCartOpen &&
       !RESTRICT_SEARCH_AND_CART_TO_SHOW.some(
         (allowedPath) =>
           allowedPath === pathname ||
           (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
       );
+    handleCartVisibility(shouldForceOpenCart);
 
-    if (shouldForceOpenCart) {
-      handleCartVisibility(true);
-    } else {
-      handleCartVisibility(false);
-    }
+    if (_cx) fetchAndAddProductsFromEncodedCart(_cx);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [forceOpenCart]);
+  }, [searchParams]);
 
   useEffect(() => {
-    if (_cx) {
-      fetchAndAddProductsFromEncodedCart(_cx);
+    if (isCartOpen) {
+      const timer = setTimeout(() => setDelayedIsOpen(true), 50);
+      return () => clearTimeout(timer);
+    } else {
+      setDelayedIsOpen(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [_cx]);
+  }, [isCartOpen]);
+
+  useEffect(() => {
+    const checkoutElement = fixedCheckoutRef.current;
+    if (checkoutElement) {
+      setCheckoutSectionHeight(checkoutElement.offsetHeight);
+    }
+  }, [appliedCoupon]);
 
   return (
     <Drawer

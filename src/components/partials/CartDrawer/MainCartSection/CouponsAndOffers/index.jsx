@@ -1,10 +1,3 @@
-import CouponDrawer from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer";
-import CouponHeader from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponHeader";
-import CouponModal from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponModal";
-import { applyCouponAPI } from "@/lib/appSyncAPIs";
-import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
-import { useIsInteractive } from "@/utils/context/navbar";
-import { AUTO_APPLY_COUPON_PATHNAMES } from "@/utils/data/constants";
 import {
   getCouponDiscount,
   useBestCoupon,
@@ -14,9 +7,16 @@ import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
+import CouponDrawer from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer";
+import CouponHeader from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponHeader";
+import CouponModal from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponModal";
+import { applyCouponAPI } from "@/lib/appSyncAPIs";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
+import { useIsInteractive } from "@/utils/context/navbar";
+import { AUTO_APPLY_COUPON_PATHNAMES } from "@/utils/data/constants";
+
 const CouponsAndOffers = () => {
   const pathname = usePathname();
-
   const { applyCoupon, removeCoupon, removeFromCart } = useCartDispatch();
   const [couponCode, setCouponCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,6 @@ const CouponsAndOffers = () => {
   const user = useSelector((state) => state.user?.user);
 
   const isInteractive = useIsInteractive();
-
   const { filteredFeaturedCoupons: featuredCoupons = [] } =
     useFeaturedCoupons();
   const bestCouponCode = useBestCoupon();
@@ -56,9 +55,7 @@ const CouponsAndOffers = () => {
 
         if (allowed) {
           applyCoupon({ ...couponResponse, autoApplied: !!autoApplied });
-          setTimeout(() => {
-            setIsCouponModalOpen(true);
-          }, 300);
+          setTimeout(() => setIsCouponModalOpen(true), 300);
           setIsSidebarOpen(false);
           setError(null);
         } else {
@@ -77,7 +74,7 @@ const CouponsAndOffers = () => {
   );
 
   useEffect(() => {
-    if (cartList || cartList !== previousCartList.current) {
+    if (cartList !== previousCartList.current) {
       previousCartList.current = cartList;
 
       const shouldAutoApply = AUTO_APPLY_COUPON_PATHNAMES.some(
@@ -125,6 +122,28 @@ const CouponsAndOffers = () => {
       setError(null);
     }
   }, [couponCode]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (isSidebarOpen) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      window.addEventListener("popstate", handlePopState);
+
+      if (isSidebarOpen) {
+        window.history.pushState({ couponDrawer: "open" }, "");
+      }
+    }
+
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("popstate", handlePopState);
+      }
+    };
+  }, [isSidebarOpen]);
 
   return (
     <>
