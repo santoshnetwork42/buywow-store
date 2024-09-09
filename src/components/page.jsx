@@ -148,12 +148,18 @@ export default async function PageBlock({ pageType, slug }) {
   const pageData = await getPageBySlugAPI(slug);
   const { blocks, slug: fetchedSlug, type: fetchedPageType } = pageData;
 
-  if (!fetchedSlug) {
+  if (!fetchedSlug || fetchedSlug !== slug) {
     return handleRedirect(`/${pageType}/${slug}`);
   }
 
-  if (PAGETYPE[fetchedPageType] !== pageType) {
+  if (!fetchedPageType || PAGETYPE[fetchedPageType] !== pageType) {
     return handleRedirect(`/${pageType}/${slug}`);
+  }
+
+  if (!Array.isArray(blocks)) {
+    console.log("Blocks not found: ", pageType, slug);
+
+    notFound();
   }
 
   return (

@@ -8,7 +8,11 @@ import BlogBreadCrumb from "@/components/partials/Blog/BlogBreadCrumb";
 import BlogSidebar from "@/components/partials/Blog/BlogSidebar";
 import { PREBUILD_ALL_PAGES } from "@/config";
 import { replaceBlogLinks } from "@/lib/replaceBlogLinks";
-import { fetchBlog, fetchFeaturedBlogs } from "@/lib/wordPressAPIs";
+import {
+  fetchAllBlogSlugs,
+  fetchBlog,
+  fetchFeaturedBlogs,
+} from "@/lib/wordPressAPIs";
 import handleRedirect from "@/utils/handleRedirect";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -29,6 +33,16 @@ export async function generateMetadata({ params }) {
       authorName: blog?.author?.node?.name,
     };
   }
+}
+
+export async function generateStaticParams() {
+  if (!PREBUILD_ALL_PAGES) {
+    return [];
+  }
+  const { blogs } = await fetchAllBlogSlugs({});
+  return blogs.map((blog) => ({
+    slug: blog?.node?.slug,
+  }));
 }
 
 export default async function ReadBlog({ params }) {

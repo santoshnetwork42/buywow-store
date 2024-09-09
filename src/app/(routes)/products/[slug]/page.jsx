@@ -1,5 +1,10 @@
 import PageBlock from "@/components/page";
-import { getPageBySlugAPI, getStoreAPI } from "@/lib/appSyncAPIs";
+import { PREBUILD_ALL_PAGES } from "@/config";
+import {
+  getCMSPagesAPI,
+  getPageBySlugAPI,
+  getStoreAPI,
+} from "@/lib/appSyncAPIs";
 import { generateSEOAndJSONLD } from "@/utils/helpers/generateSEOAndJSONLD";
 
 export const revalidate = 1800;
@@ -36,6 +41,14 @@ export async function generateMetadata({ params }) {
     }) || {};
 
   return seoData;
+}
+
+export async function generateStaticParams() {
+  if (!PREBUILD_ALL_PAGES) {
+    return [];
+  }
+  const pages = await getCMSPagesAPI("product");
+  return pages.map((slug) => ({ slug }));
 }
 
 export default async function Page({ params }) {
