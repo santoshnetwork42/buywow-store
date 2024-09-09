@@ -33,19 +33,17 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
   if (!(totalRatings > 0)) return null;
   return (
     <div className="flex items-center gap-1">
-      <div className="flex items-center gap-[3px]">
-        <Img
-          src="img_star.svg"
-          width={16}
-          height={16}
-          alt="Rating stars"
-          className="aspect-square w-[12px] sm:w-[14px] lg:w-[16px]"
-          isStatic
-        />
-        <Text as="span" size="sm" className="capitalize" responsive>
-          {toDecimal(rating, 2)}
-        </Text>
-      </div>
+      <Img
+        src="img_star.svg"
+        width={16}
+        height={16}
+        alt="Rating stars"
+        className="aspect-square w-[12px] sm:w-[14px] lg:w-[16px]"
+        isStatic
+      />
+      <Text as="span" size="sm" className="capitalize" responsive>
+        {toDecimal(rating, 2)}
+      </Text>
       <Text as="span" size="sm" className="capitalize" responsive>
         ({formatTotalRatings(totalRatings)}) reviews
       </Text>
