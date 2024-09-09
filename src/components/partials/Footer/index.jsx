@@ -67,7 +67,7 @@ const Copyright = React.memo(({ copyrightText }) => {
   );
 });
 
-const Footer = ({ data, ...props }) => {
+const Footer = ({ data }) => {
   const [openSections, setOpenSections] = useState({});
 
   const pathname = usePathname();
@@ -141,9 +141,7 @@ const Footer = ({ data, ...props }) => {
   if (isRestricted) return <></>;
 
   return (
-    <footer
-      className={`flex bg-blue_gray-300_01 px-5 py-6 sm:px-10 md:px-14 lg:px-16 xl:px-24 ${props.className || ""}`}
-    >
+    <footer className="container-main flex bg-blue_gray-300_01 px-5 py-6 shadow-[0_0_0_100vmax_#899fbf] [clipPath:inset(0_-100vmax)] sm:px-10 md:px-14 lg:px-16 xl:px-24">
       <div className="flex w-full flex-col justify-between gap-5 sm:flex-row">
         <div className="flex flex-col gap-7">
           <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 lg:gap-7">

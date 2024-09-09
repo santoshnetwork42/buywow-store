@@ -50,7 +50,7 @@ export default async function ReadBlog({ params }) {
   const blog = await fetchBlog(slug);
 
   if (!blog) {
-    return await handleRedirect(`/blog/${slug}`);
+    await handleRedirect(`/blog/${slug}`);
   }
 
   const featuredBlogs = await fetchFeaturedBlogs(5);

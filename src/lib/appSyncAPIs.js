@@ -90,7 +90,7 @@ export const getPageBySlugAPI = async (slugId) => {
     collectionDataLimit: 100,
   });
 
-  return JSON.parse(data?.getPageBySlug);
+  return JSON.parse(data?.getPageBySlug || "{}");
 };
 
 export const getPageMetadataBySlugAPI = async (slugId) => {
