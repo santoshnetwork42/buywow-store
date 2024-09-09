@@ -64,7 +64,7 @@ const CarouselImage = React.memo(
           <Img
             src={imageUrl}
             alt={imageAlt}
-            priority
+            priority={index === 0}
             width={500}
             height={500}
             className="h-auto w-full object-contain"
@@ -79,7 +79,11 @@ CarouselImage.displayName = "CarouselImage";
 
 const DotButton = React.memo(({ selected, onClick }) => (
   <Button
-    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full transition-all duration-300 ease-in-out md:h-1.5 ${selected ? "w-2.5 bg-white-a700_01 md:w-3" : "w-1 bg-lime-50 hover:bg-lime-100 md:w-1.5"} `}
+    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full transition-all duration-300 ease-in-out md:h-1.5 ${
+      selected
+        ? "w-2.5 bg-white-a700_01 md:w-3"
+        : "w-1 bg-lime-50 hover:bg-lime-100 md:w-1.5"
+    }`}
     size="none"
     variant="none"
     onClick={onClick}
@@ -125,7 +129,6 @@ const Carousel = ({
 
   const carouselImages = useMemo(() => {
     const imagesToRender = isInteractive ? banners : [banners[0]];
-
     return imagesToRender.map((banner, index) => (
       <CarouselImage
         key={`carousel-image-${banner.id || index}`}
