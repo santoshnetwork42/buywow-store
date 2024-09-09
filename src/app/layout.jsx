@@ -6,7 +6,6 @@ import CartDrawer from "@/components/partials/CartDrawer";
 import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
-import GokwikLoader from "@/components/scripts/goKwikScriptLoader";
 import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
   getCartUpsellProductsAPI,
@@ -61,9 +60,7 @@ async function RootLayout({ children }) {
         <meta name="theme-color" content="#000000" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
-        {/* Enable the below line and comment the line after another if anything goes wrong with goKwik */}
-        {/* {!!GOKWIK_SCRIPT && <script defer src={GOKWIK_SCRIPT} />} */}
-        {GOKWIK_SCRIPT && <GokwikLoader src={GOKWIK_SCRIPT} />}
+        {!!GOKWIK_SCRIPT && <script defer src={GOKWIK_SCRIPT} />}
       </head>
       <body>
         <Provider data={{ headerData, carouselData }}>
