@@ -17,7 +17,7 @@ import React, {
 } from "react";
 
 const CarouselImage = React.memo(
-  ({ webImage, mWebImage, link, index, moeText }) => {
+  ({ webImage, mWebImage, link, index, moeText, isInteractive }) => {
     const webImageAttrs = extractAttributes(webImage);
     const mWebImageAttrs = extractAttributes(mWebImage);
 
@@ -32,12 +32,12 @@ const CarouselImage = React.memo(
     const source = getSource();
 
     useEffect(() => {
-      if (!eventTriggered.current) {
+      if (!eventTriggered.current && isInteractive) {
         homeViewed();
         eventTriggered.current = true;
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [isInteractive]);
 
     if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
@@ -123,18 +123,18 @@ const Carousel = ({
     return () => emblaApi.off("select", onSelect);
   }, [emblaApi, onSelect]);
 
-  const carouselImages = useMemo(
-    () =>
-      banners?.map((banner, index) => (
-        <CarouselImage
-          key={`carousel-image-${index}`}
-          {...banner}
-          index={index}
-        />
-      )),
+  const carouselImages = useMemo(() => {
+    const imagesToRender = isInteractive ? banners : [banners[0]];
 
-    [banners],
-  );
+    return imagesToRender.map((banner, index) => (
+      <CarouselImage
+        key={`carousel-image-${banner.id || index}`}
+        {...banner}
+        index={index}
+        isInteractive={isInteractive}
+      />
+    ));
+  }, [banners, isInteractive]);
 
   const dotButtons = useMemo(
     () =>
@@ -152,20 +152,12 @@ const Carousel = ({
 
   return (
     <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">
-      {isInteractive ? (
-        <>
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex">{carouselImages}</div>
-          </div>
-          <div className="absolute bottom-1.5 left-1/2 flex -translate-x-1/2 cursor-pointer sm:bottom-2 md:bottom-2.5 lg:bottom-3">
-            {dotButtons}
-          </div>
-        </>
-      ) : (
-        <div className="overflow-hidden">
-          {<CarouselImage {...banners[0]} index={0} />}
-        </div>
-      )}
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">{carouselImages}</div>
+      </div>
+      <div className="absolute bottom-1.5 left-1/2 flex -translate-x-1/2 cursor-pointer sm:bottom-2 md:bottom-2.5 lg:bottom-3">
+        {dotButtons}
+      </div>
     </div>
   );
 };

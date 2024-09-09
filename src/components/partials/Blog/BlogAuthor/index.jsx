@@ -1,5 +1,4 @@
-import { Heading, Text } from "@/components/elements";
-import Image from "next/image";
+import { Heading, Img, Text } from "@/components/elements";
 import Link from "next/link";
 
 export default function BlogAuthor({
@@ -11,7 +10,7 @@ export default function BlogAuthor({
 }) {
   return (
     <div className="grid grid-cols-[auto,1fr] gap-6">
-      <Image
+      <Img
         src={avatar}
         alt={name}
         width={100}
@@ -34,12 +33,13 @@ export default function BlogAuthor({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Image
-                  src="/images/linkedin.svg"
+                <Img
+                  src="linkedin.svg"
                   alt="linkedin"
                   width={16}
                   height={16}
                   style={{ filter: "invert(1)" }}
+                  isStatic
                 />
               </Link>
             )}

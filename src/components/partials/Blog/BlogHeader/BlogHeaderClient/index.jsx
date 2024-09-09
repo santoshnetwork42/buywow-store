@@ -1,11 +1,10 @@
 "use client";
 
 import { DownArrowIconSVG, MenuSVG } from "@/assets/svg/icons";
-import { Button } from "@/components/elements";
+import { Button, Img } from "@/components/elements";
 import BlogCard2 from "@/components/partials/Blog/BlogCard2";
 import BlogMobileMenu from "@/components/partials/Blog/BlogHeader/BlogMobileMenu";
 import { useSource } from "@/utils/context/navbar";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -16,7 +15,6 @@ export default function BlogHeaderClient({ menu, categoryBlogs }) {
   const openBlogMobileMenu = () => setIsBlogMobileMenuOpen(true);
   const closeBlogMobileMenu = () => setIsBlogMobileMenuOpen(false);
 
-  console.log("menu :>> ", menu);
   return (
     <header className="container-main flex flex-col gap-y-6 border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
       <div className="grid w-full grid-cols-[1fr,auto,1fr] items-center justify-center gap-x-4">
@@ -31,11 +29,12 @@ export default function BlogHeaderClient({ menu, categoryBlogs }) {
           </Button>
         </div>
         <Link prefetch={false} href={source === "app" ? "/blog" : "/"}>
-          <Image
-            src="/images/img_wow_logo.png"
+          <Img
+            src="img_wow_logo.png"
             alt="logo"
             width={100}
             height={100}
+            isStatic
           />
         </Link>
       </div>
@@ -44,8 +43,8 @@ export default function BlogHeaderClient({ menu, categoryBlogs }) {
         <nav className="hidden w-full items-center justify-center gap-x-4 lg:flex">
           {menu
             ?.filter((item) => item.label !== "Web Stories")
-            .map((item) => (
-              <div key={item.id} className="group relative">
+            .map((item, index) => (
+              <div key={item.id || index} className="group relative">
                 <Link
                   prefetch={false}
                   className="flex cursor-pointer items-center gap-x-1 py-2"
@@ -58,8 +57,11 @@ export default function BlogHeaderClient({ menu, categoryBlogs }) {
                 {categoryBlogs[item.id] &&
                   categoryBlogs[item.id].length > 0 && (
                     <div className="invisible absolute left-1/2 top-full z-10 hidden w-80 -translate-x-1/2 scale-95 transform gap-y-4 rounded-lg border-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 p-4 opacity-0 shadow-lg transition-all duration-300 ease-in-out group-hover:visible group-hover:grid group-hover:scale-100 group-hover:opacity-100">
-                      {categoryBlogs[item.id].map((blog) => (
-                        <BlogCard2 key={blog.node.id} blog={blog.node} />
+                      {categoryBlogs[item.id].map((blog, index) => (
+                        <BlogCard2
+                          key={blog.node.id || index}
+                          blog={blog.node}
+                        />
                       ))}
                     </div>
                   )}

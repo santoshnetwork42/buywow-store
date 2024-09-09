@@ -42,8 +42,8 @@ export default function BlogSidebar({ featuredBlogs = [], tags = [] }) {
           <div className="grid gap-y-4">
             {featuredBlogs &&
               featuredBlogs.length > 0 &&
-              featuredBlogs.map((blog) => (
-                <BlogCard2 blog={blog} key={blog.id} />
+              featuredBlogs.map((blog, index) => (
+                <BlogCard2 blog={blog} key={blog.id || index} />
               ))}
           </div>
 
@@ -56,11 +56,11 @@ export default function BlogSidebar({ featuredBlogs = [], tags = [] }) {
               </Heading>
 
               <div className="flex flex-wrap gap-4">
-                {tags.map((tag) => (
+                {tags.map((tag, index) => (
                   <Link
                     prefetch={false}
                     href={`/blog/tag/${tag.slug}`}
-                    key={tag.slug}
+                    key={tag.slug || index}
                     className="border border-yellow-900 px-2 py-1 text-sm text-yellow-900"
                   >
                     {tag.name}

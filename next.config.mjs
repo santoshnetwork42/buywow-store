@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  async rewrites() {
-    const payload = [];
-    return payload;
-  },
 
   async redirects() {
     const allRedirects = [
@@ -150,18 +146,6 @@ const nextConfig = {
         hostname: process.env.NEXT_PUBLIC_WP_AVATAR_URL,
       },
     ],
-  },
-
-  i18n: {
-    locales: ["en"],
-    defaultLocale: "en",
-  },
-
-  experimental: {
-    staleTimes: {
-      dynamic: 0,
-      static: 180,
-    },
   },
 };
 
