@@ -10,6 +10,7 @@ import {
   findUserAddresses,
   getCartUpsellProducts,
   getCMSPages,
+  getCouponRule,
   getInitialData,
   getLoyalty,
   getNavbarAndFooter,

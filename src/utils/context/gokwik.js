@@ -1,17 +1,6 @@
 "use client";
 
 import {
-  getCouponDiscount,
-  useCartTotal,
-  useConfiguration,
-  useNavbar,
-} from "@wow-star/utils";
-import awaitGlobal from "await-global";
-import { confirmSignIn, getCurrentUser, signIn } from "aws-amplify/auth";
-import { useRouter } from "next/navigation";
-import { createContext, useCallback, useEffect } from "react";
-
-import {
   applyCouponAPI,
   fetchCouponRuleAPI,
   getOrderByIdAPI,
@@ -23,6 +12,16 @@ import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import { PREPAID_ENABLED } from "@/utils/data/constants";
 import { errorHandler } from "@/utils/errorHandler";
 import { addPhonePrefix, formatUserAddress } from "@/utils/helpers";
+import {
+  getCouponDiscount,
+  useCartTotal,
+  useConfiguration,
+  useNavbar,
+} from "@wow-star/utils";
+import awaitGlobal from "await-global";
+import { confirmSignIn, getCurrentUser, signIn } from "aws-amplify/auth";
+import { useRouter } from "next/navigation";
+import { createContext, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export const GKContext = createContext();
@@ -52,7 +51,7 @@ function GoKwikProvider({ children }) {
     auth,
   } = useEventsDispatch();
 
-  const setRewardPoints = useCallback(async () => {
+  const setRewardPoints = async () => {
     try {
       if (isRewardApplied)
         setUserWithRewardPoints({
@@ -66,35 +65,31 @@ function GoKwikProvider({ children }) {
       console.error("Error while upadating user points ");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userWithRewardPoints, setUserWithRewardPoints]);
+  };
 
-  const applyCouponCode = useCallback(
-    async (couponCode, autoApplied = false) => {
-      const response = await applyCouponAPI(couponCode);
+  const applyCouponCode = async (couponCode, autoApplied = false) => {
+    const response = await applyCouponAPI(couponCode);
 
-      if (!!response?.data?.applyCoupon) {
-        const {
-          allowed,
-          message,
-          coupon: couponResponse,
-        } = getCouponDiscount(response.data.applyCoupon, cartList);
+    if (!!response?.data?.applyCoupon) {
+      const {
+        allowed,
+        message,
+        coupon: couponResponse,
+      } = getCouponDiscount(response.data.applyCoupon, cartList);
 
-        if (allowed) {
-          applyCoupon({
-            ...couponResponse,
-            autoApplied: !!autoApplied,
-            checkoutSource: "GOKWIK",
-          });
-        } else {
-          console.error("Failed to apply coupon:", message);
-        }
+      if (allowed) {
+        applyCoupon({
+          ...couponResponse,
+          autoApplied: !!autoApplied,
+          checkoutSource: "GOKWIK",
+        });
       } else {
-        console.error("Coupon not found");
+        console.error("Failed to apply coupon:", message);
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [userId, cartList],
-  );
+    } else {
+      console.error("Coupon not found");
+    }
+  };
 
   const onGokwikClose = () => {
     setIsLoggedinViaGokwik(false);
@@ -112,8 +107,8 @@ function GoKwikProvider({ children }) {
 
   const fetchOrder = async (orderId) => {
     try {
-      const { getOrder } = await getOrderByIdAPI({ id: orderId });
-      return getOrder;
+      const order = await getOrderByIdAPI({ id: orderId });
+      return order;
     } catch (error) {
       errorHandler(error);
     }
@@ -151,7 +146,7 @@ function GoKwikProvider({ children }) {
             // const currentUser = await getCurrentUser();
             auth({ action: "login", moe: { userId: phone } });
             setIsLoggedinViaGokwik(true);
-            const getUserResponse = await getUserRewardsAPI(code);
+            const getUserResponse = await getUserRewardsAPI();
             setUserWithRewardPoints({
               ...getUserResponse,
             });
@@ -189,11 +184,12 @@ function GoKwikProvider({ children }) {
                 id: orderResponse?.id,
               };
 
-              if (orderDetails?.applied_discount)
+              if (orderDetails?.applied_discount) {
                 coupon = await fetchCoupon(
                   orderDetails?.applied_discount?.code,
                   userId,
                 );
+              }
 
               placeOrder(
                 order,
