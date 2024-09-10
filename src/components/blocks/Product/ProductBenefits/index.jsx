@@ -15,15 +15,10 @@ const BenefitItem = ({ text, subText, image }) => {
         className="aspect-[100/96] w-20 sm:w-[84px] md:w-[88px] lg:w-[92px] xl:w-24"
       />
       <div className="flex flex-col items-center justify-center gap-1 md:gap-2">
-        <Heading
-          as="h5"
-          className="line-clamp-2 text-center text-sm"
-          size="base"
-          responsive
-        >
+        <Heading as="h5" className="text-center text-sm" size="base" responsive>
           {text}
         </Heading>
-        <Text as="p" className="line-clamp-3 text-center" size="sm" responsive>
+        <Text as="p" className="text-center" size="sm" responsive>
           {subText}
         </Text>
       </div>

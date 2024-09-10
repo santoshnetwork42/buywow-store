@@ -5,7 +5,7 @@ import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
-import { useCartTotal } from "@wow-star/utils";
+import { useCartItems, useCartTotal } from "@wow-star/utils";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -13,11 +13,11 @@ import { useSelector } from "react-redux";
 const CartSummary = React.memo(
   ({ totalItems, grandTotal, prepaidDiscountPercent, prepaidDiscount }) => (
     <div className="flex flex-col gap-1">
-      <Heading size="lg" as="h3" className="w-fit font-medium" responsive>
+      <Heading size="lg" as="h3" className="text-base" responsive>
         {totalItems > 1 ? `${totalItems} Items` : "1 Item"} | ₹{" "}
         {toDecimal(grandTotal)}
       </Heading>
-      {!!prepaidDiscountPercent && (
+      {prepaidDiscountPercent > 0 && (
         <Text as="p" size="sm" className="text-black-900" responsive>
           Including {prepaidDiscountPercent}% prepaid discount
         </Text>
@@ -30,13 +30,18 @@ CartSummary.displayName = "CartSummary";
 
 const StickyViewCart = () => {
   const isInteractive = useIsInteractive();
+  const pathname = usePathname();
 
-  const cartList = useSelector((state) => state.cart?.data || []);
+  const { handleCartVisibility } = useModalDispatch();
   const isRewardApplied = useSelector(
     (state) => state.cart?.isRewardApplied || false,
   );
-  const { handleCartVisibility } = useModalDispatch();
-  const pathname = usePathname();
+  const appliedCoupon = useSelector((state) => state.cart?.coupon);
+
+  const cartItems = useCartItems({
+    showLTOProducts: false,
+    showNonApplicableFreeProducts: true,
+  });
 
   const isAllowed = useMemo(
     () =>
@@ -58,31 +63,39 @@ const StickyViewCart = () => {
     handleCartVisibility(true);
   }, [handleCartVisibility]);
 
-  if (!cartList.length || !isAllowed || !isInteractive) return null;
+  if (!cartItems.length || !isAllowed || !isInteractive) return null;
 
   const getCollectionWiseNudgeMsg = () => {
     if (pathname === "/collections/all" || pathname === "/") {
-      return "Add more items to unlock 'Buy 1 Get 1 Free Offer'";
+      if (appliedCoupon?.code === "WOW") {
+        return "Congrats, your Buy 1 Get 1 offer has been availed!";
+      } else if (totalItems > 1) {
+        return "Apply coupon 'WOW' for getting Buy 1 Get 1 offer!";
+      } else {
+        return "Add more items to unlock 'Buy 1 Get 1 Free Offer'";
+      }
     }
     return "";
   };
 
-  let totalQty = (cartList || [])?.reduce((acc, i) => acc + i.qty, 0);
   let isNudge = getCollectionWiseNudgeMsg();
 
   return (
     <>
       <div className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">
-        {!!isNudge && totalQty > 0 && (
-          <div className="rounded-t-md bg-[#6E809A] py-1 text-center">
-            <p className="text-md font-normal text-white-a700">
-              {totalQty < 2
-                ? `Add more items to unlock 'Buy 1 Get 1 Free Offer'`
-                : `Congrats, your Buy 1 Get 1 offer has been availed!`}
-            </p>
+        {!!isNudge && (
+          <div className="bg-blue_gray-400_01 py-1 text-center sm:rounded-t-md md:py-1.5">
+            <Text
+              as="p"
+              size="base"
+              className="text-sm text-white-a700"
+              responsive
+            >
+              {isNudge}
+            </Text>
           </div>
         )}
-        <div className="flex flex-grow justify-between px-5 py-2">
+        <div className="flex flex-grow items-center justify-between px-5 py-2">
           <CartSummary
             totalItems={totalItems}
             grandTotal={grandTotal}
