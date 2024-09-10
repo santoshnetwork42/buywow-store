@@ -3,6 +3,15 @@
 
 export const getInitialData = /* GraphQL */ `
   query getInitialData(
+    $ltoProductFilter: SearchableProductFilterInput
+    $ltoProductSort: [SearchableProductSortInput]
+    $ltoProductLimit: Int
+    $ltoProductNextToken: String
+    $ltoProductFrom: Int
+    $ltoProductAggregates: [SearchableProductAggregationInput]
+    $ltoProductVariantFilter: ModelVariantFilterInput
+    $ltoProductVariantLimit: Int
+    $ltoProductImageLimit: Int
     $getStoreSettingInput: GetStoreSettingInput!
     $storeId: ID!
     $deviceType: DeviceType!
@@ -161,6 +170,85 @@ export const getInitialData = /* GraphQL */ `
         updatedAt
       }
       nextToken
+    }
+    searchProducts(
+      filter: $ltoProductFilter
+      sort: $ltoProductSort
+      limit: $ltoProductLimit
+      nextToken: $ltoProductNextToken
+      from: $ltoProductFrom
+      aggregates: $ltoProductAggregates
+    ) {
+      items {
+        id
+        title
+        collections
+        vendor
+        status
+        minimumOrderQuantity
+        maximumOrderQuantity
+        subCategory {
+          name
+          slug
+        }
+        isFeatured
+        category {
+          name
+          slug
+        }
+        slug
+        price
+        sku
+        position
+        listingPrice
+        tags
+        inventory
+        blockedInventory
+        continueSellingOutOfStock
+        rating
+        totalRatings
+        thumbImages
+        isInventoryEnabled
+        totalOrders
+        recommended
+        recommendPriority
+        recommendPrice
+        variants(
+          filter: $ltoProductVariantFilter
+          limit: $ltoProductVariantLimit
+        ) {
+          items {
+            id
+            title
+            minimumOrderQuantity
+            maximumOrderQuantity
+            price
+            position
+            listingPrice
+            images {
+              items {
+                id
+              }
+            }
+            inventory
+            blockedInventory
+            status
+          }
+        }
+        images(limit: $ltoProductImageLimit) {
+          items {
+            id
+            position
+            alt
+            width
+            height
+            imageKey
+            isThumb
+          }
+        }
+      }
+      nextToken
+      total
     }
   }
 `;

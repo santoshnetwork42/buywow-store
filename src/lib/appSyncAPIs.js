@@ -588,6 +588,11 @@ export const getInitialDataAPI = async (deviceType) => {
       shippingTierFilter: {
         storeId: { eq: STORE_ID },
       },
+      ltoProductFilter: {
+        storeId: { eq: STORE_ID },
+        recommended: { eq: true },
+      },
+      ltoProductSort: [{ field: "recommendPriority", direction: "asc" }],
     });
     return data;
   } catch (error) {

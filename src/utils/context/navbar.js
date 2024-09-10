@@ -1,7 +1,11 @@
 "use client";
 
 import { GUEST_CHECKOUT, STORE_ID, STORE_PREFIX } from "@/config";
-import { NavbarProvider as Navbar, useConfiguration } from "@wow-star/utils";
+import {
+  getProductInventory,
+  NavbarProvider as Navbar,
+  useConfiguration,
+} from "@wow-star/utils";
 import { generateClient } from "aws-amplify/api";
 import Cookie from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -61,6 +65,8 @@ function NavbarProvider({ children, headerData }) {
     }
   };
 
+  console.log("INTIAL____DATA", initialData);
+
   useEffect(() => {
     const handleInteraction = () => {
       setIsInteractive(true);
@@ -105,6 +111,21 @@ function NavbarProvider({ children, headerData }) {
             !expirationDate ||
             new Date(expirationDate).getTime() >= new Date().getTime()
           );
+        }) || []
+      }
+      getLtoProducts={
+        initialData?.searchProducts?.items?.filter((lto) => {
+          const status = lto.variants?.items?.length
+            ? lto.variants?.items[0].status === "ENABLED"
+            : lto.status === "ENABLED";
+
+          const { hasInventory } = getProductInventory(
+            lto,
+            null,
+            initialData?.getStoreSetting?.configurations?.BLOCK_INVENTORY,
+          );
+
+          return hasInventory && status;
         }) || []
       }
     >
