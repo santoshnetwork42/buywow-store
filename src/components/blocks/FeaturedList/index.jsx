@@ -1,9 +1,28 @@
 import { Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
+import React from "react";
 import { twMerge } from "tailwind-merge";
 
-const FeaturedItem = ({ image, text, isWebHorizontal, isInPDP }) => {
+const FeaturedItem = ({
+  image,
+  text,
+  isWebHorizontal,
+  isInPDP,
+  isInPersistLoading,
+}) => {
   const { url, alternativeText } = extractAttributes(image);
+
+  const createMarkup = (html) => {
+    // Remove all HTML tags except <br>
+    const withoutTags = html.replace(/<(?!br\s*\/?)[^>]+>/gi, "");
+
+    return withoutTags.split(/<br\s*\/?>/i).map((text, index, array) => (
+      <React.Fragment key={index}>
+        {text.replace(/&nbsp;/g, "\u00A0")}
+        {index !== array.length - 1 && <br />}
+      </React.Fragment>
+    ));
+  };
 
   return (
     <div
@@ -16,13 +35,24 @@ const FeaturedItem = ({ image, text, isWebHorizontal, isInPDP }) => {
         alt={alternativeText || "Feature Icon"}
         className={`aspect-square w-full rounded-full object-contain ${!isInPDP ? "max-w-10 sm:max-w-12 md:max-w-14 lg:max-w-16" : "max-w-12"}`}
       />
-      <Text
-        as="p"
-        size="base"
-        className={`line-clamp-2 shrink-0 text-center capitalize ${isWebHorizontal && "md:text-left"}`}
-        dangerouslySetInnerHTML={{ __html: text }}
-        responsive
-      />
+      {isInPersistLoading ? (
+        <Text
+          as="p"
+          size="base"
+          className={`line-clamp-2 shrink-0 text-center capitalize ${isWebHorizontal && "md:text-left"}`}
+          responsive
+        >
+          {createMarkup(text)}
+        </Text>
+      ) : (
+        <Text
+          as="p"
+          size="base"
+          className={`line-clamp-2 shrink-0 text-center capitalize ${isWebHorizontal && "md:text-left"}`}
+          dangerouslySetInnerHTML={{ __html: text }}
+          responsive
+        />
+      )}
     </div>
   );
 };
@@ -33,6 +63,7 @@ const FeaturedList = ({
   featuredListItems: features,
   isWebHorizontal = true,
   isInPDP = false,
+  isInPersistLoading = false,
 }) => {
   if (!Array.isArray(features) || features.length === 0) return null;
 
@@ -50,6 +81,7 @@ const FeaturedList = ({
           text={feature?.text}
           isWebHorizontal={isWebHorizontal}
           isInPDP={isInPDP}
+          isInPersistLoading={isInPersistLoading}
         />
       ))}
     </div>

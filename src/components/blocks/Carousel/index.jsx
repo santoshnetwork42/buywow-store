@@ -54,7 +54,7 @@ const CarouselImage = React.memo(
           });
         }}
       >
-        <picture className="relative block w-full">
+        <picture className="relative block aspect-[180/71] w-full sm:aspect-[1920/661]">
           {!!webImageAttrs.url && (
             <source
               media="(min-width: 576px)"
@@ -67,7 +67,7 @@ const CarouselImage = React.memo(
             priority
             width={500}
             height={500}
-            className="h-auto w-full object-contain"
+            className="aspect-[180/71] h-auto w-full object-contain sm:aspect-[1920/661]"
           />
         </picture>
       </Link>
