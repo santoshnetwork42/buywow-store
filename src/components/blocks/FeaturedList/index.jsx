@@ -33,7 +33,9 @@ const FeaturedList = ({
   featuredListItems: features,
   isWebHorizontal = true,
   isInPDP = false,
+  showComponent = true,
 }) => {
+  console.log("showComponent :>> ", showComponent);
   if (!Array.isArray(features) || features.length === 0) return null;
 
   return (
