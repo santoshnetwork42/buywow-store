@@ -1,7 +1,7 @@
+import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 import { addPhonePrefix } from "@/utils/helpers";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
-import { authSagaActions } from "@/store/sagas/sagaActions/auth.actions";
 
 export const useAuthDispatch = () => {
   const dispatch = useDispatch();
@@ -74,6 +74,16 @@ export const useAuthDispatch = () => {
     [dispatch],
   );
 
+  const setAuthError = useCallback(
+    (error) => {
+      dispatch({
+        type: authSagaActions.SET_AUTH_ERROR,
+        payload: error,
+      });
+    },
+    [dispatch],
+  );
+
   return {
     handleSignOut,
     setConfirmationStatus,
@@ -82,5 +92,6 @@ export const useAuthDispatch = () => {
     createAwsAccount,
     confirmSignIn,
     confirmSignUp,
+    setAuthError,
   };
 };

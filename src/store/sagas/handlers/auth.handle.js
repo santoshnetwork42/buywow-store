@@ -12,6 +12,7 @@ import {
 import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
 import { resetAddress } from "@/store/slices/address.slice";
 import {
+  setAuthError,
   setAuthLoading,
   setConfirmationStatus,
 } from "@/store/slices/auth.slice";
@@ -85,6 +86,10 @@ export function* confirmSignInHandler(action) {
 
     const user = yield call(confirmSignInRequest, { confirmationCode });
 
+    if (!user?.isSignedIn) {
+      return yield put(setAuthError({ otp: "OTP is invalid" }));
+    }
+
     //user?.nextStep?.signInStep = DONE if user is verified successfully
     yield put(setConfirmationStatus(user?.nextStep?.signInStep));
     yield put(
@@ -112,6 +117,8 @@ export function* confirmSignInHandler(action) {
         },
       });
     }
+
+    showToast.success("You've successfully signed in. Welcome!");
   } catch (error) {
     console.error("Error in confirmSignInHandler:", error);
   } finally {
@@ -128,6 +135,10 @@ export function* confirmSignUpHandler(action) {
       username,
       confirmationCode,
     });
+
+    if (!user) {
+      return yield put(setAuthError({ otp: "OTP is invalid" }));
+    }
 
     if (user?.nextStep?.signUpStep === "COMPLETE_AUTO_SIGN_IN") {
       const res = yield call(autoSignInRequest);
@@ -159,6 +170,8 @@ export function* confirmSignUpHandler(action) {
           },
         });
       }
+
+      showToast.success("You've successfully signed in. Welcome!");
     }
   } catch (error) {
     console.error("Error in confirmSignUpHandler:", error);
@@ -203,6 +216,14 @@ export function* signOutHandler() {
 export function* authLoaderHandler(action) {
   try {
     yield put(setAuthLoading(action.payload));
+  } catch (error) {
+    console.error("error", error);
+  }
+}
+
+export function* authErrorHandler(action) {
+  try {
+    yield put(setAuthError(action.payload));
   } catch (error) {
     console.error("error", error);
   }

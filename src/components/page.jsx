@@ -148,6 +148,10 @@ export default async function PageBlock({ pageType, slug }) {
   const pageData = await getPageBySlugAPI(slug);
   const { blocks, slug: fetchedSlug, type: fetchedPageType } = pageData || {};
 
+  if (pageType === "landing" && !fetchedSlug) {
+    await handleRedirect(`/${slug}`);
+  }
+
   if (!fetchedSlug || fetchedSlug !== slug) {
     await handleRedirect(`/${pageType}/${slug}`);
   }

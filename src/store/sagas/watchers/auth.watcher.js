@@ -1,4 +1,5 @@
 import {
+  authErrorHandler,
   authLoaderHandler,
   confirmSignInHandler,
   confirmSignUpHandler,
@@ -44,6 +45,10 @@ function* authLoader() {
   yield takeLatest(authSagaActions.SET_AUTH_LOADER, authLoaderHandler);
 }
 
+function* authError() {
+  yield takeLatest(authSagaActions.SET_AUTH_ERROR, authErrorHandler);
+}
+
 export function* authWatcher() {
   yield all([
     fork(createAccount),
@@ -53,5 +58,6 @@ export function* authWatcher() {
     fork(setConfirmationStatus),
     fork(signOut),
     fork(authLoader),
+    fork(authError),
   ]);
 }

@@ -12,7 +12,7 @@ export async function generateMetadata() {
   }
 
   const store = await getStoreAPI();
-  const { webUrl, name } = store || {};
+  const { webUrl } = store || {};
 
   const findBlock = (typeName) =>
     pageData?.blocks?.find((block) => block?.__typename === typeName) || {};
@@ -27,7 +27,7 @@ export async function generateMetadata() {
       seoComponent,
       extractedSlug: "index",
       webUrl,
-      name,
+      name: "Buy Wow",
     }) || {};
 
   return seoData;

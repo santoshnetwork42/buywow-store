@@ -33,19 +33,17 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
   if (!(totalRatings > 0)) return null;
   return (
     <div className="flex items-center gap-1">
-      <div className="flex items-center gap-[3px]">
-        <Img
-          src="img_star.svg"
-          width={16}
-          height={16}
-          alt="Rating stars"
-          className="aspect-square w-[12px] sm:w-[14px] lg:w-[16px]"
-          isStatic
-        />
-        <Text as="span" size="sm" className="capitalize" responsive>
-          {toDecimal(rating, 2)}
-        </Text>
-      </div>
+      <Img
+        src="img_star.svg"
+        width={16}
+        height={16}
+        alt="Rating stars"
+        className="aspect-square w-[12px] sm:w-[14px] lg:w-[16px]"
+        isStatic
+      />
+      <Text as="span" size="sm" className="capitalize" responsive>
+        {toDecimal(rating, 2)}
+      </Text>
       <Text as="span" size="sm" className="capitalize" responsive>
         ({formatTotalRatings(totalRatings)}) reviews
       </Text>
@@ -56,21 +54,19 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
 const PriceDisplay = memo(({ price, listingPrice }) => {
   if (!price) return null;
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex shrink items-center gap-1 md:gap-2">
-        <Heading as="span" size="lg" className="text-base" responsive>
-          ₹{toDecimal(price)}
-        </Heading>
-        {listingPrice > price && (
-          <Text
-            as="span"
-            size="sm"
-            className="font-light capitalize line-through"
-          >
-            ₹{toDecimal(listingPrice)}
-          </Text>
-        )}
-      </div>
+    <div className="flex shrink items-center gap-2">
+      <Heading as="span" size="lg" className="text-base" responsive>
+        ₹{toDecimal(price)}
+      </Heading>
+      {listingPrice > price && (
+        <Text
+          as="span"
+          size="sm"
+          className="font-light capitalize line-through"
+        >
+          ₹{toDecimal(listingPrice)}
+        </Text>
+      )}
     </div>
   );
 });
@@ -197,14 +193,14 @@ const ProductCard = memo(
               </Text>
             )}
           </div>
-          <div className="flex flex-col justify-between gap-1">
+          <div className="flex flex-col gap-1">
             <RatingDisplay rating={rating} totalRatings={totalRatings} />
-            <div className="flex flex-1 justify-between gap-2">
+            <div className="flex items-center justify-between gap-2">
               <PriceDisplay price={price} listingPrice={listingPrice} />
               <AddToCart
                 product={packageProduct}
                 selectedVariant={selectedVariant}
-                buttonText={"Add"}
+                buttonText="Add"
                 buttonSize="medium"
                 quantityClassName="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] lg:grid-cols-[repeat(3,36px)]"
               />

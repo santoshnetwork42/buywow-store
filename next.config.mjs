@@ -9,6 +9,23 @@ const nextConfig = {
         source: "/landing/sitemap.xml",
         destination: "/api/landing-sitemap",
       },
+      {
+        source: "/robots.txt",
+        destination: "/api/robots",
+      },
+      {
+        source: "/.well-known/apple-app-site-association",
+        destination: "/api/apple-app-site-association",
+      },
+      {
+        source: "/apple-app-site-association",
+        destination: "/api/apple-app-site-association",
+      },
+      { source: "/blog/sitemap.xml", destination: "/api/sitemap_blogs" },
+      {
+        source: "/.well-known/assetlinks.json",
+        destination: "/api/assetlinks",
+      },
     ];
     return paylolad;
   },

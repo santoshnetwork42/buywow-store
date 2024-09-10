@@ -24,7 +24,7 @@ export function validatePhoneNumber(phoneNumber) {
 }
 
 export function isPhoneNumberValid(phoneNumber) {
-  const pattern = /^\d{10}$/;
+  const pattern = /^[6789][0-9]{9}$/;
   return pattern.test(phoneNumber);
 }
 
