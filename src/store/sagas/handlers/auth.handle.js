@@ -117,6 +117,8 @@ export function* confirmSignInHandler(action) {
         },
       });
     }
+
+    showToast.success("You've successfully signed in. Welcome!");
   } catch (error) {
     console.error("Error in confirmSignInHandler:", error);
   } finally {
@@ -168,6 +170,8 @@ export function* confirmSignUpHandler(action) {
           },
         });
       }
+
+      showToast.success("You've successfully signed in. Welcome!");
     }
   } catch (error) {
     console.error("Error in confirmSignUpHandler:", error);

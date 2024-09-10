@@ -1,4 +1,5 @@
 import { STORE_PREFIX } from "@/config";
+import rootSaga from "@/store/sagas";
 import { addressSlice } from "@/store/slices/address.slice";
 import { authSlice } from "@/store/slices/auth.slice";
 import { cartSlice } from "@/store/slices/cart.slice";
@@ -20,7 +21,6 @@ import {
 } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import createSagaMiddleware from "redux-saga";
-import rootSaga from "@/store/sagas";
 
 export const actionTypes = {
   DESTROY_SESSION: "DESTROY_SESSION",
