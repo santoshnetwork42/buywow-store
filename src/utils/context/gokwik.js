@@ -49,6 +49,7 @@ function GoKwikProvider({ children }) {
     addressSelected,
     addPaymentInfo,
     startCheckout,
+    auth,
   } = useEventsDispatch();
 
   const setRewardPoints = useCallback(async () => {
@@ -151,7 +152,7 @@ function GoKwikProvider({ children }) {
 
           if (isSignedIn) {
             // const currentUser = await getCurrentUser();
-            // dispatchAuthEvent("login", { userId: currentUser.userId });
+            auth({ action: "login", moe: { userId: phone } });
             setIsLoggedinViaGokwik(true);
             const getUserResponse = await getUserRewardsAPI(code);
             setUserWithRewardPoints({
