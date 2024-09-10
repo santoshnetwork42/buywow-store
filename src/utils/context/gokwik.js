@@ -34,7 +34,7 @@ function GoKwikProvider({ children }) {
   const { applyCoupon, removeCoupon, emptyCart, removeFromCart } =
     useCartDispatch();
   const { setIsLoggedinViaGokwik, setCustomUser } = useUserDispatch();
-  const cartList = useSelector((state) => state.cart?.cartList);
+  const cartList = useSelector((state) => state.cart?.data) || [];
   const userId = useSelector((state) => state.user?.user?.id) || {};
   const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
@@ -70,17 +70,14 @@ function GoKwikProvider({ children }) {
 
   const applyCouponCode = useCallback(
     async (couponCode, autoApplied = false) => {
-      const response = await applyCouponAPI(code);
-      if (!response?.data?.applyCoupon) {
-        console.error("Coupon not found");
-      }
+      const response = await applyCouponAPI(couponCode);
 
-      if (response) {
+      if (!!response?.data?.applyCoupon) {
         const {
           allowed,
           message,
           coupon: couponResponse,
-        } = getCouponDiscount(response, cartList);
+        } = getCouponDiscount(response.data.applyCoupon, cartList);
 
         if (allowed) {
           applyCoupon({
@@ -143,7 +140,6 @@ function GoKwikProvider({ children }) {
           },
         });
 
-        
         if (
           cu?.nextStep?.signInStep === "CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE"
         ) {

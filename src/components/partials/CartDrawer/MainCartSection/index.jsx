@@ -32,8 +32,6 @@ const MainCartSection = React.memo(
       validLtoProduct?.qty >
       ((inventoryMapping || {})[validLtoProduct?.recordKey] || 99);
 
-    console.log(validLtoProduct, "validLtoProduct", cartItems);
-
     return (
       <div className="mb-7 flex flex-1 flex-col gap-4">
         <CartProductList

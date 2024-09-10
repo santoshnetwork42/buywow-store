@@ -65,8 +65,6 @@ function NavbarProvider({ children, headerData }) {
     }
   };
 
-  console.log("INTIAL____DATA", initialData);
-
   useEffect(() => {
     const handleInteraction = () => {
       setIsInteractive(true);
