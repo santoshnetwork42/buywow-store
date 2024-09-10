@@ -58,11 +58,15 @@ const CarouselImage = React.memo(
           {!!webImageAttrs.url && (
             <source
               media="(min-width: 576px)"
-              srcSet={`${webImageAttrs.url}?w=1920&q=75&f=webp`}
+              srcSet={
+                isInteractive
+                  ? `${webImageAttrs.url}?w=1920&q=75&f=webp`
+                  : `/images/img_carousel_web.webp`
+              }
             />
           )}
           <Img
-            src={imageUrl}
+            src={isInteractive ? imageUrl : "/images/img_carousel_mweb.webp"}
             alt={imageAlt}
             priority
             width={500}
