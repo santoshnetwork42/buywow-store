@@ -16,13 +16,13 @@ export const LimitedTimeDealProduct = ({
   product,
   parentRecordKey,
   isBought,
+  removeFromCart,
+  addToCart,
 }) => {
   const { slug, listingPrice, recommendPrice, title, images } = product || {};
   const { thumbImage = "" } = getProductMeta(product) || {};
   const productImage = thumbImage?.imageKey || images?.items[0]?.imageKey;
   if (!product?.id) return null;
-
-  const { addToCart, removeFromCart } = useCartDispatch();
 
   const handleAddToCart = () => {
     addToCart({
@@ -133,7 +133,7 @@ const LimitedTimeDealProductSection = ({
   isBought,
 }) => {
   const [timeLeft, setTimeLeft] = useState("");
-
+  const { addToCart, removeFromCart } = useCartDispatch();
   // isBought,timeLeft
   // true =>> not to check
   // false =>> see and then go for limited time deal
@@ -162,7 +162,7 @@ const LimitedTimeDealProductSection = ({
 
       return () => clearInterval(timer);
     }
-  }, [startTime]);
+  }, [startTime, isBought]);
 
   // if not bought and timeLeft null
   if (!isBought && !timeLeft) return null;
@@ -200,6 +200,8 @@ const LimitedTimeDealProductSection = ({
         product={product}
         parentRecordKey={parentRecordKey}
         isBought={isBought}
+        addToCart={addToCart}
+        removeFromCart={removeFromCart}
       />
     </div>
   );
