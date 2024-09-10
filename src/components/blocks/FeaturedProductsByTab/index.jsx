@@ -6,6 +6,7 @@ import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import { getBgColor } from "@/utils/helpers";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
 const FeaturedProductsByTab = ({
@@ -13,12 +14,20 @@ const FeaturedProductsByTab = ({
   featuredProductsByTabBgColor,
   button,
   featuredProductsTabItems,
+  isPersistLoading,
 }) => {
+  const pathname = usePathname();
   const bgColorClass = getBgColor(featuredProductsByTabBgColor);
 
   const isPaddedColor =
     featuredProductsByTabBgColor === "LIME" ||
     featuredProductsByTabBgColor === "BLUE";
+
+  if (
+    !featuredProductsTabItems?.length ||
+    (isPersistLoading && pathname !== "/")
+  )
+    return null;
 
   const renderProductCard = (product, index) => (
     <ProductCard
@@ -42,8 +51,6 @@ const FeaturedProductsByTab = ({
       </Slider>
     </TabPanel>
   );
-
-  if (!featuredProductsTabItems?.length) return null;
 
   return (
     <div

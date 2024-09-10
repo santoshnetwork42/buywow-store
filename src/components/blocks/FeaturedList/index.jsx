@@ -1,5 +1,8 @@
+"use client";
+
 import { Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -8,7 +11,7 @@ const FeaturedItem = ({
   text,
   isWebHorizontal,
   isInPDP,
-  isInPersistLoading,
+  isPersistLoading,
 }) => {
   const { url, alternativeText } = extractAttributes(image);
 
@@ -35,7 +38,7 @@ const FeaturedItem = ({
         alt={alternativeText || "Feature Icon"}
         className={`aspect-square w-full rounded-full object-contain ${!isInPDP ? "max-w-10 sm:max-w-12 md:max-w-14 lg:max-w-16" : "max-w-12"}`}
       />
-      {isInPersistLoading ? (
+      {isPersistLoading ? (
         <Text
           as="p"
           size="base"
@@ -63,9 +66,16 @@ const FeaturedList = ({
   featuredListItems: features,
   isWebHorizontal = true,
   isInPDP = false,
-  isInPersistLoading = false,
+  isPersistLoading = false,
 }) => {
-  if (!Array.isArray(features) || features.length === 0) return null;
+  const pathname = usePathname();
+
+  if (
+    !Array.isArray(features) ||
+    features.length === 0 ||
+    (isPersistLoading && pathname !== "/")
+  )
+    return null;
 
   return (
     <div
@@ -81,7 +91,7 @@ const FeaturedList = ({
           text={feature?.text}
           isWebHorizontal={isWebHorizontal}
           isInPDP={isInPDP}
-          isInPersistLoading={isInPersistLoading}
+          isPersistLoading={isPersistLoading}
         />
       ))}
     </div>

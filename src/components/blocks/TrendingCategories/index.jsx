@@ -1,6 +1,9 @@
+"use client";
+
 import { Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const CategoryItem = ({ image, title, link }) => {
   const { url, alternativeText } = extractAttributes(image);
@@ -34,8 +37,14 @@ const CategoryItem = ({ image, title, link }) => {
 
 CategoryItem.displayName = "CategoryItem";
 
-const TrendingCategories = ({ trendingCategoryItems: categories }) => {
-  if (!categories?.length) return null;
+const TrendingCategories = ({
+  trendingCategoryItems: categories,
+  isPersistLoading,
+}) => {
+  const pathname = usePathname();
+
+  if (!categories?.length || (isPersistLoading && pathname !== "/"))
+    return null;
 
   return (
     <div className="no-scrollbar w-full overflow-x-scroll lg:hidden">

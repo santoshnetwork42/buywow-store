@@ -38,11 +38,11 @@ input:focus {
 } */
 
 /* Reveal effect for tab */
-.tab-panel--selected {
+/* .tab-panel--selected {
   animation-name: tabPanel;
   animation-duration: 300ms;
   animation-timing-function: linear;
-}
+} */
 
 @keyframes tabPanel {
   from {

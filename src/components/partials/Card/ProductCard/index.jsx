@@ -3,6 +3,7 @@
 import AddToCart from "@/components/common/AddToCart";
 import { Heading, Img, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
+import { useIsInteractive } from "@/utils/context/navbar";
 import {
   extractAttributes,
   formatTotalRatings,
@@ -84,6 +85,7 @@ const ProductCard = memo(
     showBenefitTags = true,
     sendProductDataToParent,
   }) => {
+    const isInteractive = useIsInteractive();
     const [selectedVariant] = useProductVariantGroups(fetchedProduct);
     const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
@@ -193,19 +195,21 @@ const ProductCard = memo(
               </Text>
             )}
           </div>
-          <div className="flex flex-col gap-1">
-            <RatingDisplay rating={rating} totalRatings={totalRatings} />
-            <div className="flex items-center justify-between gap-1 sm:gap-2">
-              <PriceDisplay price={price} listingPrice={listingPrice} />
-              <AddToCart
-                product={packageProduct}
-                selectedVariant={selectedVariant}
-                buttonText="Add"
-                buttonSize="medium"
-                quantityClassName="grid-cols-[repeat(3,24px)] sm:grid-cols-[repeat(3,32px)] lg:grid-cols-[repeat(3,36px)]"
-              />
+          {isInteractive && (
+            <div className="flex flex-col gap-1">
+              <RatingDisplay rating={rating} totalRatings={totalRatings} />
+              <div className="flex items-center justify-between gap-1 sm:gap-2">
+                <PriceDisplay price={price} listingPrice={listingPrice} />
+                <AddToCart
+                  product={packageProduct}
+                  selectedVariant={selectedVariant}
+                  buttonText="Add"
+                  buttonSize="medium"
+                  quantityClassName="grid-cols-[repeat(3,24px)] sm:grid-cols-[repeat(3,32px)] lg:grid-cols-[repeat(3,36px)]"
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </Link>
     );
