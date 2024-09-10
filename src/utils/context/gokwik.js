@@ -49,6 +49,7 @@ function GoKwikProvider({ children }) {
     addressSelected,
     addPaymentInfo,
     startCheckout,
+    auth,
   } = useEventsDispatch();
 
   const setRewardPoints = useCallback(async () => {
@@ -142,6 +143,7 @@ function GoKwikProvider({ children }) {
           },
         });
 
+        
         if (
           cu?.nextStep?.signInStep === "CONFIRM_SIGN_IN_WITH_CUSTOM_CHALLENGE"
         ) {
@@ -151,7 +153,7 @@ function GoKwikProvider({ children }) {
 
           if (isSignedIn) {
             // const currentUser = await getCurrentUser();
-            // dispatchAuthEvent("login", { userId: currentUser.userId });
+            auth({ action: "login", moe: { userId: phone } });
             setIsLoggedinViaGokwik(true);
             const getUserResponse = await getUserRewardsAPI(code);
             setUserWithRewardPoints({
