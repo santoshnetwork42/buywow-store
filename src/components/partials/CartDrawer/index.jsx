@@ -240,6 +240,14 @@ const CartDrawer = ({ upsellProducts }) => {
     }
   }, [appliedCoupon]);
 
+  const getCollectionWiseNudgeMsg = () => {
+    if (pathname === "/collections/all" || pathname === "/") {
+      return "Add more items to unlock 'Buy 1 Get 1 Free Offer'";
+    }
+    return "";
+  };
+  let isNudge = getCollectionWiseNudgeMsg();
+
   return (
     <Drawer
       isOpen={isCartOpen}
@@ -257,6 +265,15 @@ const CartDrawer = ({ upsellProducts }) => {
           cartClose={handleCartClose}
           className="mx-3 md:mx-4"
         />
+        {!!isNudge && cartItems?.length > 0 && (
+          <div className="bg-[#6E809A] py-1 text-center">
+            <p className="text-md font-normal text-white-a700">
+              {cartItems?.length < 2
+                ? `Add more items to unlock 'Buy 1 Get 1 Free Offer'`
+                : `Congrats, your Buy 1 Get 1 offer has been availed!`}
+            </p>
+          </div>
+        )}
         {cartItems?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-col gap-3 px-3 md:px-4">

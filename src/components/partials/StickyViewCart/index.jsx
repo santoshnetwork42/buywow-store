@@ -60,23 +60,46 @@ const StickyViewCart = () => {
 
   if (!cartList.length || !isAllowed || !isInteractive) return null;
 
+  const getCollectionWiseNudgeMsg = () => {
+    if (pathname === "/collections/all" || pathname === "/") {
+      return "Add more items to unlock 'Buy 1 Get 1 Free Offer'";
+    }
+    return "";
+  };
+
+  let totalQty = (cartList || [])?.reduce((acc, i) => acc + i.qty, 0);
+  let isNudge = getCollectionWiseNudgeMsg();
+
   return (
-    <div className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 items-center justify-between bg-white-a700 bg-opacity-95 px-4 py-2 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">
-      <CartSummary
-        totalItems={totalItems}
-        grandTotal={grandTotal}
-        prepaidDiscountPercent={prepaidDiscountPercent}
-        prepaidDiscount={prepaidDiscount}
-      />
-      <Button
-        variant="primary"
-        size="none"
-        className="rounded-md px-6 py-3 text-white-a700 transition-colors duration-300"
-        onClick={openCart}
-      >
-        GO TO CART
-      </Button>
-    </div>
+    <>
+      <div className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">
+        {!!isNudge && totalQty > 0 && (
+          <div className="rounded-t-md bg-[#6E809A] py-1 text-center">
+            <p className="text-md font-normal text-white-a700">
+              {totalQty < 2
+                ? `Add more items to unlock 'Buy 1 Get 1 Free Offer'`
+                : `Congrats, your Buy 1 Get 1 offer has been availed!`}
+            </p>
+          </div>
+        )}
+        <div className="flex flex-grow justify-between px-5 py-2">
+          <CartSummary
+            totalItems={totalItems}
+            grandTotal={grandTotal}
+            prepaidDiscountPercent={prepaidDiscountPercent}
+            prepaidDiscount={prepaidDiscount}
+          />
+          <Button
+            variant="primary"
+            size="none"
+            className="rounded-md px-6 py-3 text-white-a700 transition-colors duration-300"
+            onClick={openCart}
+          >
+            GO TO CART
+          </Button>
+        </div>
+      </div>
+    </>
   );
 };
 
