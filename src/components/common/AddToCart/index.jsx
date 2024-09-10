@@ -79,7 +79,7 @@ const AddToCart = ({
         size={buttonSize}
         className={twMerge(
           buttonClassName,
-          "bg-gray-400 text-white-a700 opacity-100",
+          "bg-gray-400 px-2 text-white-a700 opacity-100",
         )}
         disabled
       >

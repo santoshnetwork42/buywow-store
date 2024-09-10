@@ -1,14 +1,13 @@
 "use client";
-import Checkmark, { LimitedTimeDiscount } from "@/assets/svg/icons";
+import Checkmark from "@/assets/svg/icons";
 import { Button, Heading, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { LIMITED_TIME_DEAL_DURATION_IN_MINUTES } from "@/utils/data/constants";
-import { getDiscountPercentage } from "@/utils/helpers";
+import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
 import { getProductMeta } from "@wow-star/utils";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import React from "react";
 import { twMerge } from "tailwind-merge";
 import RemoveButton from "../MainCartSection/ProductItem/RemoveButton";
 
@@ -82,17 +81,19 @@ export const LimitedTimeDealProduct = ({
         <div className="flex justify-between">
           <div className="flex items-center gap-1 md:gap-2">
             <div className="flex shrink items-center gap-1 md:gap-2">
-              <Heading
-                as="del"
-                size="lg"
-                className="text-base text-gray-500"
-                responsive
-              >
-                ₹{listingPrice}
-              </Heading>
               <Heading as="span" size="lg" className="text-base" responsive>
-                ₹{recommendPrice}
+                ₹{toDecimal(recommendPrice)}
               </Heading>
+              {listingPrice > recommendPrice && (
+                <Text
+                  as="del"
+                  size="base"
+                  className="text-sm text-gray-500"
+                  responsive
+                >
+                  ₹{toDecimal(listingPrice)}
+                </Text>
+              )}
               {discount > 0 && (
                 <Text
                   size="sm"

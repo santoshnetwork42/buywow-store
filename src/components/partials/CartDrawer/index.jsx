@@ -238,14 +238,21 @@ const CartDrawer = ({ upsellProducts }) => {
     if (checkoutElement) {
       setCheckoutSectionHeight(checkoutElement.offsetHeight);
     }
-  }, [appliedCoupon]);
+  }, [appliedCoupon, isCartOpen]);
 
   const getCollectionWiseNudgeMsg = () => {
     if (pathname === "/collections/all" || pathname === "/") {
-      return "Add more items to unlock 'Buy 1 Get 1 Free Offer'";
+      if (appliedCoupon?.code === "WOW") {
+        return "Congrats, your Buy 1 Get 1 offer has been availed!";
+      } else if (totalItems > 1) {
+        return "Apply coupon 'WOW' for getting Buy 1 Get 1 offer!";
+      } else {
+        return "Add more items to unlock 'Buy 1 Get 1 Free Offer'";
+      }
     }
     return "";
   };
+
   let isNudge = getCollectionWiseNudgeMsg();
 
   return (
@@ -265,13 +272,16 @@ const CartDrawer = ({ upsellProducts }) => {
           cartClose={handleCartClose}
           className="mx-3 md:mx-4"
         />
-        {!!isNudge && cartItems?.length > 0 && (
-          <div className="bg-[#6E809A] py-1 text-center">
-            <p className="text-md font-normal text-white-a700">
-              {cartItems?.length < 2
-                ? `Add more items to unlock 'Buy 1 Get 1 Free Offer'`
-                : `Congrats, your Buy 1 Get 1 offer has been availed!`}
-            </p>
+        {!!isNudge && (
+          <div className="bg-blue_gray-400_01 py-1.5 text-center md:py-2">
+            <Text
+              as="p"
+              size="base"
+              className="text-sm text-white-a700"
+              responsive
+            >
+              {isNudge}
+            </Text>
           </div>
         )}
         {cartItems?.length > 0 ? (
