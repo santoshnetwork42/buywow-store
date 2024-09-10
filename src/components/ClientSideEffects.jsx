@@ -2,6 +2,7 @@
 
 import { GUEST_CHECKOUT_COOKIE_EXPIRY, STORE_PREFIX } from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
@@ -18,6 +19,16 @@ const ClientSideEffects = () => {
   const { updateMeta, setStore, destroySession } = useSystemDispatch();
   const { setUser } = useUserDispatch();
   const { auth } = useEventsDispatch();
+  const { storeCoupon } = useCartDispatch();
+
+  const couponCode = searchParams.get("couponCode")?.split("&")[0];
+
+  useEffect(() => {
+    if (couponCode) {
+      storeCoupon(couponCode);
+    }
+    //   eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const setMetaData = useCallback(() => {
     const cookieMeta = Cookies.get(`${STORE_PREFIX}_metadata`);

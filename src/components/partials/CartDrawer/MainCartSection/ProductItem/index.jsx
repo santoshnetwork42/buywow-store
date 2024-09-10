@@ -205,7 +205,7 @@ const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
               variantClassName="w-fit"
               className="lg:gap-1"
             />
-            <div className="flex items-center gap-2">
+            <div className="ml-auto flex items-center gap-2">
               {!outOfStock && !isFreeProduct && !disableChange && (
                 <Quantity
                   product={item}

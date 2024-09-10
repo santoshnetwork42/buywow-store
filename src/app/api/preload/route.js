@@ -7,17 +7,23 @@ import fetchData from "@/utils/fetchData";
 
 export async function GET() {
   try {
-    const data = await fetchData(getInitialData, {
-      storeId: STORE_ID,
-      deviceType: "WEB",
-      getStoreSettingInput: {
+    const data = await fetchData(
+      getInitialData,
+      {
         storeId: STORE_ID,
         deviceType: "WEB",
+        getStoreSettingInput: {
+          storeId: STORE_ID,
+          deviceType: "WEB",
+        },
+        shippingTierFilter: {
+          storeId: { eq: STORE_ID },
+        },
       },
-      shippingTierFilter: {
-        storeId: { eq: STORE_ID },
+      {
+        next: { revalidate: 0 },
       },
-    });
+    );
 
     return Response.json(data);
   } catch (error) {

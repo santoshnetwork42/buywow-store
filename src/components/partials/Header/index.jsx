@@ -155,7 +155,7 @@ const Header = ({ data }) => {
   const handleUserClick = async () => {
     try {
       if (user?.id) {
-        router.push("/account");
+        router.push("/pages/account");
       } else {
         handlePasswordLessModal(true, false, null);
       }

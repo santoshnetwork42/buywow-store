@@ -1,7 +1,6 @@
 "use client";
 
 import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
-import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDiscounts";
 import PriceSection from "@/components/partials/Product/PDP/PriceSection";
 import ProductDetailViewBlocks from "@/components/partials/Product/PDP/ProductDetailViewBlocks";
 import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
@@ -106,12 +105,12 @@ const ProductDetailView = ({ product }) => {
           hasInventory={hasInventory}
           currentInventory={currentInventory}
         />
-        <OffersAndDiscounts
+        {/* <OffersAndDiscounts
           bestCoupon={bestCoupon}
           price={price}
           hasInventory={hasInventory}
           productId={packageProduct?.id}
-        />
+        /> */}
         <div className="mt-5 flex flex-col">
           <VariantSelector
             variantGroups={variantGroup}
