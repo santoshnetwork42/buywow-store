@@ -68,16 +68,18 @@ const ProductDetailViewBlocks = ({ blocks }) => {
 
   return (
     <div className="flex flex-col gap-5">
-      {otherBlocks.map((block, index) => {
-        switch (block.__typename) {
-          case "ComponentBlocksUpsellProducts":
-            return <UpsellProducts key={index} {...block} isInPDP />;
-          case "ComponentBlocksFeaturedList":
-            return <FeaturedList key={index} {...block} isInPDP />;
-          default:
-            return null;
-        }
-      })}
+      {otherBlocks
+        ?.filter((block) => !!block?.showComponent)
+        ?.map((block, index) => {
+          switch (block.__typename) {
+            case "ComponentBlocksUpsellProducts":
+              return <UpsellProducts key={index} {...block} isInPDP />;
+            case "ComponentBlocksFeaturedList":
+              return <FeaturedList key={index} {...block} isInPDP />;
+            default:
+              return null;
+          }
+        })}
       {accordionBlocks.length > 0 && (
         <div className="flex flex-col items-center gap-2">
           {accordionBlocks.map((block, index) => (
