@@ -22,7 +22,7 @@ const CategoryItem = ({ image, title, link }) => {
           className="aspect-square w-14 object-contain"
         />
       </div>
-      {title && (
+      {!!title && (
         <Text
           size="sm"
           as="span"

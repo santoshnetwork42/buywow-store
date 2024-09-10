@@ -54,24 +54,21 @@ const CarouselImage = React.memo(
           });
         }}
       >
-        <picture className="relative block aspect-[180/71] w-full sm:aspect-[1920/661]">
+        <picture className="relative block w-full">
           {!!webImageAttrs.url && (
             <source
               media="(min-width: 576px)"
-              srcSet={
-                isInteractive
-                  ? `${webImageAttrs.url}?w=1920&q=75&f=webp`
-                  : `/images/img_carousel_web.webp`
-              }
+              srcSet={`${webImageAttrs.url}?w=1920&q=75&f=webp`}
             />
           )}
           <Img
-            src={isInteractive ? imageUrl : "/images/img_carousel_mweb.webp"}
+            src={imageUrl}
             alt={imageAlt}
             priority
-            width={500}
-            height={500}
-            className="aspect-[180/71] h-auto w-full object-contain sm:aspect-[1920/661]"
+            quality={55}
+            width={300}
+            height={300}
+            className="h-auto w-full object-cover"
           />
         </picture>
       </Link>
