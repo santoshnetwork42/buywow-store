@@ -10,6 +10,7 @@ const FeaturedProducts = ({
   featuredProductsBgColor: bgColor,
   button,
   products: { data: products },
+  promotion,
 }) => {
   if (!Array.isArray(products) || products.length === 0) return null;
 
@@ -30,6 +31,7 @@ const FeaturedProducts = ({
           <ProductCard
             key={`product-${index}`}
             className="w-[calc(50vw-16px)] max-w-[326px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
+            parentPromotionTag={promotion}
             {...product.attributes}
           />
         ))}
