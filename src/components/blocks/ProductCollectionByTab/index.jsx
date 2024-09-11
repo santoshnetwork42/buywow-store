@@ -10,6 +10,7 @@ import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductC
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { getSource } from "@/utils/helpers";
+import { setSoldOutLast } from "@/utils/helpers/products";
 import React, {
   useCallback,
   useEffect,
@@ -317,8 +318,9 @@ const ProductCollectionByTab = ({
       );
       const skeletonCount = isLoading ? remainingProducts : 0;
 
+      const currentProductsOosLast = setSoldOutLast(currentProducts, true);
       return [
-        ...currentProducts.map((product, productIndex) => (
+        ...currentProductsOosLast.map((product, productIndex) => (
           <ProductCard
             className="h-auto bg-white-a700_01"
             key={`product-${productIndex}`}
