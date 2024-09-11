@@ -10,6 +10,7 @@ import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductC
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { getSource } from "@/utils/helpers";
+import { setSoldOutLast } from "@/utils/helpers/products";
 import React, {
   useCallback,
   useEffect,
@@ -64,6 +65,7 @@ const ProductCollectionByTab = ({
   verticalBlogSection,
   horizontalBlogSection,
   slug,
+  promotion,
 }) => {
   const [sortOption, setSortOption] = useState(
     SORT_OPTIONS.find((option) => option.value === defaultCollectionSorting) ||
@@ -307,7 +309,7 @@ const ProductCollectionByTab = ({
   }, [productCollectionTabItems]);
 
   const renderProductsAndSkeletons = useCallback(
-    (category) => {
+    (category, promotion) => {
       const currentProducts = category.products?.data || [];
       const totalProducts = category.pagination?.totalData || 0;
       const pageSize = 16;
@@ -317,11 +319,13 @@ const ProductCollectionByTab = ({
       );
       const skeletonCount = isLoading ? remainingProducts : 0;
 
+      const currentProductsOosLast = setSoldOutLast(currentProducts, true);
       return [
-        ...currentProducts.map((product, productIndex) => (
+        ...currentProductsOosLast.map((product, productIndex) => (
           <ProductCard
             className="h-auto bg-white-a700_01"
             key={`product-${productIndex}`}
+            parentPromotionTag={promotion}
             {...product.attributes}
           />
         )),
@@ -376,7 +380,7 @@ const ProductCollectionByTab = ({
               rootMargin="800px"
             >
               <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(326px,calc(25vw-34px)))]">
-                {renderProductsAndSkeletons(category)}
+                {renderProductsAndSkeletons(category, promotion)}
                 {verticalBlogSection?.verticalBlogItem && (
                   <BlogCard
                     cardData={verticalBlogSection.verticalBlogItem}

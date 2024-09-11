@@ -77,6 +77,7 @@ const ProductCard = memo(
     imageBgColor,
     productBenefitTags,
     promotionTag,
+    parentPromotionTag,
     slug,
     fetchedProduct,
     offerTag,
@@ -137,21 +138,36 @@ const ProductCard = memo(
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
             alt={title || "Product image"}
           />
-          {!!promotionTag?.data &&
-            (() => {
-              const { tag, bgColor } = extractAttributes(promotionTag);
-              return (
-                <Text
-                  as="span"
-                  size="sm"
-                  className={`absolute left-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize text-white-a700 md:left-2.5 md:top-2.5 md:px-3 ${!!offerTag?.showOfferTag && discountPercentage > 0 && "max-w-[50%]"}`}
-                  responsive
-                  style={{ backgroundColor: bgColor || "#DD8434" }}
-                >
-                  {tag}
-                </Text>
-              );
-            })()}
+          {!!parentPromotionTag?.data
+            ? (() => {
+                const { tag, bgColor } = extractAttributes(parentPromotionTag);
+                return (
+                  <Text
+                    as="span"
+                    size="sm"
+                    className={`absolute left-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize text-white-a700 md:left-2.5 md:top-2.5 md:px-3 ${!!offerTag?.showOfferTag && discountPercentage > 0 && "max-w-[50%]"}`}
+                    responsive
+                    style={{ backgroundColor: bgColor || "#DD8434" }}
+                  >
+                    {tag}
+                  </Text>
+                );
+              })()
+            : !!promotionTag?.data &&
+              (() => {
+                const { tag, bgColor } = extractAttributes(promotionTag);
+                return (
+                  <Text
+                    as="span"
+                    size="sm"
+                    className={`absolute left-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize text-white-a700 md:left-2.5 md:top-2.5 md:px-3 ${!!offerTag?.showOfferTag && discountPercentage > 0 && "max-w-[50%]"}`}
+                    responsive
+                    style={{ backgroundColor: bgColor || "#DD8434" }}
+                  >
+                    {tag}
+                  </Text>
+                );
+              })()}
           {!!offerTag?.showOfferTag && discountPercentage > 0 && (
             <Text
               as="span"
