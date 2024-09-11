@@ -244,8 +244,6 @@ const CartDrawer = ({ upsellProducts }) => {
     if (pathname === "/collections/all" || pathname === "/") {
       if (appliedCoupon?.code === "WOW") {
         return "Congrats, your Buy 1 Get 1 offer has been availed!";
-      } else if (totalItems > 1) {
-        return "Apply coupon 'WOW' for getting Buy 1 Get 1 offer!";
       } else {
         return "Add more items to unlock 'Buy 1 Get 1 Free Offer'";
       }
@@ -272,7 +270,7 @@ const CartDrawer = ({ upsellProducts }) => {
           cartClose={handleCartClose}
           className="mx-3 md:mx-4"
         />
-        {!!isNudge && (
+        {!!isNudge && !!cartItems.length && (
           <div className="bg-blue_gray-400_01 py-1.5 text-center md:py-2">
             <Text
               as="p"

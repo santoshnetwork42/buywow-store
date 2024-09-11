@@ -69,8 +69,6 @@ const StickyViewCart = () => {
     if (pathname === "/collections/all" || pathname === "/") {
       if (appliedCoupon?.code === "WOW") {
         return "Congrats, your Buy 1 Get 1 offer has been availed!";
-      } else if (totalItems > 1) {
-        return "Apply coupon 'WOW' for getting Buy 1 Get 1 offer!";
       } else {
         return "Add more items to unlock 'Buy 1 Get 1 Free Offer'";
       }
@@ -83,7 +81,7 @@ const StickyViewCart = () => {
   return (
     <>
       <div className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">
-        {!!isNudge && (
+        {!!isNudge && !!cartItems.length && (
           <div className="bg-blue_gray-400_01 py-1.5 text-center sm:rounded-t-md">
             <Text
               as="p"
