@@ -58,8 +58,9 @@ const CouponItem = ({
       <div className="flex justify-between px-3 py-2">
         {coupon?.tAndC?.length > 0 && (
           <Accordion
-            className="border-b-0"
+            className="max-w-[58%] border-b-0 sm:max-w-[66%] md:max-w-[70%]"
             accordionButtonClassName="py-1 gap-2 w-fit"
+            accordionMainContainerClassName="px-1 sm:px-2 md:px-2 lg:px-2"
             variant="small"
             title={
               <Text as="span" size="sm" className="underline">
@@ -68,13 +69,17 @@ const CouponItem = ({
               </Text>
             }
           >
-            <ul className="list-inside list-disc">
+            <div className="flex flex-col gap-1">
               {coupon.tAndC.map((tAndC, index) => (
-                <Text as="li" key={`t-and-c-${index}`} size="sm">
-                  {tAndC}
-                </Text>
+                <div
+                  key={`t-and-c-${index}`}
+                  className="flex items-start gap-2"
+                >
+                  <Text className="mt-2 h-1 min-w-1 rounded-full bg-black-900"></Text>
+                  <Text size="sm">{tAndC}</Text>
+                </div>
               ))}
-            </ul>
+            </div>
           </Accordion>
         )}
         <Heading

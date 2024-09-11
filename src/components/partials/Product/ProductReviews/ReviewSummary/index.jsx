@@ -19,7 +19,7 @@ const ReviewSummary = React.memo(
               className="text-sm normal-case"
               responsive
             >
-              {toDecimal(rating, 0)} out of 5{" "}
+              {toDecimal(rating, 2)} out of 5{" "}
               {!!totalRating && `| ${totalRating} Customer Rating`}
             </Heading>
           </div>
