@@ -50,37 +50,41 @@ const Quantity = ({
   );
 
   const decreaseQuantity = useCallback(() => {
-    setCartQuantity((prevQuantity) => {
+    if (cartQuantity > 0) {
       const newQuantity =
-        prevQuantity === minimumOrderQuantity ? 0 : prevQuantity - 1;
-      return newQuantity;
-    });
-  }, [minimumOrderQuantity]);
+        cartQuantity === minimumOrderQuantity ? 0 : cartQuantity - 1;
+      handleQuantityChange(newQuantity);
+    }
+  }, [cartQuantity, minimumOrderQuantity, handleQuantityChange]);
 
   const increaseQuantity = useCallback(() => {
-    setCartQuantity((prevQuantity) => {
-      if (!product?.isInventoryEnabled || prevQuantity < max) {
-        if (prevQuantity < maximumOrderQuantity) {
-          if (totalItemQuantity && totalItemQuantity >= maximumOrderQuantity) {
-            showToast.error(
-              `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
-            );
-          } else {
-            return prevQuantity + 1;
-          }
-        } else {
+    if (!product?.isInventoryEnabled || cartQuantity < max) {
+      if (cartQuantity < maximumOrderQuantity) {
+        if (totalItemQuantity && totalItemQuantity >= maximumOrderQuantity) {
           showToast.error(
             `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
           );
+        } else {
+          handleQuantityChange(cartQuantity + 1);
         }
       } else {
         showToast.error(
           `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
         );
       }
-      return prevQuantity;
-    });
-  }, [max, maximumOrderQuantity, totalItemQuantity, product]);
+    } else {
+      showToast.error(
+        `You cannot add more than ${maximumOrderQuantity} quantities of ${product?.title}.`,
+      );
+    }
+  }, [
+    cartQuantity,
+    max,
+    maximumOrderQuantity,
+    totalItemQuantity,
+    product,
+    handleQuantityChange,
+  ]);
 
   if (!product) return null;
 
