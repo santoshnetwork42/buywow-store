@@ -11,6 +11,7 @@ const fetchData = async (query = "", variables = {}, options = {}) => {
     },
     ...options,
   });
+
   const data = await response.json();
   return data.data;
 };
