@@ -155,7 +155,7 @@ const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, productId }) => {
         price={price}
         hasInventory={hasInventory}
       />
-      <AllOffers productId={productId} />
+      {/* <AllOffers productId={productId} /> */}
     </div>
   );
 };
