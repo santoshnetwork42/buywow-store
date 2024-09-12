@@ -78,7 +78,7 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
             By {review?.reviewer.name}
           </Text>
         </div>
-        {review?.verifiedPurchase && (
+        {review?.verified && (
           <div className="flex items-center gap-1">
             <Img
               src="verified.svg"
@@ -113,7 +113,7 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
               <Heading as="h3" size="lg" className="text-base" responsive>
                 {review?.reviewer.name}
               </Heading>
-              {!review?.verifiedPurchase && (
+              {!review?.verified && (
                 <div className="flex items-center gap-1">
                   <Img
                     src="verified.svg"
