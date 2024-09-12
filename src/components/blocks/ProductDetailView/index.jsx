@@ -106,14 +106,14 @@ const ProductDetailView = ({ product }) => {
           hasInventory={hasInventory}
           currentInventory={currentInventory}
         />
-        {
-          <OffersAndDiscounts
-            bestCoupon={bestCoupon}
-            price={price}
-            hasInventory={hasInventory}
-            productId={packageProduct?.id}
-          />
-        }
+
+        <OffersAndDiscounts
+          bestCoupon={bestCoupon}
+          price={price}
+          hasInventory={hasInventory}
+          productId={packageProduct?.id}
+        />
+
         <div className="mt-5 flex flex-col">
           <VariantSelector
             variantGroups={variantGroup}
