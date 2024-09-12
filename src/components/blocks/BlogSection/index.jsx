@@ -36,7 +36,7 @@ export default async function BlogSection({
   return (
     <div className="container-main mb-main flex flex-col items-center justify-center">
       <SectionHeading title={title} />
-      <div className="gap px-auto flex w-full justify-evenly overflow-scroll sm:gap-5 md:gap-6 lg:gap-7">
+      <div className="gap px-auto flex w-full justify-evenly overflow-hidden sm:gap-5 md:gap-6 lg:gap-7">
         <Suspense fallback={<div>Loading blogs...</div>}>
           <Slider sliderClassName="gap-[10px] sm:gap-3 lg:gap-5">
             {featuredBlogs.map((blog, index) => (
