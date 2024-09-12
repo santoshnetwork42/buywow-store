@@ -43,6 +43,7 @@ export const getInitialData = /* GraphQL */ `
         GOKWIK_ENABLED
         PPCOD_ENABLED
         PPCOD_AMOUNT
+        SHOW_SHIPPING_BAR
       }
     }
 

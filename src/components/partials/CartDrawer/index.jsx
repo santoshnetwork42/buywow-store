@@ -33,6 +33,7 @@ import {
   PREPAID_ENABLED,
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
+import ShippingProgress from "../Others/ShippingProgress";
 
 const CartDrawer = ({ upsellProducts }) => {
   const router = useRouter();
@@ -285,11 +286,11 @@ const CartDrawer = ({ upsellProducts }) => {
         {cartItems?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-col gap-3 px-3 md:px-4">
-              {/* <ShippingProgress
+              <ShippingProgress
                 freeShippingThreshold={targetAmountForFreeShipping}
                 cartValue={totalAmountForShippingCharge}
                 className="bg-[#F5E8DDBF] shadow-[0_4px_4px_#0000000D]"
-              /> */}
+              />
               <MainCartSection
                 cartItems={cartItems}
                 inventoryMapping={inventoryMapping}

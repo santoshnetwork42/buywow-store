@@ -11,7 +11,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
 
   if (!bestCoupon || !hasInventory) return null;
 
-  const finalPrice = price - discount > 0 ? price - discount : price;
+  const finalPrice = price - discount >= 0 ? price - discount : price;
 
   return (
     <div className="flex h-fit w-full justify-between rounded bg-gray-50 px-3 pb-2 pt-2.5">
