@@ -1,8 +1,11 @@
 import { Img, Text } from "@/components/elements";
+import { SHOW_SHIPPING_BAR } from "@/utils/data/constants";
+import { useConfiguration } from "@wow-star/utils";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 const ShippingProgress = ({ freeShippingThreshold, cartValue, className }) => {
+  const isShippingBarEnabled = useConfiguration(SHOW_SHIPPING_BAR, true);
   const [animate, setAnimate] = useState(false);
 
   const { amountAwayFromFreeShipping, progressPercentage, shippingMessage } =
@@ -48,7 +51,7 @@ const ShippingProgress = ({ freeShippingThreshold, cartValue, className }) => {
     return startAnimation();
   }, [cartValue, startAnimation]);
 
-  if (!shippingMessage) {
+  if (!isShippingBarEnabled || !shippingMessage) {
     return null;
   }
 

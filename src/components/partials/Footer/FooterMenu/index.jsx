@@ -1,5 +1,6 @@
 import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
+import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import Link from "next/link";
 import React, { useMemo } from "react";
 
@@ -45,12 +46,7 @@ const FooterMenu = ({ item, isOpen, onToggle }) => {
         >
           {item.title}
         </Heading>
-        <DownArrowIconSVG
-          className={`h-[14px] w-[14px] transition-transform duration-300 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-          fillColor="#ffffff"
-        />
+        <ToggleArrow open={isOpen} arrowClassName="bg-white-a700" />
       </div>
       <Heading
         as="h6"

@@ -5,6 +5,7 @@ import { Heading } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import { getBgColor } from "@/utils/helpers";
+import { setSoldOutLast } from "@/utils/helpers/products";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
@@ -49,7 +50,7 @@ const FeaturedProductsByTab = ({
         sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
         isContainShadow
       >
-        {item?.products?.data?.map(renderProductCard)}
+        {setSoldOutLast(item?.products?.data, true)?.map(renderProductCard)}
       </Slider>
     </TabPanel>
   );

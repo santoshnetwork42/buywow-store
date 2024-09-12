@@ -8,23 +8,28 @@ import Link from "next/link";
 import { Suspense } from "react";
 
 async function getFeaturedBlogsData() {
-  const apiUrl = SITE_URL || "http://localhost:3000";
-  const res = await fetch(`${apiUrl}/api/blog`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      query: getFeaturedBlogs,
-      variables: { first: 5 },
-    }),
-    next: { revalidate: 86400, tags: ["blog"] },
-  });
+  try {
+    const apiUrl = SITE_URL || "http://localhost:3000";
+    const res = await fetch(`${apiUrl}/api/blog`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: getFeaturedBlogs,
+        variables: { first: 5 },
+      }),
+      next: { revalidate: 86400, tags: ["blog"] },
+    });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch blog data");
+    if (!res.ok) {
+      throw new Error("Failed to fetch blog data");
+    }
+
+    const blogData = await res.json();
+    return blogData.data.posts.nodes;
+  } catch (error) {
+    console.error("Error fetching featured blogs:", error);
+    return [];
   }
-
-  const blogData = await res.json();
-  return blogData.data.posts.nodes;
 }
 
 export default async function BlogSection({
@@ -36,7 +41,7 @@ export default async function BlogSection({
   return (
     <div className="container-main mb-main flex flex-col items-center justify-center">
       <SectionHeading title={title} />
-      <div className="gap px-auto flex w-full justify-evenly overflow-scroll sm:gap-5 md:gap-6 lg:gap-7">
+      <div className="gap px-auto flex w-full justify-evenly overflow-hidden sm:gap-5 md:gap-6 lg:gap-7">
         <Suspense fallback={<div>Loading blogs...</div>}>
           <Slider sliderClassName="gap-[10px] sm:gap-3 lg:gap-5">
             {featuredBlogs.map((blog, index) => (
