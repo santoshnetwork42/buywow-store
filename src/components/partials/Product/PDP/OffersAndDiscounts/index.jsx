@@ -11,8 +11,10 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
 
   if (!bestCoupon || !hasInventory) return null;
 
+  const finalPrice = price - discount > 0 ? price - discount : price;
+
   return (
-    <div className="flex h-fit w-full justify-between rounded bg-gray-50 px-3 pb-2 pt-2.5 sm:max-w-[60%] md:max-w-full xl:max-w-[60%]">
+    <div className="flex h-fit w-full justify-between rounded bg-gray-50 px-3 pb-2 pt-2.5">
       <div className="flex gap-2">
         <div className="aspect-square w-6 md:w-7">
           <Img
@@ -25,7 +27,22 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
         </div>
         <div className="flex flex-col justify-center gap-1">
           <Heading size="base" as="h4" className="text-sm" responsive>
-            Best Price
+            {isProductCoupon ? `Free Product` : `Best Price`}
+            {isProductCoupon ? (
+              <Text
+                as="div"
+                size="sm"
+                className="font-light md:mt-1"
+                responsive
+              >
+                {coupon?.getYStoreProduct?.title}
+                {coupon?.getYStoreProduct?.sku === "WOW_GIFT"
+                  ? ""
+                  : ` worth ₹ ${coupon?.getYStoreProduct?.price} on orders above ₹${coupon?.minOrderValue}`}
+              </Text>
+            ) : (
+              <></>
+            )}
           </Heading>
           <div className="flex items-center gap-1">
             <Text as="span" size="sm" className="font-light" responsive>
@@ -48,14 +65,18 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-end gap-2">
-        <Heading as="h4" size="base" className="text-sm font-bold" responsive>
-          ₹{toDecimal(price - discount)}
-        </Heading>
-        <Text as="span" size="sm" className="line-through" responsive>
-          ₹{toDecimal(price)}
-        </Text>
-      </div>
+      {!isProductCoupon && (
+        <div className="flex flex-col items-end gap-2">
+          <Heading as="h4" size="base" className="text-sm font-bold" responsive>
+            ₹{toDecimal(finalPrice)}
+          </Heading>
+          {finalPrice !== price && (
+            <Text as="span" size="sm" className="line-through" responsive>
+              ₹{toDecimal(price)}
+            </Text>
+          )}
+        </div>
+      )}
     </div>
   );
 };
