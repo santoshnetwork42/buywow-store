@@ -82,34 +82,32 @@ const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
   }, [cartList, removeFromCart, removeCoupon]);
 
   useEffect(() => {
-    if (cartList !== previousCartList.current) {
-      previousCartList.current = cartList;
+    previousCartList.current = cartList;
 
-      const shouldAutoApply = AUTO_APPLY_COUPON_PATHNAMES.some(
-        (allowedPath) =>
-          pathname === allowedPath ||
-          (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
-      );
+    const shouldAutoApply = AUTO_APPLY_COUPON_PATHNAMES.some(
+      (allowedPath) =>
+        pathname === allowedPath ||
+        (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
+    );
 
-      if (shouldAutoApply && isInteractive) {
-        if (storedCouponCode) {
-          if (
-            (!appliedCoupon || appliedCoupon?.autoApplied) &&
-            appliedCoupon?.code !== storedCouponCode
-          ) {
-            applyCouponCode(storedCouponCode, true);
-          }
-        } else if (bestCouponCode) {
-          if (
-            (!appliedCoupon || appliedCoupon?.autoApplied) &&
-            appliedCoupon?.code !== bestCouponCode
-          ) {
-            applyCouponCode(bestCouponCode, true);
-          }
-        } else {
-          if (appliedCoupon?.autoApplied) {
-            removeCoupon();
-          }
+    if (shouldAutoApply && isInteractive) {
+      if (storedCouponCode) {
+        if (
+          (!appliedCoupon || appliedCoupon?.autoApplied) &&
+          appliedCoupon?.code !== storedCouponCode
+        ) {
+          applyCouponCode(storedCouponCode, true);
+        }
+      } else if (bestCouponCode) {
+        if (
+          (!appliedCoupon || appliedCoupon?.autoApplied) &&
+          appliedCoupon?.code !== bestCouponCode
+        ) {
+          applyCouponCode(bestCouponCode, true);
+        }
+      } else {
+        if (appliedCoupon?.autoApplied) {
+          removeCoupon();
         }
       }
     }
