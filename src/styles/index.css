@@ -272,7 +272,8 @@ span.ripple {
 
 /* Woot Bubble  */
 .woot--bubble-holder {
-  z-index: 2000 !important;
+  z-index: 10 !important;
+  bottom: 6rem !important;
 }
 
 .woot--bubble-holder-hidden {
