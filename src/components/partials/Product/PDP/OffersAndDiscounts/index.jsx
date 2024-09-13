@@ -85,6 +85,7 @@ const AllOffers = ({ productId }) => {
   const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, productId);
 
   if (pdpFeaturedCoupons?.length === 0) return null;
+
   return (
     <Accordion
       className="my-auto flex h-fit w-full shrink-0 rounded bg-blue-50 px-3 sm:w-[45%] md:w-full xl:w-[45%]"
@@ -99,7 +100,7 @@ const AllOffers = ({ productId }) => {
       accordionMainContainerClassName="!my-0 !px-0"
     >
       <div className="flex flex-col pb-1">
-        {[1, 2]?.map((item, index) => {
+        {pdpFeaturedCoupons?.map((item, index) => {
           const { coupon } = item || {};
           const { couponTitle, code } = coupon || {};
           return (
@@ -129,9 +130,7 @@ const AllOffers = ({ productId }) => {
                 <Text
                   as="span"
                   size="sm"
-                  onClick={() =>
-                    copyText("BUYWOW30", `Coupon code copied: BUYWOW30`)
-                  }
+                  onClick={() => copyText(code, `Coupon code copied: ${code}`)}
                   className="cursor-pointer rounded-full border border-dashed border-black-900 bg-white-a700 px-2 py-0.5"
                   responsive
                 >

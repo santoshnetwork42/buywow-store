@@ -232,6 +232,7 @@ const ProductCard = memo(
   },
 );
 
+
 RatingDisplay.displayName = "RatingDisplay";
 PriceDisplay.displayName = "PriceDisplay";
 BenefitTag.displayName = "BenefitTag";
