@@ -107,3 +107,4 @@ export const setSoldOutLast = (items, isContainAttributes = false) => {
   }
   return [];
 };
+
