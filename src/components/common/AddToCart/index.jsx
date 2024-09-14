@@ -8,7 +8,6 @@ import Quantity from "@/components/common/Quantity";
 import { Button } from "@/components/elements";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
-import { useIsInteractive } from "@/utils/context/navbar";
 import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
 
 const AddToCart = ({
@@ -20,7 +19,6 @@ const AddToCart = ({
   quantityClassName,
   showGoToCart = false,
 }) => {
-  const isInteractive = useIsInteractive();
   const { addToCart, updateCart, removeFromCart } = useCartDispatch();
   const { handleCartVisibility } = useModalDispatch();
   const cartItems = useSelector((state) => state.cart?.data || []);
@@ -72,7 +70,7 @@ const AddToCart = ({
 
   const totalItemQuantity = cartItem?.qty || minimumOrderQuantity;
 
-  if (!product || !isInteractive) return null;
+  if (!product) return null;
 
   if (!product.hasInventory) {
     return (
