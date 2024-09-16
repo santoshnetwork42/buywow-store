@@ -84,6 +84,7 @@ async function RootLayout({ children }) {
                   <Script
                     id="adz_rum"
                     strategy="lazyOnload"
+                    defer
                     dangerouslySetInnerHTML={{
                       __html: `(() => {
                           const s = document.createElement("script");
