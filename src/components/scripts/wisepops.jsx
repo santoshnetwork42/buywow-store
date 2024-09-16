@@ -72,6 +72,7 @@ function Wisepops() {
       data-cfasync="false"
       src={`https://wisepops.net/loader.js?v=2&h=${WISEPOPS_KEY}`}
       strategy="lazyOnload"
+      defer
       onError={(e) => console.error("Error loading Wisepops script:", e)}
     />
   );

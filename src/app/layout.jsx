@@ -83,7 +83,7 @@ async function RootLayout({ children }) {
                 {AUDITZ && (
                   <Script
                     id="adz_rum"
-                    strategy="beforeInteractive"
+                    strategy="lazyOnload"
                     dangerouslySetInnerHTML={{
                       __html: `(() => {
                           const s = document.createElement("script");
