@@ -61,7 +61,7 @@ async function RootLayout({ children }) {
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
         {!!GOKWIK_SCRIPT && (
-          <Script strategy="afterInteractive" defer src={GOKWIK_SCRIPT} />
+          <Script strategy="lazyOnload" defer src={GOKWIK_SCRIPT} />
         )}
       </head>
       <body>

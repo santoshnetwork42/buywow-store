@@ -71,7 +71,7 @@ function Wisepops() {
     <Script
       data-cfasync="false"
       src={`https://wisepops.net/loader.js?v=2&h=${WISEPOPS_KEY}`}
-      strategy="afterInteractive"
+      strategy="lazyOnload"
       onError={(e) => console.error("Error loading Wisepops script:", e)}
     />
   );

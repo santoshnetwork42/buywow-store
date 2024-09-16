@@ -46,7 +46,7 @@ function LimeChat() {
       data-cfasync="false"
       src="https://s3.ap-south-1.amazonaws.com/cdn.limechat.ai/packs/js/LC_sdk/v1/sdk.js"
       onLoad={handleScriptLoad}
-      strategy="afterInteractive"
+      strategy="lazyOnload"
       onError={(e) => console.error("Error loading LimeChat script:", e)}
     />
   );
