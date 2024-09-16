@@ -1,5 +1,6 @@
 "use client";
 
+import Checkmark from "@/assets/svg/icons";
 import { Text } from "@/components/elements";
 import FlipClock from "@/components/partials/Others/FlipClock";
 import { useAnnouncementContext } from "@/utils/context/AnnouncementContext";
@@ -25,6 +26,7 @@ const AnnouncementContent = ({ announcement }) => {
         size="sm"
       >
         {leftText}
+        <Checkmark className="mt-[3px] size-4" />
       </Text>
       <div className="m-auto flex w-auto shrink-0 items-center justify-center">
         {showTimer && !!timer ? (
