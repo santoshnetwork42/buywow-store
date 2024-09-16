@@ -60,7 +60,9 @@ async function RootLayout({ children }) {
         <meta name="theme-color" content="#000000" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
-        {!!GOKWIK_SCRIPT && <script defer src={GOKWIK_SCRIPT} />}
+        {!!GOKWIK_SCRIPT && (
+          <Script strategy="afterInteractive" defer src={GOKWIK_SCRIPT} />
+        )}
       </head>
       <body>
         <Provider data={{ headerData, carouselData }}>
