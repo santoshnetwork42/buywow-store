@@ -3105,7 +3105,7 @@ export const OfferTicket = ({ size = 16, color = "#000000", className }) => {
   );
 };
 
-export default function Checkmark({ size = 20, color = "#000000", className }) {
+export const Checkmark = ({ size = 20, color = "#000000", className }) => {
   return (
     <svg
       className={`${className} ${styles.checkmark}`}
@@ -3132,7 +3132,7 @@ export default function Checkmark({ size = 20, color = "#000000", className }) {
       />
     </svg>
   );
-}
+};
 
 export function SearchIcon({ size = 20, color = "#000000", className }) {
   return (

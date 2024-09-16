@@ -1,7 +1,12 @@
-import Checkmark from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
 import { formateDate } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import React from "react";
+
+const Checkmark = dynamic(
+  () => import("@/assets/svg/icons").then((mod) => mod.Checkmark),
+  { ssr: false },
+);
 
 const DetailRow = React.memo(
   ({ label, value, valueClassName = "", showBorder = true }) => (

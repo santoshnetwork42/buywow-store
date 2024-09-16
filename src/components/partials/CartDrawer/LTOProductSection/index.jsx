@@ -1,15 +1,21 @@
 "use client";
-import Checkmark from "@/assets/svg/icons";
+
 import { Button, Heading, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { LIMITED_TIME_DEAL_DURATION_IN_MINUTES } from "@/utils/data/constants";
 import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
 import { getProductMeta } from "@wow-star/utils";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import RemoveButton from "../MainCartSection/ProductItem/RemoveButton";
+
+const Checkmark = dynamic(
+  () => import("@/assets/svg/icons").then((mod) => mod.Checkmark),
+  { ssr: false },
+);
 
 export const LimitedTimeDealProduct = ({
   product,
