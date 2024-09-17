@@ -7,7 +7,7 @@ import {
 } from "@/lib/appSyncAPIs";
 import { generateSEOAndJSONLD } from "@/utils/helpers/generateSEOAndJSONLD";
 
-export const revalidate = 1800;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
   const { slug } = params;

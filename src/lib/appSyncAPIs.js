@@ -307,7 +307,7 @@ export const getCartUpsellProductsAPI = async () => {
     getCartUpsellProducts,
     { storeId: STORE_ID },
     {
-      next: { revalidate: 1800, tags: ["cartUpsell"] },
+      next: { revalidate: 3600, tags: ["cartUpsell"] },
     },
   );
   return JSON.parse(data?.getCartUpsellProducts || "{}");
