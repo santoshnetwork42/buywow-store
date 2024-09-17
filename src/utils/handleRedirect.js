@@ -6,9 +6,13 @@ import {
 import { notFound, redirect } from "next/navigation";
 import { extname } from "path";
 
-const handleRedirect = async (path) => {
-  const extension = extname(path);
+const handleRedirect = async (path, log) => {
+  if (log) {
+    console.log("pagedata");
+    console.log(JSON.stringify(log, null, 2));
+  }
 
+  const extension = extname(path);
   const pageRedirect = await getRedirectsAPI(path);
 
   if (pageRedirect?.redirect && pageRedirect.redirect !== path) {

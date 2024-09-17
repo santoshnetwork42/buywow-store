@@ -149,19 +149,19 @@ export default async function PageBlock({ pageType, slug }) {
   const { blocks, slug: fetchedSlug, type: fetchedPageType } = pageData || {};
 
   if (pageType === "landing" && !fetchedSlug) {
-    await handleRedirect(`/${slug}`);
+    await handleRedirect(`/${slug}`, pageData);
   }
 
   if (!fetchedSlug || fetchedSlug !== slug) {
-    await handleRedirect(`/${pageType}/${slug}`);
+    await handleRedirect(`/${pageType}/${slug}`, pageData);
   }
 
   if (!fetchedPageType || PAGETYPE[fetchedPageType] !== pageType) {
-    await handleRedirect(`/${pageType}/${slug}`);
+    await handleRedirect(`/${pageType}/${slug}`, pageData);
   }
 
   if (!Array.isArray(blocks)) {
-    await handleRedirect(`/${pageType}/${slug}`);
+    await handleRedirect(`/${pageType}/${slug}`, pageData);
   }
 
   return (
