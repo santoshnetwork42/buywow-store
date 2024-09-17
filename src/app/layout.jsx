@@ -1,9 +1,6 @@
 import awsExport from "@/aws-exports";
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
 import ClientSideEffects from "@/components/ClientSideEffects";
-import ToastComponent from "@/components/common/ToastComponent";
-import CartDrawer from "@/components/partials/CartDrawer";
-import Footer from "@/components/partials/Footer";
 import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
 import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
@@ -18,8 +15,15 @@ import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 import GoKwikProvider from "@/utils/context/gokwik";
 import NavbarProvider from "@/utils/context/navbar";
 import { Amplify } from "aws-amplify";
+import dynamic from "next/dynamic";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
+
+const CartDrawer = dynamic(() => import("@/components/partials/CartDrawer"));
+const Footer = dynamic(() => import("@/components/partials/Footer"));
+const ToastComponent = dynamic(
+  () => import("@/components/common/ToastComponent"),
+);
 
 const outfit = Outfit({
   subsets: ["latin"],
