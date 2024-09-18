@@ -84,62 +84,6 @@ span.ripple {
   transform-origin: bottom;
 }
 
-/* Info section */
-.info-section h1,
-.info-section h2,
-.info-section h3,
-.info-section h4,
-.info-section h5,
-.info-section h6,
-.info-section p {
-  margin: 0 0 20px;
-}
-
-.info-section p,
-.info-section li {
-  font-weight: 300;
-}
-
-.info-section strong {
-  font-weight: 600;
-}
-
-.info-section ul {
-  list-style: none;
-  padding-left: 28px;
-}
-
-.info-section ul li {
-  position: relative;
-}
-
-.info-section ul li::before {
-  content: "";
-  position: absolute;
-  left: -16px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 4px;
-  background-color: black;
-  border-radius: 50%;
-}
-
-.info-section h3 {
-  font-size: 20px !important;
-  font-weight: 900 !important;
-  margin: 0 0 10px;
-}
-
-.info-section p strong {
-  font-weight: bolder !important;
-  font-weight: bold;
-}
-
-.info-section p {
-  line-height: 1.6;
-}
-
 /* Inline HTML  */
 .inline-html-content p,
 .inline-html-content a {

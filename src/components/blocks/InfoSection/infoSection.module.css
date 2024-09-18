@@ -1,0 +1,55 @@
+/* Info section */
+.info_section h1,
+.info_section h2,
+.info_section h3,
+.info_section h4,
+.info_section h5,
+.info_section h6,
+.info_section p {
+  margin: 0 0 20px;
+}
+
+.info_section p,
+.info_section li {
+  font-weight: 300;
+}
+
+.info_section strong {
+  font-weight: 600;
+}
+
+.info_section ul {
+  list-style: none;
+  padding-left: 28px;
+}
+
+.info_section ul li {
+  position: relative;
+}
+
+.info_section ul li::before {
+  content: "";
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.info_section h3 {
+  font-size: 20px !important;
+  font-weight: 900 !important;
+  margin: 0 0 10px;
+}
+
+.info_section p strong {
+  font-weight: bolder !important;
+  font-weight: bold;
+}
+
+.info_section p {
+  line-height: 1.6;
+}

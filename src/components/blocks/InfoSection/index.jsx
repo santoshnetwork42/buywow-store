@@ -1,11 +1,12 @@
 import { Text } from "@/components/elements";
+import styles from "@/components/blocks/InfoSection/infoSection.module.css";
 
 const InfoSection = ({ information }) => (
   <div className="container-main mb-main mt-2 flex">
     <Text
       size="xl"
       as="p"
-      className="info-section"
+      className={styles.info_section}
       responsive
       dangerouslySetInnerHTML={{ __html: information }}
     />
