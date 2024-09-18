@@ -238,19 +238,19 @@ export const validateEmail = (email) => {
   return { error: true, message: "Invalid Email" };
 };
 
-export const calculateTotals = (productItems) => {
-  return productItems.reduce(
-    (acc, { quantity, price, cancelledQuantity = 0 }) => {
-      const activeTotal = quantity * price;
-      const totalWithCancelled = (quantity + cancelledQuantity) * price;
-      return {
-        activeItemsTotalPrice: acc.activeItemsTotalPrice + activeTotal,
-        itemsTotalPrice: acc.itemsTotalPrice + totalWithCancelled,
-      };
-    },
-    { activeItemsTotalPrice: 0, itemsTotalPrice: 0 },
-  );
-};
+// export const calculateTotals = (productItems) => {
+//   return productItems.reduce(
+//     (acc, { quantity, price, cancelledQuantity = 0 }) => {
+//       const activeTotal = quantity * price;
+//       const totalWithCancelled = (quantity + cancelledQuantity) * price;
+//       return {
+//         activeItemsTotalPrice: acc.activeItemsTotalPrice + activeTotal,
+//         itemsTotalPrice: acc.itemsTotalPrice + totalWithCancelled,
+//       };
+//     },
+//     { activeItemsTotalPrice: 0, itemsTotalPrice: 0 },
+//   );
+// };
 
 export const orderStatusBadge = {
   CONFIRMED: {
@@ -348,11 +348,11 @@ export const formatUserAddress = (address) => {
   };
 };
 
-export const getPer = (totalCount, allReview) => {
-  if (totalCount && allReview)
-    return Math.round((allReview * 100) / totalCount);
-  return 0;
-};
+// export const getPer = (totalCount, allReview) => {
+//   if (totalCount && allReview)
+//     return Math.round((allReview * 100) / totalCount);
+//   return 0;
+// };
 
 export const processAnalytics = (analytics) => {
   if (!analytics || !Array.isArray(analytics)) return [];
