@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowIconSVG, LogOutIcon } from "@/assets/svg/icons";
+import { ArrowIconSVG } from "@/assets/svg/icons";
 import AccountDetails from "@/components/partials/Account/AccountDetails";
 import AccountSkeleton from "@/components/partials/Account/AccountSkeleton";
 import AccountTabs from "@/components/partials/Account/AccountTabs";
@@ -17,6 +17,7 @@ const WowCashIcon = dynamic(() => import("@/src/assets/svg/wowCashIcon"));
 const LocationDot = dynamic(() => import("@/src/assets/svg/locationDot"));
 const ListRadio = dynamic(() => import("@/src/assets/svg/listRadio"));
 const User = dynamic(() => import("@/src/assets/svg/user"));
+const LogOutIcon = dynamic(() => import("@/src/assets/svg/logOutIcon"));
 
 const AccountClient = () => {
   const router = useRouter();

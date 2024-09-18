@@ -1,5 +1,7 @@
-import { GradientStarIcon } from "@/assets/svg/icons";
+import dynamic from "next/dynamic";
 import React from "react";
+
+const GradientStarIcon = dynamic(() => import("@/assets/svg/gradientStarIcon"));
 
 const ReviewStars = React.memo(
   ({ rating = 0, onChange = () => {}, editable = false, size = 20 }) => {

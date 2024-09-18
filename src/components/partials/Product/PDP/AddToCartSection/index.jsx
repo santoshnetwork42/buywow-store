@@ -1,7 +1,7 @@
-import { IndiaMapIcon, VehicleIcon } from "@/assets/svg/icons";
 import AddToCart from "@/components/common/AddToCart";
 import { Button, Img, Text } from "@/components/elements";
 import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import React, {
   useCallback,
   useEffect,
@@ -10,6 +10,9 @@ import React, {
   useState,
 } from "react";
 import { twMerge } from "tailwind-merge";
+
+const IndiaMapIcon = dynamic(() => import("@/assets/svg/indiaMapIcon"));
+const VehicleIcon = dynamic(() => import("@/assets/svg/vehicleIcon"));
 
 const ShippingInfo = () => (
   <div className="hidden justify-evenly gap-2 md:flex">
