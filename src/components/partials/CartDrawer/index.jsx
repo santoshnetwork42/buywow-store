@@ -19,7 +19,6 @@ import CheckoutButton from "@/components/partials/CartDrawer/CheckoutButton";
 import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
 import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
 
-import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
 import CouponsAndOffers from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers";
 
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
@@ -34,7 +33,6 @@ import {
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
 import dynamic from "next/dynamic";
-import ShippingProgress from "../Others/ShippingProgress";
 
 const LoyaltyCash = dynamic(
   () => import("@/components/partials/CartDrawer/LoyaltyCash"),
@@ -42,6 +40,14 @@ const LoyaltyCash = dynamic(
 
 const Cashback = dynamic(
   () => import("@/components/partials/CartDrawer/Cashback"),
+);
+
+const ShippingProgress = dynamic(
+  () => import("@/components/partials/Others/ShippingProgress"),
+);
+
+const MainCartSection = dynamic(
+  () => import("@/components/partials/CartDrawer/MainCartSection"),
 );
 
 const CartDrawer = ({ upsellProducts }) => {
