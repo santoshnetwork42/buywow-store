@@ -1,8 +1,11 @@
-import { CouponAndOffer, OfferTicket } from "@/assets/svg/icons";
 import { Heading, Img, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import { copyText, toDecimal } from "@/utils/helpers";
 import { useFeaturedCoupons, useFreebie } from "@wow-star/utils";
+import dynamic from "next/dynamic";
+
+const OfferTicket = dynamic(() => import("@/src/assets/svg/offerTicket"));
+const CouponAndOffer = dynamic(() => import("@/src/assets/svg/couponAndOffer"));
 
 const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   const freeProduct = useFreebie();

@@ -1,4 +1,4 @@
-export const CartIcon = ({ size = 20, color = "#000000" }) => {
+const CartIcon = ({ size = 20, color = "#000000" }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
