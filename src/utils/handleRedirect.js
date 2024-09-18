@@ -6,9 +6,8 @@ import {
 import { notFound, redirect } from "next/navigation";
 import { extname } from "path";
 
-const handleRedirect = async (path) => {
+const handleRedirect = async (path, log) => {
   const extension = extname(path);
-
   const pageRedirect = await getRedirectsAPI(path);
 
   if (pageRedirect?.redirect && pageRedirect.redirect !== path) {
@@ -23,24 +22,10 @@ const handleRedirect = async (path) => {
     await createRedirectsAPI(path);
   }
 
-  const { REVALIDATE_SECRET = "secret", NEXT_PUBLIC_SITE_URL } = process.env;
-
-  const response = await fetch(
-    `http://localhost:3000/api/revalidate?secret=${REVALIDATE_SECRET}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        path: path ?? "/",
-      }),
-    },
-  );
-  const data = await response.json();
-  console.log("data: }}}}}}}}}}}}}}{{{{{{{{{{{{{{{{{{{{", data);
-
-  console.error("not found: ", path);
+  console.error("not found path: ", path);
+  if (log) {
+    console.log(JSON.stringify(log, null, 2));
+  }
   notFound();
 };
 

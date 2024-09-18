@@ -1,7 +1,7 @@
 import SearchResults from "@/components/partials/Others/SearchResult";
 import { getPageBySlugAPI } from "@/lib/appSyncAPIs";
 
-export const revalidate = 1800;
+export const revalidate = 3600;
 
 export const metadata = {
   title: "Search",
