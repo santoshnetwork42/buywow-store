@@ -1,8 +1,15 @@
 import { Button, Input, Text } from "@/components/elements";
 import Modal from "@/components/features/Modal";
-import React, { useCallback } from "react";
 import ReviewStars from "@/components/partials/Product/ProductReviews/ReviewStars";
-import ImageUploader from "@/components/partials/Product/ProductReviews/ReviewForm/ImageUploader";
+import dynamic from "next/dynamic";
+import React, { useCallback } from "react";
+
+const ImageUploader = dynamic(
+  () =>
+    import(
+      "@/components/partials/Product/ProductReviews/ReviewForm/ImageUploader"
+    ),
+);
 
 const ReviewForm = React.memo(
   ({ isOpen, onClose, reviewState, setReview, onSubmit, loading }) => {
