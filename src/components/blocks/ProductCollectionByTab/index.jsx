@@ -4,13 +4,13 @@ import SortDropdown from "@/components/common/SortDropdown";
 import { Heading } from "@/components/elements";
 import InfiniteScroll from "@/components/features/InfiniteScroll";
 import Slider from "@/components/features/Slider";
-import BlogCard from "@/components/partials/Card/BlogCard";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { getSource } from "@/utils/helpers";
 import { setSoldOutLast } from "@/utils/helpers/products";
+import dynamic from "next/dynamic";
 import React, {
   useCallback,
   useEffect,
@@ -19,6 +19,8 @@ import React, {
   useState,
 } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+
+const BlogCard = dynamic(() => import("@/components/partials/Card/BlogCard"));
 
 const SORT_OPTIONS = [
   { value: "RECOMMENDED", label: "Recommended" },
