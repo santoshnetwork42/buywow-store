@@ -1,6 +1,8 @@
-import { CartIcon } from "@/assets/svg/icons";
 import { Text } from "@/components/elements";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+
+const CartIcon = dynamic(() => import("@/assets/svg/cart"));
 
 const EmptyCart = ({ cartClose }) => {
   return (
