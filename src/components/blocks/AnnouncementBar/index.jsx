@@ -1,13 +1,17 @@
 "use client";
 
 import { Text } from "@/components/elements";
-import FlipClock from "@/components/partials/Others/FlipClock";
 import { useAnnouncementContext } from "@/utils/context/AnnouncementContext";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { extractAttributes } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useMemo } from "react";
+
+const FlipClock = dynamic(
+  () => import("@/components/partials/Others/FlipClock"),
+);
 
 const AnnouncementContent = ({ announcement }) => {
   const { leftText, centerText, rightText, showTimer, timer } = announcement;

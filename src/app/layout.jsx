@@ -1,5 +1,4 @@
 import awsExport from "@/aws-exports";
-import AnnouncementBar from "@/components/blocks/AnnouncementBar";
 import ClientSideEffects from "@/components/ClientSideEffects";
 import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
@@ -19,6 +18,9 @@ import dynamic from "next/dynamic";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 
+const AnnouncementBar = dynamic(
+  () => import("@/components/blocks/AnnouncementBar"),
+);
 const CartDrawer = dynamic(() => import("@/components/partials/CartDrawer"));
 const Footer = dynamic(() => import("@/components/partials/Footer"));
 const ToastComponent = dynamic(

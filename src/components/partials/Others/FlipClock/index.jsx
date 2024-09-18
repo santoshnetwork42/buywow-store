@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { Text, Img } from "@/components/elements";
+import { Text } from "@/components/elements";
+import { useCallback, useEffect, useState } from "react";
+import styles from "@/src/components/partials/Others/FlipClock/flipClock.module.css";
 
 const FlipUnit = ({ digit, unit }) => {
   const [flip, setFlip] = useState(false);
@@ -23,7 +24,7 @@ const FlipUnit = ({ digit, unit }) => {
       <div className="relative mt-0.5 flex-1">
         <div
           className={`absolute top-0 z-10 flex h-1/2 w-full items-end justify-center overflow-hidden border-b-[0.5px] border-gray-400 shadow-sm ${
-            flip ? "animate-flip" : ""
+            flip ? `${styles.animate_flip}` : ""
           }`}
         >
           <span className="-mb-2.5 text-sm font-bold text-blue_gray-300">
