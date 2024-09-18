@@ -7,11 +7,6 @@ import { notFound, redirect } from "next/navigation";
 import { extname } from "path";
 
 const handleRedirect = async (path, log) => {
-  if (log) {
-    console.log("pagedata");
-    console.log(JSON.stringify(log, null, 2));
-  }
-
   const extension = extname(path);
   const pageRedirect = await getRedirectsAPI(path);
 
@@ -27,7 +22,10 @@ const handleRedirect = async (path, log) => {
     await createRedirectsAPI(path);
   }
 
-  console.error("not found: ", path);
+  console.error("not found path: ", path);
+  if (log) {
+    console.log(JSON.stringify(log, null, 2));
+  }
   notFound();
 };
 
