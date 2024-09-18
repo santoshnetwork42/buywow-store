@@ -9,6 +9,7 @@ export const metadata = {
     "Search for products using our advanced search engine. Start your search here.",
 };
 
+
 async function getInitialSearchData() {
   try {
     const initialSearchData = await getPageBySlugAPI("search");
