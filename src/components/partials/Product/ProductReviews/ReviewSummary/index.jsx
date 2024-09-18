@@ -1,9 +1,17 @@
 import SectionHeading from "@/components/common/SectionHeading";
 import { Button, Heading } from "@/components/elements";
-import { toDecimal } from "@/utils/helpers";
-import React from "react";
 import ReviewStars from "@/components/partials/Product/ProductReviews/ReviewStars";
-import RatingBar from "@/components/partials/Product/ProductReviews/ReviewSummary/RatingBar";
+import { toDecimal } from "@/utils/helpers";
+import dynamic from "next/dynamic";
+import React from "react";
+
+const RatingBar = dynamic(
+  () =>
+    import(
+      "@/components/partials/Product/ProductReviews/ReviewSummary/RatingBar"
+    ),
+  { ssr: false },
+);
 
 const ReviewSummary = React.memo(
   ({ title, rating, totalRating, reviewAnalytics, onReviewClick }) => (
