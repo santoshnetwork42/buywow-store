@@ -16,7 +16,6 @@ import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
 
 import CheckoutButton from "@/components/partials/CartDrawer/CheckoutButton";
-import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
 import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
 
 import CouponsAndOffers from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers";
@@ -48,6 +47,10 @@ const ShippingProgress = dynamic(
 
 const MainCartSection = dynamic(
   () => import("@/components/partials/CartDrawer/MainCartSection"),
+);
+
+const CheckoutSummary = dynamic(
+  () => import("@/components/partials/CartDrawer/CheckoutSummary"),
 );
 
 const CartDrawer = ({ upsellProducts }) => {
