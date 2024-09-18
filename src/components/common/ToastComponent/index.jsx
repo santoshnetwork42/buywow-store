@@ -1,8 +1,10 @@
 "use client";
 
-import { AlertIcon } from "@/assets/svg/icons";
 import { Text } from "@/components/elements";
+import dynamic from "next/dynamic";
 import { Toaster, toast } from "react-hot-toast";
+
+const AlertIcon = dynamic(() => import("@/assets/svg/alertIcon"));
 
 // Generic Toast Component
 const ToastComponent = () => {
