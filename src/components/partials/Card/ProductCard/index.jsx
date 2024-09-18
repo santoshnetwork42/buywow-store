@@ -55,7 +55,7 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
 const PriceDisplay = memo(({ price, listingPrice }) => {
   if (!price) return null;
   return (
-    <div className="flex shrink items-center gap-2">
+    <div className="flex shrink items-center gap-1">
       <Heading as="span" size="lg" className="text-base" responsive>
         ₹{toDecimal(price)}
       </Heading>
@@ -190,7 +190,7 @@ const ProductCard = memo(
         )}
 
         <div className="flex flex-1 flex-col gap-2">
-          <div className="flex flex-1 flex-col">
+          <div className="flex flex-1 flex-col gap-1">
             <Heading
               as="h3"
               size="xl"
@@ -212,16 +212,17 @@ const ProductCard = memo(
             )}
           </div>
           {isInteractive && (
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-2">
               <RatingDisplay rating={rating} totalRatings={totalRatings} />
-              <div className="flex items-center justify-between gap-1 sm:gap-2">
+              <div className="flex items-center justify-between gap-1">
                 <PriceDisplay price={price} listingPrice={listingPrice} />
                 <AddToCart
                   product={packageProduct}
                   selectedVariant={selectedVariant}
                   buttonText="Add"
                   buttonSize="medium"
-                  quantityClassName="grid-cols-[repeat(3,24px)] sm:grid-cols-[repeat(3,32px)] lg:grid-cols-[repeat(3,36px)]"
+                  quantityClassName="grid-cols-[repeat(3,24px)] sm:grid-cols-[repeat(3,32px)] lg:grid-cols-[repeat(3,36px)] h-8"
+                  buttonClassName="text-base rounded-md w-16 h-8 sm:h-auto"
                 />
               </div>
             </div>
@@ -231,7 +232,6 @@ const ProductCard = memo(
     );
   },
 );
-
 
 RatingDisplay.displayName = "RatingDisplay";
 PriceDisplay.displayName = "PriceDisplay";
