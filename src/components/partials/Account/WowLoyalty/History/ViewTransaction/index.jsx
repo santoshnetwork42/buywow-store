@@ -1,13 +1,19 @@
 import { Heading, Text } from "@/components/elements";
-import { CreditIcon, DebitIcon, PendingLockIcon } from "@/src/assets/svg/icons";
 import { toDecimal } from "@/utils/helpers";
 import {
   getEventDescription,
   getEventTitle,
   getExpireLabel,
 } from "@/utils/helpers/account";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
+
+const DebitIcon = dynamic(() => import("@/src/assets/svg/debitIcon"));
+const CreditIcon = dynamic(() => import("@/src/assets/svg/creditIcon"));
+const PendingLockIcon = dynamic(
+  () => import("@/src/assets/svg/pendingLockIcon"),
+);
 
 const ViewTransaction = React.memo(({ data }) => {
   if (!data) return null;

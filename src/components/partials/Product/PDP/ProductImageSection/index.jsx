@@ -1,8 +1,8 @@
-import { VideoDotIcon } from "@/assets/svg/icons";
 import { Button, Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import useEmblaCarousel from "embla-carousel-react";
+import dynamic from "next/dynamic";
 import React, {
   useCallback,
   useEffect,
@@ -10,6 +10,8 @@ import React, {
   useRef,
   useState,
 } from "react";
+
+const VideoDotIcon = dynamic(() => import("@/assets/svg/videoDotIcon"));
 
 const Thumb = React.memo(({ isSelected, image, onClick }) => (
   <div

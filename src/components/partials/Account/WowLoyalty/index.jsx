@@ -4,10 +4,14 @@ import { Heading, Text } from "@/components/elements";
 import History from "@/components/partials/Account/WowLoyalty/History";
 import WowLoyaltySkeleton from "@/components/partials/Account/WowLoyalty/WowLoyaltySkeleton";
 import { getLoyaltyAPI } from "@/lib/appSyncAPIs";
-import { EllipsisIcon, WalletIcon } from "@/src/assets/svg/icons";
+
 import dayjs from "dayjs";
+import dynamic from "next/dynamic";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+
+const WalletIcon = dynamic(() => import("@/src/assets/svg/walletIcon"));
+const EllipsisIcon = dynamic(() => import("@/src/assets/svg/ellipsisIcon"));
 
 const INITIAL_WOW_CASH_STATE = {
   transactions: [],

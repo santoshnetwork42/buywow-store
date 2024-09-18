@@ -1,7 +1,9 @@
-import { EllipsisIcon } from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
 import { toDecimal } from "@/utils/helpers";
 import { useRuleEngine } from "@wow-star/utils";
+import dynamic from "next/dynamic";
+
+const EllipsisIcon = dynamic(() => import("@/src/assets/svg/ellipsisIcon"));
 
 const LoyaltyCash = ({
   showLoyalty,

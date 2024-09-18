@@ -1,9 +1,11 @@
-import { FreeIcon } from "@/assets/svg/icons";
 import { Heading } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React from "react";
+
+const FreeIcon = dynamic(() => import("@/assets/svg/freeIcon"));
 
 const ProductImage = ({ slug, outOfStock, imageKey, isFreeProduct }) => {
   const { handleCartVisibility } = useModalDispatch();
