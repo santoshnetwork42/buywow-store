@@ -1,5 +1,5 @@
-import { Text } from "@/components/elements";
 import styles from "@/components/blocks/InfoSection/infoSection.module.css";
+import { Text } from "@/components/elements";
 
 const InfoSection = ({ information }) => (
   <div className="container-main mb-main mt-2 flex">

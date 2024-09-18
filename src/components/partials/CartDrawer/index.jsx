@@ -15,10 +15,7 @@ import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
 
-import CheckoutButton from "@/components/partials/CartDrawer/CheckoutButton";
 import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
-
-import CouponsAndOffers from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers";
 
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
@@ -51,6 +48,15 @@ const MainCartSection = dynamic(
 
 const CheckoutSummary = dynamic(
   () => import("@/components/partials/CartDrawer/CheckoutSummary"),
+);
+
+const CheckoutButton = dynamic(
+  () => import("@/components/partials/CartDrawer/CheckoutButton"),
+);
+
+const CouponsAndOffers = dynamic(
+  () =>
+    import("@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers"),
 );
 
 const CartDrawer = ({ upsellProducts }) => {
