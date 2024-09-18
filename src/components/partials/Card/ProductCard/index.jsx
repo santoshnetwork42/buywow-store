@@ -222,7 +222,7 @@ const ProductCard = memo(
                   buttonText="Add"
                   buttonSize="medium"
                   quantityClassName=" h-8 w-[4.5rem]"
-                  buttonClassName="text-base rounded-md w-[4.5rem] h-8 sm:h-auto"
+                  buttonClassName="text-base rounded-md min-w-[4.5rem] h-8 sm:h-auto"
                 />
               </div>
             </div>
