@@ -1,5 +1,5 @@
-import { DownArrowIconSVG } from "@/assets/svg/icons";
-import { SelectBox } from "@/components/elements";
+// import { DownArrowIconSVG } from "@/assets/svg/icons";
+// import { SelectBox } from "@/components/elements";
 import { twMerge } from "tailwind-merge";
 
 const VariantSelector = ({
@@ -46,7 +46,7 @@ const VariantSelector = ({
               variantClassName,
             )}
           >
-            <SelectBox
+            {/* <SelectBox
               indicator={
                 <DownArrowIconSVG
                   strokeWidth={1.25}
@@ -126,7 +126,7 @@ const VariantSelector = ({
                   padding: "0px",
                 }),
               }}
-            />
+            /> */}
           </div>
         );
       })}
