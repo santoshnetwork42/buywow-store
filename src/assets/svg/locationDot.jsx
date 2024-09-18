@@ -1,3 +1,6 @@
+const defaultIconSize = 28;
+const defaultIconColor = "rgb(34, 34, 34)";
+
 const LocationDot = ({ size = defaultIconSize, color = defaultIconColor }) => {
   return (
     <svg

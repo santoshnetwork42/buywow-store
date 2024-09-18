@@ -14,11 +14,11 @@ import { showToast } from "@/components/common/ToastComponent";
 import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
-import Cashback from "@/components/partials/CartDrawer/Cashback";
+
 import CheckoutButton from "@/components/partials/CartDrawer/CheckoutButton";
 import CheckoutSummary from "@/components/partials/CartDrawer/CheckoutSummary";
 import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
-import LoyaltyCash from "@/components/partials/CartDrawer/LoyaltyCash";
+
 import MainCartSection from "@/components/partials/CartDrawer/MainCartSection";
 import CouponsAndOffers from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers";
 
@@ -33,7 +33,16 @@ import {
   PREPAID_ENABLED,
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
+import dynamic from "next/dynamic";
 import ShippingProgress from "../Others/ShippingProgress";
+
+const LoyaltyCash = dynamic(
+  () => import("@/components/partials/CartDrawer/LoyaltyCash"),
+);
+
+const Cashback = dynamic(
+  () => import("@/components/partials/CartDrawer/Cashback"),
+);
 
 const CartDrawer = ({ upsellProducts }) => {
   const router = useRouter();

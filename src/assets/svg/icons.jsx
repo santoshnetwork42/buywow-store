@@ -1,6 +1,3 @@
-const defaultIconSize = 28;
-const defaultIconColor = "rgb(34, 34, 34)";
-
 export const CloseIcon = ({ size = 30, color = "black", className }) => {
   return (
     <svg
