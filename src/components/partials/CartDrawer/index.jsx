@@ -15,8 +15,6 @@ import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
 
-import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
-
 import { GOKWIK_MID, STORE_PREFIX } from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
@@ -29,6 +27,10 @@ import {
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
 import dynamic from "next/dynamic";
+
+const EmptyCart = dynamic(
+  () => import("@/components/partials/CartDrawer/EmptyCart"),
+);
 
 const LoyaltyCash = dynamic(
   () => import("@/components/partials/CartDrawer/LoyaltyCash"),
