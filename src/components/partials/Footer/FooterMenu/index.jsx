@@ -1,4 +1,3 @@
-import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import Link from "next/link";

@@ -1,12 +1,16 @@
 "use client";
 
 import { Heading, Img, Text } from "@/components/elements";
-import FooterMenu from "@/components/partials/Footer/FooterMenu";
 import { PAGETYPE, RESTRICT_FOOTER_TO_SHOW } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
+
+const FooterMenu = dynamic(
+  () => import("@/components/partials/Footer/FooterMenu"),
+);
 
 const SocialLink = React.memo(({ item, index }) => {
   if (!item) return null;
