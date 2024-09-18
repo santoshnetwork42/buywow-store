@@ -1,5 +1,6 @@
 import awsExport from "@/aws-exports";
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
+import ClientSideEffects from "@/components/ClientSideEffects";
 import Header from "@/components/partials/Header";
 import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
@@ -21,10 +22,6 @@ const CartDrawer = dynamic(() => import("@/components/partials/CartDrawer"));
 const Footer = dynamic(() => import("@/components/partials/Footer"));
 const ToastComponent = dynamic(
   () => import("@/components/common/ToastComponent"),
-);
-const ClientSideEffects = dynamic(
-  () => import("@/components/ClientSideEffects"),
-  { ssr: false },
 );
 const Scripts = dynamic(() => import("@/components/scripts"), { ssr: false });
 
