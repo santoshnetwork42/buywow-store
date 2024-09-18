@@ -3,9 +3,7 @@ import { formateDate } from "@/utils/helpers";
 import dynamic from "next/dynamic";
 import React from "react";
 
-const Checkmark = dynamic(() =>
-  import("@/assets/svg/icons").then((mod) => mod.Checkmark),
-);
+const Checkmark = dynamic(() => import("@/assets/svg/checkmark/icon"));
 
 const DetailRow = React.memo(
   ({ label, value, valueClassName = "", showBorder = true }) => (

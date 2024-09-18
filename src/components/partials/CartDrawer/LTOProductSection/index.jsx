@@ -12,9 +12,7 @@ import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import RemoveButton from "../MainCartSection/ProductItem/RemoveButton";
 
-const Checkmark = dynamic(() =>
-  import("@/assets/svg/icons").then((mod) => mod.Checkmark),
-);
+const Checkmark = dynamic(() => import("@/assets/svg/checkmark/icon"));
 
 export const LimitedTimeDealProduct = ({
   product,
