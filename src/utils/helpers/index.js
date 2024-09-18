@@ -3,7 +3,7 @@ import { STORE_PREFIX } from "@/config";
 import States from "@/utils/data/states.json";
 import { uploadData } from "aws-amplify/storage";
 import Cookies from "js-cookie";
-import platform from "platform";
+import { os, name, version, product } from "platform";
 
 export function generateRandomString(length) {
   const characters =
@@ -270,10 +270,10 @@ export const orderStatusBadge = {
 export const analyticsMetaDataMapper = () => {
   // Collect device details
   const deviceDetails = {
-    os: platform.os.family || "Unknown",
-    browser: platform.name || "Unknown",
-    browserVersion: platform.version || "Unknown",
-    deviceType: platform.product || "Desktop",
+    os: os.family || "Unknown",
+    browser: name || "Unknown",
+    browserVersion: version || "Unknown",
+    deviceType: product || "Desktop",
     userAgent: navigator.userAgent || "Unknown",
     screenWidth: window.screen.width || 0,
     screenHeight: window.screen.height || 0,
