@@ -1,6 +1,13 @@
 import { Button, Text } from "@/components/elements";
+import dynamic from "next/dynamic";
 import React from "react";
-import ReviewItem from "@/components/partials/Product/ProductReviews/ReviewList/ReviewItem";
+
+const ReviewItem = dynamic(
+  () =>
+    import(
+      "@/components/partials/Product/ProductReviews/ReviewList/ReviewItem"
+    ),
+);
 
 const ReviewList = React.memo(
   ({
