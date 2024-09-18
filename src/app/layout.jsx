@@ -2,6 +2,7 @@ import awsExport from "@/aws-exports";
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
 import ClientSideEffects from "@/components/ClientSideEffects";
 import Header from "@/components/partials/Header";
+import Scripts from "@/components/scripts";
 import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
   getCartUpsellProductsAPI,
@@ -23,7 +24,6 @@ const Footer = dynamic(() => import("@/components/partials/Footer"));
 const ToastComponent = dynamic(
   () => import("@/components/common/ToastComponent"),
 );
-const Scripts = dynamic(() => import("@/components/scripts"), { ssr: false });
 
 const outfit = Outfit({
   subsets: ["latin"],
