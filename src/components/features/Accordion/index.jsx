@@ -77,7 +77,7 @@ const Accordion = ({
           <ToggleArrow
             open={isOpen}
             variant={variant}
-            className={twMerge("mr-1", toggleArrowClassName)}
+            className={twMerge("mr-1.5", toggleArrowClassName)}
           />
         )}
       </button>
