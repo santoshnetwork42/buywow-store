@@ -2,6 +2,7 @@
 
 import { Heading, Text } from "@/components/elements";
 import { getBgColor } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
 const ToggleArrow = dynamic(
