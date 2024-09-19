@@ -5,11 +5,29 @@ import TokenPagination from "@/components/features/TokenPagination";
 import { getOrdersAPI } from "@/lib/appSyncAPIs";
 import { errorHandler } from "@/utils/errorHandler";
 import { generateClient } from "aws-amplify/api";
+import dynamic from "next/dynamic";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import OrderListHeader from "@/components/partials/Account/OrderSection/OrderList/OrderListHeader";
-import OrderRow from "@/components/partials/Account/OrderSection/OrderList/OrderRow";
-import OrderSkeleton from "@/components/partials/Account/OrderSection/OrderList/OrderSkeleton";
+
+const OrderRow = dynamic(
+  () => import("@/components/partials/Account/OrderSection/OrderList/OrderRow"),
+  { ssr: false },
+);
+
+const OrderListHeader = dynamic(
+  () =>
+    import(
+      "@/components/partials/Account/OrderSection/OrderList/OrderListHeader"
+    ),
+  { ssr: false },
+);
+const OrderSkeleton = dynamic(
+  () =>
+    import(
+      "@/components/partials/Account/OrderSection/OrderList/OrderSkeleton"
+    ),
+  { ssr: false },
+);
 
 const client = generateClient();
 
