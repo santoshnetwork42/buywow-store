@@ -22,7 +22,7 @@ const TableLikeStructure = ({ legalInfoItems }) => {
               </Text>
             </div>
             <div className="flex flex-row">
-              <Text as="p" size="sm" className="line-clamp-4">
+              <Text as="p" size="sm" className="line-clamp-5">
                 {item?.subText}
               </Text>
             </div>

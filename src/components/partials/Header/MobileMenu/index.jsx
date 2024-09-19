@@ -26,7 +26,7 @@ const HeaderSection = ({
       />
     </Link>
     {!isLoggedIn && (
-      <div className="ml-2.5 flex flex-1 flex-col gap-0.5">
+      <div className="ml-2 flex flex-1 flex-col gap-0.5">
         <Heading as="h4" size="lg" className="text-white-a700_01">
           Hi Guest
         </Heading>

@@ -362,7 +362,7 @@ const CheckoutClient = () => {
       <ProgressSteps activeStep={2} />
 
       {cartList.length > 0 && totalListingPrice > 0 ? (
-        <div className="mb-14 grid w-full grid-cols-1 gap-5 sm:gap-6 md:mb-0 md:grid-cols-2 md:grid-rows-[auto_auto_1fr] md:gap-x-8 lg:gap-x-10 xl:gap-x-12">
+        <div className="mb-12 grid w-full grid-cols-1 gap-5 sm:gap-6 md:mb-0 md:grid-cols-2 md:grid-rows-[auto_auto_1fr] md:gap-x-8 lg:gap-x-10 xl:gap-x-12">
           <div className="order-3 md:order-1 md:row-span-3">
             <AddressSection variant="CHECKOUT" />
           </div>

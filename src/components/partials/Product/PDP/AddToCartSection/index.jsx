@@ -70,7 +70,7 @@ const DesktopStickyBar = ({
     <div className="fixed bottom-0 left-0 z-50 hidden w-full border-t bg-white-a700_01 py-3 shadow-md md:block">
       <div className="container-main flex items-center justify-between gap-8">
         <div className="flex items-center gap-4">
-          <div className="size-16 shrink-0 overflow-hidden rounded bg-lime-50">
+          <div className="size-20 shrink-0 overflow-hidden rounded bg-lime-50">
             <Img
               src={thumbImage?.imageKey}
               alt={title}
