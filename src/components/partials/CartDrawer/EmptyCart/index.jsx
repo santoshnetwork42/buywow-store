@@ -1,13 +1,9 @@
 import { Text } from "@/components/elements";
-import dynamic from "next/dynamic";
 import Link from "next/link";
-
-const CartIcon = dynamic(() => import("@/assets/svg/cart"));
 
 const EmptyCart = ({ cartClose }) => {
   return (
     <div className="flex flex-1 -translate-y-8 flex-col items-center justify-center gap-2">
-      <CartIcon size={250} />
       <Text
         as="p"
         size="lg"
