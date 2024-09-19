@@ -2,12 +2,20 @@
 
 import { SearchIcon } from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
-import ProductCard from "@/components/partials/Card/ProductCard";
 import { fetchSearchItems } from "@/utils/helpers";
 import { setSoldOutLast } from "@/utils/helpers/products";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
-import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
+
+const ProductCard = dynamic(
+  () => import("@/components/partials/Card/ProductCard"),
+  { ssr: false },
+);
+const ProductCardSkeleton = dynamic(
+  () => import("@/components/partials/Card/ProductCard/ProductCardSkeleton"),
+  { ssr: false },
+);
 
 const ProductGrid = React.memo(({ products, isInitialData }) => {
   const sortedProducts = setSoldOutLast(products, isInitialData);
