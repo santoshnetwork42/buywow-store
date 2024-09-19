@@ -194,7 +194,7 @@ const ProductCard = memo(
             <Heading
               as="h3"
               size="xl"
-              className="line-clamp-2 w-full"
+              className="line-clamp-3 w-full"
               title={title}
               responsive
             >
