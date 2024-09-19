@@ -13,6 +13,7 @@ const AdditionalIngredient = ({ title, image }) => {
           height={100}
           alt={alternativeText || "Additional Ingredient"}
           className="aspect-[114/100] h-auto w-full object-contain"
+          loading="lazy"
         />
       </div>
       <Heading
@@ -52,6 +53,7 @@ const PrimaryIngredient = ({ webImage, mWebImage }) => {
         width={576}
         priority
         className="aspect-square h-auto w-full object-contain md:aspect-[725/274]"
+        loading="lazy"
       />
     </picture>
   );

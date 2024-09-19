@@ -37,6 +37,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle }) => {
           height={imageHeight}
           alt={alternativeText || `${slug} Image`}
           className="h-auto w-full object-contain"
+          loading="lazy"
         />
       </div>
       <Heading

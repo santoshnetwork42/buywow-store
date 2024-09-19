@@ -14,6 +14,7 @@ const CarouselImage = React.memo(({ src, alt }) => (
       height={400}
       addPrefix
       className="aspect-[100/80] h-auto w-full object-contain sm:aspect-[100/70] md:aspect-square"
+      loading="lazy"
     />
   </div>
 ));

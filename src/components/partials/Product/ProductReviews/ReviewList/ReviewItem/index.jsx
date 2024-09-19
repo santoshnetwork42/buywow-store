@@ -50,6 +50,7 @@ const ReviewItem = React.memo(({ review, isUserReview = false, onUpdate }) => {
                     alt={`Review image ${index + 1}`}
                     addPrefix
                     className="aspect-[110/80] h-auto w-full border object-contain transition-transform duration-300 ease-in-out hover:scale-110"
+                    loading="lazy"
                   />
                 </div>
               ))}

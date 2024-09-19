@@ -28,6 +28,7 @@ const ProductEffectiveness = ({ title, image, EffectivenessChart }) => {
                   width={600}
                   height={376}
                   className="aspect-[600/346] h-auto w-full object-contain"
+                  loading="lazy"
                 />
               </div>
             );
