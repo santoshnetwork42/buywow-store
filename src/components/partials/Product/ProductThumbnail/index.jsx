@@ -20,6 +20,7 @@ const ProductThumbnail = React.memo(
         alt={alt}
         className={mergedClassName}
         addPrefix={url ? false : true}
+        loading="lazy"
         {...props}
       />
     );
