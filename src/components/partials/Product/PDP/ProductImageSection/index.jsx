@@ -51,7 +51,7 @@ const DotButton = React.memo(({ isSelected, onClick, isVideo }) => {
   const baseClassName = `
     mr-1.5 
     inline-block 
-    size-2.5 
+    size-3 
     cursor-pointer 
     rounded-full 
     transition-all 
