@@ -39,7 +39,6 @@ const ProductHighlights = ({ title, images }) => {
               height={500}
               priority
               className="h-auto w-full object-contain"
-              loading="lazy"
             />
           </picture>
         );

@@ -41,6 +41,7 @@ const Thumb = React.memo(({ isSelected, image, onClick }) => (
           alt="Thumbnail"
           className="aspect-square w-full rounded-lg object-contain"
           addPrefix
+          loading="lazy"
         />
       )}
     </button>

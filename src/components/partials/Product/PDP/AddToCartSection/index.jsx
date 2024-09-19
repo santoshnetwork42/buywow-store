@@ -78,6 +78,7 @@ const DesktopStickyBar = ({
               width={200}
               addPrefix
               className="h-auto w-full object-contain mix-blend-darken"
+              loading="lazy"
             />
           </div>
           <div className="flex flex-col gap-1">

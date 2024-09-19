@@ -79,6 +79,7 @@ const VariantItem = React.memo(({ variant, onChange }) => {
             alt={title || "Variant image"}
             addPrefix
             className="aspect-[114/92] h-auto w-full object-contain p-1"
+            loading="lazy"
           />
         </div>
       )}

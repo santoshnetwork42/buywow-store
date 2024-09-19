@@ -68,6 +68,7 @@ const Accordion = ({
                 height={26}
                 alt={alternativeText || title}
                 className="aspect-square h-auto w-full object-contain"
+                loading="lazy"
               />
             </div>
           )}

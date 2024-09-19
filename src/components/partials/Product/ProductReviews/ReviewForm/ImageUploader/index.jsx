@@ -69,6 +69,7 @@ const ImageUploader = React.memo(({ images, onPhotoChange }) => {
                 height={100}
                 addPrefix
                 alt="Review image"
+                loading="lazy"
               />
               <span
                 className="absolute right-0 top-0.5 cursor-pointer rounded-full bg-white-a700"

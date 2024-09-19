@@ -53,7 +53,6 @@ const PrimaryIngredient = ({ webImage, mWebImage }) => {
         width={576}
         priority
         className="aspect-square h-auto w-full object-contain md:aspect-[725/274]"
-        loading="lazy"
       />
     </picture>
   );
