@@ -1,6 +1,5 @@
 "use client";
 
-import SortDropdown from "@/components/common/SortDropdown";
 import { Heading } from "@/components/elements";
 import InfiniteScroll from "@/components/features/InfiniteScroll";
 import Slider from "@/components/features/Slider";
@@ -18,6 +17,10 @@ import React, {
   useState,
 } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+
+const SortDropdown = dynamic(() => import("@/components/common/SortDropdown"), {
+  ssr: false,
+});
 
 const ProductCardSkeleton = dynamic(
   () => import("@/components/partials/Card/ProductCard/ProductCardSkeleton"),
