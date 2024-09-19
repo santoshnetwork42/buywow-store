@@ -19,7 +19,7 @@ const ProductCardSkeleton = () => (
       {/* <!-- Price and Add to Cart placeholder --> */}
       <div className="mt-5 flex items-center justify-between">
         <div className="h-6 w-24 rounded bg-gray-200"></div>
-        <div className="h-6 w-20 rounded bg-gray-200 md:h-8"></div>
+        <div className="h-6 w-20 rounded bg-gray-200"></div>
       </div>
     </div>
   </div>

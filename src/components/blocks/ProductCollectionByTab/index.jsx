@@ -5,7 +5,6 @@ import { Heading } from "@/components/elements";
 import InfiniteScroll from "@/components/features/InfiniteScroll";
 import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
-import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { getSource } from "@/utils/helpers";
@@ -19,6 +18,11 @@ import React, {
   useState,
 } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+
+const ProductCardSkeleton = dynamic(
+  () => import("@/components/partials/Card/ProductCard/ProductCardSkeleton"),
+  { ssr: false },
+);
 
 const BlogCard = dynamic(() => import("@/components/partials/Card/BlogCard"));
 
