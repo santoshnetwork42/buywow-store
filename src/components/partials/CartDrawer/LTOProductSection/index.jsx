@@ -74,7 +74,7 @@ export const LimitedTimeDealProduct = ({
           </div>
           {isBought && (
             <div className="mt-2 flex gap-2">
-              <Checkmark className="mt-[3px] size-4" />
+              <Checkmark className="mt-1 size-4" />
               <div className="text-sm font-normal text-green-500">
                 Added Successfully
               </div>

@@ -130,7 +130,7 @@ const UpsellProducts = ({
       <Button
         variant="primary"
         size="large"
-        className="mt-1.5 sm:mt-1 md:mt-0"
+        className="mt-1"
         onClick={bundleAddToCart}
       >
         {isBundleAddedToCart
