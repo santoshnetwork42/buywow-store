@@ -20,17 +20,11 @@ import Script from "next/script";
 
 const AnnouncementBar = dynamic(
   () => import("@/components/blocks/AnnouncementBar"),
-  { ssr: false },
 );
-const CartDrawer = dynamic(() => import("@/components/partials/CartDrawer"), {
-  ssr: false,
-});
-const Footer = dynamic(() => import("@/components/partials/Footer"), {
-  ssr: false,
-});
+const CartDrawer = dynamic(() => import("@/components/partials/CartDrawer"));
+const Footer = dynamic(() => import("@/components/partials/Footer"));
 const ToastComponent = dynamic(
   () => import("@/components/common/ToastComponent"),
-  { ssr: false },
 );
 
 const outfit = Outfit({
