@@ -1,7 +1,10 @@
-import { CloseIcon, ImageCamera } from "@/assets/svg/icons";
+import { CloseIcon } from "@/assets/svg/icons";
 import { Img, Text } from "@/components/elements";
 import { uploadImages } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import React, { useCallback, useState } from "react";
+
+const ImageCamera = dynamic(() => import("@/assets/svg/imageCamera"));
 
 const MAX_IMAGES = 10;
 
