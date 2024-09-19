@@ -83,7 +83,7 @@ const ReviewImageCarousel = ({ images, initialSlide = 0 }) => {
         </div>
       </div>
       <ArrowIconSVG
-        className="absolute left-1 top-1/2 z-10 size-5 -translate-y-1/2 cursor-pointer rounded-full bg-white-a700/50 md:size-6 lg:size-7"
+        className="absolute left-1.5 top-1/2 z-10 size-5 -translate-y-1/2 cursor-pointer rounded-full bg-white-a700/50 md:size-6 lg:size-7"
         side="left"
         onClick={scrollPrev}
       />
