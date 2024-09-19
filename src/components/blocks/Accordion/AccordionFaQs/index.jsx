@@ -2,9 +2,14 @@
 
 import { Heading, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
-import PlusMinusToggle from "@/components/features/Accordion/PlusMinusToggle";
 import { extractAttributes } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import { memo, useEffect, useRef, useState } from "react";
+
+const PlusMinusToggle = dynamic(
+  () => import("@/components/features/Accordion/PlusMinusToggle"),
+  { ssr: false },
+);
 
 const FaqItem = memo(({ question, answer, showDivider }) => {
   const [isOpen, setIsOpen] = useState(false);
