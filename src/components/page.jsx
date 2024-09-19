@@ -59,6 +59,7 @@ const ProductCollectionSection = dynamic(
 const InfoSection = dynamic(() => import("@/components/blocks/InfoSection"));
 const Reviews = dynamic(
   () => import("@/components/blocks/Product/ProductReviews"),
+  { ssr: false },
 );
 const UpsellProducts = dynamic(
   () => import("@/components/blocks/UpsellProducts"),
