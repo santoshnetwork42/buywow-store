@@ -4,7 +4,6 @@ import { showToast } from "@/components/common/ToastComponent";
 import { Button } from "@/components/elements";
 import AddressSection from "@/components/partials/Account/AddressSection";
 import Cashback from "@/components/partials/CartDrawer/Cashback";
-import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
 import OrderSummary from "@/components/partials/Checkout/OrderSummary";
 import PaymentLoader from "@/components/partials/Checkout/PaymentLoader";
 import PaymentMethodsSection from "@/components/partials/Checkout/PaymentMethodsSection";
@@ -40,9 +39,15 @@ import {
   useNavbar,
   useOrders,
 } from "@wow-star/utils";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+
+const EmptyCart = dynamic(
+  () => import("@/components/partials/CartDrawer/EmptyCart"),
+  { ssr: false }
+);
 
 let razorpayMethod;
 
