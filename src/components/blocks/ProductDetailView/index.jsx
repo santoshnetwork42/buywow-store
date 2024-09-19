@@ -3,7 +3,6 @@
 import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
 import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDiscounts";
 import PriceSection from "@/components/partials/Product/PDP/PriceSection";
-import ProductDetailViewBlocks from "@/components/partials/Product/PDP/ProductDetailViewBlocks";
 import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import VariantSelector from "@/components/partials/Product/PDP/VariantSelector";
@@ -15,7 +14,12 @@ import {
   useProductCoupons,
   useProductVariantGroups,
 } from "@wow-star/utils";
+import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
+
+const ProductDetailViewBlocks = dynamic(
+  () => import("@/components/partials/Product/PDP/ProductDetailViewBlocks"),
+);
 
 const ProductDetailView = ({ product }) => {
   const {
