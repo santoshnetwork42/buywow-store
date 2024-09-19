@@ -32,7 +32,7 @@ export default function robots() {
         ],
       },
       {
-        userAgent: ["Applebot", "Bingbot"],
+        userAgent: ["Applebot"],
         disallow: ["/"],
       },
     ],
