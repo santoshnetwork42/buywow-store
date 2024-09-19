@@ -254,9 +254,9 @@ export const getInitialData = /* GraphQL */ `
   }
 `;
 
-export const getCartUpsellProducts = /* GraphQL */ `
-  query getCartUpsellProducts($storeId: String!) {
-    getCartUpsellProducts(storeId: $storeId)
+export const getWebCartUpsellProducts = /* GraphQL */ `
+  query getWebCartUpsellProducts($storeId: String!) {
+    getWebCartUpsellProducts(storeId: $storeId)
   }
 `;
 
@@ -272,8 +272,8 @@ export const getPagesToPrebuild = /* GraphQL */ `
   }
 `;
 
-export const searchCMSCollectionProducts = /* GraphQL */ `
-  query searchCMSCollectionProducts(
+export const searchWebCMSCollectionProducts = /* GraphQL */ `
+  query searchWebCMSCollectionProducts(
     $storeId: String!
     $collectionSlug: String!
     $tabSelected: String
@@ -281,7 +281,7 @@ export const searchCMSCollectionProducts = /* GraphQL */ `
     $page: Int
     $limit: Int
   ) {
-    searchCMSCollectionProducts(
+    searchWebCMSCollectionProducts(
       storeId: $storeId
       collectionSlug: $collectionSlug
       tabSelected: $tabSelected
@@ -396,14 +396,14 @@ export const searchCMSProducts = /* GraphQL */ `
   }
 `;
 
-export const getPageBySlug = /* GraphQL */ `
+export const getWebPageBySlug = /* GraphQL */ `
   query GetPageBySlug(
     $pageType: String!
     $slug: String!
     $storeId: String!
     $collectionDataLimit: Int
   ) {
-    getPageBySlug(
+    getWebPageBySlug(
       pageType: $pageType
       slug: $slug
       storeId: $storeId
@@ -418,9 +418,9 @@ export const getPageMetadataBySlug = /* GraphQL */ `
   }
 `;
 
-export const getNavbarAndFooter = /* GraphQL */ `
+export const getWebNavbarAndFooter = /* GraphQL */ `
   query GetNavbarAndFooter($storeId: String!) {
-    getNavbarAndFooter(storeId: $storeId)
+    getWebNavbarAndFooter(storeId: $storeId)
   }
 `;
 

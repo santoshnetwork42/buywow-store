@@ -8,14 +8,14 @@ import {
   deleteUserAddress,
   ensureUserAndDispatchOTP,
   findUserAddresses,
-  getCartUpsellProducts,
+  getWebCartUpsellProducts,
   getCMSPages,
   getCouponRule,
   getInitialData,
   getLoyalty,
-  getNavbarAndFooter,
+  getWebNavbarAndFooter,
   getOrder,
-  getPageBySlug,
+  getWebPageBySlug,
   getPageMetadataBySlug,
   getProductById,
   getRedirects,
@@ -24,7 +24,7 @@ import {
   getStore,
   getUser,
   getUserRewards,
-  searchCMSCollectionProducts,
+  searchWebCMSCollectionProducts,
   searchOrders,
   updateRedirects,
   updateReview,
@@ -64,7 +64,7 @@ export const searchCMSCollectionProductsAPI = async ({
 }) => {
   try {
     const response = await client.graphql({
-      query: searchCMSCollectionProducts,
+      query: searchWebCMSCollectionProducts,
       authMode: "apiKey",
       variables: {
         storeId: STORE_ID,
@@ -76,7 +76,7 @@ export const searchCMSCollectionProductsAPI = async ({
       },
     });
 
-    return JSON.parse(response?.data?.searchCMSCollectionProducts || {});
+    return JSON.parse(response?.data?.searchWebCMSCollectionProducts || {});
   } catch (err) {
     errorHandler(err, "Search CMS Collection Products API");
     return null;
@@ -84,14 +84,14 @@ export const searchCMSCollectionProductsAPI = async ({
 };
 
 export const getPageBySlugAPI = async (slugId) => {
-  const data = await fetchData(getPageBySlug, {
+  const data = await fetchData(getWebPageBySlug, {
     storeId: STORE_ID,
     pageType: "",
     slug: slugId,
     collectionDataLimit: 100,
   });
 
-  return JSON.parse(data?.getPageBySlug || "{}");
+  return JSON.parse(data?.getWebPageBySlug || "{}");
 };
 
 export const getPageMetadataBySlugAPI = async (slugId) => {
@@ -116,13 +116,13 @@ export const getPageMetadataBySlugAPI = async (slugId) => {
 
 export const getNavbarAndFooterAPI = async () => {
   const data = await fetchData(
-    getNavbarAndFooter,
+    getWebNavbarAndFooter,
     { storeId: STORE_ID },
     {
       next: { revalidate: 86400, tags: ["header"] },
     },
   );
-  return JSON.parse(data?.getNavbarAndFooter || "{}");
+  return JSON.parse(data?.getWebNavbarAndFooter || "{}");
 };
 
 export const getUserAPI = async () => {
@@ -304,13 +304,13 @@ export const fetchProductDetailsAPI = async (id) => {
 
 export const getCartUpsellProductsAPI = async () => {
   const data = await fetchData(
-    getCartUpsellProducts,
+    getWebCartUpsellProducts,
     { storeId: STORE_ID },
     {
       next: { revalidate: 3600, tags: ["cartUpsell"] },
     },
   );
-  return JSON.parse(data?.getCartUpsellProducts || "{}");
+  return JSON.parse(data?.getWebCartUpsellProducts || "{}");
 };
 
 export const getCMSPagesAPI = async (pageType) => {
