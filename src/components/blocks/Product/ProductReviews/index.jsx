@@ -1,9 +1,6 @@
 "use client";
 
 import { showToast } from "@/components/common/ToastComponent";
-import ReviewForm from "@/components/partials/Product/ProductReviews/ReviewForm";
-import ReviewList from "@/components/partials/Product/ProductReviews/ReviewList";
-import ReviewSummary from "@/components/partials/Product/ProductReviews/ReviewSummary";
 import {
   getProductReviewsAPI,
   getUserReviewAPI,
@@ -12,8 +9,24 @@ import {
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { errorHandler } from "@/utils/errorHandler";
 import { processAnalytics } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+
+const ReviewSummary = dynamic(
+  () => import("@/components/partials/Product/ProductReviews/ReviewSummary"),
+  { ssr: false },
+);
+
+const ReviewList = dynamic(
+  () => import("@/components/partials/Product/ProductReviews/ReviewList"),
+  { ssr: false },
+);
+
+const ReviewForm = dynamic(
+  () => import("@/components/partials/Product/ProductReviews/ReviewForm"),
+  { ssr: false },
+);
 
 const reviewDefault = {
   rating: 1,
