@@ -1,8 +1,12 @@
 "use client";
 
 import Accordion from "@/components/features/Accordion";
-import ReadMore from "@/components/features/ReadMore";
 import { extractAttributes } from "@/utils/helpers";
+import dynamic from "next/dynamic";
+
+const ReadMore = dynamic(() => import("@/components/features/ReadMore"), {
+  ssr: false,
+});
 
 const AccordionDescription = ({
   accordionDescriptionTitle: title,

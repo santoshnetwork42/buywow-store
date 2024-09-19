@@ -27,7 +27,9 @@ const ProductCardSkeleton = dynamic(
   { ssr: false },
 );
 
-const BlogCard = dynamic(() => import("@/components/partials/Card/BlogCard"));
+const BlogCard = dynamic(() => import("@/components/partials/Card/BlogCard"), {
+  ssr: false,
+});
 
 const SORT_OPTIONS = [
   { value: "RECOMMENDED", label: "Recommended" },

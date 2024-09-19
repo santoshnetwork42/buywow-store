@@ -1,9 +1,14 @@
 "use client";
 
 import { Heading, Img } from "@/components/elements";
-import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
+
+const ToggleArrow = dynamic(
+  () => import("@/components/features/Accordion/AccordionToggle"),
+  { ssr: false },
+);
 
 const Accordion = ({
   title,

@@ -2,12 +2,20 @@
 
 import SectionHeading from "@/components/common/SectionHeading";
 import { Button, Heading } from "@/components/elements";
-import Slider from "@/components/features/Slider";
-import ProductCard from "@/components/partials/Card/ProductCard";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { getBgColor, getRecordKey, toDecimal } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+
+const ProductCard = dynamic(
+  () => import("@/components/partials/Card/ProductCard"),
+  { ssr: false },
+);
+
+const Slider = dynamic(() => import("@/components/features/Slider"), {
+  ssr: false,
+});
 
 const UpsellProducts = ({
   title,
