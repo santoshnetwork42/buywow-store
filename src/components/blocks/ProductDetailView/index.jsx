@@ -1,7 +1,6 @@
 "use client";
 
 import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
-import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDiscounts";
 import PriceSection from "@/components/partials/Product/PDP/PriceSection";
 import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
@@ -26,6 +25,11 @@ const ProductDetailViewBlocks = dynamic(
   { ssr: false },
 );
 
+const OffersAndDiscounts = dynamic(
+  () => import("@/components/partials/Product/PDP/OffersAndDiscounts"),
+  { ssr: false },
+);
+
 const ProductDetailView = ({ product }) => {
   const {
     promotionTag,
@@ -44,6 +48,7 @@ const ProductDetailView = ({ product }) => {
   const { viewItem } = useEventsDispatch();
   const viewItemEventTriggered = useRef(false);
 
+  console.log("bestCoupon :>> ", bestCoupon);
   useEffect(() => {
     addRecentlyViewedProduct(extractAttributes(product?.pdpProduct));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,12 +121,14 @@ const ProductDetailView = ({ product }) => {
           currentInventory={currentInventory}
         />
 
-        <OffersAndDiscounts
-          bestCoupon={bestCoupon}
-          price={price}
-          hasInventory={hasInventory}
-          productId={packageProduct?.id}
-        />
+        {!!Object.keys(bestCoupon)?.length && (
+          <OffersAndDiscounts
+            bestCoupon={bestCoupon}
+            price={price}
+            hasInventory={hasInventory}
+            productId={packageProduct?.id}
+          />
+        )}
 
         <div className="mt-5 flex flex-col">
           {!!variantGroup?.length && (
