@@ -1,9 +1,9 @@
 /* eslint-disable react/display-name */
 "use client";
 
+import { Text } from "@/components/elements";
 import PropTypes from "prop-types";
-import React from "react";
-import Select from "react-select";
+import React, { useEffect, useRef, useState } from "react";
 
 const SelectBox = React.forwardRef(
   (
@@ -14,72 +14,87 @@ const SelectBox = React.forwardRef(
       isSearchable = false,
       isMulti = false,
       indicator,
-
+      value,
+      onChange,
       ...restProps
     },
     ref,
   ) => {
-    const [menuPortalTarget, setMenuPortalTarget] = React.useState(null);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [selectedValue, setSelectedValue] = useState({
+      label: value?.label,
+      value: value?.value,
+    });
+    const selectRef = useRef(null);
 
-    React.useEffect(() => {
-      setMenuPortalTarget(document.body);
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (selectRef.current && !selectRef.current.contains(event.target)) {
+          setIsMenuOpen(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
     }, []);
 
+    useEffect(() => {
+      setSelectedValue({
+        label: value?.label,
+        value: value?.value,
+      });
+    }, [value]);
+
+    const handleOptionClick = (option) => {
+      setSelectedValue({
+        label: option.label,
+        value: option.value,
+      });
+      setIsMenuOpen(false);
+      if (onChange) {
+        onChange(option);
+      }
+    };
+
     return (
-      <>
-        <Select
-          ref={ref}
-          options={options}
-          className={`${className} undefined`}
-          isSearchable={isSearchable}
-          isMulti={isMulti}
-          components={{
-            IndicatorSeparator: () => null,
-            ...(indicator && { DropdownIndicator: () => indicator }),
-          }}
-          styles={{
-            container: (provided) => ({
-              ...provided,
-              zIndex: 0,
-            }),
-            control: (provided) => ({
-              ...provided,
-              backgroundColor: "transparent",
-              border: "0 !important",
-              boxShadow: "0 !important",
-              minHeight: "auto",
-              width: "100%",
-              "&:hover": {
-                border: "0 !important",
-              },
-            }),
-            input: (provided) => ({
-              ...provided,
-              color: "inherit",
-            }),
-            option: (provided, state) => ({
-              ...provided,
-              color: "#000",
-            }),
-            valueContainer: (provided) => ({
-              ...provided,
-              padding: 0,
-            }),
-            placeholder: (provided) => ({
-              ...provided,
-              margin: 0,
-            }),
-            menuPortal: (base) => ({ ...base, zIndex: 999999 }),
-            menu: ({ width, ...css }) => ({ ...css }),
-          }}
-          menuPortalTarget={menuPortalTarget}
-          closeMenuOnScroll={(event) => {
-            return event.target.id === "scrollContainer";
-          }}
-          {...restProps}
-        />
+      <div className={`relative ${className}`} ref={selectRef}>
+        <div
+          className="flex w-full cursor-pointer items-center justify-between"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <Text size="sm">{selectedValue?.label}</Text>
+          {indicator}
+        </div>
+        {isMenuOpen && (
+          <div className="absolute left-0 top-full z-20 mt-1 flex w-full flex-col rounded-md border bg-white-a700_01 py-1">
+            {options?.map((option, index) => (
+              <div
+                key={option?.value}
+                className={`cursor-pointer p-2 ${
+                  selectedValue && selectedValue.value === option.value
+                    ? "bg-blue-500"
+                    : "hover:bg-sky-200"
+                }`}
+                onClick={() => handleOptionClick(option)}
+              >
+                <Text
+                  size="sm"
+                  className={`${
+                    selectedValue && selectedValue.value === option.value
+                      ? "text-white-a700_01"
+                      : ""
+                  }`}
+                >
+                  {option?.label}
+                </Text>
+              </div>
+            ))}
+          </div>
+        )}
         {children}
-      </>
+      </div>
     );
   },
 );
@@ -90,7 +105,10 @@ SelectBox.propTypes = {
   isSearchable: PropTypes.bool,
   isMulti: PropTypes.bool,
   onChange: PropTypes.func,
-  value: PropTypes.string,
+  value: PropTypes.shape({
+    label: PropTypes.string,
+    value: PropTypes.any,
+  }),
   indicator: PropTypes.node,
 };
 
