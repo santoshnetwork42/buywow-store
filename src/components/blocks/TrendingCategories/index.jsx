@@ -20,7 +20,6 @@ const CategoryItem = ({ image, title, link }) => {
           width={56}
           height={56}
           className="aspect-square w-14 object-contain"
-          loading="lazy"
         />
       </div>
       {!!title && (
