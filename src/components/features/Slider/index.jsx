@@ -4,7 +4,6 @@ import { ArrowIconSVG } from "@/assets/svg/icons";
 import { Button, Text } from "@/components/elements";
 import { useIsInteractive } from "@/utils/context/navbar";
 import useEmblaCarousel from "embla-carousel-react";
-import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -111,6 +110,7 @@ const Slider = ({
   ...props
 }) => {
   const isInteractive = useIsInteractive();
+  const [wheelPlugin, setWheelPlugin] = useState(null);
   const [emblaRef, emblaApi] = useEmblaCarousel(
     isInteractive
       ? {
@@ -119,7 +119,7 @@ const Slider = ({
           inViewThreshold: 1,
         }
       : false,
-    isInteractive ? [WheelGesturesPlugin()] : [],
+    isInteractive && wheelPlugin ? [wheelPlugin] : undefined,
   );
 
   const [sliderState, setSliderState] = useState({
@@ -164,7 +164,20 @@ const Slider = ({
   }, [emblaApi, sliderState.scrollbarWidth, updateSliderState]);
 
   useEffect(() => {
-    if (!isInteractive || !emblaApi) return;
+    if (!isInteractive) return;
+
+    const initializePlugin = async () => {
+      const { WheelGesturesPlugin } = await import(
+        "embla-carousel-wheel-gestures"
+      );
+      setWheelPlugin(WheelGesturesPlugin());
+    };
+
+    initializePlugin();
+  }, [isInteractive]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
 
     handleInit();
     emblaApi.on("init", handleInit);
@@ -178,7 +191,7 @@ const Slider = ({
       emblaApi.off("select", handleSelect);
       emblaApi.off("scroll", handleScroll);
     };
-  }, [isInteractive, emblaApi, handleInit, handleSelect, handleScroll]);
+  }, [emblaApi, handleInit, handleSelect, handleScroll]);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
