@@ -33,7 +33,9 @@ const ProductEffectiveness = ({ title, image, EffectivenessChart }) => {
               </div>
             );
           })()}
-        <ProductEffectivenessChart effectivenessChart={EffectivenessChart} />
+        {!!EffectivenessChart?.length && (
+          <ProductEffectivenessChart effectivenessChart={EffectivenessChart} />
+        )}
       </div>
     </div>
   );
