@@ -166,14 +166,16 @@ const Reviews = ({
         handleUpdateReview={handleUpdateReview}
       />
 
-      <ReviewForm
-        isOpen={showReview}
-        onClose={() => setShowReview(false)}
-        reviewState={reviewState}
-        setReview={setReview}
-        onSubmit={submitReview}
-        loading={loading}
-      />
+      {!!showReview && (
+        <ReviewForm
+          isOpen={showReview}
+          onClose={() => setShowReview(false)}
+          reviewState={reviewState}
+          setReview={setReview}
+          onSubmit={submitReview}
+          loading={loading}
+        />
+      )}
     </div>
   );
 };
