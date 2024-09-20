@@ -48,7 +48,6 @@ const ProductDetailView = ({ product }) => {
   const { viewItem } = useEventsDispatch();
   const viewItemEventTriggered = useRef(false);
 
-  console.log("bestCoupon :>> ", bestCoupon);
   useEffect(() => {
     addRecentlyViewedProduct(extractAttributes(product?.pdpProduct));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -121,7 +120,7 @@ const ProductDetailView = ({ product }) => {
           currentInventory={currentInventory}
         />
 
-        {!!Object.keys(bestCoupon)?.length && (
+        {!!Object.keys(bestCoupon || {})?.length && (
           <OffersAndDiscounts
             bestCoupon={bestCoupon}
             price={price}
