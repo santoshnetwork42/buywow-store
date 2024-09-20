@@ -14,6 +14,7 @@ import {
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from "uuid";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
+import { os, name, version, product } from "platform";
 
 export const getFbpCookie = () => {
   const name = "_fbp=";
@@ -306,10 +307,10 @@ export const analyticsMetaDataMapper = () => {
 
   return {
     deviceDetails: {
-      os: platform.os.family,
-      browser: platform.name,
-      browserVersion: platform.version,
-      deviceType: platform.product || "Desktop",
+      os: os.family,
+      browser: name,
+      browserVersion: version,
+      deviceType: product || "Desktop",
       userAgent: navigator.userAgent,
       screenWidth: screen.width,
       screenHeight: screen.height,

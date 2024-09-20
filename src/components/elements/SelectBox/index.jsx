@@ -3,7 +3,7 @@
 
 import PropTypes from "prop-types";
 import React from "react";
-import Select from "react-select";
+// import Select from "react-select";
 
 const SelectBox = React.forwardRef(
   (
@@ -27,7 +27,7 @@ const SelectBox = React.forwardRef(
 
     return (
       <>
-        <Select
+        {/* <Select
           ref={ref}
           options={options}
           className={`${className} undefined`}
@@ -77,7 +77,7 @@ const SelectBox = React.forwardRef(
             return event.target.id === "scrollContainer";
           }}
           {...restProps}
-        />
+        /> */}
         {children}
       </>
     );
