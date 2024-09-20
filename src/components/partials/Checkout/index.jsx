@@ -2,9 +2,8 @@
 
 import { showToast } from "@/components/common/ToastComponent";
 import { Button } from "@/components/elements";
-import AddressSection from "@/components/partials/Account/AddressSection";
 import Cashback from "@/components/partials/CartDrawer/Cashback";
-import OrderSummary from "@/components/partials/Checkout/OrderSummary";
+import AddressSection from "@/components/partials/Account/AddressSection";
 import PaymentLoader from "@/components/partials/Checkout/PaymentLoader";
 import PaymentMethodsSection from "@/components/partials/Checkout/PaymentMethodsSection";
 import ProgressSteps from "@/components/partials/Others/ProgressSteps";
@@ -46,7 +45,12 @@ import { useSelector } from "react-redux";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),
-  { ssr: false }
+  { ssr: false },
+);
+
+const OrderSummary = dynamic(
+  () => import("@/components/partials/Checkout/OrderSummary"),
+  { ssr: false },
 );
 
 let razorpayMethod;
