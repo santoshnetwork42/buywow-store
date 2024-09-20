@@ -3,6 +3,7 @@
 import { Text } from "@/components/elements";
 import BlogCard3 from "@/components/partials/Blog/BlogCard3";
 import { getBlogs } from "@/graphql/api";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 

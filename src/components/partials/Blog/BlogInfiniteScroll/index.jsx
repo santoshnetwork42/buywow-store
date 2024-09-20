@@ -2,6 +2,7 @@
 
 import BlogCard from "@/components/partials/Blog/BlogCard";
 import { getBlogs } from "@/graphql/api";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 
