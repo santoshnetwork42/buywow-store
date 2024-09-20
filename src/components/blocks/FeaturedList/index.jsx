@@ -37,7 +37,6 @@ const FeaturedItem = ({
         height={isInPDP ? 42 : 60}
         alt={alternativeText || "Feature Icon"}
         className={`aspect-square w-full rounded-full object-contain ${!isInPDP ? "max-w-10 sm:max-w-12 md:max-w-14 lg:max-w-16" : "max-w-12"}`}
-        loading="lazy"
       />
       {isPersistLoading ? (
         <Text

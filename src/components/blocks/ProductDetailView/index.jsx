@@ -5,7 +5,6 @@ import OffersAndDiscounts from "@/components/partials/Product/PDP/OffersAndDisco
 import PriceSection from "@/components/partials/Product/PDP/PriceSection";
 import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
-import VariantSelector from "@/components/partials/Product/PDP/VariantSelector";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
 import { extractAttributes } from "@/utils/helpers";
@@ -17,8 +16,14 @@ import {
 import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 
+const VariantSelector = dynamic(
+  () => import("@/components/partials/Product/PDP/VariantSelector"),
+  { ssr: false },
+);
+
 const ProductDetailViewBlocks = dynamic(
   () => import("@/components/partials/Product/PDP/ProductDetailViewBlocks"),
+  { ssr: false },
 );
 
 const ProductDetailView = ({ product }) => {
@@ -119,10 +124,12 @@ const ProductDetailView = ({ product }) => {
         />
 
         <div className="mt-5 flex flex-col">
-          <VariantSelector
-            variantGroups={variantGroup}
-            onVariantChange={onVariantChange}
-          />
+          {!!variantGroup?.length && (
+            <VariantSelector
+              variantGroups={variantGroup}
+              onVariantChange={onVariantChange}
+            />
+          )}
           <AddToCartSection
             product={packageProduct}
             selectedVariant={selectedVariant}
