@@ -4,7 +4,7 @@ import { Button, Img } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { extractAttributes, getSource } from "@/utils/helpers";
-import Autoplay from "embla-carousel-autoplay";
+// import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -102,9 +102,9 @@ const Carousel = ({
 
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true },
-    autoPlay && isInteractive
-      ? [Autoplay({ delay: autoPlayInterval, stopOnInteraction })]
-      : [],
+    // autoPlay && isInteractive
+    //   ? [Autoplay({ delay: autoPlayInterval, stopOnInteraction })]
+    //   : [],
   );
 
   const scrollTo = useCallback(

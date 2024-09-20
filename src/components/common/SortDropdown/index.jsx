@@ -1,5 +1,4 @@
-import { DownArrowIconSVG } from "@/assets/svg/icons";
-import { SelectBox, Text } from "@/components/elements";
+import { Text } from "@/components/elements";
 import { twMerge } from "tailwind-merge";
 
 const SortDropdown = ({ value, options, onOptionChange, className }) => {
@@ -17,7 +16,7 @@ const SortDropdown = ({ value, options, onOptionChange, className }) => {
       <Text size="base" as="p" responsive>
         Sort By:
       </Text>
-      <SelectBox
+      {/* <SelectBox
         indicator={
           <DownArrowIconSVG
             strokeWidth={1.25}
@@ -82,7 +81,7 @@ const SortDropdown = ({ value, options, onOptionChange, className }) => {
             padding: "0px",
           }),
         }}
-      />
+      /> */}
     </div>
   );
 };
