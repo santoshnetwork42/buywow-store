@@ -1,10 +1,15 @@
 import { ArrowIconSVG } from "@/assets/svg/icons";
 import { Button, Heading, Input, Text } from "@/components/elements";
-import CouponItem from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer/CouponItem";
 import dynamic from "next/dynamic";
 import React from "react";
 
 const Drawer = dynamic(() => import("@/components/features/Drawer"));
+const CouponItem = dynamic(
+  () =>
+    import(
+      "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer/CouponItem"
+    ),
+);
 
 const CouponDrawer = ({
   isOpen,
