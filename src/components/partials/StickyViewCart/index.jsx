@@ -1,15 +1,29 @@
 "use client";
 
-import { Button, Heading, Text } from "@/components/elements";
+import { Button } from "@/components/elements";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
 import { useCartItems, useCartTotal } from "@wow-star/utils";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 
+const Heading = dynamic(
+  () => import("@/components/elements/Heading").then((mod) => mod.Heading),
+  {
+    ssr: false,
+  },
+);
+
+const Text = dynamic(
+  () => import("@/components/elements/Text").then((mod) => mod.Heading),
+  {
+    ssr: false,
+  },
+);
 const CartSummary = React.memo(
   ({ totalItems, grandTotal, prepaidDiscountPercent, prepaidDiscount }) => (
     <div className="flex flex-col gap-1">
