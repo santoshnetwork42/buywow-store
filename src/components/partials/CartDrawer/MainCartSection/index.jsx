@@ -1,7 +1,14 @@
-import LimitedTimeDealProductSection from "@/components/partials/CartDrawer/LTOProductSection";
-import ProductItem from "@/components/partials/CartDrawer/MainCartSection/ProductItem";
 import UpsellProducts from "@/components/partials/Product/PDP/ProductDetailViewBlocks/UpsellProducts";
+import dynamic from "next/dynamic";
 import React from "react";
+
+const ProductItem = dynamic(
+  () => import("@/components/partials/CartDrawer/MainCartSection/ProductItem"),
+);
+
+const LimitedTimeDealProductSection = dynamic(
+  () => import("@/components/partials/CartDrawer/LTOProductSection"),
+);
 
 const CartProductList = React.memo(({ cartItems, inventoryMapping }) => {
   if (!cartItems || !Array.isArray(cartItems)) return null;
