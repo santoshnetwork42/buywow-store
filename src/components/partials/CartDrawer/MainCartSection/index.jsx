@@ -1,4 +1,3 @@
-import UpsellProducts from "@/components/partials/Product/PDP/ProductDetailViewBlocks/UpsellProducts";
 import dynamic from "next/dynamic";
 import React from "react";
 
@@ -8,6 +7,13 @@ const ProductItem = dynamic(
 
 const LimitedTimeDealProductSection = dynamic(
   () => import("@/components/partials/CartDrawer/LTOProductSection"),
+);
+
+const UpsellProducts = dynamic(
+  () =>
+    import(
+      "@/components/partials/Product/PDP/ProductDetailViewBlocks/UpsellProducts"
+    ),
 );
 
 const CartProductList = React.memo(({ cartItems, inventoryMapping }) => {
@@ -54,13 +60,15 @@ const MainCartSection = React.memo(
           />
         )}
 
-        <UpsellProducts
-          title={upsellProducts?.title}
-          upsellProductsBgColor={upsellProducts?.cartUpsellProductsBgColor}
-          upsellProductItems={upsellProducts?.cartUpsellProducts}
-          endTime={upsellProducts?.endTime}
-          isCartUpsell={true}
-        />
+        {!!upsellProducts?.cartUpsellProducts?.length && (
+          <UpsellProducts
+            title={upsellProducts?.title}
+            upsellProductsBgColor={upsellProducts?.cartUpsellProductsBgColor}
+            upsellProductItems={upsellProducts?.cartUpsellProducts}
+            endTime={upsellProducts?.endTime}
+            isCartUpsell={true}
+          />
+        )}
       </div>
     );
   },

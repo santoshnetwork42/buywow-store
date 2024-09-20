@@ -30,6 +30,7 @@ import dynamic from "next/dynamic";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),
+  { ssr: false },
 );
 
 const LoyaltyCash = dynamic(
@@ -42,6 +43,7 @@ const Cashback = dynamic(
 
 const ShippingProgress = dynamic(
   () => import("@/components/partials/Others/ShippingProgress"),
+  { ssr: false },
 );
 
 const MainCartSection = dynamic(
@@ -59,6 +61,7 @@ const CheckoutButton = dynamic(
 const CouponsAndOffers = dynamic(
   () =>
     import("@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers"),
+  { ssr: false },
 );
 
 const CartDrawer = ({ upsellProducts }) => {
