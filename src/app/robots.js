@@ -31,10 +31,6 @@ export default function robots() {
           "/offers/*",
         ],
       },
-      {
-        userAgent: ["Applebot", "Bingbot"],
-        disallow: ["/"],
-      },
     ],
 
     sitemap: [

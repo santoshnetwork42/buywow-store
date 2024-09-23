@@ -33,6 +33,16 @@ const nextConfig = {
   async redirects() {
     const allRedirects = [
       {
+        source: "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar)",
+        destination: "/404",
+        permanent: true,
+      },
+      {
+        source: "/:path*(.*phpmyadmin.*)",
+        destination: "/404",
+        permanent: true,
+      },
+      {
         source: "/blog/robots.txt",
         destination: "/robots.txt",
         permanent: true,
