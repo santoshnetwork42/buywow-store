@@ -91,7 +91,8 @@ export const getPageBySlugAPI = async (slugId) => {
     collectionDataLimit: 15,
   });
 
-  return JSON.parse(data?.getWebPageBySlug || "{}");
+  console.log("getWebPageBySlug", data?.getWebPageBySlug);
+  return JSON.parse(data?.getWebPageBySlug);
 };
 
 export const getPageMetadataBySlugAPI = async (slugId) => {
