@@ -113,7 +113,7 @@ const ProductCollectionByTab = ({
           tabSelected: activeTab?.tab?.data?.id || null,
           defaultSorting: newSortOption.value,
           page: 1,
-          limit: activeTab?.pagination?.pageSize ?? 100,
+          limit: activeTab?.pagination?.pageSize ?? 15,
         });
 
         const newProducts = response?.items?.data ?? [];
@@ -218,7 +218,7 @@ const ProductCollectionByTab = ({
         tabSelected: activeTab?.tab?.data?.id || null,
         defaultSorting: sortOption.value,
         page: nextPage,
-        limit: activeTab?.pagination?.pageSize ?? 100,
+        limit: activeTab?.pagination?.pageSize ?? 15,
       });
 
       const newProducts = response?.items?.data ?? [];

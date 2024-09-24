@@ -60,7 +60,7 @@ export const searchCMSCollectionProductsAPI = async ({
   tabSelected,
   defaultSorting,
   page = 1,
-  limit = 20,
+  limit = 15,
 }) => {
   try {
     const response = await client.graphql({
@@ -88,7 +88,7 @@ export const getPageBySlugAPI = async (slugId) => {
     storeId: STORE_ID,
     pageType: "",
     slug: slugId,
-    collectionDataLimit: 100,
+    collectionDataLimit: 15,
   });
 
   return JSON.parse(data?.getWebPageBySlug || "{}");
