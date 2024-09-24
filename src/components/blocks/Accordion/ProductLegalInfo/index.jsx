@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Heading, Text } from "@/components/elements";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import { getBgColor } from "@/utils/helpers";
+import ReadMore from "@/components/features/ReadMore";
 
 const TableLikeStructure = ({ legalInfoItems }) => {
   return (
@@ -22,9 +23,7 @@ const TableLikeStructure = ({ legalInfoItems }) => {
               </Text>
             </div>
             <div className="flex flex-row">
-              <Text as="p" size="sm" className="line-clamp-4">
-                {item?.subText}
-              </Text>
+              <ReadMore content={item?.subText} maxLength={200} isHtml />
             </div>
           </div>
         ))}
