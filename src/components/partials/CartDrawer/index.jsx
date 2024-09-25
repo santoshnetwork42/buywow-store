@@ -328,11 +328,8 @@ const CartDrawer = () => {
               <MainCartSection
                 cartItems={cartItems}
                 inventoryMapping={inventoryMapping}
-<<<<<<< Updated upstream
-=======
                 upsellProducts={upsellProducts}
                 ltoProducts={ltoProducts}
->>>>>>> Stashed changes
               />
               <LoyaltyCash
                 showLoyalty={showLoyalty}
