@@ -415,6 +415,7 @@ export const getProductReviewsAPI = async (
       authMode: "apiKey",
     });
 
+    
     const {
       data: {
         searchReviews: { items, total, nextToken: newNextToken },
