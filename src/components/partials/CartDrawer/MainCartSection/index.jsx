@@ -21,6 +21,7 @@ const CartProductList = React.memo(({ cartItems, inventoryMapping }) => {
 
 CartProductList.displayName = "CartProductList";
 
+<<<<<<< Updated upstream
 const MainCartSection = React.memo(({ cartItems, inventoryMapping }) => {
   const validLtoProduct =
     !!cartItems?.length &&
@@ -47,6 +48,32 @@ const MainCartSection = React.memo(({ cartItems, inventoryMapping }) => {
     </div>
   );
 });
+=======
+const MainCartSection = React.memo(
+  ({ cartItems, upsellProducts, inventoryMapping, ltoProducts }) => {
+    return (
+      <div className="mb-7 flex flex-1 flex-col gap-4">
+        <CartProductList
+          cartItems={cartItems}
+          inventoryMapping={inventoryMapping}
+        />
+        <LimitedTimeDealProductSection
+          ltoProducts={ltoProducts}
+          cartItems={cartItems}
+        />
+
+        <UpsellProducts
+          title={upsellProducts?.title}
+          upsellProductsBgColor={upsellProducts?.cartUpsellProductsBgColor}
+          upsellProductItems={upsellProducts?.cartUpsellProducts}
+          endTime={upsellProducts?.endTime}
+          isCartUpsell={true}
+        />
+      </div>
+    );
+  },
+);
+>>>>>>> Stashed changes
 
 MainCartSection.displayName = "MainCartSection";
 

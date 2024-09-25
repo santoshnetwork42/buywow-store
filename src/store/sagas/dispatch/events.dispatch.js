@@ -39,6 +39,16 @@ export const useEventsDispatch = () => {
     [dispatch],
   );
 
+  const ltoProductItem = useCallback(
+    (product, type) => {
+      dispatch({
+        type: eventsSagaActions.LIMITED_TIME_DEAL_PRODUCT_ITEM,
+        payload: { product, type },
+      });
+    },
+    [dispatch],
+  );
+
   const startCheckout = useCallback(
     (source) => {
       dispatch({
@@ -311,6 +321,7 @@ export const useEventsDispatch = () => {
     addressSelected,
     categoryViewed,
     logout,
+    ltoProductItem,
     // spinTheWheelPlayed,
     // spinTheWheelReward,
     addPaymentInfo,

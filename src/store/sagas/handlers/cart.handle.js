@@ -9,6 +9,7 @@ import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import {
   emptyCart,
   setCart,
+  setCartCreatedAt,
   setCartId,
   setCoupon,
   setIsRewardApplied,
@@ -36,7 +37,10 @@ export function* addToCartHandler(action) {
       ...product,
       ...(variant && {
         variantId: variant.id,
-        price: variant.price,
+        price:
+          product.cartItemSource === "LIMITED_TIME_DEAL"
+            ? product.price
+            : variant.price,
         listingPrice: variant.listingPrice,
       }),
     };
@@ -49,12 +53,11 @@ export function* addToCartHandler(action) {
       .filter(Boolean)
       .join("-");
 
-    if (updatedProduct.cartItemSource) {
+    if (
+      updatedProduct.cartItemSource &&
+      updatedProduct.cartItemSource !== "LIMITED_TIME_DEAL"
+    ) {
       updatedProduct.listingPrice = updatedProduct.price;
-    }
-
-    if (updatedProduct.cartItemSource === "LIMITED_TIME_DEAL") {
-      updatedProduct.price = updatedProduct.recommendPrice;
     }
 
     const existingItemIndex = cartState.data.findIndex(
@@ -112,9 +115,7 @@ export function* removeFromCartHandler(action) {
   }));
 
   const filteredCart = cart.filter(
-    (product) =>
-      product.recordKey !== removedProduct.recordKey &&
-      product.parentRecordKey !== removedProduct.recordKey,
+    (product) => product.recordKey !== removedProduct.recordKey,
   );
 
   const subTotal = getProductSubTotal(filteredCart);
@@ -190,6 +191,10 @@ export function* validateCartHandler(action) {
 }
 
 export function* updateCartIdHandler(action) {
+  const cartId = yield select((state) => state.cart.cartId);
+  if (!cartId) {
+    yield put(setCartCreatedAt(new Date().toISOString()));
+  }
   yield put(setCartId(action.payload));
 }
 

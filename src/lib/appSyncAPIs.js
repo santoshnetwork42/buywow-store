@@ -572,9 +572,9 @@ export const getInitialDataAPI = async (deviceType) => {
       },
       ltoProductFilter: {
         storeId: { eq: STORE_ID },
-        recommended: { eq: true },
+        isArchive: { eq: false },
       },
-      ltoProductSort: [{ field: "recommendPriority", direction: "asc" }],
+      ltoProductSort: [{ field: "priority", direction: "asc" }],
     });
     return data;
   } catch (error) {

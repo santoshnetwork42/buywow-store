@@ -11,6 +11,7 @@ import {
   checkoutStartedEventHandler,
   homeViewedEventHandler,
   logOutEventHandler,
+  ltoProductItemEventHandler,
   otpRequestedEventHandler,
   outOfStockEventHandler,
   placeOrderEventHandler,
@@ -72,6 +73,14 @@ function* viewItem() {
 function* placeOrder() {
   yield takeLatest(eventsSagaActions.PLACE_ORDER, placeOrderEventHandler);
 }
+
+function* ltoProductAdded() {
+  yield takeLatest(
+    eventsSagaActions.LIMITED_TIME_DEAL_PRODUCT_ITEM,
+    ltoProductItemEventHandler,
+  );
+}
+
 //cart actions
 function* applyCoupons() {
   yield takeLatest(cartSagaActions.APPLY_COUPONS, applyCouponsEventHandler);
@@ -184,13 +193,13 @@ export function* eventsWatcher() {
     fork(addToCartEvent),
     fork(removeFromCartEvent),
     fork(applyCoupons),
+    fork(ltoProductAdded),
     fork(search),
     fork(priceMisMatch),
     fork(auth),
     fork(proceedToCheckout),
     fork(viewItem),
     fork(placeOrder),
-    fork(applyCoupons),
     fork(checkoutStarted),
     fork(viewCart),
     fork(viewListItem),

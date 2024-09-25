@@ -29,6 +29,7 @@ const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
     listingPrice = 0,
     variantId,
     cartItemType,
+    cartItemSource,
     thumbImage,
     couponMessage,
     hideRemove,
@@ -46,6 +47,7 @@ const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
 
   const isFreeProduct =
     cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT";
+  const isLTOProduct = cartItemSource === "LIMITED_TIME_DEAL";
 
   const { hasInventory, currentInventory } = useMemo(
     () => getProductInventory(item, variantId),
@@ -193,6 +195,7 @@ const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
             hasInventory={hasInventory}
             listingPrice={listingPrice}
             cartItemType={cartItemType}
+            isLTOProduct={isLTOProduct}
             currentInventory={currentInventory}
             isFreeProduct={isFreeProduct}
             quantity={quantity}
@@ -203,47 +206,49 @@ const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
             <RemoveButton onClick={() => handleChangeQuantity(0)} />
           )}
         </div>
-        <div className="flex flex-col justify-between gap-2">
-          <div className="flex items-end justify-between gap-1">
-            <VariantSelector
-              variantGroup={variantGroup}
-              selectedVariantGroupOptions={selectedVariantGroupOptions}
-              handleOnChangeVariant={handleOnChangeVariant}
-              isFreeProduct={isFreeProduct}
-              disableChange={disableChange}
-              variantClassName="w-fit"
-              className="lg:gap-1"
-            />
-            <div className="ml-auto flex items-center gap-2">
-              {!outOfStock && !isFreeProduct && !disableChange && (
-                <Quantity
-                  product={item}
-                  minimumOrderQuantity={
-                    selectedVariant?.minimumOrderQuantity ||
-                    itemMinOrderQuantity
-                  }
-                  maximumOrderQuantity={
-                    selectedVariant?.maximumOrderQuantity ||
-                    itemMaxOrderQuantity
-                  }
-                  totalItemQuantity={totalItemQuantity}
-                  quantity={quantity}
-                  max={inventory}
-                  onChangeQuantity={handleChangeQuantity}
-                  className="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] md:h-7 lg:h-8"
-                />
-              )}
+        {!isLTOProduct && (
+          <div className="flex flex-col justify-between gap-2">
+            <div className="flex items-end justify-between gap-1">
+              <VariantSelector
+                variantGroup={variantGroup}
+                selectedVariantGroupOptions={selectedVariantGroupOptions}
+                handleOnChangeVariant={handleOnChangeVariant}
+                isFreeProduct={isFreeProduct}
+                disableChange={disableChange}
+                variantClassName="w-fit"
+                className="lg:gap-1"
+              />
+              <div className="ml-auto flex items-center gap-2">
+                {!outOfStock && !isFreeProduct && !disableChange && (
+                  <Quantity
+                    product={item}
+                    minimumOrderQuantity={
+                      selectedVariant?.minimumOrderQuantity ||
+                      itemMinOrderQuantity
+                    }
+                    maximumOrderQuantity={
+                      selectedVariant?.maximumOrderQuantity ||
+                      itemMaxOrderQuantity
+                    }
+                    totalItemQuantity={totalItemQuantity}
+                    quantity={quantity}
+                    max={inventory}
+                    onChangeQuantity={handleChangeQuantity}
+                    className="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] md:h-7 lg:h-8"
+                  />
+                )}
+              </div>
             </div>
-          </div>
 
-          {(selectedVariant?.minimumOrderQuantity > 1 ||
-            itemMinOrderQuantity > 1) && (
-            <Text as="span" size="xs" className="font-light">
-              Minimum Order Quantity:{" "}
-              {selectedVariant?.minimumOrderQuantity || itemMinOrderQuantity}
-            </Text>
-          )}
-        </div>
+            {(selectedVariant?.minimumOrderQuantity > 1 ||
+              itemMinOrderQuantity > 1) && (
+              <Text as="span" size="xs" className="font-light">
+                Minimum Order Quantity:{" "}
+                {selectedVariant?.minimumOrderQuantity || itemMinOrderQuantity}
+              </Text>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
