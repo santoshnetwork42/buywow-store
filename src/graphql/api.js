@@ -266,12 +266,6 @@ export const getCMSPages = /* GraphQL */ `
   }
 `;
 
-export const getPagesToPrebuild = /* GraphQL */ `
-  query getPagesToPrebuild($storeId: String!) {
-    getPagesToPrebuild(storeId: $storeId)
-  }
-`;
-
 export const searchWebCMSCollectionProducts = /* GraphQL */ `
   query searchWebCMSCollectionProducts(
     $storeId: String!

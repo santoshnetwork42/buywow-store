@@ -2,6 +2,7 @@
 
 import { Heading, Text } from "@/components/elements";
 import { getBgColor } from "@/utils/helpers";
+import ReadMore from "@/components/features/ReadMore";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 
@@ -27,9 +28,7 @@ const TableLikeStructure = ({ legalInfoItems }) => {
               </Text>
             </div>
             <div className="flex flex-row">
-              <Text as="p" size="sm" className="line-clamp-5">
-                {item?.subText}
-              </Text>
+              <ReadMore content={item?.subText} maxLength={200} isHtml />
             </div>
           </div>
         ))}
