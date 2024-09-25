@@ -51,7 +51,7 @@ const ContactUs = () => {
             </Text>
             {/* href="https://wa.link/xs6kb5" */}
             <div className="mt-8">
-              <Link prefetch={false} href="https://wa.link/xs6kb5">
+              <Link prefetch={false} href="https://wa.link/m2ith8">
                 <Button className="p-3" variant="primary">
                   Chat With Us
                 </Button>
