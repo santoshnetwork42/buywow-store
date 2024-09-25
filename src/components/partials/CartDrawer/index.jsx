@@ -328,7 +328,6 @@ const CartDrawer = () => {
               <MainCartSection
                 cartItems={cartItems}
                 inventoryMapping={inventoryMapping}
-                upsellProducts={upsellProducts}
                 ltoProducts={ltoProducts}
               />
               <LoyaltyCash

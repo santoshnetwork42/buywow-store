@@ -29,7 +29,7 @@ const CartProductList = React.memo(({ cartItems, inventoryMapping }) => {
 CartProductList.displayName = "CartProductList";
 
 const MainCartSection = React.memo(
-  ({ cartItems, upsellProducts, inventoryMapping, ltoProducts }) => {
+  ({ cartItems, inventoryMapping, ltoProducts }) => {
     return (
       <div className="mb-7 flex flex-1 flex-col gap-4">
         <CartProductList

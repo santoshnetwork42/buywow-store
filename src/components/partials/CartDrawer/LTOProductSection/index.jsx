@@ -236,63 +236,81 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
   }, [startTime]);
 
   // products to show as LTO -> if added in cart -> filter from ltoProducts
-  const notBoughtLTOProducts = useMemo(() => {
-    return ltoProducts?.filter(
-      (ltoProduct) =>
-        !cartItems?.some(
-          (cartItem) =>
-            cartItem.recordKey ===
-            getRecordKey(ltoProduct.product, ltoProduct.variantId, true),
-        ),
-    );
-  }, [cartItems]);
+  const { notBoughtLTOProducts, boughtLTOProducts } = useMemo(() => {
+    if (!ltoProducts || !cartItems)
+      return { notBoughtLTOProducts: [], boughtLTOProducts: [] };
 
-  const boughtLTOProducts = useMemo(() => {
-    return ltoProducts?.filter((ltoProduct) =>
-      cartItems?.some(
-        (cartItem) =>
-          cartItem.recordKey ===
-          getRecordKey(ltoProduct.product, ltoProduct.variantId, true),
-      ),
+    const cartRecordKeys = new Set(
+      cartItems.map((cartItem) => cartItem.recordKey),
     );
-  }, [cartItems]);
+
+    return ltoProducts?.reduce(
+      (acc, ltoProduct) => {
+        const recordKey = getRecordKey(
+          ltoProduct.product,
+          ltoProduct.variantId,
+          true,
+        );
+        if (cartRecordKeys.has(recordKey)) {
+          acc.boughtLTOProducts.push(ltoProduct);
+        } else {
+          acc.notBoughtLTOProducts.push(ltoProduct);
+        }
+        return acc;
+      },
+      { notBoughtLTOProducts: [], boughtLTOProducts: [] },
+    );
+  }, [ltoProducts, cartItems]);
 
   const totalAmountWithoutLTOProducts = useMemo(() => {
-    return boughtLTOProducts?.reduce((acc, item) => {
-      return acc - item.flatPrice;
-    }, totalAmount);
+    if (!ltoProducts || !cartItems) return totalAmount;
+
+    const cartRecordKeys = new Set(
+      cartItems.map((cartItem) => cartItem.recordKey),
+    );
+
+    return ltoProducts
+      .filter((ltoProduct) =>
+        cartRecordKeys.has(
+          getRecordKey(ltoProduct.product, ltoProduct.variantId, true),
+        ),
+      )
+      .reduce((acc, item) => acc - item.flatPrice, totalAmount);
   }, [cartItems]);
 
-  boughtLTOProducts?.forEach((l) => {
-    // remove if cartOrderValue change
-    const {
-      minOrderValue,
-      maximumOrderQuantity,
-      flatPrice,
-      product,
-      variantId,
-    } = l;
+  useEffect(() => {
+    if (!boughtLTOProducts?.length) return;
 
-    if (minOrderValue > totalAmountWithoutLTOProducts) {
-      removeFromCart({
-        ...product,
-        price: flatPrice,
-        minimumOrderQuantity: 1,
+    boughtLTOProducts?.forEach((lto) => {
+      const {
+        minOrderValue,
+        product,
+        flatPrice,
         maximumOrderQuantity,
-        cartItemSource: "LIMITED_TIME_DEAL",
-        recordKey: recordKey,
-      });
-      ltoProductItem({
-        product: {
+        variantId,
+      } = lto;
+      if (minOrderValue > totalAmountWithoutLTOProducts) {
+        const recordKey = getRecordKey(product, variantId, true);
+        removeFromCart({
           ...product,
           price: flatPrice,
           minimumOrderQuantity: 1,
           maximumOrderQuantity,
-        },
-        type: "REMOVE",
-      });
-    }
-  });
+          cartItemSource: "LIMITED_TIME_DEAL",
+          recordKey: recordKey,
+        });
+        ltoProductItem({
+          product: {
+            ...product,
+            price: flatPrice,
+            minimumOrderQuantity: 1,
+            maximumOrderQuantity,
+          },
+          type: "REMOVE",
+        });
+      }
+    });
+  }, [boughtLTOProducts, totalAmountWithoutLTOProducts]);
 
   // if no lto products or timer off
   if (!notBoughtLTOProducts?.length || !timeLeft) return null;
@@ -333,7 +351,6 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
             key={`product-${item.slug}-${index}`}
             item={item}
             addToCart={addToCart}
-            removeFromCart={removeFromCart}
             ltoProductItem={ltoProductItem}
             totalAmount={totalAmountWithoutLTOProducts}
           />
