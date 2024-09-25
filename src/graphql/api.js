@@ -254,12 +254,6 @@ export const getInitialData = /* GraphQL */ `
   }
 `;
 
-export const getWebCartUpsellProducts = /* GraphQL */ `
-  query getWebCartUpsellProducts($storeId: String!) {
-    getWebCartUpsellProducts(storeId: $storeId)
-  }
-`;
-
 export const getCMSPages = /* GraphQL */ `
   query getCMSPages($storeId: String!, $type: String) {
     getCMSPages(storeId: $storeId, type: $type)

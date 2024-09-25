@@ -61,7 +61,7 @@ const CouponsAndOffers = dynamic(
     import("@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers"),
 );
 
-const CartDrawer = ({ upsellProducts }) => {
+const CartDrawer = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -326,7 +326,6 @@ const CartDrawer = ({ upsellProducts }) => {
               <MainCartSection
                 cartItems={cartItems}
                 inventoryMapping={inventoryMapping}
-                upsellProducts={upsellProducts}
               />
               <LoyaltyCash
                 showLoyalty={showLoyalty}
