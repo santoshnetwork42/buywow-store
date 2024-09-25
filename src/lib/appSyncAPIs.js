@@ -303,17 +303,6 @@ export const fetchProductDetailsAPI = async (id) => {
   }
 };
 
-export const getCartUpsellProductsAPI = async () => {
-  const data = await fetchData(
-    getWebCartUpsellProducts,
-    { storeId: STORE_ID },
-    {
-      next: { revalidate: 3600, tags: ["cartUpsell"] },
-    },
-  );
-  return JSON.parse(data?.getWebCartUpsellProducts || "{}");
-};
-
 export const getCMSPagesAPI = async (pageType) => {
   const data = await fetchData(getCMSPages, {
     storeId: STORE_ID,
@@ -584,9 +573,9 @@ export const getInitialDataAPI = async (deviceType) => {
       },
       ltoProductFilter: {
         storeId: { eq: STORE_ID },
-        recommended: { eq: true },
+        isArchive: { eq: false },
       },
-      ltoProductSort: [{ field: "recommendPriority", direction: "asc" }],
+      ltoProductSort: [{ field: "priority", direction: "asc" }],
     });
     return data;
   } catch (error) {

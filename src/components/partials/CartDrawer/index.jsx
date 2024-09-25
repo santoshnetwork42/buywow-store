@@ -5,6 +5,7 @@ import {
   useCartTotal,
   useConfiguration,
   useInventory,
+  useNavbar,
 } from "@wow-star/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -61,10 +62,11 @@ const CouponsAndOffers = dynamic(
     import("@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers"),
 );
 
-const CartDrawer = ({ upsellProducts }) => {
+const CartDrawer = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { ltoProducts } = useNavbar();
 
   const appliedCoupon = useSelector((state) => state.cart?.coupon);
   const shoppingCartId = useSelector((state) => state.cart?.cartId);
@@ -119,7 +121,7 @@ const CartDrawer = ({ upsellProducts }) => {
   } = inventory;
 
   const cartItems = useCartItems({
-    showLTOProducts: false,
+    showLTOProducts: true,
     showNonApplicableFreeProducts: true,
   });
 
@@ -326,7 +328,11 @@ const CartDrawer = ({ upsellProducts }) => {
               <MainCartSection
                 cartItems={cartItems}
                 inventoryMapping={inventoryMapping}
+<<<<<<< Updated upstream
+=======
                 upsellProducts={upsellProducts}
+                ltoProducts={ltoProducts}
+>>>>>>> Stashed changes
               />
               <LoyaltyCash
                 showLoyalty={showLoyalty}

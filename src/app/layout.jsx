@@ -4,8 +4,7 @@ import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
 import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
 import {
-  getCartUpsellProductsAPI,
-  getNavbarAndFooterAPI,
+  getNavbarAndFooterAPI
 } from "@/lib/appSyncAPIs";
 import { Provider } from "@/store/Provider";
 import "@/styles/index.css";
@@ -49,7 +48,6 @@ Amplify.configure({
 
 async function RootLayout({ children }) {
   const { data } = (await getNavbarAndFooterAPI()) || {};
-  const upsellProducts = await getCartUpsellProductsAPI();
 
   const {
     announcementBar: announcementData = {},
@@ -79,7 +77,7 @@ async function RootLayout({ children }) {
                 <div className="flex min-h-dvh w-full flex-col">
                   <AnnouncementBar data={announcementData} />
                   {headerData?.data && <Header data={headerData} />}
-                  <CartDrawer upsellProducts={upsellProducts} />
+                  <CartDrawer />
                   <ToastComponent />
                   <div className="mx-auto flex w-full flex-1 flex-col bg-white-a700">
                     {children}

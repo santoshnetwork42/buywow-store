@@ -1,3 +1,4 @@
+import Checkmark from "@/assets/svg/checkmark/icon";
 import { Heading, Text } from "@/components/elements";
 import ProductPricing from "@/components/partials/CartDrawer/MainCartSection/ProductItem/ProductDetails/ProductPricing";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
@@ -12,6 +13,7 @@ const ProductDetails = ({
   currentInventory,
   listingPrice,
   cartItemType,
+  isLTOProduct,
   isFreeProduct,
   quantity,
   couponMessage,
@@ -36,6 +38,16 @@ const ProductDetails = ({
             {title}
           </Heading>
         </Link>
+
+        {isLTOProduct && (
+          <div className="my-2 flex items-center gap-2">
+            <Checkmark className="size-4" />
+            <div className="text-sm font-normal text-green-500">
+              Added Successfully
+            </div>
+          </div>
+        )}
+
         <ProductPricing
           price={price}
           listingPrice={listingPrice}

@@ -3,15 +3,12 @@
 
 export const getInitialData = /* GraphQL */ `
   query getInitialData(
-    $ltoProductFilter: SearchableProductFilterInput
-    $ltoProductSort: [SearchableProductSortInput]
+    $ltoProductFilter: SearchableUpsellProductFilterInput
+    $ltoProductSort: [SearchableUpsellProductSortInput]
     $ltoProductLimit: Int
     $ltoProductNextToken: String
     $ltoProductFrom: Int
-    $ltoProductAggregates: [SearchableProductAggregationInput]
-    $ltoProductVariantFilter: ModelVariantFilterInput
-    $ltoProductVariantLimit: Int
-    $ltoProductImageLimit: Int
+    $ltoProductAggregates: [SearchableUpsellProductAggregationInput]
     $getStoreSettingInput: GetStoreSettingInput!
     $storeId: ID!
     $deviceType: DeviceType!
@@ -172,7 +169,8 @@ export const getInitialData = /* GraphQL */ `
       }
       nextToken
     }
-    searchProducts(
+
+    searchUpsellProducts(
       filter: $ltoProductFilter
       sort: $ltoProductSort
       limit: $ltoProductLimit
@@ -182,81 +180,101 @@ export const getInitialData = /* GraphQL */ `
     ) {
       items {
         id
-        title
-        collections
-        vendor
-        status
-        minimumOrderQuantity
-        maximumOrderQuantity
-        subCategory {
-          name
-          slug
-        }
-        isFeatured
-        category {
-          name
-          slug
-        }
+        storeId
         slug
-        price
         sku
-        position
-        listingPrice
-        tags
-        inventory
-        blockedInventory
-        continueSellingOutOfStock
-        rating
-        totalRatings
-        thumbImages
-        isInventoryEnabled
-        totalOrders
-        recommended
-        recommendPriority
-        recommendPrice
-        variants(
-          filter: $ltoProductVariantFilter
-          limit: $ltoProductVariantLimit
-        ) {
-          items {
-            id
-            title
-            minimumOrderQuantity
-            maximumOrderQuantity
-            price
-            position
-            listingPrice
-            images {
-              items {
-                id
-              }
-            }
-            inventory
-            blockedInventory
-            status
+        flatPrice
+        minOrderValue
+        maximumOrderQuantity
+        priority
+        isArchive
+        variantId
+        productId
+        product {
+          id
+          minimumOrderQuantity
+          maximumOrderQuantity
+          title
+          collections
+          vendor
+          status
+          isFeatured
+          defaultPrice
+          defaultInventory
+          benefits
+          slug
+          price
+          sku
+          position
+          collectionsList {
+            label
+            priority
           }
-        }
-        images(limit: $ltoProductImageLimit) {
-          items {
-            id
-            position
-            alt
-            width
-            height
-            imageKey
-            isThumb
+          listingPrice
+          tags
+          inventory
+          blockedInventory
+          subCategoryId
+          defaultPrice
+          defaultInventory
+          variantGroups {
+            variantGroupId
+            variantGroupOptionIds
+          }
+          continueSellingOutOfStock
+          rating
+          totalRatings
+          thumbImages
+          isInventoryEnabled
+          totalOrders
+          variants {
+            items {
+              id
+              minimumOrderQuantity
+              maximumOrderQuantity
+              title
+              price
+              position
+              listingPrice
+              productVariantOptionIds {
+                variantGroupId
+                variantGroupOptionId
+              }
+              images {
+                items {
+                  id
+                  productId
+                  position
+                  createdAt
+                  updatedAt
+                  alt
+                  width
+                  height
+                  imageKey
+                  isThumb
+                }
+              }
+              inventory
+              blockedInventory
+              status
+            }
+          }
+          images {
+            items {
+              id
+              position
+              alt
+              width
+              height
+              imageKey
+              isThumb
+            }
           }
         }
       }
       nextToken
       total
     }
-  }
-`;
-
-export const getWebCartUpsellProducts = /* GraphQL */ `
-  query getWebCartUpsellProducts($storeId: String!) {
-    getWebCartUpsellProducts(storeId: $storeId)
   }
 `;
 

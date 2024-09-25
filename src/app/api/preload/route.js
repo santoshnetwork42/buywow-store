@@ -21,9 +21,9 @@ export async function GET() {
         },
         ltoProductFilter: {
           storeId: { eq: STORE_ID },
-          recommended: { eq: true },
+          isArchive: { eq: false },
         },
-        ltoProductSort: [{ field: "recommendPriority", direction: "asc" }],
+        ltoProductSort: [{ field: "minOrderValue", direction: "asc" }],
       },
       {
         next: { revalidate: 0 },

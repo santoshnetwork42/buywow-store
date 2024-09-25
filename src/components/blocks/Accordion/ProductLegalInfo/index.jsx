@@ -43,7 +43,6 @@ const ProductLegalInfo = ({
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
   const [contentHeight, setContentHeight] = useState("auto");
-
   useEffect(() => {
     if (contentRef.current) {
       const resizeObserver = new ResizeObserver((entries) => {
