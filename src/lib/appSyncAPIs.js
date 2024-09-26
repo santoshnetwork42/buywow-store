@@ -88,7 +88,7 @@ export const getPageBySlugAPI = async (slugId) => {
     storeId: STORE_ID,
     pageType: "",
     slug: slugId,
-    collectionDataLimit: 100,
+    collectionDataLimit: 20,
   });
 
   return JSON.parse(data?.getWebPageBySlug || "{}");
