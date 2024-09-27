@@ -77,7 +77,7 @@ const ProductDetailView = ({ product }) => {
     <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
       <div className="relative flex flex-col gap-2 md:row-span-3">
         <ProductHeader
-          title={title}
+          title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
           benefits={benefits}
           rating={rating}
           totalRatings={totalRatings}
@@ -92,7 +92,7 @@ const ProductDetailView = ({ product }) => {
 
       <div className="sticky top-10 z-10 flex flex-col">
         <ProductHeader
-          title={title}
+          title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
           benefits={benefits}
           rating={rating}
           totalRatings={totalRatings}
