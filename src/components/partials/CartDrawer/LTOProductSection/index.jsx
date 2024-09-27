@@ -1,5 +1,4 @@
 "use client";
-
 import { Button, Heading, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
