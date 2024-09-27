@@ -77,8 +77,6 @@ const Copyright = React.memo(({ copyrightText }) => {
 });
 
 const Footer = ({ data }) => {
-  const [openSections, setOpenSections] = useState({});
-
   const pathname = usePathname();
   const isRestricted = RESTRICT_FOOTER_TO_SHOW.some(
     (allowedPath) =>
@@ -138,6 +136,19 @@ const Footer = ({ data }) => {
       ...(otherLinks || []).filter(noSubMenu).map(prefixSlug).filter(Boolean),
     ],
   };
+
+  // Find the index of "Quick Links"
+  const quickLinksIndex = menu.itemsWithSubMenu.findIndex(
+    (item) => item.title === "Quick Links",
+  );
+
+  const [openSections, setOpenSections] = useState(() => {
+    const initialState = {};
+    if (quickLinksIndex !== -1) {
+      initialState[quickLinksIndex] = true;
+    }
+    return initialState;
+  });
 
   const toggleSection = (index) => {
     setOpenSections((prev) => ({

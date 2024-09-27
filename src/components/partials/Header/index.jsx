@@ -168,7 +168,12 @@ const Header = ({ data }) => {
   const renderMenuItems = () => (
     <>
       {collectionMenus?.map((item, index) => (
-        <MenuItem key={`menu-${index}`} item={item} index={index} showInWeb />
+        <MenuItem
+          key={`menu-${index}`}
+          item={item}
+          index={index}
+          showInWeb={item?.showInWeb}
+        />
       ))}
       {otherLinks?.map((item, index) => (
         <MenuItem
