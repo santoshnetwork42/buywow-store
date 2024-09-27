@@ -136,7 +136,6 @@ const Footer = ({ data }) => {
       ...(otherLinks || []).filter(noSubMenu).map(prefixSlug).filter(Boolean),
     ],
   };
-
   // Find the index of "Quick Links"
   const quickLinksIndex = menu.itemsWithSubMenu.findIndex(
     (item) => item.title === "Quick Links",
