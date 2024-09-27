@@ -33,7 +33,7 @@ const nextConfig = {
   async redirects() {
     const allRedirects = [
       {
-        source: "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|json)",
+        source: "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|json|cgi)",
         destination: "/404",
         permanent: true,
       },
