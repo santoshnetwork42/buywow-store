@@ -1,10 +1,14 @@
 "use client";
 
-import { LoaderIcon } from "@/assets/svg/icons";
 import BlogCard from "@/components/partials/Blog/BlogCard";
 import { getBlogs } from "@/graphql/api";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+
+const LoaderIcon = dynamic(() => import("@/assets/svg/loaderIcon"), {
+  ssr: false,
+});
 
 export default function BlogInfiniteScroll({ blogsData, pageInfoData }) {
   const [blogs, setBlog] = useState(blogsData);

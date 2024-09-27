@@ -27,7 +27,7 @@ const Counter = React.memo(({ text }) => (
 
 const DotButton = React.memo(({ isSelected, onClick }) => (
   <Button
-    className={`mr-1.5 inline-block h-1 cursor-pointer rounded-full transition-all duration-300 ease-in-out md:h-1.5 ${
+    className={`mr-1.5 inline-block h-1.5 cursor-pointer rounded-full transition-all duration-300 ease-in-out ${
       isSelected
         ? "w-2.5 bg-black-900 md:w-3"
         : "w-1.5 bg-gray-300_01 hover:bg-gray-400"

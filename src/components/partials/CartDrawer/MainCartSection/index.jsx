@@ -1,6 +1,13 @@
-import LimitedTimeDealProductSection from "@/components/partials/CartDrawer/LTOProductSection";
-import ProductItem from "@/components/partials/CartDrawer/MainCartSection/ProductItem";
+import dynamic from "next/dynamic";
 import React from "react";
+
+const ProductItem = dynamic(
+  () => import("@/components/partials/CartDrawer/MainCartSection/ProductItem"),
+);
+
+const LimitedTimeDealProductSection = dynamic(
+  () => import("@/components/partials/CartDrawer/LTOProductSection"),
+);
 
 const CartProductList = React.memo(({ cartItems, inventoryMapping }) => {
   if (!cartItems || !Array.isArray(cartItems)) return null;
@@ -21,32 +28,22 @@ const CartProductList = React.memo(({ cartItems, inventoryMapping }) => {
 
 CartProductList.displayName = "CartProductList";
 
-const MainCartSection = React.memo(({ cartItems, inventoryMapping }) => {
-  const validLtoProduct =
-    !!cartItems?.length &&
-    (cartItems.find((i) => i.ltoProduct) || cartItems.find((i) => i.ltoDeal));
-
-  const outOfStock =
-    validLtoProduct?.qty >
-    ((inventoryMapping || {})[validLtoProduct?.recordKey] || 99);
-
-  return (
-    <div className="mb-7 flex flex-1 flex-col gap-4">
-      <CartProductList
-        cartItems={cartItems}
-        inventoryMapping={inventoryMapping}
-      />
-      {!!validLtoProduct && !outOfStock && (
-        <LimitedTimeDealProductSection
-          parentRecordKey={validLtoProduct?.recordKey}
-          product={validLtoProduct?.ltoDeal || validLtoProduct?.ltoProduct}
-          addedAt={validLtoProduct?.addedAt}
-          isBought={!!validLtoProduct?.ltoProduct}
+const MainCartSection = React.memo(
+  ({ cartItems, inventoryMapping, ltoProducts }) => {
+    return (
+      <div className="mb-7 flex flex-1 flex-col gap-4">
+        <CartProductList
+          cartItems={cartItems}
+          inventoryMapping={inventoryMapping}
         />
-      )}
-    </div>
-  );
-});
+        <LimitedTimeDealProductSection
+          ltoProducts={ltoProducts}
+          cartItems={cartItems}
+        />
+      </div>
+    );
+  },
+);
 
 MainCartSection.displayName = "MainCartSection";
 

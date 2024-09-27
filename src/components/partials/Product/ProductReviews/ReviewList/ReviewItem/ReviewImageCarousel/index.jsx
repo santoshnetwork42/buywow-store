@@ -14,6 +14,7 @@ const CarouselImage = React.memo(({ src, alt }) => (
       height={400}
       addPrefix
       className="aspect-[100/80] h-auto w-full object-contain sm:aspect-[100/70] md:aspect-square"
+      loading="lazy"
     />
   </div>
 ));
@@ -83,7 +84,7 @@ const ReviewImageCarousel = ({ images, initialSlide = 0 }) => {
         </div>
       </div>
       <ArrowIconSVG
-        className="absolute left-1 top-1/2 z-10 size-5 -translate-y-1/2 cursor-pointer rounded-full bg-white-a700/50 md:size-6 lg:size-7"
+        className="absolute left-1.5 top-1/2 z-10 size-5 -translate-y-1/2 cursor-pointer rounded-full bg-white-a700/50 md:size-6 lg:size-7"
         side="left"
         onClick={scrollPrev}
       />

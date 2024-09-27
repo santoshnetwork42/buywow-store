@@ -58,74 +58,73 @@ const VariantSelector = ({
               name={`${group.id}`}
               value={selectedOption}
               options={options}
-              // menuIsOpen
               onChange={(selectedOption) =>
                 handleOnChangeVariant(group.id, selectedOption.value)
               }
               className="flex !cursor-pointer rounded-md border border-black-900 p-[5px] sm:p-[5.5px] lg:p-[7.5px]"
-              styles={{
-                singleValue: (provided) => ({
-                  ...provided,
-                  textOverflow: "clip",
-                }),
-                menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
-                menu: (provided) => ({
-                  ...provided,
-                  borderRadius: "6px",
-                  overflow: "hidden",
-                  zIndex: "1000",
-                  left: "-7.5px",
-                  top: "4px",
-                  width: "calc(100% + 15px)",
-                  "@media (max-width: 992px)": {
-                    left: "-5.5px",
-                    top: "2px",
-                    width: "calc(100% + 11px)",
-                  },
-                  "@media (max-width: 567px)": {
-                    left: "-5px",
-                    top: "1px",
-                    width: "calc(100% + 10px)",
-                  },
-                }),
-                menuList: (provided) => ({
-                  ...provided,
-                  padding: "0px",
-                }),
-                option: (provided) => ({
-                  ...provided,
-                  fontSize: "12px",
-                  padding: "7px 10px",
-                  cursor: "pointer",
-                  "@media (max-width: 992px)": {
-                    padding: "5.5px 8px",
-                  },
-                  "@media (max-width: 567px)": {
-                    fontSize: "11px",
-                    padding: "5px 7px",
-                  },
-                }),
-                control: (provided) => ({
-                  ...provided,
-                  backgroundColor: "transparent",
-                  border: "0 !important",
-                  boxShadow: "0 !important",
-                  minHeight: "auto",
-                  width: "100%",
-                  cursor: "pointer",
-                  fontSize: "12px",
-                  "&:hover": {
-                    border: "0 !important",
-                  },
-                  "@media (max-width: 567px)": {
-                    fontSize: "11px",
-                  },
-                }),
-                valueContainer: (provided) => ({
-                  ...provided,
-                  padding: "0px",
-                }),
-              }}
+              // styles={{
+              //   singleValue: (provided) => ({
+              //     ...provided,
+              //     textOverflow: "clip",
+              //   }),
+              //   menuPortal: (provided) => ({ ...provided, zIndex: 100 }),
+              //   menu: (provided) => ({
+              //     ...provided,
+              //     borderRadius: "6px",
+              //     overflow: "hidden",
+              //     zIndex: "1000",
+              //     left: "-7.5px",
+              //     top: "4px",
+              //     width: "calc(100% + 15px)",
+              //     "@media (max-width: 992px)": {
+              //       left: "-5.5px",
+              //       top: "2px",
+              //       width: "calc(100% + 11px)",
+              //     },
+              //     "@media (max-width: 567px)": {
+              //       left: "-5px",
+              //       top: "1px",
+              //       width: "calc(100% + 10px)",
+              //     },
+              //   }),
+              //   menuList: (provided) => ({
+              //     ...provided,
+              //     padding: "0px",
+              //   }),
+              //   option: (provided) => ({
+              //     ...provided,
+              //     fontSize: "12px",
+              //     padding: "7px 10px",
+              //     cursor: "pointer",
+              //     "@media (max-width: 992px)": {
+              //       padding: "5.5px 8px",
+              //     },
+              //     "@media (max-width: 567px)": {
+              //       fontSize: "11px",
+              //       padding: "5px 7px",
+              //     },
+              //   }),
+              //   control: (provided) => ({
+              //     ...provided,
+              //     backgroundColor: "transparent",
+              //     border: "0 !important",
+              //     boxShadow: "0 !important",
+              //     minHeight: "auto",
+              //     width: "100%",
+              //     cursor: "pointer",
+              //     fontSize: "12px",
+              //     "&:hover": {
+              //       border: "0 !important",
+              //     },
+              //     "@media (max-width: 567px)": {
+              //       fontSize: "11px",
+              //     },
+              //   }),
+              //   valueContainer: (provided) => ({
+              //     ...provided,
+              //     padding: "0px",
+              //   }),
+              // }}
             />
           </div>
         );

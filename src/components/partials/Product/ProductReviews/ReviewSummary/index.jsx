@@ -10,7 +10,6 @@ const RatingBar = dynamic(
     import(
       "@/components/partials/Product/ProductReviews/ReviewSummary/RatingBar"
     ),
-  { ssr: false },
 );
 
 const ReviewSummary = React.memo(

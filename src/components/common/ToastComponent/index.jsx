@@ -63,7 +63,7 @@ export const showToast = {
           maxWidth: "min(90vw, 936px)",
         }}
       >
-        <AlertIcon className="size-4 max-sm:mt-[3px] sm:size-6 lg:size-7" />
+        <AlertIcon className="size-4 max-sm:mt-1 sm:size-6 lg:size-7" />
         <Text size="lg" as="p" className="flex-1 text-white-a700" responsive>
           {message}
         </Text>

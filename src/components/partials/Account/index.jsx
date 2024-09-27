@@ -1,12 +1,8 @@
 "use client";
 
 import { ArrowIconSVG } from "@/assets/svg/icons";
-import AccountDetails from "@/components/partials/Account/AccountDetails";
 import AccountSkeleton from "@/components/partials/Account/AccountSkeleton";
 import AccountTabs from "@/components/partials/Account/AccountTabs";
-import AddressSection from "@/components/partials/Account/AddressSection";
-import OrderSection from "@/components/partials/Account/OrderSection";
-import WowLoyalty from "@/components/partials/Account/WowLoyalty";
 import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
@@ -18,6 +14,19 @@ const LocationDot = dynamic(() => import("@/src/assets/svg/locationDot"));
 const ListRadio = dynamic(() => import("@/src/assets/svg/listRadio"));
 const User = dynamic(() => import("@/src/assets/svg/user"));
 const LogOutIcon = dynamic(() => import("@/src/assets/svg/logOutIcon"));
+
+const WowLoyalty = dynamic(
+  () => import("@/components/partials/Account/WowLoyalty"),
+);
+const AccountDetails = dynamic(
+  () => import("@/components/partials/Account/AccountDetails"),
+);
+const AddressSection = dynamic(
+  () => import("@/components/partials/Account/AddressSection"),
+);
+const OrderSection = dynamic(
+  () => import("@/components/partials/Account/OrderSection"),
+);
 
 const AccountClient = () => {
   const router = useRouter();

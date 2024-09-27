@@ -1,5 +1,12 @@
 import { Text } from "@/components/elements";
-import CircularProgressBar from "@/components/partials/Product/ProductEffectivenessChart/CircularProgress";
+import dynamic from "next/dynamic";
+
+const CircularProgressBar = dynamic(
+  () =>
+    import(
+      "@/components/partials/Product/ProductEffectivenessChart/CircularProgress"
+    ),
+);
 
 const EffectivenessSection = ({ number, text, isReversed }) => (
   <div

@@ -85,7 +85,7 @@ const FeaturedProductsByTab = ({
         <Link
           prefetch={false}
           href={`/collections/${button.slug}`}
-          className="mb-4 mt-1.5 rounded-[24px] bg-yellow-900 px-4 py-2 text-center sm:mt-1 md:mt-0 md:px-5 md:py-3 lg:mb-6"
+          className="mb-4 mt-1 rounded-[24px] bg-yellow-900 px-4 py-2 text-center md:px-5 md:py-3 lg:mb-6"
         >
           <Heading as="h3" size="xl" className="text-white-a700_01" responsive>
             {button.text}

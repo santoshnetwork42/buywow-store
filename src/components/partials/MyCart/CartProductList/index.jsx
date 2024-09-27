@@ -1,14 +1,22 @@
-import Quantity from "@/components/common/Quantity";
 import { Button, Heading, Img, Text } from "@/components/elements";
 import ProductPricing from "@/components/partials/MyCart/CartProductList/ProductPricing";
-import VariantSelector from "@/components/partials/Others/VariantSelector";
-import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getUpdatedCart, toDecimal } from "@/utils/helpers";
 import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+const ProductThumbnail = dynamic(
+  () => import("@/components/partials/Product/ProductThumbnail"),
+);
+
+const VariantSelector = dynamic(
+  () => import("@/components/partials/Others/VariantSelector"),
+);
+
+const Quantity = dynamic(() => import("@/components/common/Quantity"));
 
 const ProductImage = React.memo(({ slug, outOfStock, imageKey }) => (
   <Link

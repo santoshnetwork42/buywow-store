@@ -1,12 +1,9 @@
 "use client";
 
 import { BagIcon, DownArrowIconSVG, MenuSVG } from "@/assets/svg/icons";
-import PasswordLess from "@/components/common/Passwordless";
 import { Button, Img, Text } from "@/components/elements";
-import MobileMenu from "@/components/partials/Header/MobileMenu";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
-import StickyViewCart from "@/components/partials/StickyViewCart";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
@@ -16,10 +13,25 @@ import {
 } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
 import { useCartTotal } from "@wow-star/utils";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+
+const MobileMenu = dynamic(
+  () => import("@/components/partials/Header/MobileMenu"),
+  { ssr: false },
+);
+
+const StickyViewCart = dynamic(
+  () => import("@/components/partials/StickyViewCart"),
+  { ssr: false },
+);
+
+const PasswordLess = dynamic(() => import("@/components/common/Passwordless"), {
+  ssr: false,
+});
 
 const MenuItem = React.memo(({ item, index, showInWeb }) => {
   const { topNavbarClicked } = useEventsDispatch();

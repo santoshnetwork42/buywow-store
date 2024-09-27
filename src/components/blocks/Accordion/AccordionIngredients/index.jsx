@@ -10,6 +10,7 @@ const IngredientItem = ({ text, imageUrl, imageAlt }) => (
       height={22}
       alt={imageAlt}
       className="aspect-square h-auto w-6 object-contain"
+      loading="lazy"
     />
     <div>
       <Text as="span" size="sm" dangerouslySetInnerHTML={{ __html: text }} />

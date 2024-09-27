@@ -7,13 +7,20 @@ import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
-import CouponDrawer from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer";
 import CouponHeader from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponHeader";
 import CouponModal from "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponModal";
 import { applyCouponAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { AUTO_APPLY_COUPON_PATHNAMES } from "@/utils/data/constants";
+import dynamic from "next/dynamic";
+
+const CouponDrawer = dynamic(
+  () =>
+    import(
+      "@/components/partials/CartDrawer/MainCartSection/CouponsAndOffers/CouponDrawer"
+    ),
+);
 
 const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const pathname = usePathname();
@@ -134,18 +141,20 @@ const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
         appliedCoupon={appliedCoupon}
       />
 
-      <CouponDrawer
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        couponCode={couponCode}
-        setCouponCode={setCouponCode}
-        loading={loading}
-        error={error}
-        applyCouponCode={applyCouponCode}
-        featuredCoupons={featuredCoupons}
-        appliedCoupon={appliedCoupon}
-        handleCouponRemove={handleCouponRemove}
-      />
+      {!!isSidebarOpen && (
+        <CouponDrawer
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+          couponCode={couponCode}
+          setCouponCode={setCouponCode}
+          loading={loading}
+          error={error}
+          applyCouponCode={applyCouponCode}
+          featuredCoupons={featuredCoupons}
+          appliedCoupon={appliedCoupon}
+          handleCouponRemove={handleCouponRemove}
+        />
+      )}
     </>
   );
 };

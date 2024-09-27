@@ -81,12 +81,7 @@ const OrderSummary = ({
                     slug={product?.slug}
                   />
                   {!!product?.qty && (
-                    <Text
-                      size="sm"
-                      as="p"
-                      className="my-1 text-gray-500"
-                      responsive
-                    >
+                    <Text size="sm" as="p" className="text-gray-500" responsive>
                       Qty: {product?.qty}
                     </Text>
                   )}

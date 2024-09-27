@@ -75,36 +75,41 @@ export const getProductInventory = (product, selectedVariantId = null) => {
 export const setSoldOutLast = (items, isContainAttributes = false) => {
   let soldOutProducts = [];
   if (items) {
-    const products = items?.filter(Boolean)?.reduce((acc, item) => {
-      const { fetchedProduct: prod } = isContainAttributes
-        ? item?.attributes
-        : item;
+    const products = items
+      ?.filter((item) =>
+        isContainAttributes
+          ? item?.attributes?.fetchedProduct
+          : item?.fetchedProduct,
+      )
+      ?.reduce((acc, item) => {
+        const { fetchedProduct: prod } = isContainAttributes
+          ? item?.attributes
+          : item;
 
-      if (!("hasInventory" in prod)) {
-        const { hasInventory } = getProductInventory(prod);
-        if (hasInventory) {
-          return [
-            ...acc,
-            { ...item, fetchedProduct: { ...prod, hasInventory } },
-          ];
+        if (!("hasInventory" in prod)) {
+          const { hasInventory } = getProductInventory(prod);
+          if (hasInventory) {
+            return [
+              ...acc,
+              { ...item, fetchedProduct: { ...prod, hasInventory } },
+            ];
+          } else {
+            soldOutProducts.push({
+              ...item,
+              fetchedProduct: { ...prod, hasInventory },
+            });
+            return acc;
+          }
         } else {
-          soldOutProducts.push({
-            ...item,
-            fetchedProduct: { ...prod, hasInventory },
-          });
-          return acc;
+          if (prod.hasInventory) {
+            return [...acc, { ...item, fetchedProduct: prod }];
+          } else {
+            soldOutProducts.push({ ...item, fetchedProduct: prod });
+            return acc;
+          }
         }
-      } else {
-        if (prod.hasInventory) {
-          return [...acc, { ...item, fetchedProduct: prod }];
-        } else {
-          soldOutProducts.push({ ...item, fetchedProduct: prod });
-          return acc;
-        }
-      }
-    }, []);
+      }, []);
     return [...products, ...soldOutProducts];
   }
   return [];
 };
-

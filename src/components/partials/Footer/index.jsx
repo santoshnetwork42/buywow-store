@@ -30,6 +30,7 @@ const SocialLink = React.memo(({ item, index }) => {
         height={24}
         alt={alternativeText}
         className="aspect-square w-6 object-contain"
+        loading="lazy"
       />
     </Link>
   );
@@ -45,6 +46,7 @@ const FooterLogo = React.memo(({ logoUrl, logoAlternativeText }) => {
         height={100}
         alt={logoAlternativeText || "logo"}
         className="aspect-[2] h-auto max-w-[150px] object-contain md:max-w-[175px] xl:max-w-[200px]"
+        loading="lazy"
       />
     </Link>
   );

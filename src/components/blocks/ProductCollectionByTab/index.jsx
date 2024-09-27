@@ -1,11 +1,9 @@
 "use client";
 
-import SortDropdown from "@/components/common/SortDropdown";
 import { Heading } from "@/components/elements";
 import InfiniteScroll from "@/components/features/InfiniteScroll";
 import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
-import ProductCardSkeleton from "@/components/partials/Card/ProductCard/ProductCardSkeleton";
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { getSource } from "@/utils/helpers";
@@ -20,7 +18,18 @@ import React, {
 } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 
-const BlogCard = dynamic(() => import("@/components/partials/Card/BlogCard"));
+const SortDropdown = dynamic(() => import("@/components/common/SortDropdown"), {
+  ssr: false,
+});
+
+const ProductCardSkeleton = dynamic(
+  () => import("@/components/partials/Card/ProductCard/ProductCardSkeleton"),
+  { ssr: false },
+);
+
+const BlogCard = dynamic(() => import("@/components/partials/Card/BlogCard"), {
+  ssr: false,
+});
 
 const SORT_OPTIONS = [
   { value: "RECOMMENDED", label: "Recommended" },
@@ -104,7 +113,7 @@ const ProductCollectionByTab = ({
           tabSelected: activeTab?.tab?.data?.id || null,
           defaultSorting: newSortOption.value,
           page: 1,
-          limit: activeTab?.pagination?.pageSize ?? 100,
+          limit: activeTab?.pagination?.pageSize ?? 15,
         });
 
         const newProducts = response?.items?.data ?? [];
@@ -209,7 +218,7 @@ const ProductCollectionByTab = ({
         tabSelected: activeTab?.tab?.data?.id || null,
         defaultSorting: sortOption.value,
         page: nextPage,
-        limit: activeTab?.pagination?.pageSize ?? 100,
+        limit: activeTab?.pagination?.pageSize ?? 15,
       });
 
       const newProducts = response?.items?.data ?? [];

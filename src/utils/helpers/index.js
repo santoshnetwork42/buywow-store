@@ -65,10 +65,14 @@ export const getDiscountPercentage = (price, listingPrice) => {
   return Math.round(((listingPrice - price) / listingPrice) * 100);
 };
 
-export const getRecordKey = (product, variantId) => {
+export const getRecordKey = (product, variantId, isLtoProduct = false) => {
   if (!product || !product.id) return "";
+  if (isLtoProduct) {
+    return variantId
+      ? `${product.id}-${variantId}-LIMITED_TIME_DEAL`
+      : `${product.id}-LIMITED_TIME_DEAL`;
+  }
   if (variantId) return `${product.id}-${variantId}`;
-
   const firstVariant = getFirstVariant(product);
   return firstVariant ? `${product.id}-${firstVariant.id}` : product.id;
 };

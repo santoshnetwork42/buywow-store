@@ -38,7 +38,7 @@ const OrderSkeleton = () => (
   <div className="animate-pulse">
     <div className="mb-4 h-10 rounded bg-gray-200"></div>
     <div className="mb-4 h-40 rounded bg-gray-200"></div>
-    <div className="mb-4 h-60 rounded bg-gray-200"></div>
+    <div className="mb-4 h-64 rounded bg-gray-200"></div>
     <div className="flex justify-between">
       <div className="h-10 w-32 rounded bg-gray-200"></div>
       <div className="h-10 w-32 rounded bg-gray-200"></div>

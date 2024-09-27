@@ -41,6 +41,7 @@ const Thumb = React.memo(({ isSelected, image, onClick }) => (
           alt="Thumbnail"
           className="aspect-square w-full rounded-lg object-contain"
           addPrefix
+          loading="lazy"
         />
       )}
     </button>
@@ -51,7 +52,7 @@ const DotButton = React.memo(({ isSelected, onClick, isVideo }) => {
   const baseClassName = `
     mr-1.5 
     inline-block 
-    size-2.5 
+    size-3 
     cursor-pointer 
     rounded-full 
     transition-all 

@@ -9,6 +9,7 @@ export const initialState = {
   subTotal: 0,
   storedCouponCode: null,
   cartError: null,
+  cartCreatedAt: null,
 };
 
 export const cartSlice = createSlice({
@@ -17,6 +18,9 @@ export const cartSlice = createSlice({
   reducers: {
     setCart: (state, action) => {
       state.data = action.payload;
+    },
+    setCartCreatedAt: (state, action) => {
+      state.cartCreatedAt = action.payload;
     },
     setCoupon: (state, action) => {
       state.coupon = action.payload;
@@ -47,6 +51,7 @@ export const {
   setCart,
   setCoupon,
   setCartId,
+  setCartCreatedAt,
   setIsRewardApplied,
   setIsShoppingCartIdLoading,
   setSubTotal,

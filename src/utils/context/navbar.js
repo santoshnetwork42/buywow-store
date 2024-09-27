@@ -112,14 +112,18 @@ function NavbarProvider({ children, headerData }) {
         }) || []
       }
       getLtoProducts={
-        initialData?.searchProducts?.items?.filter((lto) => {
-          const status = lto.variants?.items?.length
-            ? lto.variants?.items[0].status === "ENABLED"
-            : lto.status === "ENABLED";
+        initialData?.searchUpsellProducts?.items?.filter((lto) => {
+          let status = lto.product.status === "ENABLED";
+          if (lto.variantId) {
+            const variant = lto.product.variants.items.find(
+              (v) => v.id === lto.variantId,
+            );
+            status = variant.status === "ENABLED";
+          }
 
           const { hasInventory } = getProductInventory(
-            lto,
-            null,
+            lto.product,
+            lto.variantId,
             initialData?.getStoreSetting?.configurations?.BLOCK_INVENTORY,
           );
 

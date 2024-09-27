@@ -1,7 +1,11 @@
 import SectionHeading from "@/components/common/SectionHeading";
 import { Img } from "@/components/elements";
-import ProductEffectivenessChart from "@/components/partials/Product/ProductEffectivenessChart";
 import { extractAttributes } from "@/utils/helpers";
+import dynamic from "next/dynamic";
+
+const ProductEffectivenessChart = dynamic(
+  () => import("@/components/partials/Product/ProductEffectivenessChart"),
+);
 
 const ProductEffectiveness = ({ title, image, EffectivenessChart }) => {
   if (!image && !EffectivenessChart?.length) return null;
@@ -24,11 +28,14 @@ const ProductEffectiveness = ({ title, image, EffectivenessChart }) => {
                   width={600}
                   height={376}
                   className="aspect-[600/346] h-auto w-full object-contain"
+                  loading="lazy"
                 />
               </div>
             );
           })()}
-        <ProductEffectivenessChart effectivenessChart={EffectivenessChart} />
+        {!!EffectivenessChart?.length && (
+          <ProductEffectivenessChart effectivenessChart={EffectivenessChart} />
+        )}
       </div>
     </div>
   );

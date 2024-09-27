@@ -42,7 +42,7 @@ const OrderDetails = React.memo(
             className="flex items-center gap-1 text-green-600"
             responsive
           >
-            <Checkmark className="size-3.5 sm:size-4 lg:size-5" />
+            <Checkmark className="size-3 sm:size-4 lg:size-5" />
             Thank you. Your order is confirmed.
           </Text>
         </div>

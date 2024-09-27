@@ -441,6 +441,59 @@ export function* viewListItemEventHandler({ payload }) {
   }
 }
 
+export function* ltoProductItemEventHandler({ payload }) {
+  try {
+    const { product, type } = payload;
+    const userData = yield select((state) =>
+      state.user.user?.phone ? state.user.user : state.user.customUser,
+    );
+    const currentAddress = yield select(
+      (state) => state.address.currentAddress || state.address.addressList?.[0],
+    );
+    const user = userMapper(userData, currentAddress) || {};
+    const { value, pixel, vercel, ga, moengage } = itemMapper(
+      product,
+      null,
+      user,
+    );
+    trackEvent(
+      "Limited time deal",
+      type === "ADD" ? moengage.addToCart : moengage.removedFromCart,
+    );
+    // const eventSource = getClientSource();
+
+    // if (window && window.dataLayer) {
+    //   window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
+    //   window.dataLayer.push({
+    //     event: "view_item",
+    //     eventID: uuidv4(),
+    //     attribute: pixel,
+    //     ecommerce: {
+    //       currency: "INR",
+    //       value,
+    //       items: ga,
+    //     },
+    //   });
+    // }
+
+    // const analyticsMeta = analyticsMetaDataMapper();
+
+    // trackClickStream({
+    //   event: "view_item",
+    //   eventID: uuidv4(),
+    //   userId: user?.id || "",
+    //   user: user || {},
+    //   items: ga,
+    //   currency: "INR",
+    //   value,
+    //   source: eventSource,
+    //   ...analyticsMeta,
+    // });
+  } catch (e) {
+    errorHandler(e);
+  }
+}
+
 export function* placeOrderEventHandler({ payload }) {
   try {
     const {

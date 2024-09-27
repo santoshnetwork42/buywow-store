@@ -2,10 +2,8 @@
 
 import { showToast } from "@/components/common/ToastComponent";
 import { Button } from "@/components/elements";
-import AddressSection from "@/components/partials/Account/AddressSection";
 import Cashback from "@/components/partials/CartDrawer/Cashback";
-import EmptyCart from "@/components/partials/CartDrawer/EmptyCart";
-import OrderSummary from "@/components/partials/Checkout/OrderSummary";
+import AddressSection from "@/components/partials/Account/AddressSection";
 import PaymentLoader from "@/components/partials/Checkout/PaymentLoader";
 import PaymentMethodsSection from "@/components/partials/Checkout/PaymentMethodsSection";
 import ProgressSteps from "@/components/partials/Others/ProgressSteps";
@@ -40,9 +38,20 @@ import {
   useNavbar,
   useOrders,
 } from "@wow-star/utils";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+
+const EmptyCart = dynamic(
+  () => import("@/components/partials/CartDrawer/EmptyCart"),
+  { ssr: false },
+);
+
+const OrderSummary = dynamic(
+  () => import("@/components/partials/Checkout/OrderSummary"),
+  { ssr: false },
+);
 
 let razorpayMethod;
 
@@ -362,7 +371,7 @@ const CheckoutClient = () => {
       <ProgressSteps activeStep={2} />
 
       {cartList.length > 0 && totalListingPrice > 0 ? (
-        <div className="mb-14 grid w-full grid-cols-1 gap-5 sm:gap-6 md:mb-0 md:grid-cols-2 md:grid-rows-[auto_auto_1fr] md:gap-x-8 lg:gap-x-10 xl:gap-x-12">
+        <div className="mb-12 grid w-full grid-cols-1 gap-5 sm:gap-6 md:mb-0 md:grid-cols-2 md:grid-rows-[auto_auto_1fr] md:gap-x-8 lg:gap-x-10 xl:gap-x-12">
           <div className="order-3 md:order-1 md:row-span-3">
             <AddressSection variant="CHECKOUT" />
           </div>

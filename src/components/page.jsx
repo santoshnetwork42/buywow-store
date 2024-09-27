@@ -57,9 +57,11 @@ const ProductCollectionSection = dynamic(
   () => import("@/components/blocks/ProductCollectionByTab"),
 );
 const InfoSection = dynamic(() => import("@/components/blocks/InfoSection"));
+
 const Reviews = dynamic(
   () => import("@/components/blocks/Product/ProductReviews"),
 );
+
 const UpsellProducts = dynamic(
   () => import("@/components/blocks/UpsellProducts"),
 );

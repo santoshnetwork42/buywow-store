@@ -1,10 +1,15 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
 import { Heading, Text } from "@/components/elements";
-import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
 import { getBgColor } from "@/utils/helpers";
 import ReadMore from "@/components/features/ReadMore";
+import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
+
+const ToggleArrow = dynamic(
+  () => import("@/components/features/Accordion/AccordionToggle"),
+  { ssr: false },
+);
 
 const TableLikeStructure = ({ legalInfoItems }) => {
   return (
@@ -38,7 +43,6 @@ const ProductLegalInfo = ({
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
   const [contentHeight, setContentHeight] = useState("auto");
-
   useEffect(() => {
     if (contentRef.current) {
       const resizeObserver = new ResizeObserver((entries) => {

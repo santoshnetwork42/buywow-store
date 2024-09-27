@@ -1,7 +1,11 @@
 // components/MyCart/MainCartSection.jsx
 import React from "react";
 import ShippingProgress from "@/components/partials/Others/ShippingProgress";
-import CartProductList from "@/components/partials/MyCart/CartProductList";
+import dynamic from "next/dynamic";
+
+const CartProductList = dynamic(
+  () => import("@/components/partials/MyCart/CartProductList"),
+);
 
 export default function MainCartSection({
   cartData,
@@ -17,12 +21,14 @@ export default function MainCartSection({
         freeShippingThreshold={freeShippingThreshold}
         cartValue={subTotal}
       />
-      <CartProductList
-        cartItems={cartData}
-        totalItems={totalCartItems}
-        subtotal={subTotal}
-        inventoryMapping={inventoryMapping}
-      />
+      {!!cartData?.length && (
+        <CartProductList
+          cartItems={cartData}
+          totalItems={totalCartItems}
+          subtotal={subTotal}
+          inventoryMapping={inventoryMapping}
+        />
+      )}
     </div>
   );
 }

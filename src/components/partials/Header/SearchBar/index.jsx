@@ -1,12 +1,16 @@
 "use client";
 
-import { CloseSVG } from "@/assets/svg/icons";
 import { Img, Input } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
+import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { memo, useCallback, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
+
+const CloseSVG = dynamic(() => import("@/assets/svg/closeSVG"), {
+  ssr: false,
+});
 
 const TYPING_SPEED = 100;
 const DELETING_SPEED = 30;

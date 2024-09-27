@@ -49,7 +49,7 @@ export default function BlogSidebar({ featuredBlogs = [], tags = [] }) {
 
           {tags && tags.length > 0 && (
             <React.Fragment>
-              <hr className="my-8 border-t" />
+              <hr className="my-6 border-t" />
 
               <Heading as="h3" size="xl" className="mb-6">
                 Tags

@@ -13,6 +13,7 @@ const BenefitItem = ({ text, subText, image }) => {
         width={100}
         height={96}
         className="aspect-[100/96] w-20 sm:w-[84px] md:w-[88px] lg:w-[92px] xl:w-24"
+        loading="lazy"
       />
       <div className="flex flex-col items-center justify-center gap-1 md:gap-2">
         <Heading as="h5" className="text-center text-sm" size="base" responsive>

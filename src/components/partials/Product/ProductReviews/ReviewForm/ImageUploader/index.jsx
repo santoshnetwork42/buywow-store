@@ -1,7 +1,10 @@
-import { CloseIcon, ImageCamera } from "@/assets/svg/icons";
+import { CloseIcon } from "@/assets/svg/icons";
 import { Img, Text } from "@/components/elements";
 import { uploadImages } from "@/utils/helpers";
+import dynamic from "next/dynamic";
 import React, { useCallback, useState } from "react";
+
+const ImageCamera = dynamic(() => import("@/assets/svg/imageCamera"));
 
 const MAX_IMAGES = 10;
 
@@ -69,6 +72,7 @@ const ImageUploader = React.memo(({ images, onPhotoChange }) => {
                 height={100}
                 addPrefix
                 alt="Review image"
+                loading="lazy"
               />
               <span
                 className="absolute right-0 top-0.5 cursor-pointer rounded-full bg-white-a700"

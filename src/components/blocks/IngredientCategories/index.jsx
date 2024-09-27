@@ -25,6 +25,7 @@ const IngredientItem = ({ ingredient }) => {
         height={76}
         alt={alternativeText || `${slug} Image`}
         className="aspect-[248/76] h-auto w-full object-cover"
+        loading="lazy"
       />
     </LinkClickTracker>
   );

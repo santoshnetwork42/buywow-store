@@ -60,7 +60,7 @@ export const searchCMSCollectionProductsAPI = async ({
   tabSelected,
   defaultSorting,
   page = 1,
-  limit = 20,
+  limit = 15,
 }) => {
   try {
     const response = await client.graphql({
@@ -91,7 +91,7 @@ export const getPageBySlugAPI = async (slugId) => {
     collectionDataLimit: 20,
   });
 
-  return JSON.parse(data?.getWebPageBySlug || "{}");
+  return JSON.parse(data?.getWebPageBySlug);
 };
 
 export const getPageMetadataBySlugAPI = async (slugId) => {
@@ -572,9 +572,9 @@ export const getInitialDataAPI = async (deviceType) => {
       },
       ltoProductFilter: {
         storeId: { eq: STORE_ID },
-        recommended: { eq: true },
+        isArchive: { eq: false },
       },
-      ltoProductSort: [{ field: "recommendPriority", direction: "asc" }],
+      ltoProductSort: [{ field: "priority", direction: "asc" }],
     });
     return data;
   } catch (error) {

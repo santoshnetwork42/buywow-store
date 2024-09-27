@@ -1,11 +1,15 @@
 "use client";
 
-import { LoaderIcon } from "@/assets/svg/icons";
 import { useRippleEffect } from "@/utils/hooks/useRippleEffect";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import PropTypes from "prop-types";
 import { useCallback } from "react";
 import { twMerge } from "tailwind-merge";
+
+const LoaderIcon = dynamic(() => import("@/assets/svg/loaderIcon"), {
+  ssr: false,
+});
 
 const Button = ({
   children,

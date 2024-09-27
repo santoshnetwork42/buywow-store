@@ -13,6 +13,7 @@ const AdditionalIngredient = ({ title, image }) => {
           height={100}
           alt={alternativeText || "Additional Ingredient"}
           className="aspect-[114/100] h-auto w-full object-contain"
+          loading="lazy"
         />
       </div>
       <Heading

@@ -18,7 +18,7 @@ const LoyaltyCash = ({
   return (
     <div className="mb-7 flex justify-between rounded-lg border-[0.25px] border-[#DDDDDD] p-2.5 shadow-[0_4px_4px_#0000000D] md:p-3">
       <div className="flex gap-3">
-        <label className="mt-[1px] h-fit" htmlFor="wow-cash">
+        <label className="h-fit" htmlFor="wow-cash">
           <input
             type="checkbox"
             className="size-5 cursor-pointer rounded-md border border-black-900 transition-all checked:!bg-yellow-900 focus:border-black-900"
@@ -36,7 +36,7 @@ const LoyaltyCash = ({
           >
             Use WOW cash
             {!!cartPageWowCashTooltip?.description && (
-              <div className="group relative ml-1.5 cursor-help">
+              <div className="group relative ml-1 cursor-help">
                 <EllipsisIcon size={14} />
                 <Text
                   as="span"

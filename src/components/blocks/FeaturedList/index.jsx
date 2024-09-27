@@ -29,7 +29,7 @@ const FeaturedItem = ({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center gap-1 ${isWebHorizontal && "md:flex-row"} md:gap-2 lg:gap-3 xl:gap-4`}
+      className={`flex flex-col items-center justify-center gap-1 ${isWebHorizontal && "md:flex-row"} md:gap-2 lg:gap-3 xl:gap-5`}
     >
       <Img
         src={url}
