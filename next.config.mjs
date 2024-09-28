@@ -33,8 +33,20 @@ const nextConfig = {
   async redirects() {
     const allRedirects = [
       {
-        source: "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|json|cgi)",
+        source:
+          "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|json|cgi|env|php7|html|php8|asp|pl|save|swp|tmp|php~|exe|orig|old|bkp|copy|cfm|php4)",
         destination: "/404",
+        permanent: true,
+      },
+      {
+        source:
+          "/:path(manager|user|new|home|old|backup|main|bk|bc|wp|wordpress|admin|administrator|pma|max|login|static|concat|downloadapp|wp-content|wp-admin|gallery|chosen|sw.js)",
+        destination: "/404",
+        permanent: true,
+      },
+      {
+        source: "/:path(products|collections)",
+        destination: "/collections/all",
         permanent: true,
       },
       {
@@ -145,16 +157,6 @@ const nextConfig = {
       {
         source: "/p/privacy-policy",
         destination: "/policies/privacy-policy",
-        permanent: true,
-      },
-      {
-        source: "/elements",
-        destination: "/",
-        permanent: true,
-      },
-      {
-        source: "/elements/:any",
-        destination: "/",
         permanent: true,
       },
       {

@@ -1,30 +1,9 @@
-import awsExport from "@/aws-exports";
-import ClientSideEffects from "@/components/ClientSideEffects";
-import Header from "@/components/partials/Header";
-import Scripts from "@/components/scripts";
-import { AUDITZ, AWS_CLIENT_ID, GOKWIK_SCRIPT } from "@/config";
-import {
-  getNavbarAndFooterAPI
-} from "@/lib/appSyncAPIs";
-import { Provider } from "@/store/Provider";
+import { GOKWIK_SCRIPT } from "@/config";
 import "@/styles/index.css";
 import "@/styles/tailwind.css";
-import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
-import GoKwikProvider from "@/utils/context/gokwik";
-import NavbarProvider from "@/utils/context/navbar";
-import { Amplify } from "aws-amplify";
-import dynamic from "next/dynamic";
+
 import { Outfit } from "next/font/google";
 import Script from "next/script";
-
-const AnnouncementBar = dynamic(
-  () => import("@/components/blocks/AnnouncementBar"),
-);
-const CartDrawer = dynamic(() => import("@/components/partials/CartDrawer"));
-const Footer = dynamic(() => import("@/components/partials/Footer"));
-const ToastComponent = dynamic(
-  () => import("@/components/common/ToastComponent"),
-);
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -40,22 +19,7 @@ export const metadata = {
   metadataBase: new URL("https://buywow.in"),
 };
 
-Amplify.configure({
-  ...awsExport,
-  ssr: true,
-  aws_user_pools_web_client_id: AWS_CLIENT_ID,
-});
-
 async function RootLayout({ children }) {
-  const { data } = (await getNavbarAndFooterAPI()) || {};
-
-  const {
-    announcementBar: announcementData = {},
-    navbar: headerData = {},
-    footer: footerData = {},
-    carousel: carouselData = {},
-  } = data || {};
-
   return (
     <html lang="en" className={outfit.variable} suppressHydrationWarning>
       <head>
@@ -68,42 +32,7 @@ async function RootLayout({ children }) {
           <Script strategy="lazyOnload" defer src={GOKWIK_SCRIPT} />
         )}
       </head>
-      <body>
-        <Provider data={{ headerData, carouselData }}>
-          <NavbarProvider headerData={headerData}>
-            <GoKwikProvider>
-              <AnnouncementProvider>
-                <ClientSideEffects />
-                <div className="flex min-h-dvh w-full flex-col">
-                  <AnnouncementBar data={announcementData} />
-                  {headerData?.data && <Header data={headerData} />}
-                  <CartDrawer />
-                  <ToastComponent />
-                  <div className="mx-auto flex w-full flex-1 flex-col bg-white-a700">
-                    {children}
-                  </div>
-                  {footerData?.data && <Footer data={footerData} />}
-                </div>
-                {AUDITZ && (
-                  <Script
-                    id="adz_rum"
-                    strategy="lazyOnload"
-                    defer
-                    dangerouslySetInnerHTML={{
-                      __html: `(() => {
-                          const s = document.createElement("script");
-                          s.src = "https://rum.auditzy.com/GcPricZc-www.buywow.in.js";
-                          document.head.appendChild(s);
-                          })()`,
-                    }}
-                  />
-                )}
-                <Scripts />
-              </AnnouncementProvider>
-            </GoKwikProvider>
-          </NavbarProvider>
-        </Provider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

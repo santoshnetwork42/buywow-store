@@ -84,12 +84,18 @@ export const searchCMSCollectionProductsAPI = async ({
 };
 
 export const getPageBySlugAPI = async (slugId) => {
-  const data = await fetchData(getWebPageBySlug, {
-    storeId: STORE_ID,
-    pageType: "",
-    slug: slugId,
-    collectionDataLimit: 50,
-  });
+  const data = await fetchData(
+    getWebPageBySlug,
+    {
+      storeId: STORE_ID,
+      pageType: "",
+      slug: slugId,
+      collectionDataLimit: 50,
+    },
+    {
+      next: { tags: ["pages"] },
+    },
+  );
 
   return JSON.parse(data?.getWebPageBySlug);
 };
@@ -103,11 +109,11 @@ export const getPageMetadataBySlugAPI = async (slugId) => {
         slug: slugId,
       },
       {
-        next: { revalidate: 86400 },
+        next: { revalidate: 86400, tags: ["metadata"] },
       },
     );
 
-    return JSON.parse(response?.getPageMetadataBySlug || "{}");
+    return JSON.parse(response?.getPageMetadataBySlug);
   } catch (err) {
     errorHandler(err, "Get Page By Slug API");
     return null;
@@ -122,7 +128,7 @@ export const getNavbarAndFooterAPI = async () => {
       next: { revalidate: 86400, tags: ["header"] },
     },
   );
-  return JSON.parse(data?.getWebNavbarAndFooter || "{}");
+  return JSON.parse(data?.getWebNavbarAndFooter);
 };
 
 export const getUserAPI = async () => {
