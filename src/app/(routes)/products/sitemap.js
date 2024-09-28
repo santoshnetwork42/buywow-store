@@ -17,7 +17,7 @@ export default async function sitemap() {
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
+      url: `${NEXT_PUBLIC_SITE_URL}`,
     };
   }
 }
