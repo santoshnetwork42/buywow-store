@@ -4,17 +4,22 @@ const { NEXT_PUBLIC_SITE_URL } = process.env;
 
 export default async function sitemap() {
   try {
-    const productsPages = (await getCMSPagesForSitemapAPI("policies")) || [];
-    return productsPages.map((page) => ({
-      url: `${NEXT_PUBLIC_SITE_URL}/policies/${page}`,
-      lastModified: page.updatedAt,
-      changeFrequency: "daily",
-    }));
+    const pages = await getCMSPagesForSitemapAPI("POLICIES");
+
+    const allSitemapEntries = pages
+      .filter(({ metadata }) => !(metadata?.noIndex || metadata?.seoCanonica))
+      .map(({ slug }) => ({
+        url: `${NEXT_PUBLIC_SITE_URL}/policies/${slug}`,
+        changeFrequency: "daily",
+      }));
+
+    return allSitemapEntries;
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
-      url: `${NEXT_PUBLIC_SITE_URL}`,
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
     };
   }
 }
-export const revalidate = 120;
+
+export const revalidate = 86400;

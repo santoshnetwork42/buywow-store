@@ -279,7 +279,7 @@ export const getInitialData = /* GraphQL */ `
 `;
 
 export const getCMSPages = /* GraphQL */ `
-  query getCMSPages($storeId: String!, $type: String) {
+  query getCMSPages($storeId: String!, $type: CMSPageType!) {
     getCMSPages(storeId: $storeId, type: $type)
   }
 `;

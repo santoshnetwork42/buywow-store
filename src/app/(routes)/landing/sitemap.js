@@ -4,12 +4,12 @@ const { NEXT_PUBLIC_SITE_URL } = process.env;
 
 export default async function sitemap() {
   try {
-    const pages = await getCMSPagesForSitemapAPI("PAGES");
+    const pages = await getCMSPagesForSitemapAPI("LANDING");
 
     const allSitemapEntries = pages
       .filter(({ metadata }) => !(metadata?.noIndex || metadata?.seoCanonica))
       .map(({ slug }) => ({
-        url: `${NEXT_PUBLIC_SITE_URL}/pages/${slug}`,
+        url: `${NEXT_PUBLIC_SITE_URL}/products/${slug}`,
         changeFrequency: "daily",
       }));
 

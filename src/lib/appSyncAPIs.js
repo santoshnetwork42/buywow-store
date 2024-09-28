@@ -52,7 +52,7 @@ export const getStoreAPI = async () => {
     deviceType: "WEB",
   });
 
-  return data?.getStore || {};
+  return data?.getStore;
 };
 
 export const searchCMSCollectionProductsAPI = async ({
@@ -314,7 +314,7 @@ export const getCMSPagesAPI = async (pageType) => {
     type: pageType,
   });
 
-  return JSON.parse(data?.getCMSPages || "[]");
+  return JSON.parse(data?.getCMSPages);
 };
 
 export const getCMSPagesForSitemapAPI = async (pageType) => {
@@ -329,7 +329,7 @@ export const getCMSPagesForSitemapAPI = async (pageType) => {
     },
   );
 
-  return JSON.parse(data?.getCMSPages || "[]");
+  return JSON.parse(data?.getCMSPages);
 };
 
 export const getUserRewardsAPI = async () => {
