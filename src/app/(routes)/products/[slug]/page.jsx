@@ -47,8 +47,8 @@ export async function generateStaticParams() {
   if (!PREBUILD_ALL_PAGES) {
     return [];
   }
-  const pages = await getCMSPagesAPI("product");
-  return pages.map((slug) => ({ slug }));
+  const pages = await getCMSPagesAPI("PRODUCT");
+  return pages.map(({ slug }) => ({ slug }));
 }
 
 export default async function Page({ params }) {
