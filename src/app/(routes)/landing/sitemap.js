@@ -7,17 +7,26 @@ export default async function sitemap() {
     const pages = await getCMSPagesForSitemapAPI("LANDING");
 
     const allSitemapEntries = pages
-      .filter(({ metadata }) => !(metadata?.noIndex || metadata?.seoCanonica))
+      .filter(
+        ({ metadata, slug }) =>
+          !(metadata?.noIndex || metadata?.seoCanonica) && slug !== "index",
+      )
       .map(({ slug }) => ({
-        url: `${NEXT_PUBLIC_SITE_URL}/products/${slug}`,
+        url: `${NEXT_PUBLIC_SITE_URL}/${slug}`,
         changeFrequency: "daily",
       }));
 
-    return allSitemapEntries;
+    return [
+      {
+        url: `${NEXT_PUBLIC_SITE_URL}/`,
+        changeFrequency: "daily",
+      },
+      ...allSitemapEntries,
+    ];
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
+      url: `${NEXT_PUBLIC_SITE_URL}`,
     };
   }
 }

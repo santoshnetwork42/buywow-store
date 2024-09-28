@@ -13,11 +13,21 @@ export default async function sitemap() {
         changeFrequency: "daily",
       }));
 
-    return allSitemapEntries;
+    return [
+      {
+        url: `${NEXT_PUBLIC_SITE_URL}/pages/contact-us`,
+        changeFrequency: "daily",
+      },
+      {
+        url: `${NEXT_PUBLIC_SITE_URL}/pages/query-us`,
+        changeFrequency: "daily",
+      },
+      ...allSitemapEntries,
+    ];
   } catch (error) {
     console.error("Error fetching data:", error);
     return {
-      url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
+      url: `${NEXT_PUBLIC_SITE_URL}`,
     };
   }
 }
