@@ -1,11 +1,13 @@
 "use client";
 
 import { showToast } from "@/components/common/ToastComponent";
+import { Img } from "@/components/elements";
 import Cashback from "@/components/partials/CartDrawer/Cashback";
 import OrderDetails from "@/components/partials/Order/OrderContent/OrderDetails";
 import OrderSummary from "@/components/partials/Order/OrderContent/OrderSummary";
 import ProductList from "@/components/partials/Order/OrderContent/ProductList";
 import ProgressSteps from "@/components/partials/Others/ProgressSteps";
+import { SWOP_STORE_BANNER_URL } from "@/config";
 import { getOrderByIdAPI, validateTransactionAPI } from "@/lib/appSyncAPIs";
 import States from "@/utils/data/states.json";
 import { errorHandler } from "@/utils/errorHandler";
@@ -104,9 +106,36 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
 
   if (!order) return null;
 
+  const bannerOnThankYouPage = {
+    mWebImage: "/swopstore/swopstore-mweb.jpg",
+    webImage: "/swopstore/swopstore-web.jpg",
+    link: SWOP_STORE_BANNER_URL,
+  };
   return (
     <>
       <ProgressSteps activeStep={3} className="mb-5 mt-4" />
+      {
+        <Link prefetch={false} className="" href={bannerOnThankYouPage.link}>
+          <Img
+            src={bannerOnThankYouPage?.mWebImage}
+            alt={'Thank you for your order!"'}
+            width={400}
+            height={200}
+            className="rounded-md sm:hidden"
+          />
+        </Link>
+      }
+      {
+        <Link prefetch={false} className="" href={bannerOnThankYouPage.link}>
+          <Img
+            src={bannerOnThankYouPage?.webImage}
+            alt={"Thank you for your order!"}
+            width={1400}
+            height={400}
+            className="hidden rounded-md sm:block"
+          />
+        </Link>
+      }
       <OrderDetails
         code={order.code || order.id}
         status={order.status}
