@@ -4,6 +4,7 @@ import Sidebar from "@/components/features/Drawer";
 import MobileMenuItem from "@/components/partials/Header/MobileMenuItem";
 import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
+import { PAGETYPE } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
 import { useCallback } from "react";
@@ -50,14 +51,14 @@ const HeaderSection = ({
 
 HeaderSection.displayName = "HeaderSection";
 
-const MenuList = ({ items, closeMenu, linkPrefix }) => (
+const MenuList = ({ items, closeMenu }) => (
   <>
     {items?.map((item, index) => (
       <li key={`menu-item-${index}`}>
         <MobileMenuItem
           item={item}
           closeMenu={closeMenu}
-          linkPrefix={linkPrefix}
+          linkPrefix={PAGETYPE[item?.slugType] || ""}
         />
         <div className="h-[0.5px] w-full bg-gray-300" />
       </li>
@@ -116,14 +117,10 @@ const MobileMenu = ({
       {(collectionMenus?.length > 0 || otherLinks?.length > 0) && (
         <ul className="space-y-4">
           {collectionMenus?.length > 0 && (
-            <MenuList
-              items={collectionMenus}
-              closeMenu={onClose}
-              linkPrefix="collections"
-            />
+            <MenuList items={collectionMenus} closeMenu={onClose} />
           )}
           {otherLinks?.length > 0 && (
-            <MenuList items={otherLinks} closeMenu={onClose} linkPrefix="" />
+            <MenuList items={otherLinks} closeMenu={onClose} />
           )}
         </ul>
       )}
