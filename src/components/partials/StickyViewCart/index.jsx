@@ -77,6 +77,11 @@ const StickyViewCart = () => {
         return "Congrats, your Buy 8 @ ₹1000 offer has been availed!";
       }
       return "Add more items to unlock 'Buy 8 @ ₹1000 Offer'";
+    } else if (pathname === "/collections/buy-8-1199") {
+      if (appliedCoupon?.code === "BUNDLE8") {
+        return "Congrats, your Buy 8 @ ₹1199 offer has been availed!";
+      }
+      return "Add more items to unlock 'Buy 8 @ ₹1199 Offer'";
     }
     return "";
   };
