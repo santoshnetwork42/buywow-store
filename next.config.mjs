@@ -25,15 +25,15 @@ const nextConfig = {
     const allRedirects = [
       {
         source:
-          "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|json|cgi|env|php7|html|php8|asp|pl|save|swp|tmp|php~|exe|orig|old|bkp|copy|cfm|php4)",
+          "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|json|cgi|env|php7|html|php8|asp|pl|save|swp|tmp|php~|exe|orig|old|bkp|copy|cfm|php4|php3)",
         destination: "/404",
-        permanent: true,
+        permanent: false,
       },
       {
         source:
-          "/:path(manager|user|new|home|old|backup|main|bk|bc|wp|wordpress|admin|administrator|pma|max|login|static|concat|downloadapp|wp-content|wp-admin|gallery|chosen|sw.js)",
+          "/:path(manager|user|new|home|old|backup|main|bk|bc|wp|wordpress|admin|administrator|pma|max|login|static|concat|downloadapp|wp-content|wp-admin|gallery|chosen|sw.js|career|careers|client|roundcube|ispmgr|security|trust-security|termsandconditions|privacy-policy|security.txt|ads.txt|jobs)",
         destination: "/404",
-        permanent: true,
+        permanent: false,
       },
       {
         source: "/:path(products|collections)",
@@ -43,7 +43,7 @@ const nextConfig = {
       {
         source: "/:path*(.*phpmyadmin.*)",
         destination: "/404",
-        permanent: true,
+        permanent: false,
       },
       {
         source: "/blog/robots.txt",
