@@ -1,10 +1,30 @@
 "use client";
 
+import { ShareNow } from "@/assets/svg/shareNowIcon";
 import { Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 import { twMerge } from "tailwind-merge";
+
+const hasLinkTag = (htmlString) => {
+  try {
+    const linkRegex = /<a\b[^>]*>/i;
+    return linkRegex.test(htmlString);
+  } catch (e) {
+    return "";
+  }
+};
+const extractLink = (htmlString) => {
+  try {
+    const linkRegex = /<a\s+(?:[^>]*?\s+)?href="([^"]*)"/i;
+    const match = htmlString.match(linkRegex);
+    return match ? match[1] : null;
+  } catch (e) {
+    return "";
+  }
+};
 
 const FeaturedItem = ({
   image,
@@ -14,7 +34,7 @@ const FeaturedItem = ({
   isPersistLoading,
 }) => {
   const { url, alternativeText } = extractAttributes(image);
-
+  const isMarketPlaceLink = hasLinkTag(text);
   const createMarkup = (html) => {
     // Remove all HTML tags except <br>
     const withoutTags = html.replace(/<(?!br\s*\/?)[^>]+>/gi, "");
@@ -27,6 +47,34 @@ const FeaturedItem = ({
     ));
   };
 
+  if (isMarketPlaceLink) {
+    const extractUrl = extractLink(text) || "";
+    return (
+      <Link
+        href={extractUrl}
+        className={`flex grow items-center justify-center gap-x-4 rounded-full bg-lime-50_01 px-4 py-1.5 ${isWebHorizontal && "md:flex-row"} max-w-52 md:max-w-64 md:gap-2 lg:gap-3 xl:gap-5`}
+      >
+        <Img
+          src={url}
+          width={80}
+          height={20}
+          objectFit="contain"
+          alt={alternativeText || "Feature Icon"}
+          className={`aspect-[10/4] w-full rounded-full max-sm:hidden sm:aspect-[4/2] md:aspect-[4/1.4]`}
+        />
+        <Img
+          src={url}
+          width={40}
+          height={10}
+          objectFit="contain"
+          alt={alternativeText || "Feature Icon"}
+          className={`aspect-[10/4] w-full rounded-full sm:hidden sm:aspect-[4/2] md:aspect-[4/1]`}
+        />
+
+        <ShareNow size={32} />
+      </Link>
+    );
+  }
   return (
     <div
       className={`flex flex-col items-center justify-center gap-1 ${isWebHorizontal && "md:flex-row"} md:gap-2 lg:gap-3 xl:gap-5`}
@@ -80,7 +128,7 @@ const FeaturedList = ({
   return (
     <div
       className={twMerge(
-        `mx-auto flex w-full flex-wrap items-center justify-around gap-y-2 max-xl:!max-w-full md:justify-evenly`,
+        `mx-auto flex w-full flex-wrap items-center justify-around gap-x-2 gap-y-2 max-xl:!max-w-full md:justify-evenly`,
         isInPDP ? "" : "container-main mb-7 md:mb-8",
       )}
     >
