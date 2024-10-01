@@ -185,9 +185,12 @@ export const getInitialData = /* GraphQL */ `
         sku
         flatPrice
         minOrderValue
+        link
+        minimumOrderQuantity
         maximumOrderQuantity
         priority
         isArchive
+        autoApply
         variantId
         productId
         product {
