@@ -65,8 +65,8 @@ export const LimitedTimeDealProduct = ({
         name: "LIMITED_TIME_DEAL",
       },
     });
-    ltoProductItem({
-      product: {
+    ltoProductItem(
+      {
         ...product,
         variantId,
         qty: minimumOrderQuantity || 1,
@@ -74,8 +74,8 @@ export const LimitedTimeDealProduct = ({
         minimumOrderQuantity: minimumOrderQuantity || 1,
         maximumOrderQuantity,
       },
-      type: "ADD",
-    });
+      "ADD",
+    );
   };
 
   const discount = getDiscountPercentage(flatPrice, listingPrice);
@@ -319,15 +319,16 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
           cartItemSource: "LIMITED_TIME_DEAL",
           recordKey: recordKey,
         });
-        ltoProductItem({
-          product: {
+        ltoProductItem(
+          {
             ...product,
+            variantId,
             price: flatPrice,
             minimumOrderQuantity: minimumOrderQuantity || 1,
             maximumOrderQuantity,
           },
-          type: "REMOVE",
-        });
+          "REMOVE",
+        );
       }
     });
   }, [boughtLTOProducts, totalCartAmount]);
@@ -371,8 +372,8 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
             name: "LIMITED_TIME_DEAL",
           },
         });
-        ltoProductItem({
-          product: {
+        ltoProductItem(
+          {
             ...product,
             variantId,
             qty: minimumOrderQuantity || 1,
@@ -380,8 +381,8 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
             minimumOrderQuantity: minimumOrderQuantity || 1,
             maximumOrderQuantity,
           },
-          type: "ADD",
-        });
+          "ADD",
+        );
       }
     });
   }, [totalCartAmount]);
