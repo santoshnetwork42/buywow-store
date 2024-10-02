@@ -1,6 +1,5 @@
 // ==================================================
 // NEW APIs
-
 export const getInitialData = /* GraphQL */ `
   query getInitialData(
     $ltoProductFilter: SearchableUpsellProductFilterInput
