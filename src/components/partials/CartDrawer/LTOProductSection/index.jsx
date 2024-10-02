@@ -220,7 +220,6 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
   //timer
   const [timeLeft, setTimeLeft] = useState("");
   const startTime = useSelector((state) => state?.cart?.cartCreatedAt);
-
   // events and redux
   const { addToCart, removeFromCart } = useCartDispatch();
   const { ltoProductItem } = useEventsDispatch();
