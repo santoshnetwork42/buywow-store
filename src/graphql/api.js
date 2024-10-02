@@ -457,6 +457,12 @@ export const applyCoupon = /* GraphQL */ `
       applicableProducts
       paymentMethod
       applyPrepaidDiscount
+      applyOnAllVariants
+      autoApply
+      deviceType
+      isAffiliated
+      isFeatured
+      isPDPFeatured
     }
   }
 `;
