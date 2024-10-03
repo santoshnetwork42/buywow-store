@@ -1,6 +1,7 @@
 import { DownArrowIconSVG } from "@/assets/svg/icons";
 import { Heading, Text } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { PAGETYPE } from "@/utils/data/constants";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -84,7 +85,7 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
               <SubMenuItem
                 key={`sub-menu-item-${subItem.id || index}`}
                 subItem={subItem}
-                linkPrefix={linkPrefix}
+                linkPrefix={PAGETYPE[subItem?.slugType] || ""}
                 closeMenu={closeMenu}
                 isLast={index === item.subMenu.length - 1}
               />
