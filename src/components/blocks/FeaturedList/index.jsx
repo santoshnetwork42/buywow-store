@@ -125,7 +125,7 @@ const FeaturedList = ({
   return (
     <div
       className={twMerge(
-        `mx-auto flex w-full flex-wrap items-center justify-normal gap-x-6 gap-y-2 max-xl:!max-w-full max-md:justify-evenly`,
+        `mx-auto flex w-full flex-wrap items-center justify-around gap-x-2 gap-y-2 max-xl:!max-w-full md:justify-evenly`,
         isInPDP ? "" : "container-main mb-7 md:mb-8",
       )}
     >
