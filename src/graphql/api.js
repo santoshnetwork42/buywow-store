@@ -1,6 +1,5 @@
 // ==================================================
 // NEW APIs
-
 export const getInitialData = /* GraphQL */ `
   query getInitialData(
     $ltoProductFilter: SearchableUpsellProductFilterInput
@@ -185,9 +184,12 @@ export const getInitialData = /* GraphQL */ `
         sku
         flatPrice
         minOrderValue
+        link
+        minimumOrderQuantity
         maximumOrderQuantity
         priority
         isArchive
+        autoApply
         variantId
         productId
         product {
@@ -454,6 +456,12 @@ export const applyCoupon = /* GraphQL */ `
       applicableProducts
       paymentMethod
       applyPrepaidDiscount
+      applyOnAllVariants
+      autoApply
+      deviceType
+      isAffiliated
+      isFeatured
+      isPDPFeatured
     }
   }
 `;

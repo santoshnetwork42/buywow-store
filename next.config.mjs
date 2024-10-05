@@ -24,8 +24,20 @@ const nextConfig = {
   async redirects() {
     const allRedirects = [
       {
+        source: "/:path*\\.json",
+        destination: "/404",
+        permanent: true,
+        has: [
+          {
+            type: "query",
+            key: "path",
+            value: "(?!^\\.well-known/assetlinks$).*",
+          },
+        ],
+      },
+      {
         source:
-          "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|json|cgi|env|php7|html|php8|asp|pl|save|swp|tmp|php~|exe|orig|old|bkp|copy|cfm|php4|php3)",
+          "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|cgi|env|php7|html|php8|asp|pl|save|swp|tmp|php~|exe|orig|old|bkp|copy|cfm|php4)",
         destination: "/404",
         permanent: false,
       },

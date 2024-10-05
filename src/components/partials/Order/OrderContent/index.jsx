@@ -114,28 +114,7 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   return (
     <>
       <ProgressSteps activeStep={3} className="mb-5 mt-4" />
-      {
-        <Link prefetch={false} className="" href={bannerOnThankYouPage.link}>
-          <Img
-            src={bannerOnThankYouPage?.mWebImage}
-            alt={'Thank you for your order!"'}
-            width={400}
-            height={200}
-            className="rounded-md sm:hidden"
-          />
-        </Link>
-      }
-      {
-        <Link prefetch={false} className="" href={bannerOnThankYouPage.link}>
-          <Img
-            src={bannerOnThankYouPage?.webImage}
-            alt={"Thank you for your order!"}
-            width={1400}
-            height={400}
-            className="hidden rounded-md sm:block"
-          />
-        </Link>
-      }
+      <SwopStoreBanner />
       <OrderDetails
         code={order.code || order.id}
         status={order.status}
@@ -186,5 +165,37 @@ const ActionButtons = React.memo(() => (
 ));
 
 ActionButtons.displayName = "ActionButtons";
+
+const SwopStoreBanner = React.memo(() => {
+  const bannerOnThankYouPage = {
+    mWebImage: "/swopstore/swopstore-mweb.jpg",
+    webImage: "/swopstore/swopstore-web.jpg",
+    link: SWOP_STORE_BANNER_URL,
+  };
+  return (
+    <>
+      <Link prefetch={false} className="" href={bannerOnThankYouPage.link}>
+        <Img
+          src={bannerOnThankYouPage?.mWebImage}
+          alt={'Thank you for your order!"'}
+          width={400}
+          height={200}
+          className="rounded-md sm:hidden"
+        />
+      </Link>
+      <Link prefetch={false} className="" href={bannerOnThankYouPage.link}>
+        <Img
+          src={bannerOnThankYouPage?.webImage}
+          alt={"Thank you for your order!"}
+          width={1400}
+          height={400}
+          className="hidden rounded-md sm:block"
+        />
+      </Link>
+    </>
+  );
+});
+
+SwopStoreBanner.displayName = "SwopStoreBanner";
 
 export default OrderContent;

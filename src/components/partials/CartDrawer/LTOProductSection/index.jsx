@@ -30,10 +30,17 @@ export const LimitedTimeDealProduct = ({
   totalAmount,
   ltoProductItem,
 }) => {
-  const { variantId, product, flatPrice, minOrderValue, maximumOrderQuantity } =
-    item;
+  const {
+    variantId,
+    product,
+    flatPrice,
+    minOrderValue,
+    maximumOrderQuantity,
+    minimumOrderQuantity,
+    link = "#",
+  } = item;
 
-  const { slug, listingPrice, title, images } = product || {};
+  const { slug, listingPrice, title } = product || {};
   const variant = product?.variants?.items?.find((i) => i.id === variantId);
 
   //images
@@ -45,31 +52,35 @@ export const LimitedTimeDealProduct = ({
     addToCart({
       ...product,
       price: flatPrice,
-      minimumOrderQuantity: 1,
+      qty: minimumOrderQuantity || 1,
+      variantId,
+      minimumOrderQuantity: minimumOrderQuantity || 1,
       maximumOrderQuantity,
       ...(variantId && { title: `${title} - ${variant.title}` }),
-      qty: 1,
       cartItemSource: "LIMITED_TIME_DEAL",
-      recordKey: getRecordKey(item.product, item.variantId, true), //(product,variantId,isLtoProduct)
+      cartItemType: "LIMITED_TIME_DEAL",
+      recordKey: getRecordKey(product, variantId, true), //(product,variantId,isLtoProduct)
       section: {
         id: "LIMITED_TIME_DEAL".toLowerCase().replace(/\ /g, "-"),
         name: "LIMITED_TIME_DEAL",
       },
     });
-    ltoProductItem({
-      product: {
+    ltoProductItem(
+      {
         ...product,
+        variantId,
+        qty: minimumOrderQuantity || 1,
         price: flatPrice,
-        minimumOrderQuantity: 1,
+        minimumOrderQuantity: minimumOrderQuantity || 1,
         maximumOrderQuantity,
       },
-      type: "ADD",
-    });
+      "ADD",
+    );
   };
 
   const discount = getDiscountPercentage(flatPrice, listingPrice);
-
   const isLocked = minOrderValue > totalAmount;
+  const flatPriceDecimal = toDecimal(flatPrice);
 
   return (
     <Link
@@ -77,23 +88,28 @@ export const LimitedTimeDealProduct = ({
       href={`/product/${slug}`}
       className="relative flex min-h-40 w-full min-w-80 rounded-md bg-white-a700 p-2.5 shadow md:min-w-96 md:p-3"
     >
-      <div className="flex flex-col gap-y-2">
+      <div className="flex grow flex-col gap-y-1">
         <div className="flex min-h-10 flex-col justify-between">
           <Heading
             as={"p"}
             size="sm"
-            className="line-clamp-2 flex items-center gap-x-2 pb-1 tracking-wide text-green-500"
+            className="line-clamp-2 flex items-center gap-x-2 pb-1 !normal-case tracking-wide text-green-500"
           >
             {isLocked ? (
               <>
                 <PendingLockIcon size={22} />
-                Shop for ₹{Math.round(minOrderValue - totalAmount, 2)} more to
-                unlock limited time deal
+                <div>
+                  Shop for{" "}
+                  <span className="inline font-extrabold">
+                    ₹{Math.round(minOrderValue - totalAmount, 2)} more
+                  </span>{" "}
+                  to unlock special price
+                </div>
               </>
             ) : (
               <>
                 <TagIcon size={20} />
-                Yay !! Get {discount}% off on this product
+                Yay! Get {discount}% off on this product
               </>
             )}
           </Heading>
@@ -122,7 +138,7 @@ export const LimitedTimeDealProduct = ({
                 <Heading
                   as="h4"
                   size="base"
-                  className="line-clamp-2 text-sm font-semibold"
+                  className="line-clamp-1 text-sm font-semibold"
                   responsive
                 >
                   {title}
@@ -132,7 +148,7 @@ export const LimitedTimeDealProduct = ({
             <div className="flex justify-between gap-10">
               <div className="flex shrink items-center gap-2">
                 <Heading as="span" size="lg" className="text-base" responsive>
-                  ₹{toDecimal(flatPrice)}
+                  ₹{flatPriceDecimal}
                 </Heading>
                 {listingPrice > flatPrice && (
                   <Text
@@ -156,28 +172,42 @@ export const LimitedTimeDealProduct = ({
                 )}
               </div>
 
-              <Button
-                variant="primary"
-                disabled={isLocked}
-                className={twMerge(
-                  "h-fit shrink-0 rounded-md px-4 py-1.5 text-sm",
-                  isLocked ? "" : "",
-                )}
-                onClick={(e) => {
-                  if (!isLocked) {
+              {!isLocked && (
+                <Button
+                  variant="primary"
+                  className={twMerge(
+                    "h-fit shrink-0 rounded-md px-4 py-1.5 text-sm",
+                    isLocked ? "backdrop-blur-lg backdrop-filter" : "",
+                  )}
+                  onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     handleAddToCart(e);
-                  } else {
-                    showToast.error(
-                      `Shop for ₹${Math.round(minOrderValue - totalAmount, 2)} more  to unlock limited time deal`,
-                    );
-                  }
-                }}
-              >
-                {isLocked ? "Unlock" : "Add"}
-              </Button>
+                  }}
+                >
+                  Add
+                </Button>
+              )}
+              {isLocked && (
+                <div className="rounded-md bg-yellow-900 px-4 py-1.5 text-white-a700_01">
+                  <Link prefetch={false} href={link ?? "#"} className="flex">
+                    <Text
+                      as="span"
+                      size="sm"
+                      className="flex items-center justify-center gap-2 overflow-hidden text-sm font-medium capitalize !leading-tight text-white-a700_01 transition-colors duration-200"
+                      responsive
+                    >
+                      Unlock
+                    </Text>
+                  </Link>
+                </div>
+              )}
             </div>
+            {minimumOrderQuantity > 1 && (
+              <Text as="span" size="xs" className="font-light">
+                Minimum Order Quantity: {minimumOrderQuantity}
+              </Text>
+            )}
           </div>
         </div>
       </div>
@@ -190,16 +220,6 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
   //timer
   const [timeLeft, setTimeLeft] = useState("");
   const startTime = useSelector((state) => state?.cart?.cartCreatedAt);
-
-  // get cart total
-  const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
-  const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
-
-  const { totalAmount } = useCartTotal({
-    paymentType: prepaidEnabled ? "PREPAID" : "COD",
-    isRewardApplied,
-  });
-
   // events and redux
   const { addToCart, removeFromCart } = useCartDispatch();
   const { ltoProductItem } = useEventsDispatch();
@@ -239,9 +259,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
     if (!ltoProducts || !cartItems)
       return { notBoughtLTOProducts: [], boughtLTOProducts: [] };
 
-    const cartRecordKeys = new Set(
-      cartItems.map((cartItem) => cartItem.recordKey),
-    );
+    const cartRecordKeys = cartItems.map((cartItem) => cartItem.recordKey);
 
     return ltoProducts?.reduce(
       (acc, ltoProduct) => {
@@ -250,7 +268,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
           ltoProduct.variantId,
           true,
         );
-        if (cartRecordKeys.has(recordKey)) {
+        if (cartRecordKeys.includes(recordKey)) {
           acc.boughtLTOProducts.push(ltoProduct);
         } else {
           acc.notBoughtLTOProducts.push(ltoProduct);
@@ -261,20 +279,21 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
     );
   }, [ltoProducts, cartItems]);
 
-  const totalAmountWithoutLTOProducts = useMemo(() => {
-    if (!ltoProducts || !cartItems) return totalAmount;
+  const totalCartAmount = useMemo(() => {
+    if (!cartItems) return 0;
 
-    const cartRecordKeys = new Set(
-      cartItems.map((cartItem) => cartItem.recordKey),
-    );
-
-    return ltoProducts
-      .filter((ltoProduct) =>
-        cartRecordKeys.has(
-          getRecordKey(ltoProduct.product, ltoProduct.variantId, true),
-        ),
-      )
-      .reduce((acc, item) => acc - item.flatPrice, totalAmount);
+    // get cart item which don't have limited time deal
+    return cartItems?.reduce((acc, cartItem) => {
+      if (
+        !(
+          cartItem.cartItemType === "LIMITED_TIME_DEAL" ||
+          cartItem.cartItemType === "FREE_PRODUCT"
+        )
+      ) {
+        acc += cartItem.price * cartItem.qty;
+      }
+      return acc;
+    }, 0);
   }, [cartItems]);
 
   useEffect(() => {
@@ -285,32 +304,87 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
         minOrderValue,
         product,
         flatPrice,
+        minimumOrderQuantity,
         maximumOrderQuantity,
         variantId,
       } = lto;
-      if (minOrderValue > totalAmountWithoutLTOProducts) {
+      if (minOrderValue > totalCartAmount) {
         const recordKey = getRecordKey(product, variantId, true);
         removeFromCart({
           ...product,
           price: flatPrice,
-          minimumOrderQuantity: 1,
+          minimumOrderQuantity: minimumOrderQuantity || 1,
           maximumOrderQuantity,
           cartItemSource: "LIMITED_TIME_DEAL",
           recordKey: recordKey,
         });
-        ltoProductItem({
-          product: {
+        ltoProductItem(
+          {
             ...product,
+            variantId,
             price: flatPrice,
-            minimumOrderQuantity: 1,
+            minimumOrderQuantity: minimumOrderQuantity || 1,
             maximumOrderQuantity,
           },
-          type: "REMOVE",
-        });
+          "REMOVE",
+        );
       }
     });
-  }, [boughtLTOProducts, totalAmountWithoutLTOProducts]);
+  }, [boughtLTOProducts, totalCartAmount]);
 
+  useEffect(() => {
+    const autoApplyLTOProducts = notBoughtLTOProducts?.filter(
+      (i) => i.autoApply,
+    );
+    const cartRecordKeys = cartItems.map((cartItem) => cartItem.recordKey);
+    autoApplyLTOProducts?.forEach((item) => {
+      const {
+        variantId,
+        product,
+        flatPrice,
+        minOrderValue,
+        maximumOrderQuantity,
+        minimumOrderQuantity,
+      } = item;
+
+      const { title } = product || {};
+      const variant = product?.variants?.items?.find((i) => i.id === variantId);
+
+      const recordKey = getRecordKey(product, variantId, true);
+      if (
+        minOrderValue < totalCartAmount &&
+        !cartRecordKeys.includes(recordKey)
+      ) {
+        addToCart({
+          ...product,
+          price: flatPrice,
+          qty: minimumOrderQuantity || 1,
+          variantId,
+          minimumOrderQuantity: minimumOrderQuantity || 1,
+          maximumOrderQuantity,
+          ...(variantId && { title: `${title} - ${variant.title}` }),
+          cartItemSource: "LIMITED_TIME_DEAL",
+          cartItemType: "LIMITED_TIME_DEAL",
+          recordKey: getRecordKey(product, variantId, true), //(product,variantId,isLtoProduct)
+          section: {
+            id: "LIMITED_TIME_DEAL".toLowerCase().replace(/\ /g, "-"),
+            name: "LIMITED_TIME_DEAL",
+          },
+        });
+        ltoProductItem(
+          {
+            ...product,
+            variantId,
+            qty: minimumOrderQuantity || 1,
+            price: flatPrice,
+            minimumOrderQuantity: minimumOrderQuantity || 1,
+            maximumOrderQuantity,
+          },
+          "ADD",
+        );
+      }
+    });
+  }, [totalCartAmount]);
   // if no lto products or timer off
   if (!notBoughtLTOProducts?.length || !timeLeft) return null;
 
@@ -351,7 +425,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
             item={item}
             addToCart={addToCart}
             ltoProductItem={ltoProductItem}
-            totalAmount={totalAmountWithoutLTOProducts}
+            totalAmount={totalCartAmount}
           />
         ))}
       </Slider>
