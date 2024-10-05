@@ -49,29 +49,26 @@ const FeaturedItem = ({
 
   if (isMarketPlaceLink) {
     const extractUrl = extractLink(text) || "";
+
     return (
       <Link
         href={extractUrl}
-        className={`flex grow items-center justify-center gap-x-4 rounded-full bg-lime-50_01 px-4 py-1.5 ${isWebHorizontal && "md:flex-row"} max-w-52 md:max-w-64 md:gap-2 lg:gap-3 xl:gap-5`}
+        // className={`flex max-w-72 items-center justify-center gap-4 rounded-full bg-lime-50_01`}
+        className="flex max-w-40 items-center justify-between gap-4 rounded-full bg-lime-50 px-4 py-1 md:max-w-[8rem] lg:max-w-[11rem]"
       >
-        <Img
-          src={url}
-          width={80}
-          height={20}
-          objectFit="contain"
-          alt={alternativeText || "Feature Icon"}
-          className={`aspect-[10/4] w-full rounded-full max-sm:hidden sm:aspect-[4/2] md:aspect-[4/1.4]`}
-        />
-        <Img
-          src={url}
-          width={40}
-          height={10}
-          objectFit="contain"
-          alt={alternativeText || "Feature Icon"}
-          className={`aspect-[10/4] w-full rounded-full sm:hidden sm:aspect-[4/2] md:aspect-[4/1]`}
-        />
-
-        <ShareNow size={32} />
+        <div className="max-w-30">
+          <Img
+            src={url}
+            width={100}
+            height={100}
+            alt={alternativeText || "Additional Ingredient"}
+            className="aspect-[4/2] object-contain"
+            loading="lazy"
+          />
+        </div>
+        <div>
+          <ShareNow size={28} />
+        </div>
       </Link>
     );
   }
@@ -128,7 +125,7 @@ const FeaturedList = ({
   return (
     <div
       className={twMerge(
-        `mx-auto flex w-full flex-wrap items-center justify-around gap-x-2 gap-y-2 max-xl:!max-w-full md:justify-evenly`,
+        `mx-auto flex w-full flex-wrap items-center justify-normal gap-x-6 gap-y-2 max-xl:!max-w-full max-md:justify-evenly`,
         isInPDP ? "" : "container-main mb-7 md:mb-8",
       )}
     >
