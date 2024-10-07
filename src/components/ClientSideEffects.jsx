@@ -21,7 +21,9 @@ const ClientSideEffects = () => {
   const { auth } = useEventsDispatch();
   const { storeCoupon } = useCartDispatch();
 
-  const couponCode = searchParams.get("couponCode")?.split("&")[0];
+  const couponCode =
+    searchParams.get("couponCode")?.split("&")[0] ||
+    searchParams.get("couponcode")?.split("&")[0];
 
   useEffect(() => {
     if (couponCode) {
