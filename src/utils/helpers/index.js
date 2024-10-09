@@ -440,3 +440,65 @@ export async function fetchSearchItems(search, limit = 1) {
     return [];
   }
 }
+
+export const extractCollectionSlug = (url) => {
+  const regex = /\/collections\/([^/?]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
+};
+
+export const extractCouponsForApplicableCollection = ({
+  coupons = [],
+  collectionSlug,
+}) => {
+  const extractedCollectionSlug = extractCollectionSlug(collectionSlug);
+
+  const filteredCoupons = coupons.filter(
+    (coupon) =>
+      !coupon.applicableProducts.length &&
+      (!coupon.applicableCollections.length ||
+        coupon.applicableCollections.includes(extractedCollectionSlug)) &&
+      (coupon.couponType === "BUY_X_AT_Y" ||
+        coupon.couponType === "BUY_X_GET_Y"),
+  );
+
+  filteredCoupons.sort(
+    (a, b) =>
+      a.buyXQuantity +
+      (a.getYQuantity || 0) -
+      (b.buyXQuantity + (b.getYQuantity || 0)),
+  );
+
+  return filteredCoupons;
+};
+
+const sumCartItemsQuantity = (cartItems, collectionSlug) => {
+  return cartItems
+    .filter((item) => item.collections.includes(collectionSlug))
+    .reduce((total, item) => total + (item.qty || 0), 0);
+};
+
+export const calculateCollectionNudgeMessage = ({
+  pathname,
+  cartItems,
+  nudgeFeat,
+}) => {
+  if (!nudgeFeat?.length) return;
+  const collectionSlug = extractCollectionSlug(pathname);
+
+  const lastCoupon = nudgeFeat[nudgeFeat?.length - 1];
+  const maxProgressQuantity =
+    lastCoupon?.buyXQuantity + lastCoupon?.getYQuantity || 0;
+
+  const currQuantity = sumCartItemsQuantity(cartItems, collectionSlug);
+
+  return { currQuantity, maxProgressQuantity };
+  // nudgeFeat.buyXQuantity
+  // cartItems.length
+  // if cartItems.length
+
+  // const dm = cartItems.filter((item) =>
+  //   item.collections.includes(collectionSlug),
+  // ).length;
+  // console.log("dm :>> ", dm);
+};

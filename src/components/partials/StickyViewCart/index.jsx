@@ -2,12 +2,12 @@
 
 import { Button, Heading, Text } from "@/components/elements";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
-import { useIsInteractive } from "@/utils/context/navbar";
+import { useIsInteractive, useNudgeFeat } from "@/utils/context/navbar";
 import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
-import { toDecimal } from "@/utils/helpers";
+import { calculateCollectionNudgeMessage, toDecimal } from "@/utils/helpers";
 import { useCartItems, useCartTotal } from "@wow-star/utils";
 import { usePathname } from "next/navigation";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 const CartSummary = React.memo(
@@ -30,9 +30,14 @@ CartSummary.displayName = "CartSummary";
 
 const StickyViewCart = () => {
   const isInteractive = useIsInteractive();
+  const nudgeFeat = useNudgeFeat();
+  // console.log("nudgeFeat :>> ", nudgeFeat);
   const pathname = usePathname();
 
   const { handleCartVisibility } = useModalDispatch();
+  const [currQuantity, setCurrQuantity] = React.useState(0);
+  const [maxProgressQuantity, setMaxProgressQuantity] = React.useState(0);
+
   const isRewardApplied = useSelector(
     (state) => state.cart?.isRewardApplied || false,
   );
@@ -52,6 +57,21 @@ const StickyViewCart = () => {
       ),
     [pathname],
   );
+
+  const abc = () => {
+    const { currQuantity = 0, maxProgressQuantity = 0 } =
+      calculateCollectionNudgeMessage({
+        pathname,
+        cartItems,
+        nudgeFeat,
+      }) || {};
+    setMaxProgressQuantity(maxProgressQuantity);
+    setCurrQuantity(currQuantity);
+  };
+
+  useEffect(() => {
+    abc();
+  }, [nudgeFeat, cartItems, pathname]);
 
   const { grandTotal, totalItems, prepaidDiscountPercent, prepaidDiscount } =
     useCartTotal({
@@ -87,12 +107,12 @@ const StickyViewCart = () => {
     return "";
   };
 
-  let isNudge = getCollectionWiseNudgeMsg();
+  // let isNudge = abc();
 
   return (
     <>
       <div className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">
-        {!!isNudge && !!cartItems.length && (
+        {/* {!!isNudge && !!cartItems.length && (
           <div className="bg-blue_gray-400_01 py-1.5 text-center sm:rounded-t-md">
             <Text
               as="p"
@@ -103,7 +123,38 @@ const StickyViewCart = () => {
               {isNudge}
             </Text>
           </div>
-        )}
+        )} */}
+        <div className="relative flex w-full px-4">
+          <div className="flex w-full justify-between border-gray-500">
+            <div
+              style={{
+                width: `${(100 / maxProgressQuantity) * currQuantity}%`,
+              }}
+              className="bg-gray-400"
+            >
+              {currQuantity}
+            </div>
+            <div>{maxProgressQuantity}</div>
+          </div>
+          {nudgeFeat && (
+            <div className="absolute left-0 flex h-4 w-full px-4">
+              {nudgeFeat?.map((item, index) => {
+                return (
+                  <div
+                    key={index}
+                    style={{ width: `${100 / nudgeFeat.length}%` }}
+                    className={`flex justify-center`}
+                  >
+                    {JSON.stringify(
+                      item.buyXQuantity + (item.getYQuantity || 0) <=
+                        currQuantity,
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
         <div className="flex flex-grow items-center justify-between px-5 py-2">
           <CartSummary
             totalItems={totalItems}

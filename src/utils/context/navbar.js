@@ -11,6 +11,7 @@ import Cookie from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { extractCouponsForApplicableCollection } from "@/utils/helpers";
 
 const client = generateClient();
 
@@ -30,11 +31,18 @@ function NavbarProvider({ children, headerData }) {
   const _source = searchParams.get("_source");
 
   const [initialData, setInitialData] = useState(null);
+  const [nudgeFeat, setNudgeFeat] = useState(null);
 
   useEffect(() => {
     fetchInitialData()
       .then((data) => {
         setInitialData(data);
+        setNudgeFeat(
+          extractCouponsForApplicableCollection({
+            coupons: data?.getTopCoupons?.items,
+            collectionSlug: pathname,
+          }),
+        );
       })
       .catch((err) => {
         console.error("Error fetching initial data:", err);
@@ -85,6 +93,7 @@ function NavbarProvider({ children, headerData }) {
     isInteractive,
     source,
     headerData,
+    nudgeFeat,
   };
 
   return (
@@ -150,6 +159,11 @@ export const useSource = () => {
 export const useIsInteractive = () => {
   const { isInteractive } = useContext(NavbarContext) || {};
   return isInteractive;
+};
+
+export const useNudgeFeat = () => {
+  const { nudgeFeat } = useContext(NavbarContext) || {};
+  return nudgeFeat;
 };
 
 export const useGuestCheckout = () => {
