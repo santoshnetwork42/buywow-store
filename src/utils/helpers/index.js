@@ -82,16 +82,6 @@ export const getUpdatedCart = (cartList = [], recordKey, payload) => {
     if (recordKey === item.recordKey) {
       return { ...item, ...payload };
     }
-    if (
-      item.cartItemSource === "LIMITED_TIME_DEAL" &&
-      item.parentRecordKey === recordKey &&
-      payload.recordKey
-    ) {
-      return {
-        ...item,
-        parentRecordKey: payload.recordKey,
-      };
-    }
 
     return item;
   });

@@ -1,24 +1,21 @@
 "use client";
 
+import CartWithPlus from "@/assets/svg/cartWithPlus";
 import PendingLockIcon from "@/assets/svg/pendingLockIcon";
 import TagIcon from "@/assets/svg/tagIcon";
-import { showToast } from "@/components/common/ToastComponent";
 import { Button, Heading, Text } from "@/components/elements";
 import ProgressBar from "@/components/features/ProgressBar";
 import Slider from "@/components/features/Slider";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
-import {
-  LIMITED_TIME_DEAL_DURATION_IN_MINUTES,
-  PREPAID_ENABLED,
-} from "@/utils/data/constants";
+import { LIMITED_TIME_DEAL_DURATION_IN_MINUTES } from "@/utils/data/constants";
 import {
   getDiscountPercentage,
   getRecordKey,
   toDecimal,
 } from "@/utils/helpers";
-import { getThumbImage, useCartTotal, useConfiguration } from "@wow-star/utils";
+import { getThumbImage } from "@wow-star/utils";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
@@ -88,7 +85,7 @@ export const LimitedTimeDealProduct = ({
       href={`/product/${slug}`}
       className="relative flex min-h-40 w-full min-w-80 rounded-md bg-white-a700 p-2.5 shadow md:min-w-96 md:p-3"
     >
-      <div className="flex grow flex-col gap-y-1">
+      <div className="flex grow flex-col gap-y-2">
         <div className="flex min-h-10 flex-col justify-between">
           <Heading
             as={"p"}
@@ -106,10 +103,15 @@ export const LimitedTimeDealProduct = ({
                   to unlock special price
                 </div>
               </>
-            ) : (
+            ) : !!discount ? (
               <>
                 <TagIcon size={20} />
                 Yay! Get {discount}% off on this product
+              </>
+            ) : (
+              <>
+                <CartWithPlus size={24} />
+                Complete your shopping journey with this must have!
               </>
             )}
           </Heading>
@@ -120,10 +122,10 @@ export const LimitedTimeDealProduct = ({
             )}
           />
         </div>
-        <div className="flex min-h-20">
+        <div className="flex min-h-20 gap-x-2">
           <div
             className="flex aspect-[74/80] w-[74px] items-center overflow-hidden rounded"
-            style={{ backgroundColor: "rgb(255, 255, 255)" }}
+            style={{ backgroundColor: "#F7F7E7" }}
           >
             <ProductThumbnail
               height={100}
@@ -132,18 +134,16 @@ export const LimitedTimeDealProduct = ({
             />
           </div>
           <div className="flex flex-1 flex-col gap-2">
-            <div className="flex flex-1 flex-col gap-2">
-              <div className="flex justify-between gap-2">
-                {" "}
-                <Heading
-                  as="h4"
-                  size="base"
-                  className="line-clamp-1 text-sm font-semibold"
-                  responsive
-                >
-                  {title}
-                </Heading>
-              </div>
+            <div className="flex flex-1 flex-col justify-between gap-2">
+              {" "}
+              <Heading
+                as="h4"
+                size="base"
+                className="line-clamp-1 text-sm font-semibold"
+                responsive
+              >
+                {title}
+              </Heading>
             </div>
             <div className="flex justify-between gap-10">
               <div className="flex shrink items-center gap-2">
@@ -189,17 +189,40 @@ export const LimitedTimeDealProduct = ({
                 </Button>
               )}
               {isLocked && (
-                <div className="rounded-md bg-yellow-900 px-4 py-1.5 text-white-a700_01">
-                  <Link prefetch={false} href={link ?? "#"} className="flex">
-                    <Text
-                      as="span"
-                      size="sm"
-                      className="flex items-center justify-center gap-2 overflow-hidden text-sm font-medium capitalize !leading-tight text-white-a700_01 transition-colors duration-200"
-                      responsive
+                <div
+                  className={twMerge(
+                    "rounded-md bg-yellow-900 px-4 py-1.5 text-white-a700_01",
+                    !link ? "cursor-not-allowed opacity-50" : "",
+                  )}
+                >
+                  {link ? (
+                    <Link prefetch={false} href={link} className="flex">
+                      <Text
+                        as="span"
+                        size="sm"
+                        className="flex items-center justify-center gap-2 overflow-hidden text-sm font-medium capitalize !leading-tight text-white-a700_01 transition-colors duration-200"
+                        responsive
+                      >
+                        Unlock
+                      </Text>
+                    </Link>
+                  ) : (
+                    <Link
+                      prefetch={false}
+                      href={""}
+                      className="flex"
+                      onClick={(e) => e.preventDefault()}
                     >
-                      Unlock
-                    </Text>
-                  </Link>
+                      <Text
+                        as="span"
+                        size="sm"
+                        className="flex items-center justify-center gap-2 overflow-hidden text-sm font-medium capitalize !leading-tight text-white-a700_01 transition-colors duration-200"
+                        responsive
+                      >
+                        Unlock
+                      </Text>
+                    </Link>
+                  )}
                 </div>
               )}
             </div>
