@@ -28,7 +28,7 @@ function NavbarProvider({ children, headerData }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
-
+ 
   const [initialData, setInitialData] = useState(null);
 
   useEffect(() => {
