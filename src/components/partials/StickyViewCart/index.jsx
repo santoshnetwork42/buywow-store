@@ -28,10 +28,115 @@ const CartSummary = React.memo(
 
 CartSummary.displayName = "CartSummary";
 
+const IntegratedProgressStepper = ({
+  steps,
+  appliedCoupon,
+  currQuantity,
+  maxQuantity,
+}) => {
+  // Ensure currQuantity doesn't exceed maxQuantity
+  const safeCurrentQuantity = Math.min(currQuantity, maxQuantity);
+
+  // Calculate progress percentage
+  const progressPercentage = (safeCurrentQuantity / maxQuantity) * 100;
+
+  // Find the index of the applied coupon
+  const appliedCouponIndex = steps
+    ? steps.findIndex((step) => step.code === appliedCoupon?.code)
+    : -1;
+
+  // Determine the current step based on currQuantity
+  const currentStepIndex = steps?.findIndex(
+    (step) => safeCurrentQuantity <= step.quantity,
+  );
+
+  return (
+    <div className="w-full px-4 py-10">
+      <div className="relative">
+        {/* Progress Bar */}
+        <div className="h-2 rounded-full bg-gray-200">
+          <div
+            style={{ width: `${progressPercentage}%` }}
+            className="h-full rounded-full bg-green-400 transition-all duration-300 ease-in-out"
+          ></div>
+        </div>
+
+        {/* Current and Max Quantity */}
+        {/* <div className="absolute -top-8 left-0 mt-2 flex w-full justify-between text-xs text-gray-600">
+          <span>{safeCurrentQuantity}</span>
+          <span>{maxQuantity}</span>
+        </div> */}
+
+        {/* Steps */}
+        <div className="absolute left-0 top-0 -mt-4 flex w-full justify-between">
+          {steps?.map((step, index) => {
+            const stepPosition = (step.quantity / maxQuantity) * 100;
+            const isCompleted = index < currentStepIndex;
+            const isCurrent = index === currentStepIndex;
+            const isMarked = index <= appliedCouponIndex;
+
+            return (
+              <div
+                key={step.code}
+                className="absolute left-3 top-2 flex justify-end"
+                style={{
+                  width: `${(100 / maxQuantity) * (step.buyXQuantity + (step.getYQuantity || 0))}%`,
+                }}
+              >
+                <div className="flex flex-col items-center justify-center gap-1">
+                  <div
+                    className={`flex h-6 w-6 items-center justify-center rounded-full bg-white-a700_01 transition-all duration-300 ease-in-out ${
+                      isCompleted
+                        ? "border-green-500 bg-green-500 shadow-lg shadow-green-200"
+                        : isCurrent
+                          ? "shadow-lg"
+                          : "bg-white"
+                    } ${isMarked ? "ring-2 ring-green-300 ring-opacity-50" : "border-2 border-green-200"} `}
+                  >
+                    {isCompleted && (
+                      <svg
+                        className="text-white h-4 w-4 transition-opacity duration-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="transition-all duration-300 ease-in-out">
+                    <span
+                      className={`text-xs font-medium ${isMarked ? "text-green-600" : "text-gray-500"} transition-all duration-300 ease-in-out`}
+                    >
+                      {step.name || step.code}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 transform text-center">
+                  <span className="text-xs font-medium text-gray-500 transition-all duration-300 ease-in-out">
+                    {step.quantity}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const StickyViewCart = () => {
   const isInteractive = useIsInteractive();
   const nudgeFeat = useNudgeFeat();
-  // console.log("nudgeFeat :>> ", nudgeFeat);
+  console.log("nudgeFeat :>> ", nudgeFeat);
   const pathname = usePathname();
 
   const { handleCartVisibility } = useModalDispatch();
@@ -124,37 +229,16 @@ const StickyViewCart = () => {
             </Text>
           </div>
         )} */}
-        <div className="relative flex w-full px-4">
-          <div className="flex w-full justify-between border-gray-500">
-            <div
-              style={{
-                width: `${(100 / maxProgressQuantity) * currQuantity}%`,
-              }}
-              className="bg-gray-400"
-            >
-              {currQuantity}
-            </div>
-            <div>{maxProgressQuantity}</div>
-          </div>
-          {nudgeFeat && (
-            <div className="absolute left-0 flex h-4 w-full px-4">
-              {nudgeFeat?.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    style={{ width: `${100 / nudgeFeat.length}%` }}
-                    className={`flex justify-center`}
-                  >
-                    {JSON.stringify(
-                      item.buyXQuantity + (item.getYQuantity || 0) <=
-                        currQuantity,
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          )}
+
+        <div className="mx-auto w-full max-w-4xl">
+          <IntegratedProgressStepper
+            steps={nudgeFeat}
+            appliedCoupon={appliedCoupon}
+            currQuantity={currQuantity}
+            maxQuantity={maxProgressQuantity}
+          />
         </div>
+
         <div className="flex flex-grow items-center justify-between px-5 py-2">
           <CartSummary
             totalItems={totalItems}
