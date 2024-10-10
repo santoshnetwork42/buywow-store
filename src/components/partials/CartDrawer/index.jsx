@@ -240,16 +240,13 @@ const CartDrawer = () => {
   }, [pathname]);
 
   useEffect(() => {
+    const forceOpenCart = searchParams?.get("cart") === "1";
+    const _cx = searchParams?.get("_cx");
+
     const shoppingCartIdFromSearchParams = searchParams?.get("cartId");
-    console.log(shoppingCartId !== shoppingCartIdFromSearchParams);
     if (shoppingCartId !== shoppingCartIdFromSearchParams) {
       updateCartWithShoppingCartId(shoppingCartIdFromSearchParams);
     }
-  }, []);
-
-  useEffect(() => {
-    const forceOpenCart = searchParams?.get("cart") === "1";
-    const _cx = searchParams?.get("_cx");
 
     const shouldForceOpenCart =
       forceOpenCart &&
