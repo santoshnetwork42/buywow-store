@@ -74,7 +74,7 @@ function* placeOrder() {
   yield takeLatest(eventsSagaActions.PLACE_ORDER, placeOrderEventHandler);
 }
 
-function* ltoProductAdded() {
+function* ltoProductItemEvent() {
   yield takeLatest(
     eventsSagaActions.LIMITED_TIME_DEAL_PRODUCT_ITEM,
     ltoProductItemEventHandler,
@@ -193,7 +193,7 @@ export function* eventsWatcher() {
     fork(addToCartEvent),
     fork(removeFromCartEvent),
     fork(applyCoupons),
-    fork(ltoProductAdded),
+    fork(ltoProductItemEvent),
     fork(search),
     fork(priceMisMatch),
     fork(auth),

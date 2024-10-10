@@ -21,14 +21,16 @@ const ClientSideEffects = () => {
   const { auth } = useEventsDispatch();
   const { storeCoupon } = useCartDispatch();
 
-  const couponCode = searchParams.get("couponCode")?.split("&")[0];
-
   useEffect(() => {
+    const couponCode =
+      searchParams.get("couponCode")?.split("&")[0] ||
+      searchParams.get("couponcode")?.split("&")[0];
+
     if (couponCode) {
       storeCoupon(couponCode);
     }
     //   eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams]);
 
   const setMetaData = useCallback(() => {
     const cookieMeta = Cookies.get(`${STORE_PREFIX}_metadata`);

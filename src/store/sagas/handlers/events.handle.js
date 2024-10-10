@@ -460,6 +460,12 @@ export function* ltoProductItemEventHandler({ payload }) {
       "Limited time deal",
       type === "ADD" ? moengage.addToCart : moengage.removedFromCart,
     );
+    if (type === "ADD") {
+      trackEvent("Limited time deal", moengage.addToCart);
+    } else {
+      trackEvent("Limited time deal removed", moengage.removedFromCart);
+    }
+
     // const eventSource = getClientSource();
 
     // if (window && window.dataLayer) {
@@ -1061,6 +1067,10 @@ export function* removeFromCartEventHandler({ payload }) {
       null,
       user,
     );
+
+    if (product.cartItemSource === "LIMITED_TIME_DEAL") {
+      trackEvent("Limited time deal removed", moengage.removedFromCart);
+    }
 
     trackEvent("Removed From Cart", moengage.removedFromCart);
     if (window && window.dataLayer) {

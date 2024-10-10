@@ -61,7 +61,7 @@ const ProductDetails = ({
           Only {currentInventory} left!
         </Text>
       )}
-      {isFreeProduct && !!quantity && (
+      {(isFreeProduct || isLTOProduct) && !!quantity && (
         <Text size="sm" as="p" className="mb-1 mt-2 text-gray-500" responsive>
           Qty: {quantity}
         </Text>
