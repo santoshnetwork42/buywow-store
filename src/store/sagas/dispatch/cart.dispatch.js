@@ -55,6 +55,16 @@ export const useCartDispatch = () => {
     [dispatch],
   );
 
+  const checkoutInitiated = useCallback(
+    (isAbandonedCart) => {
+      dispatch({
+        type: cartSagaActions.MANAGE_CART,
+        payload: { isCheckoutInitiated: true, isAbandonedCart },
+      });
+    },
+    [dispatch],
+  );
+
   const removeCoupon = useCallback(() => {
     dispatch({
       type: cartSagaActions.REMOVE_COUPON,
@@ -99,6 +109,16 @@ export const useCartDispatch = () => {
     [dispatch],
   );
 
+  const updateCartWithShoppingCartId = useCallback(
+    (cartId) => {
+      dispatch({
+        type: cartSagaActions.UPDATE_CART_WITH_SHOPPING_CART_ID,
+        payload: { cartId },
+      });
+    },
+    [dispatch],
+  );
+
   const storeCoupon = useCallback(
     (couponCode) => {
       dispatch({
@@ -123,6 +143,7 @@ export const useCartDispatch = () => {
     addToCart,
     removeFromCart,
     updateCart,
+    checkoutInitiated,
     applyRewardPoint,
     applyCoupon,
     removeCoupon,
@@ -132,5 +153,6 @@ export const useCartDispatch = () => {
     updateCartIdLoading,
     storeCoupon,
     fetchAndAddProductsFromEncodedCart,
+    updateCartWithShoppingCartId,
   };
 };

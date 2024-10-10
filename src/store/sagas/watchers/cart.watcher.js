@@ -12,6 +12,7 @@ import {
   updateCartIdHandler,
   updateCartIdLoadingHandler,
   validateCartHandler,
+  updateCartWithShoppingCartIdHandler,
 } from "@/store/sagas/handlers/cart.handle";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { all, fork, takeEvery, takeLatest } from "redux-saga/effects";
@@ -59,6 +60,13 @@ function* updateCartIdLoading() {
   );
 }
 
+function* updateCartWithShoppingCartId() {
+  yield takeLatest(
+    cartSagaActions.UPDATE_CART_WITH_SHOPPING_CART_ID,
+    updateCartWithShoppingCartIdHandler,
+  );
+}
+
 function* storedCouponCode() {
   yield takeLatest(cartSagaActions.STORED_COUPON_CODE, storedCouponCodeHandler);
 }
@@ -86,6 +94,7 @@ export function* cartWatcher() {
     fork(validateCart),
     fork(updateCartId),
     fork(updateCartIdLoading),
+    fork(updateCartWithShoppingCartId),
     fork(storedCouponCode),
     fork(manageCart),
     fork(fetchAndAddProductsFromEncodedCart),

@@ -592,6 +592,185 @@ export const getOrder = /* GraphQL */ `
   }
 `;
 
+// createdAt: ModKeyConditionInput;
+// filter: ModelShoppingCartProductFilterInput;
+// sortDirection: ModelSortDirection;
+// limit: Int;
+// nextToken: String;
+
+export const getShoppingCart = /* GraphQL */ `
+  query GetShoppingCart($id: ID!) {
+    getShoppingCart(id: $id) {
+      id
+      storeId
+      userId
+      couponCodeId
+      couponCode
+      paymentType
+      appliedRewardPoints
+      coupon {
+        id
+        code
+        storeId
+        prefix
+        userId
+        name
+        description
+        couponNote
+        couponTitle
+        couponType
+        deviceType
+        expirationDate
+        couponCodeCount
+        tAndC
+        buyXQuantity
+        minOrderValue
+        maxDiscount
+        maxAllowedUsage
+        applicableCollections
+        applicableProducts
+        paymentMethod
+        ppcodCouponAmount
+        isArchive
+        isFeatured
+        isBulkCoupon
+        autoApply
+        isAffiliated
+        applyPrepaidDiscount
+        priority
+        applyOnAllVariants
+        isPDPFeatured
+        createdBy
+        updatedBy
+        createdAt
+        updatedAt
+      }
+      utmSource
+      utmContent
+      utmMedium
+      utmCampaign
+      utmTerm
+      source
+      referrer
+      landingPage
+      createdAt
+      updatedAt
+      shoppingcartProducts {
+        items {
+          id
+          productId
+          product {
+            id
+            minimumOrderQuantity
+            maximumOrderQuantity
+            title
+            collections
+            vendor
+            subCategory {
+              name
+              slug
+            }
+            isFeatured
+            category {
+              name
+              slug
+            }
+            slug
+            price
+            sku
+            position
+            listingPrice
+            tags
+            inventory
+            blockedInventory
+            continueSellingOutOfStock
+            rating
+            totalRatings
+            thumbImages
+            isInventoryEnabled
+            totalOrders
+            variantGroups {
+              variantGroupId
+              variantGroupOptionIds
+            }
+            variants {
+              items {
+                id
+                minimumOrderQuantity
+                maximumOrderQuantity
+                title
+                price
+                position
+                listingPrice
+                productVariantOptionIds {
+                  variantGroupId
+                  variantGroupOptionId
+                }
+                images {
+                  items {
+                    id
+                    position
+                    alt
+                    width
+                    height
+                    imageKey
+                    isThumb
+                  }
+                }
+                inventory
+                blockedInventory
+              }
+            }
+            images {
+              items {
+                id
+                position
+                alt
+                width
+                height
+                imageKey
+                isThumb
+              }
+            }
+          }
+          variantId
+          variant {
+            id
+            minimumOrderQuantity
+            maximumOrderQuantity
+            title
+            price
+            position
+            listingPrice
+            productVariantOptionIds {
+              variantGroupId
+              variantGroupOptionId
+            }
+            images {
+              items {
+                id
+                position
+                alt
+                width
+                height
+                imageKey
+                isThumb
+              }
+            }
+            inventory
+            blockedInventory
+          }
+          quantity
+          source
+          createdAt
+          updatedAt
+        }
+      }
+      expiresAt
+    }
+  }
+`;
+
 export const getProductById = /* GraphQL */ `
   query GetProduct($id: ID!) {
     getProduct(id: $id) {

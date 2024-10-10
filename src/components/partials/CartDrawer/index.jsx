@@ -81,8 +81,13 @@ const CartDrawer = () => {
   );
   const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
-  const { validateCart, fetchAndAddProductsFromEncodedCart, applyRewardPoint } =
-    useCartDispatch();
+  const {
+    validateCart,
+    fetchAndAddProductsFromEncodedCart,
+    applyRewardPoint,
+    updateCartWithShoppingCartId,
+    checkoutInitiated,
+  } = useCartDispatch();
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
   const { handleOutOfStock, handleProceedToCheckout, viewCart } =
     useEventsDispatch();
@@ -137,6 +142,7 @@ const CartDrawer = () => {
       return false;
     }
 
+    checkoutInitiated(!!searchParams?.get("cart"));
     handleCartVisibility(false);
 
     if (user?.id) {
@@ -232,6 +238,20 @@ const CartDrawer = () => {
     handleCartVisibility(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
+
+  const handleAbandonedCart = (shoppingCartId) => {
+    // cartId, coupons, ltoProducts
+
+    updateCartWithShoppingCartId(shoppingCartId);
+  };
+
+  useEffect(() => {
+    const shoppingCartIdFromSearchParams = searchParams?.get("cartId");
+
+    if (shoppingCartId !== shoppingCartIdFromSearchParams) {
+      handleAbandonedCart(shoppingCartIdFromSearchParams);
+    }
+  }, []);
 
   useEffect(() => {
     const forceOpenCart = searchParams?.get("cart") === "1";
@@ -346,7 +366,7 @@ const CartDrawer = () => {
                 cashbackAmount={prepaidCashbackRewardsOnOrder}
                 amountNeeded={amountNeededToAvailCashback}
               />
-              <CheckoutSummary />
+              {prepaidCashbackRewardsOnOrder && <CheckoutSummary />}
             </div>
 
             <div
