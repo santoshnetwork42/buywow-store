@@ -239,17 +239,11 @@ const CartDrawer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
-  const handleAbandonedCart = (shoppingCartId) => {
-    // cartId, coupons, ltoProducts
-
-    updateCartWithShoppingCartId(shoppingCartId);
-  };
-
   useEffect(() => {
     const shoppingCartIdFromSearchParams = searchParams?.get("cartId");
-
+    console.log(shoppingCartId !== shoppingCartIdFromSearchParams);
     if (shoppingCartId !== shoppingCartIdFromSearchParams) {
-      handleAbandonedCart(shoppingCartIdFromSearchParams);
+      updateCartWithShoppingCartId(shoppingCartIdFromSearchParams);
     }
   }, []);
 

@@ -222,15 +222,13 @@ export function* updateCartWithShoppingCartIdHandler(action) {
     const shoppingcartProducts = shoppingCart.shoppingcartProducts.items || [];
     if (!shoppingCart.shoppingcartProducts.items?.length) return;
 
-    yield put(emptyCart());
-
-    // set cartId
-    console.log(cartId, "_____________SET IN LOCAL___________", STORE_PREFIX);
+    // empty cart first if mismatch cart present
+    yield put({ type: cartSagaActions.EMPTY_CART });
+    // add cartId
     localStorage.setItem(`${STORE_PREFIX}-cartId`, cartId);
     yield put({ type: cartSagaActions.UPDATE_CART_ID, payload: cartId });
-    console.log(cartId, "_____________UPDATE_CART_ID___________");
 
-    // add to shopping cart to db
+    // add shopping cart to db
     for (let i = 0; i < shoppingcartProducts.length; i++) {
       const { quantity, source, variantId, product, variant } =
         shoppingcartProducts[i];
@@ -249,13 +247,12 @@ export function* updateCartWithShoppingCartIdHandler(action) {
         };
       }
 
-      console.log(source, "source");
       if (!(source === "LIMITED_TIME_DEAL" || source === "COUPON"))
         yield call(addToCartHandler, {
           payload: { product: cartProduct },
         });
     }
-    // coupon code apply if autoapply then ok
+    // coupon code apply so source === "COUPON" products will get added here
     if (!!couponCode) yield put(setStoredCouponCode(couponCode));
 
     yield call(setCartModalHandler, {
