@@ -244,7 +244,11 @@ const CartDrawer = () => {
     const _cx = searchParams?.get("_cx");
 
     const shoppingCartIdFromSearchParams = searchParams?.get("cartId");
-    if (shoppingCartId !== shoppingCartIdFromSearchParams) {
+
+    if (
+      shoppingCartId !== shoppingCartIdFromSearchParams &&
+      !!shoppingCartIdFromSearchParams
+    ) {
       updateCartWithShoppingCartId(shoppingCartIdFromSearchParams);
     }
 

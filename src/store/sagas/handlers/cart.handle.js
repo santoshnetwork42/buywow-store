@@ -272,8 +272,7 @@ export function* manageCartHandler(action) {
 
     yield put({ type: cartSagaActions.UPDATE_CART_ID_LOADING, payload: true });
 
-    const { isAbandonedCart = true, isCheckoutInitiated = false } =
-      action?.payload || {};
+    const { isCheckoutInitiated = false } = action?.payload || {};
     const { user, cart, system } = yield select();
     let { coupon, data: products, isRewardApplied } = cart;
     const { user: userData, isLoggedinViaGokwik } = user;
@@ -296,18 +295,16 @@ export function* manageCartHandler(action) {
         userData?.id && !isLoggedinViaGokwik ? isRewardApplied : false,
       data,
       metadata: { ...system?.meta, isAffiseTrackingValid },
-      // isCheckoutInitiated,
+      isCheckoutInitiated,
     };
 
     if (cart.cartId) {
       cartInput.shoppingCartId = cart.cartId;
     }
-    console.log;
-    // here i have just by pass create shoppping cart for abandonedCart (kwikpass), dont know why userData?.id is there
-    const methodToCall =
-      userData?.id || isAbandonedCart
-        ? manageShoppingCartAPI
-        : createShoppingCartAPI;
+
+    const methodToCall = userData?.id
+      ? manageShoppingCartAPI
+      : createShoppingCartAPI;
 
     const authMode = userData?.id ? "userPool" : "apiKey";
 

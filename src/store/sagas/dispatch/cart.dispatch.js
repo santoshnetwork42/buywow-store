@@ -55,15 +55,12 @@ export const useCartDispatch = () => {
     [dispatch],
   );
 
-  const checkoutInitiated = useCallback(
-    (isAbandonedCart) => {
-      dispatch({
-        type: cartSagaActions.MANAGE_CART,
-        payload: { isCheckoutInitiated: true, isAbandonedCart },
-      });
-    },
-    [dispatch],
-  );
+  const checkoutInitiated = useCallback(() => {
+    dispatch({
+      type: cartSagaActions.MANAGE_CART,
+      payload: { isCheckoutInitiated: true },
+    });
+  }, [dispatch]);
 
   const removeCoupon = useCallback(() => {
     dispatch({
