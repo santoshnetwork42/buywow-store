@@ -143,8 +143,8 @@ const CheckoutClient = () => {
   useEffect(() => {
     setPageLoading(true);
     if (!user?.id && !guestCheckout && !customUser?.phone) {
-      router.push("/");
-      handlePasswordLessModal(true, false, "/collections");
+      // router.push("/");
+      handlePasswordLessModal(true, false, "/");
     } else if (user?.id || guestCheckout || customUser?.phone) {
       setPageLoading(false);
     }
