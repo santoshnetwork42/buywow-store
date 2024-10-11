@@ -139,7 +139,7 @@ const CheckoutClient = () => {
     placeOrderV1,
     orderHelper,
   ] = useOrders();
-
+ 
   useEffect(() => {
     setPageLoading(true);
     if (!user?.id && !guestCheckout && !customUser?.phone) {
