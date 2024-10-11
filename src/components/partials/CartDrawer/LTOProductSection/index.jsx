@@ -86,7 +86,7 @@ export const LimitedTimeDealProduct = ({
     <Link
       prefetch={false}
       href={`/product/${slug}`}
-      className="relative flex min-h-40 w-full min-w-80 rounded-md bg-white-a700 p-2.5 shadow md:min-w-96 md:p-3"
+      className="relative flex min-h-40 w-full min-w-80 rounded-md bg-white-a700 p-2 shadow md:min-w-96 md:p-3"
     >
       <div className="flex grow flex-col gap-y-2">
         <div className="flex min-h-10 flex-col justify-between">
@@ -122,7 +122,7 @@ export const LimitedTimeDealProduct = ({
             )}
           />
         </div>
-        <div className="flex min-h-20">
+        <div className="flex min-h-20 gap-3">
           <div
             className="flex aspect-[74/80] w-[74px] items-center overflow-hidden rounded"
             style={{ backgroundColor: "rgb(255, 255, 255)" }}
@@ -140,7 +140,7 @@ export const LimitedTimeDealProduct = ({
                 <Heading
                   as="h4"
                   size="base"
-                  className="line-clamp-1 text-sm font-semibold"
+                  className="line-clamp-2 text-sm font-semibold"
                   responsive
                 >
                   {title}
@@ -163,10 +163,20 @@ export const LimitedTimeDealProduct = ({
                       <Text
                         as="del"
                         size="base"
-                        className="text-sm text-gray-500"
+                        className="text-sm text-gray-600"
                         responsive
                       >
                         ₹{toDecimal(listingPrice)}
+                      </Text>
+                    )}
+                    {discount > 0 && (
+                      <Text
+                        size="sm"
+                        as="p"
+                        className="shrink-0 rounded-md bg-lime-50 p-1"
+                        responsive
+                      >
+                        {discount}% Off
                       </Text>
                     )}
                   </>
@@ -175,23 +185,13 @@ export const LimitedTimeDealProduct = ({
                   <>
                     <Heading
                       as="span"
-                      size="lg"
-                      className="text-base text-green-500"
+                      size="xs"
+                      className="text-green-500"
                       responsive
                     >
-                      FREE
+                      FREE GIFT
                     </Heading>
                   </>
-                )}
-                {discount > 0 && (
-                  <Text
-                    size="sm"
-                    as="p"
-                    className="shrink-0 rounded-md bg-lime-50 p-1"
-                    responsive
-                  >
-                    {discount}% Off
-                  </Text>
                 )}
               </div>
 
@@ -251,7 +251,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
     if (!startTime) return null;
     return (
       new Date(startTime).getTime() +
-      LIMITED_TIME_DEAL_DURATION_IN_MINUTES * 60 * 1000
+      LIMITED_TIME_DEAL_DURATION_IN_MINUTES * 3600 * 1000
     );
   }, [startTime]);
 
