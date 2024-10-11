@@ -87,7 +87,6 @@ function NavbarProvider({ children, headerData }) {
     headerData,
   };
 
-  console.log(pathname, "pathname");
   return (
     <Navbar
       storeId={STORE_ID}

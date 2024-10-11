@@ -360,7 +360,7 @@ const CartDrawer = () => {
                 cashbackAmount={prepaidCashbackRewardsOnOrder}
                 amountNeeded={amountNeededToAvailCashback}
               />
-              {prepaidCashbackRewardsOnOrder && <CheckoutSummary />}
+              <CheckoutSummary />
             </div>
 
             <div
