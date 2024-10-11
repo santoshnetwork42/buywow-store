@@ -1,4 +1,5 @@
 import { Input } from "@/components/elements";
+import { fetchCityAndState } from "@/lib/customAPIs";
 import States from "@/utils/data/states.json";
 import {
   validateEmail,
@@ -6,7 +7,7 @@ import {
   validatePinCode,
   validateString,
 } from "@/utils/helpers";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 
 const AddressFormFields = ({
   address,
@@ -22,6 +23,31 @@ const AddressFormFields = ({
       })),
     [],
   );
+
+  const fetchCityAndStateData = useCallback(
+    async (pinCode) => {
+      const result = await fetchCityAndState(pinCode);
+
+      if (result) {
+        if (result?.city) {
+          setAddress((prevAddress) => ({ ...prevAddress, city: result?.city }));
+        }
+        if (result?.state) {
+          setAddress((prevAddress) => ({
+            ...prevAddress,
+            state: result?.state,
+          }));
+        }
+      }
+    },
+    [setAddress],
+  );
+
+  useEffect(() => {
+    if (address?.pinCode?.length === 6) {
+      fetchCityAndStateData(address?.pinCode);
+    }
+  }, [address, fetchCityAndStateData]);
 
   const handleInputChange = useCallback(
     (field) => (e) => {

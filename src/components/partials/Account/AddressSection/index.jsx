@@ -1,12 +1,13 @@
 "use client";
 
 import { Button, Heading, Text } from "@/components/elements";
-import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
-import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import AddressForm from "@/components/partials/Account/AddressSection/AddressForm";
 import AddressList from "@/components/partials/Account/AddressSection/AddressList";
 import AddressModal from "@/components/partials/Account/AddressSection/AddressModal";
+import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
+import useWindowDimensions from "@/utils/helpers/getWindowDimension";
+import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const AddressSkeleton = () => (
   <div className="animate-pulse space-y-4">
@@ -22,7 +23,10 @@ const AddressSection = React.memo(({ variant }) => {
   const addressState = useSelector((state) => state.address);
   const { addressList, initialLoading } = addressState;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isSmallSize: isMobile } = useWindowDimensions();
+  const [isModalOpen, setIsModalOpen] = useState(
+    isMobile ? !addressList.length : false,
+  );
 
   useEffect(() => {
     if (user?.id) {
@@ -30,6 +34,10 @@ const AddressSection = React.memo(({ variant }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  useEffect(() => {
+    setIsModalOpen(isMobile ? !addressState?.addressList?.length : false);
+  }, [addressState, isMobile]);
 
   const handleAddNewAddress = useCallback(() => {
     setIsModalOpen(true);
@@ -86,7 +94,8 @@ const AddressSection = React.memo(({ variant }) => {
             <AddressModal
               isOpen={isModalOpen}
               onClose={handleCloseModal}
-              enableOutsideClick={true}
+              enableOutsideClick={!!addressList?.length}
+              enableCloseButton={!!addressList?.length}
               action="CREATE"
             />
           )}

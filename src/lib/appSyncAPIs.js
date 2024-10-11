@@ -18,6 +18,7 @@ import {
   getWebPageBySlug,
   getPageMetadataBySlug,
   getProductById,
+  getShoppingCart,
   getRedirects,
   getReviews,
   getReviewsAnalytics,
@@ -304,6 +305,24 @@ export const fetchProductDetailsAPI = async (id) => {
     return data?.getProduct;
   } catch (error) {
     errorHandler(error, "Fetch Product Details API");
+    return null;
+  }
+};
+
+export const fetchShoppingCartAPI = async (id) => {
+  try {
+    const response = await client.graphql({
+      query: getShoppingCart,
+      variables: {
+        id: id,
+      },
+      authMode: "apiKey",
+    });
+
+    const data = "data" in response ? response.data : response;
+    return data?.getShoppingCart;
+  } catch (error) {
+    errorHandler(error, "Fetch getShoppingCart API");
     return null;
   }
 };

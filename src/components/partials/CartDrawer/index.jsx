@@ -81,8 +81,13 @@ const CartDrawer = () => {
   );
   const isRewardApplied = useSelector((state) => state.cart?.isRewardApplied);
 
-  const { validateCart, fetchAndAddProductsFromEncodedCart, applyRewardPoint } =
-    useCartDispatch();
+  const {
+    validateCart,
+    fetchAndAddProductsFromEncodedCart,
+    applyRewardPoint,
+    updateCartWithShoppingCartId,
+    checkoutInitiated,
+  } = useCartDispatch();
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
   const { handleOutOfStock, handleProceedToCheckout, viewCart } =
     useEventsDispatch();
@@ -137,6 +142,7 @@ const CartDrawer = () => {
       return false;
     }
 
+    checkoutInitiated(!!searchParams?.get("cart"));
     handleCartVisibility(false);
 
     if (user?.id) {
@@ -236,6 +242,15 @@ const CartDrawer = () => {
   useEffect(() => {
     const forceOpenCart = searchParams?.get("cart") === "1";
     const _cx = searchParams?.get("_cx");
+
+    const shoppingCartIdFromSearchParams = searchParams?.get("cartId");
+
+    if (
+      shoppingCartId !== shoppingCartIdFromSearchParams &&
+      !!shoppingCartIdFromSearchParams
+    ) {
+      updateCartWithShoppingCartId(shoppingCartIdFromSearchParams);
+    }
 
     const shouldForceOpenCart =
       forceOpenCart &&
