@@ -251,7 +251,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
     if (!startTime) return null;
     return (
       new Date(startTime).getTime() +
-      LIMITED_TIME_DEAL_DURATION_IN_MINUTES * 3600 * 1000
+      LIMITED_TIME_DEAL_DURATION_IN_MINUTES * 60 * 1000
     );
   }, [startTime]);
 
