@@ -28,7 +28,6 @@ function NavbarProvider({ children, headerData }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
-  const forceOpenCart = searchParams.get("cart") === 1;
 
   const [initialData, setInitialData] = useState(null);
 
