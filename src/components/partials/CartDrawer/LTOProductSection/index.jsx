@@ -88,12 +88,12 @@ export const LimitedTimeDealProduct = ({
       href={`/product/${slug}`}
       className="relative flex min-h-40 w-full min-w-80 rounded-md bg-white-a700 p-2.5 shadow md:min-w-96 md:p-3"
     >
-      <div className="flex grow flex-col gap-y-1">
+      <div className="flex grow flex-col gap-y-2">
         <div className="flex min-h-10 flex-col justify-between">
           <Heading
             as={"p"}
             size="sm"
-            className="line-clamp-2 flex items-center gap-x-2 pb-1 !normal-case tracking-wide text-green-500"
+            className="line-clamp-2 flex items-center gap-x-2 pb-1 !normal-case tracking-wide"
           >
             {isLocked ? (
               <>
@@ -109,7 +109,9 @@ export const LimitedTimeDealProduct = ({
             ) : (
               <>
                 <TagIcon size={20} />
-                Yay! Get {discount}% off on this product
+                <Text className="text-green-500" size="md">
+                  Yay! Get {discount}% off on this product
+                </Text>
               </>
             )}
           </Heading>
@@ -147,18 +149,39 @@ export const LimitedTimeDealProduct = ({
             </div>
             <div className="flex justify-between gap-10">
               <div className="flex shrink items-center gap-2">
-                <Heading as="span" size="lg" className="text-base" responsive>
-                  ₹{flatPriceDecimal}
-                </Heading>
-                {listingPrice > flatPrice && (
-                  <Text
-                    as="del"
-                    size="base"
-                    className="text-sm text-gray-500"
-                    responsive
-                  >
-                    ₹{toDecimal(listingPrice)}
-                  </Text>
+                {!!Number(flatPriceDecimal) && (
+                  <>
+                    <Heading
+                      as="span"
+                      size="lg"
+                      className="text-base"
+                      responsive
+                    >
+                      ₹{flatPriceDecimal}
+                    </Heading>
+                    {listingPrice > flatPrice && (
+                      <Text
+                        as="del"
+                        size="base"
+                        className="text-sm text-gray-500"
+                        responsive
+                      >
+                        ₹{toDecimal(listingPrice)}
+                      </Text>
+                    )}
+                  </>
+                )}
+                {!Number(flatPriceDecimal) && (
+                  <>
+                    <Heading
+                      as="span"
+                      size="lg"
+                      className="text-base text-green-500"
+                      responsive
+                    >
+                      FREE
+                    </Heading>
+                  </>
                 )}
                 {discount > 0 && (
                   <Text
@@ -189,12 +212,12 @@ export const LimitedTimeDealProduct = ({
                 </Button>
               )}
               {isLocked && (
-                <div className="rounded-md bg-yellow-900 px-4 py-1.5 text-white-a700_01">
+                <div className="rounded-md border-2 border-yellow-900 bg-white-a700_01 px-4 py-1.5">
                   <Link prefetch={false} href={link ?? "#"} className="flex">
                     <Text
                       as="span"
                       size="sm"
-                      className="flex items-center justify-center gap-2 overflow-hidden text-sm font-medium capitalize !leading-tight text-white-a700_01 transition-colors duration-200"
+                      className="flex items-center justify-center gap-2 overflow-hidden text-sm font-medium capitalize !leading-tight text-yellow-900 transition-colors duration-200"
                       responsive
                     >
                       Unlock
@@ -228,7 +251,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
     if (!startTime) return null;
     return (
       new Date(startTime).getTime() +
-      LIMITED_TIME_DEAL_DURATION_IN_MINUTES * 60 * 1000
+      LIMITED_TIME_DEAL_DURATION_IN_MINUTES * 3600 * 1000
     );
   }, [startTime]);
 
