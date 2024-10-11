@@ -101,7 +101,6 @@ export function* addToCartHandler(action) {
       ];
     }
 
-    console.log("-----updatedCart-----");
     const subTotal = getProductSubTotal(updatedCart);
     yield put(setSubTotal(subTotal));
     yield put(setCart(updatedCart));
@@ -241,7 +240,7 @@ export function* updateCartWithShoppingCartIdHandler(action) {
       if (!!variantId) {
         cartProduct = {
           ...cartProduct,
-          name: `${product?.title} - ${variant?.label || variant?.title}`,
+          title: `${product?.title} - ${variant?.label ?? ""}`,
           price: variant.price,
           variantId,
         };
