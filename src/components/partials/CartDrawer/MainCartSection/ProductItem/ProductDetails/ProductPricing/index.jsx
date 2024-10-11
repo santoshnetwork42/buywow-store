@@ -40,18 +40,34 @@ const ProductPricing = ({
 
   return (
     <div className="flex items-center gap-1.5">
-      <Heading as="h4" size="base" className="text-sm" responsive>
-        ₹{toDecimal(price)}
-      </Heading>
-      {listingPrice > price && (
-        <Text
-          as="span"
-          size="sm"
-          className="text-gray-600/75 line-through"
-          responsive
-        >
-          ₹{toDecimal(listingPrice)}
-        </Text>
+      {!!price && (
+        <>
+          <Heading as="h4" size="base" className="text-sm" responsive>
+            ₹{toDecimal(price)}
+          </Heading>
+          {listingPrice > price && (
+            <Text
+              as="span"
+              size="sm"
+              className="text-gray-600/75 line-through"
+              responsive
+            >
+              ₹{toDecimal(listingPrice)}
+            </Text>
+          )}
+        </>
+      )}
+      {!price && (
+        <>
+          <Heading
+            as="span"
+            size="lg"
+            className="text-base text-green-500"
+            responsive
+          >
+            FREE
+          </Heading>
+        </>
       )}
       {discountPercentage > 0 && (
         <Text
