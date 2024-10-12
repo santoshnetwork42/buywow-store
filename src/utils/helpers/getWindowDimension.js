@@ -6,14 +6,18 @@ const getWindowDimensions = () => {
     return {
       width,
       height,
-      isSmallSize: width < 575,
-      isDesktop: width >= 992,
+      isSmallSize: width < 576,
+      isMidSize: width >= 576 && width < 768,
+      isDesktop: width >= 768 && width < 992,
+      isLargeDesktop: width >= 992,
     };
   }
 
   return {
     isSmallSize: false,
+    isMidSize: false,
     isDesktop: false,
+    isLargeDesktop: false,
   };
 };
 

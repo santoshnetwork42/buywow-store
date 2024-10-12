@@ -23,9 +23,9 @@ const AddressSection = React.memo(({ variant }) => {
   const addressState = useSelector((state) => state.address);
   const { addressList, initialLoading } = addressState;
 
-  const { isSmallSize: isMobile } = useWindowDimensions();
+  const { isSmallSize: isMobile, isMidSize: isTab } = useWindowDimensions();
   const [isModalOpen, setIsModalOpen] = useState(
-    isMobile ? !addressList.length : false,
+    isMobile || isTab ? !addressList.length : false,
   );
 
   useEffect(() => {
@@ -36,8 +36,10 @@ const AddressSection = React.memo(({ variant }) => {
   }, [user]);
 
   useEffect(() => {
-    setIsModalOpen(isMobile ? !addressState?.addressList?.length : false);
-  }, [addressState, isMobile]);
+    setIsModalOpen(
+      isMobile || isTab ? !addressState?.addressList?.length : false,
+    );
+  }, [addressState, isMobile, isTab]);
 
   const handleAddNewAddress = useCallback(() => {
     setIsModalOpen(true);
