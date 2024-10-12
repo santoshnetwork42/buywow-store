@@ -1,8 +1,14 @@
 "use client";
 
-import { GTM_ID, LIMECHAT_ENABLED, WISEPOPS_KEY } from "@/config";
+import {
+  GOKWIK_SCRIPT,
+  GTM_ID,
+  LIMECHAT_ENABLED,
+  WISEPOPS_KEY,
+} from "@/config";
 import { useIsInteractive, useSource } from "@/utils/context/navbar";
 import dynamic from "next/dynamic";
+import Script from "next/script";
 import { useEffect, useState } from "react";
 
 const Affise = dynamic(() => import("@/components/scripts/affise"), {
@@ -44,6 +50,9 @@ export default function Scripts() {
       <Affise />
       {LIMECHAT_ENABLED && <LimeChat />}
       {WISEPOPS_KEY && <Wisepops />}
+      {!!GOKWIK_SCRIPT && (
+        <Script strategy="afterInteractive" defer src={GOKWIK_SCRIPT} />
+      )}
     </>
   );
 }

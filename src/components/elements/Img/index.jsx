@@ -31,7 +31,7 @@ const Img = React.memo(
           loader: ({ src: imageSrc, width: imageWidth }) => {
             return getPublicImageURL({
               key: imageSrc,
-              resize: imageWidth,
+              resize: Math.ceil(imageWidth * 0.75),
               quality,
               addPrefix,
             });

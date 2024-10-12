@@ -37,7 +37,7 @@ const nextConfig = {
       },
       {
         source:
-          "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|cgi|env|php7|html|php8|asp|pl|save|swp|tmp|php~|exe|orig|old|bkp|copy|cfm|php4)",
+          "/:path*\\.(tgz|gz|bz|php|zip|tar|bak|rar|atom|cgi|env|php7|html|php8|asp|pl|save|swp|tmp|php~|exe|orig|old|bkp|copy|cfm|php4|php3)",
         destination: "/404",
         permanent: false,
       },

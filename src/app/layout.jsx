@@ -1,9 +1,8 @@
-import { GOKWIK_SCRIPT } from "@/config";
+import { MEDIA_BASE_URL, WORDPRESS_MEDIA_URL } from "@/config";
 import "@/styles/index.css";
 import "@/styles/tailwind.css";
 
 import { Outfit } from "next/font/google";
-import Script from "next/script";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -28,9 +27,9 @@ async function RootLayout({ children }) {
         <meta name="theme-color" content="#000000" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
-        {!!GOKWIK_SCRIPT && (
-          <Script strategy="lazyOnload" defer src={GOKWIK_SCRIPT} />
-        )}
+
+        <link rel="preconnect" href={`https://${MEDIA_BASE_URL}`} />
+        <link rel="preconnect" href={`https://${WORDPRESS_MEDIA_URL}`} />
       </head>
       <body>{children}</body>
     </html>

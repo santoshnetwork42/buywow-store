@@ -1,5 +1,6 @@
 "use client";
 
+import { SearchIcon } from "@/assets/svg/icons";
 import { Img, Input } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
@@ -23,17 +24,6 @@ const dataText = [
   "Search for Face Wash",
   "Search for Face Mask",
 ];
-
-const SearchIcon = memo(() => (
-  <Img
-    src="img_search.svg"
-    width={24}
-    height={24}
-    alt="search"
-    className="aspect-square w-6 cursor-pointer object-contain"
-    isStatic
-  />
-));
 
 const ClearIcon = memo(({ onClick }) => (
   <CloseSVG
@@ -125,7 +115,7 @@ const SearchBar = memo(({ className }) => {
   const suffix = search ? (
     <ClearIcon onClick={() => setSearch("")} />
   ) : (
-    <SearchIcon />
+    <SearchIcon size={22} />
   );
 
   return (
@@ -153,7 +143,6 @@ const SearchBar = memo(({ className }) => {
   );
 });
 
-SearchIcon.displayName = "SearchIcon";
 ClearIcon.displayName = "ClearIcon";
 SearchBar.displayName = "SearchBar";
 
