@@ -17,6 +17,7 @@ const FeaturedProductsByTab = ({
   featuredProductsTabItems,
   isPersistLoading,
   promotion,
+  lazyBlock,
 }) => {
   const pathname = usePathname();
   const bgColorClass = getBgColor(featuredProductsByTabBgColor);
@@ -31,18 +32,9 @@ const FeaturedProductsByTab = ({
   )
     return null;
 
-  const renderProductCard = (product, index) => (
-    <ProductCard
-      key={`product-${product?.id || index}`}
-      className="w-[calc(50vw-16px)] max-w-[326px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
-      parentPromotionTag={promotion}
-      {...product?.attributes}
-    />
-  );
-
-  const renderTabPanel = (item, index) => (
+  const renderTabPanel = (item, tabIndex) => (
     <TabPanel
-      key={`tab-panel-${index}`}
+      key={`tab-panel-${tabIndex}`}
       className="no-scrollbar w-full overflow-x-auto overflow-y-visible"
     >
       <Slider
@@ -50,7 +42,17 @@ const FeaturedProductsByTab = ({
         sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
         isContainShadow
       >
-        {setSoldOutLast(item?.products?.data, true)?.map(renderProductCard)}
+        {setSoldOutLast(item?.products?.data, true)?.map(
+          (product, productIndex) => (
+            <ProductCard
+              key={`product-${product?.id}-${tabIndex}-${productIndex}`}
+              className="w-[calc(50vw-16px)] max-w-[326px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
+              parentPromotionTag={promotion}
+              priority={!lazyBlock && !tabIndex && productIndex < 4}
+              {...product?.attributes}
+            />
+          ),
+        )}
       </Slider>
     </TabPanel>
   );
