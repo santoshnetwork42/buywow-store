@@ -64,7 +64,7 @@ function* storedCouponCode() {
 }
 
 function* manageCart() {
-  yield takeLatest([cartSagaActions.MANAGE_CART], manageCartHandler);
+  yield takeEvery([cartSagaActions.MANAGE_CART], manageCartHandler);
 }
 
 function* fetchAndAddProductsFromEncodedCart() {
