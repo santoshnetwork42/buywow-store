@@ -1,6 +1,7 @@
 import {
   getCouponDiscount,
   useBestCoupon,
+  useCoupons,
   useFeaturedCoupons,
 } from "@wow-star/utils";
 import { usePathname } from "next/navigation";
@@ -25,6 +26,8 @@ const CouponDrawer = dynamic(
 const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const pathname = usePathname();
   const { applyCoupon, removeCoupon, removeFromCart } = useCartDispatch();
+  const topCoupons = useCoupons();
+
   const [couponCode, setCouponCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -98,7 +101,8 @@ const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
     );
 
     if (shouldAutoApply && isInteractive) {
-      if (storedCouponCode) {
+      const mappedTopCoupons = topCoupons?.map((coupon) => coupon.code);
+      if (storedCouponCode && mappedTopCoupons?.includes(storedCouponCode)) {
         if (
           (!appliedCoupon || appliedCoupon?.autoApplied) &&
           appliedCoupon?.code !== storedCouponCode
