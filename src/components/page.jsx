@@ -129,7 +129,7 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: RecentlyViewed,
 };
 
-const renderBlock = ({ block, pageType, slug }) => {
+const renderBlock = ({ block, pageType, slug, index }) => {
   const { showComponent, __typename, id } = block || {};
   if (!showComponent) return null;
 
@@ -142,6 +142,7 @@ const renderBlock = ({ block, pageType, slug }) => {
       slug={slug}
       {...block}
       pageType={pageType}
+      lazyBlock={index > 3}
     />
   );
 };
@@ -168,7 +169,9 @@ export default async function PageBlock({ pageType, slug }) {
 
   return (
     <React.Fragment>
-      {blocks.map((block) => renderBlock({ block, slug, pageType }))}
+      {blocks.map((block, index) =>
+        renderBlock({ block, slug, pageType, index }),
+      )}
     </React.Fragment>
   );
 }

@@ -16,6 +16,7 @@ const hasLinkTag = (htmlString) => {
     return "";
   }
 };
+
 const extractLink = (htmlString) => {
   try {
     const linkRegex = /<a\s+(?:[^>]*?\s+)?href="([^"]*)"/i;
@@ -32,9 +33,11 @@ const FeaturedItem = ({
   isWebHorizontal,
   isInPDP,
   isPersistLoading,
+  lazyBlock = true,
 }) => {
   const { url, alternativeText } = extractAttributes(image);
   const isMarketPlaceLink = hasLinkTag(text);
+
   const createMarkup = (html) => {
     // Remove all HTML tags except <br>
     const withoutTags = html.replace(/<(?!br\s*\/?)[^>]+>/gi, "");
@@ -63,7 +66,7 @@ const FeaturedItem = ({
             height={100}
             alt={alternativeText || "Additional Ingredient"}
             className="aspect-[4/2] object-contain"
-            loading="lazy"
+            priority={lazyBlock}
           />
         </div>
         <div>
@@ -72,6 +75,7 @@ const FeaturedItem = ({
       </Link>
     );
   }
+
   return (
     <div
       className={`flex flex-col items-center justify-center gap-1 ${isWebHorizontal && "md:flex-row"} md:gap-2 lg:gap-3 xl:gap-5`}
@@ -82,6 +86,7 @@ const FeaturedItem = ({
         height={isInPDP ? 42 : 60}
         alt={alternativeText || "Feature Icon"}
         className={`aspect-square w-full rounded-full object-contain ${!isInPDP ? "max-w-10 sm:max-w-12 md:max-w-14 lg:max-w-16" : "max-w-12"}`}
+        priority={!lazyBlock && !isInPDP}
       />
       {isPersistLoading ? (
         <Text
@@ -94,7 +99,7 @@ const FeaturedItem = ({
         </Text>
       ) : (
         <Text
-          as="p"
+          as="div"
           size="base"
           className={`line-clamp-2 shrink-0 text-center capitalize ${isWebHorizontal && "md:text-left"}`}
           dangerouslySetInnerHTML={{ __html: text }}
@@ -112,6 +117,7 @@ const FeaturedList = ({
   isWebHorizontal = true,
   isInPDP = false,
   isPersistLoading = false,
+  lazyBlock,
 }) => {
   const pathname = usePathname();
 
@@ -137,6 +143,7 @@ const FeaturedList = ({
           isWebHorizontal={isWebHorizontal}
           isInPDP={isInPDP}
           isPersistLoading={isPersistLoading}
+          lazyBlock={lazyBlock}
         />
       ))}
     </div>

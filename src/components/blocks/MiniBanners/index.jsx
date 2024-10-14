@@ -3,8 +3,8 @@ import { Img } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
 
-const MiniBanners = ({ miniBannerItems: banners }) => {
-  if (!Array.isArray(banners) || banners.length === 0) return null;
+const MiniBanners = ({ miniBannerItems: banners, lazyBlock = true }) => {
+  if (!Array.isArray(banners) || !banners.length) return null;
 
   return (
     <Slider
@@ -13,9 +13,7 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
       sliderClassName="gap-2 sm:gap-3 md:gap-4 lg:gap-5"
       dragFree={false}
     >
-      {banners.map((banner, index) => {
-        if (!banner) return null;
-
+      {banners.filter(Boolean).map((banner, index) => {
         const { webImage, mWebImage, link } = banner;
         const webImageAttrs = extractAttributes(webImage);
         const mWebImageAttrs = extractAttributes(mWebImage);
@@ -51,7 +49,7 @@ const MiniBanners = ({ miniBannerItems: banners }) => {
                 alt={imageAlt}
                 width={500}
                 height={500}
-                priority
+                priority={!lazyBlock}
                 className="aspect-[298/120] h-auto w-full object-cover md:aspect-[650/166]"
               />
             </picture>

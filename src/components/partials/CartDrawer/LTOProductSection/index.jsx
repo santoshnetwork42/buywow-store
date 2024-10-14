@@ -103,7 +103,7 @@ export const LimitedTimeDealProduct = ({
                   to unlock special price
                 </div>
               </>
-            ) : !!discount ? (
+            ) : (
               <>
                 <TagIcon size={20} />
                 <Text className="text-green-500" size="md">
