@@ -139,7 +139,7 @@ const CheckoutClient = () => {
     placeOrderV1,
     orderHelper,
   ] = useOrders();
- 
+
   useEffect(() => {
     setPageLoading(true);
     if (!user?.id && !guestCheckout && !customUser?.phone) {
@@ -147,6 +147,7 @@ const CheckoutClient = () => {
       handlePasswordLessModal(true, false, "/");
     } else if (user?.id || guestCheckout || customUser?.phone) {
       setPageLoading(false);
+      handlePasswordLessModal();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, guestCheckout, customUser, router]);

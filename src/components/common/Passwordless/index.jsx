@@ -218,13 +218,33 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
   const handleOTPChange = useCallback((element, index) => {
     const value = element.value;
     if (isNaN(value)) return;
-    setAuthData((prev) => {
-      const newOtp = [...prev.confirmationCode];
-      newOtp[index] = value;
-      return { ...prev, confirmationCode: newOtp };
-    });
-    if (value !== "" && index < 5) {
-      otpInputRefs.current[index + 1]?.focus();
+
+    // Handle paste operation
+    if (value.length > 1) {
+      const otpArray = value
+        .split("")
+        .filter((char) => /\d/.test(char))
+        .slice(0, 6);
+
+      setAuthData((prev) => ({
+        ...prev,
+        confirmationCode: Array(6)
+          .fill("")
+          .map((_x, i) => otpArray[i] || ""),
+      }));
+
+      const focusIndex = Math.min(otpArray.length, 5);
+      otpInputRefs.current[focusIndex]?.focus();
+    } else {
+      // Handle single digit input
+      setAuthData((prev) => {
+        const newOtp = [...prev.confirmationCode];
+        newOtp[index] = value;
+        return { ...prev, confirmationCode: newOtp };
+      });
+      if (value !== "" && index < 5) {
+        otpInputRefs.current[index + 1]?.focus();
+      }
     }
   }, []);
 
@@ -325,7 +345,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
             key={index}
             type="text"
             inputMode="numeric"
-            maxLength={1}
+            maxLength={6} // Changed to allow full OTP paste
             value={data}
             onChange={(e) => handleOTPChange(e.target, index)}
             autoComplete="one-time-code"
@@ -336,7 +356,6 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
             ref={(el) => (otpInputRefs.current[index] = el)}
             className={`flex h-10 w-10 flex-grow rounded-md border`}
             inputClassName="text-center"
-            onPaste={handlePaste}
             error={error?.otp}
           />
         ))}

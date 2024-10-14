@@ -14,6 +14,7 @@ const AddressModal = ({
   isOpen = false,
   onClose = () => {},
   enableOutsideClick = true,
+  enableCloseButton = true,
   action = null,
   addressItem = {},
 }) => {
@@ -26,8 +27,11 @@ const AddressModal = ({
 
   const [address, setAddress] = useState({
     id: addressItem?.id || null,
-    email: addressItem?.email || "",
-    phone: removePhonePrefix(addressItem?.phone) || "",
+    email: addressItem?.email || user?.email || "",
+    phone:
+      removePhonePrefix(addressItem?.phone) ||
+      removePhonePrefix(user?.phone) ||
+      "",
     address: addressItem?.address || "",
     state: addressItem?.state || "",
     city: addressItem?.city || "",
@@ -85,6 +89,7 @@ const AddressModal = ({
       showMobileView
       title="Address"
       enableOutsideClick={enableOutsideClick}
+      enableCloseButton={enableCloseButton}
     >
       <div className="mt-4">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">

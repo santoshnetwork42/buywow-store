@@ -1,8 +1,9 @@
 import { Button } from "@/components/elements";
+import AddressFormFields from "@/components/partials/Account/AddressSection/AddressForm/AddressFormFields";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
+import { removePhonePrefix } from "@/utils/helpers";
 import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
-import AddressFormFields from "@/components/partials/Account/AddressSection/AddressForm/AddressFormFields";
 
 const AddressForm = React.memo(({ className }) => {
   const { createAddress } = useAddressDispatch();
@@ -10,8 +11,8 @@ const AddressForm = React.memo(({ className }) => {
   const isLoading = useSelector((state) => state.address?.isLoading);
 
   const [address, setAddress] = useState({
-    email: "",
-    phone: "",
+    email: user?.email || "",
+    phone: removePhonePrefix(user?.phone) || "",
     address: "",
     state: "",
     city: "",
@@ -52,7 +53,7 @@ const AddressForm = React.memo(({ className }) => {
         type="submit"
         variant="primary"
         size="medium"
-        className="h-[36px] w-full sm:h-[36px] sm:w-1/2 md:h-[44px] lg:h-[44px]"
+        className="h-[36px] w-full sm:h-[36px] md:h-[44px] lg:h-[44px]"
         loader={isLoading}
       >
         Add Address

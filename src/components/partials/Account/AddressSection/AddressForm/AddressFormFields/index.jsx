@@ -28,17 +28,11 @@ const AddressFormFields = ({
     async (pinCode) => {
       const result = await fetchCityAndState(pinCode);
 
-      if (result) {
-        if (result?.city) {
-          setAddress((prevAddress) => ({ ...prevAddress, city: result?.city }));
-        }
-        if (result?.state) {
-          setAddress((prevAddress) => ({
-            ...prevAddress,
-            state: result?.state,
-          }));
-        }
-      }
+      setAddress((prevAddress) => ({
+        ...prevAddress,
+        city: result?.city || prevAddress?.city,
+        state: result?.state || prevAddress?.state,
+      }));
     },
     [setAddress],
   );
@@ -47,7 +41,7 @@ const AddressFormFields = ({
     if (address?.pinCode?.length === 6) {
       fetchCityAndStateData(address?.pinCode);
     }
-  }, [address, fetchCityAndStateData]);
+  }, [address.pinCode, fetchCityAndStateData]);
 
   const handleInputChange = useCallback(
     (field) => (e) => {

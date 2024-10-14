@@ -174,7 +174,11 @@ const SwopStoreBanner = React.memo(() => {
   };
   return (
     <>
-      <Link prefetch={false} className="" href={bannerOnThankYouPage.link}>
+      <Link
+        prefetch={false}
+        className=""
+        href={bannerOnThankYouPage.link ?? "#"}
+      >
         <Img
           src={bannerOnThankYouPage?.mWebImage}
           alt={'Thank you for your order!"'}
@@ -183,7 +187,11 @@ const SwopStoreBanner = React.memo(() => {
           className="rounded-md sm:hidden"
         />
       </Link>
-      <Link prefetch={false} className="" href={bannerOnThankYouPage.link}>
+      <Link
+        prefetch={false}
+        className=""
+        href={bannerOnThankYouPage.link ?? "#"}
+      >
         <Img
           src={bannerOnThankYouPage?.webImage}
           alt={"Thank you for your order!"}

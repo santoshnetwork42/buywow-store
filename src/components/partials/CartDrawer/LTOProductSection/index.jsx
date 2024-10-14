@@ -83,14 +83,14 @@ export const LimitedTimeDealProduct = ({
     <Link
       prefetch={false}
       href={`/product/${slug}`}
-      className="relative flex min-h-40 w-full min-w-80 rounded-md bg-white-a700 p-2.5 shadow md:min-w-96 md:p-3"
+      className="relative flex min-h-40 w-full min-w-80 rounded-md bg-white-a700 p-2 shadow md:min-w-96 md:p-3"
     >
       <div className="flex grow flex-col gap-y-2">
         <div className="flex min-h-10 flex-col justify-between">
           <Heading
             as={"p"}
             size="sm"
-            className="line-clamp-2 flex items-center gap-x-2 pb-1 !normal-case tracking-wide text-green-500"
+            className="line-clamp-2 flex items-center gap-x-2 pb-1 !normal-case tracking-wide"
           >
             {isLocked ? (
               <>
@@ -106,12 +106,9 @@ export const LimitedTimeDealProduct = ({
             ) : !!discount ? (
               <>
                 <TagIcon size={20} />
-                Yay! Get {discount}% off on this product
-              </>
-            ) : (
-              <>
-                <CartWithPlus size={24} />
-                Complete your shopping journey with this must have!
+                <Text className="text-green-500" size="md">
+                  Yay! Get {discount}% off on this product
+                </Text>
               </>
             )}
           </Heading>
@@ -122,7 +119,7 @@ export const LimitedTimeDealProduct = ({
             )}
           />
         </div>
-        <div className="flex min-h-20 gap-x-2">
+        <div className="flex min-h-20 gap-3">
           <div
             className="flex aspect-[74/80] w-[74px] items-center overflow-hidden rounded"
             style={{ backgroundColor: "#F7F7E7" }}
@@ -134,41 +131,64 @@ export const LimitedTimeDealProduct = ({
             />
           </div>
           <div className="flex flex-1 flex-col gap-2">
-            <div className="flex flex-1 flex-col justify-between gap-2">
-              {" "}
-              <Heading
-                as="h4"
-                size="base"
-                className="line-clamp-1 text-sm font-semibold"
-                responsive
-              >
-                {title}
-              </Heading>
+            <div className="flex flex-1 flex-col gap-2">
+              <div className="flex justify-between gap-2">
+                {" "}
+                <Heading
+                  as="h4"
+                  size="base"
+                  className="line-clamp-2 text-sm font-semibold"
+                  responsive
+                >
+                  {title}
+                </Heading>
+              </div>
             </div>
             <div className="flex justify-between gap-10">
               <div className="flex shrink items-center gap-2">
-                <Heading as="span" size="lg" className="text-base" responsive>
-                  ₹{flatPriceDecimal}
-                </Heading>
-                {listingPrice > flatPrice && (
-                  <Text
-                    as="del"
-                    size="base"
-                    className="text-sm text-gray-500"
-                    responsive
-                  >
-                    ₹{toDecimal(listingPrice)}
-                  </Text>
+                {!!Number(flatPriceDecimal) && (
+                  <>
+                    <Heading
+                      as="span"
+                      size="lg"
+                      className="text-base"
+                      responsive
+                    >
+                      ₹{flatPriceDecimal}
+                    </Heading>
+                    {listingPrice > flatPrice && (
+                      <Text
+                        as="del"
+                        size="base"
+                        className="text-sm text-gray-600"
+                        responsive
+                      >
+                        ₹{toDecimal(listingPrice)}
+                      </Text>
+                    )}
+                    {discount > 0 && (
+                      <Text
+                        size="sm"
+                        as="p"
+                        className="shrink-0 rounded-md bg-lime-50 p-1"
+                        responsive
+                      >
+                        {discount}% Off
+                      </Text>
+                    )}
+                  </>
                 )}
-                {discount > 0 && (
-                  <Text
-                    size="sm"
-                    as="p"
-                    className="shrink-0 rounded-md bg-lime-50 p-1"
-                    responsive
-                  >
-                    {discount}% Off
-                  </Text>
+                {!Number(flatPriceDecimal) && (
+                  <>
+                    <Heading
+                      as="span"
+                      size="xs"
+                      className="text-green-500"
+                      responsive
+                    >
+                      FREE GIFT
+                    </Heading>
+                  </>
                 )}
               </div>
 
@@ -189,40 +209,17 @@ export const LimitedTimeDealProduct = ({
                 </Button>
               )}
               {isLocked && (
-                <div
-                  className={twMerge(
-                    "rounded-md bg-yellow-900 px-4 py-1.5 text-white-a700_01",
-                    !link ? "cursor-not-allowed opacity-50" : "",
-                  )}
-                >
-                  {link ? (
-                    <Link prefetch={false} href={link} className="flex">
-                      <Text
-                        as="span"
-                        size="sm"
-                        className="flex items-center justify-center gap-2 overflow-hidden text-sm font-medium capitalize !leading-tight text-white-a700_01 transition-colors duration-200"
-                        responsive
-                      >
-                        Unlock
-                      </Text>
-                    </Link>
-                  ) : (
-                    <Link
-                      prefetch={false}
-                      href={""}
-                      className="flex"
-                      onClick={(e) => e.preventDefault()}
+                <div className="rounded-md border-2 border-yellow-900 bg-white-a700_01 px-4 py-1.5">
+                  <Link prefetch={false} href={link ?? "#"} className="flex">
+                    <Text
+                      as="span"
+                      size="sm"
+                      className="flex items-center justify-center gap-2 overflow-hidden text-sm font-medium capitalize !leading-tight text-yellow-900 transition-colors duration-200"
+                      responsive
                     >
-                      <Text
-                        as="span"
-                        size="sm"
-                        className="flex items-center justify-center gap-2 overflow-hidden text-sm font-medium capitalize !leading-tight text-white-a700_01 transition-colors duration-200"
-                        responsive
-                      >
-                        Unlock
-                      </Text>
-                    </Link>
-                  )}
+                      Unlock
+                    </Text>
+                  </Link>
                 </div>
               )}
             </div>
@@ -309,7 +306,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
     return cartItems?.reduce((acc, cartItem) => {
       if (
         !(
-          cartItem.cartItemType === "LIMITED_TIME_DEAL" ||
+          cartItem.cartItemSource === "LIMITED_TIME_DEAL" ||
           cartItem.cartItemType === "FREE_PRODUCT"
         )
       ) {
