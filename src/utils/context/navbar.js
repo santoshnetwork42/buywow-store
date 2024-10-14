@@ -24,7 +24,7 @@ async function fetchInitialData() {
   return response.json();
 }
 
-function NavbarProvider({ children, headerData }) {
+function NavbarProvider({ children, headerData, storeConfig }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
@@ -85,6 +85,7 @@ function NavbarProvider({ children, headerData }) {
     isInteractive,
     source,
     headerData,
+    storeConfig: storeConfig?.storeConfiguration,
   };
 
   return (
@@ -150,6 +151,11 @@ export const useSource = () => {
 export const useIsInteractive = () => {
   const { isInteractive } = useContext(NavbarContext) || {};
   return isInteractive;
+};
+
+export const useStoreConfig = () => {
+  const { storeConfig } = useContext(NavbarContext) || {};
+  return storeConfig;
 };
 
 export const useGuestCheckout = () => {

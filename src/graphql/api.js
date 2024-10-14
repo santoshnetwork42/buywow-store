@@ -334,6 +334,12 @@ export const getWebNavbarAndFooter = /* GraphQL */ `
   }
 `;
 
+export const getStoreConfigurations = /* GraphQL */ `
+  query GetStoreConfigurations($storeId: String!) {
+    getStoreConfigurations(storeId: $storeId)
+  }
+`;
+
 export const getUser = /* GraphQL */ `
   query GetUser {
     getUser {

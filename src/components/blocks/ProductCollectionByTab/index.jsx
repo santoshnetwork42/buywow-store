@@ -6,6 +6,7 @@ import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { useStoreConfig } from "@/utils/context/navbar";
 import { getSource } from "@/utils/helpers";
 import { setSoldOutLast } from "@/utils/helpers/products";
 import dynamic from "next/dynamic";
@@ -94,6 +95,10 @@ const ProductCollectionByTab = ({
   const viewListItemEventTriggered = useRef(false);
   const { viewList, categoryViewed } = useEventsDispatch();
   const source = getSource();
+
+  const storeConfig = useStoreConfig();
+  const { data: storeConfigData } = storeConfig;
+  const { attributes: storeConfigDataAttributes } = storeConfigData;
 
   const reloadProducts = useCallback(
     async (newSortOption) => {
@@ -336,7 +341,11 @@ const ProductCollectionByTab = ({
           <ProductCard
             className="h-auto bg-white-a700_01"
             key={`product-${productIndex}`}
-            parentPromotionTag={promotion}
+            parentPromotionTag={
+              (storeConfigDataAttributes?.promotion_tag?.data &&
+                storeConfigDataAttributes?.promotion_tag) ||
+              promotion
+            }
             {...product.attributes}
           />
         )),
