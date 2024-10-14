@@ -492,34 +492,13 @@ const sumCartItemsQuantity = (cartItems, collectionSlug) => {
 };
 
 export const getNudgeQuantity = ({ pathname, cartItems, coupons }) => {
-  console.log(
-    pathname,
-    "pathname",
-    "cartItems",
-    cartItems,
-    coupons,
-    "nudgeFeat",
-  );
   if (!coupons?.length) return;
   const collectionSlug = extractCollectionSlug(pathname);
 
   const lastCoupon = coupons[coupons?.length - 1];
   const maxProgressQuantity =
     lastCoupon?.buyXQuantity + lastCoupon?.getYQuantity || 0;
-  console.log(
-    maxProgressQuantity,
-    collectionSlug,
-    "maxProgressQuantity---collectionSlug",
-  );
 
   const currQuantity = sumCartItemsQuantity(cartItems, collectionSlug);
   return { currQuantity, maxProgressQuantity };
-  // nudgeFeat.buyXQuantity
-  // cartItems.length
-  // if cartItems.length
-
-  // const dm = cartItems.filter((item) =>
-  //   item.collections.includes(collectionSlug),
-  // ).length;
-  // console.log("dm :>> ", dm);
 };
