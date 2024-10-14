@@ -36,15 +36,11 @@ function NavbarProvider({ children, headerData }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
-<<<<<<< HEAD
   const dispatch = useDispatch();
 
   const [initialData, setInitialData] = useState(null);
   const [nudgeFeat, setNudgeFeat] = useState(null);
-=======
 
-  const [initialData, setInitialData] = useState(null);
->>>>>>> aae4205f9840f68f22efdff395c452060bb59615
 
   useEffect(() => {
     fetchInitialData()
