@@ -85,6 +85,19 @@ module.exports = {
       fontFamily: {
         outfit: ["var(--font-outfit)"],
       },
+      keyframes: {
+        "pulse-glow": {
+          "0%, 100%": {
+            boxShadow: "0 0 1px 1px rgba(221, 132, 52, 0.5)",
+          },
+          "50%": {
+            boxShadow: "0 0 4px 4px rgba(221, 132, 52, 0.6)",
+          },
+        },
+      },
+      animation: {
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],

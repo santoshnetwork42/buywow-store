@@ -453,14 +453,23 @@ export const extractCouponsForApplicableCollection = ({
 }) => {
   const extractedCollectionSlug = extractCollectionSlug(collectionSlug);
 
-  const filteredCoupons = coupons.filter(
+  let filteredCoupons = coupons.filter(
     (coupon) =>
       !coupon.applicableProducts.length &&
-      (!coupon.applicableCollections.length ||
-        coupon.applicableCollections.includes(extractedCollectionSlug)) &&
+      coupon.applicableCollections.includes(extractedCollectionSlug) &&
       (coupon.couponType === "BUY_X_AT_Y" ||
         coupon.couponType === "BUY_X_GET_Y"),
   );
+
+  if (filteredCoupons?.length === 0) {
+    filteredCoupons = coupons.filter(
+      (coupon) =>
+        !coupon.applicableProducts.length &&
+        !coupon.applicableCollections.length &&
+        (coupon.couponType === "BUY_X_AT_Y" ||
+          coupon.couponType === "BUY_X_GET_Y"),
+    );
+  }
 
   filteredCoupons.sort(
     (a, b) =>
@@ -474,24 +483,36 @@ export const extractCouponsForApplicableCollection = ({
 
 const sumCartItemsQuantity = (cartItems, collectionSlug) => {
   return cartItems
-    .filter((item) => item.collections.includes(collectionSlug))
+    .filter(
+      (item) =>
+        item.collections.includes(collectionSlug) &&
+        item.cartItemSource !== "LIMITED_TIME_DEAL",
+    )
     .reduce((total, item) => total + (item.qty || 0), 0);
 };
 
-export const calculateCollectionNudgeMessage = ({
-  pathname,
-  cartItems,
-  nudgeFeat,
-}) => {
-  if (!nudgeFeat?.length) return;
+export const getNudgeQuantity = ({ pathname, cartItems, coupons }) => {
+  console.log(
+    pathname,
+    "pathname",
+    "cartItems",
+    cartItems,
+    coupons,
+    "nudgeFeat",
+  );
+  if (!coupons?.length) return;
   const collectionSlug = extractCollectionSlug(pathname);
 
-  const lastCoupon = nudgeFeat[nudgeFeat?.length - 1];
+  const lastCoupon = coupons[coupons?.length - 1];
   const maxProgressQuantity =
     lastCoupon?.buyXQuantity + lastCoupon?.getYQuantity || 0;
+  console.log(
+    maxProgressQuantity,
+    collectionSlug,
+    "maxProgressQuantity---collectionSlug",
+  );
 
   const currQuantity = sumCartItemsQuantity(cartItems, collectionSlug);
-
   return { currQuantity, maxProgressQuantity };
   // nudgeFeat.buyXQuantity
   // cartItems.length

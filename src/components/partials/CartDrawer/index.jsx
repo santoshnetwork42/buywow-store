@@ -9,7 +9,7 @@ import {
 } from "@wow-star/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { showToast } from "@/components/common/ToastComponent";
 import { Text } from "@/components/elements";
@@ -28,6 +28,12 @@ import {
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
 import dynamic from "next/dynamic";
+import {
+  setCurrentQuantity,
+  setMaximumQuantity,
+} from "@/store/slices/nudge.slice";
+import { getNudgeQuantity } from "@/utils/helpers";
+import Nudge from "@/components/common/Nudge";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),
@@ -86,6 +92,8 @@ const CartDrawer = () => {
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
   const { handleOutOfStock, handleProceedToCheckout, viewCart } =
     useEventsDispatch();
+  const nudgeCoupons = useSelector((state) => state.nudge.applicableCoupons);
+  const dispatch = useDispatch();
 
   const [delayedIsOpen, setDelayedIsOpen] = useState(false);
   const [checkoutSectionHeight, setCheckoutSectionHeight] = useState(0);
@@ -190,6 +198,17 @@ const CartDrawer = () => {
     outOfStockItems,
     inventoryMapping,
   ]);
+
+  useEffect(() => {
+    const { currQuantity = 0, maxProgressQuantity = 0 } =
+      getNudgeQuantity({
+        pathname,
+        cartItems,
+        coupons: nudgeCoupons,
+      }) || {};
+    dispatch(setCurrentQuantity(currQuantity));
+    dispatch(setMaximumQuantity(maxProgressQuantity));
+  }, [cartItems, pathname, nudgeCoupons]);
 
   const checkoutButtonDisabled = GOKWIK_MID
     ? !isInventoryCheckReady && isShoppingCartIdLoading
@@ -309,7 +328,7 @@ const CartDrawer = () => {
           cartClose={handleCartClose}
           className="mx-3 md:mx-4"
         />
-        {!!isNudge && !!cartItems.length && (
+        {!isNudge && !!cartItems.length && (
           <div className="bg-blue_gray-400_01 py-1.5 text-center md:py-2">
             <Text
               as="p"
@@ -324,6 +343,7 @@ const CartDrawer = () => {
         {cartItems?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-col gap-3 px-3 md:px-4">
+              <Nudge isCart={true} />
               <ShippingProgress
                 freeShippingThreshold={targetAmountForFreeShipping}
                 cartValue={totalAmountForShippingCharge}
