@@ -15,6 +15,7 @@ import {
   extractCollectionSlug,
   extractCouponsForApplicableCollection,
 } from "@/utils/helpers";
+import { useCoupons } from "@wow-star/utils";
 import { getCurrentUser } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
 import Cookies from "js-cookie";
@@ -32,6 +33,43 @@ const ClientSideEffects = () => {
   const { storeCoupon } = useCartDispatch();
   const dispatch = useDispatch();
   const pathname = usePathname();
+  const coupons = useCoupons();
+
+  // store nudge coupons useEffect
+  useEffect(() => {
+    const couponCode =
+      searchParams.get("couponCode")?.split("&")[0] ||
+      searchParams.get("couponcode")?.split("&")[0];
+
+    const fetchCoupon = async () => {
+      try {
+        const response = await fetchCouponRuleAPI(couponCode);
+        dispatch(
+          setApplicableCoupons(
+            extractCouponsForApplicableCollection({
+              coupons: [response],
+              collectionSlug: pathname,
+            }),
+          ),
+        );
+      } catch (error) {
+        errorHandler(error);
+      }
+    };
+    // if url has couponCode then priority will be first
+    // else fetch all coupons for that collection
+    // if there is no coupons then global coupons will be used
+    if (!!couponCode) fetchCoupon();
+    else
+      dispatch(
+        setApplicableCoupons(
+          extractCouponsForApplicableCollection({
+            coupons,
+            collectionSlug: pathname,
+          }),
+        ),
+      );
+  }, [coupons, searchParams]);
 
   useEffect(() => {
     const couponCode =
@@ -40,22 +78,6 @@ const ClientSideEffects = () => {
 
     if (couponCode) {
       storeCoupon(couponCode);
-      const fetchCoupon = async () => {
-        try {
-          const response = await fetchCouponRuleAPI(couponCode);
-          dispatch(
-            setApplicableCoupons(
-              extractCouponsForApplicableCollection({
-                coupons: [response],
-                collectionSlug: pathname,
-              }),
-            ),
-          );
-        } catch (error) {
-          errorHandler(error);
-        }
-      };
-      fetchCoupon();
     }
 
     const collectionSlug = extractCollectionSlug(pathname);

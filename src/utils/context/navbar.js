@@ -45,15 +45,6 @@ function NavbarProvider({ children, headerData }) {
     fetchInitialData()
       .then((data) => {
         setInitialData(data);
-        // store nudge coupons
-        dispatch(
-          setApplicableCoupons(
-            extractCouponsForApplicableCollection({
-              coupons: data?.getTopCoupons?.items,
-              collectionSlug: pathname,
-            }),
-          ),
-        );
       })
       .catch((err) => {
         console.error("Error fetching initial data:", err);
