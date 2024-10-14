@@ -306,7 +306,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
     return cartItems?.reduce((acc, cartItem) => {
       if (
         !(
-          cartItem.cartItemType === "LIMITED_TIME_DEAL" ||
+          cartItem.cartItemSource === "LIMITED_TIME_DEAL" ||
           cartItem.cartItemType === "FREE_PRODUCT"
         )
       ) {
