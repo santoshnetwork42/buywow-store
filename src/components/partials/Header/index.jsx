@@ -1,6 +1,7 @@
 "use client";
 
 import { BagIcon, DownArrowIconSVG, MenuSVG } from "@/assets/svg/icons";
+import { WOWLogo } from "@/assets/svg/logo";
 import { Button, Img, Text } from "@/components/elements";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
@@ -99,33 +100,6 @@ const MenuItem = React.memo(({ item, index, showInWeb }) => {
   );
 });
 
-const Logo = React.memo(({ logoUrl, logoAlt, vipUrl, vipAlt, className }) => (
-  <Link href="/" className={className}>
-    <div className="flex items-center gap-1">
-      <Img
-        src={logoUrl}
-        width={86}
-        height={48}
-        alt={logoAlt}
-        priority
-        className="aspect-[86/48] w-[86px] object-contain"
-      />
-      {/* {vipUrl && (
-        <>
-          <div className="h-[35px] w-[0.5px] bg-gray-300_01" />
-          <Img
-            src={vipUrl}
-            width={70}
-            height={28}
-            alt={vipAlt}
-            className="aspect-[70/28] w-[70px] object-contain"
-          />
-        </>
-      )} */}
-    </div>
-  </Link>
-));
-
 const Header = ({ data }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -215,22 +189,19 @@ const Header = ({ data }) => {
             >
               <MenuSVG height={24} width={24} fillColor="#000000ff" />
             </Button>
-            <Logo
-              logoUrl={logoUrl}
-              logoAlt={logoAlternativeText}
-              vipUrl={vipUrl}
-              vipAlt={vipAlternativeText}
-              className="hidden md:block"
-            />
+
+            <div className="flex hidden items-center gap-1 md:block">
+              <Link href="/">
+                <WOWLogo size={86} keyName="web" />
+              </Link>
+            </div>
           </div>
 
-          <Logo
-            logoUrl={logoUrl}
-            logoAlt={logoAlternativeText}
-            vipUrl={vipUrl}
-            vipAlt={vipAlternativeText}
-            className="md:hidden"
-          />
+          <div className="flex items-center gap-1 md:hidden">
+            <Link href="/">
+              <WOWLogo size={86} keyName="mobile" />
+            </Link>
+          </div>
 
           {(!!collectionMenus?.length || !!otherLinks?.length) && (
             <ul className="hidden flex-wrap gap-y-2 lg:flex lg:gap-x-3 xl:gap-x-4 xxl:gap-x-5">
@@ -291,7 +262,6 @@ const Header = ({ data }) => {
 };
 
 MenuItem.displayName = "MenuItem";
-Logo.displayName = "Logo";
 Header.displayName = "Header";
 
 export default Header;
