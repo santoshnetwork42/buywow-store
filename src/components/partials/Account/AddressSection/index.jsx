@@ -74,7 +74,7 @@ const AddressSection = React.memo(({ variant }) => {
           </Button>
         )}
       </div>
-
+ 
       {addressList?.length > 0 ? (
         <>
           <AddressList addressList={addressList} variant={variant} />
