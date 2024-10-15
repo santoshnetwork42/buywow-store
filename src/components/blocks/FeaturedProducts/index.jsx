@@ -39,9 +39,9 @@ const FeaturedProducts = ({
             key={`product-${index}`}
             className="w-[calc(50vw-16px)] max-w-[326px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
             parentPromotionTag={
+              (promotion?.data && promotion) ||
               (storeConfigData?.attributes?.promotion_tag?.data &&
-                storeConfigData?.attributes?.promotion_tag) ||
-              promotion
+                storeConfigData?.attributes?.promotion_tag)
             }
             {...product.attributes}
           />

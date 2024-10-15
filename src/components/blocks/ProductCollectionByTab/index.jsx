@@ -333,7 +333,7 @@ const ProductCollectionByTab = ({
         pageSize,
       );
       const skeletonCount = isLoading ? remainingProducts : 0;
-
+      console.log("promotion :>> ", promotion);
       const currentProductsOosLast = setSoldOutLast(currentProducts, true);
       return [
         ...currentProductsOosLast.map((product, productIndex) => (
@@ -341,9 +341,9 @@ const ProductCollectionByTab = ({
             className="h-auto bg-white-a700_01"
             key={`product-${productIndex}`}
             parentPromotionTag={
+              (promotion?.data && promotion) ||
               (storeConfigData?.attributes?.promotion_tag?.data &&
-                storeConfigData?.attributes?.promotion_tag) ||
-              promotion
+                storeConfigData?.attributes?.promotion_tag)
             }
             {...product.attributes}
           />
