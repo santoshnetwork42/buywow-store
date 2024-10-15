@@ -71,7 +71,7 @@ export function* createAddressHandler(action) {
 
     yield put(updateCurrentAddress(newAddress));
     const { addressList = [] } = yield select((state) => state.address);
-    yield put(updateAddressList([...addressList, newAddress]));
+    yield put(updateAddressList([newAddress, ...addressList]));
   } catch (error) {
     console.error("error creating address", error);
   } finally {
