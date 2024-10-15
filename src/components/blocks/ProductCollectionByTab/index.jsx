@@ -333,8 +333,8 @@ const ProductCollectionByTab = ({
         pageSize,
       );
       const skeletonCount = isLoading ? remainingProducts : 0;
-      console.log("promotion :>> ", promotion);
       const currentProductsOosLast = setSoldOutLast(currentProducts, true);
+
       return [
         ...currentProductsOosLast.map((product, productIndex) => (
           <ProductCard
