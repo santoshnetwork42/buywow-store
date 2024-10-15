@@ -98,7 +98,6 @@ const ProductCollectionByTab = ({
 
   const storeConfig = useStoreConfig();
   const { data: storeConfigData } = storeConfig;
-  const { attributes: storeConfigDataAttributes } = storeConfigData;
 
   const reloadProducts = useCallback(
     async (newSortOption) => {
@@ -342,8 +341,8 @@ const ProductCollectionByTab = ({
             className="h-auto bg-white-a700_01"
             key={`product-${productIndex}`}
             parentPromotionTag={
-              (storeConfigDataAttributes?.promotion_tag?.data &&
-                storeConfigDataAttributes?.promotion_tag) ||
+              (storeConfigData?.attributes?.promotion_tag?.data &&
+                storeConfigData?.attributes?.promotion_tag) ||
               promotion
             }
             {...product.attributes}

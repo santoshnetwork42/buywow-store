@@ -23,7 +23,6 @@ const FeaturedProductsByTab = ({
   const pathname = usePathname();
   const storeConfig = useStoreConfig();
   const { data: storeConfigData } = storeConfig;
-  const { attributes: storeConfigDataAttributes } = storeConfigData;
 
   const bgColorClass = getBgColor(featuredProductsByTabBgColor);
 
@@ -53,8 +52,8 @@ const FeaturedProductsByTab = ({
               key={`product-${product?.id}-${tabIndex}-${productIndex}`}
               className="w-[calc(50vw-16px)] max-w-[326px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
               parentPromotionTag={
-                (storeConfigDataAttributes?.promotion_tag?.data &&
-                  storeConfigDataAttributes?.promotion_tag) ||
+                (storeConfigData?.attributes?.promotion_tag?.data &&
+                  storeConfigData?.attributes?.promotion_tag) ||
                 promotion
               }
               priority={!lazyBlock && !tabIndex && productIndex < 4}
