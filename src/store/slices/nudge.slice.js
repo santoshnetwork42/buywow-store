@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   collectionSlug: "",
-  applicableCoupons: [],
+  applicableProductCoupons: [],
+  applicableCollectionCoupons: [],
+  globalCoupons: [],
   currQuantity: 0,
   maxQuantity: 0,
   initialLoading: false,
@@ -21,8 +23,14 @@ export const nudgeSlice = createSlice({
     setMaximumQuantity: (state, action) => {
       state.maxQuantity = action.payload;
     },
-    setApplicableCoupons: (state, action) => {
-      state.applicableCoupons = action.payload;
+    setApplicableCollectionCoupons: (state, action) => {
+      state.applicableCollectionCoupons = action.payload;
+    },
+    setApplicableProductCoupons: (state, action) => {
+      state.applicableProductCoupons = action.payload;
+    },
+    setGlobalCoupons: (state, action) => {
+      state.globalCoupons = action.payload;
     },
     resetNudge: () => initialState,
   },
@@ -32,7 +40,9 @@ export const {
   setCollectionSlug,
   setCurrentQuantity,
   setMaximumQuantity,
-  setApplicableCoupons,
+  setApplicableCollectionCoupons,
+  setApplicableProductCoupons,
+  setGlobalCoupons,
   resetNudge,
 } = nudgeSlice.actions;
 export default nudgeSlice.reducer;

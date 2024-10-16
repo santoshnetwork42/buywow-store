@@ -1,9 +1,28 @@
+"use client";
+
 import GiftIcon from "@/assets/svg/gift";
-import { useSelector } from "react-redux";
+import { fetchCouponRuleAPI } from "@/lib/appSyncAPIs";
+import {
+  setApplicableCollectionCoupons,
+  setApplicableProductCoupons,
+  setCurrentQuantity,
+  setMaximumQuantity,
+} from "@/store/slices/nudge.slice";
+import { errorHandler } from "@/utils/errorHandler";
+import {
+  extractCollectionSlug,
+  extractCouponsForApplicableCollection,
+  extractCouponsForApplicableProduct,
+  extractProductSlug,
+  getNudgeQuantity,
+} from "@/utils/helpers";
+import { useCoupons } from "@wow-star/utils";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const IntegratedProgressStepper = ({
   steps,
-  appliedCoupon,
   currQuantity,
   maxQuantity,
   isCart,
@@ -129,10 +148,137 @@ const IntegratedProgressStepper = ({
 };
 
 const Nudge = ({ isCart = false }) => {
-  const nudgeFeat = useSelector((state) => state.nudge.applicableCoupons);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart?.data || []);
+  const coupons = useCoupons();
+
+  const collectionCoupons = useSelector(
+    (state) => state.nudge.applicableCollectionCoupons,
+  );
+  const pdpCoupons = useSelector(
+    (state) => state.nudge.applicableProductCoupons,
+  );
+  const globalCoupons = useSelector((state) => state.nudge.globalCoupons);
   const currQuantity = useSelector((state) => state.nudge.currQuantity);
   const maxProgressQuantity = useSelector((state) => state.nudge.maxQuantity);
-  const appliedCoupon = useSelector((state) => state.cart?.coupon);
+
+  const [nudgeFeat, setNudgeFeat] = useState([]);
+
+  useEffect(() => {
+    const collectionSlug = extractCollectionSlug(pathname);
+    const productSlug = extractProductSlug(pathname);
+
+    const couponCode =
+      searchParams.get("couponCode")?.split("&")[0] ||
+      searchParams.get("couponcode")?.split("&")[0];
+
+    const fetchCoupon = async () => {
+      try {
+        const response = await fetchCouponRuleAPI(couponCode);
+        // collectionSlug
+        dispatch(
+          setApplicableCollectionCoupons(
+            extractCouponsForApplicableCollection({
+              coupons: response ? [response] : [],
+              collectionSlug: pathname,
+            }),
+          ),
+        );
+      } catch (error) {
+        errorHandler(error);
+      }
+    };
+
+    if (!!couponCode) fetchCoupon();
+    else if (!!collectionSlug) {
+      dispatch(
+        setApplicableCollectionCoupons(
+          extractCouponsForApplicableCollection({
+            coupons: coupons,
+            collectionSlug: pathname,
+          }),
+        ),
+      );
+    } else if (!!productSlug)
+      dispatch(
+        setApplicableProductCoupons(
+          extractCouponsForApplicableProduct({
+            coupons: coupons,
+            productSlug: pathname,
+          }),
+        ),
+      );
+  }, [searchParams, coupons]);
+
+  useEffect(() => {
+    const isHomepage = pathname === "/";
+
+    if (isHomepage) {
+      if (nudgeFeat !== globalCoupons) {
+        setNudgeFeat(globalCoupons);
+        const i =
+          getNudgeQuantity({
+            pathname,
+            cartItems,
+            coupons: globalCoupons,
+          }) || {};
+      }
+      return;
+    }
+
+    const collectionSlug = extractCollectionSlug(pathname);
+    const productSlug = extractProductSlug(pathname);
+
+    console.log(collectionSlug, "collectionSlug", collectionCoupons);
+    // Handle collection page
+    if (collectionSlug && nudgeFeat !== collectionCoupons) {
+      const nextNudgeFeat = collectionCoupons?.length
+        ? collectionCoupons
+        : globalCoupons;
+      setNudgeFeat(nextNudgeFeat);
+      return;
+    }
+
+    // Handle product page (PDP)
+    if (productSlug) {
+      const nextNudgeFeat = pdpCoupons?.length ? pdpCoupons : globalCoupons;
+      if (nudgeFeat !== nextNudgeFeat) {
+        setNudgeFeat(nextNudgeFeat);
+      }
+    }
+  }, [pathname, globalCoupons, pdpCoupons, collectionCoupons]);
+
+  useEffect(() => {
+    const collectionSlug = extractCollectionSlug(pathname);
+    const productSlug = extractProductSlug(pathname);
+
+    const isGlobalOffer =
+      (!!collectionSlug && !!collectionCoupons?.length) ||
+      (!!productSlug && !!pdpCoupons?.length);
+
+    const { currQuantity = 0, maxProgressQuantity = 0 } =
+      getNudgeQuantity({
+        pathname,
+        cartItems,
+        isGlobalOffer:
+          !!collectionSlug && !!collectionCoupons?.length
+            ? false
+            : !!productSlug && !!pdpCoupons?.length
+              ? false
+              : true,
+        coupons:
+          !!collectionSlug && !!collectionCoupons?.length
+            ? collectionCoupons
+            : !!productSlug && !!pdpCoupons?.length
+              ? pdpCoupons
+              : globalCoupons,
+      }) || {};
+
+    dispatch(setCurrentQuantity(currQuantity));
+    dispatch(setMaximumQuantity(maxProgressQuantity));
+  }, [cartItems, pathname]);
 
   const steps = nudgeFeat.map((i) => ({
     ...i,
@@ -143,7 +289,6 @@ const Nudge = ({ isCart = false }) => {
     <div className="w-full">
       <IntegratedProgressStepper
         steps={steps}
-        appliedCoupon={appliedCoupon}
         currQuantity={currQuantity}
         maxQuantity={maxProgressQuantity}
         isCart={isCart}

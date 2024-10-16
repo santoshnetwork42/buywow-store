@@ -23,7 +23,7 @@ export async function GET() {
           storeId: { eq: STORE_ID },
           isArchive: { eq: false },
         },
-        ltoProductSort: [{ field: "minOrderValue", direction: "asc" }],
+        ltoProductSort: [{ field: "priority", direction: "asc" }],
       },
       {
         next: { revalidate: 0 },

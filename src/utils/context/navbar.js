@@ -1,6 +1,8 @@
 "use client";
 
 import { GUEST_CHECKOUT, STORE_ID, STORE_PREFIX } from "@/config";
+import { setGlobalCoupons } from "@/store/slices/nudge.slice";
+import { extractGlobalCoupons } from "@/utils/helpers";
 import {
   getProductInventory,
   NavbarProvider as Navbar,
@@ -11,14 +13,6 @@ import Cookie from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  extractCollectionSlug,
-  extractCouponsForApplicableCollection,
-} from "@/utils/helpers";
-import {
-  setApplicableCoupons,
-  setCollectionSlug,
-} from "@/store/slices/nudge.slice";
 
 const client = generateClient();
 
@@ -44,6 +38,10 @@ function NavbarProvider({ children, headerData, storeConfig }) {
     fetchInitialData()
       .then((data) => {
         setInitialData(data);
+        // store global coupons
+        dispatch(
+          setGlobalCoupons(extractGlobalCoupons(data.getTopCoupons.items)),
+        );
       })
       .catch((err) => {
         console.error("Error fetching initial data:", err);
@@ -160,11 +158,6 @@ export const useSource = () => {
 export const useIsInteractive = () => {
   const { isInteractive } = useContext(NavbarContext) || {};
   return isInteractive;
-};
-
-export const useStoreConfig = () => {
-  const { storeConfig } = useContext(NavbarContext) || {};
-  return storeConfig;
 };
 
 export const useGuestCheckout = () => {

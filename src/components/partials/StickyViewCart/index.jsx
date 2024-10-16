@@ -1,15 +1,14 @@
 "use client";
 
-import GiftIcon from "@/assets/svg/gift";
 import Nudge from "@/components/common/Nudge";
 import { Button, Heading, Text } from "@/components/elements";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
-import { useIsInteractive, useNudgeFeat } from "@/utils/context/navbar";
+import { useIsInteractive } from "@/utils/context/navbar";
 import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
-import { getNudgeQuantity, toDecimal } from "@/utils/helpers";
+import { toDecimal } from "@/utils/helpers";
 import { useCartItems, useCartTotal } from "@wow-star/utils";
 import { usePathname } from "next/navigation";
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 const CartSummary = React.memo(
@@ -36,9 +35,6 @@ const StickyViewCart = () => {
   const pathname = usePathname();
 
   const { handleCartVisibility } = useModalDispatch();
-  const nudgeFeat = useSelector((state) => state.nudge.applicableCoupons);
-  const currQuantity = useSelector((state) => state.nudge.currQuantity);
-  const maxProgressQuantity = useSelector((state) => state.nudge.maxQuantity);
 
   const isRewardApplied = useSelector(
     (state) => state.cart?.isRewardApplied || false,

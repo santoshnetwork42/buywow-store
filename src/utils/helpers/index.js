@@ -447,41 +447,16 @@ export const extractCollectionSlug = (url) => {
   return match ? match[1] : null;
 };
 
-export const extractCouponsForApplicableCollection = ({
-  coupons = [],
-  collectionSlug,
-}) => {
-  const extractedCollectionSlug = extractCollectionSlug(collectionSlug);
-
-  let filteredCoupons = coupons.filter(
-    (coupon) =>
-      !coupon.applicableProducts.length &&
-      coupon.applicableCollections.includes(extractedCollectionSlug) &&
-      (coupon.couponType === "BUY_X_AT_Y" ||
-        coupon.couponType === "BUY_X_GET_Y"),
-  );
-
-  if (filteredCoupons?.length === 0) {
-    filteredCoupons = coupons.filter(
-      (coupon) =>
-        !coupon.applicableProducts.length &&
-        !coupon.applicableCollections.length &&
-        (coupon.couponType === "BUY_X_AT_Y" ||
-          coupon.couponType === "BUY_X_GET_Y"),
-    );
-  }
-
-  filteredCoupons.sort(
-    (a, b) =>
-      a.buyXQuantity +
-      (a.getYQuantity || 0) -
-      (b.buyXQuantity + (b.getYQuantity || 0)),
-  );
-
-  return filteredCoupons;
+export const extractProductSlug = (url) => {
+  const regex = /\/products\/([^/?]+)/;
+  const match = url.match(regex);
+  return match ? match[1] : null;
 };
 
-const sumCartItemsQuantity = (cartItems, collectionSlug) => {
+export const sumCartItemsQuantityBasedOnCollection = (
+  cartItems,
+  collectionSlug,
+) => {
   return cartItems
     .filter(
       (item) =>
@@ -491,14 +466,97 @@ const sumCartItemsQuantity = (cartItems, collectionSlug) => {
     .reduce((total, item) => total + (item.qty || 0), 0);
 };
 
-export const getNudgeQuantity = ({ pathname, cartItems, coupons }) => {
+export const getNudgeQuantity = ({
+  pathname,
+  cartItems,
+  coupons,
+  isGlobalOffer,
+}) => {
   if (!coupons?.length) return;
+
   const collectionSlug = extractCollectionSlug(pathname);
+  const productSlug = extractProductSlug(pathname);
 
   const lastCoupon = coupons[coupons?.length - 1];
   const maxProgressQuantity =
     lastCoupon?.buyXQuantity + lastCoupon?.getYQuantity || 0;
 
-  const currQuantity = sumCartItemsQuantity(cartItems, collectionSlug);
+  const filterCartItems = cartItems.filter(
+    (item) => item.cartItemSource !== "LIMITED_TIME_DEAL",
+  );
+
+  // other pages except pdp and collection
+  let currQuantity = filterCartItems?.reduce(
+    (total, item) => total + (item.qty || 0),
+    0,
+  );
+  if (isGlobalOffer) {
+    return { currQuantity, maxProgressQuantity };
+  } else if (productSlug) {
+    // if pdp page
+    currQuantity = filterCartItems
+      .filter((item) => item.slug === productSlug)
+      .reduce((total, item) => total + (item.qty || 0), 0);
+  } else if (collectionSlug) {
+    // if collection page
+    currQuantity = filterCartItems
+      .filter((item) => item.collections.includes(collectionSlug))
+      .reduce((total, item) => total + (item.qty || 0), 0);
+  }
   return { currQuantity, maxProgressQuantity };
+};
+
+export const sortCouponBasedOnQuantity = (coupons = []) => {
+  return coupons.sort(
+    (a, b) =>
+      a.buyXQuantity +
+      (a.getYQuantity || 0) -
+      (b.buyXQuantity + (b.getYQuantity || 0)),
+  );
+};
+
+export const extractGlobalCoupons = (coupons = []) => {
+  const filteredCoupons = coupons.filter(
+    (coupon) =>
+      !coupon.applicableProducts.length &&
+      !coupon.applicableCollections.length &&
+      (coupon.couponType === "BUY_X_AT_Y" ||
+        coupon.couponType === "BUY_X_GET_Y"),
+  );
+
+  return sortCouponBasedOnQuantity(filteredCoupons);
+};
+
+export const extractCouponsForApplicableProduct = ({
+  coupons = [],
+  productSlug,
+}) => {
+  const extractedProductSlug = extractProductSlug(productSlug);
+
+  const filteredCoupons = coupons.filter(
+    (coupon) =>
+      !coupon.applicableCollections.length &&
+      coupon.applicableProducts.includes(extractedProductSlug) &&
+      (coupon.couponType === "BUY_X_AT_Y" ||
+        coupon.couponType === "BUY_X_GET_Y"),
+  );
+
+  return sortCouponBasedOnQuantity(filteredCoupons);
+};
+
+export const extractCouponsForApplicableCollection = ({
+  coupons = [],
+  collectionSlug,
+}) => {
+  const extractedCollectionSlug = extractCollectionSlug(collectionSlug);
+
+  const filteredCoupons = coupons.filter(
+    (coupon) =>
+      !coupon.applicableProducts.length &&
+      coupon.applicableCollections.includes(extractedCollectionSlug) &&
+      (coupon.couponType === "BUY_X_AT_Y" ||
+        coupon.couponType === "BUY_X_GET_Y"),
+  );
+
+  return sortCouponBasedOnQuantity(filteredCoupons);
 };

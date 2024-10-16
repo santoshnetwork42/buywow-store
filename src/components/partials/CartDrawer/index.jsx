@@ -97,8 +97,6 @@ const CartDrawer = () => {
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
   const { handleOutOfStock, handleProceedToCheckout, viewCart } =
     useEventsDispatch();
-  const nudgeCoupons = useSelector((state) => state.nudge.applicableCoupons);
-  const dispatch = useDispatch();
 
   const [delayedIsOpen, setDelayedIsOpen] = useState(false);
   const [checkoutSectionHeight, setCheckoutSectionHeight] = useState(0);
@@ -204,17 +202,6 @@ const CartDrawer = () => {
     outOfStockItems,
     inventoryMapping,
   ]);
-
-  useEffect(() => {
-    const { currQuantity = 0, maxProgressQuantity = 0 } =
-      getNudgeQuantity({
-        pathname,
-        cartItems,
-        coupons: nudgeCoupons,
-      }) || {};
-    dispatch(setCurrentQuantity(currQuantity));
-    dispatch(setMaximumQuantity(maxProgressQuantity));
-  }, [cartItems, pathname, nudgeCoupons]);
 
   const checkoutButtonDisabled = GOKWIK_MID
     ? !isInventoryCheckReady && isShoppingCartIdLoading
