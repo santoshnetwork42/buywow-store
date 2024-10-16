@@ -1,13 +1,15 @@
 "use client";
 
+import GiftIcon from "@/assets/svg/gift";
+import Nudge from "@/components/common/Nudge";
 import { Button, Heading, Text } from "@/components/elements";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
-import { useIsInteractive } from "@/utils/context/navbar";
+import { useIsInteractive, useNudgeFeat } from "@/utils/context/navbar";
 import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
-import { toDecimal } from "@/utils/helpers";
+import { getNudgeQuantity, toDecimal } from "@/utils/helpers";
 import { useCartItems, useCartTotal } from "@wow-star/utils";
 import { usePathname } from "next/navigation";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 const CartSummary = React.memo(
@@ -30,9 +32,14 @@ CartSummary.displayName = "CartSummary";
 
 const StickyViewCart = () => {
   const isInteractive = useIsInteractive();
+
   const pathname = usePathname();
 
   const { handleCartVisibility } = useModalDispatch();
+  const nudgeFeat = useSelector((state) => state.nudge.applicableCoupons);
+  const currQuantity = useSelector((state) => state.nudge.currQuantity);
+  const maxProgressQuantity = useSelector((state) => state.nudge.maxQuantity);
+
   const isRewardApplied = useSelector(
     (state) => state.cart?.isRewardApplied || false,
   );
@@ -86,23 +93,10 @@ const StickyViewCart = () => {
     return "";
   };
 
-  let isNudge = getCollectionWiseNudgeMsg();
-
   return (
     <>
       <div className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg">
-        {!!isNudge && !!cartItems.length && (
-          <div className="bg-blue_gray-400_01 py-1.5 text-center sm:rounded-t-md">
-            <Text
-              as="p"
-              size="base"
-              className="text-sm text-white-a700"
-              responsive
-            >
-              {isNudge}
-            </Text>
-          </div>
-        )}
+        <Nudge />
         <div className="flex flex-grow items-center justify-between px-5 py-2">
           <CartSummary
             totalItems={totalItems}

@@ -10,7 +10,15 @@ import { generateClient } from "aws-amplify/api";
 import Cookie from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  extractCollectionSlug,
+  extractCouponsForApplicableCollection,
+} from "@/utils/helpers";
+import {
+  setApplicableCoupons,
+  setCollectionSlug,
+} from "@/store/slices/nudge.slice";
 
 const client = generateClient();
 
@@ -28,6 +36,7 @@ function NavbarProvider({ children, headerData, storeConfig }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
+  const dispatch = useDispatch();
 
   const [initialData, setInitialData] = useState(null);
 

@@ -8,6 +8,7 @@ import { modalSlice } from "@/store/slices/modal.slice";
 import { recentlyViewedSlice } from "@/store/slices/recentlyViewed.slice";
 import { systemSlice } from "@/store/slices/system.slice";
 import { userSlice } from "@/store/slices/user.slice";
+import { nudgeSlice } from "@/store/slices/nudge.slice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   FLUSH,
@@ -82,9 +83,14 @@ const persistedReducers = {
     createPersistConfig("system"),
     systemSlice.reducer,
   ),
+  [nudgeSlice.name]: persistReducer(
+    createPersistConfig("nudge"),
+    nudgeSlice.reducer,
+  ),
   // Non-persisted reducers
   [modalSlice.name]: modalSlice.reducer,
   [eventsSlice.name]: eventsSlice.reducer,
+  // [nudgeSlice.name]: nudgeSlice.reducer,
 };
 
 const appReducer = combineReducers(persistedReducers);

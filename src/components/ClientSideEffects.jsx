@@ -1,16 +1,27 @@
 "use client";
 
 import { GUEST_CHECKOUT_COOKIE_EXPIRY, STORE_PREFIX } from "@/config";
-import { getUserAPI } from "@/lib/appSyncAPIs";
+import { fetchCouponRuleAPI, getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
+import {
+  setApplicableCoupons,
+  setCollectionSlug,
+} from "@/store/slices/nudge.slice";
+import { errorHandler } from "@/utils/errorHandler";
+import {
+  extractCollectionSlug,
+  extractCouponsForApplicableCollection,
+} from "@/utils/helpers";
+import { useCoupons } from "@wow-star/utils";
 import { getCurrentUser } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
 import Cookies from "js-cookie";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
 const ClientSideEffects = () => {
@@ -20,6 +31,45 @@ const ClientSideEffects = () => {
   const { setUser } = useUserDispatch();
   const { auth } = useEventsDispatch();
   const { storeCoupon } = useCartDispatch();
+  const dispatch = useDispatch();
+  const pathname = usePathname();
+  const coupons = useCoupons();
+
+  // store nudge coupons useEffect
+  useEffect(() => {
+    const couponCode =
+      searchParams.get("couponCode")?.split("&")[0] ||
+      searchParams.get("couponcode")?.split("&")[0];
+
+    const fetchCoupon = async () => {
+      try {
+        const response = await fetchCouponRuleAPI(couponCode);
+        dispatch(
+          setApplicableCoupons(
+            extractCouponsForApplicableCollection({
+              coupons: [response],
+              collectionSlug: pathname,
+            }),
+          ),
+        );
+      } catch (error) {
+        errorHandler(error);
+      }
+    };
+    // if url has couponCode then priority will be first
+    // else fetch all coupons for that collection
+    // if there is no coupons then global coupons will be used
+    if (!!couponCode) fetchCoupon();
+    else
+      dispatch(
+        setApplicableCoupons(
+          extractCouponsForApplicableCollection({
+            coupons,
+            collectionSlug: pathname,
+          }),
+        ),
+      );
+  }, [coupons, searchParams]);
 
   useEffect(() => {
     const couponCode =
@@ -29,6 +79,9 @@ const ClientSideEffects = () => {
     if (couponCode) {
       storeCoupon(couponCode);
     }
+
+    const collectionSlug = extractCollectionSlug(pathname);
+    dispatch(setCollectionSlug(collectionSlug));
     //   eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
