@@ -5,8 +5,9 @@ import { extractAttributes } from "@/utils/helpers";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const CategoryItem = ({ image, title, link }) => {
+const CategoryItem = ({ image, title, link, priority }) => {
   const { url, alternativeText } = extractAttributes(image);
+
   return (
     <Link
       prefetch={false}
@@ -20,6 +21,7 @@ const CategoryItem = ({ image, title, link }) => {
           width={56}
           height={56}
           className="aspect-square w-14 object-contain"
+          priority={priority}
         />
       </div>
       {!!title && (
@@ -40,6 +42,7 @@ CategoryItem.displayName = "CategoryItem";
 const TrendingCategories = ({
   trendingCategoryItems: categories,
   isPersistLoading,
+  lazyBlock = true,
 }) => {
   const pathname = usePathname();
 
@@ -55,6 +58,7 @@ const TrendingCategories = ({
             title={category?.title}
             image={category?.image}
             link={category?.slug}
+            priority={!lazyBlock}
           />
         ))}
       </div>

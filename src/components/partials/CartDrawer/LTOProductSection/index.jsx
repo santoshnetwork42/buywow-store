@@ -1,24 +1,21 @@
 "use client";
 
+import CartWithPlus from "@/assets/svg/cartWithPlus";
 import PendingLockIcon from "@/assets/svg/pendingLockIcon";
 import TagIcon from "@/assets/svg/tagIcon";
-import { showToast } from "@/components/common/ToastComponent";
 import { Button, Heading, Text } from "@/components/elements";
 import ProgressBar from "@/components/features/ProgressBar";
 import Slider from "@/components/features/Slider";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
-import {
-  LIMITED_TIME_DEAL_DURATION_IN_MINUTES,
-  PREPAID_ENABLED,
-} from "@/utils/data/constants";
+import { LIMITED_TIME_DEAL_DURATION_IN_MINUTES } from "@/utils/data/constants";
 import {
   getDiscountPercentage,
   getRecordKey,
   toDecimal,
 } from "@/utils/helpers";
-import { getThumbImage, useCartTotal, useConfiguration } from "@wow-star/utils";
+import { getThumbImage } from "@wow-star/utils";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
@@ -125,7 +122,7 @@ export const LimitedTimeDealProduct = ({
         <div className="flex min-h-20 gap-3">
           <div
             className="flex aspect-[74/80] w-[74px] items-center overflow-hidden rounded"
-            style={{ backgroundColor: "rgb(255, 255, 255)" }}
+            style={{ backgroundColor: "#F7F7E7" }}
           >
             <ProductThumbnail
               height={100}

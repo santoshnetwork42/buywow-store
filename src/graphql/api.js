@@ -93,6 +93,8 @@ export const getInitialData = /* GraphQL */ `
         priority
         couponType
         buyXQuantity
+        deviceType 
+        ppcodCouponAmount
         getYAmount
         getYPercentage
         getYQuantity
@@ -385,6 +387,7 @@ export const applyCoupon = /* GraphQL */ `
       getYProduct
       couponTitle
       description
+      ppcodCouponAmount
       getYStoreProduct {
         id
         title
@@ -462,6 +465,9 @@ export const applyCoupon = /* GraphQL */ `
       isAffiliated
       isFeatured
       isPDPFeatured
+      isArchive
+      priority
+      createdAt
     }
   }
 `;

@@ -85,6 +85,7 @@ const ProductCard = memo(
     image,
     showBenefitTags = true,
     sendProductDataToParent,
+    priority,
   }) => {
     const isInteractive = useIsInteractive();
     const [selectedVariant] = useProductVariantGroups(fetchedProduct);
@@ -137,7 +138,9 @@ const ProductCard = memo(
             imageKey={thumbImage?.imageKey}
             className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
             alt={title || "Product image"}
+            priority={priority}
           />
+
           {!!parentPromotionTag?.data
             ? (() => {
                 const { tag, bgColor } = extractAttributes(parentPromotionTag);

@@ -1,8 +1,13 @@
 "use client";
 
-import { BagIcon, DownArrowIconSVG, MenuSVG } from "@/assets/svg/icons";
+import {
+  BagIcon,
+  DownArrowIconSVG,
+  MenuSVG,
+  UserIcon,
+} from "@/assets/svg/icons";
 import { WOWLogo } from "@/assets/svg/logo";
-import { Button, Img, Text } from "@/components/elements";
+import { Button, Text } from "@/components/elements";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -103,7 +108,7 @@ const MenuItem = React.memo(({ item, index, showInWeb }) => {
 const Header = ({ data }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const showHeader = pathname?.includes("blog");
+  const showHeader = !pathname?.includes("blog");
   const isInteractive = useIsInteractive();
 
   const user = useSelector((state) => state.user?.user);
@@ -173,10 +178,9 @@ const Header = ({ data }) => {
   );
 
   if (!data) return null;
+  if (!showHeader) return null;
 
-  return showHeader ? (
-    <></>
-  ) : (
+  return (
     <header className="relative">
       <div className="container-main flex border-b-[0.5px] border-solid border-gray-300_01 bg-white-a700_01 py-2.5 md:py-3 lg:py-4">
         <div className="flex flex-1 flex-wrap items-center justify-between gap-x-5 gap-y-2.5 md:flex-nowrap">
@@ -214,14 +218,7 @@ const Header = ({ data }) => {
               <SearchBar className="hidden min-w-[200px] max-w-[284px] shrink md:flex" />
             )}
             <Button className="ml-auto flex-shrink-0" onClick={handleUserClick}>
-              <Img
-                src="img_user.svg"
-                width={24}
-                height={24}
-                alt="user icon"
-                className="aspect-square w-[24px] object-contain"
-                isStatic
-              />
+              <UserIcon size={22} />
             </Button>
             {!isRestricted && (
               <div
