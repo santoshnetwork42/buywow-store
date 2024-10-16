@@ -33,6 +33,7 @@ import {
   updateUserAddress,
   validateTransaction,
   verifyCustomOTP,
+  getStoreConfigurations,
 } from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import fetchData from "@/utils/fetchData";
@@ -130,6 +131,17 @@ export const getNavbarAndFooterAPI = async () => {
     },
   );
   return JSON.parse(data?.getWebNavbarAndFooter);
+};
+
+export const getStoreConfigurationsAPI = async () => {
+  const data = await fetchData(
+    getStoreConfigurations,
+    { storeId: STORE_ID },
+    {
+      next: { revalidate: 86400, tags: ["header"] },
+    },
+  );
+  return JSON.parse(data?.getStoreConfigurations);
 };
 
 export const getUserAPI = async () => {
