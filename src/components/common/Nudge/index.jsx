@@ -231,7 +231,6 @@ const Nudge = ({ isCart = false }) => {
     const collectionSlug = extractCollectionSlug(pathname);
     const productSlug = extractProductSlug(pathname);
 
-    console.log(collectionSlug, "collectionSlug", collectionCoupons);
     // Handle collection page
     if (collectionSlug && nudgeFeat !== collectionCoupons) {
       const nextNudgeFeat = collectionCoupons?.length

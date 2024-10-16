@@ -146,6 +146,11 @@ function NavbarProvider({ children, headerData, storeConfig }) {
   );
 }
 
+export const useStoreConfig = () => {
+  const { storeConfig } = useContext(NavbarContext) || {};
+  return storeConfig;
+};
+
 export const useNavbar = () => {
   return useContext(NavbarContext);
 };
