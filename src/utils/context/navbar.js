@@ -146,11 +146,6 @@ function NavbarProvider({ children, headerData, storeConfig }) {
   );
 }
 
-export const useStoreConfig = () => {
-  const { storeConfig } = useContext(NavbarContext) || {};
-  return storeConfig;
-};
-
 export const useNavbar = () => {
   return useContext(NavbarContext);
 };
@@ -163,6 +158,11 @@ export const useSource = () => {
 export const useIsInteractive = () => {
   const { isInteractive } = useContext(NavbarContext) || {};
   return isInteractive;
+};
+
+export const useStoreConfig = () => {
+  const { storeConfig } = useContext(NavbarContext) || {};
+  return storeConfig;
 };
 
 export const useGuestCheckout = () => {
