@@ -3,7 +3,10 @@ import ClientSideEffects from "@/components/ClientSideEffects";
 import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
 import { AWS_CLIENT_ID } from "@/config";
-import { getNavbarAndFooterAPI } from "@/lib/appSyncAPIs";
+import {
+  getNavbarAndFooterAPI,
+  getStoreConfigurationsAPI,
+} from "@/lib/appSyncAPIs";
 import { Provider } from "@/store/Provider";
 import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 import GoKwikProvider from "@/utils/context/gokwik";
@@ -28,6 +31,7 @@ Amplify.configure({
 
 async function PageLayout({ children }) {
   const { data } = (await getNavbarAndFooterAPI()) || {};
+  const { data: storeConfig } = (await getStoreConfigurationsAPI()) || {};
 
   const {
     announcementBar: announcementData = {},
@@ -38,7 +42,7 @@ async function PageLayout({ children }) {
 
   return (
     <Provider data={{ headerData, carouselData }}>
-      <NavbarProvider headerData={headerData}>
+      <NavbarProvider headerData={headerData} storeConfig={storeConfig}>
         <GoKwikProvider>
           <AnnouncementProvider>
             <ClientSideEffects />
