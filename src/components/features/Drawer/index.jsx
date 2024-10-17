@@ -29,7 +29,8 @@ const Drawer = ({
   const drawerRef = useRef(null);
 
   const toggleScroll = useCallback((lock) => {
-    document.body.style.overflow = lock ? "hidden" : "unset";
+    if (document?.body?.style)
+      document.body.style.overflow = lock ? "hidden" : "unset";
   }, []);
 
   const openDrawer = () => {
