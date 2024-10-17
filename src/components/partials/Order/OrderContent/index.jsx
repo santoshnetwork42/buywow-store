@@ -68,22 +68,22 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
     [order],
   );
 
-  useEffect(() => {
-    if ((isStatusProcessing || isPaymentProcessing) && fetchAttempts < 3) {
-      const timerId = setTimeout(() => {
-        if (isPaymentProcessing) {
-          showToast.custom("Hold On! We're updating your payment status...");
-          checkPaymentStatus();
-        } else {
-          fetchUpdatedOrder();
-        }
-        setFetchAttempts((prev) => prev + 1);
-      }, 100);
+  // useEffect(() => {
+  //   if ((isStatusProcessing || isPaymentProcessing) && fetchAttempts < 3) {
+  //     const timerId = setTimeout(() => {
+  //       if (isPaymentProcessing) {
+  //         showToast.custom("Hold On! We're updating your payment status...");
+  //         checkPaymentStatus();
+  //       } else {
+  //         fetchUpdatedOrder();
+  //       }
+  //       setFetchAttempts((prev) => prev + 1);
+  //     }, 100);
 
-      return () => clearTimeout(timerId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order, paymentId]);
+  //     return () => clearTimeout(timerId);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [order, paymentId]);
 
   useEffect(() => {
     if (user?.id && order?.userId && user.id === order.userId) {
