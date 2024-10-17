@@ -9,19 +9,22 @@ import ProductList from "@/components/partials/Order/OrderContent/ProductList";
 import ProgressSteps from "@/components/partials/Others/ProgressSteps";
 import { SWOP_STORE_BANNER_URL } from "@/config";
 import { getOrderByIdAPI, validateTransactionAPI } from "@/lib/appSyncAPIs";
+import OrderSkeleton from "@/src/components/partials/Account/OrderSection/OrderList/OrderSkeleton";
 import States from "@/utils/data/states.json";
 import { errorHandler } from "@/utils/errorHandler";
 import Link from "next/link";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
 const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   const [order, setOrder] = useState(initialOrderData);
+  const [loading, setLoading] = useState(!initialOrderData);
   const user = useSelector((state) => state.user?.user);
   const [fetchAttempts, setFetchAttempts] = useState(0);
   const allStatus = ["CANCELLED", "DISPATCHED", "COURIER_RETURN", "DELIVERED"];
 
   const fetchUpdatedOrder = useCallback(async () => {
+    setLoading(true);
     try {
       const getOrder = await getOrderByIdAPI({
         id: orderId,
@@ -33,6 +36,8 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
       }
     } catch (error) {
       errorHandler(error);
+    } finally {
+      setLoading(false);
     }
   }, [orderId, user?.id]);
 
@@ -44,7 +49,7 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
           paymentId,
         });
         if (success) {
-          fetchUpdatedOrder();
+          await fetchUpdatedOrder();
           showToast.custom("Thank you! Your order has been confirmed.");
         }
       } catch (error) {
@@ -69,6 +74,12 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   );
 
   useEffect(() => {
+    if (!initialOrderData) {
+      fetchUpdatedOrder();
+    }
+  }, [initialOrderData, fetchUpdatedOrder]);
+
+  useEffect(() => {
     if ((isStatusProcessing || isPaymentProcessing) && fetchAttempts < 3) {
       const timerId = setTimeout(() => {
         if (isPaymentProcessing) {
@@ -82,15 +93,19 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
 
       return () => clearTimeout(timerId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [order, paymentId]);
+  }, [
+    isStatusProcessing,
+    isPaymentProcessing,
+    fetchAttempts,
+    checkPaymentStatus,
+    fetchUpdatedOrder,
+  ]);
 
   useEffect(() => {
     if (user?.id && order?.userId && user.id === order.userId) {
       fetchUpdatedOrder();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, order?.userId, fetchUpdatedOrder]);
 
   const { formattedState, country } = useMemo(() => {
     if (order?.shippingAddress?.state) {
@@ -103,6 +118,10 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
     }
     return { formattedState: "", country: "" };
   }, [order?.shippingAddress]);
+
+  if (loading) {
+    return <OrderSkeleton />;
+  }
 
   if (!order) return null;
 
@@ -131,7 +150,7 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   );
 };
 
-const ActionButtons = React.memo(() => (
+const ActionButtons = () => (
   <div className="flex flex-wrap justify-center gap-2 sm:justify-between">
     <div className="flex gap-2">
       <Link
@@ -157,11 +176,11 @@ const ActionButtons = React.memo(() => (
       RETURN TO SHOP
     </Link>
   </div>
-));
+);
 
 ActionButtons.displayName = "ActionButtons";
 
-const SwopStoreBanner = React.memo(() => {
+const SwopStoreBanner = () => {
   const bannerOnThankYouPage = {
     mWebImage: "/swopstore/swopstore-mweb.jpg",
     webImage: "/swopstore/swopstore-web.jpg",
@@ -171,13 +190,13 @@ const SwopStoreBanner = React.memo(() => {
     <>
       <Link
         prefetch={false}
-        className=""
+        className="flex w-full items-center justify-center"
         href={bannerOnThankYouPage.link ?? "#"}
       >
         <Img
           src={bannerOnThankYouPage?.mWebImage}
           alt={'Thank you for your order!"'}
-          width={400}
+          width={500}
           height={200}
           className="rounded-md sm:hidden"
         />
@@ -197,7 +216,7 @@ const SwopStoreBanner = React.memo(() => {
       </Link>
     </>
   );
-});
+};
 
 SwopStoreBanner.displayName = "SwopStoreBanner";
 
