@@ -58,13 +58,13 @@ export default async function OrderPage({ params, searchParams }) {
 
   return (
     <div className="container-main mb-main flex max-w-4xl flex-col gap-5 py-5 md:gap-6">
-      {/* <Suspense fallback={<OrderSkeleton />}> */}
+      <Suspense fallback={<OrderSkeleton />}>
         <OrderContent
           initialOrderData={initialOrderData}
           orderId={orderId}
           paymentId={paymentId}
         />
-      {/* </Suspense> */}
+      </Suspense>
     </div>
   );
 }
