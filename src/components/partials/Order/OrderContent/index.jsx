@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect, useState, useCallback, useMemo } from "react";
+import { useSelector } from "react-redux";
+import Link from "next/link";
 import { showToast } from "@/components/common/ToastComponent";
 import { Img } from "@/components/elements";
 import Cashback from "@/components/partials/CartDrawer/Cashback";
@@ -12,14 +15,10 @@ import { getOrderByIdAPI, validateTransactionAPI } from "@/lib/appSyncAPIs";
 import OrderSkeleton from "@/src/components/partials/Account/OrderSection/OrderList/OrderSkeleton";
 import States from "@/utils/data/states.json";
 import { errorHandler } from "@/utils/errorHandler";
-import Link from "next/link";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
 
 const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   const [order, setOrder] = useState(initialOrderData);
-  const [loading, setLoading] = useState(false);
-  
+  const [loading, setLoading] = useState(!initialOrderData);
   const user = useSelector((state) => state.user?.user);
   const [fetchAttempts, setFetchAttempts] = useState(0);
   const allStatus = ["CANCELLED", "DISPATCHED", "COURIER_RETURN", "DELIVERED"];
@@ -50,7 +49,7 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
           paymentId,
         });
         if (success) {
-          fetchUpdatedOrder();
+          await fetchUpdatedOrder();
           showToast.custom("Thank you! Your order has been confirmed.");
         }
       } catch (error) {
@@ -73,6 +72,12 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
       order?.checkoutChannel === "GOKWIK",
     [order],
   );
+
+  useEffect(() => {
+    if (!initialOrderData) {
+      fetchUpdatedOrder();
+    }
+  }, [initialOrderData, fetchUpdatedOrder]);
 
   useEffect(() => {
     if ((isStatusProcessing || isPaymentProcessing) && fetchAttempts < 3) {
@@ -145,7 +150,7 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   );
 };
 
-const ActionButtons = React.memo(() => (
+const ActionButtons = () => (
   <div className="flex flex-wrap justify-center gap-2 sm:justify-between">
     <div className="flex gap-2">
       <Link
@@ -171,11 +176,11 @@ const ActionButtons = React.memo(() => (
       RETURN TO SHOP
     </Link>
   </div>
-));
+);
 
 ActionButtons.displayName = "ActionButtons";
 
-const SwopStoreBanner = React.memo(() => {
+const SwopStoreBanner = () => {
   const bannerOnThankYouPage = {
     mWebImage: "/swopstore/swopstore-mweb.jpg",
     webImage: "/swopstore/swopstore-web.jpg",
@@ -211,7 +216,7 @@ const SwopStoreBanner = React.memo(() => {
       </Link>
     </>
   );
-});
+};
 
 SwopStoreBanner.displayName = "SwopStoreBanner";
 
