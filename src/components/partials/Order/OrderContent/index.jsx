@@ -78,7 +78,7 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
           fetchUpdatedOrder();
         }
         setFetchAttempts((prev) => prev + 1);
-      }, FETCH_INTERVAL);
+      }, 100);
 
       return () => clearTimeout(timerId);
     }
