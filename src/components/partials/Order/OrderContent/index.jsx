@@ -104,6 +104,7 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
     return { formattedState: "", country: "" };
   }, [order?.shippingAddress]);
 
+  console.log("UniqueOrder :>> ", order);
   if (!order) return null;
 
   const bannerOnThankYouPage = {
