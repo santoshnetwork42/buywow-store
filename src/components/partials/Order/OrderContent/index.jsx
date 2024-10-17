@@ -13,14 +13,19 @@ import OrderSkeleton from "@/src/components/partials/Account/OrderSection/OrderL
 import States from "@/utils/data/states.json";
 import { errorHandler } from "@/utils/errorHandler";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
 const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
+  const router = useRouter();
+
   const [order, setOrder] = useState(initialOrderData);
   const [loading, setLoading] = useState(!initialOrderData);
   const user = useSelector((state) => state.user?.user);
   const [fetchAttempts, setFetchAttempts] = useState(0);
+  const [refreshAttempts, setRefreshAttempts] = useState(0);
+
   const allStatus = ["CANCELLED", "DISPATCHED", "COURIER_RETURN", "DELIVERED"];
 
   const fetchUpdatedOrder = useCallback(async () => {
@@ -100,6 +105,13 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
     checkPaymentStatus,
     fetchUpdatedOrder,
   ]);
+
+  useEffect(() => {
+    if (refreshAttempts < 1) {
+      setRefreshAttempts((prev) => prev + 1);
+      router.refresh();
+    }
+  }, [refreshAttempts, router]);
 
   useEffect(() => {
     if (user?.id && order?.userId && user.id === order.userId) {
