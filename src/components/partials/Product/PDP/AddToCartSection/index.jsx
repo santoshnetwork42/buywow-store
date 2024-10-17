@@ -133,8 +133,10 @@ const AddToCartSection = React.memo(({ product, selectedVariant }) => {
   }, []);
 
   useEffect(() => {
-    window.addEventListener("scroll", checkVisibility);
-    return () => window.removeEventListener("scroll", checkVisibility);
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", checkVisibility);
+      return () => window.removeEventListener("scroll", checkVisibility);
+    }
   }, [checkVisibility]);
 
   const renderAddToCartContent = () => (
