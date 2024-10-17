@@ -190,13 +190,13 @@ const SwopStoreBanner = () => {
     <>
       <Link
         prefetch={false}
-        className=""
+        className="flex w-full items-center justify-center"
         href={bannerOnThankYouPage.link ?? "#"}
       >
         <Img
           src={bannerOnThankYouPage?.mWebImage}
           alt={'Thank you for your order!"'}
-          width={400}
+          width={500}
           height={200}
           className="rounded-md sm:hidden"
         />
