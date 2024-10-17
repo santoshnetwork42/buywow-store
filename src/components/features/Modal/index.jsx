@@ -33,17 +33,21 @@ const Modal = ({
 
     if (isOpen) {
       setIsVisible(true);
-      document.body.style.overflow = "hidden";
+      if (document?.body?.style) document.body.style.overflow = "hidden";
     } else {
       timer = setTimeout(() => {
         setIsVisible(false);
       }, 300);
-      if (!isCartDrawerOpen) document.body.style.overflow = "auto";
+      if (!isCartDrawerOpen) {
+        if (document?.body?.style) document.body.style.overflow = "auto";
+      }
     }
 
     return () => {
       if (timer) clearTimeout(timer);
-      if (!isCartDrawerOpen) document.body.style.overflow = "auto";
+      if (!isCartDrawerOpen) {
+        if (document?.body?.style) document.body.style.overflow = "auto";
+      }
     };
   }, [isOpen, isCartDrawerOpen]);
 
