@@ -106,11 +106,6 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
 
   if (!order) return null;
 
-  const bannerOnThankYouPage = {
-    mWebImage: "/swopstore/swopstore-mweb.jpg",
-    webImage: "/swopstore/swopstore-web.jpg",
-    link: SWOP_STORE_BANNER_URL,
-  };
   return (
     <>
       <ProgressSteps activeStep={3} className="mb-5 mt-4" />
