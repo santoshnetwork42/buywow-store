@@ -339,6 +339,7 @@ const CheckoutClient = () => {
       if (razorpayMethod) {
         razorpayMethod.close();
       }
+      router.refresh();
       router.push(`/order/${finalOrder.id}`);
       setPaymentLoader(false);
       emptyCart();
