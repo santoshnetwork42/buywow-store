@@ -22,6 +22,20 @@ export const useEventsDispatch = () => {
     [dispatch],
   );
 
+  const viewReviews = useCallback(
+    (payload) => {
+      dispatch({ type: eventsSagaActions.VIEW_REVIEW, payload });
+    },
+    [dispatch],
+  );
+
+  const writeReview = useCallback(
+    (payload) => {
+      dispatch({ type: eventsSagaActions.WRITE_REVIEW, payload });
+    },
+    [dispatch],
+  );
+
   const placeOrder = useCallback(
     (order, products, coupon, address, paymentType, checkoutSource) => {
       dispatch({
@@ -49,6 +63,16 @@ export const useEventsDispatch = () => {
     [dispatch],
   );
 
+  const customEvent = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.CUSTOM_EVENT,
+        payload,
+      });
+    },
+    [dispatch],
+  );
+
   const startCheckout = useCallback(
     (source) => {
       dispatch({
@@ -69,10 +93,10 @@ export const useEventsDispatch = () => {
   );
 
   const viewList = useCallback(
-    (id, name, products) => {
+    (payload) => {
       dispatch({
         type: eventsSagaActions.VIEW_LIST_ITEM,
-        payload: { id, name, products },
+        payload,
       });
     },
     [dispatch],
@@ -104,11 +128,21 @@ export const useEventsDispatch = () => {
     });
   }, [dispatch]);
 
+  const pageViewed = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.PAGE_VIEWED,
+        payload,
+      });
+    },
+    [dispatch],
+  );
+
   const addPaymentInfo = useCallback(
-    (checkoutSource = "BUYWOW") => {
+    (payload) => {
       dispatch({
         type: eventsSagaActions.ADD_PAYMENT_INFO,
-        payload: { checkoutSource },
+        payload,
       });
     },
     [dispatch],
@@ -203,6 +237,46 @@ export const useEventsDispatch = () => {
     [dispatch],
   );
 
+  const footerClicked = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.FOOTER_CLICK,
+        payload,
+      });
+    },
+    [dispatch],
+  );
+
+  const announcementBarClicked = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.ANNOUNCEMENT_BAR_CLICK,
+        payload,
+      });
+    },
+    [dispatch],
+  );
+
+  const sessionStartedEvent = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.SESSION_STARTED,
+        payload,
+      });
+    },
+    [dispatch],
+  );
+
+  const sessionDestroyEvent = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.SESSION_DESTROY,
+        payload,
+      });
+    },
+    [dispatch],
+  );
+
   const blogClicked = useCallback(
     (payload) => {
       dispatch({
@@ -241,6 +315,16 @@ export const useEventsDispatch = () => {
         payload: {
           source: source || "BUYWOW",
         },
+      });
+    },
+    [dispatch],
+  );
+
+  const handleProductQtyChanges = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.PRODUCT_QTY_CHANGES,
+        payload,
       });
     },
     [dispatch],
@@ -322,6 +406,8 @@ export const useEventsDispatch = () => {
     categoryViewed,
     logout,
     ltoProductItem,
+    announcementBarClicked,
+    handleProductQtyChanges,
     // spinTheWheelPlayed,
     // spinTheWheelReward,
     addPaymentInfo,
@@ -333,10 +419,17 @@ export const useEventsDispatch = () => {
     shopByClicked,
     blogClicked,
     homeViewed,
+    pageViewed,
     viewList,
     priceMismatch,
+    footerClicked,
+    viewReviews,
+    writeReview,
     // customEventVercel,
     spinTheWheelPlayed,
     spinTheWheelReward,
+    sessionStartedEvent,
+    sessionDestroyEvent,
+    customEvent,
   };
 };

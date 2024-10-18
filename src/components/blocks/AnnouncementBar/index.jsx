@@ -1,6 +1,7 @@
 "use client";
 
 import { Text } from "@/components/elements";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useAnnouncementContext } from "@/utils/context/AnnouncementContext";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { extractAttributes } from "@/utils/helpers";
@@ -13,8 +14,9 @@ const FlipClock = dynamic(
   () => import("@/components/partials/Others/FlipClock"),
 );
 
-const AnnouncementContent = ({ announcement }) => {
-  const { leftText, centerText, rightText, showTimer, timer } = announcement;
+const AnnouncementContent = ({ announcement, onClick }) => {
+  const { leftText, centerText, rightText, showTimer, timer, link } =
+    announcement;
 
   if (!leftText && !centerText && !rightText && (showTimer ? !timer : true))
     return null;
@@ -22,6 +24,15 @@ const AnnouncementContent = ({ announcement }) => {
   return (
     <div
       className={`min-h-8 flex-1 items-center justify-between gap-5 py-1 sm:min-h-9 md:py-2 lg:min-h-10 ${!centerText ? "hidden lg:flex" : "flex"}`}
+      onClick={(e) => {
+        onClick({
+          leftText,
+          centerText,
+          rightText,
+          link,
+          showTimer,
+        });
+      }}
     >
       <Text
         as="p"
@@ -61,7 +72,10 @@ const AnnouncementBar = ({ data }) => {
     updateGlobalAnnouncement,
     updatePageAnnouncement,
   } = useAnnouncementContext();
-
+  const { announcementBarClicked } = useEventsDispatch();
+  const handleBarClick = (payload) => {
+    announcementBarClicked(payload);
+  };
   useEffect(() => {
     if (pathname) {
       updatePageAnnouncement(null);
@@ -101,7 +115,10 @@ const AnnouncementBar = ({ data }) => {
         boxShadow: `0 0 0 100vmax ${announcement?.bgColor || "#6E809A"}`,
       }}
     >
-      <AnnouncementContent announcement={announcement} />
+      <AnnouncementContent
+        announcement={announcement}
+        onClick={handleBarClick}
+      />
     </Link>
   );
 };

@@ -92,8 +92,7 @@ const ProductCollectionByTab = ({
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef(null);
-  const viewListItemEventTriggered = useRef(false);
-  const { viewList, categoryViewed } = useEventsDispatch();
+  const { viewList } = useEventsDispatch();
   const source = getSource();
 
   const storeConfig = useStoreConfig();
@@ -103,7 +102,6 @@ const ProductCollectionByTab = ({
     async (newSortOption) => {
       setIsLoading(true);
       const activeTab = productCollectionTabItems[activeTabIndex];
-
       try {
         setProductCollectionTabItems((prevItems) =>
           prevItems.map((item) => ({
@@ -139,13 +137,6 @@ const ProductCollectionByTab = ({
         setCurrentPage(1);
         const totalProducts = activeTab?.pagination?.totalData ?? 0;
         setHasMore(newProducts.length < totalProducts);
-        viewList(
-          slug,
-          "PLP",
-          newProducts
-            ?.filter((i) => i?.attributes?.fetchedProduct)
-            ?.map((i) => i.attributes.fetchedProduct),
-        ); // viewListItems event passed
       } catch (error) {
         console.error("Error reloading products:", error);
       } finally {
@@ -186,28 +177,29 @@ const ProductCollectionByTab = ({
   }, []);
 
   useEffect(() => {
-    if (!viewListItemEventTriggered.current) {
-      const [_products] = productCollectionTabItems
-        ?.filter((i, index) => activeTabIndex === index)
-        .map((i) => i?.products);
-      viewList(
-        slug,
-        "PLP",
-        _products?.data
-          ?.filter((i) => i?.attributes?.fetchedProduct)
-          ?.map((i) => i.attributes.fetchedProduct),
-      );
+    const activeTab = productCollectionTabItems[activeTabIndex];
 
-      categoryViewed({
-        URL: window.location.href,
-        "Category Name": title,
-        "Item Count": 100,
-        Source: source,
+    const [_products] = productCollectionTabItems
+      ?.filter((i, index) => activeTabIndex === index)
+      .map((i) => i?.products);
+
+    const productsData = _products?.data
+      ?.filter((i) => i?.attributes?.fetchedProduct)
+      ?.map((i) => i.attributes.fetchedProduct);
+
+    if (!!productsData?.length)
+      viewList({
+        id: slug,
+        name: "PLP",
+        products: productsData,
+        collectionName: slug || title,
+        count: productsData?.length,
+        filter: activeTab?.tab?.data?.attributes?.title, // lower
+        sort: sortOption?.label, //lower
       });
-      viewListItemEventTriggered.current = true;
-    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [productCollectionTabItems]);
+  }, [productCollectionTabItems, activeTabIndex, sortOption]);
 
   const loadMoreProducts = useCallback(async () => {
     if (isLoading || !hasMore) return;
@@ -250,13 +242,6 @@ const ProductCollectionByTab = ({
         const newTotalLoaded =
           (activeTab?.products?.data?.length ?? 0) + newProducts.length;
         setHasMore(newTotalLoaded < totalProducts);
-        viewList(
-          slug,
-          "PLP",
-          newProducts
-            ?.filter((i) => i?.attributes?.fetchedProduct)
-            ?.map((i) => i.attributes.fetchedProduct),
-        ); // event passed
       } else {
         setHasMore(false);
       }
@@ -289,13 +274,6 @@ const ProductCollectionByTab = ({
 
         setCurrentPage(calculatedPage);
         setHasMore(productsInTab < totalProducts);
-        viewList(
-          slug,
-          "PLP",
-          selectedTab.products?.data
-            ?.filter((i) => i?.attributes?.fetchedProduct)
-            ?.map((i) => i.attributes.fetchedProduct),
-        );
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -335,6 +313,7 @@ const ProductCollectionByTab = ({
       const skeletonCount = isLoading ? remainingProducts : 0;
       const currentProductsOosLast = setSoldOutLast(currentProducts, true);
 
+      const tabValue = category?.tab?.data?.attributes?.title || "";
       return [
         ...currentProductsOosLast.map((product, productIndex) => (
           <ProductCard
@@ -346,6 +325,10 @@ const ProductCollectionByTab = ({
                 storeConfigData?.attributes?.promotion_tag)
             }
             {...product.attributes}
+            section={{
+              name: title,
+              tabValue,
+            }}
           />
         )),
         ...Array.from({ length: skeletonCount }).map((_, index) => (

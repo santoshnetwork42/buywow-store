@@ -1,5 +1,6 @@
 "use client";
 
+import LinkClickTracker from "@/components/common/LinkClickTracker";
 import { Heading, Img, Text } from "@/components/elements";
 import { PAGETYPE, RESTRICT_FOOTER_TO_SHOW } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
@@ -17,12 +18,17 @@ const SocialLink = React.memo(({ item, index }) => {
   const { url, alternativeText = "icon" } = extractAttributes(item.image) || {};
   if (!url) return null;
   return (
-    <Link
+    <LinkClickTracker
       prefetch={false}
       key={item.id || index}
       href={item?.link || "#"}
       target="_blank"
       rel="noopener noreferrer"
+      trackingType="FOOTER_CLICK"
+      trackingEventPayload={{
+        menu: item?.link || "#",
+        subMenu: item?.link || "#",
+      }}
     >
       <Img
         src={url}
@@ -32,7 +38,7 @@ const SocialLink = React.memo(({ item, index }) => {
         className="aspect-square w-6 object-contain"
         loading="lazy"
       />
-    </Link>
+    </LinkClickTracker>
   );
 });
 
@@ -202,10 +208,15 @@ const Footer = ({ data }) => {
           )}
           <div className="flex flex-col gap-3">
             {menu.itemsWithoutSubMenu.map((item, index) => (
-              <Link
+              <LinkClickTracker
                 prefetch={false}
                 key={`footer-menu-link-${index}`}
                 href={item?.slug || item?.link || "#"}
+                trackingType="FOOTER_CLICK"
+                trackingEventPayload={{
+                  menu: item?.slug || item?.link || "#",
+                  subMenu: item?.slug || item?.link || "#",
+                }}
               >
                 <Heading
                   as="h5"
@@ -214,7 +225,7 @@ const Footer = ({ data }) => {
                 >
                   {item?.title}
                 </Heading>
-              </Link>
+              </LinkClickTracker>
             ))}
           </div>
         </div>

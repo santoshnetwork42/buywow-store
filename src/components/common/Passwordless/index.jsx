@@ -45,6 +45,10 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     (state) => state.modal?.modal?.passwordLess?.redirectTo,
   );
 
+  const sourceOfPasswordLessModalOpen = useSelector(
+    (state) => state.modal?.modal?.passwordLess?.source,
+  );
+
   const { auth, otpRequested } = useEventsDispatch();
 
   const phoneInputRef = useRef(null);
@@ -164,7 +168,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     const phone = addPhonePrefix(authData.phone);
     signInAwsAccount(phone);
 
-    otpRequested({ phone });
+    otpRequested({ phone, source: sourceOfPasswordLessModalOpen });
     setCountdown(30);
   };
 

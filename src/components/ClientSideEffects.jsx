@@ -18,7 +18,8 @@ const ClientSideEffects = () => {
 
   const { updateMeta, setStore, destroySession } = useSystemDispatch();
   const { setUser } = useUserDispatch();
-  const { auth } = useEventsDispatch();
+  const { auth, sessionStartedEvent, sessionDestroyEvent } =
+    useEventsDispatch();
   const { storeCoupon } = useCartDispatch();
 
   useEffect(() => {
@@ -68,6 +69,9 @@ const ClientSideEffects = () => {
         secure: process.env.NODE_ENV !== "development",
         sameSite: "strict",
       });
+      sessionStartedEvent({
+        sessionId,
+      });
     }
 
     updateMeta(metadata);
@@ -103,10 +107,14 @@ const ClientSideEffects = () => {
         const currentUser = await getCurrentUser().catch(() => null);
         if (!currentUser) {
           destroySession();
+          sessionDestroyEvent({
+            sessionId: Cookies.get(`${STORE_PREFIX}_session_id`),
+          });
         }
       }
     } catch (error) {
       destroySession();
+      sessionDestroyEvent();
       console.error("Error fetching user data:", error);
     }
   }, [setUser, destroySession]);

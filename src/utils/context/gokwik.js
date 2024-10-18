@@ -49,6 +49,7 @@ function GoKwikProvider({ children }) {
     addPaymentInfo,
     startCheckout,
     auth,
+    customEvent,
   } = useEventsDispatch();
 
   const setRewardPoints = async () => {
@@ -93,6 +94,7 @@ function GoKwikProvider({ children }) {
 
   const onGokwikClose = () => {
     setIsLoggedinViaGokwik(false);
+    customEvent({ event: "gokwik_checkout_close", source: "GOKWIK" });
   };
 
   const onCouponRemove = () => {
@@ -102,7 +104,7 @@ function GoKwikProvider({ children }) {
       }
     });
 
-    removeCoupon();
+    removeCoupon({ checkoutSource: "GOKWIK" });
   };
 
   const fetchOrder = async (orderId) => {
@@ -244,7 +246,7 @@ function GoKwikProvider({ children }) {
 
       gokwikSdk.on("payment-method-selected", (payment) => {
         const checkoutSource = "GOKWIK";
-        addPaymentInfo(checkoutSource);
+        addPaymentInfo({ checkoutSource, payment });
       });
 
       gokwikSdk.on("checkout-initiation-failure", (checkout) => {

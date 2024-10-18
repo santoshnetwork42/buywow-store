@@ -3,9 +3,15 @@ import { put } from "redux-saga/effects";
 
 export function* setPasswordLessModalHandler(action) {
   try {
-    const { isPasswordLessOpen, customLogin, redirectTo } = action.payload;
+    const { isPasswordLessOpen, customLogin, redirectTo, source } =
+      action.payload;
     yield put(
-      setPasswordLessModal({ isPasswordLessOpen, customLogin, redirectTo }),
+      setPasswordLessModal({
+        isPasswordLessOpen,
+        customLogin,
+        redirectTo,
+        source,
+      }),
     );
   } catch (error) {
     console.error("error", error);
