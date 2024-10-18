@@ -10,10 +10,21 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Provider as ReactProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
+import { useEventsDispatch } from "./sagas/dispatch/events.dispatch";
 
 const LoadingState = ({ data }) => {
   // Your existing loading state components here
   const { headerData, carouselData } = data || {};
+
+  const pathname = usePathname();
+  const { homeViewed } = useEventsDispatch();
+
+  useEffect(() => {
+    if (pathname === "/") {
+      homeViewed();
+    }
+  }, [pathname]);
+
   return (
     <div className="max-h-[100dvh] overflow-hidden">
       {headerData?.data && <Header data={headerData} />}

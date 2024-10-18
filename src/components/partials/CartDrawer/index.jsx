@@ -183,7 +183,7 @@ const CartDrawer = () => {
       return true;
     }
 
-    handlePasswordLessModal(true, true, "/checkout");
+    handlePasswordLessModal(true, true, "/checkout", "CHECKOUT");
     return false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

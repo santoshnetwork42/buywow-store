@@ -2,6 +2,7 @@
 
 import { showToast } from "@/components/common/ToastComponent";
 import { Button, Text } from "@/components/elements";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import React, { useCallback, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -28,6 +29,7 @@ const Quantity = ({
   className,
 }) => {
   const [cartQuantity, setCartQuantity] = useState(quantity);
+  const { handleProductQtyChanges } = useEventsDispatch();
 
   useEffect(() => {
     setCartQuantity(quantity || 1);
@@ -36,6 +38,10 @@ const Quantity = ({
   useEffect(() => {
     if (onChangeQuantity && cartQuantity !== quantity && cartQuantity !== "") {
       onChangeQuantity(cartQuantity);
+      handleProductQtyChanges({
+        product: { ...product, qty: cartQuantity },
+        type: quantity < cartQuantity ? "INCREASE" : "DECREASE",
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartQuantity]);

@@ -33,7 +33,9 @@ const SingleBanner = ({ banner, pageType }) => {
         moeText:
           banner?.moeText ||
           webImageAttrs?.alternativeText ||
-          mWebImageAttrs?.alternativeText,
+          mWebImageAttrs?.alternativeText ||
+          link,
+        url: link,
       }}
     >
       <picture className="block w-full">

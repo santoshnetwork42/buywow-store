@@ -62,12 +62,15 @@ export const useCartDispatch = () => {
     });
   }, [dispatch]);
 
-  const removeCoupon = useCallback(() => {
-    dispatch({
-      type: cartSagaActions.REMOVE_COUPON,
-      payload: {},
-    });
-  }, [dispatch]);
+  const removeCoupon = useCallback(
+    (payload) => {
+      dispatch({
+        type: cartSagaActions.REMOVE_COUPON,
+        payload, // payload passed only for event purpose and in that gokwik case only
+      });
+    },
+    [dispatch],
+  );
 
   const emptyCart = useCallback(() => {
     dispatch({

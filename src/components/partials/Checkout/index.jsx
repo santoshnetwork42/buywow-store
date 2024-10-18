@@ -305,7 +305,12 @@ const CheckoutClient = () => {
 
         razorpayMethod = new Razorpay(options);
         razorpayMethod.open();
-        addPaymentInfo();
+
+        addPaymentInfo({
+          ...variables,
+          ...payment,
+          grandTotal,
+        });
       }
 
       return Promise.resolve();
@@ -356,6 +361,34 @@ const CheckoutClient = () => {
     startCheckout();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    addPaymentInfo({
+      paymentMethod: selectedPaymentMethod,
+      checkoutSource: "BUYWOW",
+      appliedRewardPoints: usableRewards,
+      totalCashbackEarned:
+        selectedPaymentMethod === "COD"
+          ? codCashbackRewardsOnOrder
+          : prepaidCashbackRewardsOnOrder,
+      couponDiscount: couponTotal,
+      shippingTotal,
+      totalSaved,
+      subTotal: totalListingPrice,
+      totalAmount,
+      grandTotal,
+      totalListingPrice,
+      prepaidDiscount: selectedPaymentMethod === "COD" ? 0 : prepaidDiscount,
+      prepaidDiscountPercent,
+      prepaidGrandTotal,
+      codCharges,
+      appliedCODCharges,
+      codGrandTotal,
+      ppcodAmount:
+        (ppcodEnabled && ppcodAmount) || ppcodCouponEnabled
+          ? ppcodAmountToTake
+          : 0,
+    });
+  }, [selectedPaymentMethod]);
 
   const ppcodAmountToTake = ppcodCouponEnabled
     ? appliedCoupon?.ppcodCouponAmount

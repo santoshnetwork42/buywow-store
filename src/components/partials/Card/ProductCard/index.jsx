@@ -86,6 +86,7 @@ const ProductCard = memo(
     showBenefitTags = true,
     sendProductDataToParent,
     priority,
+    section,
   }) => {
     const isInteractive = useIsInteractive();
     const [selectedVariant] = useProductVariantGroups(fetchedProduct);
@@ -226,6 +227,7 @@ const ProductCard = memo(
                   buttonSize="medium"
                   quantityClassName=" h-8 w-[4.5rem]"
                   buttonClassName="text-base rounded-md min-w-[4.5rem] h-8 sm:h-auto"
+                  section={section}
                 />
               </div>
             </div>

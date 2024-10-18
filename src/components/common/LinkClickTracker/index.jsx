@@ -14,8 +14,14 @@ const LinkClickTracker = ({
   trackingEventPayload = "",
 }) => {
   const source = getSource();
-  const { bannerClicked, shopByClicked, blogClicked, topNavbarClicked } =
-    useEventsDispatch();
+  const {
+    bannerClicked,
+    shopByClicked,
+    blogClicked,
+    topNavbarClicked,
+    footerClicked,
+  } = useEventsDispatch();
+
   const handleClick = useCallback(
     (e) => {
       switch (trackingType) {
@@ -24,12 +30,22 @@ const LinkClickTracker = ({
             Source: source,
             item_id: trackingEventPayload?.id,
             banner_name: trackingEventPayload?.moeText,
+            banner_link: trackingEventPayload?.url,
+          });
+          break;
+        }
+        case "FOOTER_CLICK": {
+          footerClicked({
+            section: "footer",
+            menu: trackingEventPayload?.menu,
+            subMenu: trackingEventPayload?.subMenu,
           });
           break;
         }
         case "SHOP_BY_CLICK": {
           shopByClicked({
             item_name: trackingEventPayload?.name,
+            event: trackingEventPayload?.type, // event name passed for clickstream as payload
             item_id: "",
             item_slug: trackingEventPayload?.slug,
             item_parent_category: trackingEventPayload?.parentCategory,

@@ -17,6 +17,7 @@ const IngredientItem = ({ ingredient }) => {
         slug: `/collections/${slug}`,
         name: alternativeText || slug,
         parentCategory: "shop by ingredients",
+        type: "shop_by_ingredients",
       }}
     >
       <Img

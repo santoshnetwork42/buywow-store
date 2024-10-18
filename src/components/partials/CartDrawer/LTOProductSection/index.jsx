@@ -59,7 +59,7 @@ export const LimitedTimeDealProduct = ({
       recordKey: getRecordKey(product, variantId, true), //(product,variantId,isLtoProduct)
       section: {
         id: "LIMITED_TIME_DEAL".toLowerCase().replace(/\ /g, "-"),
-        name: "LIMITED_TIME_DEAL",
+        name: "LIMITED_TIME_DEAL".toLowerCase().replace(/\ /g, "-"),
       },
     });
     ltoProductItem(
@@ -388,7 +388,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
           recordKey: getRecordKey(product, variantId, true), //(product,variantId,isLtoProduct)
           section: {
             id: "LIMITED_TIME_DEAL".toLowerCase().replace(/\ /g, "-"),
-            name: "LIMITED_TIME_DEAL",
+            name: "LIMITED_TIME_DEAL".toLowerCase().replace(/\ /g, "-"),
           },
         });
         ltoProductItem(
