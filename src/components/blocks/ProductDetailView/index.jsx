@@ -120,7 +120,7 @@ const ProductDetailView = ({ product }) => {
           currentInventory={currentInventory}
         />
 
-        {!!Object.keys(bestCoupon || {})?.length && (
+        {
           <OffersAndDiscounts
             bestCoupon={bestCoupon}
             price={price}
@@ -131,7 +131,7 @@ const ProductDetailView = ({ product }) => {
               collections: packageProduct?.collections,
             }}
           />
-        )}
+        }
 
         <div className="mt-5 flex flex-col">
           {!!variantGroup?.length && (
