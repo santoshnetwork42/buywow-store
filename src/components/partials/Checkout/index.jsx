@@ -267,6 +267,12 @@ const CheckoutClient = () => {
         return;
       }
 
+      addPaymentInfoEvent({
+        ...variables,
+        ...payment,
+        grandTotal,
+      });
+
       if (success && rzpEnabled && transaction && order) {
         const options = {
           key: RAZORPAY_KEY,
@@ -305,12 +311,6 @@ const CheckoutClient = () => {
 
         razorpayMethod = new Razorpay(options);
         razorpayMethod.open();
-
-        addPaymentInfoEvent({
-          ...variables,
-          ...payment,
-          grandTotal,
-        });
       }
 
       return Promise.resolve();
