@@ -1633,7 +1633,7 @@ export function* blogClickEventHandler({ payload }) {
 }
 
 export function* removeCouponsEventHandler({ payload }) {
-  const { checkoutSource } = payload || {};
+  const { checkoutSource = "" } = payload || {};
 
   try {
     const { data, coupon } = yield select((state) => state.cart);
@@ -1658,7 +1658,7 @@ export function* removeCouponsEventHandler({ payload }) {
       user: user || {},
       coupon_code: coupon?.code,
       coupon_rule_id: coupon?.id,
-      source: eventSource,
+      source: checkoutSource || eventSource,
       cart: ga,
       ...analyticsMeta,
     });

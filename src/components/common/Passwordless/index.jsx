@@ -49,7 +49,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     (state) => state.modal?.modal?.passwordLess?.source,
   );
 
-  const { auth, otpRequested } = useEventsDispatch();
+  const { authEvent, otpRequestedEvent } = useEventsDispatch();
 
   const phoneInputRef = useRef(null);
   const otpInputRefs = useRef([]);
@@ -168,7 +168,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
     const phone = addPhonePrefix(authData.phone);
     signInAwsAccount(phone);
 
-    otpRequested({ phone, source: sourceOfPasswordLessModalOpen });
+    otpRequestedEvent({ phone, source: sourceOfPasswordLessModalOpen });
     setCountdown(30);
   };
 
@@ -196,7 +196,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
           if (isVerified) {
             setConfirmationStatus("DONE");
             setCustomUser(phone);
-            auth({ action: "signup", moe: { userId: null, phone } });
+            authEvent({ action: "signup", moe: { userId: null, phone } });
           } else {
             setAuthError({ otp: "Invalid OTP" });
             console.error("OTP verification failed");

@@ -35,7 +35,7 @@ const AccountClient = () => {
   const user = useSelector((state) => state.user?.user);
   const [activeTab, setActiveTab] = useState("My Orders");
   const [isLoading, setIsLoading] = useState(true);
-  const { pageViewed } = useEventsDispatch();
+  const { pageViewedEvent } = useEventsDispatch();
 
   useEffect(() => {
     if (user?.id === null) {
@@ -46,7 +46,7 @@ const AccountClient = () => {
   }, [user, router]);
 
   useEffect(() => {
-    pageViewed({
+    pageViewedEvent({
       event: "account_page_viewed",
       section: activeTab,
     });

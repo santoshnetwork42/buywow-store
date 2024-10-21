@@ -1,9 +1,6 @@
 "use client";
 
 import Carousel from "@/components/blocks/Carousel";
-import FeaturedList from "@/components/blocks/FeaturedList";
-import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
-import TrendingCategories from "@/components/blocks/TrendingCategories";
 import Header from "@/components/partials/Header";
 import store, { persistor } from "@/store/store";
 import { usePathname } from "next/navigation";
@@ -15,15 +12,6 @@ import { useEventsDispatch } from "./sagas/dispatch/events.dispatch";
 const LoadingState = ({ data }) => {
   // Your existing loading state components here
   const { headerData, carouselData } = data || {};
-
-  const pathname = usePathname();
-  const { homeViewed } = useEventsDispatch();
-
-  useEffect(() => {
-    if (pathname === "/") {
-      homeViewed();
-    }
-  }, [pathname]);
 
   return (
     <div className="max-h-[100dvh] overflow-hidden">

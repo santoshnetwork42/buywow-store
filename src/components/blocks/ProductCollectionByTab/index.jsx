@@ -92,7 +92,7 @@ const ProductCollectionByTab = ({
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef(null);
-  const { viewList } = useEventsDispatch();
+  const { viewListEvent } = useEventsDispatch();
   const source = getSource();
 
   const storeConfig = useStoreConfig();
@@ -188,7 +188,7 @@ const ProductCollectionByTab = ({
       ?.map((i) => i.attributes.fetchedProduct);
 
     if (!!productsData?.length)
-      viewList({
+      viewListEvent({
         id: slug,
         name: "PLP",
         products: productsData,

@@ -22,7 +22,7 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   const [fetchAttempts, setFetchAttempts] = useState(0);
   const allStatus = ["CANCELLED", "DISPATCHED", "COURIER_RETURN", "DELIVERED"];
 
-  const { pageViewed } = useEventsDispatch();
+  const { pageViewedEvent } = useEventsDispatch();
 
   const fetchUpdatedOrder = useCallback(async () => {
     try {
@@ -92,7 +92,7 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
     if (user?.id && order?.userId && user.id === order.userId) {
       fetchUpdatedOrder();
     }
-    pageViewed({
+    pageViewedEvent({
       event: "thank_you_page_viewed",
       orderId: order?.id,
       userId: user?.id,

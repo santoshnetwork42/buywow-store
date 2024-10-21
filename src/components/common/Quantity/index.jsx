@@ -29,7 +29,7 @@ const Quantity = ({
   className,
 }) => {
   const [cartQuantity, setCartQuantity] = useState(quantity);
-  const { handleProductQtyChanges } = useEventsDispatch();
+  const { handleProductQtyChangesEvent } = useEventsDispatch();
 
   useEffect(() => {
     setCartQuantity(quantity || 1);
@@ -38,7 +38,7 @@ const Quantity = ({
   useEffect(() => {
     if (onChangeQuantity && cartQuantity !== quantity && cartQuantity !== "") {
       onChangeQuantity(cartQuantity);
-      handleProductQtyChanges({
+      handleProductQtyChangesEvent({
         product: { ...product, qty: cartQuantity },
         type: quantity < cartQuantity ? "INCREASE" : "DECREASE",
       });

@@ -27,7 +27,7 @@ const CarouselImage = React.memo(
       webImageAttrs?.alternativeText ||
       "Carousel Banner";
 
-    const { bannerClicked } = useEventsDispatch();
+    const { bannerClickedEvent } = useEventsDispatch();
     const source = getSource();
 
     if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
@@ -38,10 +38,10 @@ const CarouselImage = React.memo(
         href={link || "#"}
         className="w-full flex-[0_0_100%]"
         onClick={() => {
-          bannerClicked({
+          bannerClickedEvent({
             Source: source,
             item_id: index,
-            banner_name: moeText || link || "#",
+            banner_name: moeText || imageAlt,
             banner_link: link || "#",
           });
         }}

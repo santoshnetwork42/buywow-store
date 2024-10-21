@@ -25,7 +25,7 @@ export const LimitedTimeDealProduct = ({
   item,
   addToCart,
   totalAmount,
-  ltoProductItem,
+  ltoProductItemEvent,
 }) => {
   const {
     variantId,
@@ -59,10 +59,10 @@ export const LimitedTimeDealProduct = ({
       recordKey: getRecordKey(product, variantId, true), //(product,variantId,isLtoProduct)
       section: {
         id: "LIMITED_TIME_DEAL".toLowerCase().replace(/\ /g, "-"),
-        name: "LIMITED_TIME_DEAL".toLowerCase().replace(/\ /g, "-"),
+        name: "LIMITED_TIME_DEAL",
       },
     });
-    ltoProductItem(
+    ltoProductItemEvent(
       {
         ...product,
         variantId,
@@ -242,7 +242,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
   const startTime = useSelector((state) => state?.cart?.cartCreatedAt);
   // events and redux
   const { addToCart, removeFromCart } = useCartDispatch();
-  const { ltoProductItem } = useEventsDispatch();
+  const { ltoProductItemEvent } = useEventsDispatch();
   // Calculate endTime once on startTime change
   const endTime = useMemo(() => {
     if (!startTime) return null;
@@ -338,7 +338,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
           cartItemSource: "LIMITED_TIME_DEAL",
           recordKey: recordKey,
         });
-        ltoProductItem(
+        ltoProductItemEvent(
           {
             ...product,
             variantId,
@@ -391,7 +391,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
             name: "LIMITED_TIME_DEAL".toLowerCase().replace(/\ /g, "-"),
           },
         });
-        ltoProductItem(
+        ltoProductItemEvent(
           {
             ...product,
             variantId,
@@ -444,7 +444,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
             key={`product-${item.slug}-${index}`}
             item={item}
             addToCart={addToCart}
-            ltoProductItem={ltoProductItem}
+            ltoProductItemEvent={ltoProductItemEvent}
             totalAmount={totalCartAmount}
           />
         ))}

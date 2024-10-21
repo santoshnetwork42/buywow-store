@@ -14,7 +14,7 @@ const FlipClock = dynamic(
   () => import("@/components/partials/Others/FlipClock"),
 );
 
-const AnnouncementContent = ({ announcement, onClick }) => {
+const AnnouncementContent = ({ announcement, announcementBarClickedEvent }) => {
   const { leftText, centerText, rightText, showTimer, timer, link } =
     announcement;
 
@@ -25,13 +25,14 @@ const AnnouncementContent = ({ announcement, onClick }) => {
     <div
       className={`min-h-8 flex-1 items-center justify-between gap-5 py-1 sm:min-h-9 md:py-2 lg:min-h-10 ${!centerText ? "hidden lg:flex" : "flex"}`}
       onClick={(e) => {
-        onClick({
-          leftText,
-          centerText,
-          rightText,
-          link,
-          showTimer,
-        });
+        if (announcementBarClickedEvent)
+          announcementBarClickedEvent({
+            leftText,
+            centerText,
+            rightText,
+            link,
+            showTimer,
+          });
       }}
     >
       <Text
@@ -72,10 +73,8 @@ const AnnouncementBar = ({ data }) => {
     updateGlobalAnnouncement,
     updatePageAnnouncement,
   } = useAnnouncementContext();
-  const { announcementBarClicked } = useEventsDispatch();
-  const handleBarClick = (payload) => {
-    announcementBarClicked(payload);
-  };
+  const { announcementBarClickedEvent } = useEventsDispatch();
+
   useEffect(() => {
     if (pathname) {
       updatePageAnnouncement(null);
@@ -117,7 +116,7 @@ const AnnouncementBar = ({ data }) => {
     >
       <AnnouncementContent
         announcement={announcement}
-        onClick={handleBarClick}
+        announcementBarClickedEvent={announcementBarClickedEvent}
       />
     </Link>
   );

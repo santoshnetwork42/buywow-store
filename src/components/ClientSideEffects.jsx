@@ -9,17 +9,22 @@ import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import { getCurrentUser } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
 import Cookies from "js-cookie";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const { updateMeta, setStore, destroySession } = useSystemDispatch();
   const { setUser } = useUserDispatch();
-  const { auth, sessionStartedEvent, sessionDestroyEvent } =
-    useEventsDispatch();
+  const {
+    authEvent: authEventHandler,
+    sessionStartedEvent,
+    sessionDestroyEvent,
+    homeViewedEvent,
+  } = useEventsDispatch();
   const { storeCoupon } = useCartDispatch();
 
   useEffect(() => {
@@ -131,11 +136,15 @@ const ClientSideEffects = () => {
   }, [setStore]);
 
   useEffect(() => {
+    if (pathname === "/") {
+      homeViewedEvent();
+    }
+
     const hubListenerCancelToken = Hub.listen("auth", async (authEvent) => {
       const { event } = authEvent.payload;
       if (event === "signedOut") {
         destroySession();
-        auth({ action: "logout" });
+        authEventHandler({ action: "logout" });
       } else {
         fetchAndSetUser();
       }

@@ -60,9 +60,9 @@ const CheckoutClient = () => {
   const { handlePasswordLessModal } = useModalDispatch();
   const { validateCart, emptyCart } = useCartDispatch();
   const {
-    addPaymentInfo,
-    placeOrder: onPlaceOrder,
-    startCheckout,
+    addPaymentInfoEvent,
+    placeOrderEvent: onPlaceOrderEvent,
+    startCheckoutEvent,
   } = useEventsDispatch();
 
   const currentAddress = useSelector((state) => state.address?.currentAddress);
@@ -306,7 +306,7 @@ const CheckoutClient = () => {
         razorpayMethod = new Razorpay(options);
         razorpayMethod.open();
 
-        addPaymentInfo({
+        addPaymentInfoEvent({
           ...variables,
           ...payment,
           grandTotal,
@@ -323,7 +323,7 @@ const CheckoutClient = () => {
 
   const afterOrderConfirm = useCallback(async () => {
     if (isConfirmed && finalOrder) {
-      onPlaceOrder(
+      onPlaceOrderEvent(
         finalOrder,
         [...freeProducts],
         appliedCoupon,
@@ -358,37 +358,9 @@ const CheckoutClient = () => {
   }, [isConfirmed, afterOrderConfirm]);
 
   useEffect(() => {
-    startCheckout();
+    startCheckoutEvent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  useEffect(() => {
-    addPaymentInfo({
-      paymentMethod: selectedPaymentMethod,
-      checkoutSource: "BUYWOW",
-      appliedRewardPoints: usableRewards,
-      totalCashbackEarned:
-        selectedPaymentMethod === "COD"
-          ? codCashbackRewardsOnOrder
-          : prepaidCashbackRewardsOnOrder,
-      couponDiscount: couponTotal,
-      shippingTotal,
-      totalSaved,
-      subTotal: totalListingPrice,
-      totalAmount,
-      grandTotal,
-      totalListingPrice,
-      prepaidDiscount: selectedPaymentMethod === "COD" ? 0 : prepaidDiscount,
-      prepaidDiscountPercent,
-      prepaidGrandTotal,
-      codCharges,
-      appliedCODCharges,
-      codGrandTotal,
-      ppcodAmount:
-        (ppcodEnabled && ppcodAmount) || ppcodCouponEnabled
-          ? ppcodAmountToTake
-          : 0,
-    });
-  }, [selectedPaymentMethod]);
 
   const ppcodAmountToTake = ppcodCouponEnabled
     ? appliedCoupon?.ppcodCouponAmount

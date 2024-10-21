@@ -30,12 +30,8 @@ const SingleBanner = ({ banner, pageType }) => {
       trackingType="BANNER_CLICKED"
       trackingEventPayload={{
         id: 1,
-        moeText:
-          banner?.moeText ||
-          webImageAttrs?.alternativeText ||
-          mWebImageAttrs?.alternativeText ||
-          link,
-        url: link,
+        banner_name: banner?.moeText || imageAlt,
+        banner_link: link,
       }}
     >
       <picture className="block w-full">

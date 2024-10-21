@@ -89,7 +89,7 @@ const CartDrawer = () => {
     checkoutInitiated,
   } = useCartDispatch();
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
-  const { handleOutOfStock, handleProceedToCheckout, viewCart } =
+  const { handleOutOfStockEvent, handleProceedToCheckoutEvent, viewCartEvent } =
     useEventsDispatch();
 
   const [delayedIsOpen, setDelayedIsOpen] = useState(false);
@@ -100,7 +100,7 @@ const CartDrawer = () => {
   const inventory = useInventory({ validateCart });
   const guestCheckout = useGuestCheckout();
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
-  const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
+  const gokwikEnabled = true;
 
   const {
     grandTotal,
@@ -137,7 +137,7 @@ const CartDrawer = () => {
 
   const validateAndGoToCheckout = useCallback(async () => {
     if (!isInventoryCheckSuccess) {
-      handleOutOfStock(outOfStockItems, inventoryMapping);
+      handleOutOfStockEvent(outOfStockItems, inventoryMapping);
       showToast.error("Please remove out of stock product from cart");
       return false;
     }
@@ -169,7 +169,7 @@ const CartDrawer = () => {
           },
         });
 
-        handleProceedToCheckout("GOKWIK");
+        handleProceedToCheckoutEvent("GOKWIK");
         return true;
       } catch (e) {
         await gokwikSdk.close();
@@ -177,7 +177,7 @@ const CartDrawer = () => {
       }
     }
 
-    handleProceedToCheckout("BUYWOW");
+    handleProceedToCheckoutEvent("BUYWOW");
     if (user?.id || guestCheckout || customUser?.phone) {
       router.push("/checkout");
       return true;
@@ -230,7 +230,7 @@ const CartDrawer = () => {
   }, [isCartOpen, handleCartVisibility]);
 
   useEffect(() => {
-    if (isCartOpen) viewCart();
+    if (isCartOpen) viewCartEvent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCartOpen]);
 

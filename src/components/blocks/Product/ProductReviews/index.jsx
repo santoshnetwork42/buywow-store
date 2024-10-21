@@ -47,7 +47,7 @@ const Reviews = ({
   const user = useSelector((state) => state.user?.user);
   const { handlePasswordLessModal } = useModalDispatch();
 
-  const { viewReviews, writeReview } = useEventsDispatch();
+  const { viewReviewsEvent, writeReviewEvent } = useEventsDispatch();
 
   const processedAnalytics = useMemo(
     () => processAnalytics(initialAnalytics),
@@ -87,7 +87,7 @@ const Reviews = ({
           setReviews((prev) => (reset ? items : [...prev, ...items]));
           setToken(nextToken);
           setTotal(totalCount);
-          viewReviews({
+          viewReviewsEvent({
             product: fetchedProduct,
             totalReviews: totalCount,
             rating,
@@ -117,7 +117,7 @@ const Reviews = ({
         if (result) {
           setUserReview(result);
           setReview(reviewDefault);
-          writeReview({
+          writeReviewEvent({
             product: fetchedProduct,
             type: !!(reviewState?.reviewId || reviewState?.id)
               ? "UPDATE"
@@ -151,7 +151,7 @@ const Reviews = ({
         ? showToast.error("You have already reviewed this product.")
         : setShowReview(true);
     } else {
-      handlePasswordLessModal(true, undefined, undefined, "REVIEW");
+      handlePasswordLessModal(true, false, null, "REVIEW");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, handlePasswordLessModal]);

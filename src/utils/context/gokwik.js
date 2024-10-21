@@ -43,12 +43,12 @@ function GoKwikProvider({ children }) {
     paymentType: prepaidEnabled ? "PREPAID" : "COD",
   });
   const {
-    addressAdded,
-    placeOrder,
-    addressSelected,
-    addPaymentInfo,
-    startCheckout,
-    auth,
+    addressAddedEvent,
+    placeOrderEvent,
+    addressSelectedEvent,
+    addPaymentInfoEvent,
+    startCheckoutEvent,
+    authEvent,
     customEvent,
   } = useEventsDispatch();
 
@@ -146,7 +146,7 @@ function GoKwikProvider({ children }) {
 
           if (isSignedIn) {
             // const currentUser = await getCurrentUser();
-            auth({ action: "login", moe: { userId: phone } });
+            authEvent({ action: "login", moe: { userId: phone } });
             setIsLoggedinViaGokwik(true);
             const getUserResponse = await getUserRewardsAPI();
             setUserWithRewardPoints({
@@ -193,7 +193,7 @@ function GoKwikProvider({ children }) {
                 );
               }
 
-              placeOrder(
+              placeOrderEvent(
                 order,
                 orderResponse?.products?.items,
                 coupon,
@@ -235,18 +235,18 @@ function GoKwikProvider({ children }) {
 
       gokwikSdk.on("address-add", (address) => {
         const formattedAddress = formatUserAddress(address);
-        addressAdded(formattedAddress, totalPrice, "GOKWIK");
-        addressSelected(formattedAddress, totalPrice, "GOKWIK");
+        addressAddedEvent(formattedAddress, totalPrice, "GOKWIK");
+        addressSelectedEvent(formattedAddress, totalPrice, "GOKWIK");
       });
 
       gokwikSdk.on("address-selected", (address) => {
         const formattedAddress = formatUserAddress(address);
-        addressSelected(formattedAddress, totalPrice, "GOKWIK");
+        addressSelectedEvent(formattedAddress, totalPrice, "GOKWIK");
       });
 
       gokwikSdk.on("payment-method-selected", (payment) => {
         const checkoutSource = "GOKWIK";
-        addPaymentInfo({ checkoutSource, payment });
+        addPaymentInfoEvent({ checkoutSource, payment });
       });
 
       gokwikSdk.on("checkout-initiation-failure", (checkout) => {
@@ -255,7 +255,7 @@ function GoKwikProvider({ children }) {
       });
 
       gokwikSdk.on("user-login-successful", async (event) => {
-        startCheckout("GOKWIK", event);
+        startCheckoutEvent("GOKWIK", event);
         await manageUserAuthEvent(event.phone_no, event.user_token);
       });
     });
