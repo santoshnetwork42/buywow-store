@@ -64,7 +64,7 @@ const StickyViewCart = () => {
   }, [handleCartVisibility]);
 
   if (!cartItems.length || !isAllowed || !isInteractive) return null;
-
+ 
   const getCollectionWiseNudgeMsg = () => {
     // if (pathname === "/collections/all" || pathname === "/") {
     //   if (appliedCoupon?.code === "WOW") {
