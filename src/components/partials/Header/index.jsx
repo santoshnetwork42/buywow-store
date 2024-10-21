@@ -40,7 +40,7 @@ const PasswordLess = dynamic(() => import("@/components/common/Passwordless"), {
 });
 
 const MenuItem = React.memo(({ item, index, showInWeb }) => {
-  const { topNavbarClicked } = useEventsDispatch();
+  const { topNavbarClickedEvent } = useEventsDispatch();
 
   const linkPrefix = PAGETYPE[item?.slugType] || "";
 
@@ -64,7 +64,7 @@ const MenuItem = React.memo(({ item, index, showInWeb }) => {
               : item.link || "#"
           }
           onClick={() => {
-            topNavbarClicked({
+            topNavbarClickedEvent({
               banner_name: item.title,
               item_id: item.slug,
               Source: "Web",
@@ -91,7 +91,7 @@ const MenuItem = React.memo(({ item, index, showInWeb }) => {
             : item?.link || "#"
         }
         onClick={() => {
-          topNavbarClicked({
+          topNavbarClickedEvent({
             banner_name: item.title,
             item_id: item.slug,
             Source: "Web",

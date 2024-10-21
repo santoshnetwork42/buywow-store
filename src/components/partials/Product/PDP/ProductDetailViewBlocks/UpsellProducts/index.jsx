@@ -81,6 +81,10 @@ const UpsellProduct = React.memo(({ product, text, subText }) => {
             buttonText={"Add"}
             buttonClassName={"shrink-0 px-3 py-1 text-sm"}
             quantityClassName="grid-cols-[repeat(3,26px)] !h-[25.5px] md:grid-cols-[repeat(3,28px)]"
+            section={{
+              name: "frequently_bought_together_pdp_page",
+              tabValue: "frequently_bought_together_pdp_page",
+            }}
           />
         </div>
       </div>

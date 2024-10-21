@@ -26,6 +26,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle }) => {
         slug,
         name: title,
         parentCategory: parentCategoryTitle,
+        type: parentCategoryTitle,
       }}
     >
       <div

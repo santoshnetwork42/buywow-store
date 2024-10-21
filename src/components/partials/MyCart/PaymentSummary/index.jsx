@@ -33,7 +33,7 @@ export default function PaymentSummary({
       if (user?.id || customUser?.phone || guestCheckout) {
         router.push("/checkout");
       } else {
-        handlePasswordLessModal(true, true, "/checkout");
+        handlePasswordLessModal(true, true, "/checkout", "CHECKOUT");
       }
     } catch (error) {
       console.error("error :>> ", error);

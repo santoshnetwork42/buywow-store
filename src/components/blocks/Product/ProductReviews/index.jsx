@@ -6,6 +6,7 @@ import {
   getUserReviewAPI,
   submitReviewAPI,
 } from "@/lib/appSyncAPIs";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { errorHandler } from "@/utils/errorHandler";
 import { processAnalytics } from "@/utils/helpers";
@@ -46,6 +47,8 @@ const Reviews = ({
   const user = useSelector((state) => state.user?.user);
   const { handlePasswordLessModal } = useModalDispatch();
 
+  const { viewReviewsEvent, writeReviewEvent } = useEventsDispatch();
+
   const processedAnalytics = useMemo(
     () => processAnalytics(initialAnalytics),
     [initialAnalytics],
@@ -84,6 +87,16 @@ const Reviews = ({
           setReviews((prev) => (reset ? items : [...prev, ...items]));
           setToken(nextToken);
           setTotal(totalCount);
+          viewReviewsEvent({
+            product: fetchedProduct,
+            totalReviews: totalCount,
+            rating,
+            totalReviewViewedByUser: [...reviews, ...items]?.length,
+            userId: user?.id,
+            productId,
+            slug: fetchedProduct?.slug,
+            sku: fetchedProduct?.sku,
+          });
         }
       } catch (error) {
         errorHandler(error);
@@ -104,6 +117,13 @@ const Reviews = ({
         if (result) {
           setUserReview(result);
           setReview(reviewDefault);
+          writeReviewEvent({
+            product: fetchedProduct,
+            type: !!(reviewState?.reviewId || reviewState?.id)
+              ? "UPDATE"
+              : "ADD",
+            ...result,
+          });
           setShowReview(false);
           getProductReviews(true);
           showToast.success("Your review has been submitted.");
@@ -131,7 +151,7 @@ const Reviews = ({
         ? showToast.error("You have already reviewed this product.")
         : setShowReview(true);
     } else {
-      handlePasswordLessModal(true);
+      handlePasswordLessModal(true, false, null, "REVIEW");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, handlePasswordLessModal]);
