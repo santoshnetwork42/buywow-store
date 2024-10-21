@@ -331,7 +331,6 @@ export const analyticsMetaDataMapper = () => {
 
 export const trackClickStream = async (payload) => {
   try {
-    console.log(payload);
     const NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL =
       process.env.NEXT_PUBLIC_CLICK_STREAM_WEBHOOK_URL;
 
