@@ -136,10 +136,6 @@ const ClientSideEffects = () => {
   }, [setStore]);
 
   useEffect(() => {
-    if (pathname === "/") {
-      homeViewedEvent();
-    }
-
     const hubListenerCancelToken = Hub.listen("auth", async (authEvent) => {
       const { event } = authEvent.payload;
       if (event === "signedOut") {
@@ -157,6 +153,12 @@ const ClientSideEffects = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (pathname === "/") {
+      homeViewedEvent();
+    }
+  }, [pathname]);
 
   useEffect(() => {
     setMetaData();
