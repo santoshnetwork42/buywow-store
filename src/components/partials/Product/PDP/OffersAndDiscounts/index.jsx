@@ -84,8 +84,8 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   );
 };
 
-const AllOffers = ({ productId }) => {
-  const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, productId);
+const AllOffers = (product) => {
+  const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, product);
 
   if (pdpFeaturedCoupons?.length === 0) return null;
 
@@ -148,7 +148,7 @@ const AllOffers = ({ productId }) => {
   );
 };
 
-const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, productId }) => {
+const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, product }) => {
   if (!bestCoupon || !hasInventory) return null;
   return (
     <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:gap-2.5 md:flex-col lg:gap-3 xl:flex-row">
@@ -157,7 +157,7 @@ const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, productId }) => {
         price={price}
         hasInventory={hasInventory}
       />
-      <AllOffers productId={productId} />
+      <AllOffers product={product} />
     </div>
   );
 };

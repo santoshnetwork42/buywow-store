@@ -126,6 +126,10 @@ const ProductDetailView = ({ product }) => {
             price={price}
             hasInventory={hasInventory}
             productId={packageProduct?.id}
+            product={{
+              id: packageProduct?.id,
+              collections: packageProduct?.collections,
+            }}
           />
         )}
 
