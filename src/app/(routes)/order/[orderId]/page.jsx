@@ -1,14 +1,21 @@
-import OrderContent from "@/components/partials/Order/OrderContent";
 import { STORE_ID } from "@/config";
 import { getOrderByIdAPI } from "@/lib/appSyncAPIs";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
-import { Suspense } from "react";
 
 export const metadata = {
   title: "Order",
   description:
     "This page shows the details of the order, including order number, status, products, amount and shipping details.",
 };
+
+const OrderContent = dynamic(
+  () => import("@/components/partials/Order/OrderContent"),
+  {
+    loading: () => <OrderSkeleton />,
+    ssr: false,
+  },
+);
 
 const getOrderData = async (orderId, paymentId) => {
   try {
@@ -58,13 +65,11 @@ export default async function OrderPage({ params, searchParams }) {
 
   return (
     <div className="container-main mb-main flex max-w-4xl flex-col gap-5 py-5 md:gap-6">
-      <Suspense fallback={<OrderSkeleton />}>
-        <OrderContent
-          initialOrderData={initialOrderData}
-          orderId={orderId}
-          paymentId={paymentId}
-        />
-      </Suspense>
+      <OrderContent
+        initialOrderData={initialOrderData}
+        orderId={orderId}
+        paymentId={paymentId}
+      />
     </div>
   );
 }
