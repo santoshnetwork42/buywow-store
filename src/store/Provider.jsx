@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Provider as ReactProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import { useEventsDispatch } from "./sagas/dispatch/events.dispatch";
 
 const LoadingState = ({ data }) => {
   // Your existing loading state components here
