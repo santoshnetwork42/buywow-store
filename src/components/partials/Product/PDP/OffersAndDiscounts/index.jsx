@@ -84,7 +84,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   );
 };
 
-const AllOffers = (product) => {
+const AllOffers = ({ product }) => {
   const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, product);
 
   if (pdpFeaturedCoupons?.length === 0) return null;
@@ -106,6 +106,12 @@ const AllOffers = (product) => {
         {pdpFeaturedCoupons?.map((item, index) => {
           const { coupon } = item || {};
           const { couponTitle, code } = coupon || {};
+          const isGlobalOffer =
+            Array.isArray(coupon?.applicableCollections) &&
+            coupon.applicableCollections.length === 0 &&
+            Array.isArray(coupon?.applicableProducts) &&
+            coupon.applicableProducts.length === 0;
+
           return (
             <div
               key={index}
@@ -122,7 +128,9 @@ const AllOffers = (product) => {
                     {couponTitle}
                   </Heading>
                   <Text as="span" size="sm" responsive>
-                    Applicable on certain products
+                    {isGlobalOffer
+                      ? `Applicable on all products`
+                      : `Applicable on certain products`}
                   </Text>
                 </div>
               </div>
