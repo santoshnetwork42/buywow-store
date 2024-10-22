@@ -6,10 +6,10 @@ import dayjs from "dayjs";
 import Link from "next/link";
 
 export default function BlogCard4({ blog, index }) {
-  const { blogClicked } = useEventsDispatch();
+  const { blogClickedEvent } = useEventsDispatch();
 
   const handleClick = () => {
-    blogClicked({
+    blogClickedEvent({
       item_name: blog.title,
       item_id: index + 1,
       item_slug: blog.slug,

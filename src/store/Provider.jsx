@@ -1,9 +1,6 @@
 "use client";
 
 import Carousel from "@/components/blocks/Carousel";
-import FeaturedList from "@/components/blocks/FeaturedList";
-import FeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
-import TrendingCategories from "@/components/blocks/TrendingCategories";
 import Header from "@/components/partials/Header";
 import store, { persistor } from "@/store/store";
 import { usePathname } from "next/navigation";
@@ -14,6 +11,7 @@ import { PersistGate } from "redux-persist/integration/react";
 const LoadingState = ({ data }) => {
   // Your existing loading state components here
   const { headerData, carouselData } = data || {};
+
   return (
     <div className="max-h-[100dvh] overflow-hidden">
       {headerData?.data && <Header data={headerData} />}

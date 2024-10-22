@@ -9,16 +9,22 @@ import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import { getCurrentUser } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
 import Cookies from "js-cookie";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   const { updateMeta, setStore, destroySession } = useSystemDispatch();
   const { setUser } = useUserDispatch();
-  const { auth } = useEventsDispatch();
+  const {
+    authEvent: authEventHandler,
+    sessionStartedEvent,
+    sessionDestroyEvent,
+    homeViewedEvent,
+  } = useEventsDispatch();
   const { storeCoupon } = useCartDispatch();
 
   useEffect(() => {
@@ -68,6 +74,9 @@ const ClientSideEffects = () => {
         secure: process.env.NODE_ENV !== "development",
         sameSite: "strict",
       });
+      sessionStartedEvent({
+        sessionId,
+      });
     }
 
     updateMeta(metadata);
@@ -103,10 +112,14 @@ const ClientSideEffects = () => {
         const currentUser = await getCurrentUser().catch(() => null);
         if (!currentUser) {
           destroySession();
+          sessionDestroyEvent({
+            sessionId: Cookies.get(`${STORE_PREFIX}_session_id`),
+          });
         }
       }
     } catch (error) {
       destroySession();
+      sessionDestroyEvent();
       console.error("Error fetching user data:", error);
     }
   }, [setUser, destroySession]);
@@ -127,7 +140,7 @@ const ClientSideEffects = () => {
       const { event } = authEvent.payload;
       if (event === "signedOut") {
         destroySession();
-        auth({ action: "logout" });
+        authEventHandler({ action: "logout" });
       } else {
         fetchAndSetUser();
       }
@@ -140,6 +153,12 @@ const ClientSideEffects = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (pathname === "/") {
+      homeViewedEvent();
+    }
+  }, [pathname]);
 
   useEffect(() => {
     setMetaData();

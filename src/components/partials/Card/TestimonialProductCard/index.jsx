@@ -58,6 +58,10 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
             buttonText={"Add"}
             buttonClassName="px-2 h-[26px] sm:h-[27px] md:px-2.5 md:h-[28px] lg:h-[29px] xl:px-3 xl:h-[30px]"
             quantityClassName="grid-cols-[repeat(3,24px)] sm:grid-cols-[repeat(3,26px)] md:grid-cols-[repeat(3,28px)] h-[26px] sm:h-[27px] md:h-[28px] lg:h-[29px] xl:h-[30px] lg:grid-cols-[repeat(3,30px)] xl:grid-cols-[repeat(3,32px)]"
+            section={{
+              name: "testimonial_product_card",
+              tabValue: "testimonial_product_card",
+            }}
           />
         </div>
       </div>

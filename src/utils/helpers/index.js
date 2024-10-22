@@ -16,6 +16,15 @@ export function generateRandomString(length) {
   return Array.from(array, (x) => characters[x % charactersLength]).join("");
 }
 
+export function trimLowercaseJoinWithUnderscore(str = "") {
+  return str
+    .split(" ") // Split the string by spaces
+    .map((word) => word.trim()) // Trim each word
+    .filter((word) => word.length > 0) // Remove empty strings
+    .map((word) => word.toLowerCase())
+    .join("_"); // Join the words with underscores
+}
+
 export function validatePhoneNumber(phoneNumber) {
   if (isPhoneNumberValid(phoneNumber)) {
     return { error: false };

@@ -18,6 +18,7 @@ const AddToCart = ({
   buttonClassName,
   quantityClassName,
   showGoToCart = false,
+  section,
 }) => {
   const { addToCart, updateCart, removeFromCart } = useCartDispatch();
   const { handleCartVisibility } = useModalDispatch();
@@ -30,6 +31,11 @@ const AddToCart = ({
       ...product,
       qty: product.minimumOrderQuantity || 1,
       variantId: selectedVariant?.id,
+      section: {
+        id: section?.name ?? "pdp_page",
+        name: section?.name ?? "pdp_page",
+        tabValue: section?.tabValue ?? "pdp_page",
+      },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product, selectedVariant]);

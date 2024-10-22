@@ -60,9 +60,9 @@ const CheckoutClient = () => {
   const { handlePasswordLessModal } = useModalDispatch();
   const { validateCart, emptyCart } = useCartDispatch();
   const {
-    addPaymentInfo,
-    placeOrder: onPlaceOrder,
-    startCheckout,
+    addPaymentInfoEvent,
+    placeOrderEvent: onPlaceOrderEvent,
+    startCheckoutEvent,
   } = useEventsDispatch();
 
   const currentAddress = useSelector((state) => state.address?.currentAddress);
@@ -267,6 +267,12 @@ const CheckoutClient = () => {
         return;
       }
 
+      addPaymentInfoEvent({
+        ...variables,
+        ...payment,
+        grandTotal,
+      });
+
       if (success && rzpEnabled && transaction && order) {
         const options = {
           key: RAZORPAY_KEY,
@@ -305,7 +311,6 @@ const CheckoutClient = () => {
 
         razorpayMethod = new Razorpay(options);
         razorpayMethod.open();
-        addPaymentInfo();
       }
 
       return Promise.resolve();
@@ -318,7 +323,7 @@ const CheckoutClient = () => {
 
   const afterOrderConfirm = useCallback(async () => {
     if (isConfirmed && finalOrder) {
-      onPlaceOrder(
+      onPlaceOrderEvent(
         finalOrder,
         [...freeProducts],
         appliedCoupon,
@@ -339,7 +344,7 @@ const CheckoutClient = () => {
       if (razorpayMethod) {
         razorpayMethod.close();
       }
-      router.replace(`/order/${finalOrder.id}`);
+      router.push(`/order/${finalOrder.id}`);
       setPaymentLoader(false);
       emptyCart();
     }
@@ -353,7 +358,7 @@ const CheckoutClient = () => {
   }, [isConfirmed, afterOrderConfirm]);
 
   useEffect(() => {
-    startCheckout();
+    startCheckoutEvent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
