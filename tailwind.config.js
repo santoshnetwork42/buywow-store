@@ -90,13 +90,14 @@ module.exports = {
           "0%, 100%": {
             boxShadow: "0 0 1px 1px rgba(221, 132, 52, 0.5)",
           },
-          "50%": {
-            boxShadow: "0 0 4px 4px rgba(221, 132, 52, 0.6)",
+          "30%": {
+            boxShadow: "0 0 1px 2px rgba(221, 132, 52, 0.6)",
           },
         },
       },
       animation: {
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "border-complete": "borderLinear 0.5s linear forwards",
       },
     },
   },

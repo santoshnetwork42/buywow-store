@@ -21,6 +21,22 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+const GiftIconWithBorder = ({
+  isMarked,
+  isNextIndex,
+  animationType = "linear",
+}) => {
+  return (
+    <div className="relative">
+      <div
+        className={`relative flex h-8 w-8 items-center justify-center rounded-lg bg-white-a700_01 transition-all duration-300 ease-in-out ${isNextIndex ? "animate-pulse-glow" : ""} ${isMarked ? `border-animation border-animation-${animationType}` : "ring-2 ring-gray-400 ring-opacity-10"} `}
+      >
+        <GiftIcon color={isMarked ? "#dd8433" : "#c2c3c7"} />
+      </div>
+    </div>
+  );
+};
+
 const IntegratedProgressStepper = ({
   steps,
   currQuantity,
@@ -40,6 +56,7 @@ const IntegratedProgressStepper = ({
     (step) => safeCurrentQuantity < step.quantity,
   );
 
+  let progressQuantity = 0;
   // Find the index of the applied coupon
   // const appliedCouponIndex = steps
   //   ? steps.findIndex((step) => step.code === appliedCoupon?.code)
@@ -75,26 +92,42 @@ const IntegratedProgressStepper = ({
   }
 
   return (
-    <div
-      className={`w-full rounded-lg bg-deep_orange-50 px-4 ${isCart ? "py-12" : "pb-10 pt-12"}`}
-    >
+    <div className={`w-full rounded-lg bg-deep_orange-50 px-4 py-12`}>
       <div className="relative">
-        <div className="absolute top-0 -mt-9 w-full text-center text-[14px] !leading-3">
+        <div className="absolute top-0 -mt-9 w-full text-center text-[12px] !leading-3">
           {nudgeMsg}
         </div>
         {/* Progress Bar */}
-        <div className="h-1 rounded-full bg-gray-200">
+        {/* <div className="h-1 rounded-full bg-gray-200">
           <div
             style={{ width: `${progressPercentage}%` }}
             className="h-full rounded-full bg-yellow-900 transition-all duration-300 ease-in-out"
           ></div>
-        </div>
-
-        {/* Current and Max Quantity */}
-        {/* <div className="absolute -top-8 left-0 mt-2 flex w-full justify-between text-xs text-gray-600">
-          <span>{safeCurrentQuantity}</span>
-          <span>{maxQuantity}</span>
         </div> */}
+
+        <div className="flex w-[87%] gap-1">
+          {steps?.map((step, index) => {
+            return (
+              <div key={index} className="h-2 w-full rounded-full">
+                <div className="flex gap-1">
+                  {Array.from({
+                    length: index
+                      ? step.quantity - steps[index - 1].quantity
+                      : step.quantity,
+                  }).map((_, qtyIndex) => (
+                    <div
+                      key={qtyIndex}
+                      className={`h-1 w-full rounded-full transition-all duration-300 ease-in-out ${progressQuantity + qtyIndex < currQuantity ? "bg-yellow-900" : "bg-gray-300"}`}
+                    />
+                  ))}
+                </div>
+                <div className="hidden">
+                  {(progressQuantity = step.quantity)}
+                </div>
+              </div>
+            );
+          })}
+        </div>
 
         {/* Steps */}
         <div className="absolute left-0 top-0 -mt-4 flex w-full justify-between">
@@ -108,36 +141,30 @@ const IntegratedProgressStepper = ({
                 key={step.code}
                 className="absolute left-3 flex justify-end pr-1 md:pr-2"
                 style={{
-                  width: `${(100 / maxQuantity) * (step.buyXQuantity + (step.getYQuantity || 0))}%`,
+                  width: `${(100 / steps?.length) * (index + 1)}%`,
                 }}
               >
                 <div className="flex flex-col items-center justify-center gap-2">
-                  <div
-                    className={`relative flex h-8 w-8 items-center justify-center rounded-full bg-white-a700_01 transition-all duration-300 ease-in-out ${isNextIndex ? "animate-pulse-glow shadow-[0_0_5px_5px_rgba(59,130,246,0.5)]" : ""} ${isMarked ? "ring-2 ring-green-600 ring-opacity-50" : "ring-2 ring-gray-400 ring-opacity-10"} `}
-                  >
-                    {<GiftIcon color={isMarked ? "#16a34a" : "#c2c3c7"} />}
-                  </div>
+                  <GiftIconWithBorder
+                    isMarked={isMarked}
+                    isNextIndex={isNextIndex}
+                    animationType="linear" // or "clockwise" or "corners"
+                  />
+
                   <div className="flex flex-col text-center transition-all duration-300 ease-in-out">
-                    <span
-                      className={`block text-xs font-medium ${isMarked ? "text-green-600" : "text-gray-600"} !leading-3 transition-all duration-300 ease-in-out`}
+                    {/* <span
+                      className={`block text-xs font-medium ${isMarked ? "text-yellow-900" : "text-gray-600"} !leading-3 transition-all duration-300 ease-in-out`}
                     >
                       {step.code}
+                    </span> */}
+
+                    <span
+                      className={`block text-xs !leading-3 transition-all duration-300 ease-in-out`}
+                    >
+                      {`On ${step.quantity} Products`}
                     </span>
-                    {isCart && (
-                      <span
-                        className={`block text-xs font-medium !leading-3 ${isMarked ? "text-green-600" : "text-gray-600"} transition-all duration-300 ease-in-out`}
-                      >
-                        {`On ${step.quantity} Products`}
-                      </span>
-                    )}
                   </div>
                 </div>
-                {/* 
-                  <div className="absolute bottom-8 left-1/2 -translate-x-1/2 transform text-center">
-                    <span className="text-xs font-medium text-gray-500 transition-all duration-300 ease-in-out">
-                      {step.quantity}
-                    </span>
-                  </div> */}
               </div>
             );
           })}
