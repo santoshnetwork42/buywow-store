@@ -1,3 +1,5 @@
+import VolumeMute from "@/assets/svg/volumeMute";
+import VolumeUp from "@/assets/svg/volumeUp";
 import { Button, Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
@@ -114,83 +116,108 @@ const ProductImage = React.memo(
     productBenefitTags,
     videoRef,
     layout,
-  }) => (
-    <div
-      className={`main-image relative overflow-hidden ${
-        layout === "grid" ? "w-full" : "flex-[0_0_100%]"
-      }`}
-      onClick={() => image.isVideo && togglePlayPause(index, layout)}
-    >
-      {image.isVideo ? (
-        <>
-          <video
-            ref={videoRef}
-            src={getPublicImageURL({
-              key: image.imageKey,
-              resize: 820,
-              addPrefix: true,
-            })}
-            className="main-image m-auto aspect-square cursor-pointer rounded-lg border object-contain shadow-sm"
-            loop
-            muted
-            playsInline
-          />
-          {(showPlayButton || !isPlaying) && (
-            <PlayPauseButton
-              isPlaying={isPlaying}
+  }) => {
+    const [muted, setMuted] = useState(true);
+
+    return (
+      <div
+        className={`main-image relative overflow-hidden ${
+          layout === "grid" ? "w-full" : "flex-[0_0_100%]"
+        }`}
+        onClick={() => image.isVideo && togglePlayPause(index, layout)}
+      >
+        {image.isVideo ? (
+          <>
+            <video
+              ref={videoRef}
+              src={getPublicImageURL({
+                key: image.imageKey,
+                resize: 820,
+                addPrefix: true,
+              })}
+              className="main-image m-auto aspect-square cursor-pointer rounded-lg border object-contain shadow-sm"
+              loop
+              muted={muted}
+              playsInline
+            />
+            {(showPlayButton || !isPlaying) && (
+              <PlayPauseButton
+                isPlaying={isPlaying}
+                onClick={() => {
+                  togglePlayPause(index, layout);
+                }}
+              />
+            )}
+            <div
+              className="absolute bottom-1 right-1 flex cursor-pointer items-center justify-center rounded-lg bg-black-900 bg-opacity-50 p-1"
               onClick={(e) => {
                 e.stopPropagation();
-                togglePlayPause(index, layout);
+                e.preventDefault();
+                setMuted(!muted);
               }}
+            >
+              {muted && (
+                <VolumeMute
+                  size={26}
+                  className="size-4 max-sm:mt-1 sm:size-6 lg:size-7"
+                />
+              )}
+
+              {!muted && (
+                <VolumeUp
+                  size={26}
+                  className="size-4 max-sm:mt-1 sm:size-6 lg:size-7"
+                />
+              )}
+            </div>
+          </>
+        ) : (
+          <div className="aspect-square overflow-hidden rounded-lg border shadow-sm">
+            <Img
+              src={image?.imageKey}
+              width={400}
+              height={400}
+              alt={`Product image ${index + 1}`}
+              priority
+              className="main-image m-auto aspect-square h-auto w-full object-contain"
+              addPrefix
             />
-          )}
-        </>
-      ) : (
-        <div className="aspect-square overflow-hidden rounded-lg border shadow-sm">
-          <Img
-            src={image?.imageKey}
-            width={400}
-            height={400}
-            alt={`Product image ${index + 1}`}
-            priority
-            className="main-image m-auto aspect-square h-auto w-full object-contain"
-            addPrefix
-          />
-        </div>
-      )}
-      {promotionTag?.data && index === 0 && (
-        <Text
-          as="span"
-          size="xs"
-          className="absolute left-2.5 top-2 z-10 rounded px-2 py-1 capitalize text-white-a700 md:top-2.5 md:px-2.5"
-          style={{
-            backgroundColor:
-              extractAttributes(promotionTag).bgColor || "#DD8434",
-          }}
-        >
-          {extractAttributes(promotionTag).tag}
-        </Text>
-      )}
-      {productBenefitTags?.data && index === 0 && (
-        <div className="absolute right-2.5 top-2 z-10 flex flex-col items-end gap-2 capitalize md:top-2.5">
-          {productBenefitTags.data.map((benefitTag, idx) => {
-            const { tag, bgColor } = benefitTag?.attributes || {};
-            return (
-              <Text
-                key={idx}
-                as="span"
-                size="xs"
-                className="w-fit rounded px-2 py-1 md:px-2.5"
-                style={{ backgroundColor: bgColor || "#DD8434" }}
-              >
-                {tag}
-              </Text>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  ),
+          </div>
+        )}
+        {promotionTag?.data && index === 0 && (
+          <Text
+            as="span"
+            size="xs"
+            className="absolute left-2.5 top-2 z-10 rounded px-2 py-1 capitalize text-white-a700 md:top-2.5 md:px-2.5"
+            style={{
+              backgroundColor:
+                extractAttributes(promotionTag).bgColor || "#DD8434",
+            }}
+          >
+            {extractAttributes(promotionTag).tag}
+          </Text>
+        )}
+        {productBenefitTags?.data && index === 0 && (
+          <div className="absolute right-2.5 top-2 z-10 flex flex-col items-end gap-2 capitalize md:top-2.5">
+            {productBenefitTags.data.map((benefitTag, idx) => {
+              const { tag, bgColor } = benefitTag?.attributes || {};
+              return (
+                <Text
+                  key={idx}
+                  as="span"
+                  size="xs"
+                  className="w-fit rounded px-2 py-1 md:px-2.5"
+                  style={{ backgroundColor: bgColor || "#DD8434" }}
+                >
+                  {tag}
+                </Text>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  },
 );
 
 const ProductImageSection = ({
