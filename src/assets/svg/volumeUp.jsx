@@ -7,7 +7,6 @@ const VolumeUp = ({ size = 28, className, ...props }) => {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
       fill="white"
-      class="bi bi-volume-up"
       viewBox="-1.5 0 16 16"
     >
       <path d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.48 5.48 0 0 1 11.025 8a5.48 5.48 0 0 1-1.61 3.89z" />

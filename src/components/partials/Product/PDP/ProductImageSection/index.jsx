@@ -118,6 +118,32 @@ const ProductImage = React.memo(
     layout,
   }) => {
     const [muted, setMuted] = useState(true);
+    const videoContainerRef = useRef(null);
+
+    // Add this useEffect for intersection observer
+    useEffect(() => {
+      if (!image.isVideo || !videoContainerRef.current) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting && isPlaying) {
+              // Video is out of view and playing - pause it
+              togglePlayPause(index, layout);
+            }
+          });
+        },
+        {
+          threshold: 0.5, // 50% of the video must be visible
+        },
+      );
+
+      observer.observe(videoContainerRef.current);
+
+      return () => {
+        observer.disconnect();
+      };
+    }, [image.isVideo, isPlaying, index, layout, togglePlayPause]);
 
     return (
       <div
@@ -127,7 +153,8 @@ const ProductImage = React.memo(
         onClick={() => image.isVideo && togglePlayPause(index, layout)}
       >
         {image.isVideo ? (
-          <>
+          // Add ref to the video container
+          <div ref={videoContainerRef}>
             <video
               ref={videoRef}
               src={getPublicImageURL({
@@ -156,22 +183,12 @@ const ProductImage = React.memo(
                 setMuted(!muted);
               }}
             >
-              {muted && (
-                <VolumeMute
-                  size={26}
-                  className="size-4 max-sm:mt-1 sm:size-6 lg:size-7"
-                />
-              )}
-
-              {!muted && (
-                <VolumeUp
-                  size={26}
-                  className="size-4 max-sm:mt-1 sm:size-6 lg:size-7"
-                />
-              )}
+              {muted && <VolumeMute className="size-6" />}
+              {!muted && <VolumeUp className="size-6" />}
             </div>
-          </>
+          </div>
         ) : (
+          // Rest of your existing code for images...
           <div className="aspect-square overflow-hidden rounded-lg border shadow-sm">
             <Img
               src={image?.imageKey}
@@ -184,6 +201,7 @@ const ProductImage = React.memo(
             />
           </div>
         )}
+        {/* Rest of your existing code for tags... */}
         {promotionTag?.data && index === 0 && (
           <Text
             as="span"
