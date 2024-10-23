@@ -170,7 +170,8 @@ const ProductImage = React.memo(
             {(showPlayButton || !isPlaying) && (
               <PlayPauseButton
                 isPlaying={isPlaying}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   togglePlayPause(index, layout);
                 }}
               />
