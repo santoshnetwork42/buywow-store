@@ -33,10 +33,8 @@ const MiniBanners = ({ miniBannerItems: banners, lazyBlock = true }) => {
             trackingType="BANNER_CLICKED"
             trackingEventPayload={{
               id: index + 1,
-              moeText:
-                banner?.moeText ||
-                webImageAttrs?.alternativeText ||
-                mWebImageAttrs?.alternativeText,
+              banner_name: banner?.moeText || imageAlt,
+              banner_link: link,
             }}
           >
             <picture className="relative block aspect-[298/120] w-[80vw] min-w-[298px] max-w-[352px] overflow-hidden rounded-lg sm:w-[46vw] sm:max-w-[662px] md:aspect-[650/166] md:w-[calc(50vw-36px)] lg:w-[calc(50vw-46px)] xl:w-[calc(50vw-58px)]">

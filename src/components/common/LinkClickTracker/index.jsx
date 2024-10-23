@@ -14,22 +14,38 @@ const LinkClickTracker = ({
   trackingEventPayload = "",
 }) => {
   const source = getSource();
-  const { bannerClicked, shopByClicked, blogClicked, topNavbarClicked } =
-    useEventsDispatch();
+  const {
+    bannerClickedEvent,
+    shopByClickedEvent,
+    blogClickedEvent,
+    topNavbarClickedEvent,
+    footerClickedEvent,
+  } = useEventsDispatch();
+
   const handleClick = useCallback(
     (e) => {
       switch (trackingType) {
         case "BANNER_CLICKED": {
-          bannerClicked({
+          bannerClickedEvent({
             Source: source,
             item_id: trackingEventPayload?.id,
-            banner_name: trackingEventPayload?.moeText,
+            banner_name: trackingEventPayload?.banner_name,
+            banner_link: trackingEventPayload?.banner_link,
+          });
+          break;
+        }
+        case "FOOTER_CLICK": {
+          footerClickedEvent({
+            section: "footer",
+            menu: trackingEventPayload?.menu,
+            subMenu: trackingEventPayload?.subMenu,
           });
           break;
         }
         case "SHOP_BY_CLICK": {
-          shopByClicked({
+          shopByClickedEvent({
             item_name: trackingEventPayload?.name,
+            event: trackingEventPayload?.type, // event name passed for clickstream as payload
             item_id: "",
             item_slug: trackingEventPayload?.slug,
             item_parent_category: trackingEventPayload?.parentCategory,
@@ -37,7 +53,7 @@ const LinkClickTracker = ({
           break;
         }
         case "BLOG_CLICK": {
-          blogClicked({
+          blogClickedEvent({
             item_name: trackingEventPayload.name,
             item_id: trackingEventPayload?.id,
             item_slug: trackingEventPayload.slug,
@@ -46,7 +62,7 @@ const LinkClickTracker = ({
           break;
         }
         case "TOP_NAVBAR_CLICKED": {
-          topNavbarClicked({
+          topNavbarClickedEvent({
             banner_name: trackingEventPayload?.name,
             item_id: trackingEventPayload?.slug,
             Source: "Web",

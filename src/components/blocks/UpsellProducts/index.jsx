@@ -62,6 +62,10 @@ const UpsellProducts = ({
             ...packageProduct,
             qty: packageProduct.minimumOrderQuantity || 1,
             variantId: selectedVariantId,
+            section: {
+              id: "frequently_bought_together_pdp_page",
+              name: "frequently_bought_together_pdp_page",
+            },
           });
         }
       }

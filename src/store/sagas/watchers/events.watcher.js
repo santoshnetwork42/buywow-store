@@ -4,6 +4,7 @@ import {
   addressSelectedEventHandler,
   addToCartEventHandler,
   applyCouponsEventHandler,
+  removeCouponsEventHandler,
   authEventHandler,
   bannerClickedEventHandler,
   blogClickEventHandler,
@@ -25,10 +26,19 @@ import {
   viewCartEventHandler,
   viewItemEventHandler,
   viewListItemEventHandler,
+  footerClickEventHandler,
+  announcementBarClickEventHandler,
+  pageViewedEventHandler,
+  productQtyChangesEventHandler,
+  viewReviewsEventHandler,
+  writeReviewEventHandler,
+  sessionStartedEventHandler,
+  sessionDestroyEventHandler,
+  customEventHandler,
 } from "@/store/sagas/handlers/events.handle";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
-import { all, fork, takeLatest } from "redux-saga/effects";
+import { all, fork, takeEvery, takeLatest } from "redux-saga/effects";
 
 function* outOfStock() {
   yield takeLatest(eventsSagaActions.OUT_OF_STOCK, outOfStockEventHandler);
@@ -53,6 +63,13 @@ function* proceedToCheckout() {
   );
 }
 
+function* productQtyChangesEvent() {
+  yield takeLatest(
+    eventsSagaActions.PRODUCT_QTY_CHANGES,
+    productQtyChangesEventHandler,
+  );
+}
+
 //cart actions
 function* addToCartEvent() {
   yield takeLatest(cartSagaActions.ADD_TO_CART, addToCartEventHandler);
@@ -73,6 +90,9 @@ function* viewItem() {
 function* placeOrder() {
   yield takeLatest(eventsSagaActions.PLACE_ORDER, placeOrderEventHandler);
 }
+function* customEvent() {
+  yield takeEvery(eventsSagaActions.CUSTOM_EVENT, customEventHandler);
+}
 
 function* ltoProductItemEvent() {
   yield takeLatest(
@@ -84,6 +104,10 @@ function* ltoProductItemEvent() {
 //cart actions
 function* applyCoupons() {
   yield takeLatest(cartSagaActions.APPLY_COUPONS, applyCouponsEventHandler);
+}
+
+function* removeCoupon() {
+  yield takeLatest(cartSagaActions.REMOVE_COUPON, removeCouponsEventHandler);
 }
 
 function* checkoutStarted() {
@@ -148,6 +172,35 @@ function* topNavbarClicked() {
 function* shopByClick() {
   yield takeLatest(eventsSagaActions.SHOP_BY_CLICK, shopByClickEventHandler);
 }
+function* footerClick() {
+  yield takeLatest(eventsSagaActions.FOOTER_CLICK, footerClickEventHandler);
+}
+
+function* viewReviews() {
+  yield takeLatest(eventsSagaActions.VIEW_REVIEW, viewReviewsEventHandler);
+}
+
+function* writeReview() {
+  yield takeLatest(eventsSagaActions.WRITE_REVIEW, writeReviewEventHandler);
+}
+function* announcementBarClick() {
+  yield takeLatest(
+    eventsSagaActions.ANNOUNCEMENT_BAR_CLICK,
+    announcementBarClickEventHandler,
+  );
+}
+function* sessionStarted() {
+  yield takeLatest(
+    eventsSagaActions.SESSION_STARTED,
+    sessionStartedEventHandler,
+  );
+}
+function* sessionDestroyed() {
+  yield takeLatest(
+    eventsSagaActions.SESSION_DESTROY,
+    sessionDestroyEventHandler,
+  );
+}
 function* blogClick() {
   yield takeLatest(eventsSagaActions.BLOG_CLICK, blogClickEventHandler);
 }
@@ -161,6 +214,10 @@ function* blogClick() {
 
 function* homeViewed() {
   yield takeLatest(eventsSagaActions.HOME_VIEWED, homeViewedEventHandler);
+}
+
+function* pageViewed() {
+  yield takeLatest(eventsSagaActions.PAGE_VIEWED, pageViewedEventHandler);
 }
 
 function* logOut() {
@@ -191,8 +248,10 @@ export function* eventsWatcher() {
   yield all([
     fork(outOfStock),
     fork(addToCartEvent),
+    fork(productQtyChangesEvent),
     fork(removeFromCartEvent),
     fork(applyCoupons),
+    fork(removeCoupon),
     fork(ltoProductItemEvent),
     fork(search),
     fork(priceMisMatch),
@@ -212,10 +271,18 @@ export function* eventsWatcher() {
     fork(tileClicked),
     fork(topNavbarClicked),
     fork(shopByClick),
+    fork(footerClick),
+    fork(announcementBarClick),
     fork(blogClick),
     // fork(productSearched),
     fork(homeViewed),
+    fork(pageViewed),
     fork(logOut),
+    fork(viewReviews),
+    fork(writeReview),
+    fork(sessionStarted),
+    fork(sessionDestroyed),
+    fork(customEvent),
     // fork(spinTheWheelPlayed),
     // fork(spinTheWheelReward),
     // fork(customEventVercel),
