@@ -44,6 +44,7 @@ const FeaturedProducts = ({
                 storeConfigData?.attributes?.promotion_tag)
             }
             {...product.attributes}
+            section={{ name: title, tabValue: title }}
           />
         ))}
       </Slider>

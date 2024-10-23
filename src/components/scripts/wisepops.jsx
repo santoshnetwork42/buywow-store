@@ -8,16 +8,17 @@ import { showToast } from "@/components/common/ToastComponent";
 
 function Wisepops() {
   const user = useSelector((state) => state.user?.user);
-  const { spinTheWheelPlayed, spinTheWheelReward } = useEventsDispatch();
+  const { spinTheWheelPlayedEvent, spinTheWheelRewardEvent } =
+    useEventsDispatch();
   const [coupons, updateUserCoupon] = useUpdateUserCoupon();
 
   const beforeFormSubmitHandler = useCallback(
     (event) => {
       const button = event.detail.target.querySelector("button");
       if (button) button.setCustomValidity("");
-      spinTheWheelPlayed({ URL: window.location.href });
+      spinTheWheelPlayedEvent({ URL: window.location.href });
     },
-    [spinTheWheelPlayed],
+    [spinTheWheelPlayedEvent],
   );
 
   const afterFormSubmitHandler = useCallback(
@@ -34,14 +35,14 @@ function Wisepops() {
   useEffect(() => {
     const appliedCoupon = coupons?.find((coupon) => coupon?.isExternal);
     if (appliedCoupon) {
-      spinTheWheelReward({
+      spinTheWheelRewardEvent({
         URL: window.location.href,
         "Reward Type": appliedCoupon.couponType,
         "Reward Won": appliedCoupon.code,
         "Reward Description": appliedCoupon.description,
       });
     }
-  }, [coupons, spinTheWheelReward]);
+  }, [coupons, spinTheWheelRewardEvent]);
 
   useEffect(() => {
     window.addEventListener(
