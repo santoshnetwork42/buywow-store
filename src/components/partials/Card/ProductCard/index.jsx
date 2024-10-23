@@ -178,7 +178,7 @@ const ProductCard = memo(
               size="sm"
               className="absolute right-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize md:right-2.5 md:top-2.5 md:px-3"
               responsive
-              style={{ backgroundColor: offerTag?.bgColor || "#DD8434" }}
+              style={{ backgroundColor: "#ECCA31" }}
             >
               {discountPercentage}% OFF
             </Text>
