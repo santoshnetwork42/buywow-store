@@ -12,7 +12,7 @@
     "@reduxjs/toolkit": "^2.2.6",
     "@tailwindcss/forms": "^0.5.7",
     "@wordpress/block-library": "^9.5.0",
-    "@wow-star/utils": "1.0.0-cms-beta.9",
+    "@wow-star/utils": "1.0.0-cms-beta.12",
     "await-global": "^2.0.0",
     "aws-amplify": "^6.4.0",
     "canvas-confetti": "^1.9.3",
