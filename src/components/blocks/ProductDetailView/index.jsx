@@ -6,6 +6,7 @@ import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
+import handleRedirect from "@/utils/handleRedirect";
 import { extractAttributes } from "@/utils/helpers";
 import {
   useProduct,
@@ -45,7 +46,7 @@ const ProductDetailView = ({ product }) => {
     useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
-  const { viewItem } = useEventsDispatch();
+  const { viewItemEvent } = useEventsDispatch();
   const viewItemEventTriggered = useRef(false);
 
   useEffect(() => {
@@ -55,7 +56,7 @@ const ProductDetailView = ({ product }) => {
 
   useEffect(() => {
     if (fetchedProduct && !viewItemEventTriggered.current) {
-      viewItem({
+      viewItemEvent({
         ...fetchedProduct,
         section: { id: "product-detail", name: "Product Detail" },
       });
