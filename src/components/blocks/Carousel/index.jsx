@@ -8,16 +8,10 @@ import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 const CarouselImage = React.memo(
-  ({ webImage, mWebImage, link, index, moeText, isInteractive }) => {
+  ({ webImage, mWebImage, link, index, moeText, isPersistLoading }) => {
     const webImageAttrs = extractAttributes(webImage);
     const mWebImageAttrs = extractAttributes(mWebImage);
 
@@ -61,6 +55,7 @@ const CarouselImage = React.memo(
             width={300}
             height={300}
             className="h-auto w-full object-cover"
+            isPersistLoading={isPersistLoading}
           />
         </picture>
       </Link>
@@ -125,6 +120,7 @@ const Carousel = ({
         {...banner}
         index={index}
         isInteractive={isInteractive}
+        isPersistLoading={isPersistLoading}
       />
     ));
   }, [banners, isInteractive]);

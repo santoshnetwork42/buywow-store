@@ -4,7 +4,7 @@ import { Img } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
 
-const IngredientItem = ({ ingredient }) => {
+const IngredientItem = ({ ingredient, priority }) => {
   const { slug, image } = ingredient;
   const { url, alternativeText } = extractAttributes(image);
 
@@ -26,7 +26,7 @@ const IngredientItem = ({ ingredient }) => {
         height={76}
         alt={alternativeText || `${slug} Image`}
         className="aspect-[248/76] h-auto w-full object-cover"
-        loading="lazy"
+        priority={priority}
       />
     </LinkClickTracker>
   );
@@ -37,6 +37,7 @@ IngredientItem.displayName = "IngredientItem";
 const IngredientCategories = ({
   title,
   ingredientCategoryItems: ingredients,
+  lazyBlock,
 }) => {
   const ingredientGroups = ingredients.reduce((acc, _, index) => {
     if (index % 2 === 0) {
@@ -60,6 +61,7 @@ const IngredientCategories = ({
               <IngredientItem
                 key={`ingredient-${index}-${subIndex}}`}
                 ingredient={ingredient}
+                priority={!lazyBlock}
               />
             ))}
           </div>
