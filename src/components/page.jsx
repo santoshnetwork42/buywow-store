@@ -213,17 +213,17 @@ export default async function PageBlock({ pageType, slug }) {
   const { blocks, slug: fetchedSlug, type: fetchedPageType } = pageData || {};
 
   if (pageType === "landing" && !fetchedSlug) {
-    await handleRedirect(`/${slug}`, data);
+    await handleRedirect(`/${slug}`, pageData);
     return;
   }
 
   if (!fetchedSlug || fetchedSlug !== slug) {
-    await handleRedirect(`/${pageType}/${slug}`, data);
+    await handleRedirect(`/${pageType}/${slug}`, pageData);
     return;
   }
 
   if (!fetchedPageType || PAGETYPE[fetchedPageType] !== pageType) {
-    await handleRedirect(`/${pageType}/${slug}`, data);
+    await handleRedirect(`/${pageType}/${slug}`, pageData);
     return;
   }
 
