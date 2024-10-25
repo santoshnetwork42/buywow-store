@@ -203,7 +203,7 @@ const renderBlock = ({ block, pageType, slug, index }) => {
       slug={slug}
       {...block}
       pageType={pageType}
-      lazyBlock={index >= 4}
+      lazyBlock={index > 3}
     />
   );
 };

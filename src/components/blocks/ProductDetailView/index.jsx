@@ -121,18 +121,16 @@ const ProductDetailView = ({ product }) => {
           currentInventory={currentInventory}
         />
 
-        {
-          <OffersAndDiscounts
-            bestCoupon={bestCoupon}
-            price={price}
-            hasInventory={hasInventory}
-            productId={packageProduct?.id}
-            product={{
-              id: packageProduct?.id,
-              collections: packageProduct?.collections,
-            }}
-          />
-        }
+        <OffersAndDiscounts
+          bestCoupon={bestCoupon}
+          price={price}
+          hasInventory={hasInventory}
+          productId={packageProduct?.id}
+          product={{
+            id: packageProduct?.id,
+            collections: packageProduct?.collections,
+          }}
+        />
 
         <div className="mt-5 flex flex-col">
           {!!variantGroup?.length && (
