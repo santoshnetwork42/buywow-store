@@ -135,7 +135,7 @@ const DesktopStickyBar = ({
   discountPercentage,
   marketPlaceObject,
 }) => {
-  if (!isFixed || !hasInventory) return null;
+  if (!isFixed || (!hasInventory && !marketPlaceObject)) return null;
 
   return (
     <div className="fixed bottom-0 left-0 z-50 hidden w-full border-t bg-white-a700_01 py-3 shadow-md md:block">
