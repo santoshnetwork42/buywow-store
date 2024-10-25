@@ -17,7 +17,7 @@ import {
   useCartTotal,
   useConfiguration,
   useNavbar,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import awaitGlobal from "await-global";
 import { confirmSignIn, getCurrentUser, signIn } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";

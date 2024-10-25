@@ -37,7 +37,7 @@ import {
   useInventory,
   useNavbar,
   useOrders,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";

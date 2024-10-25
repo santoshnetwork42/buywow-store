@@ -5,7 +5,7 @@ import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
-import { useCartItems, useCartTotal } from "@wow-star/utils";
+import { useCartItems, useCartTotal } from "@wow-star/utils-cms";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";

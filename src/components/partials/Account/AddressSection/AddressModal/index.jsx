@@ -5,7 +5,7 @@ import Modal from "@/components/features/Modal";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { removePhonePrefix } from "@/utils/helpers";
-import { useCartTotal } from "@wow-star/utils";
+import { useCartTotal } from "@wow-star/utils-cms";
 import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import AddressFormFields from "@/components/partials/Account/AddressSection/AddressForm/AddressFormFields";

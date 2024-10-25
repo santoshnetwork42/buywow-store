@@ -12,7 +12,7 @@ import {
   useProduct,
   useProductCoupons,
   useProductVariantGroups,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 

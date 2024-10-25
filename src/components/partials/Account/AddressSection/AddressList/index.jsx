@@ -4,7 +4,7 @@ import { Button, Text } from "@/components/elements";
 import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem/RemoveButton";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
-import { useCartTotal } from "@wow-star/utils";
+import { useCartTotal } from "@wow-star/utils-cms";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AddressModal from "@/components/partials/Account/AddressSection/AddressModal";

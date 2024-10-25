@@ -5,7 +5,7 @@ import {
   getProductInventory,
   NavbarProvider as Navbar,
   useConfiguration,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import { generateClient } from "aws-amplify/api";
 import Cookie from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";

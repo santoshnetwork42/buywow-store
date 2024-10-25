@@ -5,7 +5,7 @@ import { Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { extractAttributes, getDiscountPercentage } from "@/utils/helpers";
-import { useProduct, useProductVariantGroups } from "@wow-star/utils";
+import { useProduct, useProductVariantGroups } from "@wow-star/utils-cms";
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
