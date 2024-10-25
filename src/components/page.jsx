@@ -3,88 +3,38 @@ import handleRedirect from "@/utils/handleRedirect";
 import dynamic from "next/dynamic";
 import React from "react";
 
-// Dynamically import components
-const PageAnnouncementBar = dynamic(
-  () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
-);
-const Carousal = dynamic(() => import("@/components/blocks/Carousel"));
-const SingleBanner = dynamic(() => import("@/components/blocks/SingleBanner"));
-const MiniBanners = dynamic(() => import("@/components/blocks/MiniBanners"));
-const TrendingCategories = dynamic(
-  () => import("@/components/blocks/TrendingCategories"),
-);
-const FeaturedList = dynamic(() => import("@/components/blocks/FeaturedList"));
-const IngredientCategories = dynamic(
-  () => import("@/components/blocks/IngredientCategories"),
-);
-const FeaturedCategories = dynamic(
-  () => import("@/components/blocks/FeaturedCategories"),
-);
-const TestimonialSection = dynamic(
-  () => import("@/components/blocks/TestimonialSection"),
-);
-const FeaturedProducts = dynamic(
-  () => import("@/components/blocks/FeaturedProducts"),
-);
-const FeaturedProductsByTab = dynamic(
-  () => import("@/components/blocks/FeaturedProductsByTab"),
-);
-const ProductEffectiveness = dynamic(
-  () => import("@/components/blocks/Product/ProductEffectiveness"),
-);
-const ProductHighlights = dynamic(
-  () => import("@/components/blocks/Product/ProductHighlights"),
-);
-const ProductBenefits = dynamic(
-  () => import("@/components/blocks/Product/ProductBenefits"),
-);
-const ProductKeyIngredients = dynamic(
-  () => import("@/components/blocks/Product/ProductKeyIngredients"),
-);
-const InfoDropdown = dynamic(
-  () => import("@/components/blocks/Accordion/InfoDropdown"),
-);
-const ProductLegalInfo = dynamic(
-  () => import("@/components/blocks/Accordion/ProductLegalInfo"),
-);
-const CollectionLinks = dynamic(
-  () => import("@/components/blocks/CollectionLinks"),
-);
-const ProductDetailView = dynamic(
-  () => import("@/components/blocks/ProductDetailView"),
-);
-const ProductCollectionSection = dynamic(
-  () => import("@/components/blocks/ProductCollectionByTab"),
-);
-const InfoSection = dynamic(() => import("@/components/blocks/InfoSection"));
-
-const Reviews = dynamic(
-  () => import("@/components/blocks/Product/ProductReviews"),
-);
-
-const UpsellProducts = dynamic(
-  () => import("@/components/blocks/UpsellProducts"),
-);
-const AccordionDescription = dynamic(
-  () => import("@/components/blocks/Accordion/AccordionDescription"),
-);
-const AccordionIngredients = dynamic(
-  () => import("@/components/blocks/Accordion/AccordionIngredients"),
-);
-const AccordionUsageInstructions = dynamic(
-  () => import("@/components/blocks/Accordion/AccordionUsageInstructions"),
-);
-const AccordionFaQs = dynamic(
-  () => import("@/components/blocks/Accordion/AccordionFaQs"),
-);
-const Breadcrumb = dynamic(() => import("@/components/blocks/Breadcrumb"));
-const VideoSection = dynamic(
-  () => import("@/components/partials/Others/VideoSection"),
-);
-const BlogSection = dynamic(() => import("@/components/blocks/BlogSection"));
-const RecentlyViewed = dynamic(
-  () => import("@/components/blocks/RecentlyViewed"),
-);
+// First fold imports
+import FFAccordionDescription from "@/components/blocks/Accordion/AccordionDescription";
+import FFAccordionFaQs from "@/components/blocks/Accordion/AccordionFaQs";
+import FFAccordionIngredients from "@/components/blocks/Accordion/AccordionIngredients";
+import FFAccordionUsageInstructions from "@/components/blocks/Accordion/AccordionUsageInstructions";
+import FFInfoDropdown from "@/components/blocks/Accordion/InfoDropdown";
+import FFProductLegalInfo from "@/components/blocks/Accordion/ProductLegalInfo";
+import FFPageAnnouncementBar from "@/components/blocks/AnnouncementBar/PageAnnouncementBar";
+import FFBlogSection from "@/components/blocks/BlogSection";
+import FFBreadcrumb from "@/components/blocks/Breadcrumb";
+import FFCarousal from "@/components/blocks/Carousel";
+import FFCollectionLinks from "@/components/blocks/CollectionLinks";
+import FFFeaturedCategories from "@/components/blocks/FeaturedCategories";
+import FFFeaturedList from "@/components/blocks/FeaturedList";
+import FFFeaturedProducts from "@/components/blocks/FeaturedProducts";
+import FFFeaturedProductsByTab from "@/components/blocks/FeaturedProductsByTab";
+import FFInfoSection from "@/components/blocks/InfoSection";
+import FFIngredientCategories from "@/components/blocks/IngredientCategories";
+import FFMiniBanners from "@/components/blocks/MiniBanners";
+import FFProductBenefits from "@/components/blocks/Product/ProductBenefits";
+import FFProductEffectiveness from "@/components/blocks/Product/ProductEffectiveness";
+import FFProductHighlights from "@/components/blocks/Product/ProductHighlights";
+import FFProductKeyIngredients from "@/components/blocks/Product/ProductKeyIngredients";
+import FFReviews from "@/components/blocks/Product/ProductReviews";
+import FFProductCollectionSection from "@/components/blocks/ProductCollectionByTab";
+import FFProductDetailView from "@/components/blocks/ProductDetailView";
+import FFRecentlyViewed from "@/components/blocks/RecentlyViewed";
+import FFSingleBanner from "@/components/blocks/SingleBanner";
+import FFTestimonialSection from "@/components/blocks/TestimonialSection";
+import FFTrendingCategories from "@/components/blocks/TrendingCategories";
+import FFUpsellProducts from "@/components/blocks/UpsellProducts";
+import FFVideoSection from "@/components/partials/Others/VideoSection";
 
 const PAGETYPE = {
   HOME: "home",
@@ -96,45 +46,156 @@ const PAGETYPE = {
 };
 
 const componentMap = {
-  ComponentBlocksAnnouncementBar: PageAnnouncementBar,
-  ComponentBannerCarousal: Carousal,
-  ComponentBannerSingleBanner: SingleBanner,
-  ComponentBannerMiniBanners: MiniBanners,
-  ComponentCategoriesTrendingCategories: TrendingCategories,
-  ComponentBlocksFeaturedList: FeaturedList,
-  ComponentCategoriesIngredientCategories: IngredientCategories,
-  ComponentCategoriesFeaturedCategories: FeaturedCategories,
-  ComponentBlocksTestimonialSection: TestimonialSection,
-  ComponentBlocksFeaturedProducts: FeaturedProducts,
-  ComponentBlocksFeaturedProductsByTab: FeaturedProductsByTab,
-  ComponentProductProductEffectivenessImages: ProductEffectiveness,
-  ComponentProductProductHighlightImages: ProductHighlights,
-  ComponentProductProductBenefits: ProductBenefits,
-  ComponentProductProductKeyIngredientImages: ProductKeyIngredients,
-  ComponentAccordionInfoDropdownSection: InfoDropdown,
-  ComponentProductProductLegalInfo: ProductLegalInfo,
-  ComponentBlocksCollectionLinks: CollectionLinks,
-  ComponentBlocksPdp: ProductDetailView,
-  ComponentBlocksProductCollectionByTab: ProductCollectionSection,
-  ComponentBlocksInfoSection: InfoSection,
-  ComponentProductProductReviews: Reviews,
-  ComponentBlocksUpsellProducts: UpsellProducts,
-  ComponentAccordionDescriptionSection: AccordionDescription,
-  ComponentAccordionIngredientsSection: AccordionIngredients,
-  ComponentAccordionUsageInstructionsSection: AccordionUsageInstructions,
-  ComponentAccordionFaQsSection: AccordionFaQs,
-  ComponentBlocksBreadcrumb: Breadcrumb,
-  ComponentBlocksVideoSection: VideoSection,
-  ComponentBlocksBlogSection: BlogSection,
-  ComponentBlocksRecentlyViewed: RecentlyViewed,
+  ComponentBlocksAnnouncementBar: {
+    FF: FFPageAnnouncementBar,
+    Lazy: dynamic(
+      () => import("@/components/blocks/AnnouncementBar/PageAnnouncementBar"),
+    ),
+  },
+  ComponentBannerCarousal: {
+    FF: FFCarousal,
+    Lazy: dynamic(() => import("@/components/blocks/Carousel")),
+  },
+  ComponentBannerSingleBanner: {
+    FF: FFSingleBanner,
+    Lazy: dynamic(() => import("@/components/blocks/SingleBanner")),
+  },
+  ComponentBannerMiniBanners: {
+    FF: FFMiniBanners,
+    Lazy: dynamic(() => import("@/components/blocks/MiniBanners")),
+  },
+  ComponentCategoriesTrendingCategories: {
+    FF: FFTrendingCategories,
+    Lazy: dynamic(() => import("@/components/blocks/TrendingCategories")),
+  },
+  ComponentBlocksFeaturedList: {
+    FF: FFFeaturedList,
+    Lazy: dynamic(() => import("@/components/blocks/FeaturedList")),
+  },
+  ComponentCategoriesIngredientCategories: {
+    FF: FFIngredientCategories,
+    Lazy: dynamic(() => import("@/components/blocks/IngredientCategories")),
+  },
+  ComponentCategoriesFeaturedCategories: {
+    FF: FFFeaturedCategories,
+    Lazy: dynamic(() => import("@/components/blocks/FeaturedCategories")),
+  },
+  ComponentBlocksTestimonialSection: {
+    FF: FFTestimonialSection,
+    Lazy: dynamic(() => import("@/components/blocks/TestimonialSection")),
+  },
+  ComponentBlocksFeaturedProducts: {
+    FF: FFFeaturedProducts,
+    Lazy: dynamic(() => import("@/components/blocks/FeaturedProducts")),
+  },
+  ComponentBlocksFeaturedProductsByTab: {
+    FF: FFFeaturedProductsByTab,
+    Lazy: dynamic(() => import("@/components/blocks/FeaturedProductsByTab")),
+  },
+  ComponentProductProductEffectivenessImages: {
+    FF: FFProductEffectiveness,
+    Lazy: dynamic(
+      () => import("@/components/blocks/Product/ProductEffectiveness"),
+    ),
+  },
+  ComponentProductProductHighlightImages: {
+    FF: FFProductHighlights,
+    Lazy: dynamic(
+      () => import("@/components/blocks/Product/ProductHighlights"),
+    ),
+  },
+  ComponentProductProductBenefits: {
+    FF: FFProductBenefits,
+    Lazy: dynamic(() => import("@/components/blocks/Product/ProductBenefits")),
+  },
+  ComponentProductProductKeyIngredientImages: {
+    FF: FFProductKeyIngredients,
+    Lazy: dynamic(
+      () => import("@/components/blocks/Product/ProductKeyIngredients"),
+    ),
+  },
+  ComponentAccordionInfoDropdownSection: {
+    FF: FFInfoDropdown,
+    Lazy: dynamic(() => import("@/components/blocks/Accordion/InfoDropdown")),
+  },
+  ComponentProductProductLegalInfo: {
+    FF: FFProductLegalInfo,
+    Lazy: dynamic(
+      () => import("@/components/blocks/Accordion/ProductLegalInfo"),
+    ),
+  },
+  ComponentBlocksCollectionLinks: {
+    FF: FFCollectionLinks,
+    Lazy: dynamic(() => import("@/components/blocks/CollectionLinks")),
+  },
+  ComponentBlocksPdp: {
+    FF: FFProductDetailView,
+    Lazy: dynamic(() => import("@/components/blocks/ProductDetailView")),
+  },
+  ComponentBlocksProductCollectionByTab: {
+    FF: FFProductCollectionSection,
+    Lazy: dynamic(() => import("@/components/blocks/ProductCollectionByTab")),
+  },
+  ComponentBlocksInfoSection: {
+    FF: FFInfoSection,
+    Lazy: dynamic(() => import("@/components/blocks/InfoSection")),
+  },
+  ComponentProductProductReviews: {
+    FF: FFReviews,
+    Lazy: dynamic(() => import("@/components/blocks/Product/ProductReviews")),
+  },
+  ComponentBlocksUpsellProducts: {
+    FF: FFUpsellProducts,
+    Lazy: dynamic(() => import("@/components/blocks/UpsellProducts")),
+  },
+  ComponentAccordionDescriptionSection: {
+    FF: FFAccordionDescription,
+    Lazy: dynamic(
+      () => import("@/components/blocks/Accordion/AccordionDescription"),
+    ),
+  },
+  ComponentAccordionIngredientsSection: {
+    FF: FFAccordionIngredients,
+    Lazy: dynamic(
+      () => import("@/components/blocks/Accordion/AccordionIngredients"),
+    ),
+  },
+  ComponentAccordionUsageInstructionsSection: {
+    FF: FFAccordionUsageInstructions,
+    Lazy: dynamic(
+      () => import("@/components/blocks/Accordion/AccordionUsageInstructions"),
+    ),
+  },
+  ComponentAccordionFaQsSection: {
+    FF: FFAccordionFaQs,
+    Lazy: dynamic(() => import("@/components/blocks/Accordion/AccordionFaQs")),
+  },
+  ComponentBlocksBreadcrumb: {
+    FF: FFBreadcrumb,
+    Lazy: dynamic(() => import("@/components/blocks/Breadcrumb")),
+  },
+  ComponentBlocksVideoSection: {
+    FF: FFVideoSection,
+    Lazy: dynamic(() => import("@/components/partials/Others/VideoSection")),
+  },
+  ComponentBlocksBlogSection: {
+    FF: FFBlogSection,
+    Lazy: dynamic(() => import("@/components/blocks/BlogSection")),
+  },
+  ComponentBlocksRecentlyViewed: {
+    FF: FFRecentlyViewed,
+    Lazy: dynamic(() => import("@/components/blocks/RecentlyViewed")),
+  },
 };
 
 const renderBlock = ({ block, pageType, slug, index }) => {
   const { showComponent, __typename, id } = block || {};
   if (!showComponent) return null;
 
-  const Component = componentMap[__typename];
-  if (!Component) return null;
+  const ComponentInfo = componentMap[__typename];
+  if (!ComponentInfo) return null;
+
+  const Component = index < 4 ? ComponentInfo.FF : ComponentInfo.Lazy;
 
   return (
     <Component
@@ -153,14 +214,17 @@ export default async function PageBlock({ pageType, slug }) {
 
   if (pageType === "landing" && !fetchedSlug) {
     await handleRedirect(`/${slug}`, pageData);
+    return;
   }
 
   if (!fetchedSlug || fetchedSlug !== slug) {
     await handleRedirect(`/${pageType}/${slug}`, pageData);
+    return;
   }
 
   if (!fetchedPageType || PAGETYPE[fetchedPageType] !== pageType) {
     await handleRedirect(`/${pageType}/${slug}`, pageData);
+    return;
   }
 
   if (!Array.isArray(blocks)) {
@@ -170,7 +234,12 @@ export default async function PageBlock({ pageType, slug }) {
   return (
     <React.Fragment>
       {blocks.map((block, index) =>
-        renderBlock({ block, slug, pageType, index }),
+        renderBlock({
+          block,
+          slug: fetchedSlug,
+          pageType: fetchedPageType,
+          index,
+        }),
       )}
     </React.Fragment>
   );

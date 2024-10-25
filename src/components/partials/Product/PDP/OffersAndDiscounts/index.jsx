@@ -106,6 +106,7 @@ const AllOffers = ({ productId }) => {
         {pdpFeaturedCoupons?.map((item, index) => {
           const { coupon } = item || {};
           const { couponTitle, code } = coupon || {};
+
           return (
             <div
               key={index}

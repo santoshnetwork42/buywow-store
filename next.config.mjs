@@ -187,6 +187,11 @@ const nextConfig = {
       },
       {
         protocol: "https",
+        hostname: process.env.NEXT_PUBLIC_MEDIA_BASE_URL,
+        pathname: "/public/**",
+      },
+      {
+        protocol: "https",
         hostname: process.env.NEXT_PUBLIC_WP_MEDIA_URL,
       },
       {
