@@ -28,7 +28,7 @@ const BenefitTag = memo(({ bgColor, tag }) => {
     </Text>
   );
 });
-
+ 
 const RatingDisplay = memo(({ rating, totalRatings }) => {
   if (!(totalRatings > 0)) return null;
   return (
