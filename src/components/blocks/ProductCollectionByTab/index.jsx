@@ -79,6 +79,7 @@ const ProductCollectionByTab = ({
   slug,
   promotion,
 }) => {
+  const show2ndVariantOOSProducts = false;
   const [sortOption, setSortOption] = useState(
     SORT_OPTIONS.find((option) => option.value === defaultCollectionSorting) ||
       SORT_OPTIONS[0],
@@ -333,7 +334,11 @@ const ProductCollectionByTab = ({
         pageSize,
       );
       const skeletonCount = isLoading ? remainingProducts : 0;
-      const currentProductsOosLast = setSoldOutLast(currentProducts, true);
+      const currentProductsOosLast = setSoldOutLast(
+        currentProducts,
+        true,
+        show2ndVariantOOSProducts,
+      );
 
       return [
         ...currentProductsOosLast.map((product, productIndex) => (
