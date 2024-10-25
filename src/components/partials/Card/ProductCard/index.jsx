@@ -3,7 +3,6 @@
 import AddToCart from "@/components/common/AddToCart";
 import { Heading, Img, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
-import { useIsInteractive } from "@/utils/context/navbar";
 import {
   extractAttributes,
   formatTotalRatings,
@@ -88,7 +87,6 @@ const ProductCard = memo(
     priority,
     section,
   }) => {
-    const isInteractive = useIsInteractive();
     const [selectedVariant] = useProductVariantGroups(fetchedProduct);
     const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
@@ -133,7 +131,7 @@ const ProductCard = memo(
           style={{ backgroundColor: imageBgColor || "#F7F7E7" }}
         >
           <ProductThumbnail
-            width={500}
+            width={400}
             height={550}
             url={url}
             imageKey={thumbImage?.imageKey}
@@ -178,7 +176,7 @@ const ProductCard = memo(
               size="sm"
               className="absolute right-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize md:right-2.5 md:top-2.5 md:px-3"
               responsive
-              style={{ backgroundColor: offerTag?.bgColor || "#DD8434" }}
+              style={{ backgroundColor: "#ECCA31" }}
             >
               {discountPercentage}% OFF
             </Text>
@@ -215,23 +213,21 @@ const ProductCard = memo(
               </Text>
             )}
           </div>
-          {isInteractive && (
-            <div className="flex flex-col gap-2">
-              <RatingDisplay rating={rating} totalRatings={totalRatings} />
-              <div className="flex items-center justify-between gap-1">
-                <PriceDisplay price={price} listingPrice={listingPrice} />
-                <AddToCart
-                  product={packageProduct}
-                  selectedVariant={selectedVariant}
-                  buttonText="Add"
-                  buttonSize="medium"
-                  quantityClassName=" h-8 w-[4.5rem]"
-                  buttonClassName="text-base rounded-md min-w-[4.5rem] h-8 sm:h-auto"
-                  section={section}
-                />
-              </div>
+          <div className="flex flex-col gap-2">
+            <RatingDisplay rating={rating} totalRatings={totalRatings} />
+            <div className="flex items-center justify-between gap-1">
+              <PriceDisplay price={price} listingPrice={listingPrice} />
+              <AddToCart
+                product={packageProduct}
+                selectedVariant={selectedVariant}
+                buttonText="Add"
+                buttonSize="medium"
+                quantityClassName=" h-8 w-[4.5rem]"
+                buttonClassName="text-base rounded-md min-w-[4.5rem] h-8 sm:h-auto"
+                section={section}
+              />
             </div>
-          )}
+          </div>
         </div>
       </Link>
     );

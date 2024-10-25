@@ -84,8 +84,8 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   );
 };
 
-const AllOffers = ({ product }) => {
-  const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, product);
+const AllOffers = ({ productId }) => {
+  const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, productId);
 
   if (pdpFeaturedCoupons?.length === 0) return null;
 
@@ -106,11 +106,6 @@ const AllOffers = ({ product }) => {
         {pdpFeaturedCoupons?.map((item, index) => {
           const { coupon } = item || {};
           const { couponTitle, code } = coupon || {};
-          const isGlobalOffer =
-            Array.isArray(coupon?.applicableCollections) &&
-            coupon.applicableCollections.length === 0 &&
-            Array.isArray(coupon?.applicableProducts) &&
-            coupon.applicableProducts.length === 0;
 
           return (
             <div
@@ -128,9 +123,7 @@ const AllOffers = ({ product }) => {
                     {couponTitle}
                   </Heading>
                   <Text as="span" size="sm" responsive>
-                    {isGlobalOffer
-                      ? `Applicable on all products`
-                      : `Applicable on certain products`}
+                    Applicable on certain products
                   </Text>
                 </div>
               </div>
@@ -156,18 +149,16 @@ const AllOffers = ({ product }) => {
   );
 };
 
-const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, product }) => {
-  if (!hasInventory) return null;
+const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, productId }) => {
+  if (!bestCoupon || !hasInventory) return null;
   return (
     <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:gap-2.5 md:flex-col lg:gap-3 xl:flex-row">
-      {!!bestCoupon && (
-        <BestPriceDisplay
-          bestCoupon={bestCoupon}
-          price={price}
-          hasInventory={hasInventory}
-        />
-      )}
-      <AllOffers product={product} />
+      <BestPriceDisplay
+        bestCoupon={bestCoupon}
+        price={price}
+        hasInventory={hasInventory}
+      />
+      <AllOffers productId={productId} />
     </div>
   );
 };

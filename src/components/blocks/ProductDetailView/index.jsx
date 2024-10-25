@@ -6,6 +6,7 @@ import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
+import handleRedirect from "@/utils/handleRedirect";
 import { extractAttributes } from "@/utils/helpers";
 import {
   useProduct,
@@ -30,7 +31,7 @@ const OffersAndDiscounts = dynamic(
   { ssr: false },
 );
 
-const ProductDetailView = ({ product }) => {
+const ProductDetailView = ({ product, marketPlaceLinks }) => {
   const {
     promotionTag,
     productBenefitTags,
@@ -120,18 +121,15 @@ const ProductDetailView = ({ product }) => {
           currentInventory={currentInventory}
         />
 
-        {
-          <OffersAndDiscounts
-            bestCoupon={bestCoupon}
-            price={price}
-            hasInventory={hasInventory}
-            productId={packageProduct?.id}
-            product={{
-              id: packageProduct?.id,
-              collections: packageProduct?.collections,
-            }}
-          />
-        }
+        {!marketPlaceLinks?.length &&
+          !!Object.keys(bestCoupon || {})?.length && (
+            <OffersAndDiscounts
+              bestCoupon={bestCoupon}
+              price={price}
+              hasInventory={hasInventory}
+              productId={packageProduct?.id}
+            />
+          )}
 
         <div className="mt-5 flex flex-col">
           {!!variantGroup?.length && (
@@ -143,6 +141,7 @@ const ProductDetailView = ({ product }) => {
           <AddToCartSection
             product={packageProduct}
             selectedVariant={selectedVariant}
+            marketPlaceLinks={marketPlaceLinks}
           />
           {!!(productDetailView?.length > 0) && (
             <ProductDetailViewBlocks blocks={productDetailView} />
