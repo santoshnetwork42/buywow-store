@@ -122,7 +122,7 @@ const ProductImage = React.memo(
 
     // Add this useEffect for intersection observer
     useEffect(() => {
-      if (!image.isVideo || !videoContainerRef.current) return;
+      if (!image?.isVideo || !videoContainerRef?.current) return;
 
       const observer = new IntersectionObserver(
         (entries) => {
@@ -152,7 +152,7 @@ const ProductImage = React.memo(
         }`}
         onClick={() => image.isVideo && togglePlayPause(index, layout)}
       >
-        {image.isVideo ? (
+        {image?.isVideo ? (
           // Add ref to the video container
           <div ref={videoContainerRef}>
             <video
