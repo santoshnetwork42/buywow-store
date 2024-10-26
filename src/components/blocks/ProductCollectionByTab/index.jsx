@@ -78,8 +78,8 @@ const ProductCollectionByTab = ({
   horizontalBlogSection,
   slug,
   promotion,
+  showProductsOnVariantStockOut = true,
 }) => {
-  const show2ndVariantOOSProducts = false;
   const [sortOption, setSortOption] = useState(
     SORT_OPTIONS.find((option) => option.value === defaultCollectionSorting) ||
       SORT_OPTIONS[0],
@@ -337,7 +337,7 @@ const ProductCollectionByTab = ({
       const currentProductsOosLast = setSoldOutLast(
         currentProducts,
         true,
-        show2ndVariantOOSProducts,
+        showProductsOnVariantStockOut,
       );
 
       return [

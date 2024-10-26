@@ -75,7 +75,7 @@ export const getProductInventory = (product, selectedVariantId = null) => {
 export const setSoldOutLast = (
   items,
   isContainAttributes = false,
-  show2ndVariantOOSProducts = true,
+  showProductsOnVariantStockOut = true,
 ) => {
   let soldOutProducts = [];
   if (items) {
@@ -114,7 +114,7 @@ export const setSoldOutLast = (
         }
       }, []);
 
-    if (!show2ndVariantOOSProducts) {
+    if (!showProductsOnVariantStockOut) {
       const filteredProducts = products?.filter((product) => {
         if (!product?.attributes?.fetchedProduct?.variants?.items?.length) {
           return true;
