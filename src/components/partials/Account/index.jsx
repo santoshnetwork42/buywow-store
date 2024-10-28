@@ -4,6 +4,7 @@ import { ArrowIconSVG } from "@/assets/svg/icons";
 import AccountSkeleton from "@/components/partials/Account/AccountSkeleton";
 import AccountTabs from "@/components/partials/Account/AccountTabs";
 import { useAuthDispatch } from "@/store/sagas/dispatch/auth.dispatch";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -34,6 +35,7 @@ const AccountClient = () => {
   const user = useSelector((state) => state.user?.user);
   const [activeTab, setActiveTab] = useState("My Orders");
   const [isLoading, setIsLoading] = useState(true);
+  const { pageViewedEvent } = useEventsDispatch();
 
   useEffect(() => {
     if (user?.id === null) {
@@ -42,6 +44,13 @@ const AccountClient = () => {
       setIsLoading(false);
     }
   }, [user, router]);
+
+  useEffect(() => {
+    pageViewedEvent({
+      event: "account_page_viewed",
+      section: activeTab,
+    });
+  }, [activeTab]);
 
   const handleLogout = useCallback(() => {
     router.push("/");

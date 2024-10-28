@@ -6,7 +6,7 @@ import {
   useConfiguration,
   useInventory,
   useNavbar,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -89,7 +89,7 @@ const CartDrawer = () => {
     checkoutInitiated,
   } = useCartDispatch();
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
-  const { handleOutOfStock, handleProceedToCheckout, viewCart } =
+  const { handleOutOfStockEvent, handleProceedToCheckoutEvent, viewCartEvent } =
     useEventsDispatch();
 
   const [delayedIsOpen, setDelayedIsOpen] = useState(false);
@@ -137,7 +137,7 @@ const CartDrawer = () => {
 
   const validateAndGoToCheckout = useCallback(async () => {
     if (!isInventoryCheckSuccess) {
-      handleOutOfStock(outOfStockItems, inventoryMapping);
+      handleOutOfStockEvent(outOfStockItems, inventoryMapping);
       showToast.error("Please remove out of stock product from cart");
       return false;
     }
@@ -169,7 +169,7 @@ const CartDrawer = () => {
           },
         });
 
-        handleProceedToCheckout("GOKWIK");
+        handleProceedToCheckoutEvent("GOKWIK");
         return true;
       } catch (e) {
         await gokwikSdk.close();
@@ -177,13 +177,13 @@ const CartDrawer = () => {
       }
     }
 
-    handleProceedToCheckout("BUYWOW");
+    handleProceedToCheckoutEvent("BUYWOW");
     if (user?.id || guestCheckout || customUser?.phone) {
       router.push("/checkout");
       return true;
     }
 
-    handlePasswordLessModal(true, true, "/checkout");
+    handlePasswordLessModal(true, true, "/checkout", "CHECKOUT");
     return false;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -230,7 +230,7 @@ const CartDrawer = () => {
   }, [isCartOpen, handleCartVisibility]);
 
   useEffect(() => {
-    if (isCartOpen) viewCart();
+    if (isCartOpen) viewCartEvent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCartOpen]);
 
@@ -285,13 +285,14 @@ const CartDrawer = () => {
   }, [appliedCoupon, isCartOpen]);
 
   const getCollectionWiseNudgeMsg = () => {
-    if (pathname === "/collections/all" || pathname === "/") {
-      if (appliedCoupon?.code === "WOW") {
-        return "Congrats, your Buy 1 Get 1 offer has been availed!";
-      } else {
-        return "Add more items to unlock 'Buy 1 Get 1 Free'";
-      }
-    } else if (pathname === "/collections/buy-8-1000") {
+    // if (pathname === "/collections/all" || pathname === "/") {
+    //   if (appliedCoupon?.code === "WOW") {
+    //     return "Congrats, your Buy 1 Get 1 offer has been availed!";
+    //   } else {
+    //     return "Add more items to unlock 'Buy 1 Get 1 Free'";
+    //   }
+    // } 
+    if (pathname === "/collections/buy-8-1000") {
       if (appliedCoupon?.code === "BUY8") {
         return "Congrats, your Buy 8 @ ₹1000 offer has been availed!";
       }

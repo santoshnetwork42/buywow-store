@@ -10,7 +10,7 @@ import {
   getProductInventory,
   getProductMeta,
   getProductPrice,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import Cookies from "js-cookie";
 import { v4 as uuidv4 } from "uuid";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
@@ -154,6 +154,9 @@ export const itemMapper = (
         ...basicAttributes,
         "ATC Source": section?.name || null,
       },
+      qtyChanges: {
+        ...basicAttributes,
+      },
       productViewed: {
         ...basicAttributes,
         "Total variants": variants?.items?.length,
@@ -203,7 +206,7 @@ export const itemMapper = (
         item_id: id,
         item_name: title,
         affiliation: "",
-        coupon: "",
+        coupon: coupon?.code || "",
         discount: listingPrice - price,
         index: 0,
         item_brand: vendor,

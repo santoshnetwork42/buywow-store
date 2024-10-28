@@ -12,7 +12,7 @@ import {
   useProduct,
   useProductCoupons,
   useProductVariantGroups,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 
@@ -46,7 +46,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
     useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
-  const { viewItem } = useEventsDispatch();
+  const { viewItemEvent } = useEventsDispatch();
   const viewItemEventTriggered = useRef(false);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
 
   useEffect(() => {
     if (fetchedProduct && !viewItemEventTriggered.current) {
-      viewItem({
+      viewItemEvent({
         ...fetchedProduct,
         section: { id: "product-detail", name: "Product Detail" },
       });

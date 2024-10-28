@@ -6,6 +6,7 @@ export const initialState = {
       isPasswordLessOpen: false,
       customLogin: false,
       redirectTo: null,
+      source: null,
     },
     cart: { isCartOpen: false },
   },

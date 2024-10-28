@@ -18,7 +18,7 @@ import {
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
-import { useCartTotal } from "@wow-star/utils";
+import { useCartTotal } from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -40,7 +40,7 @@ const PasswordLess = dynamic(() => import("@/components/common/Passwordless"), {
 });
 
 const MenuItem = React.memo(({ item, index, showInWeb }) => {
-  const { topNavbarClicked } = useEventsDispatch();
+  const { topNavbarClickedEvent } = useEventsDispatch();
 
   const linkPrefix = PAGETYPE[item?.slugType] || "";
 
@@ -64,7 +64,7 @@ const MenuItem = React.memo(({ item, index, showInWeb }) => {
               : item.link || "#"
           }
           onClick={() => {
-            topNavbarClicked({
+            topNavbarClickedEvent({
               banner_name: item.title,
               item_id: item.slug,
               Source: "Web",
@@ -91,7 +91,7 @@ const MenuItem = React.memo(({ item, index, showInWeb }) => {
             : item?.link || "#"
         }
         onClick={() => {
-          topNavbarClicked({
+          topNavbarClickedEvent({
             banner_name: item.title,
             item_id: item.slug,
             Source: "Web",

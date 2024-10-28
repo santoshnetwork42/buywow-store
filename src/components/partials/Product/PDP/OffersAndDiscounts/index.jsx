@@ -1,7 +1,7 @@
 import { Heading, Img, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import { copyText, toDecimal } from "@/utils/helpers";
-import { useFeaturedCoupons, useFreebie } from "@wow-star/utils";
+import { useFeaturedCoupons, useFreebie } from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 
 const OfferTicket = dynamic(() => import("@/src/assets/svg/offerTicket"));
@@ -106,6 +106,7 @@ const AllOffers = ({ productId }) => {
         {pdpFeaturedCoupons?.map((item, index) => {
           const { coupon } = item || {};
           const { couponTitle, code } = coupon || {};
+
           return (
             <div
               key={index}

@@ -4,7 +4,7 @@ import { Heading, Img } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
 
-const CategoryItem = ({ category, size, parentCategoryTitle }) => {
+const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
   const { image, slug, title } = category;
   const { url, alternativeText } = extractAttributes(image);
 
@@ -26,6 +26,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle }) => {
         slug,
         name: title,
         parentCategory: parentCategoryTitle,
+        type: parentCategoryTitle,
       }}
     >
       <div
@@ -37,7 +38,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle }) => {
           height={imageHeight}
           alt={alternativeText || `${slug} Image`}
           className="h-auto w-full object-contain"
-          loading="lazy"
+          priority={priority}
         />
       </div>
       <Heading
@@ -58,6 +59,7 @@ const FeaturedCategories = ({
   title,
   featuredCategoryItems: categories,
   featuredItemSize: itemSize = "SMALL",
+  lazyBlock,
 }) => {
   const sliderClassName = `gap-2 ${
     itemSize === "SMALL" ? "md:gap-2.5" : "sm:gap-3 md:gap-4 lg:gap-5"
@@ -80,12 +82,14 @@ const FeaturedCategories = ({
                   category={category}
                   size={itemSize}
                   parentCategoryTitle={title}
+                  priority={!lazyBlock}
                 />
                 {!!arr[index + 1] && (
                   <CategoryItem
                     category={arr[index + 1]}
                     size={itemSize}
                     parentCategoryTitle={title}
+                    priority={!lazyBlock}
                   />
                 )}
               </div>,
@@ -101,6 +105,7 @@ const FeaturedCategories = ({
             category={category}
             size={itemSize}
             parentCategoryTitle={title}
+            priority={!lazyBlock}
           />
         ))}
       </Slider>

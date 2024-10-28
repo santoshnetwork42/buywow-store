@@ -5,7 +5,7 @@ import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
-import { useCartItems, useCartTotal } from "@wow-star/utils";
+import { useCartItems, useCartTotal } from "@wow-star/utils-cms";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -66,13 +66,14 @@ const StickyViewCart = () => {
   if (!cartItems.length || !isAllowed || !isInteractive) return null;
 
   const getCollectionWiseNudgeMsg = () => {
-    if (pathname === "/collections/all" || pathname === "/") {
-      if (appliedCoupon?.code === "WOW") {
-        return "Congrats, your Buy 1 Get 1 offer has been availed!";
-      } else {
-        return "Add more items to unlock 'Buy 1 Get 1 Free'";
-      }
-    } else if (pathname === "/collections/buy-8-1000") {
+    // if (pathname === "/collections/all" || pathname === "/") {
+    //   if (appliedCoupon?.code === "WOW") {
+    //     return "Congrats, your Buy 1 Get 1 offer has been availed!";
+    //   } else {
+    //     return "Add more items to unlock 'Buy 1 Get 1 Free'";
+    //   }
+    // }
+    if (pathname === "/collections/buy-8-1000") {
       if (appliedCoupon?.code === "BUY8") {
         return "Congrats, your Buy 8 @ ₹1000 offer has been availed!";
       }

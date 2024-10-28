@@ -5,7 +5,7 @@ import { Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { extractAttributes, getDiscountPercentage } from "@/utils/helpers";
-import { useProduct, useProductVariantGroups } from "@wow-star/utils";
+import { useProduct, useProductVariantGroups } from "@wow-star/utils-cms";
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
@@ -81,6 +81,10 @@ const UpsellProduct = React.memo(({ product, text, subText }) => {
             buttonText={"Add"}
             buttonClassName={"shrink-0 px-3 py-1 text-sm"}
             quantityClassName="grid-cols-[repeat(3,26px)] !h-[25.5px] md:grid-cols-[repeat(3,28px)]"
+            section={{
+              name: "frequently_bought_together_pdp_page",
+              tabValue: "frequently_bought_together_pdp_page",
+            }}
           />
         </div>
       </div>

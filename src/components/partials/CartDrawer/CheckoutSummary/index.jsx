@@ -4,7 +4,7 @@ import SummaryItem from "@/components/common/CheckoutSummaryItem";
 import { Heading, Text } from "@/components/elements";
 import { PREPAID_ENABLED } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
-import { useCartTotal, useConfiguration } from "@wow-star/utils";
+import { useCartTotal, useConfiguration } from "@wow-star/utils-cms";
 import React from "react";
 import { useSelector } from "react-redux";
 

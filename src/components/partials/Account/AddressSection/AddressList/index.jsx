@@ -4,7 +4,7 @@ import { Button, Text } from "@/components/elements";
 import RemoveButton from "@/components/partials/CartDrawer/MainCartSection/ProductItem/RemoveButton";
 import { useAddressDispatch } from "@/store/sagas/dispatch/address.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
-import { useCartTotal } from "@wow-star/utils";
+import { useCartTotal } from "@wow-star/utils-cms";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AddressModal from "@/components/partials/Account/AddressSection/AddressModal";
@@ -14,7 +14,7 @@ const AddressList = React.memo(({ addressList, variant }) => {
   const user = useSelector((state) => state.user?.user);
   const { updateCurrentAddress, deleteAddress } = useAddressDispatch();
 
-  const { addressSelected } = useEventsDispatch();
+  const { addressSelectedEvent } = useEventsDispatch();
   const { totalPrice } = useCartTotal({
     paymentType: "PREPAID",
     isRewardApplied: false,
@@ -25,7 +25,7 @@ const AddressList = React.memo(({ addressList, variant }) => {
   useEffect(() => {
     setSelectedAddressId(currentAddress?.id);
     if (currentAddress?.id)
-      addressSelected(currentAddress, totalPrice, "BUYWOW");
+      addressSelectedEvent(currentAddress, totalPrice, "BUYWOW");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress]);
 

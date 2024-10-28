@@ -8,16 +8,10 @@ import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 
 const CarouselImage = React.memo(
-  ({ webImage, mWebImage, link, index, moeText, isInteractive }) => {
+  ({ webImage, mWebImage, link, index, moeText, isPersistLoading }) => {
     const webImageAttrs = extractAttributes(webImage);
     const mWebImageAttrs = extractAttributes(mWebImage);
 
@@ -27,17 +21,8 @@ const CarouselImage = React.memo(
       webImageAttrs?.alternativeText ||
       "Carousel Banner";
 
-    const { homeViewed, bannerClicked } = useEventsDispatch();
-    const eventTriggered = useRef(false);
+    const { bannerClickedEvent } = useEventsDispatch();
     const source = getSource();
-
-    useEffect(() => {
-      if (!eventTriggered.current && isInteractive) {
-        homeViewed();
-        eventTriggered.current = true;
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isInteractive]);
 
     if (!webImageAttrs.url && !mWebImageAttrs.url) return null;
 
@@ -47,10 +32,11 @@ const CarouselImage = React.memo(
         href={link || "#"}
         className="w-full flex-[0_0_100%]"
         onClick={() => {
-          bannerClicked({
+          bannerClickedEvent({
             Source: source,
             item_id: index,
-            banner_name: moeText,
+            banner_name: moeText || imageAlt,
+            banner_link: link || "#",
           });
         }}
       >
@@ -69,6 +55,7 @@ const CarouselImage = React.memo(
             width={300}
             height={300}
             className="h-auto w-full object-cover"
+            isPersistLoading={isPersistLoading}
           />
         </picture>
       </Link>
@@ -133,6 +120,7 @@ const Carousel = ({
         {...banner}
         index={index}
         isInteractive={isInteractive}
+        isPersistLoading={isPersistLoading}
       />
     ));
   }, [banners, isInteractive]);

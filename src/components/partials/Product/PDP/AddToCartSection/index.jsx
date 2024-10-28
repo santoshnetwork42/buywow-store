@@ -20,6 +20,70 @@ import { twMerge } from "tailwind-merge";
 const IndiaMapIcon = dynamic(() => import("@/assets/svg/indiaMapIcon"));
 const VehicleIcon = dynamic(() => import("@/assets/svg/vehicleIcon"));
 
+// Extracted Components
+const MarketplaceLink = React.memo(({ marketItem }) => {
+  const { url, alternativeText } = extractAttributes(marketItem.image);
+  const { link } = marketItem;
+
+  return (
+    <Link
+      href={link}
+      className="flex items-center justify-between gap-4 rounded-full border border-yellow-600 bg-lime-50 px-4 py-1"
+    >
+      <div className="flex w-full justify-center">
+        <Img
+          src={url}
+          width={100}
+          height={100}
+          alt={alternativeText || "Additional Ingredient"}
+          className="aspect-[4/2] object-contain"
+        />
+      </div>
+      <div>
+        <ShareNow size={28} />
+      </div>
+    </Link>
+  );
+});
+
+MarketplaceLink.displayName = "MarketplaceLink";
+
+const MarketplaceGrid = React.memo(({ marketPlaceLinks }) => {
+  const gridClass = useMemo(() => {
+    switch (marketPlaceLinks?.length) {
+      case 1:
+        return "grid-cols-1";
+      case 2:
+        return "grid-cols-2";
+      case 3:
+      case 4:
+        return "grid-cols-2 grid-rows-2";
+      default:
+        return "grid-cols-1";
+    }
+  }, [marketPlaceLinks?.length]);
+
+  if (!marketPlaceLinks?.length) return null;
+
+  return (
+    <div className={`grid gap-4 ${gridClass} my-2`}>
+      {marketPlaceLinks.map((marketItem, index) => (
+        <div
+          key={index}
+          className={`${
+            index === 0 && marketPlaceLinks.length === 3 ? "col-span-2" : ""
+          } hidden w-full md:block`}
+        >
+          <MarketplaceLink marketItem={marketItem} />
+        </div>
+      ))}
+    </div>
+  );
+});
+
+MarketplaceGrid.displayName = "MarketplaceGrid";
+
+// Original Components (unchanged)
 const ShippingInfo = () => (
   <div className="hidden justify-evenly gap-2 md:flex">
     <div className="flex items-center gap-1">
@@ -70,9 +134,8 @@ const DesktopStickyBar = ({
   listingPrice,
   discountPercentage,
   marketPlaceObject,
-  marketPlaceImage,
 }) => {
-  if (!isFixed || !hasInventory) return null;
+  if (!isFixed || (!hasInventory && !marketPlaceObject)) return null;
 
   return (
     <div className="fixed bottom-0 left-0 z-50 hidden w-full border-t bg-white-a700_01 py-3 shadow-md md:block">
@@ -100,7 +163,11 @@ const DesktopStickyBar = ({
             />
           </div>
         </div>
-        {!marketPlaceObject && (
+        {marketPlaceObject ? (
+          <div>
+            <MarketplaceLink marketItem={marketPlaceObject} />
+          </div>
+        ) : (
           <div className="h-12 w-[50%] max-w-[500px] shrink-0">
             <AddToCart
               product={product}
@@ -111,32 +178,6 @@ const DesktopStickyBar = ({
               showGoToCart
             />
           </div>
-        )}
-        {!!marketPlaceObject && (
-          <>
-            <div>
-              <Link
-                href={marketPlaceObject.link}
-                className="flex w-60 items-center justify-between gap-4 rounded-full border border-yellow-600 bg-lime-50 px-4 py-1"
-              >
-                <div className="flex w-full justify-center">
-                  <Img
-                    src={marketPlaceImage.url}
-                    width={100}
-                    height={100}
-                    alt={
-                      marketPlaceImage.alternativeText ||
-                      "Additional Ingredient"
-                    }
-                    className="aspect-[4/2] object-contain"
-                  />
-                </div>
-                <div>
-                  <ShareNow size={28} />
-                </div>
-              </Link>
-            </div>
-          </>
         )}
       </div>
     </div>
@@ -157,11 +198,15 @@ const AddToCartSection = React.memo(
       [price, listingPrice],
     );
 
-    const marketPlaceObject = !!marketPlaceLinks?.length
-      ? marketPlaceLinks[0]
-      : null;
+    const marketPlaceObject = useMemo(
+      () => (marketPlaceLinks?.length ? marketPlaceLinks[0] : null),
+      [marketPlaceLinks],
+    );
 
-    const marketPlaceImage = extractAttributes(marketPlaceObject?.image);
+    const marketPlaceImage = useMemo(
+      () => extractAttributes(marketPlaceObject?.image),
+      [marketPlaceObject],
+    );
 
     const checkVisibility = useCallback(() => {
       if (typeof window === "undefined") return;
@@ -183,158 +228,73 @@ const AddToCartSection = React.memo(
       }
     }, [checkVisibility]);
 
-    const renderAddToCartContent = () => (
-      <>
-        <AddToCart
-          product={product}
-          selectedVariant={selectedVariant}
-          buttonText="Add To Cart"
-          buttonClassName="w-full py-3 text-xl md:py-4"
-          quantityClassName="flex-1 min-h-full"
-          showGoToCart
-        />
-        <ShippingInfo />
-      </>
+    const renderAddToCartContent = useCallback(
+      () => (
+        <>
+          <AddToCart
+            product={product}
+            selectedVariant={selectedVariant}
+            buttonText="Add To Cart"
+            buttonClassName="w-full py-3 text-xl md:py-4"
+            quantityClassName="flex-1 min-h-full"
+            showGoToCart
+          />
+          <ShippingInfo />
+        </>
+      ),
+      [product, selectedVariant],
     );
 
-    const renderOutOfStockContent = () => (
-      <>
-        <Button
-          variant="primary"
-          size="none"
-          className="h-full w-full bg-gray-400 py-3 text-xl text-white-a700 opacity-100 md:py-4"
-          disabled
-        >
-          Sold Out
-        </Button>
-        <Text
-          as="p"
-          size="base"
-          className="hidden font-light text-red-600 md:block"
-          responsive
-        >
-          We are working hard to be back in stock as soon as possible
-        </Text>
-      </>
+    const renderOutOfStockContent = useCallback(
+      () => (
+        <>
+          <Button
+            variant="primary"
+            size="none"
+            className="h-full w-full bg-gray-400 py-3 text-xl text-white-a700 opacity-100 md:py-4"
+            disabled
+          >
+            Sold Out
+          </Button>
+          <Text
+            as="p"
+            size="base"
+            className="hidden font-light text-red-600 md:block"
+            responsive
+          >
+            We are working hard to be back in stock as soon as possible
+          </Text>
+        </>
+      ),
+      [],
     );
 
     return (
       <>
         <div ref={borderRef} />
-        {
-          <div
-            ref={sectionRef}
-            className={twMerge(
-              `z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:static md:mb-7 md:gap-2.5 md:border-0 md:py-0`,
-              isFixed
-                ? "container-main fixed bottom-0 left-0 mb-0 border-t py-3"
-                : "",
-            )}
-          >
-            {!marketPlaceObject ? (
-              hasInventory ? (
-                renderAddToCartContent()
-              ) : (
-                renderOutOfStockContent()
-              )
-            ) : (
-              <div className="w-full md:hidden">
-                <Link
-                  href={marketPlaceObject.link}
-                  className="flex items-center justify-between gap-4 rounded-full border border-yellow-600 bg-lime-50 px-4 py-1"
-                >
-                  <div className="flex w-full justify-center">
-                    <Img
-                      src={marketPlaceImage.url}
-                      width={100}
-                      height={100}
-                      alt={
-                        marketPlaceImage.alternativeText ||
-                        "Additional Ingredient"
-                      }
-                      className="aspect-[4/2] object-contain"
-                    />
-                  </div>
-                  <div>
-                    <ShareNow size={28} />
-                  </div>
-                </Link>
-              </div>
-            )}
-          </div>
-        }
-
-        {/* <div>
-          {marketPlaceLinks?.map((marketItem, index) => {
-            const { url, alternativeText } = extractAttributes(
-              marketItem.image,
-            );
-            const { link } = marketItem;
-            return (
-              <div key={index}>
-                <Link
-                  href={link}
-                  // className={`flex max-w-72 items-center justify-center gap-4 rounded-full bg-lime-50_01`}
-                  className="flex max-w-40 items-center justify-between gap-4 rounded-full bg-lime-50 px-4 py-1 md:max-w-[8rem] lg:max-w-[11rem]"
-                >
-                  <div className="max-w-30">
-                    <Img
-                      src={url}
-                      width={100}
-                      height={100}
-                      alt={alternativeText || "Additional Ingredient"}
-                      className="aspect-[4/2] object-contain"
-                    />
-                  </div>
-                  <div>
-                    <ShareNow size={28} />
-                  </div>
-                </Link>
-              </div>
-            );
-          })}
-        </div> */}
-
         <div
-          className={`grid gap-4 ${
-            marketPlaceLinks?.length === 1
-              ? "grid-cols-1"
-              : marketPlaceLinks?.length === 2
-                ? "grid-cols-2"
-                : "grid-cols-2 grid-rows-2"
-          } ${marketPlaceLinks?.length === 3 && "first:col-span-2"} my-2`}
+          ref={sectionRef}
+          className={twMerge(
+            `z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:static md:mb-7 md:gap-2.5 md:border-0 md:py-0`,
+            isFixed
+              ? "container-main fixed bottom-0 left-0 mb-0 border-t py-3"
+              : "",
+          )}
         >
-          {marketPlaceLinks?.map((marketItem, index) => {
-            const { url, alternativeText } = extractAttributes(
-              marketItem.image,
-            );
-            const { link } = marketItem;
-            return (
-              <div
-                key={index}
-                className={`${index === 0 && marketPlaceLinks.length === 3 ? "col-span-2" : ""} w-full`}
-              >
-                <Link
-                  href={link}
-                  className="flex items-center justify-between gap-4 rounded-full border border-yellow-600 bg-lime-50 px-4 py-1"
-                >
-                  <div className="flex w-full justify-center">
-                    <Img
-                      src={url}
-                      width={100}
-                      height={100}
-                      alt={alternativeText || "Additional Ingredient"}
-                      className="aspect-[4/2] object-contain"
-                    />
-                  </div>
-                  <div>
-                    <ShareNow size={28} />
-                  </div>
-                </Link>
-              </div>
-            );
-          })}
+          {!marketPlaceObject ? (
+            hasInventory ? (
+              renderAddToCartContent()
+            ) : (
+              renderOutOfStockContent()
+            )
+          ) : (
+            <div className="w-full md:hidden">
+              <MarketplaceLink marketItem={marketPlaceObject} />
+            </div>
+          )}
         </div>
+
+        <MarketplaceGrid marketPlaceLinks={marketPlaceLinks} />
 
         <DesktopStickyBar
           isFixed={isFixed}

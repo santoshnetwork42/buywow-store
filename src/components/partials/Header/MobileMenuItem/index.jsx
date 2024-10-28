@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
-  const { topNavbarClicked } = useEventsDispatch();
+  const { topNavbarClickedEvent } = useEventsDispatch();
   if (!subItem) return null;
 
   return (
@@ -16,7 +16,7 @@ const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
         className="w-full py-2.5"
         href={`/${linkPrefix ? linkPrefix + "/" : ""}${subItem.slug || ""}`}
         onClick={() => {
-          topNavbarClicked({
+          topNavbarClickedEvent({
             banner_name: subItem.title || "",
             item_id: subItem.slug || "",
             Source: "Mobile",
@@ -36,7 +36,7 @@ const SubMenuItem = ({ subItem, linkPrefix, closeMenu, isLast }) => {
 SubMenuItem.displayName = "SubMenuItem";
 
 const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
-  const { topNavbarClicked } = useEventsDispatch();
+  const { topNavbarClickedEvent } = useEventsDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [height, setHeight] = useState(0);
   const contentRef = useRef(null);
@@ -57,7 +57,7 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
         <div
           className="flex cursor-pointer items-center justify-between pb-3 pr-3 pt-2"
           onClick={() => {
-            topNavbarClicked({
+            topNavbarClickedEvent({
               banner_name: item.title,
               item_id: item.slug,
               Source: "Mobile",
@@ -105,7 +105,7 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
           : item?.link || "#"
       }
       onClick={() => {
-        topNavbarClicked({
+        topNavbarClickedEvent({
           banner_name: item.title,
           item_id: item.slug,
           Source: "Mobile",

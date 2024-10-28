@@ -40,7 +40,7 @@ const SearchBar = memo(({ className }) => {
   const pathname = usePathname();
   const isInteractive = useIsInteractive();
   const [search, setSearch] = useState("");
-  const { search: searchEvent } = useEventsDispatch();
+  const { searchEvent } = useEventsDispatch();
   const [placeholderState, setPlaceholderState] = useState({
     text: "Search for Ubtan",
     isDeleting: false,

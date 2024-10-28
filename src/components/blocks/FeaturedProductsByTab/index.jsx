@@ -62,6 +62,10 @@ const FeaturedProductsByTab = ({
             }
             priority={!lazyBlock && !tabIndex && productIndex < 4}
             {...product?.attributes}
+            section={{
+              name: title,
+              tabValue: item?.tab?.data?.attributes?.title,
+            }}
           />
         ))}
       </Slider>

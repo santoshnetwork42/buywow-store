@@ -1,17 +1,25 @@
+import LinkClickTracker from "@/components/common/LinkClickTracker";
 import { Heading, Text } from "@/components/elements";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
-import Link from "next/link";
 import React, { useMemo } from "react";
 
-const SubMenuItem = React.memo(({ item }) => {
+const SubMenuItem = React.memo(({ item, parentTitle }) => {
   if (!item?.title) return null;
   return (
     <li className="">
-      <Link prefetch={false} href={item?.slug || item?.link}>
+      <LinkClickTracker
+        prefetch={false}
+        href={item?.slug || item?.link || "#"}
+        trackingType="FOOTER_CLICK"
+        trackingEventPayload={{
+          menu: parentTitle,
+          subMenu: item?.title,
+        }}
+      >
         <Text as="p" size="sm" className="capitalize text-white-a700_01">
           {item.title}
         </Text>
-      </Link>
+      </LinkClickTracker>
     </li>
   );
 });
@@ -63,7 +71,11 @@ const FooterMenu = ({ item, isOpen, onToggle }) => {
           }`}
         >
           {subMenuItems.map((subItem, index) => (
-            <SubMenuItem key={`${subItem.slug}-${index}`} item={subItem} />
+            <SubMenuItem
+              key={`${subItem.slug}-${index}`}
+              item={subItem}
+              parentTitle={item.title}
+            />
           ))}
         </ul>
       )}
