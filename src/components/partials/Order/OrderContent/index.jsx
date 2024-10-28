@@ -9,6 +9,7 @@ import ProductList from "@/components/partials/Order/OrderContent/ProductList";
 import ProgressSteps from "@/components/partials/Others/ProgressSteps";
 import { SWOP_STORE_BANNER_URL } from "@/config";
 import { getOrderByIdAPI, validateTransactionAPI } from "@/lib/appSyncAPIs";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import OrderSkeleton from "@/src/components/partials/Account/OrderSection/OrderList/OrderSkeleton";
 import States from "@/utils/data/states.json";
 import { errorHandler } from "@/utils/errorHandler";
@@ -22,6 +23,8 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   const user = useSelector((state) => state.user?.user);
   const [fetchAttempts, setFetchAttempts] = useState(0);
   const allStatus = ["CANCELLED", "DISPATCHED", "COURIER_RETURN", "DELIVERED"];
+
+  const { pageViewedEvent } = useEventsDispatch();
 
   const fetchUpdatedOrder = useCallback(async () => {
     setLoading(true);
@@ -105,6 +108,11 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
     if (user?.id && order?.userId && user.id === order.userId) {
       fetchUpdatedOrder();
     }
+    pageViewedEvent({
+      event: "thank_you_page_viewed",
+      orderId: order?.id,
+      userId: user?.id,
+    });
   }, [user, order?.userId, fetchUpdatedOrder]);
 
   const { formattedState, country } = useMemo(() => {

@@ -23,7 +23,7 @@ const AddressModal = ({
   const isLoading = useSelector((state) => state.address?.isLoading);
 
   const ButtonText = action === "CREATE" ? "Add Address" : "Update Address";
-  const { addressAdded } = useEventsDispatch();
+  const { addressAddedEvent } = useEventsDispatch();
 
   const [address, setAddress] = useState({
     id: addressItem?.id || null,
@@ -74,7 +74,7 @@ const AddressModal = ({
       } else {
         editAddress(address, user?.id);
       }
-      addressAdded(address, totalPrice, "BUYWOW");
+      addressAddedEvent(address, totalPrice, "BUYWOW");
 
       closeModal();
     },

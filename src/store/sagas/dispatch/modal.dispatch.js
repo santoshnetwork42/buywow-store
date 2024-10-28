@@ -18,13 +18,19 @@ export const useModalDispatch = () => {
   );
 
   const handlePasswordLessModal = useCallback(
-    (isPasswordLessOpen = false, customLogin = false, redirectTo = null) => {
+    (
+      isPasswordLessOpen = false,
+      customLogin = false,
+      redirectTo = null,
+      source = "HEADER",
+    ) => {
       dispatch({
         type: modalSagaActions.SET_PASSWORDLESS_MODAL,
         payload: {
           isPasswordLessOpen,
           customLogin,
           redirectTo,
+          source,
         },
       });
     },

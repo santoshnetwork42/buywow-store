@@ -14,7 +14,7 @@ const AddressList = React.memo(({ addressList, variant }) => {
   const user = useSelector((state) => state.user?.user);
   const { updateCurrentAddress, deleteAddress } = useAddressDispatch();
 
-  const { addressSelected } = useEventsDispatch();
+  const { addressSelectedEvent } = useEventsDispatch();
   const { totalPrice } = useCartTotal({
     paymentType: "PREPAID",
     isRewardApplied: false,
@@ -25,7 +25,7 @@ const AddressList = React.memo(({ addressList, variant }) => {
   useEffect(() => {
     setSelectedAddressId(currentAddress?.id);
     if (currentAddress?.id)
-      addressSelected(currentAddress, totalPrice, "BUYWOW");
+      addressSelectedEvent(currentAddress, totalPrice, "BUYWOW");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentAddress]);
 
