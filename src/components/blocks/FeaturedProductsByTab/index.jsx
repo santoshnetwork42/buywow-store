@@ -19,6 +19,7 @@ const FeaturedProductsByTab = ({
   isPersistLoading,
   promotion,
   lazyBlock,
+  showProductsOnVariantStockOut = true,
 }) => {
   const pathname = usePathname();
   const storeConfig = useStoreConfig();
@@ -46,25 +47,27 @@ const FeaturedProductsByTab = ({
         sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
         isContainShadow
       >
-        {setSoldOutLast(item?.products?.data, true)?.map(
-          (product, productIndex) => (
-            <ProductCard
-              key={`product-${product?.id}-${tabIndex}-${productIndex}`}
-              className="w-[calc(50vw-16px)] max-w-[326px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
-              parentPromotionTag={
-                (promotion?.data && promotion) ||
-                (storeConfigData?.attributes?.promotion_tag?.data &&
-                  storeConfigData?.attributes?.promotion_tag)
-              }
-              priority={!lazyBlock && !tabIndex && productIndex < 4}
-              {...product?.attributes}
-              section={{
-                name: title,
-                tabValue: item?.tab?.data?.attributes?.title,
-              }}
-            />
-          ),
-        )}
+        {setSoldOutLast(
+          item?.products?.data,
+          true,
+          showProductsOnVariantStockOut,
+        )?.map((product, productIndex) => (
+          <ProductCard
+            key={`product-${product?.id}-${tabIndex}-${productIndex}`}
+            className="w-[calc(50vw-16px)] max-w-[326px] bg-white-a700_01 sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]"
+            parentPromotionTag={
+              (promotion?.data && promotion) ||
+              (storeConfigData?.attributes?.promotion_tag?.data &&
+                storeConfigData?.attributes?.promotion_tag)
+            }
+            priority={!lazyBlock && !tabIndex && productIndex < 4}
+            {...product?.attributes}
+            section={{
+              name: title,
+              tabValue: item?.tab?.data?.attributes?.title,
+            }}
+          />
+        ))}
       </Slider>
     </TabPanel>
   );
