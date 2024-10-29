@@ -155,7 +155,7 @@ const CartDrawer = () => {
 
     const cartId =
       localStorage.getItem(`${STORE_PREFIX}-cartId`) || shoppingCartId;
-    const isGKCXEnabled = !!(GOKWIK_MID && cartId && true);
+    const isGKCXEnabled = !!(GOKWIK_MID && cartId && gokwikEnabled);
 
     if (isGKCXEnabled) {
       try {
