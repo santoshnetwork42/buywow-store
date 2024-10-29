@@ -100,7 +100,7 @@ const CartDrawer = () => {
   const inventory = useInventory({ validateCart });
   const guestCheckout = useGuestCheckout();
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
-  const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
+  const gokwikEnabled = useConfiguration(true, false);
 
   const {
     grandTotal,
