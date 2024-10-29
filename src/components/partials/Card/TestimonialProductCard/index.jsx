@@ -3,7 +3,7 @@
 import AddToCart from "@/components/common/AddToCart";
 import { Heading, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
-import { useProduct, useProductVariantGroups } from "@wow-star/utils";
+import { useProduct, useProductVariantGroups } from "@wow-star/utils-cms";
 import Link from "next/link";
 
 const TestimonialProductCard = ({ fetchedProduct }) => {

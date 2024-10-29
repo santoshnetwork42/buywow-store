@@ -18,7 +18,7 @@ import {
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
 import { extractAttributes } from "@/utils/helpers";
-import { useCartTotal } from "@wow-star/utils";
+import { useCartTotal } from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";

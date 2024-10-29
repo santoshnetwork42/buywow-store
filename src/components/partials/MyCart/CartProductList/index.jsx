@@ -2,7 +2,10 @@ import { Button, Heading, Img, Text } from "@/components/elements";
 import ProductPricing from "@/components/partials/MyCart/CartProductList/ProductPricing";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { getUpdatedCart, toDecimal } from "@/utils/helpers";
-import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
+import {
+  getProductInventory,
+  useProductVariantGroups,
+} from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";

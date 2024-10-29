@@ -60,6 +60,8 @@ export const getInitialData = /* GraphQL */ `
         id
         storeId
         paymentType
+        type
+        coupons
         amount
         minOrderValue
         maxOrderValue
@@ -93,7 +95,7 @@ export const getInitialData = /* GraphQL */ `
         priority
         couponType
         buyXQuantity
-        deviceType 
+        deviceType
         ppcodCouponAmount
         getYAmount
         getYPercentage
