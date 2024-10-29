@@ -72,7 +72,11 @@ export const getProductInventory = (product, selectedVariantId = null) => {
   };
 };
 
-export const setSoldOutLast = (items, isContainAttributes = false) => {
+export const setSoldOutLast = (
+  items,
+  isContainAttributes = false,
+  showProductsOnVariantStockOut = true,
+) => {
   let soldOutProducts = [];
   if (items) {
     const products = items
@@ -109,6 +113,33 @@ export const setSoldOutLast = (items, isContainAttributes = false) => {
           }
         }
       }, []);
+
+    if (!showProductsOnVariantStockOut) {
+      const filteredProducts = products?.filter((product) => {
+        if (!product?.attributes?.fetchedProduct?.variants?.items?.length) {
+          return true;
+        }
+
+        const variantsSortedByPosition =
+          product?.attributes?.fetchedProduct?.variants?.items
+            ?.slice()
+            .sort((a, b) => (a.position ?? 1) - (b.position ?? 1));
+
+        let firstVariant = variantsSortedByPosition[0];
+
+        const { inventory: variantInventory, minimumOrderQuantity } =
+          firstVariant || {};
+        const currentInventory = Math.max(0, variantInventory || 0);
+
+        if (currentInventory === 0 || currentInventory < minimumOrderQuantity) {
+          return false;
+        }
+
+        return true;
+      });
+      return [...filteredProducts, ...soldOutProducts];
+    }
+
     return [...products, ...soldOutProducts];
   }
   return [];

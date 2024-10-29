@@ -3,7 +3,7 @@ import {
   useBestCoupon,
   useCoupons,
   useFeaturedCoupons,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";

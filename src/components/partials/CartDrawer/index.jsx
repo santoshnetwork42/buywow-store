@@ -6,7 +6,7 @@ import {
   useConfiguration,
   useInventory,
   useNavbar,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";

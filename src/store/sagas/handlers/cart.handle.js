@@ -26,7 +26,7 @@ import {
   getFirstVariant,
   getProductSubTotal,
 } from "@/utils/helpers";
-import { getCouponDiscount } from "@wow-star/utils";
+import { getCouponDiscount } from "@wow-star/utils-cms";
 import { product } from "platform";
 import { all, call, put, select } from "redux-saga/effects";
 

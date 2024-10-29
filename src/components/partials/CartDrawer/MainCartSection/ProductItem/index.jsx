@@ -8,7 +8,10 @@ import VariantSelector from "@/components/partials/Others/VariantSelector";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { getUpdatedCart } from "@/utils/helpers";
-import { getProductInventory, useProductVariantGroups } from "@wow-star/utils";
+import {
+  getProductInventory,
+  useProductVariantGroups,
+} from "@wow-star/utils-cms";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
