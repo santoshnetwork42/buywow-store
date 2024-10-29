@@ -15,7 +15,7 @@ import {
 } from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
-
+ 
 const VariantSelector = dynamic(
   () => import("@/components/partials/Product/PDP/VariantSelector"),
   { ssr: false },
