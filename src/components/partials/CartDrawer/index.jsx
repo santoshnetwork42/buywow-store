@@ -100,7 +100,7 @@ const CartDrawer = () => {
   const inventory = useInventory({ validateCart });
   const guestCheckout = useGuestCheckout();
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
-  const gokwikEnabled = useConfiguration(true, false);
+  const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
 
   const {
     grandTotal,
@@ -155,7 +155,7 @@ const CartDrawer = () => {
 
     const cartId =
       localStorage.getItem(`${STORE_PREFIX}-cartId`) || shoppingCartId;
-    const isGKCXEnabled = !!(GOKWIK_MID && cartId && true);
+    const isGKCXEnabled = !!(GOKWIK_MID && cartId && gokwikEnabled);
 
     if (isGKCXEnabled) {
       try {
@@ -291,7 +291,7 @@ const CartDrawer = () => {
     //   } else {
     //     return "Add more items to unlock 'Buy 1 Get 1 Free'";
     //   }
-    // }
+    // } 
     if (pathname === "/collections/buy-8-1000") {
       if (appliedCoupon?.code === "BUY8") {
         return "Congrats, your Buy 8 @ ₹1000 offer has been availed!";
