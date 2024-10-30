@@ -159,7 +159,7 @@ const CartDrawer = () => {
     const isGKCXEnabled = !!(
       GOKWIK_MID &&
       cartId &&
-      gokwikEnabled &&
+      // gokwikEnabled &&
       checkoutABVariant === "gk_checkout"
     );
 
