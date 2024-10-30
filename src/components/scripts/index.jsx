@@ -5,6 +5,7 @@ import {
   GTM_ID,
   LIMECHAT_ENABLED,
   WISEPOPS_KEY,
+  VERCEL_ANALYTICS_ENABLED,
 } from "@/config";
 import { useIsInteractive, useSource } from "@/utils/context/navbar";
 import dynamic from "next/dynamic";
@@ -49,7 +50,7 @@ export default function Scripts() {
   return (
     <>
       <Affise />
-      <Analytics />
+      {VERCEL_ANALYTICS_ENABLED && <Analytics />}
       {LIMECHAT_ENABLED && <LimeChat />}
       {WISEPOPS_KEY && <Wisepops />}
       {!!GOKWIK_SCRIPT && (
