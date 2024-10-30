@@ -3,6 +3,7 @@ import { errorHandler } from "@/utils/errorHandler";
 import {
   addressMapper,
   getClientSource,
+  getFormattedDate,
   initializeMoengageAndAddInfo,
   itemMapper,
   moEngagedOrderMapper,
@@ -11,7 +12,6 @@ import {
   trackClickStream,
   trackEvent,
   userMapper,
-  getFormattedDate,
 } from "@/utils/events";
 import {
   analyticsMetaDataMapper,
@@ -19,10 +19,10 @@ import {
   getSource,
   trimLowercaseJoinWithUnderscore,
 } from "@/utils/helpers";
+import { track } from "@vercel/analytics";
 import { generateClient } from "aws-amplify/api";
 import { call, select } from "redux-saga/effects";
 import { v4 as uuid, v4 as uuidv4 } from "uuid";
-import { track } from "@vercel/analytics";
 
 const eventSource = getSource();
 const client = generateClient();
