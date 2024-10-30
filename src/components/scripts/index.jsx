@@ -10,6 +10,7 @@ import { useIsInteractive, useSource } from "@/utils/context/navbar";
 import dynamic from "next/dynamic";
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/next";
 
 const Affise = dynamic(() => import("@/components/scripts/affise"), {
   ssr: false,
@@ -48,6 +49,7 @@ export default function Scripts() {
   return (
     <>
       <Affise />
+      <Analytics />
       {LIMECHAT_ENABLED && <LimeChat />}
       {WISEPOPS_KEY && <Wisepops />}
       {!!GOKWIK_SCRIPT && (
