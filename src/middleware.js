@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { VERCEL_CHECKOUT_AB_FLAG } from "./config";
+import { VERCEL_CHECKOUT_AB_FLAG } from "@/config";
 
 export const config = {
   matcher: ["/:path*"],
