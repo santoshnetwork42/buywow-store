@@ -9,7 +9,7 @@ import {
   getDiscountPercentage,
   toDecimal,
 } from "@/utils/helpers";
-import { useProduct, useProductVariantGroups } from "@wow-star/utils";
+import { useProduct, useProductVariantGroups } from "@wow-star/utils-cms";
 import Link from "next/link";
 import { memo, useEffect } from "react";
 import { twMerge } from "tailwind-merge";
@@ -28,7 +28,7 @@ const BenefitTag = memo(({ bgColor, tag }) => {
     </Text>
   );
 });
-
+ 
 const RatingDisplay = memo(({ rating, totalRatings }) => {
   if (!(totalRatings > 0)) return null;
   return (

@@ -12,10 +12,10 @@ import {
   useProduct,
   useProductCoupons,
   useProductVariantGroups,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
-
+ 
 const VariantSelector = dynamic(
   () => import("@/components/partials/Product/PDP/VariantSelector"),
   { ssr: false },
@@ -31,7 +31,7 @@ const OffersAndDiscounts = dynamic(
   { ssr: false },
 );
 
-const ProductDetailView = ({ product }) => {
+const ProductDetailView = ({ product, marketPlaceLinks }) => {
   const {
     promotionTag,
     productBenefitTags,
@@ -121,14 +121,15 @@ const ProductDetailView = ({ product }) => {
           currentInventory={currentInventory}
         />
 
-        {!!Object.keys(bestCoupon || {})?.length && (
-          <OffersAndDiscounts
-            bestCoupon={bestCoupon}
-            price={price}
-            hasInventory={hasInventory}
-            productId={packageProduct?.id}
-          />
-        )}
+        {!marketPlaceLinks?.length &&
+          !!Object.keys(bestCoupon || {})?.length && (
+            <OffersAndDiscounts
+              bestCoupon={bestCoupon}
+              price={price}
+              hasInventory={hasInventory}
+              productId={packageProduct?.id}
+            />
+          )}
 
         <div className="mt-5 flex flex-col">
           {!!variantGroup?.length && (
@@ -140,6 +141,7 @@ const ProductDetailView = ({ product }) => {
           <AddToCartSection
             product={packageProduct}
             selectedVariant={selectedVariant}
+            marketPlaceLinks={marketPlaceLinks}
           />
           {!!(productDetailView?.length > 0) && (
             <ProductDetailViewBlocks blocks={productDetailView} />

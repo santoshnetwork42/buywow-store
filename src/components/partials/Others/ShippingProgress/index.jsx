@@ -1,6 +1,6 @@
 import { Img, Text } from "@/components/elements";
 import { SHOW_SHIPPING_BAR } from "@/utils/data/constants";
-import { useConfiguration } from "@wow-star/utils";
+import { useConfiguration } from "@wow-star/utils-cms";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
 

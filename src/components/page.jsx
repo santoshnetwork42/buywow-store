@@ -188,7 +188,7 @@ const componentMap = {
   },
 };
 
-const renderBlock = ({ block, pageType, slug, index }) => {
+const renderBlock = ({ block, pageType, slug, index, marketPlaceLinks }) => {
   const { showComponent, __typename, id } = block || {};
   if (!showComponent) return null;
 
@@ -204,13 +204,19 @@ const renderBlock = ({ block, pageType, slug, index }) => {
       {...block}
       pageType={pageType}
       lazyBlock={index > 3}
+      marketPlaceLinks={marketPlaceLinks}
     />
   );
 };
 
 export default async function PageBlock({ pageType, slug }) {
   const pageData = await getPageBySlugAPI(slug);
-  const { blocks, slug: fetchedSlug, type: fetchedPageType } = pageData || {};
+  const {
+    blocks,
+    slug: fetchedSlug,
+    type: fetchedPageType,
+    marketPlaceLinks,
+  } = pageData || {};
 
   if (pageType === "landing" && !fetchedSlug) {
     await handleRedirect(`/${slug}`, pageData);
@@ -239,6 +245,7 @@ export default async function PageBlock({ pageType, slug }) {
           slug: fetchedSlug,
           pageType: fetchedPageType,
           index,
+          marketPlaceLinks,
         }),
       )}
     </React.Fragment>
