@@ -1,4 +1,3 @@
-import Quantity from "@/components/common/Quantity";
 import { getUser } from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import {
@@ -12,6 +11,7 @@ import {
   trackClickStream,
   trackEvent,
   userMapper,
+  getFormattedDate,
 } from "@/utils/events";
 import {
   analyticsMetaDataMapper,
@@ -22,6 +22,7 @@ import {
 import { generateClient } from "aws-amplify/api";
 import { call, select } from "redux-saga/effects";
 import { v4 as uuid, v4 as uuidv4 } from "uuid";
+import { track } from "@vercel/analytics";
 
 const eventSource = getSource();
 const client = generateClient();
@@ -94,6 +95,12 @@ export function* proceedToCheckoutEventHandler({ payload }) {
       user: user || {},
       source: eventSource,
       ...analyticsMeta,
+    });
+
+    track("proceed_to_checkout", {
+      login: userData ? 1 : 0,
+      source,
+      date: getFormattedDate(),
     });
   } catch (e) {
     errorHandler(e);
@@ -787,18 +794,18 @@ export function* placeOrderEventHandler({ payload }) {
       });
     }
 
-    // track("purchase_final_v1", {
-    //   transaction_id: id,
-    //   value: totalAmount,
-    //   tax: 0,
-    //   code: code,
-    //   discount: totalDiscount,
-    //   shipping: totalShippingCharges,
-    //   currency: "INR",
-    //   coupon: coupon?.code || "",
-    //   source: checkoutSource,
-    //   orderDate,
-    // });
+    track("purchase_final_v1", {
+      transaction_id: id,
+      value: totalAmount,
+      tax: 0,
+      code,
+      discount: totalDiscount,
+      shipping: totalShippingCharges,
+      currency: "INR",
+      coupon: coupon?.code || "",
+      source: checkoutSource,
+      orderDate,
+    });
 
     const eventSource = getClientSource();
     const analyticsMeta = analyticsMetaDataMapper();
@@ -1720,18 +1727,6 @@ export function* spinTheWheelRewardEventHandler({ payload }) {
     trackEvent("Spin The Wheel Reward", {
       ...payload,
     });
-  } catch (e) {
-    errorHandler(e);
-  }
-}
-
-export function* customEventVercelEventHandler({ payload }) {
-  try {
-    const { title, data } = payload;
-    // track(title, {
-    //   ...data,
-    //   date: getFormattedDate(),
-    // });
   } catch (e) {
     errorHandler(e);
   }

@@ -38,3 +38,4 @@ export const PREBUILD_ALL_PAGES =
 export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 export const SWOP_STORE_BANNER_URL =
   process.env.NEXT_PUBLIC_SWOP_STORE_BANNER_URL;
+export const VERCEL_CHECKOUT_AB_FLAG = `${STORE_PREFIX}_${process.env.VERCEL_CHECKOUT_AB_FLAG}`;

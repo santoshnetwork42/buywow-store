@@ -1,22 +1,10 @@
 "use client";
 
-import {
-  useCartItems,
-  useCartTotal,
-  useConfiguration,
-  useInventory,
-  useNavbar,
-} from "@wow-star/utils";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-
 import { showToast } from "@/components/common/ToastComponent";
 import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
-
-import { GOKWIK_MID, STORE_PREFIX } from "@/config";
+import { GOKWIK_MID, STORE_PREFIX, VERCEL_CHECKOUT_AB_FLAG } from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -27,7 +15,18 @@ import {
   PREPAID_ENABLED,
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
+import {
+  useCartItems,
+  useCartTotal,
+  useConfiguration,
+  useInventory,
+  useNavbar,
+} from "@wow-star/utils";
 import dynamic from "next/dynamic";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import Cookies from "js-cookie";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),
@@ -136,6 +135,8 @@ const CartDrawer = () => {
       : 0;
 
   const validateAndGoToCheckout = useCallback(async () => {
+    const checkoutABVariant = Cookies.get(VERCEL_CHECKOUT_AB_FLAG);
+
     if (!isInventoryCheckSuccess) {
       handleOutOfStockEvent(outOfStockItems, inventoryMapping);
       showToast.error("Please remove out of stock product from cart");
@@ -155,7 +156,12 @@ const CartDrawer = () => {
 
     const cartId =
       localStorage.getItem(`${STORE_PREFIX}-cartId`) || shoppingCartId;
-    const isGKCXEnabled = !!(GOKWIK_MID && cartId && gokwikEnabled);
+    const isGKCXEnabled = !!(
+      GOKWIK_MID &&
+      cartId &&
+      gokwikEnabled &&
+      checkoutABVariant === "gk_checkout"
+    );
 
     if (isGKCXEnabled) {
       try {
@@ -174,6 +180,7 @@ const CartDrawer = () => {
       } catch (e) {
         await gokwikSdk.close();
         router.push("/checkout");
+        return true;
       }
     }
 
@@ -291,7 +298,7 @@ const CartDrawer = () => {
     //   } else {
     //     return "Add more items to unlock 'Buy 1 Get 1 Free'";
     //   }
-    // } 
+    // }
     if (pathname === "/collections/buy-8-1000") {
       if (appliedCoupon?.code === "BUY8") {
         return "Congrats, your Buy 8 @ ₹1000 offer has been availed!";
