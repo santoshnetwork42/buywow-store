@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { VERCEL_CHECKOUT_AB_FLAG } from "./config";
 
-// make sure the middleware only runs when
-// the requested url starts with `/` all pages
 export const config = {
   matcher: ["/:path*"],
 };
