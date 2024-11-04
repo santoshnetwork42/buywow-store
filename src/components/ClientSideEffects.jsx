@@ -33,7 +33,7 @@ const ClientSideEffects = () => {
       searchParams.get("couponcode")?.split("&")[0];
 
     if (couponCode) {
-      const expiryTime = new Date().getTime() + 1 * 60 * 60 * 1000;
+      const expiryTime = new Date().getTime() + 30 * 60 * 1000;
       storeCoupon({ couponCode, couponExpiry: expiryTime });
     }
     //   eslint-disable-next-line react-hooks/exhaustive-deps

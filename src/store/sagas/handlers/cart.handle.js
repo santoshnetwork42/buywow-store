@@ -258,7 +258,7 @@ export function* updateCartWithShoppingCartIdHandler(action) {
     }
     // coupon code apply so source === "COUPON" products will get added here
     if (!!couponCode) {
-      const expiryTime = new Date().getTime() + 1 * 60 * 60 * 1000;
+      const expiryTime = new Date().getTime() + 30 * 60 * 1000;
       yield put(setStoredCouponCode({ couponCode, couponExpiry: expiryTime }));
     }
 
