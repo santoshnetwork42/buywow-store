@@ -25,7 +25,9 @@ const CouponDrawer = dynamic(
 
 const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const pathname = usePathname();
-  const { applyCoupon, removeCoupon, removeFromCart } = useCartDispatch();
+  const { applyCoupon, removeCoupon, removeFromCart, clearStoredCoupon } =
+    useCartDispatch();
+
   const topCoupons = useCoupons();
 
   const [couponCode, setCouponCode] = useState("");
@@ -36,6 +38,9 @@ const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const cartList = useSelector((state) => state.cart?.data || []);
   const appliedCoupon = useSelector((state) => state.cart?.coupon);
   const storedCouponCode = useSelector((state) => state.cart?.storedCouponCode);
+  const storedCouponExpiry = useSelector(
+    (state) => state.cart?.storedCouponExpiry,
+  );
   const user = useSelector((state) => state.user?.user);
 
   const isInteractive = useIsInteractive();
@@ -90,6 +95,15 @@ const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
     });
     removeCoupon();
   }, [cartList, removeFromCart, removeCoupon]);
+
+  useEffect(() => {
+    if (storedCouponCode && storedCouponExpiry) {
+      const currentTime = new Date().getTime();
+      if (currentTime > storedCouponExpiry) {
+        clearStoredCoupon();
+      }
+    }
+  }, [storedCouponCode, storedCouponExpiry, clearStoredCoupon]);
 
   useEffect(() => {
     previousCartList.current = cartList;

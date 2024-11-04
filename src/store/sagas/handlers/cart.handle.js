@@ -10,6 +10,7 @@ import {
 } from "@/store/sagas/requests/cart.request";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import {
+  clearStoredCoupon,
   emptyCart,
   setCart,
   setCartCreatedAt,
@@ -207,8 +208,12 @@ export function* updateCartIdLoadingHandler(action) {
 }
 
 export function* storedCouponCodeHandler(action) {
-  const { couponCode } = action.payload;
-  yield put(setStoredCouponCode(couponCode));
+  const { couponCode, couponExpiry } = action.payload;
+  yield put(setStoredCouponCode({ couponCode, couponExpiry }));
+}
+
+export function* clearStoredCouponCodeHandler() {
+  yield put(clearStoredCoupon());
 }
 
 export function* updateCartWithShoppingCartIdHandler(action) {
@@ -252,7 +257,10 @@ export function* updateCartWithShoppingCartIdHandler(action) {
         });
     }
     // coupon code apply so source === "COUPON" products will get added here
-    if (!!couponCode) yield put(setStoredCouponCode(couponCode));
+    if (!!couponCode) {
+      const expiryTime = new Date().getTime() + 1 * 60 * 60 * 1000;
+      yield put(setStoredCouponCode({ couponCode, couponExpiry: expiryTime }));
+    }
 
     yield call(setCartModalHandler, {
       payload: { isCartOpen: true },
