@@ -8,6 +8,7 @@ export const initialState = {
   isShoppingCartIdLoading: false,
   subTotal: 0,
   storedCouponCode: null,
+  storedCouponExpiry: null,
   cartError: null,
   cartCreatedAt: null,
 };
@@ -38,10 +39,15 @@ export const cartSlice = createSlice({
       state.subTotal = action.payload;
     },
     setStoredCouponCode: (state, action) => {
-      state.storedCouponCode = action.payload;
+      state.storedCouponCode = action.payload.couponCode;
+      state.storedCouponExpiry = action.payload.couponExpiry;
     },
     setCartError: (state, action) => {
       state.cartError = action.payload;
+    },
+    clearStoredCoupon: (state) => {
+      state.storedCouponCode = null;
+      state.storedCouponExpiry = null;
     },
     emptyCart: () => initialState,
   },
@@ -58,6 +64,7 @@ export const {
   setStoredCouponCode,
   setCartError,
   emptyCart,
+  clearStoredCoupon,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

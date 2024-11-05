@@ -120,10 +120,20 @@ export const useCartDispatch = () => {
   );
 
   const storeCoupon = useCallback(
-    (couponCode) => {
+    (payload) => {
       dispatch({
         type: cartSagaActions.STORED_COUPON_CODE,
-        payload: { couponCode },
+        payload,
+      });
+    },
+    [dispatch],
+  );
+
+  const clearStoredCoupon = useCallback(
+    (payload) => {
+      dispatch({
+        type: cartSagaActions.CLEAR_STORED_COUPON_CODE,
+        payload,
       });
     },
     [dispatch],
@@ -152,6 +162,7 @@ export const useCartDispatch = () => {
     updateCartId,
     updateCartIdLoading,
     storeCoupon,
+    clearStoredCoupon,
     fetchAndAddProductsFromEncodedCart,
     updateCartWithShoppingCartId,
   };
