@@ -292,14 +292,13 @@ const CartDrawer = () => {
   }, [appliedCoupon, isCartOpen]);
 
   const getCollectionWiseNudgeMsg = () => {
-    // if (pathname === "/collections/all" || pathname === "/") {
-    //   if (appliedCoupon?.code === "WOW") {
-    //     return "Congrats, your Buy 1 Get 1 offer has been availed!";
-    //   } else {
-    //     return "Add more items to unlock 'Buy 1 Get 1 Free'";
-    //   }
-    // }
-    if (pathname === "/collections/buy-8-1000") {
+    if (pathname === "/collections/all" || pathname === "/") {
+      if (appliedCoupon?.code === "WOW") {
+        return "Congrats, your Buy 1 Get 1 offer has been availed!";
+      } else {
+        return "Add more items to unlock 'Buy 1 Get 1 Free'";
+      }
+    } else if (pathname === "/collections/buy-8-1000") {
       if (appliedCoupon?.code === "BUY8") {
         return "Congrats, your Buy 8 @ ₹1000 offer has been availed!";
       }
