@@ -1,5 +1,6 @@
 "use client";
 
+import { Text } from "@/components/elements";
 import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
 import PriceSection from "@/components/partials/Product/PDP/PriceSection";
 import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
@@ -15,7 +16,7 @@ import {
 } from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
- 
+
 const VariantSelector = dynamic(
   () => import("@/components/partials/Product/PDP/VariantSelector"),
   { ssr: false },
@@ -90,6 +91,16 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
   return (
     <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
       <div className="relative flex flex-col gap-2 md:row-span-3">
+        <div className="w-max md:hidden">
+          {/* Have added it for temporary purpose, remove once feature is ready */}
+          <Text
+            as="p"
+            size="sm"
+            className="rounded-md bg-green-500 p-1 px-2 text-white-a700_01"
+          >
+            BUY 1 GET 1 FREE
+          </Text>
+        </div>
         <ProductHeader
           title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
           benefits={benefits}
@@ -105,6 +116,16 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
       </div>
 
       <div className="sticky top-10 z-10 flex flex-col">
+        <div className="mb-1 hidden w-max md:block">
+          {/* Have added it for temporary purpose, remove once feature is ready */}
+          <Text
+            as="p"
+            size="sm"
+            className="rounded-md bg-green-500 p-1 px-2 text-white-a700_01"
+          >
+            BUY 1 GET 1 FREE
+          </Text>
+        </div>
         <ProductHeader
           title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
           benefits={benefits}
