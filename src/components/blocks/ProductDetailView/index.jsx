@@ -7,6 +7,7 @@ import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
+import { useStoreConfig } from "@/utils/context/navbar";
 import handleRedirect from "@/utils/handleRedirect";
 import { extractAttributes } from "@/utils/helpers";
 import {
@@ -49,6 +50,13 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
   const { viewItemEvent } = useEventsDispatch();
   const viewItemEventTriggered = useRef(false);
+  
+  const storeConfig = useStoreConfig();
+  const { data: storeConfigData } = storeConfig;
+
+  const { tag, bgColor } = extractAttributes(
+    storeConfigData?.attributes?.promotion_tag,
+  );
 
   useEffect(() => {
     addRecentlyViewedProduct(extractAttributes(product?.pdpProduct));
@@ -91,16 +99,20 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
   return (
     <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
       <div className="relative flex flex-col gap-2 md:row-span-3">
-        <div className="w-max md:hidden">
-          {/* Have added it for temporary purpose, remove once feature is ready */}
-          <Text
-            as="p"
-            size="sm"
-            className="rounded-md bg-green-500 p-1 px-2 text-white-a700_01"
-          >
-            BUY 1 GET 1 FREE
-          </Text>
-        </div>
+        {tag && (
+          <div className="w-max md:hidden">
+            {/* Have added it for temporary purpose, remove once feature is ready */}
+            <Text
+              as="span"
+              size="sm"
+              className={`rounded-md p-1 px-2 capitalize text-white-a700`}
+              responsive
+              style={{ backgroundColor: bgColor || "#DD8434" }}
+            >
+              {tag}
+            </Text>
+          </div>
+        )}
         <ProductHeader
           title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
           benefits={benefits}
@@ -116,16 +128,20 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
       </div>
 
       <div className="sticky top-10 z-10 flex flex-col">
-        <div className="mb-1 hidden w-max md:block">
-          {/* Have added it for temporary purpose, remove once feature is ready */}
-          <Text
-            as="p"
-            size="sm"
-            className="rounded-md bg-green-500 p-1 px-2 text-white-a700_01"
-          >
-            BUY 1 GET 1 FREE
-          </Text>
-        </div>
+        {tag && (
+          <div className="mb-1 hidden w-max md:block">
+            {/* Have added it for temporary purpose, remove once feature is ready */}
+            <Text
+              as="span"
+              size="sm"
+              className={`rounded-md p-1 px-2 capitalize text-white-a700`}
+              responsive
+              style={{ backgroundColor: bgColor || "#DD8434" }}
+            >
+              {tag}
+            </Text>
+          </div>
+        )}
         <ProductHeader
           title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
           benefits={benefits}
