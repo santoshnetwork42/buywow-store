@@ -97,15 +97,6 @@ const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
   }, [cartList, removeFromCart, removeCoupon]);
 
   useEffect(() => {
-    if (storedCouponCode && storedCouponExpiry) {
-      const currentTime = new Date().getTime();
-      if (currentTime > storedCouponExpiry) {
-        clearStoredCoupon();
-      }
-    }
-  }, [storedCouponCode, storedCouponExpiry, clearStoredCoupon]);
-
-  useEffect(() => {
     previousCartList.current = cartList;
 
     const shouldAutoApply = AUTO_APPLY_COUPON_PATHNAMES.some(
@@ -113,6 +104,13 @@ const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
         pathname === allowedPath ||
         (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
     );
+
+    if (storedCouponCode && storedCouponExpiry) {
+      const currentTime = new Date().getTime();
+      if (currentTime > storedCouponExpiry) {
+        clearStoredCoupon();
+      }
+    }
 
     if (shouldAutoApply && isInteractive) {
       const mappedTopCoupons = topCoupons?.map((coupon) => coupon.code);
