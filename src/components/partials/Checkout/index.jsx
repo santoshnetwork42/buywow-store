@@ -363,7 +363,7 @@ const CheckoutClient = () => {
     startCheckoutEvent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+ 
   const ppcodAmountToTake = ppcodCouponEnabled
     ? appliedCoupon?.ppcodCouponAmount
     : ppcodAmount;
