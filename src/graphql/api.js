@@ -23,6 +23,7 @@ export const getInitialData = /* GraphQL */ `
         COD_CHARGES
         PREPAID_DISCOUNT_PERCENT
         MAX_COD_AMOUNT
+        MIN_COD_AMOUNT
         MAX_PREPAID_DISCOUNT
         GUEST_CHECKOUT
         COD_ENABLED
