@@ -20,3 +20,16 @@ export const PAGETYPE = {
   COLLECTION: "collections",
   PRODUCT: "products",
 };
+
+export const PDP_BLOCK_PROMOTION_TAG_TO_IGNORE = [
+  "brightening-vitamin-c-foaming-face-wash-with-built-in-brush-lp",
+  "onion-hair-shampoo-for-hair-growth-hair-fall-lp",
+  "onion-hair-shampoo-for-hair-growth-hair-fall-lp-2",
+  "rosemary-biotin-hair-growth-shampoo-lp",
+  "apple-cider-vinegar-foaming-face-wash-with-built-in-brush-lp",
+  "vitamin-c-brightening-trio-lp",
+  "brightening-vitamin-c-foaming-face-wash-with-built-in-brush-lp-2",
+  "shea-cocoa-butter-moisturizing-lotion-lp",
+  "rosemary-biotin-hair-growth-shampoo-lp-2",
+  "onion-hair-fall-control-and-repair-trio",
+];

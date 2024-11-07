@@ -8,6 +8,7 @@ import ProductImageSection from "@/components/partials/Product/PDP/ProductImageS
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
 import { useStoreConfig } from "@/utils/context/navbar";
+import { PDP_BLOCK_PROMOTION_TAG_TO_IGNORE } from "@/utils/data/constants";
 import handleRedirect from "@/utils/handleRedirect";
 import { extractAttributes } from "@/utils/helpers";
 import {
@@ -99,7 +100,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
   return (
     <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
       <div className="relative flex flex-col gap-2 md:row-span-3">
-        {tag && (
+        {tag && !PDP_BLOCK_PROMOTION_TAG_TO_IGNORE.includes(slug) && (
           <div className="w-max md:hidden">
             {/* Have added it for temporary purpose, remove once feature is ready */}
             <Text
@@ -128,7 +129,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
       </div>
 
       <div className="sticky top-10 z-10 flex flex-col">
-        {tag && (
+        {tag && !PDP_BLOCK_PROMOTION_TAG_TO_IGNORE.includes(slug) && (
           <div className="mb-1 hidden w-max md:block">
             {/* Have added it for temporary purpose, remove once feature is ready */}
             <Text
