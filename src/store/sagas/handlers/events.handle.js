@@ -1003,7 +1003,7 @@ export function* addressAddedEventHandler({ payload }) {
     const userData = yield select((state) =>
       state.user.user?.phone ? state.user.user : state.user.customUser,
     );
-    const user = userMapper(userData);
+    const user = userMapper(userData, address);
     const { name, email, phone } = address;
     initializeMoengageAndAddInfo({
       firstName: name.split(" ")[0],
