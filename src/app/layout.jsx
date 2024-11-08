@@ -1,4 +1,8 @@
-import { MEDIA_BASE_URL, WORDPRESS_MEDIA_URL } from "@/config";
+import {
+  MEDIA_BASE_URL,
+  WORDPRESS_MEDIA_URL,
+  GOOGLE_VERIFICATION_TAG,
+} from "@/config";
 import "@/styles/index.css";
 import "@/styles/tailwind.css";
 
@@ -27,6 +31,13 @@ async function RootLayout({ children }) {
         <meta name="theme-color" content="#000000" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
+
+        {!!GOOGLE_VERIFICATION_TAG && (
+          <meta
+            name="google-site-verification"
+            content={GOOGLE_VERIFICATION_TAG}
+          />
+        )}
 
         <link rel="preconnect" href={`https://${MEDIA_BASE_URL}`} />
         <link rel="preconnect" href={`https://${WORDPRESS_MEDIA_URL}`} />
