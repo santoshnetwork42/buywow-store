@@ -1,6 +1,7 @@
 "use client";
 
 import GiftIcon from "@/assets/svg/gift";
+import { Text } from "@/components/elements";
 import { fetchCouponRuleAPI } from "@/lib/appSyncAPIs";
 import {
   setApplicableCollectionCoupons,
@@ -92,20 +93,70 @@ const IntegratedProgressStepper = ({
   }
 
   return (
-    <div className={`w-full rounded-lg bg-deep_orange-50 px-4 py-12`}>
-      <div className="relative">
-        <div className="absolute top-0 -mt-9 w-full text-center text-[12px] !leading-3">
+    <div
+      className={`w-full rounded-lg rounded-t-none bg-deep_orange-50 p-4 py-6 pt-4`}
+    >
+      <div className="flex w-full flex-col gap-3">
+        <div className="mb-2 w-full text-center text-[12px] !leading-3">
           {nudgeMsg}
         </div>
         {/* Progress Bar */}
-        {/* <div className="h-1 rounded-full bg-gray-200">
-          <div
-            style={{ width: `${progressPercentage}%` }}
-            className="h-full rounded-full bg-yellow-900 transition-all duration-300 ease-in-out"
-          ></div>
+        <div className="relative">
+          <div className="h-1 rounded-full bg-gray-200">
+            <div
+              style={{ width: `${progressPercentage}%` }}
+              className="h-full rounded-full bg-yellow-900 transition-all duration-300 ease-in-out"
+            ></div>
+          </div>
+
+          <div className="relative flex w-full gap-1">
+            {Array.from({ length: maxQuantity - 1 })?.map((_, index) => {
+              return (
+                <div
+                  key={index}
+                  style={{ width: `${(100 / maxQuantity) * (index + 1)}%` }}
+                  className={`absolute -top-2.5 flex w-full justify-end`}
+                >
+                  <p
+                    className={`transition-all ease-in-out ${(100 / maxQuantity) * (index + 1) <= progressPercentage ? "bg-yellow-900 duration-1000" : "bg-gray-300 duration-300"} rounded-full p-2`}
+                  ></p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="relative flex w-full gap-1">
+            {steps?.map((step, index) => {
+              return (
+                <div
+                  key={index}
+                  style={{ width: `${(100 / maxQuantity) * step.quantity}%` }}
+                  className={`absolute -top-3.5 flex w-full justify-end`}
+                >
+                  <p
+                    className={`rounded-full p-1 px-2.5 transition-all ease-in-out ${safeCurrentQuantity >= step.quantity ? "bg-yellow-900 text-white-a700_01 duration-700" : "bg-gray-300 text-black-900 duration-300"}`}
+                    // className={`transition-all ease-in-out ${(100 / maxQuantity) * (index + 1) <= progressPercentage ? "bg-yellow-900 duration-1000" : "bg-gray-300 duration-300"} rounded-full p-2`}
+                  >
+                    {step.quantity}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        {/* <div className={`absolute -top-3 flex w-full justify-end`}>
+          <Text
+            as="p"
+            size="base"
+            className={`rounded-full p-1 px-2.5 transition-all ease-in-out ${safeCurrentQuantity === maxQuantity ? "bg-yellow-900 text-white-a700_01 duration-700" : "bg-gray-300 text-black-900 duration-300"}`}
+          >
+            {maxQuantity}
+          </Text>
         </div> */}
 
-        <div className="flex w-[87%] gap-1">
+        {/* <div className="flex w-full gap-1"></div> */}
+
+        {/* <div className="flex w-[87%] gap-1">
           {steps?.map((step, index) => {
             return (
               <div key={index} className="h-2 w-full rounded-full">
@@ -127,10 +178,10 @@ const IntegratedProgressStepper = ({
               </div>
             );
           })}
-        </div>
+        </div> */}
 
         {/* Steps */}
-        <div className="absolute left-0 top-0 -mt-4 flex w-full justify-between">
+        {/* <div className="absolute left-0 top-0 -mt-4 flex w-full justify-between">
           {steps?.map((step, index) => {
             const stepPosition = (step.quantity / maxQuantity) * 100;
             const isMarked = step.quantity <= currQuantity;
@@ -152,11 +203,11 @@ const IntegratedProgressStepper = ({
                   />
 
                   <div className="flex flex-col text-center transition-all duration-300 ease-in-out">
-                    {/* <span
+                    <span
                       className={`block text-xs font-medium ${isMarked ? "text-yellow-900" : "text-gray-600"} !leading-3 transition-all duration-300 ease-in-out`}
                     >
                       {step.code}
-                    </span> */}
+                    </span> 
 
                     <span
                       className={`block text-xs !leading-3 transition-all duration-300 ease-in-out`}
@@ -168,7 +219,7 @@ const IntegratedProgressStepper = ({
               </div>
             );
           })}
-        </div>
+        </div> */}
       </div>
     </div>
   );
