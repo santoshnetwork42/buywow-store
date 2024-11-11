@@ -1,6 +1,6 @@
 import { STORE_ID, WISEPOPS_KEY } from "@/config";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
-import { useUpdateUserCoupon } from "@wow-star/utils";
+import { useUpdateUserCoupon } from "@wow-star/utils-cms";
 import Script from "next/script";
 import { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";

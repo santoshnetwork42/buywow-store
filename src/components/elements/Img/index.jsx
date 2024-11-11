@@ -17,6 +17,7 @@ const Img = React.memo(
     width,
     addPrefix = false,
     quality = DEFAULT_IMAGE_QUALITY,
+    isPersistLoading = false,
     ...restProps
   }) => {
     const [hasError, setHasError] = useState(false);
@@ -55,6 +56,19 @@ const Img = React.memo(
             {alt}
           </Text>
         </div>
+      );
+    }
+
+    if (isPersistLoading) {
+      return (
+        <Image
+          className={className}
+          src={imageConfig.src}
+          alt={alt || "Image"}
+          width={width}
+          onError={handleError}
+          {...restProps}
+        />
       );
     }
 

@@ -15,7 +15,7 @@ import {
   getRecordKey,
   toDecimal,
 } from "@/utils/helpers";
-import { getThumbImage } from "@wow-star/utils";
+import { getThumbImage } from "@wow-star/utils-cms";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";

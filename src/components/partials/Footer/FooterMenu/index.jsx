@@ -9,7 +9,7 @@ const SubMenuItem = React.memo(({ item, parentTitle }) => {
     <li className="">
       <LinkClickTracker
         prefetch={false}
-        href={"#"}
+        href={item?.slug || item?.link || "#"}
         trackingType="FOOTER_CLICK"
         trackingEventPayload={{
           menu: parentTitle,

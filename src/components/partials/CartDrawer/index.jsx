@@ -15,8 +15,7 @@ import { showToast } from "@/components/common/ToastComponent";
 import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
-
-import { GOKWIK_MID, STORE_PREFIX } from "@/config";
+import { GOKWIK_MID, STORE_PREFIX, VERCEL_CHECKOUT_AB_FLAG } from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -27,6 +26,14 @@ import {
   PREPAID_ENABLED,
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
+import {
+  useCartItems,
+  useCartTotal,
+  useConfiguration,
+  useInventory,
+  useNavbar,
+} from "@wow-star/utils-cms";
+import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
 import {
   setCurrentQuantity,
@@ -34,6 +41,9 @@ import {
 } from "@/store/slices/nudge.slice";
 import { getNudgeQuantity } from "@/utils/helpers";
 import Nudge from "@/components/common/Nudge";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),
@@ -142,6 +152,8 @@ const CartDrawer = () => {
       : 0;
 
   const validateAndGoToCheckout = useCallback(async () => {
+    const checkoutABVariant = Cookies.get(VERCEL_CHECKOUT_AB_FLAG);
+
     if (!isInventoryCheckSuccess) {
       handleOutOfStockEvent(outOfStockItems, inventoryMapping);
       showToast.error("Please remove out of stock product from cart");
@@ -161,7 +173,12 @@ const CartDrawer = () => {
 
     const cartId =
       localStorage.getItem(`${STORE_PREFIX}-cartId`) || shoppingCartId;
-    const isGKCXEnabled = !!(GOKWIK_MID && cartId && gokwikEnabled);
+    const isGKCXEnabled = !!(
+      GOKWIK_MID &&
+      cartId &&
+      gokwikEnabled &&
+      checkoutABVariant === "gk_checkout"
+    );
 
     if (isGKCXEnabled) {
       try {
@@ -180,6 +197,7 @@ const CartDrawer = () => {
       } catch (e) {
         await gokwikSdk.close();
         router.push("/checkout");
+        return true;
       }
     }
 
@@ -291,14 +309,13 @@ const CartDrawer = () => {
   }, [appliedCoupon, isCartOpen]);
 
   const getCollectionWiseNudgeMsg = () => {
-    // if (pathname === "/collections/all" || pathname === "/") {
-    //   if (appliedCoupon?.code === "WOW") {
-    //     return "Congrats, your Buy 1 Get 1 offer has been availed!";
-    //   } else {
-    //     return "Add more items to unlock 'Buy 1 Get 1 Free'";
-    //   }
-    // } 
-    if (pathname === "/collections/buy-8-1000") {
+    if (pathname === "/collections/all" || pathname === "/") {
+      if (appliedCoupon?.code === "WOW") {
+        return "Congrats, your Buy 1 Get 1 offer has been availed!";
+      } else {
+        return "Add more items to unlock 'Buy 1 Get 1 Free'";
+      }
+    } else if (pathname === "/collections/buy-8-1000") {
       if (appliedCoupon?.code === "BUY8") {
         return "Congrats, your Buy 8 @ ₹1000 offer has been availed!";
       }
@@ -308,6 +325,21 @@ const CartDrawer = () => {
         return "Congrats, your Buy 8 @ ₹1199 offer has been availed!";
       }
       return "Add more items to unlock 'Buy 8 @ ₹1199 Offer'";
+    } else if (pathname === "/collections/buy-3-599") {
+      if (appliedCoupon?.code === "TRI599") {
+        return "Congrats, your Buy 3 @ ₹599 offer has been availed!";
+      }
+      return "Add more items to unlock 'Buy 3 @ ₹599 Offer'";
+    } else if (pathname === "/collections/buy-4-699") {
+      if (appliedCoupon?.code === "BUY699") {
+        return "Congrats, your Buy 4 @ ₹699 offer has been availed!";
+      }
+      return "Add more items to unlock 'Buy 4 @ ₹699 Offer'";
+    } else if (pathname === "/collections/buy-6-899") {
+      if (appliedCoupon?.code === "BUNDLE6") {
+        return "Congrats, your Buy 6 @ ₹899 offer has been availed!";
+      }
+      return "Add more items to unlock 'Buy 6 @ ₹899 Offer'";
     }
     return "";
   };

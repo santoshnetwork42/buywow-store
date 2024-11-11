@@ -20,10 +20,12 @@ const PaymentMethodsSection = React.memo(
     codCharges,
     codCouponDisabled,
     isMaxCODDisabled,
+    isMinCODDisabled,
     ppcodAmount,
     ppcodAmountToTake,
     codGrandTotal,
     maxCOD,
+    minCOD,
   }) => (
     <div className="flex flex-col gap-2.5">
       <Heading size="2xl" as="h3" className="font-medium" responsive>
@@ -61,18 +63,20 @@ const PaymentMethodsSection = React.memo(
             description={
               codCouponDisabled
                 ? `COD payment disabled for your coupon "${appliedCoupon?.code}"`
-                : isMaxCODDisabled
-                  ? `COD payment is not allowed for orders above ₹${maxCOD}.`
-                  : (ppcodEnabled && ppcodAmount) || ppcodCouponEnabled
-                    ? `Pay ₹${toDecimal(ppcodAmountToTake)} now (non-refundable). Rest ₹${toDecimal(
-                        codGrandTotal - ppcodAmountToTake,
-                      )} on delivery.`
-                    : "Pay using Cash on Delivery."
+                : isMinCODDisabled
+                  ? `COD payment is not allowed for orders below ₹${minCOD}.`
+                  : isMaxCODDisabled
+                    ? `COD payment is not allowed for orders above ₹${maxCOD}.`
+                    : (ppcodEnabled && ppcodAmount) || ppcodCouponEnabled
+                      ? `Pay ₹${toDecimal(ppcodAmountToTake)} now (non-refundable). Rest ₹${toDecimal(
+                          codGrandTotal - ppcodAmountToTake,
+                        )} on delivery.`
+                      : "Pay using Cash on Delivery."
             }
             total={codGrandTotal}
             selectedPaymentMethod={selectedPaymentMethod}
             onMethodChange={handleMethodChange}
-            disabled={codCouponDisabled || isMaxCODDisabled}
+            disabled={codCouponDisabled || isMaxCODDisabled || isMinCODDisabled}
           />
         )}
       </div>

@@ -78,6 +78,7 @@ const ProductCollectionByTab = ({
   horizontalBlogSection,
   slug,
   promotion,
+  showProductsOnVariantStockOut = true,
 }) => {
   const [sortOption, setSortOption] = useState(
     SORT_OPTIONS.find((option) => option.value === defaultCollectionSorting) ||
@@ -311,7 +312,11 @@ const ProductCollectionByTab = ({
         pageSize,
       );
       const skeletonCount = isLoading ? remainingProducts : 0;
-      const currentProductsOosLast = setSoldOutLast(currentProducts, true);
+      const currentProductsOosLast = setSoldOutLast(
+        currentProducts,
+        true,
+        showProductsOnVariantStockOut,
+      );
 
       const tabValue = category?.tab?.data?.attributes?.title || "";
       return [

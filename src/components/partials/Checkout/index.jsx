@@ -15,6 +15,7 @@ import { useGuestCheckout } from "@/utils/context/navbar";
 import {
   COD_ENABLED,
   MAX_COD_AMOUNT,
+  MIN_COD_AMOUNT,
   PPCOD_AMOUNT,
   PPCOD_ENABLED,
   PREPAID_ENABLED,
@@ -37,7 +38,7 @@ import {
   useInventory,
   useNavbar,
   useOrders,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -82,6 +83,7 @@ const CheckoutClient = () => {
   });
 
   const maxCOD = useConfiguration(MAX_COD_AMOUNT, -1);
+  const minCOD = useConfiguration(MIN_COD_AMOUNT, -1);
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const maxPrepaidDiscount = useConfiguration(MAX_PREPAID_DISCOUNT, 0);
   const codEnabled = useConfiguration(COD_ENABLED, true);
@@ -138,7 +140,7 @@ const CheckoutClient = () => {
     { isConfirmed, order: finalOrder, loading },
     placeOrderV1,
     orderHelper,
-  ] = useOrders();
+  ] = useOrders({ orderVersion: "V2" });
 
   useEffect(() => {
     setPageLoading(true);
@@ -361,12 +363,13 @@ const CheckoutClient = () => {
     startCheckoutEvent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+ 
   const ppcodAmountToTake = ppcodCouponEnabled
     ? appliedCoupon?.ppcodCouponAmount
     : ppcodAmount;
 
   const isMaxCODDisabled = maxCOD > -1 ? codGrandTotal > maxCOD : false;
+  const isMinCODDisabled = minCOD > -1 ? codGrandTotal < minCOD : false;
 
   if (pageLoading) return null;
 
@@ -444,10 +447,12 @@ const CheckoutClient = () => {
               codCharges={codCharges}
               codCouponDisabled={codCouponDisabled}
               isMaxCODDisabled={isMaxCODDisabled}
+              isMinCODDisabled={isMinCODDisabled}
               ppcodAmount={ppcodAmount}
               ppcodAmountToTake={ppcodAmountToTake}
               codGrandTotal={codGrandTotal}
               maxCOD={maxCOD}
+              minCOD={minCOD}
             />
 
             <div className="fixed bottom-0 left-0 w-full border-t bg-white-a700 px-3 py-2.5 sm:px-5 md:relative md:border-none md:p-0">

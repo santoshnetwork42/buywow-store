@@ -1,17 +1,21 @@
 "use client";
 
+import { Text } from "@/components/elements";
 import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
 import PriceSection from "@/components/partials/Product/PDP/PriceSection";
 import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed.dispatch";
+import { useStoreConfig } from "@/utils/context/navbar";
+import { PDP_BLOCK_PROMOTION_TAG_TO_IGNORE } from "@/utils/data/constants";
+import handleRedirect from "@/utils/handleRedirect";
 import { extractAttributes } from "@/utils/helpers";
 import {
   useProduct,
   useProductCoupons,
   useProductVariantGroups,
-} from "@wow-star/utils";
+} from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 
@@ -30,7 +34,7 @@ const OffersAndDiscounts = dynamic(
   { ssr: false },
 );
 
-const ProductDetailView = ({ product }) => {
+const ProductDetailView = ({ product, marketPlaceLinks }) => {
   const {
     promotionTag,
     productBenefitTags,
@@ -47,6 +51,13 @@ const ProductDetailView = ({ product }) => {
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
   const { viewItemEvent } = useEventsDispatch();
   const viewItemEventTriggered = useRef(false);
+  
+  const storeConfig = useStoreConfig();
+  const { data: storeConfigData } = storeConfig;
+
+  const { tag, bgColor } = extractAttributes(
+    storeConfigData?.attributes?.promotion_tag,
+  );
 
   useEffect(() => {
     addRecentlyViewedProduct(extractAttributes(product?.pdpProduct));
@@ -89,6 +100,20 @@ const ProductDetailView = ({ product }) => {
   return (
     <div className="container-main mb-main mt-3 grid w-full grid-cols-1 gap-y-3 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
       <div className="relative flex flex-col gap-2 md:row-span-3">
+        {tag && !PDP_BLOCK_PROMOTION_TAG_TO_IGNORE.includes(slug) && (
+          <div className="w-max md:hidden">
+            {/* Have added it for temporary purpose, remove once feature is ready */}
+            <Text
+              as="span"
+              size="sm"
+              className={`rounded-md p-1 px-2 capitalize text-white-a700`}
+              responsive
+              style={{ backgroundColor: bgColor || "#DD8434" }}
+            >
+              {tag}
+            </Text>
+          </div>
+        )}
         <ProductHeader
           title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
           benefits={benefits}
@@ -104,6 +129,20 @@ const ProductDetailView = ({ product }) => {
       </div>
 
       <div className="sticky top-10 z-10 flex flex-col">
+        {tag && !PDP_BLOCK_PROMOTION_TAG_TO_IGNORE.includes(slug) && (
+          <div className="mb-1 hidden w-max md:block">
+            {/* Have added it for temporary purpose, remove once feature is ready */}
+            <Text
+              as="span"
+              size="sm"
+              className={`rounded-md p-1 px-2 capitalize text-white-a700`}
+              responsive
+              style={{ backgroundColor: bgColor || "#DD8434" }}
+            >
+              {tag}
+            </Text>
+          </div>
+        )}
         <ProductHeader
           title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
           benefits={benefits}
@@ -120,14 +159,15 @@ const ProductDetailView = ({ product }) => {
           currentInventory={currentInventory}
         />
 
-        {!!Object.keys(bestCoupon || {})?.length && (
-          <OffersAndDiscounts
-            bestCoupon={bestCoupon}
-            price={price}
-            hasInventory={hasInventory}
-            productId={packageProduct?.id}
-          />
-        )}
+        {!marketPlaceLinks?.length &&
+          !!Object.keys(bestCoupon || {})?.length && (
+            <OffersAndDiscounts
+              bestCoupon={bestCoupon}
+              price={price}
+              hasInventory={hasInventory}
+              productId={packageProduct?.id}
+            />
+          )}
 
         <div className="mt-5 flex flex-col">
           {!!variantGroup?.length && (
@@ -139,6 +179,7 @@ const ProductDetailView = ({ product }) => {
           <AddToCartSection
             product={packageProduct}
             selectedVariant={selectedVariant}
+            marketPlaceLinks={marketPlaceLinks}
           />
           {!!(productDetailView?.length > 0) && (
             <ProductDetailViewBlocks blocks={productDetailView} />

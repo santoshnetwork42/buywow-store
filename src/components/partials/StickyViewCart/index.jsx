@@ -6,7 +6,7 @@ import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
-import { useCartItems, useCartTotal } from "@wow-star/utils";
+import { useCartItems, useCartTotal } from "@wow-star/utils-cms";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -69,14 +69,13 @@ const StickyViewCart = () => {
   if (!cartItems.length || !isAllowed || !isInteractive) return null;
 
   const getCollectionWiseNudgeMsg = () => {
-    // if (pathname === "/collections/all" || pathname === "/") {
-    //   if (appliedCoupon?.code === "WOW") {
-    //     return "Congrats, your Buy 1 Get 1 offer has been availed!";
-    //   } else {
-    //     return "Add more items to unlock 'Buy 1 Get 1 Free'";
-    //   }
-    // }
-    if (pathname === "/collections/buy-8-1000") {
+    if (pathname === "/collections/all" || pathname === "/") {
+      if (appliedCoupon?.code === "WOW") {
+        return "Congrats, your Buy 1 Get 1 offer has been availed!";
+      } else {
+        return "Add more items to unlock 'Buy 1 Get 1 Free'";
+      }
+    } else if (pathname === "/collections/buy-8-1000") {
       if (appliedCoupon?.code === "BUY8") {
         return "Congrats, your Buy 8 @ ₹1000 offer has been availed!";
       }
@@ -86,6 +85,21 @@ const StickyViewCart = () => {
         return "Congrats, your Buy 8 @ ₹1199 offer has been availed!";
       }
       return "Add more items to unlock 'Buy 8 @ ₹1199 Offer'";
+    } else if (pathname === "/collections/buy-3-599") {
+      if (appliedCoupon?.code === "TRI599") {
+        return "Congrats, your Buy 3 @ ₹599 offer has been availed!";
+      }
+      return "Add more items to unlock 'Buy 3 @ ₹599 Offer'";
+    } else if (pathname === "/collections/buy-4-699") {
+      if (appliedCoupon?.code === "BUY699") {
+        return "Congrats, your Buy 4 @ ₹699 offer has been availed!";
+      }
+      return "Add more items to unlock 'Buy 4 @ ₹699 Offer'";
+    } else if (pathname === "/collections/buy-6-899") {
+      if (appliedCoupon?.code === "BUNDLE6") {
+        return "Congrats, your Buy 6 @ ₹899 offer has been availed!";
+      }
+      return "Add more items to unlock 'Buy 6 @ ₹899 Offer'";
     }
     return "";
   };

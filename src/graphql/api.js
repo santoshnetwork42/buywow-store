@@ -23,6 +23,7 @@ export const getInitialData = /* GraphQL */ `
         COD_CHARGES
         PREPAID_DISCOUNT_PERCENT
         MAX_COD_AMOUNT
+        MIN_COD_AMOUNT
         MAX_PREPAID_DISCOUNT
         GUEST_CHECKOUT
         COD_ENABLED
@@ -60,6 +61,8 @@ export const getInitialData = /* GraphQL */ `
         id
         storeId
         paymentType
+        type
+        coupons
         amount
         minOrderValue
         maxOrderValue
@@ -93,7 +96,7 @@ export const getInitialData = /* GraphQL */ `
         priority
         couponType
         buyXQuantity
-        deviceType 
+        deviceType
         ppcodCouponAmount
         getYAmount
         getYPercentage
