@@ -1,12 +1,5 @@
 "use client";
 
-import {
-  useCartItems,
-  useCartTotal,
-  useConfiguration,
-  useInventory,
-  useNavbar,
-} from "@wow-star/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,9 +34,6 @@ import {
 } from "@/store/slices/nudge.slice";
 import { getNudgeQuantity } from "@/utils/helpers";
 import Nudge from "@/components/common/Nudge";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),

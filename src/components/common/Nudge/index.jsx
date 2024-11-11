@@ -16,7 +16,7 @@ import {
   extractProductSlug,
   getNudgeQuantity,
 } from "@/utils/helpers";
-import { useCoupons } from "@wow-star/utils";
+import { useCoupons } from "@wow-star/utils-cms";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
