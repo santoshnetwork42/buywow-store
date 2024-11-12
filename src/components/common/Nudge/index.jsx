@@ -19,7 +19,7 @@ import {
 } from "@/utils/helpers";
 import { useCoupons } from "@wow-star/utils-cms";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const GiftIconWithBorder = ({
@@ -245,6 +245,7 @@ const Nudge = ({ isCart = false }) => {
 
   const [nudgeFeat, setNudgeFeat] = useState([]);
 
+  // Separate useEffect for fetching coupons
   useEffect(() => {
     const collectionSlug = extractCollectionSlug(pathname);
     const productSlug = extractProductSlug(pathname);
@@ -252,7 +253,6 @@ const Nudge = ({ isCart = false }) => {
     const fetchCoupon = async () => {
       try {
         const response = await fetchCouponRuleAPI(storedCouponCode);
-        // collectionSlug
         dispatch(
           setApplicableCollectionCoupons(
             extractCouponsForApplicableCollection({
@@ -266,106 +266,116 @@ const Nudge = ({ isCart = false }) => {
       }
     };
 
-    if (!!storedCouponCode) fetchCoupon();
-    else if (!!collectionSlug) {
+    if (storedCouponCode) {
+      fetchCoupon();
+    } else if (collectionSlug) {
       dispatch(
         setApplicableCollectionCoupons(
           extractCouponsForApplicableCollection({
-            coupons: coupons,
+            coupons,
             collectionSlug: pathname,
           }),
         ),
       );
-    } else if (!!productSlug)
+    } else if (productSlug) {
       dispatch(
         setApplicableProductCoupons(
           extractCouponsForApplicableProduct({
-            coupons: coupons,
+            coupons,
             productSlug: pathname,
           }),
         ),
       );
-  }, [searchParams, coupons]);
+    }
+  }, [pathname, searchParams, coupons, storedCouponCode, dispatch]);
 
+  // Separate useEffect for updating nudgeFeat
   useEffect(() => {
     const isHomepage = pathname === "/";
-
-    if (isHomepage) {
-      setNudgeFeat(globalCoupons);
-      const i =
-        getNudgeQuantity({
-          pathname,
-          cartItems,
-          coupons: !!storedCouponCode
-            ? globalCoupons?.filter(
-                (coupon) => coupon.code === storedCouponCode,
-              )
-            : globalCoupons,
-        }) || {};
-
-      return;
-    }
-
     const collectionSlug = extractCollectionSlug(pathname);
     const productSlug = extractProductSlug(pathname);
 
-    // Handle collection page
-    if (collectionSlug) {
-      const nextNudgeFeat = collectionCoupons?.length
+    let nextNudgeFeat = [];
+
+    if (isHomepage) {
+      nextNudgeFeat = globalCoupons;
+    } else if (collectionSlug) {
+      nextNudgeFeat = collectionCoupons?.length
         ? collectionCoupons
-        : !!storedCouponCode
+        : storedCouponCode
           ? globalCoupons?.filter((coupon) => coupon.code === storedCouponCode)
           : globalCoupons;
-
-      setNudgeFeat(nextNudgeFeat);
-      return;
-    }
-
-    // Handle product page (PDP)
-    if (productSlug) {
-      const nextNudgeFeat = pdpCoupons?.length
+    } else if (productSlug) {
+      nextNudgeFeat = pdpCoupons?.length
         ? pdpCoupons
-        : !!storedCouponCode
+        : storedCouponCode
           ? globalCoupons?.filter((coupon) => coupon.code === storedCouponCode)
           : globalCoupons;
-      setNudgeFeat(nextNudgeFeat);
     }
-  }, [pathname, globalCoupons, pdpCoupons, collectionCoupons]);
 
+    console.log("Updating nudgeFeat:", {
+      pathname,
+      nextNudgeFeat,
+      collectionCoupons,
+      pdpCoupons,
+      globalCoupons,
+    });
+
+    setNudgeFeat(nextNudgeFeat || []);
+  }, [
+    pathname,
+    globalCoupons,
+    pdpCoupons,
+    collectionCoupons,
+    storedCouponCode,
+  ]);
+
+  // Separate useEffect for quantity calculations
   useEffect(() => {
     const collectionSlug = extractCollectionSlug(pathname);
     const productSlug = extractProductSlug(pathname);
 
-    const isGlobalOffer =
-      (!!collectionSlug && !!collectionCoupons?.length) ||
-      (!!productSlug && !!pdpCoupons?.length);
+    const isGlobalOffer = !(
+      (collectionSlug && collectionCoupons?.length) ||
+      (productSlug && pdpCoupons?.length)
+    );
+
+    const relevantCoupons =
+      collectionSlug && collectionCoupons?.length
+        ? collectionCoupons
+        : productSlug && pdpCoupons?.length
+          ? pdpCoupons
+          : globalCoupons;
 
     const { currQuantity = 0, maxProgressQuantity = 0 } =
       getNudgeQuantity({
         pathname,
         cartItems,
-        isGlobalOffer:
-          !!collectionSlug && !!collectionCoupons?.length
-            ? false
-            : !!productSlug && !!pdpCoupons?.length
-              ? false
-              : true,
-        coupons:
-          !!collectionSlug && !!collectionCoupons?.length
-            ? collectionCoupons
-            : !!productSlug && !!pdpCoupons?.length
-              ? pdpCoupons
-              : globalCoupons,
+        isGlobalOffer,
+        coupons: relevantCoupons,
       }) || {};
 
     dispatch(setCurrentQuantity(currQuantity));
     dispatch(setMaximumQuantity(maxProgressQuantity));
-  }, [cartItems, pathname]);
+  }, [
+    cartItems,
+    pathname,
+    collectionCoupons,
+    pdpCoupons,
+    globalCoupons,
+    dispatch,
+  ]);
 
-  const steps = nudgeFeat.map((i) => ({
-    ...i,
-    quantity: i.buyXQuantity + (i?.getYQuantity || 0),
-  }));
+  const steps = useMemo(
+    () =>
+      nudgeFeat.map((i) => ({
+        ...i,
+        quantity: i.buyXQuantity + (i?.getYQuantity || 0),
+      })),
+    [nudgeFeat],
+  );
+
+  console.log("Rendering Nudge with steps:", steps);
 
   return (
     <div className="w-full">
