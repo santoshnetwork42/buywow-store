@@ -241,6 +241,7 @@ const Nudge = ({ isCart = false }) => {
   const globalCoupons = useSelector((state) => state.nudge.globalCoupons);
   const currQuantity = useSelector((state) => state.nudge.currQuantity);
   const maxProgressQuantity = useSelector((state) => state.nudge.maxQuantity);
+  const storedCouponCode = useSelector((state) => state.cart?.storedCouponCode);
 
   const [nudgeFeat, setNudgeFeat] = useState([]);
 
@@ -248,13 +249,9 @@ const Nudge = ({ isCart = false }) => {
     const collectionSlug = extractCollectionSlug(pathname);
     const productSlug = extractProductSlug(pathname);
 
-    const couponCode =
-      searchParams.get("couponCode")?.split("&")[0] ||
-      searchParams.get("couponcode")?.split("&")[0];
-
     const fetchCoupon = async () => {
       try {
-        const response = await fetchCouponRuleAPI(couponCode);
+        const response = await fetchCouponRuleAPI(storedCouponCode);
         // collectionSlug
         dispatch(
           setApplicableCollectionCoupons(
@@ -269,7 +266,7 @@ const Nudge = ({ isCart = false }) => {
       }
     };
 
-    if (!!couponCode) fetchCoupon();
+    if (!!storedCouponCode) fetchCoupon();
     else if (!!collectionSlug) {
       dispatch(
         setApplicableCollectionCoupons(
@@ -294,15 +291,18 @@ const Nudge = ({ isCart = false }) => {
     const isHomepage = pathname === "/";
 
     if (isHomepage) {
-      if (nudgeFeat !== globalCoupons) {
-        setNudgeFeat(globalCoupons);
-        const i =
-          getNudgeQuantity({
-            pathname,
-            cartItems,
-            coupons: globalCoupons,
-          }) || {};
-      }
+      setNudgeFeat(globalCoupons);
+      const i =
+        getNudgeQuantity({
+          pathname,
+          cartItems,
+          coupons: !!storedCouponCode
+            ? globalCoupons?.filter(
+                (coupon) => coupon.code === storedCouponCode,
+              )
+            : globalCoupons,
+        }) || {};
+
       return;
     }
 
@@ -310,20 +310,25 @@ const Nudge = ({ isCart = false }) => {
     const productSlug = extractProductSlug(pathname);
 
     // Handle collection page
-    if (collectionSlug && nudgeFeat !== collectionCoupons) {
+    if (collectionSlug) {
       const nextNudgeFeat = collectionCoupons?.length
         ? collectionCoupons
-        : globalCoupons;
+        : !!storedCouponCode
+          ? globalCoupons?.filter((coupon) => coupon.code === storedCouponCode)
+          : globalCoupons;
+
       setNudgeFeat(nextNudgeFeat);
       return;
     }
 
     // Handle product page (PDP)
     if (productSlug) {
-      const nextNudgeFeat = pdpCoupons?.length ? pdpCoupons : globalCoupons;
-      if (nudgeFeat !== nextNudgeFeat) {
-        setNudgeFeat(nextNudgeFeat);
-      }
+      const nextNudgeFeat = pdpCoupons?.length
+        ? pdpCoupons
+        : !!storedCouponCode
+          ? globalCoupons?.filter((coupon) => coupon.code === storedCouponCode)
+          : globalCoupons;
+      setNudgeFeat(nextNudgeFeat);
     }
   }, [pathname, globalCoupons, pdpCoupons, collectionCoupons]);
 
