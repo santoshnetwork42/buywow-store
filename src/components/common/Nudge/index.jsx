@@ -16,6 +16,7 @@ import {
   extractCouponsForApplicableProduct,
   extractProductSlug,
   getNudgeQuantity,
+  sortCouponBasedOnQuantity,
 } from "@/utils/helpers";
 import { useCoupons } from "@wow-star/utils-cms";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -75,20 +76,20 @@ const IntegratedProgressStepper = ({
     } else if (steps?.length === 1) {
       const coupon = steps[0];
       if (coupon.couponType === "BUY_X_AT_Y")
-        nudgeMsg = `Congrats, your Buy ${coupon.buyXQuantity} @ ₹${coupon?.getYAmount} offer has been availed!`;
+        nudgeMsg = `Congratulations! You have unlocked Buy Any ${coupon.buyXQuantity} @ ₹${coupon?.getYAmount}`;
       else if (coupon.couponType === "BUY_X_GET_Y")
-        nudgeMsg = `Congrats, your Buy  ${coupon.buyXQuantity} Get ${coupon?.getYQuantity}  offer has been availed!`;
+        nudgeMsg = `Congratulations! You have unlocked Buy Any ${coupon.buyXQuantity} Get ${coupon?.getYQuantity}`;
     }
   }
   if (nextStepIndex !== -1) {
     const coupon = steps[nextStepIndex];
     const remainingQty = Math.max(coupon.quantity - currQuantity, 0);
     if (remainingQty === 0) {
-      nudgeMsg = "🥳  You have unlocked all Offers!";
+      nudgeMsg = "🥳" + "You have unlocked all Offers!";
     } else if (coupon.couponType === "BUY_X_AT_Y") {
-      nudgeMsg = `Add ${remainingQty} more ${remainingQty === 1 ? "item" : "items"} to unlock  Buy ${coupon.buyXQuantity} At  ₹${coupon?.getYAmount} Offer`;
+      nudgeMsg = `Add ${remainingQty} more ${remainingQty === 1 ? "item" : "items"} to unlock Buy Any ${coupon.buyXQuantity} @ ₹${coupon?.getYAmount} Offer`;
     } else if (coupon.couponType === "BUY_X_GET_Y") {
-      nudgeMsg = `Add ${remainingQty} more ${remainingQty === 1 ? "item" : "items"} to unlock  Buy ${coupon.buyXQuantity} Get ${coupon?.getYQuantity} Free`;
+      nudgeMsg = `Add ${remainingQty} more ${remainingQty === 1 ? "item" : "items"} to unlock Buy Any ${coupon.buyXQuantity} Get ${coupon?.getYQuantity} Free`;
     }
   }
 
@@ -301,15 +302,15 @@ const Nudge = ({ isCart = false }) => {
       nextNudgeFeat = globalCoupons;
     } else if (collectionSlug) {
       nextNudgeFeat = collectionCoupons?.length
-        ? collectionCoupons
+        ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
         : storedCouponCode
-          ? globalCoupons?.filter((coupon) => coupon.code === storedCouponCode)
+          ? coupons?.filter((coupon) => coupon.code === storedCouponCode)
           : globalCoupons;
     } else if (productSlug) {
       nextNudgeFeat = pdpCoupons?.length
         ? pdpCoupons
         : storedCouponCode
-          ? globalCoupons?.filter((coupon) => coupon.code === storedCouponCode)
+          ? coupons?.filter((coupon) => coupon.code === storedCouponCode)
           : globalCoupons;
     }
 
@@ -324,6 +325,7 @@ const Nudge = ({ isCart = false }) => {
     setNudgeFeat(nextNudgeFeat || []);
   }, [
     pathname,
+    coupons,
     globalCoupons,
     pdpCoupons,
     collectionCoupons,
@@ -342,7 +344,7 @@ const Nudge = ({ isCart = false }) => {
 
     const relevantCoupons =
       collectionSlug && collectionCoupons?.length
-        ? collectionCoupons
+        ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
         : productSlug && pdpCoupons?.length
           ? pdpCoupons
           : globalCoupons;
@@ -388,7 +390,7 @@ const Nudge = ({ isCart = false }) => {
     </div>
   );
 };
- 
+
 export default Nudge;
 
 // isFeatured and isPDPFeatured and isAffiliated

@@ -28,11 +28,6 @@ import {
 } from "@wow-star/utils-cms";
 import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
-import {
-  setCurrentQuantity,
-  setMaximumQuantity,
-} from "@/store/slices/nudge.slice";
-import { getNudgeQuantity } from "@/utils/helpers";
 import Nudge from "@/components/common/Nudge";
 
 const EmptyCart = dynamic(

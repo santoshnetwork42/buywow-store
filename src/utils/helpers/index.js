@@ -494,25 +494,78 @@ export const getNudgeQuantity = ({
     (item) => item.cartItemSource !== "LIMITED_TIME_DEAL",
   );
 
-  // other pages except pdp and collection
-  let currQuantity = filterCartItems?.reduce(
+  // Calculate total cart quantity (for global coupons)
+  const totalCartQuantity = filterCartItems.reduce(
     (total, item) => total + (item.qty || 0),
     0,
   );
-  if (isGlobalOffer) {
-    return { currQuantity, maxProgressQuantity };
-  } else if (productSlug) {
-    // if pdp page
-    currQuantity = filterCartItems
-      .filter((item) => item.slug === productSlug)
-      .reduce((total, item) => total + (item.qty || 0), 0);
-  } else if (collectionSlug) {
-    // if collection page
-    currQuantity = filterCartItems
-      .filter((item) => item.collections.includes(collectionSlug))
-      .reduce((total, item) => total + (item.qty || 0), 0);
-  }
+  // Calculate collection-specific quantity
+  const collectionCouponQuantity = filterCartItems
+    .filter((item) => item.collections.includes(collectionSlug))
+    .reduce((total, item) => total + (item.qty || 0), 0);
+
+  // Calculate collection-specific quantity
+  const productCouponQuantity = filterCartItems
+    .filter((item) => item.slug === productSlug)
+    .reduce((total, item) => total + (item.qty || 0), 0);
+
+  // Find which milestone we're currently at and return appropriate quantity
+  const getCurrentMilestoneQuantity = () => {
+    for (let i = 0; i < coupons.length; i++) {
+      const currentCoupon = coupons[i];
+      const requiredQuantity =
+        currentCoupon.buyXQuantity + (currentCoupon.getYQuantity || 0);
+
+      // If it's a global coupon
+      if (currentCoupon.isGlobal || !collectionSlug) {
+        if (totalCartQuantity <= requiredQuantity) {
+          return totalCartQuantity;
+        }
+      }
+      // If it's a collection coupon
+      else if (collectionSlug) {
+        if (collectionCouponQuantity < requiredQuantity) {
+          return collectionCouponQuantity;
+        }
+      } else if (productSlug) {
+        if (productCouponQuantity < requiredQuantity) {
+          return productCouponQuantity;
+        }
+      }
+    }
+    // If we've passed all milestones, return the appropriate final quantity
+    // If the last coupon is collection-specific, return collection quantity
+    // Otherwise return total cart quantity
+    const lastCouponIsNotGlobal = !coupons[coupons.length - 1]?.isGlobal;
+    return lastCouponIsNotGlobal
+      ? collectionSlug
+        ? collectionCouponQuantity
+        : productCouponQuantity
+      : totalCartQuantity;
+  };
+
+  const currQuantity = getCurrentMilestoneQuantity();
   return { currQuantity, maxProgressQuantity };
+
+  // // other pages except pdp and collection
+  // let currQuantity = filterCartItems?.reduce(
+  //   (total, item) => total + (item.qty || 0),
+  //   0,
+  // );
+  // if (isGlobalOffer) {
+  //   return { currQuantity, maxProgressQuantity };
+  // } else if (productSlug) {
+  //   // if pdp page
+  //   currQuantity = filterCartItems
+  //     .filter((item) => item.slug === productSlug)
+  //     .reduce((total, item) => total + (item.qty || 0), 0);
+  // } else if (collectionSlug) {
+  //   // if collection page
+  //   currQuantity = filterCartItems
+  //     .filter((item) => item.collections.includes(collectionSlug))
+  //     .reduce((total, item) => total + (item.qty || 0), 0);
+  // }
+  // return { currQuantity, maxProgressQuantity };
 };
 
 export const sortCouponBasedOnQuantity = (coupons = []) => {
@@ -525,13 +578,18 @@ export const sortCouponBasedOnQuantity = (coupons = []) => {
 };
 
 export const extractGlobalCoupons = (coupons = []) => {
-  const filteredCoupons = coupons.filter(
-    (coupon) =>
-      !coupon.applicableProducts.length &&
-      !coupon.applicableCollections.length &&
-      (coupon.couponType === "BUY_X_AT_Y" ||
-        coupon.couponType === "BUY_X_GET_Y"),
-  );
+  const filteredCoupons = coupons
+    .filter(
+      (coupon) =>
+        !coupon.applicableProducts.length &&
+        !coupon.applicableCollections.length &&
+        (coupon.couponType === "BUY_X_AT_Y" ||
+          coupon.couponType === "BUY_X_GET_Y"),
+    )
+    .map((coupon) => ({
+      ...coupon,
+      isGlobal: true,
+    }));
 
   return sortCouponBasedOnQuantity(filteredCoupons);
 };
@@ -542,13 +600,18 @@ export const extractCouponsForApplicableProduct = ({
 }) => {
   const extractedProductSlug = extractProductSlug(productSlug);
 
-  const filteredCoupons = coupons.filter(
-    (coupon) =>
-      !coupon.applicableCollections.length &&
-      coupon.applicableProducts.includes(extractedProductSlug) &&
-      (coupon.couponType === "BUY_X_AT_Y" ||
-        coupon.couponType === "BUY_X_GET_Y"),
-  );
+  const filteredCoupons = coupons
+    .filter(
+      (coupon) =>
+        !coupon.applicableCollections.length &&
+        coupon.applicableProducts.includes(extractedProductSlug) &&
+        (coupon.couponType === "BUY_X_AT_Y" ||
+          coupon.couponType === "BUY_X_GET_Y"),
+    )
+    .map((coupon) => ({
+      ...coupon,
+      isGlobal: false,
+    }));
 
   return sortCouponBasedOnQuantity(filteredCoupons);
 };
@@ -559,13 +622,18 @@ export const extractCouponsForApplicableCollection = ({
 }) => {
   const extractedCollectionSlug = extractCollectionSlug(collectionSlug);
 
-  const filteredCoupons = coupons.filter(
-    (coupon) =>
-      !coupon.applicableProducts.length &&
-      coupon.applicableCollections.includes(extractedCollectionSlug) &&
-      (coupon.couponType === "BUY_X_AT_Y" ||
-        coupon.couponType === "BUY_X_GET_Y"),
-  );
+  const filteredCoupons = coupons
+    .filter(
+      (coupon) =>
+        !coupon.applicableProducts.length &&
+        coupon.applicableCollections.includes(extractedCollectionSlug) &&
+        (coupon.couponType === "BUY_X_AT_Y" ||
+          coupon.couponType === "BUY_X_GET_Y"),
+    )
+    .map((coupon) => ({
+      ...coupon,
+      isGlobal: false,
+    }));
 
   return sortCouponBasedOnQuantity(filteredCoupons);
 };
