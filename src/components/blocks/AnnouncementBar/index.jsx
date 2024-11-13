@@ -3,7 +3,6 @@
 import { Text } from "@/components/elements";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useAnnouncementContext } from "@/utils/context/AnnouncementContext";
-import { useIsInteractive } from "@/utils/context/navbar";
 import { extractAttributes } from "@/utils/helpers";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -64,7 +63,6 @@ const AnnouncementContent = ({ announcement, announcementBarClickedEvent }) => {
 };
 
 const AnnouncementBar = ({ data }) => {
-  const isInteractive = useIsInteractive();
   const pathname = usePathname();
   const showAnnouncementBar = pathname?.includes("blog");
   const {
@@ -94,11 +92,7 @@ const AnnouncementBar = ({ data }) => {
     return pageAnnouncements || globalAnnouncement || {};
   }, [globalAnnouncement, pageAnnouncements]);
 
-  if (
-    !isInteractive ||
-    !announcement ||
-    Object.keys(announcement).length === 0
-  ) {
+  if (!announcement || Object.keys(announcement).length === 0) {
     return null;
   }
 
