@@ -129,7 +129,7 @@ export default function PaymentSummary({
             </Heading>
           </Button>
           <Text size="base" as="p" className="text-sm" responsive>
-            Estimated delivery within 3-5 days
+            Estimated delivery within 5-7 days
           </Text>
         </div>
       </div>
