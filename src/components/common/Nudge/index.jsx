@@ -76,9 +76,9 @@ const IntegratedProgressStepper = ({
     } else if (steps?.length === 1) {
       const coupon = steps[0];
       if (coupon.couponType === "BUY_X_AT_Y")
-        nudgeMsg = `Congratulations! You have unlocked Buy Any ${coupon.buyXQuantity} @ ₹${coupon?.getYAmount}`;
+        nudgeMsg = `Congratulations! You have unlocked Buy Any ${coupon.buyXQuantity} @ ₹${coupon?.getYAmount} Offer`;
       else if (coupon.couponType === "BUY_X_GET_Y")
-        nudgeMsg = `Congratulations! You have unlocked Buy Any ${coupon.buyXQuantity} Get ${coupon?.getYQuantity}`;
+        nudgeMsg = `Congratulations! You have unlocked Buy Any ${coupon.buyXQuantity} Get ${coupon?.getYQuantity} Free Offer`;
     }
   }
   if (nextStepIndex !== -1) {
@@ -89,7 +89,7 @@ const IntegratedProgressStepper = ({
     } else if (coupon.couponType === "BUY_X_AT_Y") {
       nudgeMsg = `Add ${remainingQty} more ${remainingQty === 1 ? "item" : "items"} to unlock Buy Any ${coupon.buyXQuantity} @ ₹${coupon?.getYAmount} Offer`;
     } else if (coupon.couponType === "BUY_X_GET_Y") {
-      nudgeMsg = `Add ${remainingQty} more ${remainingQty === 1 ? "item" : "items"} to unlock Buy Any ${coupon.buyXQuantity} Get ${coupon?.getYQuantity} Free`;
+      nudgeMsg = `Add ${remainingQty} more ${remainingQty === 1 ? "item" : "items"} to unlock Buy Any ${coupon.buyXQuantity} Get ${coupon?.getYQuantity} Free Offer`;
     }
   }
 
@@ -301,17 +301,24 @@ const Nudge = ({ isCart = false }) => {
     if (isHomepage) {
       nextNudgeFeat = globalCoupons;
     } else if (collectionSlug) {
-      nextNudgeFeat = collectionCoupons?.length
-        ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
-        : storedCouponCode
-          ? coupons?.filter((coupon) => coupon.code === storedCouponCode)
+      let relevantCollectionCoupons = [];
+      if (storedCouponCode) {
+        relevantCollectionCoupons = collectionCoupons?.length
+          ? collectionCoupons
+          : [];
+      } else {
+        relevantCollectionCoupons = collectionCoupons?.length
+          ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
           : globalCoupons;
+      }
+      nextNudgeFeat = relevantCollectionCoupons;
     } else if (productSlug) {
-      nextNudgeFeat = pdpCoupons?.length
-        ? pdpCoupons
-        : storedCouponCode
-          ? coupons?.filter((coupon) => coupon.code === storedCouponCode)
-          : globalCoupons;
+      nextNudgeFeat =
+        pdpCoupons?.length && !storedCouponCode
+          ? sortCouponBasedOnQuantity([...pdpCoupons, ...globalCoupons])
+          : storedCouponCode
+            ? coupons?.filter((coupon) => coupon.code === storedCouponCode)
+            : globalCoupons;
     }
 
     console.log("Updating nudgeFeat:", {
@@ -342,9 +349,21 @@ const Nudge = ({ isCart = false }) => {
       (productSlug && pdpCoupons?.length)
     );
 
-    const relevantCoupons =
-      collectionSlug && collectionCoupons?.length
+    let relevantCollectionCoupons = [];
+    if (storedCouponCode) {
+      relevantCollectionCoupons = collectionCoupons?.length
+        ? collectionCoupons
+        : [];
+    } else {
+      relevantCollectionCoupons = collectionCoupons?.length
         ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
+        : globalCoupons;
+    }
+
+    const relevantCoupons = isGlobalOffer
+      ? globalCoupons
+      : collectionSlug
+        ? relevantCollectionCoupons
         : productSlug && pdpCoupons?.length
           ? pdpCoupons
           : globalCoupons;
@@ -366,6 +385,8 @@ const Nudge = ({ isCart = false }) => {
     pdpCoupons,
     globalCoupons,
     dispatch,
+    storedCouponCode,
+    coupons,
   ]);
 
   const steps = useMemo(
