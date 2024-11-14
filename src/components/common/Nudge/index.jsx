@@ -303,9 +303,17 @@ const Nudge = ({ isCart = false }) => {
     } else if (collectionSlug) {
       let relevantCollectionCoupons = [];
       if (storedCouponCode) {
+        const isStoredCouponCollection =
+          (searchParams.get("couponCode")?.split("&")[0] ||
+            searchParams.get("couponcode")?.split("&")[0]) === storedCouponCode;
+
         relevantCollectionCoupons = collectionCoupons?.length
           ? collectionCoupons
-          : [];
+          : isStoredCouponCollection
+            ? globalCoupons?.filter(
+                (coupon) => coupon.code === storedCouponCode,
+              )
+            : [];
       } else {
         relevantCollectionCoupons = collectionCoupons?.length
           ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
@@ -329,6 +337,7 @@ const Nudge = ({ isCart = false }) => {
     pdpCoupons,
     collectionCoupons,
     storedCouponCode,
+    searchParams,
   ]);
 
   // Separate useEffect for quantity calculations
@@ -336,16 +345,20 @@ const Nudge = ({ isCart = false }) => {
     const collectionSlug = extractCollectionSlug(pathname);
     const productSlug = extractProductSlug(pathname);
 
-    const isGlobalOffer = !(
-      (collectionSlug && collectionCoupons?.length) ||
-      (productSlug && pdpCoupons?.length)
-    );
+    const isGlobalOffer = !(collectionSlug || productSlug);
 
     let relevantCollectionCoupons = [];
+
     if (storedCouponCode) {
+      const isStoredCouponCollection =
+        (searchParams.get("couponCode")?.split("&")[0] ||
+          searchParams.get("couponcode")?.split("&")[0]) === storedCouponCode;
+
       relevantCollectionCoupons = collectionCoupons?.length
         ? collectionCoupons
-        : [];
+        : isStoredCouponCollection
+          ? globalCoupons?.filter((coupon) => coupon.code === storedCouponCode)
+          : [];
     } else {
       relevantCollectionCoupons = collectionCoupons?.length
         ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
@@ -379,6 +392,7 @@ const Nudge = ({ isCart = false }) => {
     dispatch,
     storedCouponCode,
     coupons,
+    searchParams,
   ]);
 
   const steps = useMemo(
