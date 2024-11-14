@@ -208,7 +208,7 @@ const OrderSummary = ({
             </div>
           </div>
           <Text as="span" size="sm" className="text-gray-600" responsive>
-            Estimated delivery within 3-5 days
+            Estimated delivery within 5-7 days
           </Text>
         </div>
       </div>

@@ -406,7 +406,7 @@ const CartDrawer = () => {
                 as="p"
                 className="border-t-[0.25px] border-[#DDDDDD] pt-2 text-center"
               >
-                Estimated delivery within 3-5 days
+                Estimated delivery within 5-7 days
               </Text>
             </div>
           </>
