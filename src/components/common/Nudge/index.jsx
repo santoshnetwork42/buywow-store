@@ -321,14 +321,6 @@ const Nudge = ({ isCart = false }) => {
             : globalCoupons;
     }
 
-    console.log("Updating nudgeFeat:", {
-      pathname,
-      nextNudgeFeat,
-      collectionCoupons,
-      pdpCoupons,
-      globalCoupons,
-    });
-
     setNudgeFeat(nextNudgeFeat || []);
   }, [
     pathname,
@@ -397,8 +389,6 @@ const Nudge = ({ isCart = false }) => {
       })),
     [nudgeFeat],
   );
-
-  console.log("Rendering Nudge with steps:", steps);
 
   return (
     <div className="w-full">
