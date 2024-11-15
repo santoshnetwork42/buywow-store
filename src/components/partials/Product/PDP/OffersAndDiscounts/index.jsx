@@ -84,10 +84,16 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   );
 };
 
-const AllOffers = ({ productId }) => {
+const AllOffers = ({ productId, bestCoupon }) => {
   const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, productId);
 
-  if (pdpFeaturedCoupons?.length === 0) return null;
+  //exclude bestCoupon from pdpFeaturedCoupons
+  const filteredPdpFeaturedCoupons = pdpFeaturedCoupons?.filter(
+    (pdpFeaturedCoupon) =>
+      bestCoupon.coupon.couponId !== pdpFeaturedCoupon.coupon.couponId,
+  );
+
+  if (filteredPdpFeaturedCoupons?.length === 0) return null;
 
   return (
     <Accordion
@@ -96,14 +102,14 @@ const AllOffers = ({ productId }) => {
         <div className="flex items-center gap-2 py-2.5 md:py-3">
           <CouponAndOffer className="size-6 md:size-7" size={28} />
           <Heading as="h4" size="base" className="text-sm" responsive>
-            {pdpFeaturedCoupons?.length} Offers Available
+            {filteredPdpFeaturedCoupons?.length} Offers Available
           </Heading>
         </div>
       }
       accordionMainContainerClassName="!my-0 !px-0"
     >
       <div className="flex flex-col pb-1">
-        {pdpFeaturedCoupons?.map((item, index) => {
+        {filteredPdpFeaturedCoupons?.map((item, index) => {
           const { coupon } = item || {};
           const { couponTitle, code } = coupon || {};
 
@@ -158,7 +164,7 @@ const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, productId }) => {
         price={price}
         hasInventory={hasInventory}
       />
-      <AllOffers productId={productId} />
+      <AllOffers productId={productId} bestCoupon={bestCoupon} />
     </div>
   );
 };
