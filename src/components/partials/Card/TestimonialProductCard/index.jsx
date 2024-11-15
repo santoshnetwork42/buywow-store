@@ -29,9 +29,9 @@ const TestimonialProductCard = ({ fetchedProduct }) => {
         />
       </div>
       <div className="flex flex-col justify-between gap-1">
-        <Heading as="h5" size="sm" className="line-clamp-1 break-all">
+        <Text as="p" size="sm" className="line-clamp-1 break-all font-medium">
           {title}
-        </Heading>
+        </Text>
         <div className="flex items-center justify-between gap-4 md:gap-5 lg:gap-6">
           <div className="flex items-center gap-1">
             <Text
