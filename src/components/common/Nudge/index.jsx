@@ -298,28 +298,17 @@ const Nudge = ({ isCart = false }) => {
 
     let nextNudgeFeat = [];
 
-    if (isHomepage) {
+    if (storedCouponCode) {
+      const storedCouponRule = coupons?.filter(
+        (coupon) => coupon.code === storedCouponCode,
+      );
+      nextNudgeFeat = storedCouponRule;
+    } else if (isHomepage) {
       nextNudgeFeat = globalCoupons;
     } else if (collectionSlug) {
-      let relevantCollectionCoupons = [];
-      if (storedCouponCode) {
-        const isStoredCouponCollection =
-          (searchParams.get("couponCode")?.split("&")[0] ||
-            searchParams.get("couponcode")?.split("&")[0]) === storedCouponCode;
-
-        relevantCollectionCoupons = collectionCoupons?.length
-          ? collectionCoupons
-          : isStoredCouponCollection
-            ? globalCoupons?.filter(
-                (coupon) => coupon.code === storedCouponCode,
-              )
-            : [];
-      } else {
-        relevantCollectionCoupons = collectionCoupons?.length
-          ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
-          : globalCoupons;
-      }
-      nextNudgeFeat = relevantCollectionCoupons;
+      nextNudgeFeat = collectionCoupons?.length
+        ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
+        : globalCoupons;
     } else if (productSlug) {
       nextNudgeFeat =
         pdpCoupons?.length && !storedCouponCode
@@ -347,31 +336,31 @@ const Nudge = ({ isCart = false }) => {
 
     const isGlobalOffer = !(collectionSlug || productSlug);
 
-    let relevantCollectionCoupons = [];
+    let relevantCoupons;
+    let isStoredCouponGlobal;
 
     if (storedCouponCode) {
-      const isStoredCouponCollection =
-        (searchParams.get("couponCode")?.split("&")[0] ||
-          searchParams.get("couponcode")?.split("&")[0]) === storedCouponCode;
+      const storedCoupon = coupons?.find(
+        (coupon) => coupon.code === storedCouponCode,
+      );
 
-      relevantCollectionCoupons = collectionCoupons?.length
-        ? collectionCoupons
-        : isStoredCouponCollection
-          ? globalCoupons?.filter((coupon) => coupon.code === storedCouponCode)
-          : [];
+      isStoredCouponGlobal = !storedCoupon?.applicableCollections?.length;
+
+      relevantCoupons = [storedCoupon];
     } else {
-      relevantCollectionCoupons = collectionCoupons?.length
-        ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
-        : globalCoupons;
+      relevantCoupons = isGlobalOffer
+        ? globalCoupons
+        : collectionSlug
+          ? collectionCoupons?.length
+            ? sortCouponBasedOnQuantity([
+                ...collectionCoupons,
+                ...globalCoupons,
+              ])
+            : globalCoupons
+          : productSlug && pdpCoupons?.length
+            ? sortCouponBasedOnQuantity([...pdpCoupons, ...globalCoupons])
+            : globalCoupons;
     }
-
-    const relevantCoupons = isGlobalOffer
-      ? globalCoupons
-      : collectionSlug
-        ? relevantCollectionCoupons
-        : productSlug && pdpCoupons?.length
-          ? pdpCoupons
-          : globalCoupons;
 
     const { currQuantity = 0, maxProgressQuantity = 0 } =
       getNudgeQuantity({
@@ -379,6 +368,8 @@ const Nudge = ({ isCart = false }) => {
         cartItems,
         isGlobalOffer,
         coupons: relevantCoupons,
+        storedCouponCode,
+        isStoredCouponGlobal,
       }) || {};
 
     dispatch(setCurrentQuantity(currQuantity));

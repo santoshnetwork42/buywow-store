@@ -480,6 +480,8 @@ export const getNudgeQuantity = ({
   cartItems,
   coupons,
   isGlobalOffer,
+  storedCouponCode,
+  isStoredCouponGlobal,
 }) => {
   if (!coupons?.length) return;
 
@@ -544,6 +546,18 @@ export const getNudgeQuantity = ({
       : totalCartQuantity;
   };
 
+  if (storedCouponCode) {
+    if (isStoredCouponGlobal) {
+      return {
+        currQuantity: totalCartQuantity,
+        maxProgressQuantity,
+      };
+    }
+    return {
+      currQuantity: collectionCouponQuantity,
+      maxProgressQuantity,
+    };
+  }
   const currQuantity = getCurrentMilestoneQuantity();
   return { currQuantity, maxProgressQuantity };
 
