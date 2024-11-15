@@ -46,22 +46,22 @@ const FooterMenu = ({ item, isOpen, onToggle }) => {
         onClick={onToggle}
         className="flex w-full cursor-pointer items-center justify-between lg:hidden"
       >
-        <Heading
-          as="h6"
+        <Text
+          as="p"
           size="base"
           className="font-semibold capitalize text-white-a700_01"
         >
           {item.title}
-        </Heading>
+        </Text>
         <ToggleArrow open={isOpen} arrowClassName="bg-white-a700" />
       </div>
-      <Heading
-        as="h6"
+      <Text
+        as="p"
         size="base"
-        className="hidden capitalize text-white-a700_01 lg:block"
+        className="hidden font-medium capitalize text-white-a700_01 lg:block"
       >
         {item.title}
-      </Heading>
+      </Text>
       {hasSubMenu && (
         <ul
           className={`flex flex-col gap-1.5 overflow-hidden transition-all duration-300 ease-in-out sm:gap-2 lg:gap-2.5 ${
