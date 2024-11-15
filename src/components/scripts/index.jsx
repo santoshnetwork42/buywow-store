@@ -4,14 +4,15 @@ import {
   GOKWIK_SCRIPT,
   GTM_ID,
   LIMECHAT_ENABLED,
-  WISEPOPS_KEY,
   VERCEL_ANALYTICS_ENABLED,
+  WISEPOPS_KEY,
 } from "@/config";
 import { useIsInteractive, useSource } from "@/utils/context/navbar";
+import { Analytics } from "@vercel/analytics/next";
 import dynamic from "next/dynamic";
 import Script from "next/script";
 import { useEffect, useState } from "react";
-import { Analytics } from "@vercel/analytics/next";
+import GTM from "react-gtm-module";
 
 const Affise = dynamic(() => import("@/components/scripts/affise"), {
   ssr: false,
@@ -29,19 +30,11 @@ export default function Scripts() {
   const [gtmInitialized, setGtmInitialized] = useState(false);
 
   useEffect(() => {
-    if (isInteractive && source !== "app" && !gtmInitialized) {
-      const initGTM = async () => {
-        try {
-          const GTMModule = await import("react-gtm-module");
-          GTMModule.default.initialize({ gtmId: GTM_ID });
-          setGtmInitialized(true);
-        } catch (error) {
-          console.error("Failed to initialize GTM:", error);
-        }
-      };
-      initGTM();
+    if (source !== "app" && !gtmInitialized) {
+      GTM.initialize({ gtmId: GTM_ID });
+      setGtmInitialized(true);
     }
-  }, [isInteractive, source, gtmInitialized]);
+  }, [source, gtmInitialized]);
 
   if (!isInteractive || source === "app") {
     return null;

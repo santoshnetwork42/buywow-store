@@ -389,19 +389,21 @@ export function* viewItemEventHandler({ payload }) {
     trackEvent("Product Viewed", moengage.productViewed);
     const eventSource = getClientSource();
 
-    if (window && window.dataLayer) {
-      window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
-      window.dataLayer.push({
-        event: "view_item",
-        eventID: uuidv4(),
-        attribute: pixel,
-        ecommerce: {
-          currency: "INR",
-          value,
-          items: ga,
-        },
-      });
-    }
+    setTimeout(() => {
+      if (window && window.dataLayer) {
+        window.dataLayer.push({ ecommerce: null, attribute: null, user: null });
+        window.dataLayer.push({
+          event: "view_item",
+          eventID: uuidv4(),
+          attribute: pixel,
+          ecommerce: {
+            currency: "INR",
+            value,
+            items: ga,
+          },
+        });
+      }
+    }, 0);
 
     const analyticsMeta = analyticsMetaDataMapper();
 
