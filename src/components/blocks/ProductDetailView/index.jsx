@@ -50,8 +50,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
   const { viewItemEvent } = useEventsDispatch();
-  const viewItemEventTriggered = useRef(false);
-  
+
   const storeConfig = useStoreConfig();
   const { data: storeConfigData } = storeConfig;
 
@@ -65,12 +64,11 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
   }, [product]);
 
   useEffect(() => {
-    if (fetchedProduct && !viewItemEventTriggered.current) {
+    if (fetchedProduct) {
       viewItemEvent({
         ...fetchedProduct,
         section: { id: "product-detail", name: "Product Detail" },
       });
-      viewItemEventTriggered.current = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchedProduct]);
