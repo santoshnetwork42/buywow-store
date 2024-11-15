@@ -1,4 +1,4 @@
-import { Heading, Img, Text } from "@/components/elements";
+import { Img, Text } from "@/components/elements";
 import TestimonialProductCard from "@/components/partials/Card/TestimonialProductCard";
 import { extractAttributes } from "@/utils/helpers";
 
@@ -58,14 +58,14 @@ const TestimonialCard = ({
         <Text size="sm" as="p" responsive>
           Concern:
         </Text>
-        <Heading
+        <Text
           size="base"
-          as="h5"
-          className="line-clamp-2 text-sm"
+          as="p"
+          className="line-clamp-2 text-sm font-medium"
           responsive
         >
-          {concerns.map((concern) => concern.text).join(", ")}
-        </Heading>
+          {concerns?.map((concern) => concern.text).join(", ")}
+        </Text>
       </div>
     );
   };
