@@ -295,7 +295,7 @@ const Nudge = ({ isCart = false }) => {
     const isHomepage = pathname === "/";
     const collectionSlug = extractCollectionSlug(pathname);
     const productSlug = extractProductSlug(pathname);
-
+ 
     let nextNudgeFeat = [];
 
     if (storedCouponCode) {
