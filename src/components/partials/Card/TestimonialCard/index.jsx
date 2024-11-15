@@ -30,15 +30,15 @@ const TestimonialCard = ({
   const renderUserInfo = () => {
     if (!name && !age) return null;
     return (
-      <Heading
+      <Text
         size="base"
-        as="h4"
-        className="line-clamp-1 text-sm capitalize"
+        as="p"
+        className="line-clamp-1 text-sm font-medium capitalize"
         responsive
       >
         {name && age ? `${name}, ${age}` : name || age}
         {age && <span className="lowercase"> y/o</span>}
-      </Heading>
+      </Text>
     );
   };
 

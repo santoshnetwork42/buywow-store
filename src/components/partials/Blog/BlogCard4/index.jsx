@@ -29,13 +29,13 @@ export default function BlogCard4({ blog, index }) {
             className="aspect-[328/212] h-auto w-full rounded-md object-cover md:aspect-[434/228]"
           />
         </div>
-        <Heading
-          as="h5"
+        <Text
+          as="p"
           size="2xl"
-          className="line-clamp-1 pr-3 pt-5 text-base normal-case"
+          className="line-clamp-1 pr-3 pt-5 text-base font-semibold normal-case"
         >
           {blog.title}
-        </Heading>
+        </Text>
         <div className="mt-3 line-clamp-3 flex justify-between">
           <Text as="span" size="sm">
             {blog?.author?.node?.name}
