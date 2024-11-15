@@ -39,6 +39,39 @@ const ClientSideEffects = () => {
     //   eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
+  const getLandingTypeWithSession = () => {
+    const referrer = document.referrer;
+    const searchEngines = [
+      "google",
+      "bing",
+      "yahoo",
+      "duckduckgo",
+      "baidu",
+      "yandex",
+    ];
+
+    let landingType = null;
+
+    if (!referrer) {
+      landingType = "DIRECT";
+    } else {
+      try {
+        const referrerUrl = new URL(referrer);
+        const isFromSearchEngine = searchEngines.some((engine) =>
+          referrerUrl.hostname.includes(engine),
+        );
+
+        if (isFromSearchEngine) {
+          landingType = "ORGANIC";
+        }
+      } catch (error) {
+        console.error("Error parsing referrer URL:", error);
+      }
+    }
+
+    return landingType;
+  };
+
   const setMetaData = useCallback(() => {
     const cookieMeta = Cookies.get(`${STORE_PREFIX}_metadata`);
     const meta = cookieMeta ? JSON.parse(cookieMeta) : {};
@@ -71,12 +104,15 @@ const ClientSideEffects = () => {
 
     if (!Cookies.get(`${STORE_PREFIX}_session_id`)) {
       const sessionId = uuidv4();
+      const type = getLandingTypeWithSession();
+
       Cookies.set(`${STORE_PREFIX}_session_id`, sessionId, {
         secure: process.env.NODE_ENV !== "development",
         sameSite: "strict",
       });
       sessionStartedEvent({
         sessionId,
+        traffic_source: type,
       });
     }
 
