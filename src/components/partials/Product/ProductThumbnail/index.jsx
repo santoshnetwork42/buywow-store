@@ -7,7 +7,7 @@ import { twMerge } from "tailwind-merge";
 const ProductThumbnail = React.memo(
   ({ width, height, imageKey, url, className, alt, ...props }) => {
     const mergedClassName = twMerge(
-      "object-contain h-auto w-full",
+      "object-contain h-auto w-full mix-blend-darken",
       className,
       url && "aspect-square",
     );
