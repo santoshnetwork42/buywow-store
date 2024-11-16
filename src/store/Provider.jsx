@@ -14,7 +14,7 @@ import { PersistGate } from "redux-persist/integration/react";
 const LoadingState = ({ data, pathname }) => {
   const { headerData, carouselData, categories, announcementData } = data || {};
 
-  return ( 
+  return (
     <div className="max-h-[100dvh] overflow-hidden">
       <AnnouncementProvider>
         <AnnouncementBar
