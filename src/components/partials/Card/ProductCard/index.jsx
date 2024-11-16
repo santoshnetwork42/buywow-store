@@ -193,15 +193,15 @@ const ProductCard = memo(
 
         <div className="flex flex-1 flex-col gap-2">
           <div className="flex flex-1 flex-col gap-1">
-            <Heading
-              as="h3"
+            <Text
+              className="line-clamp-3 w-full font-semibold capitalize !leading-tight"
               size="xl"
-              className="line-clamp-3 w-full"
-              title={title}
+              as="p"
               responsive
+              title={title}
             >
               {title}
-            </Heading>
+            </Text>
             {!!benefits?.length && (
               <Text
                 as="p"

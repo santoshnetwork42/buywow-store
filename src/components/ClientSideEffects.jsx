@@ -40,7 +40,7 @@ const ClientSideEffects = () => {
   }, [searchParams]);
 
   const getLandingTypeWithSession = () => {
-    const referrer = document.referrer;
+    const referrer = document?.referrer;
     const searchEngines = [
       "google",
       "bing",
@@ -58,7 +58,7 @@ const ClientSideEffects = () => {
       try {
         const referrerUrl = new URL(referrer);
         const isFromSearchEngine = searchEngines.some((engine) =>
-          referrerUrl.hostname.includes(engine),
+          referrerUrl?.hostname?.includes(engine),
         );
 
         if (isFromSearchEngine) {
