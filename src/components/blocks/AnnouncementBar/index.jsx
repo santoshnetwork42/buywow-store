@@ -62,7 +62,7 @@ const AnnouncementContent = ({ announcement, announcementBarClickedEvent }) => {
   );
 };
 
-const AnnouncementBar = ({ data }) => {
+const AnnouncementBar = ({ data, announcementData }) => {
   const pathname = usePathname();
   const showAnnouncementBar = pathname?.includes("blog");
   const {
@@ -89,7 +89,12 @@ const AnnouncementBar = ({ data }) => {
   }, [data]);
 
   const announcement = useMemo(() => {
-    return pageAnnouncements || globalAnnouncement || {};
+    return (
+      pageAnnouncements ||
+      globalAnnouncement ||
+      extractAttributes(announcementData) ||
+      {}
+    );
   }, [globalAnnouncement, pageAnnouncements]);
 
   if (!announcement || Object.keys(announcement).length === 0) {

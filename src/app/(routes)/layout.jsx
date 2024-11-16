@@ -42,7 +42,7 @@ async function PageLayout({ children }) {
   } = data || {};
 
   return (
-    <Provider data={{ headerData, carouselData, categories }}>
+    <Provider data={{ headerData, carouselData, categories, announcementData }}>
       <NavbarProvider headerData={headerData} storeConfig={storeConfig}>
         <GoKwikProvider>
           <AnnouncementProvider>
