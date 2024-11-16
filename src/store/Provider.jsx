@@ -1,26 +1,42 @@
 "use client";
 
+import AnnouncementBar from "@/components/blocks/AnnouncementBar";
 import Carousel from "@/components/blocks/Carousel";
+import TrendingCategories from "@/components/blocks/TrendingCategories";
 import Header from "@/components/partials/Header";
 import store, { persistor } from "@/store/store";
+import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Provider as ReactProvider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
-const LoadingState = ({ data }) => {
-  // Your existing loading state components here
-  const { headerData, carouselData } = data || {};
+const LoadingState = ({ data, pathname }) => {
+  const { headerData, carouselData, categories, announcementData } = data || {};
 
   return (
     <div className="max-h-[100dvh] overflow-hidden">
-      {headerData?.data && <Header data={headerData} />}
-      {carouselData?.showComponent && (
-        <Carousel
-          carousalItems={carouselData?.carousalItems}
-          isPersistLoading
+      <AnnouncementProvider>
+        <AnnouncementBar
+          data={announcementData}
+          announcementData={announcementData}
         />
-      )}
+        {headerData?.data && <Header data={headerData} />}
+        {pathname === "/" &&
+          categories?.showComponent &&
+          !!categories?.trendingCategoryItems?.length && (
+            <TrendingCategories
+              trendingCategoryItems={categories?.trendingCategoryItems}
+              lazyBlock={false}
+            />
+          )}
+        {carouselData?.showComponent && (
+          <Carousel
+            carousalItems={carouselData?.carousalItems}
+            isPersistLoading
+          />
+        )}
+      </AnnouncementProvider>
     </div>
   );
 };
@@ -51,7 +67,10 @@ export const Provider = ({ children, data }) => {
 
   return (
     <ReactProvider store={store}>
-      <PersistGate persistor={persistor} loading={<LoadingState data={data} />}>
+      <PersistGate
+        persistor={persistor}
+        loading={<LoadingState data={data} pathname={pathname} />}
+      >
         {children}
       </PersistGate>
     </ReactProvider>
