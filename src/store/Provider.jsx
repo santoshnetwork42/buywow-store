@@ -25,10 +25,21 @@ const LoadingState = ({ data, pathname }) => {
         {pathname === "/" &&
           categories?.showComponent &&
           !!categories?.trendingCategoryItems?.length && (
-            <TrendingCategories
-              trendingCategoryItems={categories?.trendingCategoryItems}
-              lazyBlock={false}
-            />
+            <div className="no-scrollbar w-full overflow-x-scroll lg:hidden">
+              <div className="mx-auto flex w-max items-start justify-center p-3 py-4">
+                {Array.from({
+                  length: categories?.trendingCategoryItems?.length,
+                }).map((_, index) => (
+                  <div
+                    className="flex w-20 flex-col items-center gap-2"
+                    key={index}
+                  >
+                    <div className="h-12 w-12 rounded-full bg-gray-200"></div>
+                    <div className="h-3 w-14 rounded-md bg-gray-200"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
         {carouselData?.showComponent && (
           <Carousel
