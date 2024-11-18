@@ -40,6 +40,7 @@ const ClientSideEffects = () => {
   }, [searchParams]);
 
   const getLandingTypeWithSession = () => {
+    const { utm_source: source } = Object.fromEntries(searchParams);
     const referrer = document?.referrer;
     const searchEngines = [
       "google",
@@ -52,20 +53,22 @@ const ClientSideEffects = () => {
 
     let landingType = null;
 
-    if (!referrer) {
-      landingType = "DIRECT";
-    } else {
-      try {
-        const referrerUrl = new URL(referrer);
-        const isFromSearchEngine = searchEngines.some((engine) =>
-          referrerUrl?.hostname?.includes(engine),
-        );
+    if (!source?.trim()) {
+      if (!referrer) {
+        landingType = "DIRECT";
+      } else {
+        try {
+          const referrerUrl = new URL(referrer);
+          const isFromSearchEngine = searchEngines.some((engine) =>
+            referrerUrl?.hostname?.includes(engine),
+          );
 
-        if (isFromSearchEngine) {
-          landingType = "ORGANIC";
+          if (isFromSearchEngine) {
+            landingType = "ORGANIC";
+          }
+        } catch (error) {
+          console.error("Error parsing referrer URL:", error);
         }
-      } catch (error) {
-        console.error("Error parsing referrer URL:", error);
       }
     }
 
