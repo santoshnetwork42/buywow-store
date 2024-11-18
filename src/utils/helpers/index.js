@@ -479,14 +479,12 @@ export const getNudgeQuantity = ({
   pathname,
   cartItems,
   coupons,
-  isGlobalOffer,
   storedCouponCode,
   isStoredCouponGlobal,
 }) => {
   if (!coupons?.length) return;
 
   const collectionSlug = extractCollectionSlug(pathname);
-  const productSlug = extractProductSlug(pathname);
 
   const lastCoupon = coupons[coupons?.length - 1];
   const maxProgressQuantity =
@@ -501,14 +499,10 @@ export const getNudgeQuantity = ({
     (total, item) => total + (item.qty || 0),
     0,
   );
+
   // Calculate collection-specific quantity
   const collectionCouponQuantity = filterCartItems
     .filter((item) => item.collections.includes(collectionSlug))
-    .reduce((total, item) => total + (item.qty || 0), 0);
-
-  // Calculate collection-specific quantity
-  const productCouponQuantity = filterCartItems
-    .filter((item) => item.slug === productSlug)
     .reduce((total, item) => total + (item.qty || 0), 0);
 
   // Find which milestone we're currently at and return appropriate quantity
@@ -529,21 +523,13 @@ export const getNudgeQuantity = ({
         if (collectionCouponQuantity < requiredQuantity) {
           return collectionCouponQuantity;
         }
-      } else if (productSlug) {
-        if (productCouponQuantity < requiredQuantity) {
-          return productCouponQuantity;
-        }
       }
     }
     // If we've passed all milestones, return the appropriate final quantity
     // If the last coupon is collection-specific, return collection quantity
     // Otherwise return total cart quantity
-    const lastCouponIsNotGlobal = !coupons[coupons.length - 1]?.isGlobal;
-    return lastCouponIsNotGlobal
-      ? collectionSlug
-        ? collectionCouponQuantity
-        : productCouponQuantity
-      : totalCartQuantity;
+    const lastCouponIsGlobal = coupons[coupons.length - 1]?.isGlobal;
+    return lastCouponIsGlobal ? totalCartQuantity : collectionCouponQuantity;
   };
 
   if (storedCouponCode) {

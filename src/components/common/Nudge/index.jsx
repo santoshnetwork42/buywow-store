@@ -13,8 +13,6 @@ import { errorHandler } from "@/utils/errorHandler";
 import {
   extractCollectionSlug,
   extractCouponsForApplicableCollection,
-  extractCouponsForApplicableProduct,
-  extractProductSlug,
   getNudgeQuantity,
   sortCouponBasedOnQuantity,
 } from "@/utils/helpers";
@@ -98,7 +96,7 @@ const IntegratedProgressStepper = ({
       className={`w-full rounded-lg rounded-t-none bg-deep_orange-50 p-4 py-6 pt-4`}
     >
       <div className="flex w-full flex-col gap-3">
-        <div className="mb-2 w-full text-center text-[12px] !leading-3">
+        <div className="mb-2 w-full text-center text-[14px] !leading-3">
           {nudgeMsg}
         </div>
         {/* Progress Bar */}
@@ -236,9 +234,7 @@ const Nudge = ({ isCart = false }) => {
   const collectionCoupons = useSelector(
     (state) => state.nudge.applicableCollectionCoupons,
   );
-  const pdpCoupons = useSelector(
-    (state) => state.nudge.applicableProductCoupons,
-  );
+
   const globalCoupons = useSelector((state) => state.nudge.globalCoupons);
   const currQuantity = useSelector((state) => state.nudge.currQuantity);
   const maxProgressQuantity = useSelector((state) => state.nudge.maxQuantity);
@@ -249,25 +245,24 @@ const Nudge = ({ isCart = false }) => {
   // Separate useEffect for fetching coupons
   useEffect(() => {
     const collectionSlug = extractCollectionSlug(pathname);
-    const productSlug = extractProductSlug(pathname);
-
-    const fetchCoupon = async () => {
-      try {
-        const response = await fetchCouponRuleAPI(storedCouponCode);
-        dispatch(
-          setApplicableCollectionCoupons(
-            extractCouponsForApplicableCollection({
-              coupons: response ? [response] : [],
-              collectionSlug: pathname,
-            }),
-          ),
-        );
-      } catch (error) {
-        errorHandler(error);
-      }
-    };
 
     if (storedCouponCode) {
+      const fetchCoupon = async () => {
+        try {
+          const response = await fetchCouponRuleAPI(storedCouponCode);
+          dispatch(
+            setApplicableCollectionCoupons(
+              extractCouponsForApplicableCollection({
+                coupons: response ? [response] : [],
+                collectionSlug: pathname,
+              }),
+            ),
+          );
+        } catch (error) {
+          errorHandler(error);
+        }
+      };
+
       fetchCoupon();
     } else if (collectionSlug) {
       dispatch(
@@ -278,15 +273,6 @@ const Nudge = ({ isCart = false }) => {
           }),
         ),
       );
-    } else if (productSlug) {
-      dispatch(
-        setApplicableProductCoupons(
-          extractCouponsForApplicableProduct({
-            coupons,
-            productSlug: pathname,
-          }),
-        ),
-      );
     }
   }, [pathname, searchParams, coupons, storedCouponCode, dispatch]);
 
@@ -294,28 +280,25 @@ const Nudge = ({ isCart = false }) => {
   useEffect(() => {
     const isHomepage = pathname === "/";
     const collectionSlug = extractCollectionSlug(pathname);
-    const productSlug = extractProductSlug(pathname);
- 
     let nextNudgeFeat = [];
 
     if (storedCouponCode) {
-      const storedCouponRule = coupons?.filter(
+      const storedCouponRule = coupons?.find(
         (coupon) => coupon.code === storedCouponCode,
       );
-      nextNudgeFeat = storedCouponRule;
+      if (storedCouponRule) {
+        nextNudgeFeat =
+          storedCouponRule?.applicableCollections?.length &&
+          !storedCouponRule?.applicableCollections.includes(collectionSlug)
+            ? []
+            : [storedCouponRule];
+      }
     } else if (isHomepage) {
       nextNudgeFeat = globalCoupons;
     } else if (collectionSlug) {
       nextNudgeFeat = collectionCoupons?.length
         ? sortCouponBasedOnQuantity([...collectionCoupons, ...globalCoupons])
         : globalCoupons;
-    } else if (productSlug) {
-      nextNudgeFeat =
-        pdpCoupons?.length && !storedCouponCode
-          ? sortCouponBasedOnQuantity([...pdpCoupons, ...globalCoupons])
-          : storedCouponCode
-            ? coupons?.filter((coupon) => coupon.code === storedCouponCode)
-            : globalCoupons;
     }
 
     setNudgeFeat(nextNudgeFeat || []);
@@ -323,7 +306,6 @@ const Nudge = ({ isCart = false }) => {
     pathname,
     coupons,
     globalCoupons,
-    pdpCoupons,
     collectionCoupons,
     storedCouponCode,
     searchParams,
@@ -332,21 +314,23 @@ const Nudge = ({ isCart = false }) => {
   // Separate useEffect for quantity calculations
   useEffect(() => {
     const collectionSlug = extractCollectionSlug(pathname);
-    const productSlug = extractProductSlug(pathname);
 
-    const isGlobalOffer = !(collectionSlug || productSlug);
+    const isGlobalOffer = !collectionSlug;
 
     let relevantCoupons;
     let isStoredCouponGlobal;
 
     if (storedCouponCode) {
-      const storedCoupon = coupons?.find(
+      const storedCouponRule = coupons?.find(
         (coupon) => coupon.code === storedCouponCode,
       );
+      isStoredCouponGlobal = !storedCouponRule?.applicableCollections?.length;
 
-      isStoredCouponGlobal = !storedCoupon?.applicableCollections?.length;
-
-      relevantCoupons = [storedCoupon];
+      relevantCoupons =
+        storedCouponRule?.applicableCollections?.length &&
+        !storedCouponRule?.applicableCollections.includes(collectionSlug)
+          ? []
+          : [storedCouponRule];
     } else {
       relevantCoupons = isGlobalOffer
         ? globalCoupons
@@ -357,16 +341,13 @@ const Nudge = ({ isCart = false }) => {
                 ...globalCoupons,
               ])
             : globalCoupons
-          : productSlug && pdpCoupons?.length
-            ? sortCouponBasedOnQuantity([...pdpCoupons, ...globalCoupons])
-            : globalCoupons;
+          : globalCoupons;
     }
 
     const { currQuantity = 0, maxProgressQuantity = 0 } =
       getNudgeQuantity({
         pathname,
         cartItems,
-        isGlobalOffer,
         coupons: relevantCoupons,
         storedCouponCode,
         isStoredCouponGlobal,
@@ -378,7 +359,6 @@ const Nudge = ({ isCart = false }) => {
     cartItems,
     pathname,
     collectionCoupons,
-    pdpCoupons,
     globalCoupons,
     dispatch,
     storedCouponCode,
