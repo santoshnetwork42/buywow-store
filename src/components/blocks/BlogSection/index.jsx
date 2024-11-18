@@ -1,5 +1,5 @@
 import SectionHeading from "@/components/common/SectionHeading";
-import { Heading } from "@/components/elements";
+import { Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import BlogCard4 from "@/components/partials/Blog/BlogCard4";
 import { SITE_URL } from "@/config";
@@ -56,10 +56,15 @@ export default async function BlogSection({
         className="mt-4 rounded-[24px] bg-yellow-900 px-4 py-2 text-center md:mt-5 md:px-5 md:py-3"
         aria-label="Read more blog articles"
       >
-        <Heading as="h3" size="xl" className="text-white-a700_01" responsive>
+        <Text
+          as="p"
+          size="xl"
+          className="font-semibold text-white-a700_01"
+          responsive
+        >
           {buttonText}
           <span className="sr-only">about our blog articles</span>
-        </Heading>
+        </Text>
       </Link>
     </div>
   );

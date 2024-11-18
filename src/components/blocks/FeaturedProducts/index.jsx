@@ -1,7 +1,7 @@
 "use client";
 
 import SectionHeading from "@/components/common/SectionHeading";
-import { Heading } from "@/components/elements";
+import { Heading, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import { useStoreConfig } from "@/utils/context/navbar";
@@ -57,9 +57,14 @@ const FeaturedProducts = ({
           href={`/collections/${button.slug}`}
           className="mt-1 rounded-[24px] bg-yellow-900 px-4 py-2 text-center md:px-5 md:py-3"
         >
-          <Heading as="h3" size="xl" className="text-white-a700_01" responsive>
+          <Text
+            as="p"
+            size="xl"
+            className="font-semibold capitalize text-white-a700_01"
+            responsive
+          >
             {button.text}
-          </Heading>
+          </Text>
         </Link>
       )}
     </div>

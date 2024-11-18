@@ -1,6 +1,6 @@
 import LinkClickTracker from "@/components/common/LinkClickTracker";
 import SectionHeading from "@/components/common/SectionHeading";
-import { Heading, Img } from "@/components/elements";
+import { Heading, Img, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
 
@@ -41,14 +41,14 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
           priority={priority}
         />
       </div>
-      <Heading
+      <Text
         size="xl"
-        as="h3"
+        as="p"
         className="m-auto mt-1 line-clamp-1 w-fit break-all border-b border-b-black-900 pb-1 font-medium sm:mt-2 lg:mt-3"
         responsive
       >
         {title}
-      </Heading>
+      </Text>
     </LinkClickTracker>
   );
 };
