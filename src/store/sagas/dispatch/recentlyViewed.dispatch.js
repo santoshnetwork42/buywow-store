@@ -22,8 +22,16 @@ export const useRecentlyViewedDispatch = () => {
     });
   }, [dispatch]);
 
+  const setRecentlyViewedStalePeriod = useCallback(() => {
+    dispatch({
+      type: recentlyViewedSagaActions.SET_RECENTLY_VIEWED_STALE_PERIOD,
+      payload: {},
+    });
+  }, [dispatch]);
+
   return {
     addRecentlyViewedProduct,
     clearRecentlyViewedProducts,
+    setRecentlyViewedStalePeriod,
   };
 };
