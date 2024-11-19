@@ -75,13 +75,13 @@ const IntegratedProgressStepper = ({
       nudgeMsg = !!appliedCoupon
         ? "🥳 " +
           `Congratulations! You have unlocked Buy Any ${appliedCoupon?.couponType === "BUY_X_AT_Y" ? appliedCoupon.buyXQuantity + " @ ₹" + appliedCoupon?.getYAmount : appliedCoupon?.couponType === "BUY_X_GET_Y" ? appliedCoupon.buyXQuantity + " Get " + appliedCoupon?.getYQuantity + " Free " : ""}`
-        : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free " : ""}`;
+        : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free. Use Code: " + coupon?.code : ""}`;
     } else if (steps?.length === 1) {
       const coupon = steps[0];
       nudgeMsg = !!appliedCoupon
         ? "🥳 " +
           `Congratulations! You have unlocked Buy Any ${appliedCoupon?.couponType === "BUY_X_AT_Y" ? appliedCoupon.buyXQuantity + " @ ₹" + appliedCoupon?.getYAmount : appliedCoupon?.couponType === "BUY_X_GET_Y" ? appliedCoupon.buyXQuantity + " Get " + appliedCoupon?.getYQuantity + " Free " : ""}`
-        : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free " : ""}`;
+        : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free. Use Code: " + coupon?.code : ""}`;
     }
   }
   if (nextStepIndex !== -1) {
@@ -91,7 +91,7 @@ const IntegratedProgressStepper = ({
       nudgeMsg = !!appliedCoupon
         ? "🥳 " +
           `Congratulations! You have unlocked Buy Any ${appliedCoupon?.couponType === "BUY_X_AT_Y" ? appliedCoupon.buyXQuantity + " @ ₹" + appliedCoupon?.getYAmount : appliedCoupon?.couponType === "BUY_X_GET_Y" ? appliedCoupon.buyXQuantity + " Get " + appliedCoupon?.getYQuantity + " Free " : ""}`
-        : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free " : ""}`;
+        : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free. Use Code: " + coupon?.code : ""}`;
     } else if (coupon.couponType === "BUY_X_AT_Y") {
       nudgeMsg = `Add ${remainingQty} more ${remainingQty === 1 ? "item" : "items"} to unlock Buy Any ${coupon.buyXQuantity} @ ₹${coupon?.getYAmount}`;
     } else if (coupon.couponType === "BUY_X_GET_Y") {
