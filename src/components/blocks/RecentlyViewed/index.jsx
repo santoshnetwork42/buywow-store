@@ -38,7 +38,7 @@ const RecentlyViewed = ({
   useEffect(() => {
     const getProducts = async () => {
       try {
-        const oneHourAgo = Date.now() - 60 * 60 * 1000;
+        const oneHourAgo = Date.now() - 2 + 60 * 60 * 1000;
         if (!(recentlyViewedStalePeriod < oneHourAgo)) {
           setProducts(recentlyViewedProducts?.slice(1) || []);
         } else {
