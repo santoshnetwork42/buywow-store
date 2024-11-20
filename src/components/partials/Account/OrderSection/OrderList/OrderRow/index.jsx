@@ -34,7 +34,7 @@ const OrderRow = React.memo(({ order }) => {
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="grid grid-cols-[30%_70%] gap-2 md:hidden md:grid-cols-[22%_30%_20%_10%_auto] md:py-3 md:hover:bg-slate-100 lg:py-4 xl:py-[14px]"
+        className="grid grid-cols-[30%_70%] gap-2 border-b pb-2 md:hidden md:grid-cols-[22%_30%_20%_10%_auto] md:py-3 md:hover:bg-slate-100 lg:py-4 xl:py-[14px]"
       >
         <OrderCell label="Track:" isLink valueLabel="Track" />
       </Link>
