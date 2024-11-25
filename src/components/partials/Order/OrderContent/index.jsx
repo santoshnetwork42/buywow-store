@@ -153,20 +153,20 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
         cashbackAmount={order.cashbackEarned}
         className="shadow-none sm:w-full sm:translate-x-0 sm:rounded-md"
       />
-      <ActionButtons />
+      <ActionButtons code={order?.code} />
     </>
   );
 };
 
-const ActionButtons = () => (
+const ActionButtons = ({ code }) => (
   <div className="flex flex-wrap justify-center gap-2 sm:justify-between">
     <div className="flex gap-2">
       <Link
         prefetch={false}
-        href="/pages/account"
+        href={`https://track.buywow.in/my-order?order_id=${code}`}
         className="rounded-full bg-yellow-900 px-4 py-2 text-sm uppercase text-white-a700_01 md:px-6 md:py-3 md:text-base"
       >
-        Your Orders
+        Track Order
       </Link>
       <Link
         prefetch={false}

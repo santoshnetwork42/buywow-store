@@ -102,6 +102,7 @@ export const getInitialData = /* GraphQL */ `
         getYPercentage
         getYQuantity
         getYProduct
+        showAsNudge
         getYStoreProduct {
           id
           title

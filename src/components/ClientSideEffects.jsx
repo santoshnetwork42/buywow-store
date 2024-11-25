@@ -1,7 +1,7 @@
 "use client";
 
 import { GUEST_CHECKOUT_COOKIE_EXPIRY, STORE_PREFIX } from "@/config";
-import { getUserAPI } from "@/lib/appSyncAPIs";
+import { fetchCouponRuleAPI, getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";

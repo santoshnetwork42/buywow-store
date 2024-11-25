@@ -1,5 +1,9 @@
 "use client";
 
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import { showToast } from "@/components/common/ToastComponent";
 import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
@@ -24,9 +28,7 @@ import {
 } from "@wow-star/utils-cms";
 import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import Nudge from "@/components/common/Nudge";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),
@@ -346,7 +348,7 @@ const CartDrawer = () => {
           cartClose={handleCartClose}
           className="mx-3 md:mx-4"
         />
-        {!!isNudge && !!cartItems.length && (
+        {!isNudge && !!cartItems.length && (
           <div className="bg-blue_gray-400_01 py-1.5 text-center md:py-2">
             <Text
               as="p"
@@ -361,6 +363,7 @@ const CartDrawer = () => {
         {cartItems?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-col gap-3 px-3 md:px-4">
+              <Nudge isCart={true} />
               <ShippingProgress
                 freeShippingThreshold={targetAmountForFreeShipping}
                 cartValue={totalAmountForShippingCharge}
