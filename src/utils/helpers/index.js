@@ -583,6 +583,7 @@ export const extractGlobalCoupons = (coupons = []) => {
       (coupon) =>
         !coupon.applicableProducts.length &&
         !coupon.applicableCollections.length &&
+        coupon?.showAsNudge &&
         (coupon.couponType === "BUY_X_AT_Y" ||
           coupon.couponType === "BUY_X_GET_Y"),
     )
@@ -605,6 +606,7 @@ export const extractCouponsForApplicableProduct = ({
       (coupon) =>
         !coupon.applicableCollections.length &&
         coupon.applicableProducts.includes(extractedProductSlug) &&
+        coupon?.showAsNudge &&
         (coupon.couponType === "BUY_X_AT_Y" ||
           coupon.couponType === "BUY_X_GET_Y"),
     )
@@ -627,6 +629,7 @@ export const extractCouponsForApplicableCollection = ({
       (coupon) =>
         !coupon.applicableProducts.length &&
         coupon.applicableCollections.includes(extractedCollectionSlug) &&
+        coupon?.showAsNudge &&
         (coupon.couponType === "BUY_X_AT_Y" ||
           coupon.couponType === "BUY_X_GET_Y"),
     )
