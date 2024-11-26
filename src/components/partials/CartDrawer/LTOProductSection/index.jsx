@@ -353,7 +353,6 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
   }, [boughtLTOProducts, totalCartAmount]);
 
   useEffect(() => {
-    if (!notBoughtLTOProducts?.length || !timeLeft) return;
     const autoApplyLTOProducts = notBoughtLTOProducts?.filter(
       (i) => i.autoApply,
     );
@@ -373,7 +372,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
 
       const recordKey = getRecordKey(product, variantId, true);
       if (
-        minOrderValue <= totalCartAmount &&
+        minOrderValue < totalCartAmount &&
         !cartRecordKeys.includes(recordKey)
       ) {
         addToCart({
