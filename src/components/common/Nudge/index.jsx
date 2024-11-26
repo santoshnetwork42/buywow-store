@@ -100,9 +100,7 @@ const IntegratedProgressStepper = ({
   }
 
   return (
-    <div
-      className={`w-full rounded-lg rounded-t-none bg-deep_orange-50 p-4 py-6 pt-4`}
-    >
+    <div className={`w-full rounded-lg bg-deep_orange-50 p-4 py-6 pt-4`}>
       <div className="flex w-full flex-col gap-3">
         <div className="mb-2 w-full text-center text-[14px] !leading-3">
           {nudgeMsg}
@@ -294,7 +292,8 @@ const Nudge = ({ isCart = false }) => {
       const storedCouponRule = coupons?.find(
         (coupon) => coupon.code === storedCouponCode,
       );
-      if (storedCouponRule) {
+
+      if (storedCouponRule && storedCouponRule?.showAsNudge) {
         nextNudgeFeat =
           storedCouponRule?.applicableCollections?.length &&
           !storedCouponRule?.applicableCollections.includes(collectionSlug)
