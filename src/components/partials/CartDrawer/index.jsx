@@ -348,7 +348,7 @@ const CartDrawer = () => {
           cartClose={handleCartClose}
           className="mx-3 md:mx-4"
         />
-        {!isNudge && !!cartItems.length && (
+        {/* {!isNudge && !!cartItems.length && (
           <div className="bg-blue_gray-400_01 py-1.5 text-center md:py-2">
             <Text
               as="p"
@@ -359,7 +359,7 @@ const CartDrawer = () => {
               {isNudge}
             </Text>
           </div>
-        )}
+        )} */}
         {cartItems?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-col gap-3 px-3 md:px-4">
