@@ -293,7 +293,12 @@ const Nudge = ({ isCart = false }) => {
         (coupon) => coupon.code === storedCouponCode,
       );
 
-      if (storedCouponRule && storedCouponRule?.showAsNudge) {
+      const { showAsNudge, couponType } = storedCouponRule || {};
+      if (
+        storedCouponRule &&
+        showAsNudge &&
+        (couponType === "BUY_X_AT_Y" || couponType === "BUY_X_GET_Y")
+      ) {
         nextNudgeFeat =
           storedCouponRule?.applicableCollections?.length &&
           !storedCouponRule?.applicableCollections.includes(collectionSlug)
