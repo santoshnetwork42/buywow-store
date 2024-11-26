@@ -84,20 +84,20 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   );
 };
 
-const AllOffers = ({ productId, bestCoupon }) => {
-  const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, productId);
+const AllOffers = ({ product, bestCoupon }) => {
+  const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, product);
 
   //exclude bestCoupon from pdpFeaturedCoupons
   const filteredPdpFeaturedCoupons = pdpFeaturedCoupons?.filter(
     (pdpFeaturedCoupon) =>
-      bestCoupon.coupon.couponId !== pdpFeaturedCoupon.coupon.couponId,
+      bestCoupon?.coupon?.couponId !== pdpFeaturedCoupon.coupon.id,
   );
 
   if (filteredPdpFeaturedCoupons?.length === 0) return null;
 
   return (
     <Accordion
-      className="my-auto flex h-fit w-full shrink-0 rounded bg-blue-50 px-3 sm:w-[45%] md:w-full xl:w-[45%]"
+      className="my-auto flex h-fit w-full shrink-0 rounded bg-blue-50 px-3"
       header={
         <div className="flex items-center gap-2 py-2.5 md:py-3">
           <CouponAndOffer className="size-6 md:size-7" size={28} />
@@ -155,16 +155,19 @@ const AllOffers = ({ productId, bestCoupon }) => {
   );
 };
 
-const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, productId }) => {
-  if (!bestCoupon || !hasInventory) return null;
+const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, product }) => {
+  if (!hasInventory) return null;
+
   return (
     <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:gap-2.5 md:flex-col lg:gap-3 xl:flex-row">
-      <BestPriceDisplay
-        bestCoupon={bestCoupon}
-        price={price}
-        hasInventory={hasInventory}
-      />
-      <AllOffers productId={productId} bestCoupon={bestCoupon} />
+      {!!bestCoupon && (
+        <BestPriceDisplay
+          bestCoupon={bestCoupon}
+          price={price}
+          hasInventory={hasInventory}
+        />
+      )}
+      <AllOffers product={product} bestCoupon={bestCoupon} />
     </div>
   );
 };
