@@ -159,7 +159,7 @@ const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, product }) => {
   if (!hasInventory) return null;
 
   return (
-    <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:gap-2.5 md:flex-col lg:gap-3 xl:flex-row">
+    <div className="mt-4 flex flex-col gap-2 sm:gap-2.5 lg:gap-3">
       {!!bestCoupon && (
         <BestPriceDisplay
           bestCoupon={bestCoupon}
