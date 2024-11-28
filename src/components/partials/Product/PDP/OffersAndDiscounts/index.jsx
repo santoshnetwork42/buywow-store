@@ -90,7 +90,8 @@ const AllOffers = ({ product, bestCoupon }) => {
   //exclude bestCoupon from pdpFeaturedCoupons
   const filteredPdpFeaturedCoupons = pdpFeaturedCoupons?.filter(
     (pdpFeaturedCoupon) =>
-      bestCoupon?.coupon?.couponId !== pdpFeaturedCoupon.coupon.id,
+      (bestCoupon?.coupon?.couponId || bestCoupon?.coupon?.id) !==
+      pdpFeaturedCoupon.coupon.id,
   );
 
   if (filteredPdpFeaturedCoupons?.length === 0) return null;
