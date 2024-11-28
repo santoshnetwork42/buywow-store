@@ -108,6 +108,7 @@ const AllOffers = ({ product, bestCoupon }) => {
         </div>
       }
       accordionMainContainerClassName="!my-0 !px-0"
+      isAccordionOpen={true}
     >
       <div className="flex flex-col pb-1">
         {filteredPdpFeaturedCoupons?.map((item, index) => {
