@@ -156,17 +156,17 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           hasInventory={hasInventory}
           currentInventory={currentInventory}
         />
-
-        {!marketPlaceLinks?.length &&
-          !!Object.keys(bestCoupon || {})?.length && (
-            <OffersAndDiscounts
-              bestCoupon={bestCoupon}
-              price={price}
-              hasInventory={hasInventory}
-              productId={packageProduct?.id}
-            />
-          )}
-
+        {!marketPlaceLinks?.length && (
+          <OffersAndDiscounts
+            bestCoupon={bestCoupon}
+            price={price}
+            hasInventory={hasInventory}
+            product={{
+              id: packageProduct?.id,
+              collections: packageProduct?.collections,
+            }}
+          />
+        )}
         <div className="mt-5 flex flex-col">
           {!!variantGroup?.length && (
             <VariantSelector
