@@ -91,7 +91,7 @@ const AllOffers = ({ product, bestCoupon }) => {
   const filteredPdpFeaturedCoupons = pdpFeaturedCoupons?.filter(
     (pdpFeaturedCoupon) =>
       (bestCoupon?.coupon?.couponId || bestCoupon?.coupon?.id) !==
-      pdpFeaturedCoupon.coupon.id,
+      pdpFeaturedCoupon?.coupon?.id,
   );
 
   if (filteredPdpFeaturedCoupons?.length === 0) return null;
