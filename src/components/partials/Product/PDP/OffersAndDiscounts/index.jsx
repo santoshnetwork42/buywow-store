@@ -1,5 +1,6 @@
 import { Heading, Img, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
+import ReadMore from "@/components/features/ReadMore";
 import { copyText, toDecimal } from "@/utils/helpers";
 import { useFeaturedCoupons, useFreebie } from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
@@ -113,7 +114,7 @@ const AllOffers = ({ product, bestCoupon }) => {
       <div className="flex flex-col pb-1">
         {filteredPdpFeaturedCoupons?.map((item, index) => {
           const { coupon } = item || {};
-          const { couponTitle, code } = coupon || {};
+          const { couponTitle, code, couponNote = "" } = coupon || {};
 
           return (
             <div
@@ -130,9 +131,15 @@ const AllOffers = ({ product, bestCoupon }) => {
                   <Heading as="h4" size="sm">
                     {couponTitle}
                   </Heading>
-                  <Text as="span" size="sm" responsive>
-                    Applicable on certain products
-                  </Text>
+                  {!!couponNote ? (
+                    <div className="readmore-links">
+                      <ReadMore content={couponNote} maxLength={200} isHtml />
+                    </div>
+                  ) : (
+                    <Text as="span" size="sm" responsive>
+                      Applicable on certain products
+                    </Text>
+                  )}
                 </div>
               </div>
               <div className="flex flex-col place-items-end gap-1">
