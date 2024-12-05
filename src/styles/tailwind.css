@@ -90,4 +90,7 @@ li:hover {
     margin: 0;
     -moz-appearance: textfield !important;
   }
+  .readmore-links a {
+    @apply underline;
+  }
 }

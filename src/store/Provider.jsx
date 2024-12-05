@@ -2,7 +2,6 @@
 
 import AnnouncementBar from "@/components/blocks/AnnouncementBar";
 import Carousel from "@/components/blocks/Carousel";
-import TrendingCategories from "@/components/blocks/TrendingCategories";
 import Header from "@/components/partials/Header";
 import store, { persistor } from "@/store/store";
 import { AnnouncementProvider } from "@/utils/context/AnnouncementContext";
@@ -26,7 +25,7 @@ const LoadingState = ({ data, pathname }) => {
           categories?.showComponent &&
           !!categories?.trendingCategoryItems?.length && (
             <div className="no-scrollbar w-full overflow-x-scroll lg:hidden">
-              <div className="mx-auto flex w-max items-start justify-center p-3 py-4">
+              <div className="mx-auto flex w-max animate-pulse items-start justify-center p-3 py-4">
                 {Array.from({
                   length: categories?.trendingCategoryItems?.length,
                 }).map((_, index) => (

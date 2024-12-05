@@ -90,7 +90,6 @@ const persistedReducers = {
   // Non-persisted reducers
   [modalSlice.name]: modalSlice.reducer,
   [eventsSlice.name]: eventsSlice.reducer,
-  // [nudgeSlice.name]: nudgeSlice.reducer,
 };
 
 const appReducer = combineReducers(persistedReducers);

@@ -294,14 +294,13 @@ const CartDrawer = () => {
   }, [appliedCoupon, isCartOpen]);
 
   const getCollectionWiseNudgeMsg = () => {
-    // if (pathname === "/collections/all" || pathname === "/") {
-    //   if (appliedCoupon?.code === "WOW") {
-    //     return "Congrats, your Buy 1 Get 1 offer has been availed!";
-    //   } else {
-    //     return "Add more items to unlock 'Buy 1 Get 1 Free'";
-    //   }
-    // } else 
-    if (pathname === "/collections/buy-8-1000") {
+    if (pathname === "/collections/all" || pathname === "/") {
+      if (appliedCoupon?.code === "FREEDUO") {
+        return "Congrats, your Buy 2 Get 2 offer has been availed!";
+      } else {
+        return "Add more items to unlock 'Buy 2 Get 2 Free'";
+      }
+    } else if (pathname === "/collections/buy-8-1000") {
       if (appliedCoupon?.code === "BUY8") {
         return "Congrats, your Buy 8 @ ₹1000 offer has been availed!";
       }
@@ -349,7 +348,7 @@ const CartDrawer = () => {
           cartClose={handleCartClose}
           className="mx-3 md:mx-4"
         />
-        {!isNudge && !!cartItems.length && (
+        {/* {!isNudge && !!cartItems.length && (
           <div className="bg-blue_gray-400_01 py-1.5 text-center md:py-2">
             <Text
               as="p"
@@ -360,7 +359,7 @@ const CartDrawer = () => {
               {isNudge}
             </Text>
           </div>
-        )}
+        )} */}
         {cartItems?.length > 0 ? (
           <>
             <div className="flex flex-1 flex-col gap-3 px-3 md:px-4">

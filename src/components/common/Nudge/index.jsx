@@ -72,26 +72,35 @@ const IntegratedProgressStepper = ({
   if (nextStepIndex === -1) {
     if (steps?.length > 1) {
       const coupon = steps.slice(-1)[0];
-      nudgeMsg = !!appliedCoupon
-        ? "🥳 " +
-          `Congratulations! You have unlocked Buy Any ${appliedCoupon?.couponType === "BUY_X_AT_Y" ? appliedCoupon.buyXQuantity + " @ ₹" + appliedCoupon?.getYAmount : appliedCoupon?.couponType === "BUY_X_GET_Y" ? appliedCoupon.buyXQuantity + " Get " + appliedCoupon?.getYQuantity + " Free " : ""}`
-        : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free " : ""}`;
+      nudgeMsg =
+        !!appliedCoupon &&
+        (appliedCoupon.couponType === "BUY_X_AT_Y" ||
+          appliedCoupon.couponType === "BUY_X_GET_Y")
+          ? "🥳 " +
+            `Congratulations! You have unlocked Buy Any ${appliedCoupon?.couponType === "BUY_X_AT_Y" ? appliedCoupon.buyXQuantity + " @ ₹" + appliedCoupon?.getYAmount : appliedCoupon?.couponType === "BUY_X_GET_Y" ? appliedCoupon.buyXQuantity + " Get " + appliedCoupon?.getYQuantity + " Free " : ""}`
+          : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free. Use Code: " + coupon?.code : ""}`;
     } else if (steps?.length === 1) {
       const coupon = steps[0];
-      nudgeMsg = !!appliedCoupon
-        ? "🥳 " +
-          `Congratulations! You have unlocked Buy Any ${appliedCoupon?.couponType === "BUY_X_AT_Y" ? appliedCoupon.buyXQuantity + " @ ₹" + appliedCoupon?.getYAmount : appliedCoupon?.couponType === "BUY_X_GET_Y" ? appliedCoupon.buyXQuantity + " Get " + appliedCoupon?.getYQuantity + " Free " : ""}`
-        : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free " : ""}`;
+      nudgeMsg =
+        !!appliedCoupon &&
+        (appliedCoupon.couponType === "BUY_X_AT_Y" ||
+          appliedCoupon.couponType === "BUY_X_GET_Y")
+          ? "🥳 " +
+            `Congratulations! You have unlocked Buy Any ${appliedCoupon?.couponType === "BUY_X_AT_Y" ? appliedCoupon.buyXQuantity + " @ ₹" + appliedCoupon?.getYAmount : appliedCoupon?.couponType === "BUY_X_GET_Y" ? appliedCoupon.buyXQuantity + " Get " + appliedCoupon?.getYQuantity + " Free " : ""}`
+          : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free. Use Code: " + coupon?.code : ""}`;
     }
   }
   if (nextStepIndex !== -1) {
     const coupon = steps[nextStepIndex];
     const remainingQty = Math.max(coupon.quantity - currQuantity, 0);
     if (remainingQty === 0) {
-      nudgeMsg = !!appliedCoupon
-        ? "🥳 " +
-          `Congratulations! You have unlocked Buy Any ${appliedCoupon?.couponType === "BUY_X_AT_Y" ? appliedCoupon.buyXQuantity + " @ ₹" + appliedCoupon?.getYAmount : appliedCoupon?.couponType === "BUY_X_GET_Y" ? appliedCoupon.buyXQuantity + " Get " + appliedCoupon?.getYQuantity + " Free " : ""}`
-        : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free " : ""}`;
+      nudgeMsg =
+        !!appliedCoupon &&
+        (appliedCoupon.couponType === "BUY_X_AT_Y" ||
+          appliedCoupon.couponType === "BUY_X_GET_Y")
+          ? "🥳 " +
+            `Congratulations! You have unlocked Buy Any ${appliedCoupon?.couponType === "BUY_X_AT_Y" ? appliedCoupon.buyXQuantity + " @ ₹" + appliedCoupon?.getYAmount : appliedCoupon?.couponType === "BUY_X_GET_Y" ? appliedCoupon.buyXQuantity + " Get " + appliedCoupon?.getYQuantity + " Free " : ""}`
+          : `Your cart is eligible for Buy Any ${coupon?.couponType === "BUY_X_AT_Y" ? coupon.buyXQuantity + " @ ₹" + coupon?.getYAmount : coupon?.couponType === "BUY_X_GET_Y" ? coupon.buyXQuantity + " Get " + coupon?.getYQuantity + " Free. Use Code: " + coupon?.code : ""}`;
     } else if (coupon.couponType === "BUY_X_AT_Y") {
       nudgeMsg = `Add ${remainingQty} more ${remainingQty === 1 ? "item" : "items"} to unlock Buy Any ${coupon.buyXQuantity} @ ₹${coupon?.getYAmount}`;
     } else if (coupon.couponType === "BUY_X_GET_Y") {
@@ -100,9 +109,7 @@ const IntegratedProgressStepper = ({
   }
 
   return (
-    <div
-      className={`w-full rounded-lg rounded-t-none bg-deep_orange-50 p-4 py-6 pt-4`}
-    >
+    <div className={`w-full rounded-lg bg-deep_orange-50 p-4 py-6 pt-4`}>
       <div className="flex w-full flex-col gap-3">
         <div className="mb-2 w-full text-center text-[14px] !leading-3">
           {nudgeMsg}
@@ -294,7 +301,13 @@ const Nudge = ({ isCart = false }) => {
       const storedCouponRule = coupons?.find(
         (coupon) => coupon.code === storedCouponCode,
       );
-      if (storedCouponRule) {
+
+      const { showAsNudge, couponType } = storedCouponRule || {};
+      if (
+        storedCouponRule &&
+        showAsNudge &&
+        (couponType === "BUY_X_AT_Y" || couponType === "BUY_X_GET_Y")
+      ) {
         nextNudgeFeat =
           storedCouponRule?.applicableCollections?.length &&
           !storedCouponRule?.applicableCollections.includes(collectionSlug)
