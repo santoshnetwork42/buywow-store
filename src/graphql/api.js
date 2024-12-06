@@ -96,6 +96,7 @@ export const getInitialData = /* GraphQL */ `
         priority
         couponType
         buyXQuantity
+        discountItemThreshold
         deviceType
         ppcodCouponAmount
         getYAmount
@@ -391,6 +392,7 @@ export const applyCoupon = /* GraphQL */ `
       code
       couponType
       buyXQuantity
+      discountItemThreshold
       getYAmount
       getYPercentage
       getYQuantity
@@ -640,6 +642,7 @@ export const getShoppingCart = /* GraphQL */ `
         couponCodeCount
         tAndC
         buyXQuantity
+        discountItemThreshold
         minOrderValue
         maxDiscount
         maxAllowedUsage
@@ -1338,6 +1341,7 @@ export const getCouponRule = /* GraphQL */ `
         recommendPrice
       }
       buyXQuantity
+      discountItemThreshold
       getYAmount
       getYPercentage
       getYQuantity
