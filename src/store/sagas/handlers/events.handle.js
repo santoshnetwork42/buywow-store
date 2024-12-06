@@ -2,6 +2,7 @@ import { getUser } from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import {
   addressMapper,
+  dispatchKwikpassEvent,
   getClientSource,
   getFormattedDate,
   initializeMoengageAndAddInfo,
@@ -286,7 +287,7 @@ export function* sessionDestroyEventHandler({ payload }) {
 
 export function* viewCartEventHandler() {
   try {
-    const { data, coupon } = yield select((state) => state.cart);
+    const { data, coupon, cartId } = yield select((state) => state.cart);
 
     const userData = yield select((state) =>
       state.user.user?.phone ? state.user.user : state.user.customUser,
@@ -330,6 +331,11 @@ export function* viewCartEventHandler() {
       coupon: coupon?.code || "",
       source: eventSource,
       ...analyticsMeta,
+    });
+
+    dispatchKwikpassEvent("page_view_kp", {
+      type: "cart",
+      data: !!cartId ? { cart_id: cartId } : {},
     });
 
     // Analytics.record({
@@ -418,7 +424,62 @@ export function* viewItemEventHandler({ payload }) {
       source: eventSource,
       ...analyticsMeta,
     });
+  } catch (e) {
+    errorHandler(e);
+  }
+}
 
+export function* productViewedKwikpassEventHandler({ payload }) {
+  try {
+    const { product } = payload;
+    const { cartId } = yield select((state) => state.cart);
+
+    const { productId, variantId, price, title, slug, imageUrl } = product;
+    let eventData = {
+      product_id: productId,
+      image_url: imageUrl,
+      name: title,
+      price: price,
+      handle: slug,
+    };
+    if (!!variantId) {
+      eventData.variant_id = variantId;
+    }
+    if (!!cartId) {
+      eventData.cart_id = cartId;
+    }
+    dispatchKwikpassEvent("page_view_kp", {
+      type: "product",
+      data: eventData,
+    });
+    // Analytics.record({ name: "view_item", pinpoint, metrics: { value } });
+    // vercelAnalytics.track("view_item", vercel);
+  } catch (e) {
+    errorHandler(e);
+  }
+}
+
+export function* collectionViewedKwikpassEventHandler({ payload }) {
+  try {
+    const { collection } = payload;
+    const { cartId } = yield select((state) => state.cart);
+
+    const { collectionId, title, slug, imageUrl } = collection;
+    let eventData = {
+      name: title,
+      image_url: imageUrl,
+      handle: slug,
+    };
+    if (!!collectionId) {
+      eventData.collection_id = collectionId;
+    }
+    if (!!cartId) {
+      eventData.cart_id = cartId;
+    }
+    dispatchKwikpassEvent("page_view_kp", {
+      type: "collection",
+      data: eventData,
+    });
     // Analytics.record({ name: "view_item", pinpoint, metrics: { value } });
     // vercelAnalytics.track("view_item", vercel);
   } catch (e) {
@@ -1106,6 +1167,7 @@ export function* homeViewedEventHandler(e) {
     const userData = yield select((state) =>
       state.user.user?.phone ? state.user.user : state.user.customUser,
     );
+    const { cartId } = yield select((state) => state.cart);
     const eventSource = getClientSource();
     const user = userMapper(userData);
     trackEvent("Home Viewed", {
@@ -1123,6 +1185,10 @@ export function* homeViewedEventHandler(e) {
       URL: window.location.href,
       source: eventSource,
       ...analyticsMeta,
+    });
+    dispatchKwikpassEvent("page_view_kp", {
+      type: "home",
+      data: !!cartId ? { cart_id: cartId } : {},
     });
   } catch (e) {
     errorHandler(e);

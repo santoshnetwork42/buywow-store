@@ -1,6 +1,10 @@
 "use client";
 
-import { GUEST_CHECKOUT_COOKIE_EXPIRY, STORE_PREFIX } from "@/config";
+import {
+  GUEST_CHECKOUT_COOKIE_EXPIRY,
+  KWIKPASS_SCRIPT,
+  STORE_PREFIX,
+} from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -199,6 +203,20 @@ const ClientSideEffects = () => {
       homeViewedEvent();
     }
   }, [pathname]);
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = KWIKPASS_SCRIPT;
+    script.async = true;
+
+    script.onload = () => {
+      document.addEventListener("DOMContentLoaded", () => {
+        window.kpUpdateDOM();
+      });
+    };
+
+    document.head.appendChild(script);
+  }, []);
 
   useEffect(() => {
     setMetaData();

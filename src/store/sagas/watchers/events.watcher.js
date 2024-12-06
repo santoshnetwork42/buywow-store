@@ -25,6 +25,8 @@ import {
   topNavbarClickedEventHandler,
   viewCartEventHandler,
   viewItemEventHandler,
+  productViewedKwikpassEventHandler,
+  collectionViewedKwikpassEventHandler,
   viewListItemEventHandler,
   footerClickEventHandler,
   announcementBarClickEventHandler,
@@ -85,6 +87,19 @@ function* removeFromCartEvent() {
 
 function* viewItem() {
   yield takeLatest(eventsSagaActions.VIEW_ITEM, viewItemEventHandler);
+}
+function* productViewedKwikpassEvent() {
+  yield takeLatest(
+    eventsSagaActions.PRODUCT_VIEWED_KWIKPASS_EVENT,
+    productViewedKwikpassEventHandler,
+  );
+}
+
+function* collectionViewedKwikpassEvent() {
+  yield takeLatest(
+    eventsSagaActions.COLLECTION_VIEWED_KWIKPASS_EVENT,
+    collectionViewedKwikpassEventHandler,
+  );
 }
 
 function* placeOrder() {
@@ -258,6 +273,8 @@ export function* eventsWatcher() {
     fork(auth),
     fork(proceedToCheckout),
     fork(viewItem),
+    fork(productViewedKwikpassEvent),
+    fork(collectionViewedKwikpassEvent),
     fork(placeOrder),
     fork(checkoutStarted),
     fork(viewCart),

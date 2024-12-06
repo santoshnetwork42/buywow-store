@@ -43,3 +43,5 @@ export const VERCEL_ANALYTICS_ENABLED =
   process.env.NEXT_PUBLIC_VERCEL_ANALYTICS_ENABLED === "true";
 export const GOOGLE_VERIFICATION_TAG =
   process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION_TAG;
+export const STORE_ENV = process.env.STORE_ENV;
+export const KWIKPASS_SCRIPT = process.env.NEXT_PUBLIC_KWIKPASS_SCRIPT;

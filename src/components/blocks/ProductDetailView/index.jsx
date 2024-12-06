@@ -11,6 +11,7 @@ import { useStoreConfig } from "@/utils/context/navbar";
 import { PDP_BLOCK_PROMOTION_TAG_TO_IGNORE } from "@/utils/data/constants";
 import handleRedirect from "@/utils/handleRedirect";
 import { extractAttributes } from "@/utils/helpers";
+import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import {
   useProduct,
   useProductCoupons,
@@ -49,7 +50,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
     useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
-  const { viewItemEvent } = useEventsDispatch();
+  const { viewItemEvent, productViewedKwikpassEvent } = useEventsDispatch();
 
   const storeConfig = useStoreConfig();
   const { data: storeConfigData } = storeConfig;
@@ -72,6 +73,31 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchedProduct]);
+
+  //  kwikpass event useEffect
+  useEffect(() => {
+    const { id, price, title, slug, images } = packageProduct;
+
+    const imageUrl = getPublicImageURL({
+      key:
+        selectedVariant?.images?.items?.[0]?.imageKey ||
+        images?.items?.[0]?.imageKey,
+    });
+    const timeoutId = setTimeout(() => {
+      productViewedKwikpassEvent({
+        productId: id,
+        slug,
+        title,
+        price,
+        variantId: selectedVariant?.id || "",
+        imageUrl,
+      });
+    }, 1000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [selectedVariant, slug]);
 
   if (!fetchedProduct?.id) {
     handleRedirect(`/products/${slug}`);

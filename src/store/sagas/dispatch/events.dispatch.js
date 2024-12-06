@@ -22,6 +22,26 @@ export const useEventsDispatch = () => {
     [dispatch],
   );
 
+  const productViewedKwikpassEvent = useCallback(
+    (product) => {
+      dispatch({
+        type: eventsSagaActions.PRODUCT_VIEWED_KWIKPASS_EVENT,
+        payload: { product },
+      });
+    },
+    [dispatch],
+  );
+
+  const collectionViewedKwikpassEvent = useCallback(
+    (collection) => {
+      dispatch({
+        type: eventsSagaActions.COLLECTION_VIEWED_KWIKPASS_EVENT,
+        payload: { collection },
+      });
+    },
+    [dispatch],
+  );
+
   const viewReviewsEvent = useCallback(
     (payload) => {
       dispatch({ type: eventsSagaActions.VIEW_REVIEW, payload });
@@ -431,5 +451,7 @@ export const useEventsDispatch = () => {
     sessionStartedEvent,
     sessionDestroyEvent,
     customEvent,
+    productViewedKwikpassEvent,
+    collectionViewedKwikpassEvent,
   };
 };

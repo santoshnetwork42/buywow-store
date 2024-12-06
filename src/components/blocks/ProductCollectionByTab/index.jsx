@@ -79,6 +79,7 @@ const ProductCollectionByTab = ({
   slug,
   promotion,
   showProductsOnVariantStockOut = true,
+  id,
 }) => {
   const [sortOption, setSortOption] = useState(
     SORT_OPTIONS.find((option) => option.value === defaultCollectionSorting) ||
@@ -93,7 +94,7 @@ const ProductCollectionByTab = ({
   const [hasMore, setHasMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef(null);
-  const { viewListEvent } = useEventsDispatch();
+  const { viewListEvent, collectionViewedKwikpassEvent } = useEventsDispatch();
   const source = getSource();
 
   const storeConfig = useStoreConfig();
@@ -170,6 +171,13 @@ const ProductCollectionByTab = ({
         setHorizontalCardWidth("auto");
       }
     };
+
+    collectionViewedKwikpassEvent({
+      collectionId: id,
+      title,
+      slug,
+      imageUrl: "",
+    });
 
     handleResize();
     window.addEventListener("resize", handleResize);
