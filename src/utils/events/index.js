@@ -396,6 +396,11 @@ export const trackEvent = (title, payload) => {
   }
 };
 
+export function dispatchKwikpassEvent(eventType, payload) {
+  const event = new CustomEvent(eventType, { detail: payload });
+  window?.dispatchEvent(event);
+}
+
 export const moEngagedOrderMapper = (
   products,
   coupon,
