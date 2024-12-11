@@ -1,3 +1,4 @@
+import CouponAndOffer from "@/assets/svg/couponAndOffer";
 import { BagIcon } from "@/assets/svg/icons";
 import SummaryItem from "@/components/common/CheckoutSummaryItem";
 import { Heading, Text } from "@/components/elements";
@@ -73,6 +74,18 @@ const OrderSummary = ({
                 </Text>
               ) : (
                 <>
+                  {product?.isCouponApplied && !!appliedCoupon?.code && (
+                    <div className="my-2 flex max-w-fit items-center rounded bg-green-100 px-2 max-sm:my-0">
+                      <CouponAndOffer
+                        className="size-4"
+                        size={18}
+                        color="green"
+                      />
+                      <div className="text-xs font-normal text-green-500">
+                        {appliedCoupon?.code}
+                      </div>
+                    </div>
+                  )}
                   <ProductPricing
                     price={product?.price}
                     listingPrice={product?.listingPrice}
