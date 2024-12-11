@@ -1,4 +1,5 @@
 import Checkmark from "@/assets/svg/checkmark/icon";
+import CouponAndOffer from "@/assets/svg/couponAndOffer";
 import { Heading, Text } from "@/components/elements";
 import ProductPricing from "@/components/partials/CartDrawer/MainCartSection/ProductItem/ProductDetails/ProductPricing";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
@@ -17,7 +18,10 @@ const ProductDetails = ({
   isFreeProduct,
   quantity,
   couponMessage,
+  isCouponApplied,
+  appliedCoupon,
 }) => {
+  const { code = "" } = appliedCoupon || {};
   const { handleCartVisibility } = useModalDispatch();
 
   return (
@@ -45,6 +49,16 @@ const ProductDetails = ({
             <div className="text-sm font-normal text-green-500">
               Added Successfully
             </div>
+          </div>
+        )}
+        {isCouponApplied && !!code && (
+          <div className="my-2 flex max-w-fit items-center gap-1 rounded bg-green-100 px-2">
+            <CouponAndOffer
+              className="size-5 md:size-5"
+              size={20}
+              color="green"
+            />
+            <div className="text-sm font-normal text-green-500">{code}</div>
           </div>
         )}
 

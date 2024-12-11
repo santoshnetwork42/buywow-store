@@ -373,6 +373,7 @@ const CartDrawer = () => {
                 cartItems={cartItems}
                 inventoryMapping={inventoryMapping}
                 ltoProducts={ltoProducts}
+                appliedCoupon={appliedCoupon}
               />
               <LoyaltyCash
                 showLoyalty={showLoyalty}

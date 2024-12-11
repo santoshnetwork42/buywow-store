@@ -15,7 +15,12 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 
-const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
+const ProductItem = ({
+  item,
+  inventory = 99,
+  inventoryMapping,
+  appliedCoupon,
+}) => {
   const cartList = useSelector((state) => state.cart?.data || []);
   const { updateCart, removeCoupon, removeFromCart } = useCartDispatch();
   const isInteractive = useIsInteractive();
@@ -36,6 +41,7 @@ const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
     thumbImage,
     couponMessage,
     hideRemove,
+    isCouponApplied = false,
     extraQty: extraQuantity = 0,
     disableChange = false,
     minimumOrderQuantity: itemMinOrderQuantity,
@@ -196,6 +202,8 @@ const ProductItem = ({ item, inventory = 99, inventoryMapping }) => {
             price={price}
             slug={slug}
             hasInventory={hasInventory}
+            isCouponApplied={isCouponApplied}
+            appliedCoupon={appliedCoupon}
             listingPrice={listingPrice}
             cartItemType={cartItemType}
             isLTOProduct={isLTOProduct}
