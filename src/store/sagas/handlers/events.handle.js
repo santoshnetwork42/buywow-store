@@ -868,6 +868,7 @@ export function* placeOrderEventHandler({ payload }) {
       coupon: coupon?.code || "",
       source: checkoutSource,
       orderDate,
+      date: getFormattedDate(),
     });
 
     const eventSource = getClientSource();
