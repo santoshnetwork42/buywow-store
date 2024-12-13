@@ -112,7 +112,9 @@ const StickyViewCart = () => {
           <CartSummary
             totalItems={totalItems}
             grandTotal={grandTotal}
-            prepaidDiscountPercent={prepaidDiscountPercent}
+            prepaidDiscountPercent={
+              appliedCoupon?.applyPrepaidDiscount ? prepaidDiscountPercent : 0
+            }
             prepaidDiscount={prepaidDiscount}
           />
           <Button
