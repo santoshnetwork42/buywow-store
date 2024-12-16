@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
   recentlyViewedProducts: [],
+  stalePeriod: null,
 };
 
 export const recentlyViewedSlice = createSlice({
@@ -11,9 +12,13 @@ export const recentlyViewedSlice = createSlice({
     setRecentlyViewedProducts: (state, action) => {
       state.recentlyViewedProducts = action.payload;
     },
+    setStalePeriod: (state, action) => {
+      state.stalePeriod = action.payload;
+    },
   },
 });
 
-export const { setRecentlyViewedProducts } = recentlyViewedSlice.actions;
+export const { setRecentlyViewedProducts, setStalePeriod } =
+  recentlyViewedSlice.actions;
 
 export default recentlyViewedSlice.reducer;

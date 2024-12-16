@@ -1,4 +1,7 @@
-import { setRecentlyViewedProducts } from "@/store/slices/recentlyViewed.slice";
+import {
+  setRecentlyViewedProducts,
+  setStalePeriod,
+} from "@/store/slices/recentlyViewed.slice";
 import { MAX_RECENTLY_VIEWED_PRODUCTS } from "@/utils/data/constants";
 import { errorHandler } from "@/utils/errorHandler";
 import { put, select } from "redux-saga/effects";
@@ -26,6 +29,13 @@ export function* addRecentlyViewedProductHandler(action) {
 export function* clearRecentlyViewedProductsHandler() {
   try {
     yield put(setRecentlyViewedProducts([]));
+  } catch (error) {
+    errorHandler(error);
+  }
+}
+export function* setRecentlyViewedStalePeriod() {
+  try {
+    yield put(setStalePeriod(Date.now()));
   } catch (error) {
     errorHandler(error);
   }

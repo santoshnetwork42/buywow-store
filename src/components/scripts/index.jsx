@@ -6,8 +6,6 @@ import {
   LIMECHAT_ENABLED,
   VERCEL_ANALYTICS_ENABLED,
   WISEPOPS_KEY,
-  STORE_ENV,
-  GOKWIK_MID,
 } from "@/config";
 import { useIsInteractive, useSource } from "@/utils/context/navbar";
 import { Analytics } from "@vercel/analytics/next";
