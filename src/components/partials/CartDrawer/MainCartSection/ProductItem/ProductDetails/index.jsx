@@ -1,5 +1,4 @@
 import Checkmark from "@/assets/svg/checkmark/icon";
-import CouponAndOffer from "@/assets/svg/couponAndOffer";
 import { Heading, Text } from "@/components/elements";
 import ProductPricing from "@/components/partials/CartDrawer/MainCartSection/ProductItem/ProductDetails/ProductPricing";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";

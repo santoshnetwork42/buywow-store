@@ -1,4 +1,3 @@
-import CouponAndOffer from "@/assets/svg/couponAndOffer";
 import DiscountIcon from "@/assets/svg/discountIcon";
 import { BagIcon } from "@/assets/svg/icons";
 import SummaryItem from "@/components/common/CheckoutSummaryItem";
