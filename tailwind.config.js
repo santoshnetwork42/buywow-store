@@ -75,7 +75,10 @@ module.exports = {
         },
         // black_600: "#656d76",
         // gray_shadow: "#00000029",
-        green: { 500: "#17b31b" },
+        green: {
+          500: "#17b31b",
+          "100_01": "#e6f5eb",
+        },
       },
       boxShadow: {
         xs: "0 4px 4px 0 #0000000c",

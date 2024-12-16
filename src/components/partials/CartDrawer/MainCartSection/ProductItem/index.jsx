@@ -1,3 +1,4 @@
+import DiscountIcon from "@/assets/svg/discountIcon";
 import Quantity from "@/components/common/Quantity";
 import { Text } from "@/components/elements";
 import ProductDetails from "@/components/partials/CartDrawer/MainCartSection/ProductItem//ProductDetails";
@@ -188,79 +189,92 @@ const ProductItem = ({
   if (isLoading) return <ProductItemSkeleton />;
 
   return (
-    <div className="flex gap-3 rounded-lg border border-b p-2 pl-3 shadow-[0_4px_4px_#0000000D]">
-      <ProductImage
-        slug={slug}
-        outOfStock={outOfStock}
-        imageKey={thumbImage}
-        isFreeProduct={isFreeProduct}
-      />
-      <div className="flex flex-1 flex-col gap-1">
-        <div className="flex flex-1 justify-between gap-5">
-          <ProductDetails
-            title={title}
-            price={price}
-            slug={slug}
-            hasInventory={hasInventory}
-            isCouponApplied={isCouponApplied}
-            appliedCoupon={appliedCoupon}
-            listingPrice={listingPrice}
-            cartItemType={cartItemType}
-            isLTOProduct={isLTOProduct}
-            currentInventory={currentInventory}
-            isFreeProduct={isFreeProduct}
-            quantity={quantity}
-            couponMessage={couponMessage}
-          />
+    <div className="flex flex-col">
+      <div className="flex gap-3 rounded-lg rounded-b-none border border-b-0 p-2 pl-3 shadow-[0_4px_4px_#0000000D]">
+        <ProductImage
+          slug={slug}
+          outOfStock={outOfStock}
+          imageKey={thumbImage}
+          isFreeProduct={isFreeProduct}
+        />
+        <div className="flex flex-1 flex-col gap-1">
+          <div className="flex flex-1 justify-between gap-5">
+            <ProductDetails
+              title={title}
+              price={price}
+              slug={slug}
+              hasInventory={hasInventory}
+              appliedCoupon={appliedCoupon}
+              listingPrice={listingPrice}
+              cartItemType={cartItemType}
+              isLTOProduct={isLTOProduct}
+              currentInventory={currentInventory}
+              isFreeProduct={isFreeProduct}
+              quantity={quantity}
+              couponMessage={couponMessage}
+            />
 
-          {!hideRemove && (
-            <RemoveButton onClick={() => handleChangeQuantity(0)} />
-          )}
-        </div>
-        {!isLTOProduct && (
-          <div className="flex flex-col justify-between gap-2">
-            <div className="flex items-end justify-between gap-1">
-              <VariantSelector
-                variantGroup={variantGroup}
-                selectedVariantGroupOptions={selectedVariantGroupOptions}
-                handleOnChangeVariant={handleOnChangeVariant}
-                isFreeProduct={isFreeProduct}
-                disableChange={disableChange}
-                variantClassName="w-fit"
-                className="lg:gap-1"
-              />
-              <div className="ml-auto flex items-center gap-2">
-                {!outOfStock && !isFreeProduct && !disableChange && (
-                  <Quantity
-                    product={item}
-                    minimumOrderQuantity={
-                      selectedVariant?.minimumOrderQuantity ||
-                      itemMinOrderQuantity
-                    }
-                    maximumOrderQuantity={
-                      selectedVariant?.maximumOrderQuantity ||
-                      itemMaxOrderQuantity
-                    }
-                    totalItemQuantity={totalItemQuantity}
-                    quantity={quantity}
-                    max={inventory}
-                    onChangeQuantity={handleChangeQuantity}
-                    className="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] md:h-7 lg:h-8"
-                  />
-                )}
-              </div>
-            </div>
-
-            {(selectedVariant?.minimumOrderQuantity > 1 ||
-              itemMinOrderQuantity > 1) && (
-              <Text as="span" size="xs" className="font-light">
-                Minimum Order Quantity:{" "}
-                {selectedVariant?.minimumOrderQuantity || itemMinOrderQuantity}
-              </Text>
+            {!hideRemove && (
+              <RemoveButton onClick={() => handleChangeQuantity(0)} />
             )}
           </div>
-        )}
+          {!isLTOProduct && (
+            <div className="flex flex-col justify-between gap-2">
+              <div className="flex items-end justify-between gap-1">
+                <VariantSelector
+                  variantGroup={variantGroup}
+                  selectedVariantGroupOptions={selectedVariantGroupOptions}
+                  handleOnChangeVariant={handleOnChangeVariant}
+                  isFreeProduct={isFreeProduct}
+                  disableChange={disableChange}
+                  variantClassName="w-fit"
+                  className="lg:gap-1"
+                />
+                <div className="ml-auto flex items-center gap-2">
+                  {!outOfStock && !isFreeProduct && !disableChange && (
+                    <Quantity
+                      product={item}
+                      minimumOrderQuantity={
+                        selectedVariant?.minimumOrderQuantity ||
+                        itemMinOrderQuantity
+                      }
+                      maximumOrderQuantity={
+                        selectedVariant?.maximumOrderQuantity ||
+                        itemMaxOrderQuantity
+                      }
+                      totalItemQuantity={totalItemQuantity}
+                      quantity={quantity}
+                      max={inventory}
+                      onChangeQuantity={handleChangeQuantity}
+                      className="grid-cols-[repeat(3,28px)] sm:grid-cols-[repeat(3,32px)] md:h-7 lg:h-8"
+                    />
+                  )}
+                </div>
+              </div>
+
+              {(selectedVariant?.minimumOrderQuantity > 1 ||
+                itemMinOrderQuantity > 1) && (
+                <Text as="span" size="xs" className="font-light">
+                  Minimum Order Quantity:{" "}
+                  {selectedVariant?.minimumOrderQuantity ||
+                    itemMinOrderQuantity}
+                </Text>
+              )}
+            </div>
+          )}
+        </div>
       </div>
+
+      {!!appliedCoupon && !!appliedCoupon?.code && isCouponApplied && (
+        <Text
+          as="span"
+          size="xs"
+          className="bg-green-100_01 flex w-full items-center justify-center rounded-lg rounded-t-none border border-t-0 py-0.5 font-medium shadow-[0_4px_4px_#0000000D]"
+        >
+          <DiscountIcon width={20} height={20} color="green" className="mr-2" />
+          {`“${appliedCoupon?.code}” applied`}
+        </Text>
+      )}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import CouponAndOffer from "@/assets/svg/couponAndOffer";
+import DiscountIcon from "@/assets/svg/discountIcon";
 import { BagIcon } from "@/assets/svg/icons";
 import SummaryItem from "@/components/common/CheckoutSummaryItem";
 import { Heading, Text } from "@/components/elements";
@@ -41,66 +42,78 @@ const OrderSummary = ({
           inventoryMapping && product.qty > inventoryMapping[product.recordKey];
 
         return (
-          <div
-            key={index}
-            className="flex w-full gap-2.5 rounded-md border p-2 shadow-sm md:p-2.5"
-          >
-            <div className="max-h-22 max-w-20 overflow-hidden rounded bg-lime-50">
-              <ProductThumbnail
-                width={170}
-                height={170}
-                imageKey={product?.thumbImage}
-                className="aspect-square h-auto w-full object-contain"
-                alt="Product Image"
-              />
-            </div>
-            <div className="flex flex-col gap-1">
-              <Text
-                as="span"
-                size="base"
-                className="line-clamp-2 text-sm"
-                responsive
-              >
-                {product?.title}
-              </Text>
-              {isOutOfStock ? (
+          <div className="flex flex-col" key={index}>
+            <div
+              key={index}
+              className="flex w-full gap-2.5 rounded-md rounded-b-none border border-b-0 p-2 shadow-sm md:p-2.5"
+            >
+              <div className="max-h-22 max-w-20 overflow-hidden rounded bg-lime-50">
+                <ProductThumbnail
+                  width={170}
+                  height={170}
+                  imageKey={product?.thumbImage}
+                  className="aspect-square h-auto w-full object-contain"
+                  alt="Product Image"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
                 <Text
                   as="span"
-                  size="sm"
-                  className="mt-auto w-fit rounded-md bg-gray-400 px-2 py-0.5 text-white-a700"
+                  size="base"
+                  className="line-clamp-2 text-sm"
                   responsive
                 >
-                  Out of Stock
+                  {product?.title}
                 </Text>
-              ) : (
-                <>
-                  {product?.isCouponApplied && !!appliedCoupon?.code && (
-                    <div className="my-2 flex max-w-fit items-center rounded bg-green-100 px-2 max-sm:my-0">
-                      <CouponAndOffer
-                        className="size-4"
-                        size={18}
-                        color="green"
-                      />
-                      <div className="text-xs font-normal text-green-500">
-                        {appliedCoupon?.code}
-                      </div>
-                    </div>
-                  )}
-                  <ProductPricing
-                    price={product?.price}
-                    listingPrice={product?.listingPrice}
-                    cartItemType={product?.cartItemType}
-                    isFreeProduct={isFreeProduct}
-                    slug={product?.slug}
-                  />
-                  {!!product?.qty && (
-                    <Text size="sm" as="p" className="text-gray-500" responsive>
-                      Qty: {product?.qty}
-                    </Text>
-                  )}
-                </>
-              )}
+                {isOutOfStock ? (
+                  <Text
+                    as="span"
+                    size="sm"
+                    className="mt-auto w-fit rounded-md bg-gray-400 px-2 py-0.5 text-white-a700"
+                    responsive
+                  >
+                    Out of Stock
+                  </Text>
+                ) : (
+                  <>
+                    <ProductPricing
+                      price={product?.price}
+                      listingPrice={product?.listingPrice}
+                      cartItemType={product?.cartItemType}
+                      isFreeProduct={isFreeProduct}
+                      slug={product?.slug}
+                    />
+                    {!!product?.qty && (
+                      <Text
+                        size="sm"
+                        as="p"
+                        className="text-gray-500"
+                        responsive
+                      >
+                        Qty: {product?.qty}
+                      </Text>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
+            {!!appliedCoupon &&
+              !!appliedCoupon?.code &&
+              product?.isCouponApplied && (
+                <Text
+                  as="span"
+                  size="xs"
+                  className="bg-green-100_01 flex w-full items-center justify-center rounded-lg rounded-t-none border border-t-0 py-0.5 font-medium shadow-[0_4px_4px_#0000000D]"
+                >
+                  <DiscountIcon
+                    width={20}
+                    height={20}
+                    color="green"
+                    className="mr-2"
+                  />
+                  {`“${appliedCoupon?.code}” applied`}
+                </Text>
+              )}
           </div>
         );
       }),

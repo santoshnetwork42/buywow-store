@@ -18,7 +18,6 @@ const ProductDetails = ({
   isFreeProduct,
   quantity,
   couponMessage,
-  isCouponApplied,
   appliedCoupon,
 }) => {
   const { code = "" } = appliedCoupon || {};
@@ -49,16 +48,6 @@ const ProductDetails = ({
             <div className="text-sm font-normal text-green-500">
               Added Successfully
             </div>
-          </div>
-        )}
-        {isCouponApplied && !!code && (
-          <div className="my-2 flex max-w-fit items-center gap-1 rounded bg-green-100 px-2">
-            <CouponAndOffer
-              className="size-5 md:size-5"
-              size={20}
-              color="green"
-            />
-            <div className="text-sm font-normal text-green-500">{code}</div>
           </div>
         )}
 
