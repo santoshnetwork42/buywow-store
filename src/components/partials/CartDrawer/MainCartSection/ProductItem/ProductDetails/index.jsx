@@ -17,9 +17,7 @@ const ProductDetails = ({
   isFreeProduct,
   quantity,
   couponMessage,
-  appliedCoupon,
 }) => {
-  const { code = "" } = appliedCoupon || {};
   const { handleCartVisibility } = useModalDispatch();
 
   return (
