@@ -194,7 +194,7 @@ const ProductItem = ({
         <ProductImage
           slug={slug}
           outOfStock={outOfStock}
-          imageKey={thumbImage?.imageKey}
+          imageKey={thumbImage?.imageKey || thumbImage}
           isFreeProduct={isFreeProduct}
         />
         <div className="flex flex-1 flex-col gap-1">

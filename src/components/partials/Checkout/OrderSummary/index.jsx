@@ -50,7 +50,9 @@ const OrderSummary = ({
                 <ProductThumbnail
                   width={170}
                   height={170}
-                  imageKey={product?.thumbImage}
+                  imageKey={
+                    product?.thumbImage?.imageKey || product?.thumbImage
+                  }
                   className="aspect-square h-auto w-full object-contain"
                   alt="Product Image"
                 />
@@ -102,7 +104,7 @@ const OrderSummary = ({
                 <Text
                   as="span"
                   size="xs"
-                  className="bg-green-100_01 flex w-full items-center justify-center rounded-lg rounded-t-none border border-t-0 py-0.5 font-medium shadow-[0_4px_4px_#0000000D]"
+                  className="flex w-full items-center justify-center rounded-lg rounded-t-none border border-t-0 bg-green-100_01 py-0.5 font-medium shadow-[0_4px_4px_#0000000D]"
                 >
                   <DiscountIcon
                     width={20}
