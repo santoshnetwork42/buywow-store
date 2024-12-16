@@ -140,7 +140,7 @@ const CheckoutClient = () => {
     { isConfirmed, order: finalOrder, loading },
     placeOrderV1,
     orderHelper,
-  ] = useOrders({ orderVersion: "V2" });
+  ] = useOrders({ orderVersion: "V3" });
 
   useEffect(() => {
     setPageLoading(true);
@@ -363,7 +363,7 @@ const CheckoutClient = () => {
     startCheckoutEvent();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
- 
+
   const ppcodAmountToTake = ppcodCouponEnabled
     ? appliedCoupon?.ppcodCouponAmount
     : ppcodAmount;
