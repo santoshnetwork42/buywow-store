@@ -199,7 +199,6 @@ const nextConfig = {
         hostname: process.env.NEXT_PUBLIC_WP_AVATAR_URL,
       },
     ],
-    domains: ["media.buywow.in"],
   },
 };
 
