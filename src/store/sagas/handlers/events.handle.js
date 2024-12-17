@@ -98,11 +98,11 @@ export function* proceedToCheckoutEventHandler({ payload }) {
       ...analyticsMeta,
     });
 
-    track("proceed_to_checkout_v2", {
-      login: userData ? 1 : 0,
-      source,
-      date: getFormattedDate(),
-    });
+    // track("proceed_to_checkout_v2", {
+    //   login: userData ? 1 : 0,
+    //   source,
+    //   date: getFormattedDate(),
+    // });
   } catch (e) {
     errorHandler(e);
   }
@@ -857,19 +857,19 @@ export function* placeOrderEventHandler({ payload }) {
       });
     }
 
-    track("purchase_final_v2", {
-      transaction_id: id,
-      value: totalAmount,
-      tax: 0,
-      code,
-      discount: totalDiscount,
-      shipping: totalShippingCharges,
-      currency: "INR",
-      coupon: coupon?.code || "",
-      source: checkoutSource,
-      orderDate,
-      date: getFormattedDate(),
-    });
+    // track("purchase_final_v2", {
+    //   transaction_id: id,
+    //   value: totalAmount,
+    //   tax: 0,
+    //   code,
+    //   discount: totalDiscount,
+    //   shipping: totalShippingCharges,
+    //   currency: "INR",
+    //   coupon: coupon?.code || "",
+    //   source: checkoutSource,
+    //   orderDate,
+    //   date: getFormattedDate(),
+    // });
 
     const eventSource = getClientSource();
     const analyticsMeta = analyticsMetaDataMapper();
