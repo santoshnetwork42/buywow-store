@@ -20,6 +20,9 @@ import { v4 as uuidv4 } from "uuid";
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const sessionId = sessionStorage?.getItem(
+    `${STORE_PREFIX}_coupon_session_id`,
+  );
 
   const { updateMeta, setStore, destroySession } = useSystemDispatch();
   const { setUser } = useUserDispatch();
@@ -205,6 +208,10 @@ const ClientSideEffects = () => {
   }, [pathname]);
 
   useEffect(() => {
+    if (!sessionId) {
+      const id = uuidv4();
+      sessionStorage?.setItem(`${STORE_PREFIX}_session_id`, id);
+    }
     const script = document.createElement("script");
     script.src = KWIKPASS_SCRIPT;
     script.async = true;

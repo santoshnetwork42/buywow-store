@@ -9,7 +9,7 @@ import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
 import { GOKWIK_MID, STORE_PREFIX, VERCEL_CHECKOUT_AB_FLAG } from "@/config";
-import { getUserAPI } from "@/lib/appSyncAPIs";
+import { applyCouponAPI, getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
@@ -20,6 +20,7 @@ import {
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
 import {
+  getCouponDiscount,
   useCartItems,
   useCartTotal,
   useConfiguration,
@@ -67,6 +68,9 @@ const CartDrawer = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const sessionId = sessionStorage?.getItem(
+    `${STORE_PREFIX}_coupon_session_id`,
+  );
   const { ltoProducts } = useNavbar();
 
   const appliedCoupon = useSelector((state) => state.cart?.coupon);
@@ -88,6 +92,8 @@ const CartDrawer = () => {
     applyRewardPoint,
     updateCartWithShoppingCartId,
     checkoutInitiated,
+    removeFromCart,
+    removeCoupon,
   } = useCartDispatch();
   const { handleCartVisibility, handlePasswordLessModal } = useModalDispatch();
   const { handleOutOfStockEvent, handleProceedToCheckoutEvent, viewCartEvent } =
@@ -292,6 +298,45 @@ const CartDrawer = () => {
       setCheckoutSectionHeight(checkoutElement.offsetHeight);
     }
   }, [appliedCoupon, isCartOpen]);
+
+  const handleCouponRemove = useCallback(() => {
+    cartList.forEach((item) => {
+      if (item.cartItemSource === "COUPON") {
+        removeFromCart(item);
+      }
+    });
+    removeCoupon();
+  }, [cartList, removeFromCart, removeCoupon]);
+
+  const validatePreviousCart = useCallback(async () => {
+    const code = appliedCoupon?.code;
+    if (!code) return;
+
+    try {
+      const response = await applyCouponAPI(code);
+      const couponData = response?.data?.applyCoupon;
+
+      if (!couponData) {
+        handleCouponRemove();
+        return;
+      }
+
+      const { allowed } = getCouponDiscount(couponData, cartList);
+
+      if (!allowed) {
+        handleCouponRemove();
+      }
+    } catch (error) {
+      console.error("Failed to validate coupon:", error);
+      handleCouponRemove();
+    }
+  }, [appliedCoupon, cartList]);
+
+  useEffect(() => {
+    if (!sessionId) {
+      validatePreviousCart();
+    }
+  }, [sessionId]);
 
   const getCollectionWiseNudgeMsg = () => {
     if (pathname === "/collections/all" || pathname === "/") {
