@@ -50,9 +50,7 @@ const OrderSummary = ({
                 <ProductThumbnail
                   width={170}
                   height={170}
-                  imageKey={
-                    product?.thumbImage?.imageKey || product?.thumbImage
-                  }
+                  imageKey={product?.thumbImage}
                   className="aspect-square h-auto w-full object-contain"
                   alt="Product Image"
                 />
