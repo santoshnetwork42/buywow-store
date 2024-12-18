@@ -1,8 +1,9 @@
 import awsExport from "@/aws-exports";
 import ClientSideEffects from "@/components/ClientSideEffects";
+import BirthdayCelebration from "@/components/partials/BirthdayCelebration";
 import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
-import { AWS_CLIENT_ID } from "@/config";
+import { AWS_CLIENT_ID, SHOW_BIRTHDAY_CELEBRATION } from "@/config";
 import {
   getNavbarAndFooterAPI,
   getStoreConfigurationsAPI,
@@ -47,54 +48,7 @@ async function PageLayout({ children }) {
         <GoKwikProvider>
           <AnnouncementProvider>
             <ClientSideEffects />
-
-            <div className="balloons fixed inset-0 z-[1] h-full w-full overflow-hidden">
-              <img
-                src="images/balloon1.svg"
-                alt="Balloon"
-                className="animate-flying pointer-events-auto absolute -bottom-[250px] left-[25%] h-auto w-20 cursor-pointer select-none"
-              />
-              <img
-                src="images/balloon2.svg"
-                alt="Balloon"
-                className="animate-flying pointer-events-auto absolute -bottom-[250px] left-[85%] h-auto w-20 cursor-pointer select-none [animation-delay:2s] [animation-duration:12s]"
-              />
-              <img
-                src="images/balloon3.svg"
-                alt="Balloon"
-                className="animate-flying pointer-events-auto absolute -bottom-[250px] left-[10%] h-auto w-20 cursor-pointer select-none [animation-delay:4s]"
-              />
-              <img
-                src="images/balloon4.svg"
-                alt="Balloon"
-                className="animate-flying pointer-events-auto absolute -bottom-[250px] left-[70%] h-auto w-20 cursor-pointer select-none [animation-duration:18s]"
-              />
-              <img
-                src="images/balloon5.svg"
-                alt="Balloon"
-                className="animate-flying pointer-events-auto absolute -bottom-[250px] left-[65%] h-auto w-20 cursor-pointer select-none"
-              />
-              <img
-                src="images/balloon6.svg"
-                alt="Balloon"
-                className="animate-flying pointer-events-auto absolute -bottom-[250px] left-[35%] h-auto w-20 cursor-pointer select-none [animation-delay:3s]"
-              />
-              <img
-                src="images/balloon4.svg"
-                alt="Balloon"
-                className="animate-flying pointer-events-auto absolute -bottom-[250px] left-[30%] h-auto w-20 cursor-pointer select-none [animation-delay:6s] [animation-duration:8s]"
-              />
-              <img
-                src="images/balloon2.svg"
-                alt="Balloon"
-                className="animate-flying pointer-events-auto absolute -bottom-[250px] left-[55%] h-auto w-20 cursor-pointer select-none [animation-delay:4s]"
-              />
-              <img
-                src="images/balloon5.svg"
-                alt="Balloon"
-                className="animate-flying pointer-events-auto absolute -bottom-[250px] left-[45%] h-auto w-20 cursor-pointer select-none [animation-delay:2.5s] [animation-duration:10s]"
-              />
-            </div>
+            {SHOW_BIRTHDAY_CELEBRATION == "true" && <BirthdayCelebration />}
             <div className="flex min-h-dvh w-full flex-col">
               <AnnouncementBar data={announcementData} />
               {!!headerData?.data && <Header data={headerData} />}
