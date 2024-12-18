@@ -80,6 +80,34 @@ li:hover {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-2500 {
+    animation-delay: 2.5s;
+  }
+  .animation-delay-3000 {
+    animation-delay: 3s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+  .animation-delay-6000 {
+    animation-delay: 6s;
+  }
+  .animation-duration-8000 {
+    animation-duration: 8s;
+  }
+  .animation-duration-10000 {
+    animation-duration: 10s;
+  }
+  .animation-duration-12000 {
+    animation-duration: 12s;
+  }
+  .animation-duration-18000 {
+    animation-duration: 18s;
+  }
 }
 
 @layer base {

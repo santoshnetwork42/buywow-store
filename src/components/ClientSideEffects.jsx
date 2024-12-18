@@ -16,6 +16,7 @@ import Cookies from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import confetti from "canvas-confetti";
 
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
@@ -231,6 +232,114 @@ const ClientSideEffects = () => {
     setStoreData();
   }, [setMetaData, setGuestCheckout, setStoreData]);
 
+  // useEffect(() => {
+  //   const balloons = document.querySelectorAll(".balloons img");
+  //   let clickCount = 0;
+
+  //   const trianglePath = confetti.shapeFromPath({
+  //     path: "M 0 0 L 5 10 L -5 10 Z",
+  //   });
+
+  //   balloons.forEach((balloon) => {
+  //     balloon.addEventListener("click", (e) => {
+  //       balloon.style.visibility = "hidden";
+  //       confetti({
+  //         particleCount: 100,
+  //         angle: 90,
+  //         spread: 50,
+  //         origin: {
+  //           x: balloon.getBoundingClientRect().left / window?.innerWidth,
+  //           y: balloon.getBoundingClientRect().top / window?.innerHeight,
+  //         },
+  //         colors: [
+  //           "#dd8433",
+  //           "#d18ee0",
+  //           "#dc3f95",
+  //           "#d1cfcb",
+  //           "#a5863e",
+  //           "#382e21",
+  //           "#ba8a49",
+  //           "#5c7e7e",
+  //           "#bacd13",
+  //         ],
+  //         shapes: [trianglePath],
+  //         gravity: 0.8,
+  //         scalar: 1.5,
+  //         ticks: 150,
+  //         startVelocity: 30, // Added for better upward motion
+  //         drift: 0, // Removed horizontal drift
+  //       });
+
+  //       clickCount++;
+  //     });
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    const balloons = document?.querySelectorAll(".balloons img");
+    let clickCount = 0;
+
+    const trianglePath = confetti.shapeFromPath({
+      path: "M 0 0 L 5 10 L -5 10 Z",
+    });
+
+    // Create the click handler function
+    const handleBalloonClick = (balloon) => (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      balloon.style.visibility = "hidden";
+      confetti({
+        particleCount: 100,
+        angle: 90,
+        spread: 50,
+        origin: {
+          x: balloon.getBoundingClientRect().left / window?.innerWidth,
+          y: balloon.getBoundingClientRect().top / window?.innerHeight,
+        },
+        colors: [
+          "#dd8433",
+          "#d18ee0",
+          "#dc3f95",
+          "#d1cfcb",
+          "#a5863e",
+          "#382e21",
+          "#ba8a49",
+          "#5c7e7e",
+          "#bacd13",
+        ],
+        shapes: [trianglePath],
+        gravity: 0.8,
+        scalar: 1.5,
+        ticks: 150,
+        startVelocity: 30,
+        drift: 0,
+      });
+
+      clickCount++;
+    };
+
+    // Store click handlers to remove them later
+    const clickHandlers = new Map();
+
+    // Add click listeners
+    balloons.forEach((balloon) => {
+      const handler = handleBalloonClick(balloon);
+      clickHandlers.set(balloon, handler);
+      balloon.addEventListener("click", handler);
+      balloon.style.pointerEvents = "auto"; // Ensure clicks are registered
+    });
+
+    // Cleanup function
+    return () => {
+      balloons.forEach((balloon) => {
+        const handler = clickHandlers.get(balloon);
+        if (handler) {
+          balloon.removeEventListener("click", handler);
+        }
+      });
+    };
+  }, []);
   return null;
 };
 

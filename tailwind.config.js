@@ -97,10 +97,15 @@ module.exports = {
             boxShadow: "0 0 1px 2px rgba(221, 132, 52, 0.6)",
           },
         },
+        flying: {
+          "0%": { transform: "translateY(0)" },
+          "100%": { transform: "translateY(-1000px)" },
+        },
       },
       animation: {
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
         "border-complete": "borderLinear 0.5s linear forwards",
+        flying: "flying 15s linear infinite",
       },
     },
   },
