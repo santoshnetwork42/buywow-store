@@ -56,7 +56,7 @@ const PaymentMethodsSection = React.memo(
         )}
         {(ppcodEnabled || codEnabled) && (
           <PaymentMethod
-            label="Cash On Delivery"
+            label={`${(ppcodEnabled && ppcodAmount) || ppcodCouponEnabled ? "Partial Cash On Delivery" : "Cash On Delivery"}`}
             id="COD"
             tag={!!codCharges && `₹${toDecimal(codCharges)} EXTRA`}
             tagVariant="danger"
