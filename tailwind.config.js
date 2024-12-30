@@ -105,7 +105,7 @@ module.exports = {
       animation: {
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
         "border-complete": "borderLinear 0.5s linear forwards",
-        flying: "flying 15s linear",
+        flying: "flying 0s linear infinite",
       },
     },
   },
