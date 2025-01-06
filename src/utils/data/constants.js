@@ -11,6 +11,14 @@ export const AUTO_APPLY_COUPON_PATHNAMES = [
   "/collections",
   "/search",
 ];
+
+export const BALLOON_ALLOWED_PATHS = [
+  "/",
+  "/products",
+  "/collections",
+  "/search",
+];
+
 export const LIMITED_TIME_DEAL_DURATION_IN_MINUTES = 2;
 export const PAGETYPE = {
   HOME: "",
