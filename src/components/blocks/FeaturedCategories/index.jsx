@@ -87,29 +87,7 @@ const CustomCountdown = ({ startTime }) => {
 };
 
 const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
-  const {
-    image,
-    slug,
-    title,
-    endTime,
-    startDate,
-    endDate,
-    startTime,
-    saleMessage,
-  } = category;
-  const { url, alternativeText } = extractAttributes(image);
-  const [showClock, setShowClock] = useState(true);
-  const [saleStatus, setSaleStatus] = useState("");
-
-  const imageSize = size === "SMALL" ? 260 : 396;
-  const imageHeight = size === "SMALL" ? 260 : 470;
-  const aspectRatio = size === "SMALL" ? "aspect-square" : "aspect-[396/470]";
-
-  const linkClassName =
-    size === "SMALL"
-      ? "w-[calc(33vw-20px)] min-w-[100px] max-w-[260px] sm:w-[26vw] md:w-[24vw] lg:w-[22vw] xl:w-[20vw]"
-      : "w-[calc(33vw-12px)] min-w-[112px] sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]";
-
+  // Helper functions defined first
   const getCurrentDateTime = () => {
     const now = new Date();
     const currentTime = now.toLocaleTimeString("en-US", { hour12: false });
@@ -117,32 +95,27 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
     return { currentTime, currentDate };
   };
 
-  const isWithinThreeHoursOfStart = () => {
+  const isWithinTwentyFourHoursOfStart = (startTime, startDate, endDate) => {
     const now = new Date();
     const currentDate = now.toISOString().split("T")[0];
 
-    // Check if current date is within the valid date range
     if (!(currentDate >= startDate && currentDate <= endDate)) {
       return false;
     }
 
-    // Parse start time
     const [startHours = "", startMinutes = ""] = startTime
       ?.split(":")
       .map(Number);
-
-    // Create date objects for comparison
     const startTimeDate = new Date(now);
     startTimeDate.setHours(startHours, startMinutes, 0);
 
-    const threeHoursBefore = new Date(startTimeDate);
-    threeHoursBefore.setHours(startTimeDate.getHours() - 3);
+    const twentyFourHoursBefore = new Date(startTimeDate);
+    twentyFourHoursBefore.setHours(startTimeDate.getHours() - 24);
 
-    // Check if current time is within 3 hours before start time
-    return now >= threeHoursBefore && now < startTimeDate;
+    return now >= twentyFourHoursBefore && now < startTimeDate;
   };
 
-  const getSaleStatus = () => {
+  const getSaleStatus = (startTime, endTime, startDate, endDate) => {
     const { currentTime, currentDate } = getCurrentDateTime();
 
     if (currentDate > endDate) {
@@ -161,7 +134,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
     if (
       currentDate >= startDate &&
       currentDate <= endDate &&
-      isWithinThreeHoursOfStart()
+      isWithinTwentyFourHoursOfStart(startTime, startDate, endDate)
     ) {
       return "UPCOMING";
     }
@@ -169,25 +142,56 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
     return "NORMAL";
   };
 
-  useEffect(() => {
-    // Initial status check
-    setSaleStatus(getSaleStatus());
+  const {
+    image,
+    slug,
+    title,
+    endTime,
+    startDate,
+    endDate,
+    startTime,
+    saleMessage,
+  } = category;
+  const { url, alternativeText } = extractAttributes(image);
 
-    // Check status every minute
-    const statusCheckInterval = setInterval(() => {
-      const newStatus = getSaleStatus();
+  const [showClock, setShowClock] = useState(true);
+  const [saleStatus, setSaleStatus] = useState(() =>
+    getSaleStatus(startTime, endTime, startDate, endDate),
+  );
+  const [shouldUpdate, setShouldUpdate] = useState(false);
+
+  const imageSize = size === "SMALL" ? 260 : 396;
+  const imageHeight = size === "SMALL" ? 260 : 470;
+  const aspectRatio = size === "SMALL" ? "aspect-square" : "aspect-[396/470]";
+
+  const linkClassName =
+    size === "SMALL"
+      ? "w-[calc(33vw-20px)] min-w-[100px] max-w-[260px] sm:w-[26vw] md:w-[24vw] lg:w-[22vw] xl:w-[20vw]"
+      : "w-[calc(33vw-12px)] min-w-[112px] sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]";
+
+  useEffect(() => {
+    const checkStatus = () => {
+      const newStatus = getSaleStatus(startTime, endTime, startDate, endDate);
       if (newStatus !== saleStatus) {
         setSaleStatus(newStatus);
-        // Force a re-render when status changes
-        window.location.reload();
+        setShouldUpdate((prev) => !prev);
       }
-    }, 60000); // Check every minute
+    };
+
+    const statusCheckInterval = setInterval(checkStatus, 60000);
+    checkStatus(); // Initial check
 
     return () => clearInterval(statusCheckInterval);
-  }, [startTime, endTime, startDate, endDate]);
+  }, [startTime, endTime, startDate, endDate, saleStatus]);
 
   useEffect(() => {
-    if (getSaleStatus() === "LIVE") {
+    if (shouldUpdate) {
+      setShowClock(true);
+    }
+  }, [shouldUpdate]);
+
+  useEffect(() => {
+    if (saleStatus === "LIVE") {
       const interval = setInterval(
         () => {
           setShowClock((current) => !current);
@@ -202,7 +206,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
 
       return () => clearInterval(interval);
     }
-  }, [showClock]);
+  }, [showClock, saleStatus]);
 
   const LiveIndicator = () => (
     <div className="flex w-full items-center justify-center gap-1 self-end px-2">
@@ -217,9 +221,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
   );
 
   const renderContent = () => {
-    const status = saleStatus || getSaleStatus();
-
-    switch (status) {
+    switch (saleStatus) {
       case "LIVE":
         return (
           <div className="relative">
@@ -323,7 +325,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
       className={`${linkClassName} ${saleStatus === "UPCOMING" ? "pointer-events-none cursor-not-allowed" : ""}`}
       trackingType="SHOP_BY_CLICK"
       onClick={(e) => {
-        if (getSaleStatus() === "UPCOMING") {
+        if (saleStatus === "UPCOMING") {
           e.preventDefault();
         }
       }}
