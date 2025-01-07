@@ -1,12 +1,12 @@
 "use client";
+
 import LinkClickTracker from "@/components/common/LinkClickTracker";
 import SectionHeading from "@/components/common/SectionHeading";
 import { Img, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
-import CategoryFlipClock from "./FlipClock";
-import FlipClock from "@/components/partials/Others/FlipClock";
 import { extractAttributes } from "@/utils/helpers";
 import { useEffect, useState } from "react";
+import CategoryFlipClock from "./FlipClock";
 
 const CustomCountdown = ({ startTime }) => {
   const [timeLeft, setTimeLeft] = useState({
@@ -87,17 +87,19 @@ const CustomCountdown = ({ startTime }) => {
 };
 
 const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
-  const { image, slug, title, endTime, startDate, endDate, startTime } =
-    category;
-  console.log(
-    "endTime, startDate, endDate, startTime :>> ",
+  const {
+    image,
+    slug,
+    title,
     endTime,
     startDate,
     endDate,
     startTime,
-  );
+    saleMessage,
+  } = category;
   const { url, alternativeText } = extractAttributes(image);
   const [showClock, setShowClock] = useState(true);
+  const [saleStatus, setSaleStatus] = useState("");
 
   const imageSize = size === "SMALL" ? 260 : 396;
   const imageHeight = size === "SMALL" ? 260 : 470;
@@ -168,6 +170,23 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
   };
 
   useEffect(() => {
+    // Initial status check
+    setSaleStatus(getSaleStatus());
+
+    // Check status every minute
+    const statusCheckInterval = setInterval(() => {
+      const newStatus = getSaleStatus();
+      if (newStatus !== saleStatus) {
+        setSaleStatus(newStatus);
+        // Force a re-render when status changes
+        window.location.reload();
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(statusCheckInterval);
+  }, [startTime, endTime, startDate, endDate]);
+
+  useEffect(() => {
     if (getSaleStatus() === "LIVE") {
       const interval = setInterval(
         () => {
@@ -198,7 +217,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
   );
 
   const renderContent = () => {
-    const status = getSaleStatus();
+    const status = saleStatus || getSaleStatus();
 
     switch (status) {
       case "LIVE":
@@ -272,7 +291,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
             </div>
             <div className="absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-2 rounded-md backdrop-blur-sm">
               <div className="w-full bg-yellow-50 p-1 text-center">
-                <Text>Sale Starts In</Text>
+                <Text className="line-clamp-1">{saleMessage || ""}</Text>
               </div>
               <CustomCountdown startTime={startTime} />
             </div>
@@ -300,10 +319,8 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
 
   return (
     <LinkClickTracker
-      href={
-        getSaleStatus() === "UPCOMING" ? "#" : `/collections/${slug}` || "#"
-      }
-      className={`${linkClassName} ${getSaleStatus() === "UPCOMING" ? "pointer-events-none cursor-not-allowed" : ""}`}
+      href={saleStatus === "UPCOMING" ? "#" : `/collections/${slug}` || "#"}
+      className={`${linkClassName} ${saleStatus === "UPCOMING" ? "pointer-events-none cursor-not-allowed" : ""}`}
       trackingType="SHOP_BY_CLICK"
       onClick={(e) => {
         if (getSaleStatus() === "UPCOMING") {

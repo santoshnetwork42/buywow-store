@@ -1,9 +1,8 @@
 "use client";
 
+import ClockIcon from "@/assets/svg/clockIcon";
 import { Text } from "@/components/elements";
 import { useCallback, useEffect, useState } from "react";
-import styles from "@/src/components/partials/Others/FlipClock/flipClock.module.css";
-import ClockIcon from "@/assets/svg/clockIcon";
 
 const FlipUnit = ({ digit, unit }) => {
   const [displayedDigit, setDisplayedDigit] = useState(digit);
@@ -17,16 +16,16 @@ const FlipUnit = ({ digit, unit }) => {
   }, [digit]);
 
   return (
-    <div className="flex h-6 w-4 flex-col overflow-hidden rounded-sm">
+    <div className="flex h-6 max-w-min flex-col overflow-hidden rounded-sm">
       <div className="relative mt-0.5 flex-1">
         <div
-          className={`absolute top-0 z-10 flex h-1/2 w-full items-end justify-center overflow-hidden`}
+          className={`flex h-1/2 w-full items-end justify-center overflow-hidden`}
         >
           <span className="-mb-2.5 text-sm text-white-a700_01">
             {displayedDigit}
           </span>
         </div>
-        <div className="absolute bottom-0 flex h-1/2 w-full items-start justify-center overflow-hidden">
+        <div className="flex h-1/2 w-full items-start justify-center overflow-hidden">
           <span className="-mt-2.5 text-sm text-white-a700_01">
             {displayedDigit}
           </span>
@@ -81,17 +80,12 @@ const FlipClock = ({ timer, centerText }) => {
       return value < 10 ? `0${value}` : value.toString();
     };
 
+    const totalMinutes = Math.floor(distance / (1000 * 60));
+    const remainingSeconds = Math.floor((distance % (1000 * 60)) / 1000);
+
     return {
-      days: formatWithLeadingZero(Math.floor(distance / (1000 * 60 * 60 * 24))),
-      hours: formatWithLeadingZero(
-        Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-      ),
-      minutes: formatWithLeadingZero(
-        Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-      ),
-      seconds: formatWithLeadingZero(
-        Math.floor((distance % (1000 * 60)) / 1000),
-      ),
+      minutes: formatWithLeadingZero(totalMinutes),
+      seconds: formatWithLeadingZero(remainingSeconds),
     };
   }, [timer]);
 
@@ -122,7 +116,7 @@ const FlipClock = ({ timer, centerText }) => {
       )}
       {!!timeLeft && (
         <div className="flex items-center justify-center gap-1 px-1">
-          <div className="flex items-center">
+          <div className="flex items-center gap-0.5">
             <FlipUnit digit={timeLeft.minutes} unit="MIN" />
             <Text className="mb-1 text-white-a700_01">:</Text>
             <FlipUnit digit={timeLeft.seconds} unit="SEC" />
