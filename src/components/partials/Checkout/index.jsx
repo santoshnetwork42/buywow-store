@@ -255,11 +255,39 @@ const CheckoutClient = () => {
 
       const { success, code, error, formError, order, payment, transaction } =
         orderResult;
-
       if (code === "INVALID_ADDRESS") {
-        showToast.error(
-          Object.values(formError).map((val) => <li key={val}>{val}</li>),
-        );
+        let error = formError || {};
+        if (
+          error?.pincode ===
+            "Online Delivery is not available at this pincocde" ||
+          error?.pincode ===
+            "Cash on Delivery is not available at this pincocde"
+        ) {
+          error.pincode = (
+            <>
+              We&#39;re sorry! We currently don&#39;t deliver to this pincode.
+              However, we&#39;re working hard to expand our service areas and
+              hope to reach your location soon. Please try a different delivery
+              address to proceed.
+            </>
+          );
+        }
+
+        const errorKeys = Object.keys(error) || [];
+        if (errorKeys.length === 1) {
+          showToast.custom(
+            <p key={errorKeys[0]}>{error[errorKeys[0]]}</p>,
+            error?.pincode && {
+              duration: 5000,
+            },
+            error?.pincode && "text-center", // textClassName
+            error?.pincode && "!flex-row", //mainClassName
+          );
+        } else {
+          showToast.error(
+            Object.values(formError).map((val) => <li key={val}>{val}</li>),
+          );
+        }
         setPaymentLoader(false);
         return;
       }
