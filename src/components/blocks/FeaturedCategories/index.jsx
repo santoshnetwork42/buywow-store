@@ -323,7 +323,13 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
 
   return (
     <LinkClickTracker
-      href={saleStatus === "UPCOMING" ? "#" : `/collections/${slug}` || "#"}
+      href={
+        saleStatus === "UPCOMING"
+          ? "#"
+          : /^[\w\s#-]+$/.test(slug)
+            ? `/collections/${slug}`
+            : slug
+      }
       className={`${linkClassName} ${saleStatus === "UPCOMING" ? "pointer-events-none cursor-not-allowed" : ""}`}
       trackingType="SHOP_BY_CLICK"
       onClick={(e) => {
