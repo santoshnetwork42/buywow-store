@@ -9,7 +9,7 @@ const FaqItem = dynamic(
   { ssr: false },
 );
 
-const AccordionFaQs = ({ accordionFAQsTitle, image, FAQs }) => {
+const AccordionFaQs = ({ accordionFAQsTitle, image, FAQs, isInPDP }) => {
   if (
     !accordionFAQsTitle ||
     !FAQs ||
@@ -27,6 +27,8 @@ const AccordionFaQs = ({ accordionFAQsTitle, image, FAQs }) => {
       title={accordionFAQsTitle}
       imgUrl={accordionImageUrl}
       alternativeText={accordionImageAlt}
+      className={isInPDP ? "" : "px-3"}
+      isAccordionOpen={!isInPDP}
     >
       <div className="flex flex-col gap-2 md:gap-2.5">
         {FAQs.map((faq, index) => (
