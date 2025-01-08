@@ -7,7 +7,7 @@ import {
   UserIcon,
 } from "@/assets/svg/icons";
 import { WOWLogo } from "@/assets/svg/logo";
-import { Button, Text } from "@/components/elements";
+import { Button, Img, Text } from "@/components/elements";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -196,14 +196,28 @@ const Header = ({ data }) => {
 
             <div className="flex hidden items-center gap-1 md:block">
               <Link href="/" aria-label="Go to WOW Home Page">
-                <WOWLogo size={86} keyName="web" />
+                {/* <WOWLogo size={86} keyName="web" /> */}
+                <Img
+                  src="birthdayLogo.svg"
+                  alt="BirthdayLogo"
+                  width={100}
+                  height={100}
+                  isStatic
+                />
               </Link>
             </div>
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
             <Link href="/" aria-label="Go to WOW Home Page">
-              <WOWLogo size={86} keyName="mobile" />
+              {/* <WOWLogo size={86} keyName="mobile" /> */}
+              <Img
+                src="birthdayLogo.svg"
+                alt="BirthdayLogo"
+                width={100}
+                height={100}
+                isStatic
+              />
             </Link>
           </div>
 
