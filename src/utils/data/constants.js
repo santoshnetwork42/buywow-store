@@ -3,6 +3,7 @@ export const RESTRICT_SEARCH_AND_CART_TO_SHOW = ["/checkout"];
 export const PREPAID_ENABLED = "PREPAID_ENABLED";
 export const GOKWIK_ENABLED = "GOKWIK_ENABLED";
 export const SHOW_SHIPPING_BAR = "SHOW_SHIPPING_BAR";
+export const WEB_ANIMATED_BALLOON = "WEB_ANIMATED_BALLOON";
 export const MAX_RECENTLY_VIEWED_PRODUCTS = 13;
 export const STICKY_VIEW_CART_TO_SHOW = ["/", "/search", "/collections"];
 export const AUTO_APPLY_COUPON_PATHNAMES = [

@@ -1,11 +1,20 @@
 "use client";
 
-import { BALLOON_ALLOWED_PATHS } from "@/utils/data/constants";
+import {
+  BALLOON_ALLOWED_PATHS,
+  WEB_ANIMATED_BALLOON,
+} from "@/utils/data/constants";
 import confetti from "canvas-confetti";
 import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { useConfiguration } from "@wow-star/utils-cms";
 
 const BirthdayCelebration = React.memo(() => {
+  const isBalloonAnimationAllowed = useConfiguration(
+    WEB_ANIMATED_BALLOON,
+    false,
+  );
+
   const generateRandomValue = (min, max) =>
     Math.floor(Math.random() * (max - min) + min);
 
@@ -104,13 +113,13 @@ const BirthdayCelebration = React.memo(() => {
 
   // same as coupon auto apply right now
   const pathname = usePathname();
-  const shouldAllowedBalloonsToFloat = BALLOON_ALLOWED_PATHS.some(
+  const shouldAllowedBalloonsToFloatOnPath = BALLOON_ALLOWED_PATHS.some(
     (allowedPath) =>
       pathname === allowedPath ||
       (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
   );
 
-  if (!shouldAllowedBalloonsToFloat) {
+  if (!shouldAllowedBalloonsToFloatOnPath || !isBalloonAnimationAllowed) {
     return <></>;
   }
 
@@ -128,7 +137,7 @@ const BirthdayCelebration = React.memo(() => {
             key={index}
             src={randomImage}
             alt="Balloon"
-            className={`balloon absolute -bottom-[250px] h-auto w-8 animate-flying select-none`}
+            className={`balloon animate-flying absolute -bottom-[250px] h-auto w-8 select-none`}
             data-animation-duration={`${randomDuration}s`} // Store duration in a custom data attribute
             data-start-time={new Date().getTime()}
             data-random-delay={randomDelay}

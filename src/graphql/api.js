@@ -41,6 +41,7 @@ export const getInitialData = /* GraphQL */ `
         PPCOD_ENABLED
         PPCOD_AMOUNT
         SHOW_SHIPPING_BAR
+        WEB_ANIMATED_BALLOON
       }
     }
 
