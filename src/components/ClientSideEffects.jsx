@@ -10,18 +10,25 @@ import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
+import { WEB_ANIMATED_BALLOON } from "@/utils/data/constants";
+import { useConfiguration } from "@wow-star/utils-cms";
 import { getCurrentUser } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
 import Cookies from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
+import BirthdayCelebration from "./partials/BirthdayCelebration";
 
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const sessionId = sessionStorage?.getItem(
     `${STORE_PREFIX}_coupon_session_id`,
+  );
+  const isBalloonAnimationAllowed = useConfiguration(
+    WEB_ANIMATED_BALLOON,
+    false,
   );
 
   const { updateMeta, setStore, destroySession } = useSystemDispatch();
@@ -231,6 +238,9 @@ const ClientSideEffects = () => {
     setStoreData();
   }, [setMetaData, setGuestCheckout, setStoreData]);
 
+  if (isBalloonAnimationAllowed) {
+    return <BirthdayCelebration />;
+  }
   return null;
 };
 

@@ -48,7 +48,6 @@ async function PageLayout({ children }) {
         <GoKwikProvider>
           <AnnouncementProvider>
             <ClientSideEffects />
-            {SHOW_BIRTHDAY_CELEBRATION == "true" && <BirthdayCelebration />}
             <div className="flex min-h-dvh w-full flex-col">
               <AnnouncementBar data={announcementData} />
               {!!headerData?.data && <Header data={headerData} />}

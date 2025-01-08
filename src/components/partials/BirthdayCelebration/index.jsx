@@ -10,11 +10,6 @@ import { usePathname } from "next/navigation";
 import { useConfiguration } from "@wow-star/utils-cms";
 
 const BirthdayCelebration = React.memo(() => {
-  const isBalloonAnimationAllowed = useConfiguration(
-    WEB_ANIMATED_BALLOON,
-    false,
-  );
-
   const generateRandomValue = (min, max) =>
     Math.floor(Math.random() * (max - min) + min);
 
@@ -119,7 +114,7 @@ const BirthdayCelebration = React.memo(() => {
       (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
   );
 
-  if (!shouldAllowedBalloonsToFloatOnPath || !isBalloonAnimationAllowed) {
+  if (!shouldAllowedBalloonsToFloatOnPath) {
     return <></>;
   }
 
