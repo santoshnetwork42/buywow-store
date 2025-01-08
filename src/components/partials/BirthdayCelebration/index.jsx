@@ -1,13 +1,9 @@
 "use client";
 
-import {
-  BALLOON_ALLOWED_PATHS,
-  WEB_ANIMATED_BALLOON,
-} from "@/utils/data/constants";
+import { BALLOON_ALLOWED_PATHS } from "@/utils/data/constants";
 import confetti from "canvas-confetti";
-import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { useConfiguration } from "@wow-star/utils-cms";
+import React, { useEffect } from "react";
 
 const BirthdayCelebration = React.memo(() => {
   const generateRandomValue = (min, max) =>

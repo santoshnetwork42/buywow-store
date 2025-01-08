@@ -1,9 +1,8 @@
 import awsExport from "@/aws-exports";
 import ClientSideEffects from "@/components/ClientSideEffects";
-import BirthdayCelebration from "@/components/partials/BirthdayCelebration";
 import Header from "@/components/partials/Header";
 import Scripts from "@/components/scripts";
-import { AWS_CLIENT_ID, SHOW_BIRTHDAY_CELEBRATION } from "@/config";
+import { AWS_CLIENT_ID } from "@/config";
 import {
   getNavbarAndFooterAPI,
   getStoreConfigurationsAPI,
