@@ -5,10 +5,10 @@ import SectionHeading from "@/components/common/SectionHeading";
 import { Img, Text } from "@/components/elements";
 import Slider from "@/components/features/Slider";
 import { extractAttributes } from "@/utils/helpers";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CategoryFlipClock from "./FlipClock";
 
-const CustomCountdown = ({ startTime }) => {
+const CustomCountdown = ({ startTime, onTimerComplete }) => {
   const [timeLeft, setTimeLeft] = useState({
     hours: 0,
     minutes: 0,
@@ -17,36 +17,59 @@ const CustomCountdown = ({ startTime }) => {
 
   useEffect(() => {
     const calculateTimeLeft = () => {
-      const now = new Date();
-      const [startHours = "", startMinutes = ""] = startTime
-        ?.split(":")
-        .map(Number);
+      try {
+        const now = new Date();
+        const [startHours = "", startMinutes = ""] = startTime
+          ?.split(":")
+          .map(Number);
 
-      const targetTime = new Date(now);
-      targetTime.setHours(startHours, startMinutes, 0);
+        const targetTime = new Date(now);
+        targetTime.setHours(startHours, startMinutes, 0);
 
-      // If target time is in the past for today, no countdown needed
-      if (targetTime <= now) return { hours: 0, minutes: 0, seconds: 0 };
+        // If target time is in the past for today, notify parent and return zeros
+        if (targetTime <= now) {
+          if (onTimerComplete) {
+            onTimerComplete();
+          }
+          return { hours: 0, minutes: 0, seconds: 0 };
+        }
 
-      const difference = targetTime - now;
+        const difference = targetTime - now;
 
-      return {
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      };
+        return {
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        };
+      } catch (error) {
+        console.error("Error calculating time left:", error);
+        return { hours: 0, minutes: 0, seconds: 0 };
+      }
     };
 
     // Initial calculation
-    setTimeLeft(calculateTimeLeft());
+    const initialTime = calculateTimeLeft();
+    setTimeLeft(initialTime);
 
     // Update every second
     const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
+      const newTime = calculateTimeLeft();
+      setTimeLeft(newTime);
+
+      // Check if timer has reached zero
+      if (
+        newTime.hours === 0 &&
+        newTime.minutes === 0 &&
+        newTime.seconds === 0
+      ) {
+        if (onTimerComplete) {
+          onTimerComplete();
+        }
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [startTime]);
+  }, [startTime, onTimerComplete]);
 
   const formatNumber = (num) => String(num).padStart(2, "0");
 
@@ -87,7 +110,6 @@ const CustomCountdown = ({ startTime }) => {
 };
 
 const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
-  // Helper functions defined first
   const getCurrentDateTime = () => {
     const now = new Date();
     const currentTime = now.toLocaleTimeString("en-US", { hour12: false });
@@ -107,7 +129,6 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
       return false;
     }
 
-    // Safe split with default empty strings
     const [startHours = "", startMinutes = ""] = (
       startTime?.split(":") || []
     ).map(Number);
@@ -180,6 +201,15 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
       ? "w-[calc(33vw-20px)] min-w-[100px] max-w-[260px] sm:w-[26vw] md:w-[24vw] lg:w-[22vw] xl:w-[20vw]"
       : "w-[calc(33vw-12px)] min-w-[112px] sm:w-[28vw] sm:max-w-[396px] md:w-[26vw] lg:w-[24vw] xl:w-[22vw]";
 
+  // Force update function when timer completes
+  const handleTimerComplete = useCallback(() => {
+    const newStatus = getSaleStatus(startTime, endTime, startDate, endDate);
+    if (newStatus !== saleStatus) {
+      setSaleStatus(newStatus);
+      setShouldUpdate((prev) => !prev);
+    }
+  }, [startTime, endTime, startDate, endDate, saleStatus]);
+
   useEffect(() => {
     const checkStatus = () => {
       const newStatus = getSaleStatus(startTime, endTime, startDate, endDate);
@@ -189,7 +219,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
       }
     };
 
-    const statusCheckInterval = setInterval(checkStatus, 60000);
+    const statusCheckInterval = setInterval(checkStatus, 1000); // Check every second
     checkStatus(); // Initial check
 
     return () => clearInterval(statusCheckInterval);
@@ -303,32 +333,23 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
               />
             </div>
             <div className="absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-2 rounded-md backdrop-blur-sm">
-              <div className="w-full bg-yellow-50 p-1 text-center">
-                <Text className="line-clamp-1" responsive>
-                  {saleMessage || ""}
-                </Text>
-              </div>
-              <CustomCountdown startTime={startTime} />
+              {!!saleMessage && (
+                <div className="w-full bg-yellow-50 p-1 text-center">
+                  <Text className="line-clamp-1" responsive>
+                    {saleMessage || ""}
+                  </Text>
+                </div>
+              )}
+              <CustomCountdown
+                startTime={startTime}
+                onTimerComplete={handleTimerComplete}
+              />
             </div>
           </div>
         );
 
       case "ENDED":
       case "NORMAL":
-        return (
-          <div
-            className={`overflow-hidden rounded sm:rounded-md lg:rounded-lg ${aspectRatio}`}
-          >
-            <Img
-              src={url}
-              width={imageSize}
-              height={imageHeight}
-              alt={alternativeText || `${slug} Image`}
-              className="h-auto w-full object-contain"
-              priority={priority}
-            />
-          </div>
-        );
       default:
         return (
           <div
