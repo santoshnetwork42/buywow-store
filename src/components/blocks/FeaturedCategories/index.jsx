@@ -304,7 +304,7 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
             </div>
             <div className="absolute left-1/2 top-1/2 flex h-full w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-2 rounded-md backdrop-blur-sm">
               <div className="w-full bg-yellow-50 p-1 text-center">
-                <Text className="line-clamp-1" size="sm">
+                <Text className="line-clamp-1" responsive>
                   {saleMessage || ""}
                 </Text>
               </div>
