@@ -96,6 +96,10 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
   };
 
   const isWithinTwentyFourHoursOfStart = (startTime, startDate, endDate) => {
+    if (!startTime || !startDate || !endDate) {
+      return false;
+    }
+
     const now = new Date();
     const currentDate = now.toISOString().split("T")[0];
 
@@ -103,9 +107,11 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
       return false;
     }
 
-    const [startHours = "", startMinutes = ""] = startTime
-      ?.split(":")
-      .map(Number);
+    // Safe split with default empty strings
+    const [startHours = "", startMinutes = ""] = (
+      startTime?.split(":") || []
+    ).map(Number);
+
     const startTimeDate = new Date(now);
     startTimeDate.setHours(startHours, startMinutes, 0);
 
@@ -155,9 +161,14 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
   const { url, alternativeText } = extractAttributes(image);
 
   const [showClock, setShowClock] = useState(true);
-  const [saleStatus, setSaleStatus] = useState(() =>
-    getSaleStatus(startTime, endTime, startDate, endDate),
-  );
+  const [saleStatus, setSaleStatus] = useState(() => {
+    try {
+      return getSaleStatus(startTime, endTime, startDate, endDate);
+    } catch (error) {
+      console.warn("Error calculating initial sale status:", error);
+      return "NORMAL";
+    }
+  });
   const [shouldUpdate, setShouldUpdate] = useState(false);
 
   const imageSize = size === "SMALL" ? 260 : 396;
@@ -304,6 +315,21 @@ const CategoryItem = ({ category, size, parentCategoryTitle, priority }) => {
 
       case "ENDED":
       case "NORMAL":
+        return (
+          <div
+            className={`overflow-hidden rounded sm:rounded-md lg:rounded-lg ${aspectRatio}`}
+          >
+            <Img
+              src={url}
+              width={imageSize}
+              height={imageHeight}
+              alt={alternativeText || `${slug} Image`}
+              className="h-auto w-full object-contain"
+              priority={priority}
+            />
+          </div>
+        );
+      default:
         return (
           <div
             className={`overflow-hidden rounded sm:rounded-md lg:rounded-lg ${aspectRatio}`}
