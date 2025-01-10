@@ -288,6 +288,20 @@ export const getInitialData = /* GraphQL */ `
   }
 `;
 
+export const checkInventory = /* GraphQL */ `
+  mutation CheckInventory($storeId: ID!, $items: [CheckInventoryInput!]!) {
+    checkInventory(storeId: $storeId, items: $items) {
+      recordKey
+      productId
+      variantId
+      inventory
+      price
+      collections
+      __typename
+    }
+  }
+`;
+
 export const getCMSPages = /* GraphQL */ `
   query getCMSPages($storeId: String!, $type: CMSPageType!) {
     getCMSPages(storeId: $storeId, type: $type)

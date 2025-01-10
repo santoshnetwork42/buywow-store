@@ -1,3 +1,4 @@
+import { showToast } from "@/components/common/ToastComponent";
 import { STORE_ID, STORE_PREFIX } from "@/config";
 import {
   fetchProductDetailsAPI,
@@ -26,7 +27,12 @@ import {
   checkAffiseValidity,
   getFirstVariant,
   getProductSubTotal,
+  isDiffArray,
 } from "@/utils/helpers";
+import {
+  errorComsOnPlaceOrder,
+  errorTypeOnPlaceOrder,
+} from "@/utils/helpers/communication";
 import { getCouponDiscount } from "@wow-star/utils-cms";
 import { product } from "platform";
 import { all, call, put, select } from "redux-saga/effects";
@@ -168,6 +174,11 @@ export function* applyCouponHandler(action) {
   yield put({ type: cartSagaActions.MANAGE_CART });
 }
 
+export function* updateCartCouponHandler(action) {
+  const { coupon } = action.payload;
+  yield put(setCoupon(coupon));
+}
+
 export function* removeCouponHandler() {
   yield put(setCoupon(null));
   yield put({ type: cartSagaActions.MANAGE_CART });
@@ -180,19 +191,61 @@ export function* emptyCartHandler() {
 
 export function* validateCartHandler(action) {
   const { payload } = action;
-  const { data: cartData = [] } = yield select((state) => state.cart);
+
+  const { data: cartData = [], coupon } = yield select((state) => state.cart);
+
+  let error = "";
+  if (!coupon?.code || coupon?.isArchive) {
+    error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_ARCHIVED];
+  }
 
   const data = cartData.map((item) => {
-    if (typeof payload[item.recordKey] === "number") {
-      return {
-        ...item,
-        price: payload[item.recordKey],
-      };
+    const { price, collections } = payload[item.recordKey];
+    if (item.price !== price) {
+      error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.PRICE_CHANGE];
     }
-    return item;
+    const isDiffer = isDiffArray(item?.collections || [], collections || []);
+    if (isDiffer) {
+      const isCouponApplicable = (coupon?.applicableCollections || []).some(
+        (c) => collections?.includes(c),
+      );
+      if (
+        !isCouponApplicable &&
+        !!coupon?.applicableCollections &&
+        !!collections?.length
+      )
+        error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_CHANGE];
+    }
+    return {
+      ...item,
+      ...payload[item.recordKey],
+    };
   });
 
-  yield put(setCart(data));
+  const { allowed: isCouponAllowed } = getCouponDiscount(coupon, data);
+
+  const updatedData = isCouponAllowed
+    ? data
+    : data?.filter((item) => item?.cartItemSource !== "COUPON");
+
+  const subTotal = getProductSubTotal(updatedData);
+
+  yield put(setSubTotal(subTotal));
+  yield put(setCart(updatedData));
+
+  if (!isCouponAllowed) {
+    yield put(setCoupon(null));
+  }
+  yield put({ type: cartSagaActions.MANAGE_CART });
+
+  if (error) {
+    showToast.custom(
+      error,
+      {},
+      "text-center", // textClassName
+      "!flex-row", //mainClassName
+    );
+  }
 }
 
 export function* updateCartIdHandler(action) {
@@ -214,6 +267,70 @@ export function* storedCouponCodeHandler(action) {
 
 export function* clearStoredCouponCodeHandler() {
   yield put(clearStoredCoupon());
+}
+
+export function* validateCartOnErrorHandler(action) {
+  const { inventoryDetails, coupon } = action?.payload;
+  const { data: cartData = [], coupon: appliedCoupon } = yield select(
+    (state) => state.cart,
+  );
+
+  let error = "";
+
+  if (!!appliedCoupon?.code && (!coupon?.code || coupon?.isArchive)) {
+    error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_ARCHIVED];
+  }
+
+  const updatedCart = cartData?.map((i) => {
+    const updatedProduct = inventoryDetails?.find(
+      (p) => p.recordKey === i.recordKey,
+    );
+
+    if (i.price !== updatedProduct?.price) {
+      error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.PRICE_CHANGE];
+    }
+
+    const isDiffer = isDiffArray(
+      i?.collections || [],
+      updatedProduct?.collections || [],
+    );
+
+    if (isDiffer) {
+      error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_CHANGE];
+    }
+
+    return {
+      ...i,
+      price: updatedProduct?.price,
+      inventory: updatedProduct?.inventory,
+      collections: updatedProduct?.collections || [],
+    };
+  });
+
+  const { allowed: isCouponAllowed = false } = !coupon?.isArchive
+    ? getCouponDiscount(coupon, updatedCart)
+    : {};
+
+  const updatedData = isCouponAllowed
+    ? updatedCart
+    : updatedCart.filter((item) => item?.cartItemSource !== "COUPON");
+
+  const subTotal = getProductSubTotal(updatedData);
+
+  yield put(setSubTotal(subTotal));
+  yield put(setCart(updatedData));
+  yield put(setCoupon(isCouponAllowed ? coupon : null));
+
+  yield put({ type: cartSagaActions.MANAGE_CART });
+
+  // if (error) {
+  //   showToast.error(
+  //     error,
+  //     {},
+  //     "text-center", // textClassName
+  //     "!flex-row", //mainClassName
+  //   );
+  // }
 }
 
 export function* updateCartWithShoppingCartIdHandler(action) {

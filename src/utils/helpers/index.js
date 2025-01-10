@@ -640,3 +640,16 @@ export const extractCouponsForApplicableCollection = ({
 
   return sortCouponBasedOnQuantity(filteredCoupons);
 };
+
+export const isDiffArray = (arr1 = [], arr2 = []) => {
+  if (!Array.isArray(arr1) || !Array.isArray(arr2)) return false;
+  // First check lengths - if different, return true immediately
+  if (arr1.length !== arr2.length) return true;
+
+  // Create copies to avoid modifying original arrays
+  const sorted1 = [...arr1].sort();
+  const sorted2 = [...arr2].sort();
+
+  // Compare elements until first difference
+  return sorted1.some((element, index) => element !== sorted2[index]);
+};

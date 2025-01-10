@@ -129,7 +129,6 @@ const Header = ({ data }) => {
 
   const {
     logo,
-    VIPMembershipLogo,
     mWebMenuLogo,
     menus: collectionMenus,
     otherLinks,
@@ -137,8 +136,6 @@ const Header = ({ data }) => {
 
   const { url: logoUrl, alternativeText: logoAlternativeText = "logo" } =
     extractAttributes(logo) || {};
-  const { url: vipUrl, alternativeText: vipAlternativeText = "logo" } =
-    extractAttributes(VIPMembershipLogo) || {};
 
   const openMobileMenu = () => setIsMobileMenuOpen(true);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);

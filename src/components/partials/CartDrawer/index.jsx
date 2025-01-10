@@ -146,8 +146,10 @@ const CartDrawer = () => {
     const checkoutABVariant = Cookies.get(VERCEL_CHECKOUT_AB_FLAG);
 
     if (!isInventoryCheckSuccess) {
-      handleOutOfStockEvent(outOfStockItems, inventoryMapping);
-      showToast.error("Please remove out of stock product from cart");
+      if (!!outOfStockItems?.length) {
+        handleOutOfStockEvent(outOfStockItems, inventoryMapping);
+        showToast.error("Please remove out of stock product from cart");
+      }
       return false;
     }
 

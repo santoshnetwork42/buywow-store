@@ -7,7 +7,7 @@ import AddressSection from "@/components/partials/Account/AddressSection";
 import PaymentLoader from "@/components/partials/Checkout/PaymentLoader";
 import PaymentMethodsSection from "@/components/partials/Checkout/PaymentMethodsSection";
 import ProgressSteps from "@/components/partials/Others/ProgressSteps";
-import { RAZORPAY_KEY, RAZORPAY_SCRIPT } from "@/config";
+import { RAZORPAY_KEY, RAZORPAY_SCRIPT, STORE_ID } from "@/config";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
@@ -43,6 +43,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { checkInventoryAPI, fetchCouponRuleAPI } from "@/lib/appSyncAPIs";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),
@@ -59,13 +60,13 @@ let razorpayMethod;
 const CheckoutClient = () => {
   const router = useRouter();
   const { handlePasswordLessModal } = useModalDispatch();
-  const { validateCart, emptyCart } = useCartDispatch();
+  const { validateCart, emptyCart, validateCartOnError } = useCartDispatch();
   const {
     addPaymentInfoEvent,
     placeOrderEvent: onPlaceOrderEvent,
     startCheckoutEvent,
   } = useEventsDispatch();
-
+  const cartItems = useSelector((state) => state.cart?.data || []);
   const currentAddress = useSelector((state) => state.address?.currentAddress);
   const user = useSelector((state) => state.user?.user);
   const customUser = useSelector((state) => state.user?.customUser);
@@ -292,9 +293,29 @@ const CheckoutClient = () => {
         return;
       }
       if (error) {
-        showToast.error("Something went wrong");
+        // showToast.error("Something went wrong");
         setPaymentLoader(false);
-        return;
+
+        const inventoryPayload = cartItems?.map((product) => ({
+          recordKey: product.recordKey,
+          productId: product.id,
+          variantId: product.variantId,
+          source: product.cartItemSource || null,
+        }));
+
+        await checkInventoryAPI(STORE_ID, inventoryPayload).then(
+          async (inventoryDetails) => {
+            if (appliedCoupon?.code) {
+              await fetchCouponRuleAPI(appliedCoupon?.code).then((coupon) => {
+                validateCartOnError(inventoryDetails, coupon);
+              });
+            } else {
+              validateCartOnError(inventoryDetails, appliedCoupon);
+            }
+          },
+        );
+        router.push("/?cart=1");
+        return Promise.resolve();
       }
 
       addPaymentInfoEvent({

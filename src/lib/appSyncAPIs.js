@@ -34,6 +34,8 @@ import {
   validateTransaction,
   verifyCustomOTP,
   getStoreConfigurations,
+  getUserDetails,
+  checkInventory,
 } from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import fetchData from "@/utils/fetchData";
@@ -373,7 +375,26 @@ export const getUserRewardsAPI = async () => {
     const data = "data" in response ? response.data : response;
     return data?.getUser;
   } catch (error) {
-    errorHandler(error, "Get User Rewards API");
+    errorHandler(error, "Get User Details API");
+    return null;
+  }
+};
+
+export const checkInventoryAPI = async (storeId, items) => {
+  try {
+    const response = await client.graphql({
+      query: checkInventory,
+      variables: {
+        storeId,
+        items,
+      },
+      authMode: "apiKey",
+    });
+
+    const data = "data" in response ? response.data : response;
+    return data?.checkInventory;
+  } catch (error) {
+    errorHandler(error, "Fetch getShoppingCart API");
     return null;
   }
 };

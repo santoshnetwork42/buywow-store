@@ -14,6 +14,8 @@ import {
   validateCartHandler,
   updateCartWithShoppingCartIdHandler,
   clearStoredCouponCodeHandler,
+  updateCartCouponHandler,
+  validateCartOnErrorHandler,
 } from "@/store/sagas/handlers/cart.handle";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { all, fork, takeEvery, takeLatest } from "redux-saga/effects";
@@ -36,6 +38,16 @@ function* applyRewardPoint() {
 
 function* applyCoupon() {
   yield takeLatest(cartSagaActions.APPLY_COUPONS, applyCouponHandler);
+}
+
+function* updateCartCoupon() {
+  yield takeLatest(cartSagaActions.UPDATE_CART_COUPON, updateCartCouponHandler);
+}
+function* validateCartOnError() {
+  yield takeLatest(
+    cartSagaActions.VALIDATE_CART_ON_ERROR,
+    validateCartOnErrorHandler,
+  );
 }
 
 function* removeCoupon() {
@@ -97,9 +109,11 @@ export function* cartWatcher() {
     fork(updateCart),
     fork(applyRewardPoint),
     fork(applyCoupon),
+    fork(updateCartCoupon),
     fork(removeCoupon),
     fork(emptyCart),
     fork(validateCart),
+    fork(validateCartOnError),
     fork(updateCartId),
     fork(updateCartIdLoading),
     fork(updateCartWithShoppingCartId),

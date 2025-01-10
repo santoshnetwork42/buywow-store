@@ -54,6 +54,24 @@ export const useCartDispatch = () => {
     },
     [dispatch],
   );
+  const updateCartCoupon = useCallback(
+    (coupon) => {
+      dispatch({
+        type: cartSagaActions.UPDATE_CART_COUPON,
+        payload: { coupon },
+      });
+    },
+    [dispatch],
+  );
+  const validateCartOnError = useCallback(
+    (inventoryDetails, coupon) => {
+      dispatch({
+        type: cartSagaActions.VALIDATE_CART_ON_ERROR,
+        payload: { inventoryDetails, coupon },
+      });
+    },
+    [dispatch],
+  );
 
   const checkoutInitiated = useCallback(() => {
     dispatch({
@@ -159,7 +177,9 @@ export const useCartDispatch = () => {
     removeCoupon,
     emptyCart,
     validateCart,
+    validateCartOnError,
     updateCartId,
+    updateCartCoupon,
     updateCartIdLoading,
     storeCoupon,
     clearStoredCoupon,

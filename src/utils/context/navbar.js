@@ -1,6 +1,7 @@
 "use client";
 
 import { GUEST_CHECKOUT, STORE_ID, STORE_PREFIX } from "@/config";
+import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { setGlobalCoupons } from "@/store/slices/nudge.slice";
 import { extractGlobalCoupons } from "@/utils/helpers";
 import {
@@ -31,14 +32,17 @@ function NavbarProvider({ children, headerData, storeConfig }) {
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
   const dispatch = useDispatch();
-
+  const { updateCartCoupon } = useCartDispatch();
   const [initialData, setInitialData] = useState(null);
 
   useEffect(() => {
     fetchInitialData()
       .then((data) => {
         setInitialData(data);
-        // store global coupons
+        const updatedCoupon = data?.getTopCoupons?.items?.find(
+          (c) => c.code === appliedCoupon?.code,
+        );
+        updateCartCoupon(updatedCoupon || null); // if undefined set as null
         dispatch(
           setGlobalCoupons(extractGlobalCoupons(data.getTopCoupons.items)),
         );
