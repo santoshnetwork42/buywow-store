@@ -37,8 +37,8 @@ const SORT_OPTIONS = [
   { value: "LATEST", label: "Latest" },
   { value: "BEST_SELLERS", label: "Best Sellers" },
   { value: "HIGHEST_RATED", label: "Highest Rated" },
-  { value: "PRICE_HIGH_TO_LOW", label: "High to Low" },
-  { value: "PRICE_LOW_TO_HIGH", label: "Low to High" },
+  { value: "PRICE_HIGH_TO_LOW", label: "Price - High to Low" },
+  { value: "PRICE_LOW_TO_HIGH", label: "Price - Low to High" },
   { value: "AVAILABILITY", label: "Availability" },
 ];
 

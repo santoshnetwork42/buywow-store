@@ -30,7 +30,7 @@ const SortDropdown = ({ value, options, onOptionChange, className }) => {
         value={value}
         options={options}
         onChange={handleChange}
-        className="flex min-w-[120px] flex-grow !cursor-pointer border-b border-black-900 py-0.5 text-sm font-medium"
+        className="flex min-w-[140px] flex-grow !cursor-pointer border-b border-black-900 py-0.5 text-sm font-medium"
         // styles={{
         //   menu: (provided) => ({
         //     ...provided,
