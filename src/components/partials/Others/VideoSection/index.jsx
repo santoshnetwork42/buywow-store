@@ -562,7 +562,7 @@ const DesktopVideoCarousel = ({
                       item?.thumbnail?.data?.attributes?.alternativeText ||
                       "Video thumbnail"
                     }
-                    className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-105"
+                    className="h-full w-full rounded-md transition-transform duration-300 hover:scale-105"
                   />
                 </div>
               ))}
@@ -623,7 +623,7 @@ const DesktopVideoCarousel = ({
                       item?.thumbnail?.data?.attributes?.alternativeText ||
                       "Video thumbnail"
                     }
-                    className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-105"
+                    className="h-full w-full rounded-md transition-transform duration-300 hover:scale-105"
                   />
                 </div>
               ))}
@@ -684,7 +684,7 @@ const VideoItem = ({ thumbnail, setCurrentSelectedVideo, index }) => {
         width={200}
         height={200}
         alt={thumbnail?.alternativeText || "Image"}
-        className="h-full w-full rounded-md object-cover"
+        className="h-full w-full rounded-md object-contain"
       />
     </div>
   );
