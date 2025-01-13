@@ -1,33 +1,37 @@
 import { Heading, Img, Text } from "@/components/elements";
 import React, { useMemo } from "react";
 
-const VariantSelector = React.memo(({ variantGroups, onVariantChange }) => {
-  const sortedVariantGroups = useMemo(
-    () => [...variantGroups].sort((a, b) => a.position - b.position),
-    [variantGroups],
-  );
+const VariantSelector = React.memo(
+  ({ variantGroups, onVariantChange, isShoppable = false }) => {
+    const sortedVariantGroups = useMemo(
+      () => [...variantGroups].sort((a, b) => a.position - b.position),
+      [variantGroups],
+    );
 
-  if (!Array.isArray(variantGroups) || variantGroups.length === 0) return null;
+    if (!Array.isArray(variantGroups) || variantGroups.length === 0)
+      return null;
 
-  return (
-    <div className="mb-6 flex flex-col gap-2 md:mb-7">
-      <Heading as="h5" size="base">
-        Select Pack
-      </Heading>
-      <div className="flex flex-col gap-4 md:gap-5">
-        {sortedVariantGroups.map((group) => (
-          <VariantGroup
-            key={group.id}
-            group={group}
-            onVariantChange={onVariantChange}
-          />
-        ))}
+    return (
+      <div className="mb-6 flex flex-col gap-2 md:mb-7">
+        <Heading as="h5" size="base">
+          Select Pack
+        </Heading>
+        <div className="flex flex-col gap-4 md:gap-5">
+          {sortedVariantGroups.map((group) => (
+            <VariantGroup
+              key={group.id}
+              group={group}
+              onVariantChange={onVariantChange}
+              isShoppable={isShoppable}
+            />
+          ))}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
-const VariantGroup = React.memo(({ group, onVariantChange }) => {
+const VariantGroup = React.memo(({ group, onVariantChange, isShoppable }) => {
   const sortedVariantOptions = useMemo(
     () =>
       [...group.variantOptions].sort(
@@ -45,21 +49,22 @@ const VariantGroup = React.memo(({ group, onVariantChange }) => {
           key={option.id}
           variant={option}
           onChange={() => onVariantChange(group.id, option.id)}
+          isShoppable={isShoppable}
         />
       ))}
     </div>
   );
 });
 
-const VariantItem = React.memo(({ variant, onChange }) => {
+const VariantItem = React.memo(({ variant, onChange, isShoppable }) => {
   const { title, price, listingPrice, selected, label, thumbImage, images } =
     variant;
 
   const productImage = thumbImage || images?.items[0]?.imageKey;
 
-  const containerClassName = `flex max-w-[112px] cursor-pointer flex-col gap-2 rounded bg-orange-50_01 p-1.5 sm:max-w-[130px] md:p-2 ${
+  const containerClassName = `flex  cursor-pointer gap-2 rounded bg-orange-50_01 p-1.5  ${
     selected ? "outline outline-2 outline-black-900" : ""
-  }`;
+  } ${isShoppable ? "w-full" : "flex-col max-w-[112px] sm:max-w-[130px] md:p-2"}`;
 
   const discount = useMemo(
     () => (listingPrice > price ? listingPrice - price : null),
@@ -70,7 +75,7 @@ const VariantItem = React.memo(({ variant, onChange }) => {
 
   return (
     <div className={containerClassName} onClick={onChange}>
-      {productImage && (
+      {productImage && !isShoppable && (
         <div className="aspect-[114/92] rounded bg-white-a700">
           <Img
             src={productImage}
