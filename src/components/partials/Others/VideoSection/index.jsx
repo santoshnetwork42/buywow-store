@@ -50,7 +50,7 @@ const ModalProductDetail = React.memo(({ fetchedProduct, slug, className }) => {
     useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
-  const { title, listingPrice, price, images } = packageProduct || {};
+  const { title, listingPrice, price, images, id } = packageProduct || {};
 
   const imageList = useMemo(
     () =>
@@ -82,6 +82,8 @@ const ModalProductDetail = React.memo(({ fetchedProduct, slug, className }) => {
     () => (listingPrice > price ? listingPrice - price : 0),
     [listingPrice, price],
   );
+
+  if (!id) return <></>;
 
   return (
     <div className={className}>
@@ -572,7 +574,7 @@ const DesktopVideoCarousel = ({
           {videoItems.map((item, index) => (
             <div
               key={index}
-              className="absolute left-0 top-0 flex h-full w-full"
+              className="absolute left-0 top-0 flex h-full w-full justify-center"
               style={getVideoStyles(index)}
             >
               <div className="relative flex w-1/2 items-center justify-center rounded-md bg-gray-100">
@@ -582,7 +584,7 @@ const DesktopVideoCarousel = ({
                   }}
                   src={item?.video?.data?.attributes?.url}
                   muted={muted}
-                  className="h-full w-full rounded-md rounded-br-none rounded-tr-none object-cover"
+                  className="h-full w-full object-cover"
                   onMuteToggle={(e) => {
                     e.stopPropagation();
                     setMuted(!muted);
