@@ -709,7 +709,7 @@ const VideoSection = ({ className, ...props }) => {
           <Heading size="2xl" as="h3" responsive>
             {title}
           </Heading>
-          <Button className="bg-brown-700 rounded-full px-4 py-2 text-center max-sm:mt-1 md:px-5 md:py-3">
+          <Button className="rounded-full bg-yellow-900 px-4 py-2 text-center text-white-a700_01 max-sm:mt-1 md:px-5 md:py-3">
             {buttonText}
           </Button>
         </div>
