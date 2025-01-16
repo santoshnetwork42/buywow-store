@@ -30,7 +30,7 @@ const ReviewForm = dynamic(
 );
 
 const reviewDefault = {
-  rating: 1,
+  rating: 5,
   comment: "",
   name: "",
   email: "",
