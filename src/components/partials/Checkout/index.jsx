@@ -35,7 +35,6 @@ import {
   useCartTotal,
   useConfiguration,
   useFreeProducts,
-  useInventory,
   useNavbar,
   useOrders,
 } from "@wow-star/utils-cms";
@@ -43,7 +42,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { checkInventoryAPI, fetchCouponRuleAPI } from "@/lib/appSyncAPIs";
+import { useInventory } from "@/utils/hooks/useInventory";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),
@@ -295,25 +294,13 @@ const CheckoutClient = () => {
       if (error) {
         // showToast.error("Something went wrong");
         setPaymentLoader(false);
-
         const inventoryPayload = cartItems?.map((product) => ({
           recordKey: product.recordKey,
           productId: product.id,
           variantId: product.variantId,
           source: product.cartItemSource || null,
         }));
-
-        await checkInventoryAPI(STORE_ID, inventoryPayload).then(
-          async (inventoryDetails) => {
-            if (appliedCoupon?.code) {
-              await fetchCouponRuleAPI(appliedCoupon?.code).then((coupon) => {
-                validateCartOnError(inventoryDetails, coupon);
-              });
-            } else {
-              validateCartOnError(inventoryDetails, appliedCoupon);
-            }
-          },
-        );
+        validateCartOnError(inventoryPayload);
         router.push("/?cart=1");
         return Promise.resolve();
       }

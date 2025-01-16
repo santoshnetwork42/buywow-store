@@ -24,12 +24,12 @@ import {
   useCartItems,
   useCartTotal,
   useConfiguration,
-  useInventory,
   useNavbar,
 } from "@wow-star/utils-cms";
 import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
 import Nudge from "@/components/common/Nudge";
+import { useInventory } from "@/utils/hooks/useInventory";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),

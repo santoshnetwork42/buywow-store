@@ -64,10 +64,10 @@ export const useCartDispatch = () => {
     [dispatch],
   );
   const validateCartOnError = useCallback(
-    (inventoryDetails, coupon) => {
+    (inventoryDetails) => {
       dispatch({
         type: cartSagaActions.VALIDATE_CART_ON_ERROR,
-        payload: { inventoryDetails, coupon },
+        payload: { inventoryDetails },
       });
     },
     [dispatch],
