@@ -195,6 +195,7 @@ const Header = ({ data }) => {
               <Link href="/" aria-label="Go to WOW Home Page">
                 {/* <WOWLogo size={86} keyName="web" /> */}
                 <Img
+                  style={{ width: "100px", height: "50px" }}
                   src="birthdayLogo.svg"
                   alt="BirthdayLogo"
                   width={100}
@@ -210,6 +211,7 @@ const Header = ({ data }) => {
             <Link href="/" aria-label="Go to WOW Home Page">
               {/* <WOWLogo size={86} keyName="mobile" /> */}
               <Img
+                style={{ width: "100px", height: "50px" }}
                 src="birthdayLogo.svg"
                 alt="BirthdayLogo"
                 width={100}
