@@ -199,6 +199,7 @@ const Header = ({ data }) => {
                   alt="BirthdayLogo"
                   width={100}
                   height={100}
+                  loading="eager"
                   isStatic
                 />
               </Link>
@@ -214,6 +215,7 @@ const Header = ({ data }) => {
                 width={100}
                 height={100}
                 isStatic
+                loading="eager"
               />
             </Link>
           </div>
