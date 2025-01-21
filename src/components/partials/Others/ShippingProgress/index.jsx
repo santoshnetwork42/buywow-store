@@ -3,6 +3,7 @@ import { SHOW_SHIPPING_BAR } from "@/utils/data/constants";
 import { useConfiguration } from "@wow-star/utils-cms";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import ShippingProgressBar from "./shippingBar";
 
 const ShippingProgress = ({ freeShippingThreshold, cartValue, className }) => {
   const isShippingBarEnabled = useConfiguration(SHOW_SHIPPING_BAR, true);
@@ -51,41 +52,42 @@ const ShippingProgress = ({ freeShippingThreshold, cartValue, className }) => {
     return startAnimation();
   }, [cartValue, startAnimation]);
 
-  if (!isShippingBarEnabled || !shippingMessage) {
+  if (!isShippingBarEnabled) {
     return null;
   }
 
-  return (
-    <div
-      className={twMerge(
-        "flex items-center justify-between gap-5 rounded-lg bg-lime-50 px-3 py-2 shadow-sm md:py-3",
-        className,
-      )}
-    >
-      <Text size="base" as="p" className="line-clamp-2" responsive>
-        {shippingMessage}
-      </Text>
-      <div className="mr-[5%] flex h-full w-1/2 shrink-0 items-center">
-        <div className="relative mt-1 h-1 w-full bg-white-a700_01">
-          <div
-            className="absolute left-0 top-0 h-full rounded-full bg-yellow-900 transition-all duration-1000 ease-in-out"
-            style={{ width: animate ? `${progressPercentage}%` : "0%" }}
-          />
-          <Img
-            src="img_shipping_delivery_truck.svg"
-            alt="Delivery truck"
-            width={20}
-            height={20}
-            className="absolute top-1/2 -translate-y-1/2 transform transition-all duration-1000 ease-in-out"
-            style={{
-              left: animate ? `calc(${progressPercentage}% - 4px)` : "0",
-            }}
-            isStatic
-          />
-        </div>
-      </div>
-    </div>
-  );
+  return <ShippingProgressBar cartValue={cartValue} />;
+  // return (
+  //   <div
+  //     className={twMerge(
+  //       "flex items-center justify-between gap-5 rounded-lg bg-lime-50 px-3 py-2 shadow-sm md:py-3",
+  //       className,
+  //     )}
+  //   >
+  //     <Text size="base" as="p" className="line-clamp-2" responsive>
+  //       {shippingMessage}
+  //     </Text>
+  //     <div className="mr-[5%] flex h-full w-1/2 shrink-0 items-center">
+  //       <div className="relative mt-1 h-1 w-full bg-white-a700_01">
+  //         <div
+  //           className="absolute left-0 top-0 h-full rounded-full bg-yellow-900 transition-all duration-1000 ease-in-out"
+  //           style={{ width: animate ? `${progressPercentage}%` : "0%" }}
+  //         />
+  //         <Img
+  //           src="img_shipping_delivery_truck.svg"
+  //           alt="Delivery truck"
+  //           width={20}
+  //           height={20}
+  //           className="absolute top-1/2 -translate-y-1/2 transform transition-all duration-1000 ease-in-out"
+  //           style={{
+  //             left: animate ? `calc(${progressPercentage}% - 4px)` : "0",
+  //           }}
+  //           isStatic
+  //         />
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 };
 
 export default React.memo(ShippingProgress);
