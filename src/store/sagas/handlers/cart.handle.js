@@ -1,6 +1,8 @@
 import { showToast } from "@/components/common/ToastComponent";
 import { STORE_ID, STORE_PREFIX } from "@/config";
 import {
+  checkInventoryAPI,
+  fetchCouponRuleAPI,
   fetchProductDetailsAPI,
   fetchShoppingCartAPI,
 } from "@/lib/appSyncAPIs";
@@ -190,61 +192,102 @@ export function* emptyCartHandler() {
 }
 
 export function* validateCartHandler(action) {
-  const { payload } = action;
+  try {
+    const { payload } = action;
 
-  const { data: cartData = [], coupon } = yield select((state) => state.cart);
+    const { data: cartData = [], coupon } = yield select((state) => state.cart);
 
-  let error = "";
-  if (!coupon?.code || coupon?.isArchive) {
-    error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_ARCHIVED];
-  }
-
-  const data = cartData.map((item) => {
-    const { price, collections } = payload[item.recordKey];
-    if (item.price !== price) {
-      error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.PRICE_CHANGE];
+    let error = "";
+    if (!!coupon && coupon?.isArchive) {
+      error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_ARCHIVED];
     }
-    const isDiffer = isDiffArray(item?.collections || [], collections || []);
-    if (isDiffer) {
-      const isCouponApplicable = (coupon?.applicableCollections || []).some(
-        (c) => collections?.includes(c),
+
+    const data = cartData.map((item) => {
+      const {
+        price = 0,
+        collections = [],
+        minimumOrderQuantity = 1,
+        maximumOrderQuantity = 1,
+      } = payload[item.recordKey] || {};
+
+      if (!payload[item.recordKey]) {
+        return item;
+      }
+
+      if (item.price !== price) {
+        error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.PRICE_CHANGE];
+      }
+      const isDiffer = isDiffArray(item?.collections || [], collections || []);
+
+      const currentQty = Math.min(
+        Math.max(item?.qty || 1, minimumOrderQuantity || 1),
+        maximumOrderQuantity,
       );
-      if (
-        !isCouponApplicable &&
-        !!coupon?.applicableCollections &&
-        !!collections?.length
-      )
-        error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_CHANGE];
+
+      if (isDiffer) {
+        const isCouponApplicable = (coupon?.applicableCollections || []).some(
+          (c) => collections?.includes(c),
+        );
+        if (
+          !isCouponApplicable &&
+          !!coupon?.applicableCollections &&
+          !!collections?.length
+        )
+          error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_CHANGE];
+      } else if (item?.qty !== currentQty) {
+        error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.MOQ_CHANGE];
+      }
+
+      return {
+        ...item,
+        ...payload[item.recordKey],
+        qty: currentQty,
+        ...(item?.variantId && {
+          variants: {
+            items: item?.variants?.items?.map((i) => {
+              if (i.id === item.variantId) {
+                return {
+                  ...i,
+                  price,
+                  minimumOrderQuantity,
+                  maximumOrderQuantity,
+                };
+              }
+              return i;
+            }),
+          },
+        }),
+      };
+    });
+
+    const { allowed: isCouponAllowed } = getCouponDiscount(coupon, data);
+
+    const updatedData = isCouponAllowed
+      ? data
+      : data?.filter((item) => item?.cartItemSource !== "COUPON");
+
+    const subTotal = getProductSubTotal(updatedData);
+
+    yield put(setSubTotal(subTotal));
+    yield put(setCart(updatedData));
+
+    if (!isCouponAllowed) {
+      yield put(setCoupon(null));
     }
-    return {
-      ...item,
-      ...payload[item.recordKey],
-    };
-  });
+    yield put({ type: cartSagaActions.MANAGE_CART });
 
-  const { allowed: isCouponAllowed } = getCouponDiscount(coupon, data);
-
-  const updatedData = isCouponAllowed
-    ? data
-    : data?.filter((item) => item?.cartItemSource !== "COUPON");
-
-  const subTotal = getProductSubTotal(updatedData);
-
-  yield put(setSubTotal(subTotal));
-  yield put(setCart(updatedData));
-
-  if (!isCouponAllowed) {
-    yield put(setCoupon(null));
-  }
-  yield put({ type: cartSagaActions.MANAGE_CART });
-
-  if (error) {
-    showToast.custom(
-      error,
-      {},
-      "text-center", // textClassName
-      "!flex-row", //mainClassName
-    );
+    if (error) {
+      showToast.custom(
+        error,
+        {},
+        "text-center", // textClassName
+        "!flex-row", //mainClassName
+      );
+    }
+  } catch (e) {
+    console.error(e);
+    yield put(emptyCart());
+    yield put({ type: cartSagaActions.MANAGE_CART });
   }
 }
 
@@ -270,67 +313,109 @@ export function* clearStoredCouponCodeHandler() {
 }
 
 export function* validateCartOnErrorHandler(action) {
-  const { inventoryDetails, coupon } = action?.payload;
-  const { data: cartData = [], coupon: appliedCoupon } = yield select(
-    (state) => state.cart,
-  );
+  try {
+    const { inventoryDetails } = action?.payload;
 
-  let error = "";
+    const { data: cartData = [], coupon: appliedCoupon } = yield select(
+      (state) => state.cart,
+    );
+    // get upto date inventory
+    const updatedInventoryDetails = yield call(
+      checkInventoryAPI,
+      STORE_ID,
+      inventoryDetails,
+    );
 
-  if (!!appliedCoupon?.code && (!coupon?.code || coupon?.isArchive)) {
-    error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_ARCHIVED];
+    let coupon = null;
+
+    if (!!appliedCoupon?.code)
+      coupon = yield call(fetchCouponRuleAPI, appliedCoupon?.code);
+
+    let error = "";
+    if (!!appliedCoupon?.code && (!coupon?.code || coupon?.isArchive)) {
+      error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_ARCHIVED];
+    }
+
+    const updatedCart = cartData?.map((i) => {
+      const updatedProduct = updatedInventoryDetails?.find(
+        (p) => p.recordKey === i.recordKey,
+      );
+      if (!updatedProduct) {
+        return i;
+      }
+
+      const isDiffer = isDiffArray(
+        i?.collections || [],
+        updatedProduct?.collections || [],
+      );
+
+      const currentQty = Math.min(
+        Math.max(i?.qty || 1, updatedProduct?.minimumOrderQuantity || 1),
+        updatedProduct?.maximumOrderQuantity,
+      );
+
+      if (currentQty !== i?.qty) {
+        error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.MOQ_CHANGE];
+      } else if (i.price !== updatedProduct?.price) {
+        error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.PRICE_CHANGE];
+      } else if (isDiffer) {
+        error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_CHANGE];
+      }
+
+      return {
+        ...i,
+        ...(i?.variantId && {
+          variants: {
+            items: i?.variants?.items?.map((v) => {
+              if (v.id === i.variantId) {
+                return {
+                  ...v,
+                  price: updatedProduct?.price,
+                  minimumOrderQuantity: updatedProduct?.minimumOrderQuantity,
+                  maximumOrderQuantity: updatedProduct?.maximumOrderQuantity,
+                };
+              }
+              return i;
+            }),
+          },
+        }),
+        price: updatedProduct?.price,
+        inventory: updatedProduct?.inventory,
+        collections: updatedProduct?.collections || [],
+        qty: currentQty,
+        maximumOrderQuantity: updatedProduct?.maximumOrderQuantity,
+        minimumOrderQuantity: updatedProduct?.minimumOrderQuantity,
+      };
+    });
+
+    const { allowed: isCouponAllowed = false } = !coupon?.isArchive
+      ? getCouponDiscount(coupon, updatedCart)
+      : {};
+
+    const updatedData = isCouponAllowed
+      ? updatedCart
+      : updatedCart.filter((item) => item?.cartItemSource !== "COUPON");
+
+    const subTotal = getProductSubTotal(updatedData);
+
+    yield put(setSubTotal(subTotal));
+    yield put(setCart(updatedData));
+    yield put(setCoupon(isCouponAllowed ? coupon : null));
+
+    yield put({ type: cartSagaActions.MANAGE_CART });
+    if (error) {
+      showToast.custom(
+        error,
+        {},
+        "text-center", // textClassName
+        "!flex-row", //mainClassName
+      );
+    }
+  } catch (e) {
+    console.error(e);
+    yield put(emptyCart());
+    yield put({ type: cartSagaActions.MANAGE_CART });
   }
-
-  const updatedCart = cartData?.map((i) => {
-    const updatedProduct = inventoryDetails?.find(
-      (p) => p.recordKey === i.recordKey,
-    );
-
-    if (i.price !== updatedProduct?.price) {
-      error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.PRICE_CHANGE];
-    }
-
-    const isDiffer = isDiffArray(
-      i?.collections || [],
-      updatedProduct?.collections || [],
-    );
-
-    if (isDiffer) {
-      error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_CHANGE];
-    }
-
-    return {
-      ...i,
-      price: updatedProduct?.price,
-      inventory: updatedProduct?.inventory,
-      collections: updatedProduct?.collections || [],
-    };
-  });
-
-  const { allowed: isCouponAllowed = false } = !coupon?.isArchive
-    ? getCouponDiscount(coupon, updatedCart)
-    : {};
-
-  const updatedData = isCouponAllowed
-    ? updatedCart
-    : updatedCart.filter((item) => item?.cartItemSource !== "COUPON");
-
-  const subTotal = getProductSubTotal(updatedData);
-
-  yield put(setSubTotal(subTotal));
-  yield put(setCart(updatedData));
-  yield put(setCoupon(isCouponAllowed ? coupon : null));
-
-  yield put({ type: cartSagaActions.MANAGE_CART });
-
-  // if (error) {
-  //   showToast.error(
-  //     error,
-  //     {},
-  //     "text-center", // textClassName
-  //     "!flex-row", //mainClassName
-  //   );
-  // }
 }
 
 export function* updateCartWithShoppingCartIdHandler(action) {

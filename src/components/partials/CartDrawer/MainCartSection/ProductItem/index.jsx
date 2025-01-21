@@ -56,7 +56,10 @@ const ProductItem = ({
   const [variantUpdate, setVariantUpdate] = useState(false);
 
   const isFreeProduct =
-    cartItemType === "FREE_PRODUCT" || cartItemType === "AUTO_FREE_PRODUCT";
+    cartItemType === "FREE_PRODUCT" ||
+    cartItemType === "AUTO_FREE_PRODUCT" ||
+    cartItemSource === "COUPON";
+
   const isLTOProduct = cartItemSource === "LIMITED_TIME_DEAL";
 
   const { hasInventory, currentInventory } = useMemo(

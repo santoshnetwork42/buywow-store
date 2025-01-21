@@ -297,6 +297,8 @@ export const checkInventory = /* GraphQL */ `
       inventory
       price
       collections
+      maximumOrderQuantity
+      minimumOrderQuantity
       __typename
     }
   }
@@ -674,6 +676,63 @@ export const getShoppingCart = /* GraphQL */ `
         priority
         applyOnAllVariants
         isPDPFeatured
+        showAsNudge
+        getYStoreProduct {
+          id
+          title
+          brand
+          vendor
+          collections
+          categoryId
+          subCategoryId
+          storeId
+          bulkActionId
+          isFeatured
+          productType
+          createdAt
+          slug
+          pageTitle
+          productDescription
+          longDescription
+          manufacturer
+          updatedAt
+          isPublished
+          publishedAt
+          price
+          sku
+          size
+          color
+          status
+          position
+          currency
+          costPrice
+          listingPrice
+          taxable
+          barcode
+          tags
+          benefits
+          weight
+          weightUnit
+          minimumOrderQuantity
+          inventory
+          blockedInventory
+          continueSellingOutOfStock
+          rating
+          totalRatings
+          totalOrders
+          thumbImages
+          isTaxEnabled
+          isInventoryEnabled
+          googleCategory
+          hasVarient
+          hasFaq
+          recommended
+          recommendPriority
+          recommendPrice
+        }
+        getYAmount
+        getYPercentage
+        getYQuantity
         createdBy
         updatedBy
         createdAt
@@ -1357,6 +1416,9 @@ export const getCouponRule = /* GraphQL */ `
       }
       buyXQuantity
       discountItemThreshold
+      ppcodCouponAmount
+      priority
+      showAsNudge
       getYAmount
       getYPercentage
       getYQuantity
@@ -1366,14 +1428,20 @@ export const getCouponRule = /* GraphQL */ `
       maxAllowedUsage
       applicableCollections
       applicableProducts
+      applyPrepaidDiscount
+      applyOnAllVariants
       paymentMethod
       isArchive
       isFeatured
+      isPDPFeatured
       isBulkCoupon
       autoApply
       isAffiliated
       createdAt
       updatedAt
+      couponNote
+      couponTitle
+      tAndC
     }
   }
 `;
