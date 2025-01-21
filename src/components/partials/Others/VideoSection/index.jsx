@@ -83,7 +83,7 @@ const ModalProductDetail = React.memo(({ fetchedProduct, slug, className }) => {
     [listingPrice, price],
   );
 
-  if (!id) return <></>;
+  if (!id) return null;
 
   return (
     <div className={className}>
@@ -158,7 +158,7 @@ const MobileVideoCarouselItem = ({ fetchedProduct, slug }) => {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [selectedVariant] = useProductVariantGroups(fetchedProduct);
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
-  const { title, listingPrice, price, images } = packageProduct || {};
+  const { title, listingPrice, price, images, id } = packageProduct || {};
 
   const imageList = images?.items
     ? [...images.items].sort((a, b) => a.position - b.position)
@@ -181,6 +181,8 @@ const MobileVideoCarouselItem = ({ fetchedProduct, slug }) => {
   const onThumbClick = useCallback((index) => {
     // Implement thumb click handler if needed
   }, []);
+
+  if (!id) return null;
 
   return (
     <div className="flex w-full items-center justify-between gap-2 rounded-md bg-white-a700 bg-opacity-75 p-2 shadow-[0_0_10px_0_rgba(255,255,255,0.7)] backdrop-blur-sm">
@@ -379,9 +381,8 @@ MemoizedImg.displayName = "MemoizedImg";
 
 // Memoized Video component with loading state
 const MemoizedVideo = React.memo(
-  ({ src, muted, ref, className, onMuteToggle }) => {
+  React.forwardRef(({ src, muted, className, onMuteToggle, autoPlay }, ref) => {
     const [isLoaded, setIsLoaded] = useState(false);
-
     return (
       <div className="relative h-full w-full">
         {!isLoaded && (
@@ -392,9 +393,9 @@ const MemoizedVideo = React.memo(
           src={src}
           className={`${className} ${isLoaded ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}
           loop
-          muted={muted}
+          autoPlay={autoPlay}
+          muted={muted || !(!muted && autoPlay)}
           playsInline
-          autoPlay
           onLoadedData={() => setIsLoaded(true)}
           onError={() => setIsLoaded(true)}
         />
@@ -412,11 +413,10 @@ const MemoizedVideo = React.memo(
         )}
       </div>
     );
-  },
+  }),
   (prevProps, nextProps) =>
     prevProps.src === nextProps.src && prevProps.muted === nextProps.muted,
 );
-MemoizedVideo.displayName = "MemoizedVideo";
 
 const DesktopVideoCarousel = ({
   videoItems,
@@ -429,34 +429,39 @@ const DesktopVideoCarousel = ({
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
+    if (!videoRefs.current || !videoRefs.current[currentSelectedVideo]) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries?.forEach((entry) => {
-          const video = entry?.target;
-          if (entry?.isIntersecting) {
-            video?.play();
+        entries.forEach((entry) => {
+          const video = entry.target;
+          const videoIndex = Number(video.dataset.index);
+
+          if (entry.isIntersecting) {
+            if (videoIndex === currentSelectedVideo) {
+              video
+                .play()
+                .catch((err) => console.error("Error playing video:", err));
+            }
           } else {
-            video?.pause();
+            video.pause();
           }
         });
       },
-      { threshold: 0.5 },
+      { threshold: 0.5 }, // Adjust the threshold as needed
     );
 
-    Object?.values(videoRefs.current)?.forEach((video) => {
-      if (video) {
-        observer?.observe(video);
-      }
+    // Attach observer to all video elements
+    Object.values(videoRefs.current).forEach((video) => {
+      if (video) observer?.observe(video);
     });
 
     return () => {
-      Object.values(videoRefs?.current)?.forEach((video) => {
-        if (video) {
-          observer?.unobserve(video);
-        }
+      Object.values(videoRefs.current).forEach((video) => {
+        if (video) observer.unobserve(video);
       });
     };
-  }, [videoItems]);
+  }, [currentSelectedVideo, videoRefs]);
 
   const getVideoStyles = (index) => {
     const position = index - currentSelectedVideo;
@@ -509,6 +514,13 @@ const DesktopVideoCarousel = ({
       if (isTransitioning) return;
 
       setIsTransitioning(true);
+
+      // Pause the current playing video
+      const currentVideo = videoRefs.current[currentSelectedVideo];
+      if (currentVideo) {
+        currentVideo.pause();
+      }
+
       const newIndex =
         direction === "next"
           ? currentSelectedVideo < videoItems.length - 1
@@ -523,16 +535,36 @@ const DesktopVideoCarousel = ({
         setTimeout(() => setIsTransitioning(false), 50);
       }, 50);
     },
-    [currentSelectedVideo, isTransitioning, videoItems.length],
+    [
+      currentSelectedVideo,
+      setCurrentSelectedVideo,
+      isTransitioning,
+      videoItems.length,
+    ],
   );
+  useEffect(() => {
+    Object.values(videoRefs.current).forEach((video, index) => {
+      if (index === currentSelectedVideo) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    });
+  }, [currentSelectedVideo]);
 
   const handleThumbnailClick = useCallback(
     (index) => {
       if (isTransitioning) return;
-      const direction = index > currentSelectedVideo ? "next" : "prev";
-      handleNavigation(direction);
+
+      // Pause the current playing video
+      const currentVideo = videoRefs.current[currentSelectedVideo];
+      if (currentVideo) {
+        currentVideo.pause();
+      }
+
+      setCurrentSelectedVideo(index);
     },
-    [currentSelectedVideo, handleNavigation, isTransitioning],
+    [currentSelectedVideo, setCurrentSelectedVideo, isTransitioning],
   );
 
   return (
@@ -562,7 +594,7 @@ const DesktopVideoCarousel = ({
                       item?.thumbnail?.data?.attributes?.alternativeText ||
                       "Video thumbnail"
                     }
-                    className="h-full w-full rounded-md transition-transform duration-300 hover:scale-105"
+                    className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-105"
                   />
                 </div>
               ))}
@@ -580,14 +612,19 @@ const DesktopVideoCarousel = ({
               <div className="relative flex w-1/2 items-center justify-center rounded-md bg-gray-100">
                 <MemoizedVideo
                   ref={(el) => {
-                    videoRefs.current[index] = el;
+                    if (el) {
+                      videoRefs.current[index] = el;
+                    }
                   }}
+                  data-index={index}
+                  index={index}
                   src={item?.video?.data?.attributes?.url}
                   muted={muted}
-                  className="h-full w-full object-cover"
+                  autoPlay={currentSelectedVideo === index}
+                  className="h-full w-full rounded-md rounded-br-none rounded-tr-none object-cover"
                   onMuteToggle={(e) => {
                     e.stopPropagation();
-                    setMuted(!muted);
+                    setMuted((muted) => !muted);
                   }}
                 />
               </div>
@@ -623,7 +660,7 @@ const DesktopVideoCarousel = ({
                       item?.thumbnail?.data?.attributes?.alternativeText ||
                       "Video thumbnail"
                     }
-                    className="h-full w-full rounded-md transition-transform duration-300 hover:scale-105"
+                    className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-105"
                   />
                 </div>
               ))}
@@ -684,7 +721,126 @@ const VideoItem = ({ thumbnail, setCurrentSelectedVideo, index }) => {
         width={200}
         height={200}
         alt={thumbnail?.alternativeText || "Image"}
-        className="h-full w-full rounded-md object-contain"
+        className="h-full w-full rounded-md object-cover"
+      />
+    </div>
+  );
+};
+
+const VideoCarousel = ({ videoItems, setCurrentSelectedVideo }) => {
+  const [currentIndex, setCurrentIndex] = useState(
+    videoItems?.length >= 2 ? 2 : 0,
+  );
+  const videoRefs = useRef([]);
+  const touchStartX = useRef(0);
+  const touchEndX = useRef(0);
+
+  useEffect(() => {
+    // Pause all videos
+    videoRefs.current.forEach((videoRef, index) => {
+      if (videoRef) {
+        videoRef.pause();
+      }
+    });
+
+    // Play the center video
+    if (videoRefs.current[currentIndex]) {
+      videoRefs.current[currentIndex].play();
+    }
+  }, [currentIndex]);
+
+  const handlePrevious = () => {
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : videoItems.length - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev < videoItems.length - 1 ? prev + 1 : 0));
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    const swipeDistance = touchEndX.current - touchStartX.current;
+    const minSwipeDistance = 50; // minimum distance for swipe to register
+
+    if (Math.abs(swipeDistance) > minSwipeDistance) {
+      if (swipeDistance > 0) {
+        handlePrevious();
+      } else {
+        handleNext();
+      }
+    }
+
+    // Reset touch positions
+    touchStartX.current = 0;
+    touchEndX.current = 0;
+  };
+
+  return (
+    <div className="bg-black relative flex w-full items-center justify-center overflow-hidden">
+      <div
+        className="relative h-[280px] w-[148px] sm:h-[425px] sm:w-[240px]"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {videoItems.map((item, index) => {
+          const position = index - currentIndex;
+          const scale =
+            position === 0
+              ? 1
+              : position === -1
+                ? 0.9
+                : position === 1
+                  ? 0.9
+                  : 0.8;
+          const display = Math.abs(position) > 2 ? "none" : "block";
+          const zIndex = 5 - Math.abs(position);
+
+          return (
+            <div
+              key={index}
+              className="absolute left-0 top-0 h-full w-full transition-all duration-300"
+              style={{
+                transform: `translateX(${position * 40}%) scale(${scale})`,
+                display,
+                zIndex,
+              }}
+            >
+              <Img
+                ref={(el) => (videoRefs.current[index] = el)}
+                src={item?.thumbnail?.data?.attributes?.url}
+                width={200}
+                height={200}
+                alt={
+                  item?.thumbnail?.data?.attributes?.alternativeText || "Image"
+                }
+                className="h-full w-full rounded-md object-cover"
+                onClick={() => {
+                  setCurrentSelectedVideo(index);
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+
+      <ArrowIconSVG
+        side="left"
+        onClick={handlePrevious}
+        className="absolute left-4 top-1/2 z-10 hidden -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-yellow-900 p-1 text-white-a700_01 transition-colors md:left-[5%] md:flex md:h-7 md:w-7 lg:left-[15%] xl:left-[20%]"
+        aria-label="Previous video"
+      />
+      <ArrowIconSVG
+        onClick={handleNext}
+        className="absolute right-4 top-1/2 z-10 hidden -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-yellow-900 p-1 text-white-a700_01 transition-colors md:right-[5%] md:flex md:h-7 md:w-7 lg:right-[15%] xl:right-[20%]"
+        aria-label="Next video"
       />
     </div>
   );
@@ -704,35 +860,26 @@ const VideoSection = ({ className, ...props }) => {
 
   return (
     <div {...props} className={className}>
-      <div className="flex w-full flex-col gap-5 py-2 md:gap-6">
+      <div className="mb-6 flex w-full flex-col gap-5 py-2 md:gap-6">
         <div className="flex flex-col items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4">
           <Heading size="2xl" as="h3" responsive>
             {title}
           </Heading>
-          <Button className="rounded-full bg-yellow-900 px-4 py-2 text-center text-white-a700_01 max-sm:mt-1 md:px-5 md:py-3">
-            {buttonText}
-          </Button>
+          {buttonText && (
+            <Button
+              className="rounded-full bg-yellow-900 px-4 py-2 text-center text-white-a700_01 max-sm:mt-1 md:px-5 md:py-3"
+              variant="primary"
+            >
+              {buttonText}
+            </Button>
+          )}
         </div>
-        <div className="relative w-full">
-          <div className="no-scrollbar flex w-full items-center justify-start gap-4 overflow-x-auto scroll-smooth px-4 pb-4 md:justify-center">
-            {videoItems?.map((item, index) => (
-              <div className="flex-shrink-0" key={index}>
-                <VideoItem
-                  video={item?.video}
-                  thumbnail={item?.thumbnail?.data?.attributes}
-                  fetchedProduct={
-                    item?.product?.data?.attributes?.fetchedProduct
-                  }
-                  slug={item?.product?.data?.attributes?.slug}
-                  setCurrentSelectedVideo={(index) =>
-                    setCurrentSelectedVideo(index)
-                  }
-                  index={index}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+        <VideoCarousel
+          videoItems={videoItems}
+          setCurrentSelectedVideo={(index) => setCurrentSelectedVideo(index)}
+          currentSelectedVideo={currentSelectedVideo}
+        />
+
         {!(isMobile || isTablet) && (
           <Modal
             isOpen={currentSelectedVideo !== null}
