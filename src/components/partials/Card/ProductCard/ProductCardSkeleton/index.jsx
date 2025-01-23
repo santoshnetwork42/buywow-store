@@ -1,7 +1,7 @@
 const ProductCardSkeleton = () => (
   <div className="flex animate-pulse flex-col justify-start gap-2 self-stretch rounded-lg p-[5px] shadow-xs md:gap-3 md:p-2">
     {/* <!-- Image placeholder --> */}
-    <div className="relative aspect-[165/190] w-full overflow-hidden rounded-lg bg-gray-200 p-0.5 sm:p-1 md:p-2 lg:aspect-[300/330] lg:p-3 xl:p-4"></div>
+    <div className="relative aspect-[1/1] w-full overflow-hidden rounded-lg bg-gray-200 p-0.5 sm:p-1 md:p-2 lg:p-3 xl:p-4"></div>
 
     {/* <!-- Benefit tags placeholder --> */}
     <div className="flex max-h-12 flex-wrap gap-[4px] overflow-hidden md:max-h-[52px]">

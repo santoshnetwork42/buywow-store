@@ -135,7 +135,7 @@ const ProductCard = memo(
             height={550}
             url={url}
             imageKey={thumbImage?.imageKey}
-            className="aspect-[165/190] w-full object-contain lg:aspect-[300/330]"
+            className="aspect-[1/1] w-full object-contain"
             alt={title || "Product image"}
             priority={priority}
           />
