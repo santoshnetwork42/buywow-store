@@ -12,7 +12,7 @@ const LoyaltyCash = ({
   handleRewardApply,
   totalRewardPointsOfUser,
 }) => {
-  const cartPageWowCashTooltip = useRuleEngine("CREDIT_PREPAID_ORDER");
+  const cartPageWowCashTooltip = useRuleEngine("DEBIT_PREPAID_ORDER");
 
   if (!showLoyalty || !usableRewards) return null;
   return (

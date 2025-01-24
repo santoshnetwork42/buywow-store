@@ -72,7 +72,9 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
   const isCustomShippingTierApplicable = useMemo(() => {
     return shippingTiers?.some(
       (tier) =>
-        tier?.type === "COUPON" && tier?.coupons?.includes(appliedCoupon?.id),
+        tier?.type === "COUPON" &&
+        tier?.coupons?.includes(appliedCoupon?.id) &&
+        (tier?.paymentType === "PREPAID" || tier?.paymentType === "ALL"),
     );
   }, [shippingTiers, appliedCoupon]);
 
