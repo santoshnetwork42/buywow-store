@@ -910,7 +910,7 @@ const VideoSection = ({ className, ...props }) => {
             isOpen={currentSelectedVideo !== null}
             onClose={() => setCurrentSelectedVideo(null)}
             modalContainerClassName="p-0 h-[calc(100%-3.5rem)] bg-transparent md:w-full lg:w-full w-full md:h-[calc(100%-3.5rem)] lg:h-[calc(100%-3.5rem)]"
-            modalClassName="z-10"
+            modalClassName="z-30"
             enableOutsideClick={false}
             showCloseButtonOutOfBox
           >
