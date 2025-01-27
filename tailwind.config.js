@@ -94,7 +94,7 @@ module.exports = {
             boxShadow: "0 0 1px 1px rgba(221, 132, 52, 0.5)",
           },
           "30%": {
-            boxShadow: "0 0 1px 2px rgba(221, 132, 52, 0.6)",
+            boxShadow: "0 0 3px 3px rgba(221, 132, 52, 0.6)",
           },
         },
         flying: {

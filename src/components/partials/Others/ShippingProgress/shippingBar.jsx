@@ -78,26 +78,22 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
     );
   }, [shippingTiers, appliedCoupon]);
 
+  const currentShippingTierIndex = customShippingTiers?.findIndex(
+    (i) => i.minOrderValue < cartValue && i.maxOrderValue >= cartValue,
+  );
+
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { amountAway, progress } = useMemo(() => {
     const freeShippingThreshold = customShippingTiers?.at(-1)?.maxOrderValue;
-    const away = Math.max(0, freeShippingThreshold - cartValue);
-    const prog = Math.min(
-      100,
-      (cartValue / (freeShippingThreshold || 1)) * 100,
-    );
+    const away = Math.max(0, freeShippingThreshold - cartValue + 1);
+    const prog = Math.min(100, (cartValue / (freeShippingThreshold || 1)) * 90);
 
     return {
       amountAway: away,
       progress: prog,
     };
   }, [customShippingTiers, cartValue]);
-
-  useEffect(() => {
-    setShowShippingConfetti(amountAway <= 0);
-    // setIsModalOpen(amountAway <= 0);
-  }, [amountAway]);
 
   const message = useMemo(() => {
     return amountAway > 0 ? (
@@ -132,7 +128,7 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
       <Text size="sm" as="p" className="line-clamp-2">
         {message}
       </Text>
-      <div className="relative flex items-center">
+      <div className="progress-bar relative flex items-center">
         {/* Progress Line */}
         <div class="absolute left-0 right-0 top-1/2 z-10 h-1 rounded-full bg-gray-300 transition-all duration-300">
           <div
@@ -144,11 +140,11 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
         {customShippingTiers.map((tier, index) => (
           <div
             key={tier.id}
-            className="z-10 mt-2 flex flex-1 flex-col items-end"
+            className={`circle-${index} z-10 mt-2 flex flex-1 flex-col items-end`}
           >
             <Text
               size="xs"
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-yellow-900 px-1 text-[12px] font-medium text-white-a700 md:h-8 md:w-8 md:text-sm"
+              className={`flex h-7 w-7 items-center justify-center rounded-full bg-yellow-900 px-1 text-[12px] font-medium text-white-a700 md:h-8 md:w-8 md:text-sm ${currentShippingTierIndex === index ? "animate-pulse-glow" : ""}`}
             >
               ₹{tier.amount}
             </Text>
@@ -156,11 +152,11 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
         ))}
         <div
           key={""}
-          className="z-10 mt-2 flex flex-1 flex-col items-end justify-center"
+          className="circle-free z-10 mt-2 flex flex-1 flex-col items-end justify-center"
         >
           <Text
             size="xs"
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-yellow-900 px-1 text-[12px] font-medium text-white-a700 md:h-8 md:w-8 md:text-sm"
+            className={`flex h-7 w-7 items-center justify-center rounded-full bg-yellow-900 px-1 text-[12px] font-medium text-white-a700 md:h-8 md:w-8 md:text-sm ${amountAway <= 0 ? "animate-pulse-glow" : ""}`}
           >
             {`Free`}
           </Text>
