@@ -84,6 +84,7 @@ const ModalProductDetail = React.memo(({ fetchedProduct, slug, className }) => {
   );
 
   if (!id) return null;
+  if (!id) return null;
 
   return (
     <div className={className}>
@@ -230,8 +231,9 @@ const MobileVideoCarousel = ({
   videoItems,
   currentSelectedVideo,
   setCurrentSelectedVideo,
+  muted,
+  setMuted,
 }) => {
-  const [muted, setMuted] = useState(true);
   const scrollContainerRef = useRef(null);
   const currentVideoRef = useRef(null);
   const videoRefs = useRef({});
@@ -422,8 +424,10 @@ const DesktopVideoCarousel = ({
   videoItems,
   currentSelectedVideo,
   setCurrentSelectedVideo,
+  muted,
+  setMuted,
 }) => {
-  const [muted, setMuted] = useState(true);
+  // const [muted, setMuted] = useState(true);
   const scrollContainerRef = useRef(null);
   const videoRefs = useRef({});
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -584,7 +588,9 @@ const DesktopVideoCarousel = ({
                   className={`w-[12rem] transform cursor-pointer transition-all duration-300 ${
                     isTransitioning ? "opacity-0" : "opacity-100"
                   }`}
-                  onClick={() => handleThumbnailClick(index)}
+                  onClick={() => {
+                    // handleThumbnailClick(index)
+                  }}
                 >
                   <MemoizedImg
                     src={item?.thumbnail?.data?.attributes?.url}
@@ -650,7 +656,9 @@ const DesktopVideoCarousel = ({
                   className={`w-[12rem] transform cursor-pointer transition-all duration-300 ${
                     isTransitioning ? "opacity-0" : "opacity-100"
                   }`}
-                  onClick={() => handleThumbnailClick(index)}
+                  onClick={() => {
+                    // handleThumbnailClick(index)
+                  }}
                 >
                   <MemoizedImg
                     src={item?.thumbnail?.data?.attributes?.url}
@@ -708,12 +716,13 @@ const DesktopVideoCarousel = ({
   );
 };
 
-const VideoItem = ({ thumbnail, setCurrentSelectedVideo, index }) => {
+const VideoItem = ({ thumbnail, setCurrentSelectedVideo, index, setMuted }) => {
   return (
     <div
       className="flex aspect-square h-60 w-44 items-center justify-center rounded-md bg-gray-100 sm:h-64"
       onClick={() => {
         setCurrentSelectedVideo(index);
+        setMuted(false);
       }}
     >
       <Img
@@ -853,6 +862,7 @@ const VideoSection = ({ className, ...props }) => {
 
   const { isSmallSize: isMobile, isMidSize: isTablet } = useWindowDimensions();
   const [currentSelectedVideo, setCurrentSelectedVideo] = useState(null);
+  const [muted, setMuted] = useState(true);
 
   if (!showComponent) {
     return null;
@@ -874,12 +884,27 @@ const VideoSection = ({ className, ...props }) => {
             </Button>
           )}
         </div>
-        <VideoCarousel
-          videoItems={videoItems}
-          setCurrentSelectedVideo={(index) => setCurrentSelectedVideo(index)}
-          currentSelectedVideo={currentSelectedVideo}
-        />
-
+        <div className="relative w-full">
+          <div className="no-scrollbar flex w-full items-center justify-start gap-4 overflow-x-auto scroll-smooth px-4 pb-4 md:justify-center">
+            {videoItems?.map((item, index) => (
+              <div className="flex-shrink-0" key={index}>
+                <VideoItem
+                  video={item?.video}
+                  thumbnail={item?.thumbnail?.data?.attributes}
+                  fetchedProduct={
+                    item?.product?.data?.attributes?.fetchedProduct
+                  }
+                  slug={item?.product?.data?.attributes?.slug}
+                  setCurrentSelectedVideo={(index) =>
+                    setCurrentSelectedVideo(index)
+                  }
+                  setMuted={setMuted}
+                  index={index}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
         {!(isMobile || isTablet) && (
           <Modal
             isOpen={currentSelectedVideo !== null}
@@ -893,6 +918,8 @@ const VideoSection = ({ className, ...props }) => {
               videoItems={videoItems}
               currentSelectedVideo={currentSelectedVideo}
               setCurrentSelectedVideo={setCurrentSelectedVideo}
+              muted={muted}
+              setMuted={setMuted}
             />
           </Modal>
         )}
@@ -908,6 +935,8 @@ const VideoSection = ({ className, ...props }) => {
               videoItems={videoItems}
               currentSelectedVideo={currentSelectedVideo}
               setCurrentSelectedVideo={setCurrentSelectedVideo}
+              muted={muted}
+              setMuted={setMuted}
             />
           </Modal>
         )}

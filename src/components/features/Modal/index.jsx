@@ -20,6 +20,7 @@ const Modal = ({
   enableOutsideClick = true,
   enableCloseButton = true,
   modalContainerClassName,
+  modalClassName,
 }) => {
   const isCartDrawerOpen = useSelector(
     (state) => state.modal.modal.cart.isCartOpen,
@@ -78,9 +79,12 @@ const Modal = ({
 
   return (
     <div
-      className={`fixed inset-0 z-[999] transition-opacity duration-200 ${
-        isOpen ? "opacity-100" : "opacity-0"
-      }`}
+      className={twMerge(
+        `fixed inset-0 z-[999] transition-opacity duration-200 ${
+          isOpen ? "opacity-100" : "opacity-0"
+        }`,
+        modalClassName,
+      )}
       style={{ pointerEvents: isOpen ? "auto" : "none" }}
     >
       {isVisible && (
