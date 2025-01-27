@@ -88,7 +88,7 @@ const ModalProductDetail = React.memo(({ fetchedProduct, slug, className }) => {
 
   return (
     <div className={className}>
-      <div className="no-scrollbar flex h-full w-full flex-col gap-2 self-end overflow-hidden overflow-y-auto px-3">
+      <div className="no-scrollbar flex h-full w-full flex-col gap-2 self-end overflow-hidden overflow-y-auto px-3 py-2">
         <div className="flex w-full justify-center">
           <div className="w-64">{renderThumb}</div>
         </div>
