@@ -117,7 +117,7 @@ const Modal = ({
             >
               {enableCloseButton && showCloseButtonOutOfBox && (
                 <div
-                  className="absolute -right-1 -top-7 cursor-pointer"
+                  className="absolute -right-1 -top-7 cursor-pointer hover:scale-150"
                   onClick={onCloseClick}
                 >
                   <CloseIcon color="white" size={36} />

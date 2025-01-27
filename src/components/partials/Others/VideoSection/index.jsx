@@ -585,7 +585,7 @@ const DesktopVideoCarousel = ({
               .map(({ index, item }) => (
                 <div
                   key={index}
-                  className={`w-[12rem] transform cursor-pointer transition-all duration-300 ${
+                  className={`w-[12rem] transform transition-all duration-300 ${
                     isTransitioning ? "opacity-0" : "opacity-100"
                   }`}
                   onClick={() => {
@@ -600,7 +600,7 @@ const DesktopVideoCarousel = ({
                       item?.thumbnail?.data?.attributes?.alternativeText ||
                       "Video thumbnail"
                     }
-                    className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-105"
+                    className="h-full w-full rounded-md object-cover transition-transform duration-300"
                   />
                 </div>
               ))}
@@ -653,7 +653,7 @@ const DesktopVideoCarousel = ({
               .map(({ index, item }) => (
                 <div
                   key={index}
-                  className={`w-[12rem] transform cursor-pointer transition-all duration-300 ${
+                  className={`w-[12rem] transform transition-all duration-300 ${
                     isTransitioning ? "opacity-0" : "opacity-100"
                   }`}
                   onClick={() => {
@@ -668,7 +668,7 @@ const DesktopVideoCarousel = ({
                       item?.thumbnail?.data?.attributes?.alternativeText ||
                       "Video thumbnail"
                     }
-                    className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-105"
+                    className="h-full w-full rounded-md object-cover transition-transform duration-300"
                   />
                 </div>
               ))}
@@ -681,7 +681,7 @@ const DesktopVideoCarousel = ({
         {videoItems?.length > 1 && (
           <>
             <Button
-              className="fixed left-4 z-20 rotate-180 rounded-full p-3 text-white-a700_01"
+              className="fixed left-4 z-20 rotate-180 rounded-full p-3 text-white-a700_01 hover:scale-125"
               variant="primary"
               onClick={(e) => {
                 e.stopPropagation();
@@ -694,7 +694,7 @@ const DesktopVideoCarousel = ({
               <ArrowIconSVG height={30} width={30} />
             </Button>
             <Button
-              className="fixed right-4 z-20 rounded-full p-3 text-white-a700_01"
+              className="fixed right-4 z-20 rounded-full p-3 text-white-a700_01 hover:scale-125"
               variant="primary"
               onClick={(e) => {
                 e.stopPropagation();
@@ -928,7 +928,7 @@ const VideoSection = ({ className, ...props }) => {
             isOpen={currentSelectedVideo !== null}
             onClose={() => setCurrentSelectedVideo(null)}
             modalContainerClassName="p-0 h-full"
-            modalClassName="z-10"
+            modalClassName="z-30"
             enableOutsideClick={false}
           >
             <MobileVideoCarousel
