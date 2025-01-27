@@ -20,6 +20,7 @@ import React, {
 import VariantSelector from "../../Product/PDP/VariantSelector";
 import AddToCartSection from "./AddToCartSection";
 import { useSelector } from "react-redux";
+import SectionHeading from "@/components/common/SectionHeading";
 
 const Thumb = React.memo(({ image, onClick }) => (
   <>
@@ -872,9 +873,7 @@ const VideoSection = ({ className, ...props }) => {
     <div {...props} className={className}>
       <div className="mb-6 flex w-full flex-col gap-5 py-2 md:gap-6">
         <div className="flex flex-col items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4">
-          <Heading size="2xl" as="h3" responsive>
-            {title}
-          </Heading>
+          <SectionHeading title={title} className="mb-3 lg:mb-2" />
           {buttonText && (
             <Button
               className="rounded-full bg-yellow-900 px-4 py-2 text-center text-white-a700_01 max-sm:mt-1 md:px-5 md:py-3"
