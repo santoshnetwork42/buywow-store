@@ -21,9 +21,10 @@ import VariantSelector from "../../Product/PDP/VariantSelector";
 import AddToCartSection from "./AddToCartSection";
 import { useSelector } from "react-redux";
 import SectionHeading from "@/components/common/SectionHeading";
+import Link from "next/link";
 import PlayIcon from "@/assets/svg/playIcon";
 
-const Thumb = React.memo(({ image, onClick }) => (
+const Thumb = React.memo(({ image, onClick, slug }) => (
   <>
     {!image.isVideo && (
       <div
@@ -32,15 +33,17 @@ const Thumb = React.memo(({ image, onClick }) => (
         tabIndex={0}
         className="cursor-pointer"
       >
-        <Img
-          src={image?.imageKey}
-          width={200}
-          height={200}
-          alt={`Product thumbnail ${image?.altText || ""}`}
-          className="aspect-square w-full rounded-lg object-contain transition-transform hover:scale-105"
-          addPrefix
-          loading="lazy"
-        />
+        <Link href={`/products/${slug}`}>
+          <Img
+            src={image?.imageKey}
+            width={200}
+            height={200}
+            alt={`Product thumbnail ${image?.altText || ""}`}
+            className="aspect-square w-full rounded-lg object-contain transition-transform hover:scale-105"
+            addPrefix
+            loading="lazy"
+          />
+        </Link>
       </div>
     )}
   </>
@@ -75,6 +78,7 @@ const ModalProductDetail = React.memo(({ fetchedProduct, slug, className }) => {
             key={image?.imageKey || index}
             onClick={() => onThumbClick(index)}
             image={image}
+            slug={slug}
           />
         )),
     [imageList, onThumbClick],
@@ -212,7 +216,7 @@ const MobileVideoCarouselItem = ({ fetchedProduct, slug }) => {
         className="h-fit rounded-lg p-2 py-3 text-sm"
         onClick={() => setIsProductModalOpen(true)}
       >
-        Shop Now
+        Add To Cart
       </Button>
       <Modal
         isOpen={isProductModalOpen}
@@ -919,6 +923,7 @@ const VideoSection = ({ className, ...props }) => {
             modalClassName="z-30"
             enableOutsideClick={false}
             showCloseButtonOutOfBox
+            bgOpacity="darkest"
           >
             <DesktopVideoCarousel
               videoItems={videoItems}
