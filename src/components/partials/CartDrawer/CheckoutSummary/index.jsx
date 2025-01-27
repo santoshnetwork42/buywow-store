@@ -103,7 +103,7 @@ const PaymentSummary = React.memo(
         <SummaryItem
           label="Shipping"
           value={shippingTotal ? shippingTotal : "Free"}
-          originalValue={shippingTotal < 50 ? 50 : null}
+          originalValue={shippingTotal < 129 ? 129 : null}
           color={shippingTotal ? "text-black-600" : "text-green-600"}
         />
         {!!usableRewards && isRewardApplied && (

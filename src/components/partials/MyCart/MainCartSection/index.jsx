@@ -17,10 +17,6 @@ export default function MainCartSection({
 
   return (
     <div className="flex w-full flex-col gap-5">
-      <ShippingProgress
-        freeShippingThreshold={freeShippingThreshold}
-        cartValue={subTotal}
-      />
       {!!cartData?.length && (
         <CartProductList
           cartItems={cartData}

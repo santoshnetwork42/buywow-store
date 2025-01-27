@@ -397,14 +397,14 @@ const Nudge = ({ isCart = false }) => {
   );
 
   return (
-    <div className="w-full">
+    <>
       <IntegratedProgressStepper
         steps={steps}
         currQuantity={currQuantity}
         maxQuantity={maxProgressQuantity}
         isCart={isCart}
       />
-    </div>
+    </>
   );
 };
 

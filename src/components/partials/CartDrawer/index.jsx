@@ -120,6 +120,8 @@ const CartDrawer = () => {
     totalAmountSaved,
     showLoyalty,
     totalItems = 0,
+    totalPrice,
+    couponTotal,
   } = useCartTotal({
     paymentType: prepaidEnabled ? "PREPAID" : "COD",
     isRewardApplied,
@@ -413,7 +415,7 @@ const CartDrawer = () => {
               <Nudge isCart={true} />
               <ShippingProgress
                 freeShippingThreshold={targetAmountForFreeShipping}
-                cartValue={totalAmountForShippingCharge}
+                cartValue={Math.max(0, totalPrice - couponTotal)}
                 className="bg-[#F5E8DDBF] shadow-[0_4px_4px_#0000000D]"
               />
               <MainCartSection
