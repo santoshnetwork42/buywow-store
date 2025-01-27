@@ -216,7 +216,7 @@ const MobileVideoCarouselItem = ({ fetchedProduct, slug }) => {
         className="h-fit rounded-lg p-2 py-3 text-sm"
         onClick={() => setIsProductModalOpen(true)}
       >
-        Add To Cart
+        Show Now
       </Button>
       <Modal
         isOpen={isProductModalOpen}
@@ -895,7 +895,12 @@ const VideoSection = ({ className, ...props }) => {
                 className="relative flex-shrink-0 cursor-pointer"
                 key={index}
               >
-                <div className="bg-white/70 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform cursor-pointer rounded-full backdrop-blur-md">
+                <div
+                  className="bg-white/70 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform cursor-pointer rounded-full backdrop-blur-md"
+                  onClick={() => {
+                    setCurrentSelectedVideo(index);
+                  }}
+                >
                   <PlayIcon size={48} />
                 </div>
                 <VideoItem
