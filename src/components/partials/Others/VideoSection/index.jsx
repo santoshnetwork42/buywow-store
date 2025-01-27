@@ -21,6 +21,7 @@ import VariantSelector from "../../Product/PDP/VariantSelector";
 import AddToCartSection from "./AddToCartSection";
 import { useSelector } from "react-redux";
 import SectionHeading from "@/components/common/SectionHeading";
+import PlayIcon from "@/assets/svg/playIcon";
 
 const Thumb = React.memo(({ image, onClick }) => (
   <>
@@ -886,7 +887,13 @@ const VideoSection = ({ className, ...props }) => {
         <div className="relative w-full">
           <div className="no-scrollbar flex w-full items-center justify-start gap-4 overflow-x-auto scroll-smooth px-4 pb-4 md:justify-center">
             {videoItems?.map((item, index) => (
-              <div className="flex-shrink-0" key={index}>
+              <div
+                className="relative flex-shrink-0 cursor-pointer"
+                key={index}
+              >
+                <div className="bg-white/70 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform cursor-pointer rounded-full backdrop-blur-md">
+                  <PlayIcon size={48} />
+                </div>
                 <VideoItem
                   video={item?.video}
                   thumbnail={item?.thumbnail?.data?.attributes}
