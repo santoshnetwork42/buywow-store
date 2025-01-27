@@ -21,7 +21,14 @@ const Modal = ({
   enableCloseButton = true,
   modalContainerClassName,
   modalClassName,
+  bgOpacity = "default",
 }) => {
+  const opacityMap = {
+    darkest: "bg-opacity-80",
+    darker: "bg-opacity-60",
+    default: "bg-opacity-40",
+  };
+
   const isCartDrawerOpen = useSelector(
     (state) => state.modal.modal.cart.isCartOpen,
   );
@@ -92,10 +99,11 @@ const Modal = ({
           {showConfetti && <Confetti />}
           <div
             className={twMerge(
-              "fixed inset-0 z-20 flex justify-center bg-black-900 bg-opacity-40 transition-opacity duration-300",
+              "fixed inset-0 z-20 flex justify-center bg-black-900 transition-opacity duration-300",
               showMobileView ? "items-end" : "items-center",
               "md:items-center",
               isOpen ? "opacity-100" : "opacity-0",
+              opacityMap[bgOpacity],
             )}
           >
             <div
@@ -117,7 +125,7 @@ const Modal = ({
             >
               {enableCloseButton && showCloseButtonOutOfBox && (
                 <div
-                  className="absolute -right-1 -top-7 cursor-pointer hover:scale-150"
+                  className="absolute -right-1 -top-7 cursor-pointer"
                   onClick={onCloseClick}
                 >
                   <CloseIcon color="white" size={36} />
