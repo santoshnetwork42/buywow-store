@@ -193,32 +193,14 @@ const Header = ({ data }) => {
 
             <div className="flex hidden items-center gap-1 md:block">
               <Link href="/" aria-label="Go to WOW Home Page">
-                {/* <WOWLogo size={86} keyName="web" /> */}
-                <Img
-                  style={{ width: "100px", height: "50px" }}
-                  src="birthdayLogo.svg"
-                  alt="BirthdayLogo"
-                  width={100}
-                  height={100}
-                  loading="eager"
-                  isStatic
-                />
+                <WOWLogo size={86} keyName="web" />
               </Link>
             </div>
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
             <Link href="/" aria-label="Go to WOW Home Page">
-              {/* <WOWLogo size={86} keyName="mobile" /> */}
-              <Img
-                style={{ width: "100px", height: "50px" }}
-                src="birthdayLogo.svg"
-                alt="BirthdayLogo"
-                width={100}
-                height={100}
-                isStatic
-                loading="eager"
-              />
+              <WOWLogo size={86} keyName="mobile" />
             </Link>
           </div>
 
