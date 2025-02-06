@@ -200,6 +200,13 @@ export function* validateCartHandler(action) {
     let error = "";
     if (!!coupon && coupon?.isArchive) {
       error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_ARCHIVED];
+    } else if (
+      !!appliedCoupon &&
+      !!coupon &&
+      appliedCoupon?.isRewardApplicable !== coupon?.isRewardApplicable
+    ) {
+      error =
+        errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_LOYALTY_CHANGE];
     }
 
     const data = cartData.map((item) => {
@@ -334,6 +341,13 @@ export function* validateCartOnErrorHandler(action) {
     let error = "";
     if (!!appliedCoupon?.code && (!coupon?.code || coupon?.isArchive)) {
       error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_ARCHIVED];
+    } else if (
+      !!appliedCoupon &&
+      !!coupon &&
+      appliedCoupon?.isRewardApplicable !== coupon?.isRewardApplicable
+    ) {
+      error =
+        errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_LOYALTY_CHANGE];
     }
 
     const updatedCart = cartData?.map((i) => {

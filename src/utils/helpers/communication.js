@@ -11,6 +11,8 @@ export const errorComsOnPlaceOrder = {
     "The discount code applied to your cart is no longer valid.You can continue with the current prices or check for other offers.",
   COUPON_CHANGE:
     "One or more items in your cart are no longer eligible for the applied coupon. Please review the updated prices before proceeding to checkout.",
+  COUPON_LOYALTY_CHANGE:
+    "Reward points from the client are no longer eligible with the applied offer. Please review the updated details before proceeding to checkout.",
 };
 export const errorTypeOnPlaceOrder = {
   REMOVED_PRODUCT: "REMOVED_PRODUCT",
@@ -19,4 +21,5 @@ export const errorTypeOnPlaceOrder = {
   PRICE_CHANGE: "PRICE_CHANGE",
   COUPON_ARCHIVED: "COUPON_ARCHIVED",
   COUPON_CHANGE: "COUPON_CHANGE",
+  COUPON_LOYALTY_CHANGE: "COUPON_LOYALTY_CHANGE",
 };

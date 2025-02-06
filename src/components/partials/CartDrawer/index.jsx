@@ -124,7 +124,9 @@ const CartDrawer = () => {
     couponTotal,
   } = useCartTotal({
     paymentType: prepaidEnabled ? "PREPAID" : "COD",
-    isRewardApplied,
+    isRewardApplied:
+      (appliedCoupon ? appliedCoupon?.isRewardApplicable : true) &&
+      isRewardApplied,
   });
 
   const {
@@ -302,6 +304,10 @@ const CartDrawer = () => {
       setCheckoutSectionHeight(checkoutElement.offsetHeight);
     }
   }, [appliedCoupon, isCartOpen]);
+
+  useEffect(() => {
+    if (appliedCoupon) applyRewardPoint(appliedCoupon?.isRewardApplicable);
+  }, [appliedCoupon?.isRewardApplicable]);
 
   const handleCouponRemove = useCallback(() => {
     cartList.forEach((item) => {

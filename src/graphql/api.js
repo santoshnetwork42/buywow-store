@@ -136,6 +136,7 @@ export const getInitialData = /* GraphQL */ `
         paymentMethod
         isAffiliated
         applyPrepaidDiscount
+        isRewardApplicable
         applyOnAllVariants
         isPDPFeatured
         isFeatured
@@ -488,6 +489,7 @@ export const applyCoupon = /* GraphQL */ `
       applicableProducts
       paymentMethod
       applyPrepaidDiscount
+      isRewardApplicable
       applyOnAllVariants
       autoApply
       deviceType
@@ -673,6 +675,7 @@ export const getShoppingCart = /* GraphQL */ `
         autoApply
         isAffiliated
         applyPrepaidDiscount
+        isRewardApplicable
         priority
         applyOnAllVariants
         isPDPFeatured
@@ -1429,6 +1432,7 @@ export const getCouponRule = /* GraphQL */ `
       applicableCollections
       applicableProducts
       applyPrepaidDiscount
+      isRewardApplicable
       applyOnAllVariants
       paymentMethod
       isArchive
