@@ -195,20 +195,19 @@ export function* validateCartHandler(action) {
   try {
     const { payload } = action;
 
-    const { data: cartData = [], coupon } = yield select((state) => state.cart);
+    const {
+      data: cartData = [],
+      coupon,
+      isRewardApplied,
+    } = yield select((state) => state.cart);
 
     let error = "";
     if (!!coupon && coupon?.isArchive) {
       error = errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_ARCHIVED];
-    } else if (
-      !!appliedCoupon &&
-      !!coupon &&
-      appliedCoupon?.isRewardApplicable !== coupon?.isRewardApplicable
-    ) {
+    } else if (!!coupon && !coupon?.isRewardApplicable && isRewardApplied) {
       error =
         errorComsOnPlaceOrder[errorTypeOnPlaceOrder.COUPON_LOYALTY_CHANGE];
     }
-
     const data = cartData.map((item) => {
       const {
         price = 0,
