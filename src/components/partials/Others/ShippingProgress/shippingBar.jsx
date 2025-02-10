@@ -4,6 +4,7 @@ import Confetti from "@/components/features/Modal/Confetti";
 import { useNavbar } from "@wow-star/utils-cms";
 import React, { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { twMerge } from "tailwind-merge";
 
 const FreeShippingModal = ({ isOpen, onClose, appliedCoupon }) => (
   <Modal
@@ -79,7 +80,7 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
   }, [shippingTiers, appliedCoupon]);
 
   const currentShippingTierIndex = customShippingTiers?.findIndex(
-    (i) => i.minOrderValue < cartValue && i.maxOrderValue >= cartValue,
+    (i) => i.minOrderValue <= cartValue && i.maxOrderValue > cartValue,
   );
 
   // const [isModalOpen, setIsModalOpen] = useState(false);
@@ -125,9 +126,23 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
           <Confetti />
         </>
       )}
-      <Text size="sm" as="p" className="line-clamp-2">
-        {message}
-      </Text>
+      <div className="flex justify-center gap-x-2">
+        <div className="z-10 flex flex-col items-center">
+          <div>
+            <Img
+              src="img_shipping_delivery_truck.svg"
+              width={50}
+              height={50}
+              alt="Coupon"
+              className="aspect-square h-auto w-full"
+              isStatic
+            />
+          </div>
+        </div>
+        <Text size="sm" as="p" className="line-clamp-2">
+          {message}
+        </Text>
+      </div>
       <div className="progress-bar relative flex items-center">
         {/* Progress Line */}
         <div class="absolute left-0 right-0 top-1/2 z-10 h-1 rounded-full bg-gray-300 transition-all duration-300">
@@ -144,7 +159,14 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
           >
             <Text
               size="xs"
-              className={`flex h-7 w-7 items-center justify-center rounded-full bg-yellow-900 px-1 text-[12px] font-medium text-white-a700 md:h-8 md:w-8 md:text-sm ${currentShippingTierIndex === index ? "animate-pulse-glow" : ""}`}
+              className={twMerge(
+                `flex h-7 w-7 items-center justify-center rounded-full px-1 text-[12px] font-medium md:h-8 md:w-8 md:text-sm`,
+                currentShippingTierIndex === index ? "animate-pulse-glow" : "",
+                currentShippingTierIndex >= index ||
+                  currentShippingTierIndex === -1
+                  ? "bg-yellow-900 text-white-a700_01 duration-700"
+                  : "bg-gray-300 text-black-900 duration-300",
+              )}
             >
               ₹{tier.amount}
             </Text>
@@ -156,7 +178,7 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
         >
           <Text
             size="xs"
-            className={`flex h-7 w-7 items-center justify-center rounded-full bg-yellow-900 px-1 text-[12px] font-medium text-white-a700 md:h-8 md:w-8 md:text-sm ${amountAway <= 0 ? "animate-pulse-glow" : ""}`}
+            className={`flex h-7 w-7 items-center justify-center rounded-full px-1 text-[12px] font-medium md:h-8 md:w-8 md:text-sm ${amountAway <= 0 ? "animate-pulse-glow bg-yellow-900 text-white-a700" : "bg-gray-300 text-black-900"}`}
           >
             {`Free`}
           </Text>
@@ -166,21 +188,6 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
           </div> */}
         </div>
         {/* Free Shipping */}
-        {/* <div className="z-10 flex flex-col items-center">
-          <div>
-            <Img
-              src="../images/free-delivery.svg"
-              alt="Delivery truck"
-              width={40}
-              height={40}
-              className="transition-all duration-1000 ease-in-out"
-              style={{
-                transform: "translateY(0)",
-              }}
-              isStatic
-            />
-          </div>
-        </div> */}
       </div>
     </div>
   );
