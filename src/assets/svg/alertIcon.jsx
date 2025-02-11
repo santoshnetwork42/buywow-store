@@ -31,3 +31,117 @@ const AlertIcon = ({ size = 34, className, ...props }) => {
 };
 
 export default AlertIcon;
+
+export const IconWrapper = ({
+  children,
+  size = 24,
+  color = "currentColor",
+  strokeWidth = 2,
+  className = "",
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth={strokeWidth}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    {children}
+  </svg>
+);
+
+export const Gift = ({ size, color, strokeWidth, className }) => (
+  <IconWrapper
+    size={size}
+    color={color}
+    strokeWidth={strokeWidth}
+    className={className}
+  >
+    <path d="M20 12v10H4V12" />
+    <path d="M2 7h20v5H2z" />
+    <path d="M12 22V7" />
+    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+  </IconWrapper>
+);
+
+export const Volume2 = ({ size, color, strokeWidth, className }) => (
+  <IconWrapper
+    size={size}
+    color={color}
+    strokeWidth={strokeWidth}
+    className={className}
+  >
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+  </IconWrapper>
+);
+
+export const VolumeX = ({ size, color, strokeWidth, className }) => (
+  <IconWrapper
+    size={size}
+    color={color}
+    strokeWidth={strokeWidth}
+    className={className}
+  >
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+    <line x1="23" y1="9" x2="17" y2="15" />
+    <line x1="17" y1="9" x2="23" y2="15" />
+  </IconWrapper>
+);
+
+export const Copy = ({ size, color, strokeWidth, className }) => (
+  <IconWrapper
+    size={size}
+    color={color}
+    strokeWidth={strokeWidth}
+    className={className}
+  >
+    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+  </IconWrapper>
+);
+
+export const ExternalLink = ({ size, color, strokeWidth, className }) => (
+  <IconWrapper
+    size={size}
+    color={color}
+    strokeWidth={strokeWidth}
+    className={className}
+  >
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+    <polyline points="15 3 21 3 21 9" />
+    <line x1="10" y1="14" x2="21" y2="3" />
+  </IconWrapper>
+);
+
+export const Timer = ({ size, color, strokeWidth, className }) => (
+  <IconWrapper
+    size={size}
+    color={color}
+    strokeWidth={strokeWidth}
+    className={className}
+  >
+    <line x1="10" y1="2" x2="14" y2="2" />
+    <line x1="12" y1="14" x2="12" y2="8" />
+    <circle cx="12" cy="14" r="8" />
+  </IconWrapper>
+);
+
+export const X = ({ size, color, strokeWidth, className }) => (
+  <IconWrapper
+    size={size}
+    color={color}
+    strokeWidth={strokeWidth}
+    className={className}
+  >
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </IconWrapper>
+);

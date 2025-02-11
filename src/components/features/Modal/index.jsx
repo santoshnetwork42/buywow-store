@@ -21,6 +21,7 @@ const Modal = ({
   enableCloseButton = true,
   modalContainerClassName,
   modalClassName,
+  titleClassName,
   bgOpacity = "default",
 }) => {
   const opacityMap = {
@@ -132,8 +133,12 @@ const Modal = ({
                 </div>
               )}
               {!!title && (
-                <div className="flex items-center justify-between">
-                  <Heading as="h5" size="xl">
+                <div className={"flex items-center justify-between"}>
+                  <Heading
+                    as="h5"
+                    size="xl"
+                    className={twMerge(titleClassName, "text-orange-800")}
+                  >
                     {title}
                   </Heading>
                   {enableCloseButton && !showCloseButtonOutOfBox && (

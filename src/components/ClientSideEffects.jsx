@@ -19,6 +19,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import BirthdayCelebration from "./partials/BirthdayCelebration";
+import SpinTheWheel from "./partials/SpinTheWheel";
 
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
@@ -239,9 +240,14 @@ const ClientSideEffects = () => {
   }, [setMetaData, setGuestCheckout, setStoreData]);
 
   if (isBalloonAnimationAllowed) {
-    return <BirthdayCelebration />;
+    return (
+      <>
+        <BirthdayCelebration />
+        <SpinTheWheel />
+      </>
+    );
   }
-  return null;
+  return <SpinTheWheel />;
 };
 
 export default ClientSideEffects;

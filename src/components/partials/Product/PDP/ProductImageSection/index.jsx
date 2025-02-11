@@ -77,7 +77,7 @@ const DotButton = React.memo(({ isSelected, onClick, isVideo }) => {
 
 const PlayPauseButton = React.memo(({ isPlaying, onClick }) => (
   <div
-    className={`absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-black-900 bg-opacity-50 p-4 text-white-a700 transition-all duration-300 ease-in-out ${isPlaying ? "scale-95" : "scale-100"}`}
+    className={`absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-black-900 bg-opacity-50 p-4 text-white-a700 transition-all duration-300 ease-in-out ${isPlaying ? "scale-95" : "scale-100"}`}
     onClick={onClick}
   >
     {isPlaying ? (
