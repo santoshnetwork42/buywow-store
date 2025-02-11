@@ -493,7 +493,7 @@ export default function SpinWheel() {
           {getPreviousWin() ? (
             <>
               <p className="mb-4 text-orange-800">
-                You've already won a reward! Here's your discount code:
+                {`You've already won a reward! Here's your discount code:`}
               </p>
               <div className="bg-white mb-4 rounded-xl border-2 border-orange-200 p-4 shadow-lg">
                 <div className="flex items-center justify-center gap-3 rounded-lg bg-orange-50 px-4 py-2">
@@ -528,8 +528,8 @@ export default function SpinWheel() {
             </>
           ) : (
             <p className="text-orange-800">
-              You've reached the maximum number of attempts. Please try again
-              later.
+              {`You've reached the maximum number of attempts. Please try again
+              later.`}
             </p>
           )}
         </div>

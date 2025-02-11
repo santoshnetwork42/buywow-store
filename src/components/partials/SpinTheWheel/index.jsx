@@ -87,7 +87,7 @@ export default function SpinTheWheel() {
             className="bg-white absolute -top-16 left-0 whitespace-nowrap rounded-full px-4 py-2 font-semibold text-orange-900 opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
             style={{ backgroundColor: "white", zIndex: 9999 }}
           >
-            Spin & Win Rewards! 🎁
+            {`Spin & Win Rewards! 🎁`}
             <div className="border-t-white absolute -bottom-2 left-8 h-0 w-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent"></div>
           </div>
         </div>
