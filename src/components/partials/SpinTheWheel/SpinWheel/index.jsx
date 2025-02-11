@@ -484,7 +484,7 @@ export default function SpinWheel() {
       </div>
       <Modal
         isOpen={showMaxAttemptsDialog}
-        titleClassName={"text-white"}
+        titleClassName={"text-white text-orange-800"}
         onClose={() => setShowMaxAttemptsDialog(false)}
         title={"Maximum Attempts Reached"}
         bgOpacity={"darkest"}

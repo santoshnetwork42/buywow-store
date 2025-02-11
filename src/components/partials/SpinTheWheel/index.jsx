@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Gift, Copy, X } from "@/assets/svg/alertIcon";
-import { Button } from "@/components/elements";
-import SpinWheel from "@/components/partials/SpinTheWheel/SpinWheel";
+import { Gift, X } from "@/assets/svg/alertIcon";
 import { showToast } from "@/components/common/ToastComponent";
+import { Button } from "@/components/elements";
 import Modal from "@/components/features/Modal";
+import SpinWheel from "@/components/partials/SpinTheWheel/SpinWheel";
+import { useEffect, useState } from "react";
 
 export default function SpinTheWheel() {
   const [isVisible, setIsVisible] = useState(false);
@@ -56,20 +56,22 @@ export default function SpinTheWheel() {
     <main className="relative bg-gradient-to-b from-orange-50 to-amber-50">
       <button
         onClick={() => setShowWheel(true)}
-        className={`group fixed bottom-8 left-8 ${
+        className={`group fixed md:bottom-8 md:left-8 ${
           isVisible && !showCouponBar
-            ? "translate-y-0 animate-[bounce_1s_ease-in-out_infinite] opacity-100"
+            ? "translate-y-0 opacity-100 md:animate-[bounce_1s_ease-in-out_infinite]"
             : "translate-y-16 opacity-0"
-        } transition-all duration-700 ease-out`}
-        style={{ zIndex: 9999 }}
+        } bottom-28 left-0 transition-all duration-100 ease-out md:duration-700`}
+        style={{ zIndex: showWheel ? 10 : 9999 }}
       >
         <div className="relative">
-          <div className="absolute inset-0 animate-ping rounded-full bg-orange-400 opacity-20"></div>
-
-          <div className="text-white relative transform rounded-full bg-gradient-to-br from-orange-500 to-orange-600 p-4 shadow-lg transition-transform group-hover:scale-110">
-            <div className="border-white relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full border-4">
-              <div className="absolute inset-0 bg-orange-500 opacity-50"></div>
-              <Gift className="text-white relative z-10 h-8 w-8" />
+          <div className="absolute inset-0 rounded-full bg-orange-400 opacity-20 md:animate-ping"></div>
+          <div className="text-white from-orange-500_01 relative transform rounded-none rounded-r-full bg-gradient-to-br to-orange-600 p-2 shadow-lg transition-transform group-hover:scale-110 md:rounded-full md:p-4">
+            <div className="!border-white relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-[3px] md:h-16 md:w-16 md:border-4">
+              <div className="bg-orange-500_01 absolute inset-0 opacity-50"></div>
+              <Gift
+                className="text-white relative z-10 h-5 w-5 md:h-8 md:w-8"
+                color={"white"}
+              />
 
               {[...Array(6)].map((_, i) => (
                 <div
@@ -82,9 +84,8 @@ export default function SpinTheWheel() {
               ))}
             </div>
           </div>
-
           <div
-            className="bg-white absolute -top-16 left-0 whitespace-nowrap rounded-full px-4 py-2 font-semibold text-orange-900 opacity-0 shadow-lg transition-opacity group-hover:opacity-100"
+            className="bg-white absolute -left-2 -top-16 whitespace-nowrap rounded-full px-4 py-2 font-semibold text-orange-900 opacity-0 shadow-lg transition-opacity group-hover:opacity-100 md:left-0"
             style={{ backgroundColor: "white", zIndex: 9999 }}
           >
             {`Spin & Win Rewards! 🎁`}
@@ -93,7 +94,10 @@ export default function SpinTheWheel() {
         </div>
       </button>
       {showCouponBar && previousWin && (
-        <div className="text-white fixed bottom-0 left-0 right-0 z-50 transform bg-gradient-to-r from-orange-600 to-orange-500 px-4 py-3 shadow-lg transition-transform">
+        <div
+          className="to-orange-500_01 fixed bottom-0 left-0 right-0 z-50 transform bg-gradient-to-r from-orange-600 px-4 py-3 shadow-md transition-transform md:shadow-lg"
+          style={{ color: "white" }}
+        >
           <div className="mx-auto flex max-w-7xl items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="bg-white/20 hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-full sm:flex md:h-12 md:w-12">
@@ -128,7 +132,9 @@ export default function SpinTheWheel() {
           "bg-gradient-to-b from-orange-50 to-amber-50 md:!w-[600px]"
         }
         title={"  "}
-        titleClassName={"mb-1 text-3xl font-bold text-orange-900 md:text-4xl"}
+        titleClassName={
+          "mb-1 text-3xl font-bold text-orange-900 md:text-4xl text-orange-800"
+        }
         enableOutsideClick={false}
         bgOpacity={"darker"}
       >

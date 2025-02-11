@@ -10,7 +10,10 @@ import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
-import { WEB_ANIMATED_BALLOON } from "@/utils/data/constants";
+import {
+  BALLOON_ALLOWED_PATHS,
+  WEB_ANIMATED_BALLOON,
+} from "@/utils/data/constants";
 import { useConfiguration } from "@wow-star/utils-cms";
 import { getCurrentUser } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
@@ -20,6 +23,7 @@ import { useCallback, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import BirthdayCelebration from "./partials/BirthdayCelebration";
 import SpinTheWheel from "./partials/SpinTheWheel";
+import { useSelector } from "react-redux";
 
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
@@ -27,6 +31,21 @@ const ClientSideEffects = () => {
   const sessionId = sessionStorage?.getItem(
     `${STORE_PREFIX}_coupon_session_id`,
   );
+
+  const isCartOpen = useSelector(
+    (state) => state.modal?.modal?.cart?.isCartOpen,
+  );
+
+  // useConfiguration(WEB_SPIN_THE_WHEEL, false);
+  // BALLOON_ALLOWED_PATHS used bcz same condition for spin the wheel to float
+  const isSpinTheWheelAllowed =
+    true &&
+    BALLOON_ALLOWED_PATHS.some(
+      (allowedPath) =>
+        pathname === allowedPath ||
+        (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
+    );
+
   const isBalloonAnimationAllowed = useConfiguration(
     WEB_ANIMATED_BALLOON,
     false,
@@ -226,7 +245,7 @@ const ClientSideEffects = () => {
 
     script.onload = () => {
       document.addEventListener("DOMContentLoaded", () => {
-        window.kpUpdateDOM();
+        // window.kpUpdateDOM();
       });
     };
 
@@ -243,11 +262,11 @@ const ClientSideEffects = () => {
     return (
       <>
         <BirthdayCelebration />
-        <SpinTheWheel />
+        {!isCartOpen && isSpinTheWheelAllowed && <SpinTheWheel />}
       </>
     );
   }
-  return <SpinTheWheel />;
+  return <>{!isCartOpen && isSpinTheWheelAllowed && <SpinTheWheel />}</>;
 };
 
 export default ClientSideEffects;

@@ -134,11 +134,7 @@ const Modal = ({
               )}
               {!!title && (
                 <div className={"flex items-center justify-between"}>
-                  <Heading
-                    as="h5"
-                    size="xl"
-                    className={twMerge(titleClassName, "text-orange-800")}
-                  >
+                  <Heading as="h5" size="xl" className={titleClassName}>
                     {title}
                   </Heading>
                   {enableCloseButton && !showCloseButtonOutOfBox && (
