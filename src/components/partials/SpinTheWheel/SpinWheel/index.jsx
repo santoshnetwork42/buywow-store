@@ -100,6 +100,16 @@ export default function SpinWheel() {
     wheelAudioRef.current = new Audio(WHEEL_SOUND_URL);
     winAudioRef.current = new Audio(WIN_SOUND_URL);
 
+    const firstVisitTime = window.localStorage.getItem(STORAGE_TIME_KEY);
+    const now = Date.now();
+    const twentyFourHours = 24 * 60 * 60 * 1000;
+    if (now - firstVisitTime > twentyFourHours) {
+      window.localStorage.removeItem("last_won_code");
+      window.localStorage.setItem(STORAGE_TIME_KEY, Date.now().toString());
+      window.localStorage.setItem(ATTEMPTS_KEY, String(0));
+      window.localStorage.setItem(STORAGE_KEY, String(MAX_START_PERCENTAGE));
+    }
+
     const usedAttempts = parseInt(
       window.localStorage.getItem(ATTEMPTS_KEY) || "0",
     );
