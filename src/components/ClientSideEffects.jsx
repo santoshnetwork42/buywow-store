@@ -24,9 +24,14 @@ import { v4 as uuidv4 } from "uuid";
 import BirthdayCelebration from "./partials/BirthdayCelebration";
 import SpinTheWheel from "./partials/SpinTheWheel";
 import { useSelector } from "react-redux";
+import { WEB_SPIN_THE_WHEEL_ENABLED } from "@/utils/data/constants";
 
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
+  const isSpinTheWheelEnabled = useConfiguration(
+    WEB_SPIN_THE_WHEEL_ENABLED,
+    false,
+  );
   const pathname = usePathname();
   const sessionId = sessionStorage?.getItem(
     `${STORE_PREFIX}_coupon_session_id`,
@@ -39,7 +44,7 @@ const ClientSideEffects = () => {
   // useConfiguration(WEB_SPIN_THE_WHEEL, false);
   // BALLOON_ALLOWED_PATHS used bcz same condition for spin the wheel to float
   const isSpinTheWheelAllowed =
-    true &&
+    isSpinTheWheelEnabled &&
     BALLOON_ALLOWED_PATHS.some(
       (allowedPath) =>
         pathname === allowedPath ||

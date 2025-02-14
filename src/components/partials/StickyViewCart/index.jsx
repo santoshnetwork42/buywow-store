@@ -4,19 +4,26 @@ import Nudge from "@/components/common/Nudge";
 import { Button, Heading, Text } from "@/components/elements";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
-import { STICKY_VIEW_CART_TO_SHOW } from "@/utils/data/constants";
+import {
+  STICKY_VIEW_CART_TO_SHOW,
+  IS_PREPAID_DISCOUNT_SHOW,
+} from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
-import { useCartItems, useCartTotal } from "@wow-star/utils-cms";
+import {
+  useCartItems,
+  useCartTotal,
+  useConfiguration,
+} from "@wow-star/utils-cms";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { useSelector } from "react-redux";
 
 const CartSummary = React.memo(
-  ({ totalItems, grandTotal, prepaidDiscountPercent, prepaidDiscount }) => (
+  ({ totalItems, grandTotal, prepaidDiscountPercent, prepaidDiscount = 0 }) => (
     <div className="flex flex-col gap-1">
       <Heading size="lg" as="h3" className="text-base" responsive>
         {totalItems > 1 ? `${totalItems} Items` : "1 Item"} | ₹{" "}
-        {toDecimal(grandTotal)}
+        {toDecimal(grandTotal + prepaidDiscount)}
       </Heading>
       {prepaidDiscountPercent > 0 && (
         <Text as="p" size="sm" className="text-black-900" responsive>
@@ -31,6 +38,10 @@ CartSummary.displayName = "CartSummary";
 
 const StickyViewCart = () => {
   const isInteractive = useIsInteractive();
+  const isPrepaidDiscountToShow = useConfiguration(
+    IS_PREPAID_DISCOUNT_SHOW,
+    true,
+  );
 
   const pathname = usePathname();
 
@@ -113,9 +124,15 @@ const StickyViewCart = () => {
             totalItems={totalItems}
             grandTotal={grandTotal}
             prepaidDiscountPercent={
-              appliedCoupon?.applyPrepaidDiscount ? prepaidDiscountPercent : 0
+              isPrepaidDiscountToShow
+                ? !!appliedCoupon
+                  ? appliedCoupon?.applyPrepaidDiscount
+                    ? prepaidDiscountPercent
+                    : 0
+                  : prepaidDiscountPercent
+                : 0
             }
-            prepaidDiscount={prepaidDiscount}
+            prepaidDiscount={isPrepaidDiscountToShow ? 0 : prepaidDiscount}
           />
           <Button
             variant="primary"

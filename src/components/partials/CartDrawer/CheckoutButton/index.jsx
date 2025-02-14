@@ -6,12 +6,13 @@ const CheckoutButton = ({
   totalAmountSaved,
   validateAndGoToCheckout,
   checkoutButtonDisabled,
+  prepaidDiscount,
 }) => {
   return (
     <div className="flex items-center justify-between gap-5">
       <div className="flex shrink-0 flex-col gap-1">
         <Heading size="xl" as="h3" responsive>
-          ₹{toDecimal(grandTotal)}
+          ₹{toDecimal(grandTotal + prepaidDiscount)}
         </Heading>
         {!!totalAmountSaved && (
           <Text className="text-green-600" size="sm">
