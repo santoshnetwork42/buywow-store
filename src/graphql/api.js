@@ -42,6 +42,8 @@ export const getInitialData = /* GraphQL */ `
         PPCOD_AMOUNT
         SHOW_SHIPPING_BAR
         WEB_ANIMATED_BALLOON
+        IS_PREPAID_DISCOUNT_TO_SHOW
+        WEB_SPIN_THE_WHEEL_ENABLED
       }
     }
 
