@@ -24,14 +24,13 @@ export default function SpinTheWheel() {
       const lastWonCode = window.localStorage.getItem("last_won_code");
       if (lastWonCode) {
         const offers = [
-          { label: "10% OFF", code: "WIN10" },
-          { label: "FREE SHIPPING", code: "FREESHIP" },
-          { label: "BUY 1 GET 1", code: "BOGO" },
-          { label: "20% OFF", code: "WIN20" },
-          { label: "FREE GIFT", code: "GIFT" },
-          { label: "VIP ACCESS", code: "VIP" },
+          { label: "10% OFF", code: "SPIN10%OFF" },
+          { label: "BUY 8 @ 1000", code: "SPINBUY8" },
+          { label: "BUY 1 GET 1", code: "SPINWOW" },
+          { label: "20% OFF", code: "SPIN20%OFF" },
+          { label: "FREE GIFT", code: "FREEGIFT" },
+          { label: "30% OFF", code: "SPIN30%OFF" },
         ];
-
         const win = offers.find((offer) => offer.code === lastWonCode);
         if (win) {
           setPreviousWin(win);
@@ -65,9 +64,9 @@ export default function SpinTheWheel() {
       >
         <div className="relative">
           <div className="absolute inset-0 rounded-full bg-orange-400 opacity-20 md:animate-ping"></div>
-          <div className="text-white from-orange-500_01 relative transform rounded-none rounded-r-full bg-gradient-to-br to-orange-600 p-2 shadow-lg transition-transform group-hover:scale-110 md:rounded-full md:p-4">
+          <div className="text-white relative transform rounded-none rounded-r-full bg-gradient-to-br from-orange-500_01 to-orange-600 p-2 shadow-lg transition-transform group-hover:scale-110 md:rounded-full md:p-4">
             <div className="!border-white relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-[3px] md:h-16 md:w-16 md:border-4">
-              <div className="bg-orange-500_01 absolute inset-0 opacity-50"></div>
+              <div className="absolute inset-0 bg-orange-500_01 opacity-50"></div>
               <Gift
                 className="text-white relative z-10 h-5 w-5 md:h-8 md:w-8"
                 color={"white"}
@@ -95,7 +94,7 @@ export default function SpinTheWheel() {
       </button>
       {showCouponBar && previousWin && (
         <div
-          className="to-orange-500_01 fixed bottom-0 left-0 right-0 z-50 transform bg-gradient-to-r from-orange-600 px-4 py-3 shadow-md transition-transform md:shadow-lg"
+          className="fixed bottom-0 left-0 right-0 z-50 transform bg-gradient-to-r from-orange-600 to-orange-500_01 px-4 py-3 shadow-md transition-transform md:shadow-lg"
           style={{ color: "white" }}
         >
           <div className="mx-auto flex max-w-7xl items-center justify-between">
