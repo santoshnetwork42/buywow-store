@@ -388,7 +388,7 @@ export function* validateCartOnErrorHandler(action) {
                   maximumOrderQuantity: updatedProduct?.maximumOrderQuantity,
                 };
               }
-              return i;
+              return v;
             }),
           },
         }),
