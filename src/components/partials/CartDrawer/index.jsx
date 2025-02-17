@@ -16,7 +16,7 @@ import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useGuestCheckout } from "@/utils/context/navbar";
 import {
   GOKWIK_ENABLED,
-  IS_PREPAID_DISCOUNT_SHOW,
+  IS_PREPAID_DISCOUNT_TO_SHOW,
   PREPAID_ENABLED,
   RESTRICT_SEARCH_AND_CART_TO_SHOW,
 } from "@/utils/data/constants";
@@ -110,7 +110,7 @@ const CartDrawer = () => {
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
   const isPrepaidDiscountToShow = useConfiguration(
-    IS_PREPAID_DISCOUNT_SHOW,
+    IS_PREPAID_DISCOUNT_TO_SHOW,
     true,
   );
 

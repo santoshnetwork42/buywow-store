@@ -6,7 +6,7 @@ import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import {
   STICKY_VIEW_CART_TO_SHOW,
-  IS_PREPAID_DISCOUNT_SHOW,
+  IS_PREPAID_DISCOUNT_TO_SHOW,
 } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
 import {
@@ -39,7 +39,7 @@ CartSummary.displayName = "CartSummary";
 const StickyViewCart = () => {
   const isInteractive = useIsInteractive();
   const isPrepaidDiscountToShow = useConfiguration(
-    IS_PREPAID_DISCOUNT_SHOW,
+    IS_PREPAID_DISCOUNT_TO_SHOW,
     true,
   );
 
