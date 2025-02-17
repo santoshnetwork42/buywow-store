@@ -1,7 +1,8 @@
 "use client";
 
+import { X } from "@/assets/svg/alertIcon";
 import GiftIcon from "@/assets/svg/gift";
-import { Text } from "@/components/elements";
+import { Button, Text } from "@/components/elements";
 import { fetchCouponRuleAPI } from "@/lib/appSyncAPIs";
 import {
   setApplicableCollectionCoupons,
@@ -244,6 +245,11 @@ const Nudge = ({ isCart = false }) => {
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart?.data || []);
+
+  const lastWonCode = window.localStorage.getItem("last_won_code");
+  const [showCouponBarForSpinTheWheel, setShowCouponBarForSpinTheWheel] =
+    useState(false);
+
   const coupons = useCoupons();
 
   const collectionCoupons = useSelector(
@@ -289,6 +295,7 @@ const Nudge = ({ isCart = false }) => {
         ),
       );
     }
+    setShowCouponBarForSpinTheWheel(true);
   }, [pathname, searchParams, coupons, storedCouponCode, dispatch]);
 
   // Separate useEffect for updating nudgeFeat
@@ -395,6 +402,34 @@ const Nudge = ({ isCart = false }) => {
       })),
     [nudgeFeat],
   );
+
+  if (showCouponBarForSpinTheWheel && !!lastWonCode && !isCart) {
+    return (
+      <>
+        <div className="flex items-center justify-around bg-deep_orange-50 py-2 text-center sm:rounded-t-lg">
+          {/* {`Hello ${lastWonCode}`} */}
+          <p className="flex-grow text-sm font-light md:text-base">
+            Limited-time offer! Use code
+            <span className="bg-white/20 rounded px-2 py-1 font-mono font-bold">
+              {lastWonCode}
+            </span>
+            at checkout
+          </p>
+          <div className="flex items-center gap-2 px-3">
+            <Button
+              onClick={() => setShowCouponBarForSpinTheWheel(false)}
+              variant="ghost"
+              size="sm"
+              className="text-white hover:bg-white/20"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </Button>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

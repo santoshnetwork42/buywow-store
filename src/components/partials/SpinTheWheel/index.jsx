@@ -64,9 +64,9 @@ export default function SpinTheWheel() {
       >
         <div className="relative">
           <div className="absolute inset-0 rounded-full bg-orange-400 opacity-20 md:animate-ping"></div>
-          <div className="text-white relative transform rounded-none rounded-r-full bg-gradient-to-br from-orange-500_01 to-orange-600 p-2 shadow-lg transition-transform group-hover:scale-110 md:rounded-full md:p-4">
+          <div className="text-white from-orange-500_01 relative transform rounded-none rounded-r-full bg-gradient-to-br to-orange-600 p-2 shadow-lg transition-transform group-hover:scale-110 md:rounded-full md:p-4">
             <div className="!border-white relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-[3px] md:h-16 md:w-16 md:border-4">
-              <div className="absolute inset-0 bg-orange-500_01 opacity-50"></div>
+              <div className="bg-orange-500_01 absolute inset-0 opacity-50"></div>
               <Gift
                 className="text-white relative z-10 h-5 w-5 md:h-8 md:w-8"
                 color={"white"}
@@ -92,9 +92,9 @@ export default function SpinTheWheel() {
           </div>
         </div>
       </button>
-      {showCouponBar && previousWin && (
+      {/* {showCouponBar && previousWin && (
         <div
-          className="fixed bottom-0 left-0 right-0 z-50 transform bg-gradient-to-r from-orange-600 to-orange-500_01 px-4 py-3 shadow-md transition-transform md:shadow-lg"
+          className="to-orange-500_01 fixed bottom-0 left-0 right-0 z-50 transform bg-gradient-to-r from-orange-600 px-4 py-3 shadow-md transition-transform md:shadow-lg"
           style={{ color: "white" }}
         >
           <div className="mx-auto flex max-w-7xl items-center justify-between">
@@ -123,7 +123,7 @@ export default function SpinTheWheel() {
             </div>
           </div>
         </div>
-      )}
+      )} */}
       <Modal
         isOpen={showWheel}
         onClose={() => setShowWheel(false)}
