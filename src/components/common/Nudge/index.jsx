@@ -21,6 +21,7 @@ import { useCoupons } from "@wow-star/utils-cms";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { STORE_PREFIX } from "@/config";
 
 const GiftIconWithBorder = ({
   isMarked,
@@ -246,7 +247,9 @@ const Nudge = ({ isCart = false }) => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart?.data || []);
 
-  const lastWonCode = window.localStorage.getItem("last_won_code");
+  const lastWonCode = window.localStorage.getItem(
+    STORE_PREFIX + "_" + "last_won_code",
+  );
   const [showCouponBarForSpinTheWheel, setShowCouponBarForSpinTheWheel] =
     useState(false);
 

@@ -14,6 +14,7 @@ import {
 import confetti from "canvas-confetti";
 import { showToast } from "@/components/common/ToastComponent";
 import Modal from "@/components/features/Modal";
+import { STORE_PREFIX } from "@/config";
 
 const SPINNING_TIME = 5000;
 const ROTATION_DEGREES = 360 * 5;
@@ -24,9 +25,9 @@ const WHEEL_SOUND_URL =
 const WIN_SOUND_URL =
   "https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3";
 
-const STORAGE_KEY = "wheel_claimed_percentage";
-const STORAGE_TIME_KEY = "wheel_first_visit";
-const ATTEMPTS_KEY = "wheel_spin_attempts";
+const STORAGE_KEY = STORE_PREFIX + "_" + "wheel_claimed_percentage";
+const STORAGE_TIME_KEY = STORE_PREFIX + "_" + "wheel_first_visit";
+const ATTEMPTS_KEY = STORE_PREFIX + "_" + "wheel_spin_attempts";
 const MAX_ATTEMPTS = 1;
 const MIN_START_PERCENTAGE = 65;
 const MAX_START_PERCENTAGE = 75;
@@ -104,7 +105,7 @@ export default function SpinWheel() {
     const now = Date.now();
     const twentyFourHours = 24 * 60 * 60 * 1000;
     if (now - firstVisitTime > twentyFourHours) {
-      window.localStorage.removeItem("last_won_code");
+      window.localStorage.removeItem(STORE_PREFIX + "_" + "last_won_code");
       window.localStorage.setItem(STORAGE_TIME_KEY, Date.now().toString());
       window.localStorage.setItem(ATTEMPTS_KEY, String(0));
       window.localStorage.setItem(STORAGE_KEY, String(MAX_START_PERCENTAGE));
@@ -214,7 +215,9 @@ export default function SpinWheel() {
   const getPreviousWin = () => {
     if (typeof window === "undefined") return null;
 
-    const code = window.localStorage.getItem("last_won_code");
+    const code = window.localStorage.getItem(
+      STORE_PREFIX + "_" + "last_won_code",
+    );
     if (code) {
       return offers.find((offer) => offer.code === code);
     }
@@ -223,7 +226,10 @@ export default function SpinWheel() {
 
   const saveWinningOffer = (offer) => {
     if (typeof window === "undefined") return;
-    window.localStorage.setItem("last_won_code", offer.code);
+    window.localStorage.setItem(
+      STORE_PREFIX + "_" + "last_won_code",
+      offer.code,
+    );
   };
 
   const spinWheel = () => {

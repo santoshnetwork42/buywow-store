@@ -5,6 +5,7 @@ import { showToast } from "@/components/common/ToastComponent";
 import { Button } from "@/components/elements";
 import Modal from "@/components/features/Modal";
 import SpinWheel from "@/components/partials/SpinTheWheel/SpinWheel";
+import { STORE_PREFIX } from "@/config";
 import { useEffect, useState } from "react";
 
 export default function SpinTheWheel() {
@@ -21,7 +22,9 @@ export default function SpinTheWheel() {
 
     // Check for previous win
     if (typeof window !== "undefined") {
-      const lastWonCode = window.localStorage.getItem("last_won_code");
+      const lastWonCode = window.localStorage.getItem(
+        STORE_PREFIX + "_" + "last_won_code",
+      );
       if (lastWonCode) {
         const offers = [
           { label: "10% OFF", code: "SPIN10%OFF" },

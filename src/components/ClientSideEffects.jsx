@@ -32,6 +32,7 @@ const ClientSideEffects = () => {
     WEB_SPIN_THE_WHEEL_ENABLED,
     false,
   );
+
   const pathname = usePathname();
   const sessionId = sessionStorage?.getItem(
     `${STORE_PREFIX}_coupon_session_id`,
