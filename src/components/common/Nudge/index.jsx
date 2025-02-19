@@ -310,10 +310,10 @@ const Nudge = ({ isCart = false }) => {
 
   useEffect(() => {
     if (lastWonCodeAlreadyUsed !== "TRUE") {
-      setShowCouponBarForSpinTheWheel(true);
-      handleSpinTheWheelVisibility(true);
+      setShowCouponBarForSpinTheWheel(!!lastWonCode);
+      handleSpinTheWheelVisibility(!!lastWonCode);
     }
-  }, [pathname]);
+  }, [pathname, lastWonCode, lastWonCodeAlreadyUsed]);
   // Separate useEffect for updating nudgeFeat
   useEffect(() => {
     const isHomepage = pathname === "/";

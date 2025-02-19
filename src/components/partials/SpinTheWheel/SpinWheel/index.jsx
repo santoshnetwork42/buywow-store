@@ -287,14 +287,16 @@ export default function SpinWheel() {
   };
 
   const toggleSound = () => {
-    if (isSpinning && attemptsLeft >= 0) {
+    if (attemptsLeft >= 0) {
       setIsSoundEnabled((isSoundEnabled) => !isSoundEnabled);
-      if (!isSoundEnabled) {
-        if (wheelAudioRef.current) wheelAudioRef.current.play();
-        if (winAudioRef.current) winAudioRef.current.play();
-      } else if (isSpinning && isSoundEnabled) {
-        if (wheelAudioRef.current) wheelAudioRef.current.pause();
-        if (winAudioRef.current) winAudioRef.current.pause();
+      if (isSpinning) {
+        if (!isSoundEnabled) {
+          if (wheelAudioRef.current) wheelAudioRef.current.play();
+          if (winAudioRef.current) winAudioRef.current.play();
+        } else {
+          if (wheelAudioRef.current) wheelAudioRef.current.pause();
+          if (winAudioRef.current) winAudioRef.current.pause();
+        }
       }
     }
   };
@@ -411,7 +413,9 @@ export default function SpinWheel() {
                 onClick={toggleSound}
                 variant="ghost"
                 size="icon"
-                disabled={attemptsLeft <= 0 && !isSpinning}
+                disabled={
+                  attemptsLeft < 0 || (!isSpinning && attemptsLeft === 0)
+                }
                 className="text-orange-600 hover:text-orange-700"
               >
                 {isSoundEnabled ? (
@@ -444,7 +448,7 @@ export default function SpinWheel() {
               {getPreviousWin() && attemptsLeft <= 0 && (
                 <button
                   onClick={() => setShowMaxAttemptsDialog(true)}
-                  className="text-md mt-3 text-orange-600 underline decoration-dashed hover:text-orange-700"
+                  className="text-md mt-3 text-orange-600 decoration-dashed hover:text-orange-700"
                 >
                   View your previous reward
                 </button>
