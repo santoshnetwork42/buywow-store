@@ -7,7 +7,12 @@ import AddressSection from "@/components/partials/Account/AddressSection";
 import PaymentLoader from "@/components/partials/Checkout/PaymentLoader";
 import PaymentMethodsSection from "@/components/partials/Checkout/PaymentMethodsSection";
 import ProgressSteps from "@/components/partials/Others/ProgressSteps";
-import { RAZORPAY_KEY, RAZORPAY_SCRIPT, STORE_ID } from "@/config";
+import {
+  RAZORPAY_KEY,
+  RAZORPAY_SCRIPT,
+  STORE_ID,
+  STORE_PREFIX,
+} from "@/config";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
@@ -385,6 +390,18 @@ const CheckoutClient = () => {
       router.push(`/order/${finalOrder.id}`);
       setPaymentLoader(false);
       emptyCart();
+
+      if (window?.localStorage) {
+        const lastWonCode = window.localStorage?.getItem(
+          STORE_PREFIX + "_" + "last_won_code",
+        );
+        if (appliedCoupon?.code === lastWonCode) {
+          window.localStorage.setItem(
+            STORE_PREFIX + "_" + "last_won_code_used",
+            "TRUE",
+          );
+        }
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConfirmed, finalOrder, router]);

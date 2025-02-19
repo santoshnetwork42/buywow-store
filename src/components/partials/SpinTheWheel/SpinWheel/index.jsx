@@ -106,6 +106,10 @@ export default function SpinWheel() {
     const twentyFourHours = 24 * 60 * 60 * 1000;
     if (now - firstVisitTime > twentyFourHours) {
       window.localStorage.removeItem(STORE_PREFIX + "_" + "last_won_code");
+      window.localStorage.removeItem(
+        STORE_PREFIX + "_" + "last_won_code_used",
+        "FALSE",
+      );
       window.localStorage.setItem(STORAGE_TIME_KEY, Date.now().toString());
       window.localStorage.setItem(ATTEMPTS_KEY, String(0));
       window.localStorage.setItem(STORAGE_KEY, String(MAX_START_PERCENTAGE));

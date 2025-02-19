@@ -37,7 +37,7 @@ export default function SpinTheWheel() {
         const win = offers.find((offer) => offer.code === lastWonCode);
         if (win) {
           setPreviousWin(win);
-          setShowCouponBar(true);
+          // setShowCouponBar(true);
         }
       }
     }
@@ -62,13 +62,13 @@ export default function SpinTheWheel() {
           isVisible && !showCouponBar
             ? "translate-y-0 opacity-100 md:animate-[bounce_1s_ease-in-out_infinite]"
             : "translate-y-16 opacity-0"
-        } bottom-28 left-0 transition-all duration-100 ease-out md:duration-700`}
+        } bottom-36 left-0 transition-all duration-100 ease-out md:duration-700`}
         style={{ zIndex: showWheel ? 10 : 9999 }}
       >
         <div className="relative">
           <div className="absolute inset-0 rounded-full bg-orange-400 opacity-20 md:animate-ping"></div>
           <div className="text-white from-orange-500_01 relative transform rounded-none rounded-r-full bg-gradient-to-br to-orange-600 p-2 shadow-lg transition-transform group-hover:scale-110 md:rounded-full md:p-4">
-            <div className="!border-white relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-[3px] md:h-16 md:w-16 md:border-4">
+            <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-[3px] !border-white-a700 md:h-16 md:w-16 md:border-4">
               <div className="bg-orange-500_01 absolute inset-0 opacity-50"></div>
               <Gift
                 className="text-white relative z-10 h-5 w-5 md:h-8 md:w-8"

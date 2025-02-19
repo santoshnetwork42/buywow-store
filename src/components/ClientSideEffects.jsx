@@ -42,7 +42,6 @@ const ClientSideEffects = () => {
     (state) => state.modal?.modal?.cart?.isCartOpen,
   );
 
-  // useConfiguration(WEB_SPIN_THE_WHEEL, false);
   // BALLOON_ALLOWED_PATHS used bcz same condition for spin the wheel to float
   const isSpinTheWheelAllowed =
     isSpinTheWheelEnabled &&

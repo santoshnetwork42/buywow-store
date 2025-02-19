@@ -406,6 +406,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       showMobileView
       title={!confirmationStatus ? "Sign In" : "OTP Verification"}
       enableOutsideClick={enableOutsideClick}
+      modalClassName={"z-[9999]"}
     >
       {!confirmationStatus ? renderSignInStep : renderOTPStep}
     </Modal>

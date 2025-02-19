@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "@/assets/svg/alertIcon";
+import { Gift, X } from "@/assets/svg/alertIcon";
 import GiftIcon from "@/assets/svg/gift";
 import { Button, Text } from "@/components/elements";
 import { fetchCouponRuleAPI } from "@/lib/appSyncAPIs";
@@ -250,6 +250,10 @@ const Nudge = ({ isCart = false }) => {
   const lastWonCode = window.localStorage.getItem(
     STORE_PREFIX + "_" + "last_won_code",
   );
+
+  const lastWonCodeAlreadyUsed = window.localStorage.getItem(
+    STORE_PREFIX + "_" + "last_won_code_used",
+  );
   const [showCouponBarForSpinTheWheel, setShowCouponBarForSpinTheWheel] =
     useState(false);
 
@@ -298,9 +302,12 @@ const Nudge = ({ isCart = false }) => {
         ),
       );
     }
-    setShowCouponBarForSpinTheWheel(true);
   }, [pathname, searchParams, coupons, storedCouponCode, dispatch]);
 
+  useEffect(() => {
+    if (lastWonCodeAlreadyUsed !== "TRUE")
+      setShowCouponBarForSpinTheWheel(true);
+  }, [pathname]);
   // Separate useEffect for updating nudgeFeat
   useEffect(() => {
     const isHomepage = pathname === "/";
@@ -411,13 +418,22 @@ const Nudge = ({ isCart = false }) => {
       <>
         <div className="flex items-center justify-around bg-deep_orange-50 py-2 text-center sm:rounded-t-lg">
           {/* {`Hello ${lastWonCode}`} */}
-          <p className="flex-grow text-sm font-light md:text-base">
-            Limited-time offer! Use code
-            <span className="bg-white/20 rounded px-2 py-1 font-mono font-bold">
-              {lastWonCode}
-            </span>
-            at checkout
-          </p>
+          <div className="flex flex-grow items-center justify-evenly md:px-3">
+            <div className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border-2 !border-yellow-900 max-sm:ml-3">
+              <div className="absolute inset-0 bg-white-a700 opacity-50"></div>
+              <Gift
+                className="text-white relative z-10 h-5 w-5"
+                color={"#dd8434"}
+              />
+            </div>
+            <p className="text-sm font-light md:text-base">
+              Coupon Reserved! Use
+              <span className="bg-white/20 rounded px-2 py-1 font-mono font-bold">
+                {lastWonCode}
+              </span>
+              at checkout!
+            </p>
+          </div>
           <div className="flex items-center gap-2 px-3">
             <Button
               onClick={() => setShowCouponBarForSpinTheWheel(false)}
