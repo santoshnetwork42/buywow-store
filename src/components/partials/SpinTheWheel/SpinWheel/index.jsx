@@ -34,12 +34,17 @@ const MAX_START_PERCENTAGE = 75;
 const MAX_PERCENTAGE = 95;
 
 const offers = [
-  { label: "10% OFF", color: "#E67E22", code: "SPIN10%OFF", weight: 30 },
-  { label: "BUY 8 @ 1000", color: "#8B4513", code: "SPINBUY8", weight: 25 },
-  { label: "BUY 1 GET 1", color: "#F39C12", code: "SPINWOW", weight: 5 },
-  { label: "20% OFF", color: "#A0522D", code: "SPIN20%OFF", weight: 10 },
-  { label: "FREE GIFT", color: "#FFA500", code: "FREEGIFT", weight: 15 },
-  { label: "30% OFF", color: "#CD853F", code: "SPIN30%OFF", weight: 15 },
+  { label: "10% OFF", color: "#E67E22", code: "SPIN10VO89SM", weight: 30 },
+  {
+    label: "FREE SHIPPING",
+    color: "#8B4513",
+    code: "SPINFS6N0QH8",
+    weight: 25,
+  },
+  { label: "BUY 1 GET 1", color: "#F39C12", code: "SPINBG4WCVZS", weight: 5 },
+  { label: "20% OFF", color: "#A0522D", code: "SPIN20N43JRO", weight: 10 },
+  { label: "FREE GIFT", color: "#FFA500", code: "SPINFGTILC2RV", weight: 15 },
+  { label: "30% OFF", color: "#CD853F", code: "SPIN30ODRZ3W", weight: 15 },
 ];
 
 const totalWeight = offers.reduce((sum, offer) => sum + offer.weight, 0);

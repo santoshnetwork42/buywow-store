@@ -27,12 +27,12 @@ export default function SpinTheWheel() {
       );
       if (lastWonCode) {
         const offers = [
-          { label: "10% OFF", code: "SPIN10%OFF" },
-          { label: "BUY 8 @ 1000", code: "SPINBUY8" },
-          { label: "BUY 1 GET 1", code: "SPINWOW" },
-          { label: "20% OFF", code: "SPIN20%OFF" },
-          { label: "FREE GIFT", code: "FREEGIFT" },
-          { label: "30% OFF", code: "SPIN30%OFF" },
+          { label: "10% OFF", code: "SPIN10VO89SM" },
+          { label: "FREE SHIPPING", code: "SPINFS6N0QH8" },
+          { label: "BUY 1 GET 1", code: "SPINBG4WCVZS" },
+          { label: "20% OFF", code: "SPIN20N43JRO" },
+          { label: "FREE GIFT", code: "SPINFGTILC2RV" },
+          { label: "30% OFF", code: "SPIN30ODRZ3W" },
         ];
         const win = offers.find((offer) => offer.code === lastWonCode);
         if (win) {
