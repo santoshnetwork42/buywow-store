@@ -22,6 +22,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { STORE_PREFIX } from "@/config";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 
 const GiftIconWithBorder = ({
   isMarked,
@@ -254,6 +255,9 @@ const Nudge = ({ isCart = false }) => {
   const lastWonCodeAlreadyUsed = window.localStorage.getItem(
     STORE_PREFIX + "_" + "last_won_code_used",
   );
+
+  const { handleSpinTheWheelVisibility } = useModalDispatch();
+
   const [showCouponBarForSpinTheWheel, setShowCouponBarForSpinTheWheel] =
     useState(false);
 
@@ -305,8 +309,10 @@ const Nudge = ({ isCart = false }) => {
   }, [pathname, searchParams, coupons, storedCouponCode, dispatch]);
 
   useEffect(() => {
-    if (lastWonCodeAlreadyUsed !== "TRUE")
+    if (lastWonCodeAlreadyUsed !== "TRUE") {
       setShowCouponBarForSpinTheWheel(true);
+      handleSpinTheWheelVisibility(true);
+    }
   }, [pathname]);
   // Separate useEffect for updating nudgeFeat
   useEffect(() => {
@@ -428,15 +434,19 @@ const Nudge = ({ isCart = false }) => {
             </div>
             <p className="text-sm font-light md:text-base">
               Coupon Reserved! Use
-              <span className="bg-white/20 rounded px-2 py-1 font-mono font-bold">
+              <span className="bg-white/20 rounded p-1 font-mono font-bold md:px-2">
                 {lastWonCode}
               </span>
-              at checkout!
+              <span className="inline md:hidden"> now!</span>
+              <span className="hidden md:inline"> at checkout!</span>
             </p>
           </div>
           <div className="flex items-center gap-2 px-3">
             <Button
-              onClick={() => setShowCouponBarForSpinTheWheel(false)}
+              onClick={() => {
+                handleSpinTheWheelVisibility(false);
+                setShowCouponBarForSpinTheWheel(false);
+              }}
               variant="ghost"
               size="sm"
               className="text-white hover:bg-white/20"

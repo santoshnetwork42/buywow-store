@@ -33,6 +33,10 @@ const ClientSideEffects = () => {
     false,
   );
 
+  const isSpinTheWheelNudgeThere = useSelector(
+    (state) => state.modal.modal.spinTheWheel.isSpinTheWheelNudgeThere,
+  );
+
   const pathname = usePathname();
   const sessionId = sessionStorage?.getItem(
     `${STORE_PREFIX}_coupon_session_id`,
@@ -42,6 +46,7 @@ const ClientSideEffects = () => {
     (state) => state.modal?.modal?.cart?.isCartOpen,
   );
 
+  // useConfiguration(WEB_SPIN_THE_WHEEL, false);
   // BALLOON_ALLOWED_PATHS used bcz same condition for spin the wheel to float
   const isSpinTheWheelAllowed =
     isSpinTheWheelEnabled &&
@@ -267,11 +272,19 @@ const ClientSideEffects = () => {
     return (
       <>
         <BirthdayCelebration />
-        {!isCartOpen && isSpinTheWheelAllowed && <SpinTheWheel />}
+        {!isCartOpen && isSpinTheWheelAllowed && !isSpinTheWheelNudgeThere && (
+          <SpinTheWheel />
+        )}
       </>
     );
   }
-  return <>{!isCartOpen && isSpinTheWheelAllowed && <SpinTheWheel />}</>;
+  return (
+    <>
+      {!isCartOpen && isSpinTheWheelAllowed && !isSpinTheWheelNudgeThere && (
+        <SpinTheWheel />
+      )}
+    </>
+  );
 };
 
 export default ClientSideEffects;

@@ -17,6 +17,18 @@ export const useModalDispatch = () => {
     [dispatch],
   );
 
+  const handleSpinTheWheelVisibility = useCallback(
+    (isSpinTheWheelNudgeThere = false) => {
+      dispatch({
+        type: modalSagaActions.SET_SPIN_THE_WHEEL_MODAL,
+        payload: {
+          isSpinTheWheelNudgeThere,
+        },
+      });
+    },
+    [dispatch],
+  );
+
   const handlePasswordLessModal = useCallback(
     (
       isPasswordLessOpen = false,
@@ -40,5 +52,6 @@ export const useModalDispatch = () => {
   return {
     handleCartVisibility,
     handlePasswordLessModal,
+    handleSpinTheWheelVisibility,
   };
 };

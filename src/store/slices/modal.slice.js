@@ -9,6 +9,7 @@ export const initialState = {
       source: null,
     },
     cart: { isCartOpen: false },
+    spinTheWheel: { isSpinTheWheelNudgeThere: false },
   },
 };
 
@@ -22,13 +23,20 @@ export const modalSlice = createSlice({
     setPasswordLessModal: (state, action) => {
       state.modal.passwordLess = action.payload;
     },
+    setSpinTheWheelVisible: (state, action) => {
+      state.modal.spinTheWheel = action.payload;
+    },
     setCartModal: (state, action) => {
       state.modal.cart = action.payload;
     },
   },
 });
 
-export const { setModal, setPasswordLessModal, setCartModal } =
-  modalSlice.actions;
+export const {
+  setModal,
+  setPasswordLessModal,
+  setCartModal,
+  setSpinTheWheelVisible,
+} = modalSlice.actions;
 
 export default modalSlice.reducer;
