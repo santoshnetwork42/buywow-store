@@ -1685,6 +1685,31 @@ export function* shopByClickEventHandler({ payload }) {
   }
 }
 
+export function* spinTheWheelEventHandler({ payload }) {
+  try {
+    const { event = "", ...rest } = payload;
+    const userData = yield select((state) =>
+      state.user.user?.phone ? state.user.user : state.user.customUser,
+    );
+    const eventSource = getClientSource();
+    const user = userMapper(userData);
+
+    const analyticsMeta = analyticsMetaDataMapper();
+
+    trackClickStream({
+      event: trimLowercaseJoinWithUnderscore(event),
+      eventID: uuidv4(),
+      userId: user?.id || "",
+      user: user || {},
+      source: eventSource,
+      ...analyticsMeta,
+      ...rest,
+    });
+  } catch (e) {
+    errorHandler(e);
+  }
+}
+
 export function* blogClickEventHandler({ payload }) {
   try {
     const userData = yield select((state) =>

@@ -11,7 +11,7 @@ import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import {
-  BALLOON_ALLOWED_PATHS,
+  SPIN_THE_WHEEL_EXCLUDE_PATHS,
   WEB_ANIMATED_BALLOON,
 } from "@/utils/data/constants";
 import { useConfiguration } from "@wow-star/utils-cms";
@@ -25,6 +25,12 @@ import BirthdayCelebration from "./partials/BirthdayCelebration";
 import SpinTheWheel from "./partials/SpinTheWheel";
 import { useSelector } from "react-redux";
 import { WEB_SPIN_THE_WHEEL_ENABLED } from "@/utils/data/constants";
+import {
+  STORAGE_KEY,
+  STORAGE_TIME_KEY,
+  ATTEMPTS_KEY,
+  MAX_START_PERCENTAGE,
+} from "@/utils/data/constants";
 
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
@@ -46,11 +52,9 @@ const ClientSideEffects = () => {
     (state) => state.modal?.modal?.cart?.isCartOpen,
   );
 
-  // useConfiguration(WEB_SPIN_THE_WHEEL, false);
-  // BALLOON_ALLOWED_PATHS used bcz same condition for spin the wheel to float
   const isSpinTheWheelAllowed =
     isSpinTheWheelEnabled &&
-    BALLOON_ALLOWED_PATHS.some(
+    !SPIN_THE_WHEEL_EXCLUDE_PATHS.some(
       (allowedPath) =>
         pathname === allowedPath ||
         (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
@@ -236,6 +240,25 @@ const ClientSideEffects = () => {
       hubListenerCancelToken();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const expireWonCouponViaSpinTheWheel = () => {
+      const firstVisitTime = window.localStorage.getItem(STORAGE_TIME_KEY);
+      const now = Date.now();
+      const twentyFourHours = 2 * 60 * 60 * 1000;
+      if (now - firstVisitTime > twentyFourHours) {
+        window.localStorage.removeItem(STORE_PREFIX + "_" + "last_won_code");
+        window.localStorage.removeItem(
+          STORE_PREFIX + "_" + "last_won_code_used",
+          "FALSE",
+        );
+        window.localStorage.setItem(STORAGE_TIME_KEY, Date.now().toString());
+        window.localStorage.setItem(ATTEMPTS_KEY, String(0));
+        window.localStorage.setItem(STORAGE_KEY, String(MAX_START_PERCENTAGE));
+      }
+    };
+    expireWonCouponViaSpinTheWheel();
   }, []);
 
   useEffect(() => {

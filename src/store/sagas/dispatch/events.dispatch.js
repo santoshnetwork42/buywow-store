@@ -376,6 +376,16 @@ export const useEventsDispatch = () => {
   //   });
   // };
 
+  const spinTheWheelClickedEvent = useCallback(
+    (payload) => {
+      dispatch({
+        type: eventsSagaActions.SPIN_THE_WHEEL_ICON_CLICKED,
+        payload,
+      });
+    },
+    [dispatch],
+  );
+
   const spinTheWheelPlayedEvent = useCallback(
     (payload) => {
       dispatch({
@@ -447,6 +457,7 @@ export const useEventsDispatch = () => {
     writeReviewEvent,
     // customEventVercel,
     spinTheWheelPlayedEvent,
+    spinTheWheelClickedEvent,
     spinTheWheelRewardEvent,
     sessionStartedEvent,
     sessionDestroyEvent,

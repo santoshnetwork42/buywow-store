@@ -1,3 +1,5 @@
+import { STORE_PREFIX } from "@/config";
+
 export const RESTRICT_FOOTER_TO_SHOW = ["/checkout"];
 export const RESTRICT_SEARCH_AND_CART_TO_SHOW = ["/checkout"];
 export const PREPAID_ENABLED = "PREPAID_ENABLED";
@@ -22,6 +24,27 @@ export const BALLOON_ALLOWED_PATHS = [
   "/search",
 ];
 
+export const SPIN_THE_WHEEL_EXCLUDE_PATHS = [
+  "/collections/buy-3-599",
+  "/collections/buy-4-699",
+  "/collections/buy-6-899",
+  "/collections/buy-8-1000",
+  "/collections/affiliate-buy-8",
+  "/collections/gpay",
+  "/collections/gpay-699",
+  "/collections/buy-8-1199",
+  "/collections/bundle-skin-hair-care",
+  "/collections/bundle-deal",
+  "/collections/all-products",
+  "/collections/bundle-face-care",
+  "/collections/cred-reward",
+  "/collections/bundle-body-wash",
+  "/collections/bundle-face-wash-Gpay",
+  "/collections/bundle-body",
+  "/collections/bundle-face-wash",
+  "/collections/tuff3",
+];
+
 export const LIMITED_TIME_DEAL_DURATION_IN_MINUTES = 2;
 export const PAGETYPE = {
   HOME: "",
@@ -44,3 +67,11 @@ export const PDP_BLOCK_PROMOTION_TAG_TO_IGNORE = [
   "rosemary-biotin-hair-growth-shampoo-lp-2",
   "onion-hair-fall-control-and-repair-trio",
 ];
+
+export const STORAGE_KEY = STORE_PREFIX + "_" + "wheel_claimed_percentage";
+export const STORAGE_TIME_KEY = STORE_PREFIX + "_" + "wheel_first_visit";
+export const ATTEMPTS_KEY = STORE_PREFIX + "_" + "wheel_spin_attempts";
+export const MAX_ATTEMPTS = 1;
+export const MIN_START_PERCENTAGE = 65;
+export const MAX_START_PERCENTAGE = 75;
+export const MAX_PERCENTAGE = 95;

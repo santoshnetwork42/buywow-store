@@ -1,11 +1,11 @@
 "use client";
 
-import { Gift, X } from "@/assets/svg/alertIcon";
+import { Gift } from "@/assets/svg/alertIcon";
 import { showToast } from "@/components/common/ToastComponent";
-import { Button } from "@/components/elements";
 import Modal from "@/components/features/Modal";
 import SpinWheel from "@/components/partials/SpinTheWheel/SpinWheel";
 import { STORE_PREFIX } from "@/config";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useEffect, useState } from "react";
 
 export default function SpinTheWheel() {
@@ -13,36 +13,43 @@ export default function SpinTheWheel() {
   const [showWheel, setShowWheel] = useState(false);
   const [previousWin, setPreviousWin] = useState(null);
   const [showCouponBar, setShowCouponBar] = useState(false);
+  const { spinTheWheelClickedEvent } = useEventsDispatch();
 
   useEffect(() => {
+    const lastWonCode = window.localStorage.getItem(
+      STORE_PREFIX + "_" + "last_won_code",
+    );
     // Show the wheel after a short delay
     const timer = setTimeout(() => {
       setIsVisible(true);
     }, 1000);
 
+    // Show the modal after a short delay
+    const modalTimer = setTimeout(() => {
+      if (!lastWonCode) setShowWheel(true);
+    }, 6000);
+
     // Check for previous win
-    if (typeof window !== "undefined") {
-      const lastWonCode = window.localStorage.getItem(
-        STORE_PREFIX + "_" + "last_won_code",
-      );
-      if (lastWonCode) {
-        const offers = [
-          { label: "10% OFF", code: "SPIN10VO89SM" },
-          { label: "FREE SHIPPING", code: "SPINFS6N0QH8" },
-          { label: "BUY 1 GET 1", code: "SPINBG4WCVZS" },
-          { label: "20% OFF", code: "SPIN20N43JRO" },
-          { label: "FREE GIFT", code: "SPINFGTILC2RV" },
-          { label: "30% OFF", code: "SPIN30ODRZ3W" },
-        ];
-        const win = offers.find((offer) => offer.code === lastWonCode);
-        if (win) {
-          setPreviousWin(win);
-          // setShowCouponBar(true);
-        }
+    if (lastWonCode) {
+      const offers = [
+        { label: "10% OFF", code: "SPIN10VO89SM" },
+        { label: "FREE SHIPPING", code: "SPINFS6N0QH8" },
+        { label: "BUY 1 GET 1", code: "SPINBG4WCVZS" },
+        { label: "20% OFF", code: "SPIN20N43JRO" },
+        { label: "FREE GIFT", code: "SPINFGTILC2RV" },
+        { label: "30% OFF", code: "SPIN30ODRZ3W" },
+      ];
+      const win = offers.find((offer) => offer.code === lastWonCode);
+      if (win) {
+        setPreviousWin(win);
+        // setShowCouponBar(true);
       }
     }
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(modalTimer);
+    };
   }, []);
 
   const copyToClipboard = async (code) => {
@@ -57,7 +64,10 @@ export default function SpinTheWheel() {
   return (
     <main className="relative bg-gradient-to-b from-orange-50 to-amber-50">
       <button
-        onClick={() => setShowWheel(true)}
+        onClick={() => {
+          setShowWheel(true);
+          spinTheWheelClickedEvent({ event: "spin_the_wheel_clicked" });
+        }}
         className={`group fixed md:bottom-8 md:left-8 ${
           isVisible && !showCouponBar
             ? "translate-y-0 opacity-100 md:animate-[bounce_1s_ease-in-out_infinite]"
@@ -67,9 +77,9 @@ export default function SpinTheWheel() {
       >
         <div className="relative">
           <div className="absolute inset-0 rounded-full bg-orange-400 opacity-20 md:animate-ping"></div>
-          <div className="text-white from-orange-500_01 relative transform rounded-none rounded-r-full bg-gradient-to-br to-orange-600 p-2 shadow-lg transition-transform group-hover:scale-110 md:rounded-full md:p-4">
+          <div className="text-white relative transform rounded-none rounded-r-full bg-gradient-to-br from-orange-500_01 to-orange-600 p-2 shadow-lg transition-transform group-hover:scale-110 md:rounded-full md:p-4">
             <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-[3px] !border-white-a700 md:h-16 md:w-16 md:border-4">
-              <div className="bg-orange-500_01 absolute inset-0 opacity-50"></div>
+              <div className="absolute inset-0 bg-orange-500_01 opacity-50"></div>
               <Gift
                 className="text-white relative z-10 h-5 w-5 md:h-8 md:w-8"
                 color={"white"}

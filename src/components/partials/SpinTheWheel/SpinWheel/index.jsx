@@ -15,6 +15,16 @@ import confetti from "canvas-confetti";
 import { showToast } from "@/components/common/ToastComponent";
 import Modal from "@/components/features/Modal";
 import { STORE_PREFIX } from "@/config";
+import {
+  STORAGE_KEY,
+  STORAGE_TIME_KEY,
+  MAX_ATTEMPTS,
+  ATTEMPTS_KEY,
+  MIN_START_PERCENTAGE,
+  MAX_START_PERCENTAGE,
+  MAX_PERCENTAGE,
+} from "@/utils/data/constants";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 
 const SPINNING_TIME = 5000;
 const ROTATION_DEGREES = 360 * 5;
@@ -25,26 +35,13 @@ const WHEEL_SOUND_URL =
 const WIN_SOUND_URL =
   "https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3";
 
-const STORAGE_KEY = STORE_PREFIX + "_" + "wheel_claimed_percentage";
-const STORAGE_TIME_KEY = STORE_PREFIX + "_" + "wheel_first_visit";
-const ATTEMPTS_KEY = STORE_PREFIX + "_" + "wheel_spin_attempts";
-const MAX_ATTEMPTS = 1;
-const MIN_START_PERCENTAGE = 65;
-const MAX_START_PERCENTAGE = 75;
-const MAX_PERCENTAGE = 95;
-
 const offers = [
-  { label: "10% OFF", color: "#E67E22", code: "SPIN10VO89SM", weight: 30 },
-  {
-    label: "FREE SHIPPING",
-    color: "#8B4513",
-    code: "SPINFS6N0QH8",
-    weight: 25,
-  },
-  { label: "BUY 1 GET 1", color: "#F39C12", code: "SPINBG4WCVZS", weight: 5 },
-  { label: "20% OFF", color: "#A0522D", code: "SPIN20N43JRO", weight: 10 },
-  { label: "FREE GIFT", color: "#FFA500", code: "SPINFGTILC2RV", weight: 15 },
-  { label: "30% OFF", color: "#CD853F", code: "SPIN30ODRZ3W", weight: 15 },
+  { label: "10% OFF", color: "#E67E22", code: "SPIN10VO89SM", weight: 0 },
+  { label: "FREE SHIPPING", color: "#8B4513", code: "SPINFS6N0QH8", weight: 5 },
+  { label: "BUY 1 GET 1", color: "#F39C12", code: "SPINBG4WCVZS", weight: 10 },
+  { label: "20% OFF", color: "#A0522D", code: "SPIN20N43JRO", weight: 40 },
+  { label: "FREE GIFT", color: "#FFA500", code: "SPINFGTILC2RV", weight: 25 },
+  { label: "30% OFF", color: "#CD853F", code: "SPIN30ODRZ3W", weight: 20 },
 ];
 
 const totalWeight = offers.reduce((sum, offer) => sum + offer.weight, 0);
@@ -99,26 +96,13 @@ export default function SpinWheel() {
   const winAudioRef = useRef(null);
   const wheelRef = useRef(null);
   const lastUpdateRef = useRef(Date.now());
+  const { spinTheWheelPlayedEvent } = useEventsDispatch();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     wheelAudioRef.current = new Audio(WHEEL_SOUND_URL);
     winAudioRef.current = new Audio(WIN_SOUND_URL);
-
-    const firstVisitTime = window.localStorage.getItem(STORAGE_TIME_KEY);
-    const now = Date.now();
-    const twentyFourHours = 24 * 60 * 60 * 1000;
-    if (now - firstVisitTime > twentyFourHours) {
-      window.localStorage.removeItem(STORE_PREFIX + "_" + "last_won_code");
-      window.localStorage.removeItem(
-        STORE_PREFIX + "_" + "last_won_code_used",
-        "FALSE",
-      );
-      window.localStorage.setItem(STORAGE_TIME_KEY, Date.now().toString());
-      window.localStorage.setItem(ATTEMPTS_KEY, String(0));
-      window.localStorage.setItem(STORAGE_KEY, String(MAX_START_PERCENTAGE));
-    }
 
     const usedAttempts = parseInt(
       window.localStorage.getItem(ATTEMPTS_KEY) || "0",
@@ -244,6 +228,7 @@ export default function SpinWheel() {
   const spinWheel = () => {
     if (isSpinning) return;
 
+    spinTheWheelPlayedEvent({ event: "spin_the_wheel_played" });
     if (attemptsLeft <= 0) {
       setShowMaxAttemptsDialog(true);
       return;

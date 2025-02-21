@@ -37,6 +37,7 @@ import {
   sessionStartedEventHandler,
   sessionDestroyEventHandler,
   customEventHandler,
+  spinTheWheelEventHandler,
 } from "@/store/sagas/handlers/events.handle";
 import { cartSagaActions } from "@/store/sagas/sagaActions/cart.actions";
 import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
@@ -187,6 +188,21 @@ function* topNavbarClicked() {
 function* shopByClick() {
   yield takeLatest(eventsSagaActions.SHOP_BY_CLICK, shopByClickEventHandler);
 }
+
+function* spinTheWheelIconClicked() {
+  yield takeLatest(
+    eventsSagaActions.SPIN_THE_WHEEL_ICON_CLICKED,
+    spinTheWheelEventHandler,
+  );
+}
+
+function* spinTheWheelPlayedClicked() {
+  yield takeLatest(
+    eventsSagaActions.SPIN_THE_WHEEL_PLAYED,
+    spinTheWheelEventHandler,
+  );
+}
+
 function* footerClick() {
   yield takeLatest(eventsSagaActions.FOOTER_CLICK, footerClickEventHandler);
 }
@@ -300,6 +316,8 @@ export function* eventsWatcher() {
     fork(sessionStarted),
     fork(sessionDestroyed),
     fork(customEvent),
+    fork(spinTheWheelIconClicked),
+    fork(spinTheWheelPlayedClicked),
     // fork(spinTheWheelPlayed),
     // fork(spinTheWheelReward),
     // fork(customEventVercel),
