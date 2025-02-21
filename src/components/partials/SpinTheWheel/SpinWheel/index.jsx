@@ -36,14 +36,18 @@ const WIN_SOUND_URL =
   "https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3";
 
 const offers = [
-  { label: "10% OFF", color: "#E67E22", code: "SPIN10VO89SM", weight: 0 },
-  { label: "FREE SHIPPING", color: "#8B4513", code: "SPINFS6N0QH8", weight: 5 },
-  { label: "BUY 1 GET 1", color: "#F39C12", code: "SPINBG4WCVZS", weight: 10 },
-  { label: "20% OFF", color: "#A0522D", code: "SPIN20N43JRO", weight: 40 },
-  { label: "FREE GIFT", color: "#FFA500", code: "SPINFGTILC2RV", weight: 25 },
-  { label: "30% OFF", color: "#CD853F", code: "SPIN30ODRZ3W", weight: 20 },
+  { label: "15% OFF", color: "#E67E22", code: "SPIN15485vgc", weight: 30 },
+  {
+    label: "BUY 2 GET 2",
+    color: "#8B4513",
+    code: "SPINBG159qlf7e",
+    weight: 25,
+  },
+  { label: "BUY 1 GET 1", color: "#F39C12", code: "SPINBG4WCVZS", weight: 5 },
+  { label: "20% OFF", color: "#A0522D", code: "SPIN20N43JRO", weight: 10 },
+  { label: "FREE GIFT", color: "#FFA500", code: "SPINFGTILC2RV", weight: 15 },
+  { label: "30% OFF", color: "#CD853F", code: "SPIN30ODRZ3W", weight: 15 },
 ];
-
 const totalWeight = offers.reduce((sum, offer) => sum + offer.weight, 0);
 
 function getWeightedRandomIndex() {
