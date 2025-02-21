@@ -36,11 +36,11 @@ const WIN_SOUND_URL =
   "https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3";
 
 const offers = [
-  { label: "15% OFF", color: "#E67E22", code: "SPIN15485vgc", weight: 30 },
+  { label: "15% OFF", color: "#E67E22", code: "SPIN15485VGC", weight: 30 },
   {
     label: "BUY 2 GET 2",
     color: "#8B4513",
-    code: "SPINBG159qlf7e",
+    code: "SPINBG159QLF7E",
     weight: 25,
   },
   { label: "BUY 1 GET 1", color: "#F39C12", code: "SPINBG4WCVZS", weight: 5 },

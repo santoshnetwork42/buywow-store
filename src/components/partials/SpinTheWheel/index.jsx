@@ -32,8 +32,8 @@ export default function SpinTheWheel() {
     // Check for previous win
     if (lastWonCode) {
       const offers = [
-        { label: "15% OFF", code: "SPIN15485vgc" },
-        { label: "BUY 2 GET 2", code: "SPINBG159qlf7e" },
+        { label: "15% OFF", code: "SPIN15485VGC" },
+        { label: "BUY 2 GET 2", code: "SPINBG159QLF7E" },
         { label: "BUY 1 GET 1", code: "SPINBG4WCVZS" },
         { label: "20% OFF", code: "SPIN20N43JRO" },
         { label: "FREE GIFT", code: "SPINFGTILC2RV" },
