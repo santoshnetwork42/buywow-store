@@ -514,6 +514,9 @@ export default function SpinWheel() {
               <p className="mb-4 text-orange-800">
                 {`You've already won a reward! Here's your discount code:`}
               </p>
+              <p className="mb-4 text-orange-800">
+                {`You won: ${getPreviousWin().label}!`}
+              </p>
               <div className="bg-white mb-4 rounded-xl border-2 border-orange-200 p-4 shadow-lg">
                 <div className="flex items-center justify-center gap-3 rounded-lg bg-orange-50 px-4 py-2">
                   <code className="font-mono text-lg font-bold text-orange-600">

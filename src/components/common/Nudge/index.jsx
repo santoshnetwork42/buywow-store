@@ -1,17 +1,21 @@
 "use client";
 
 import { Gift, X } from "@/assets/svg/alertIcon";
+import CopyIcon from "@/assets/svg/copyIcon";
 import GiftIcon from "@/assets/svg/gift";
 import { Button, Text } from "@/components/elements";
+import { STORE_PREFIX } from "@/config";
 import { fetchCouponRuleAPI } from "@/lib/appSyncAPIs";
+import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import {
   setApplicableCollectionCoupons,
-  setApplicableProductCoupons,
   setCurrentQuantity,
   setMaximumQuantity,
 } from "@/store/slices/nudge.slice";
+import { SPIN_THE_WHEEL_EXCLUDE_PATHS } from "@/utils/data/constants";
 import { errorHandler } from "@/utils/errorHandler";
 import {
+  copyText,
   extractCollectionSlug,
   extractCouponsForApplicableCollection,
   getNudgeQuantity,
@@ -21,8 +25,6 @@ import { useCoupons } from "@wow-star/utils-cms";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { STORE_PREFIX } from "@/config";
-import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 
 const GiftIconWithBorder = ({
   isMarked,
@@ -309,7 +311,12 @@ const Nudge = ({ isCart = false }) => {
   }, [pathname, searchParams, coupons, storedCouponCode, dispatch]);
 
   useEffect(() => {
-    if (lastWonCodeAlreadyUsed !== "TRUE") {
+    const toShowSpinTheWheelNudge = !SPIN_THE_WHEEL_EXCLUDE_PATHS.some(
+      (allowedPath) =>
+        pathname === allowedPath ||
+        (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
+    );
+    if (lastWonCodeAlreadyUsed !== "TRUE" && toShowSpinTheWheelNudge) {
       setShowCouponBarForSpinTheWheel(!!lastWonCode);
       handleSpinTheWheelVisibility(!!lastWonCode);
     }
@@ -322,7 +329,8 @@ const Nudge = ({ isCart = false }) => {
 
     if (storedCouponCode) {
       const storedCouponRule = coupons?.find(
-        (coupon) => coupon.code === storedCouponCode,
+        (coupon) =>
+          coupon?.code?.toLowerCase() === storedCouponCode?.toLowerCase(),
       );
 
       const { showAsNudge, couponType } = storedCouponRule || {};
@@ -366,7 +374,8 @@ const Nudge = ({ isCart = false }) => {
 
     if (storedCouponCode) {
       const storedCouponRule = coupons?.find(
-        (coupon) => coupon.code === storedCouponCode,
+        (coupon) =>
+          coupon?.code?.toLowerCase() === storedCouponCode?.toLowerCase(),
       );
       isStoredCouponGlobal = !storedCouponRule?.applicableCollections?.length;
 
@@ -432,16 +441,26 @@ const Nudge = ({ isCart = false }) => {
                 color={"#dd8434"}
               />
             </div>
-            <p className="text-sm font-light md:text-base">
+            <p className="flex items-center text-sm font-light md:text-base">
               Coupon Reserved! Use
-              <span className="bg-white/20 rounded p-1 font-mono font-bold md:px-2">
+              <span className="bg-white/20 rounded p-1 font-mono font-bold max-sm:text-xs md:px-2">
                 {lastWonCode}
               </span>
-              <span className="inline md:hidden"> now!</span>
-              <span className="hidden md:inline"> at checkout!</span>
+              <Text
+                as="span"
+                size="sm"
+                onClick={() =>
+                  copyText(lastWonCode, `Coupon code copied: ${lastWonCode}`)
+                }
+                className="inline cursor-pointer p-1 pl-0 underline"
+                responsive
+              >
+                <CopyIcon size={20} />
+              </Text>
+              <span className="inline">now!</span>
             </p>
           </div>
-          <div className="flex items-center gap-2 px-3">
+          <div className="flex items-center gap-2 px-3 max-sm:px-2">
             <Button
               onClick={() => {
                 handleSpinTheWheelVisibility(false);

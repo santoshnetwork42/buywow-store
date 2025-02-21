@@ -113,18 +113,23 @@ const CouponsAndOffers = ({ isSidebarOpen, setIsSidebarOpen }) => {
     }
 
     if (shouldAutoApply && isInteractive) {
-      const mappedTopCoupons = topCoupons?.map((coupon) => coupon.code);
-      if (storedCouponCode && mappedTopCoupons?.includes(storedCouponCode)) {
+      const mappedTopCoupons = topCoupons?.map((coupon) =>
+        coupon?.code?.toLowerCase(),
+      );
+      if (
+        storedCouponCode &&
+        mappedTopCoupons?.includes(storedCouponCode?.toLowerCase())
+      ) {
         if (
           (!appliedCoupon || appliedCoupon?.autoApplied) &&
-          appliedCoupon?.code !== storedCouponCode
+          appliedCoupon?.code?.toLowerCase() !== storedCouponCode?.toLowerCase()
         ) {
           applyCouponCode(storedCouponCode, true);
         }
       } else if (bestCouponCode) {
         if (
           (!appliedCoupon || appliedCoupon?.autoApplied) &&
-          appliedCoupon?.code !== bestCouponCode
+          appliedCoupon?.code?.toLowerCase() !== bestCouponCode?.toLowerCase()
         ) {
           applyCouponCode(bestCouponCode, true);
         }
