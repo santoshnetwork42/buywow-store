@@ -88,18 +88,29 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
   const { amountAway, progress } = useMemo(() => {
     const freeShippingThreshold = customShippingTiers?.at(-1)?.maxOrderValue;
     const away = Math.max(0, freeShippingThreshold - cartValue + 1);
-    const prog = Math.min(100, (cartValue / (freeShippingThreshold || 1)) * 90);
+    const tierSize = 100 / (customShippingTiers.length + 1);
+    const currentTier = customShippingTiers[currentShippingTierIndex] || {};
+    const tierProgress =
+      ((cartValue - (currentTier?.minOrderValue || 0)) /
+        ((currentTier?.maxOrderValue || 0) -
+          (currentTier?.minOrderValue || 0))) *
+      90;
+
+    const progress = Math.min(
+      tierSize * currentShippingTierIndex + tierProgress,
+      100,
+    );
 
     return {
       amountAway: away,
-      progress: prog,
+      progress: Math.min(progress, 100),
     };
   }, [customShippingTiers, cartValue]);
 
   const message = useMemo(() => {
     return amountAway > 0 ? (
       <>
-        You are <span className="font-bold">₹{amountAway.toFixed(2)}</span> away
+        You are <span className="font-bold">₹{amountAway.toFixed(0)}</span> away
         from FREE shipping.
       </>
     ) : (
