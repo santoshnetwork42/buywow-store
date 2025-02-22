@@ -3,7 +3,7 @@ import React from "react";
 const ProductItemSkeleton = () => (
   <div className="flex animate-pulse gap-3 rounded-lg border border-b p-2 pl-3 shadow-[0_4px_4px_#0000000D]">
     {/* Product Image Skeleton */}
-    <div className="relative flex aspect-[66/88] h-fit w-20 shrink-0 overflow-hidden rounded-lg bg-gray-200 md:w-24"></div>
+    <div className="relative flex aspect-[1/1] h-fit w-20 shrink-0 overflow-hidden rounded-lg bg-gray-200 md:w-24"></div>
 
     <div className="flex flex-1 flex-col gap-1">
       <div className="flex flex-1 justify-between gap-5">

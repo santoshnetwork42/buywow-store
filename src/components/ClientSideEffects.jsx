@@ -11,6 +11,7 @@ import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import {
+  SPIN_THE_WHEEL_EXCLUDE_COUPONS,
   SPIN_THE_WHEEL_EXCLUDE_PATHS,
   WEB_ANIMATED_BALLOON,
 } from "@/utils/data/constants";
@@ -38,6 +39,7 @@ const ClientSideEffects = () => {
     WEB_SPIN_THE_WHEEL_ENABLED,
     false,
   );
+  const storedCouponCode = useSelector((state) => state.cart?.storedCouponCode);
 
   const isSpinTheWheelNudgeThere = useSelector(
     (state) => state.modal.modal.spinTheWheel.isSpinTheWheelNudgeThere,
@@ -54,6 +56,9 @@ const ClientSideEffects = () => {
 
   const isSpinTheWheelAllowed =
     isSpinTheWheelEnabled &&
+    !SPIN_THE_WHEEL_EXCLUDE_COUPONS?.some(
+      (coupon) => coupon?.toLowerCase() === storedCouponCode?.toLowerCase(),
+    ) &&
     !SPIN_THE_WHEEL_EXCLUDE_PATHS.some(
       (allowedPath) =>
         pathname === allowedPath ||

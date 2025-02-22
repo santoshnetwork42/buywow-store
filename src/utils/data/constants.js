@@ -49,6 +49,13 @@ export const SPIN_THE_WHEEL_EXCLUDE_PATHS = [
   "/policies",
 ];
 
+export const SPIN_THE_WHEEL_EXCLUDE_COUPONS = [
+  "BUY8",
+  "GET8LOOT",
+  "BUY6899",
+  "AFFBUY8",
+];
+
 export const LIMITED_TIME_DEAL_DURATION_IN_MINUTES = 2;
 export const PAGETYPE = {
   HOME: "",

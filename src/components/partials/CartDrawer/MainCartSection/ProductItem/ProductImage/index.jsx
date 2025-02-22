@@ -14,7 +14,7 @@ const ProductImage = ({ slug, outOfStock, imageKey, isFreeProduct }) => {
     <Link
       prefetch={false}
       href={outOfStock ? "#" : `/product/${slug}`}
-      className={`relative flex aspect-[66/88] h-fit w-20 shrink-0 overflow-visible rounded-lg bg-lime-50 md:w-24 ${
+      className={`relative flex aspect-[1/1] h-fit w-20 shrink-0 overflow-visible rounded-lg bg-lime-50 md:w-24 ${
         outOfStock ? "cursor-auto" : ""
       }`}
       onClick={outOfStock ? () => {} : () => handleCartVisibility(false)}
@@ -40,7 +40,7 @@ const ProductImage = ({ slug, outOfStock, imageKey, isFreeProduct }) => {
         width={300}
         height={300}
         imageKey={imageKey}
-        className="aspect-[66/88] h-auto w-full rounded-lg object-contain"
+        className="aspect-[1/1] h-auto w-full rounded-lg object-contain"
         alt="Product Image"
       />
     </Link>
