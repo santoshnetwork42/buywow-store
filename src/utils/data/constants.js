@@ -54,6 +54,14 @@ export const SPIN_THE_WHEEL_EXCLUDE_COUPONS = [
   "GET8LOOT",
   "BUY6899",
   "AFFBUY8",
+  "GPAY699",
+  "BUNDLE6",
+  "TRI599",
+  "BUY699",
+  "BUY6",
+  "WOW",
+  "B2G2",
+  "BOGO",
 ];
 
 export const LIMITED_TIME_DEAL_DURATION_IN_MINUTES = 2;
