@@ -43,6 +43,10 @@ export const SPIN_THE_WHEEL_EXCLUDE_PATHS = [
   "/collections/bundle-body",
   "/collections/bundle-face-wash",
   "/collections/tuff3",
+  "/checkout",
+  "/blog",
+  "/pages",
+  "/policies",
 ];
 
 export const LIMITED_TIME_DEAL_DURATION_IN_MINUTES = 2;

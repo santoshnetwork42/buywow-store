@@ -25,7 +25,7 @@ export default function SpinTheWheel() {
     }, 1000);
 
     // Show the modal after a short delay
-    const modalTimer = setTimeout(() => {
+    const timerModal = setTimeout(() => {
       if (!lastWonCode) setShowWheel(true);
     }, 6000);
 
@@ -48,7 +48,7 @@ export default function SpinTheWheel() {
 
     return () => {
       clearTimeout(timer);
-      clearTimeout(modalTimer);
+      clearTimeout(timerModal);
     };
   }, []);
 
