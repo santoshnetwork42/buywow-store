@@ -88,6 +88,8 @@ export const PDP_BLOCK_PROMOTION_TAG_TO_IGNORE = [
 ];
 
 export const STORAGE_KEY = STORE_PREFIX + "_" + "wheel_claimed_percentage";
+export const WHEEL_HAS_VISITED_BEFORE_KEY =
+  STORE_PREFIX + "_" + "hasVisitedBefore";
 export const STORAGE_TIME_KEY = STORE_PREFIX + "_" + "wheel_first_visit";
 export const ATTEMPTS_KEY = STORE_PREFIX + "_" + "wheel_spin_attempts";
 export const MAX_ATTEMPTS = 1;

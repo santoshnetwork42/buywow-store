@@ -1,11 +1,11 @@
 "use client";
 
 import { Gift } from "@/assets/svg/alertIcon";
-import { showToast } from "@/components/common/ToastComponent";
 import Modal from "@/components/features/Modal";
 import SpinWheel from "@/components/partials/SpinTheWheel/SpinWheel";
 import { STORE_PREFIX } from "@/config";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { WHEEL_HAS_VISITED_BEFORE_KEY } from "@/utils/data/constants";
 import { useEffect, useState } from "react";
 
 export default function SpinTheWheel() {
@@ -26,7 +26,14 @@ export default function SpinTheWheel() {
 
     // Show the modal after a short delay
     const timerModal = setTimeout(() => {
-      if (!lastWonCode) setShowWheel(true);
+      const wheelHasVisitedBefore =
+        localStorage.getItem(WHEEL_HAS_VISITED_BEFORE_KEY) === "true";
+      const lastWonCode = window.localStorage.getItem(
+        STORE_PREFIX + "_" + "last_won_code",
+      );
+      if (!wheelHasVisitedBefore && !lastWonCode) {
+        setShowWheel(true);
+      }
     }, 6000);
 
     // Check for previous win
@@ -51,15 +58,6 @@ export default function SpinTheWheel() {
       clearTimeout(timerModal);
     };
   }, []);
-
-  const copyToClipboard = async (code) => {
-    try {
-      await navigator.clipboard.writeText(code);
-      showToast.success("Coupon code copied to clipboard!");
-    } catch (err) {
-      showToast.error("Failed to copy code. Please try again.");
-    }
-  };
 
   return (
     <main className="relative bg-gradient-to-b from-orange-50 to-amber-50">
@@ -139,7 +137,10 @@ export default function SpinTheWheel() {
       )} */}
       <Modal
         isOpen={showWheel}
-        onClose={() => setShowWheel(false)}
+        onClose={() => {
+          setShowWheel(false);
+          window.localStorage.setItem(WHEEL_HAS_VISITED_BEFORE_KEY, "true");
+        }}
         modalContainerClassName={
           "bg-gradient-to-b from-orange-50 to-amber-50 md:!w-[600px]"
         }

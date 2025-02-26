@@ -14,6 +14,7 @@ import {
   SPIN_THE_WHEEL_EXCLUDE_COUPONS,
   SPIN_THE_WHEEL_EXCLUDE_PATHS,
   WEB_ANIMATED_BALLOON,
+  WHEEL_HAS_VISITED_BEFORE_KEY,
 } from "@/utils/data/constants";
 import { useConfiguration } from "@wow-star/utils-cms";
 import { getCurrentUser } from "aws-amplify/auth";
@@ -258,6 +259,7 @@ const ClientSideEffects = () => {
           STORE_PREFIX + "_" + "last_won_code_used",
           "FALSE",
         );
+        window.localStorage.setItem(WHEEL_HAS_VISITED_BEFORE_KEY, "false");
         window.localStorage.setItem(STORAGE_TIME_KEY, Date.now().toString());
         window.localStorage.setItem(ATTEMPTS_KEY, String(0));
         window.localStorage.setItem(STORAGE_KEY, String(MAX_START_PERCENTAGE));
