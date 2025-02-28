@@ -412,7 +412,7 @@ const LimitedTimeDealProductSection = ({ ltoProducts, cartItems }) => {
     <div
       className={twMerge(
         "mb-6 flex flex-col justify-center px-3 max-sm:[clipPath:inset(0_-100vmax)] sm:rounded-lg md:mb-7 md:px-4",
-        "bg-lime-50 py-3 max-sm:shadow-[0_0_0_100vmax_#FBFBF5]",
+        "bg-lime-50 py-3",
         "!mb-0 rounded-lg shadow-[0_4px_4px_#0000000D]",
         "mb-1 md:mb-2",
         "px-3! gap-2 md:gap-3",
