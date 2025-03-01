@@ -35,6 +35,7 @@ import FFTestimonialSection from "@/components/blocks/TestimonialSection";
 import FFTrendingCategories from "@/components/blocks/TrendingCategories";
 import FFUpsellProducts from "@/components/blocks/UpsellProducts";
 import FFVideoSection from "@/components/partials/Others/VideoSection";
+import FFImageSection from "@/components/partials/Others/ImageSection";
 
 const PAGETYPE = {
   HOME: "home",
@@ -178,6 +179,10 @@ const componentMap = {
     FF: FFVideoSection,
     Lazy: dynamic(() => import("@/components/partials/Others/VideoSection")),
   },
+  ComponentBlocksImageSection: {
+    FF: FFImageSection,
+    Lazy: dynamic(() => import("@/components/partials/Others/ImageSection")),
+  },
   ComponentBlocksBlogSection: {
     FF: FFBlogSection,
     Lazy: dynamic(() => import("@/components/blocks/BlogSection")),
@@ -189,8 +194,13 @@ const componentMap = {
 };
 
 const renderBlock = ({ block, pageType, slug, index, marketPlaceLinks }) => {
-  const { showComponent, __typename, id } = block || {};
-  if (!showComponent) return null;
+  const {
+    showComponent,
+    showImageComponent = false,
+    __typename,
+    id,
+  } = block || {};
+  if (!showComponent && !showImageComponent) return null;
 
   const ComponentInfo = componentMap[__typename];
   if (!ComponentInfo) return null;
