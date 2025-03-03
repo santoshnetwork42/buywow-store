@@ -298,18 +298,9 @@ const ClientSideEffects = () => {
     setStoreData();
   }, [setMetaData, setGuestCheckout, setStoreData]);
 
-  if (isBalloonAnimationAllowed) {
-    return (
-      <>
-        <BirthdayCelebration />
-        {!isCartOpen && isSpinTheWheelAllowed && !isSpinTheWheelNudgeThere && (
-          <SpinTheWheel />
-        )}
-      </>
-    );
-  }
   return (
     <>
+      {isBalloonAnimationAllowed && <BirthdayCelebration />}
       {!isCartOpen && isSpinTheWheelAllowed && !isSpinTheWheelNudgeThere && (
         <SpinTheWheel />
       )}

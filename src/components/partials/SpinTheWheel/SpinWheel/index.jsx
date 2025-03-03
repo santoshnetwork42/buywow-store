@@ -207,7 +207,10 @@ export default function SpinWheel() {
   };
 
   const getShoppingUrl = (code) => {
-    return `${SHOP_BASE_URL}?couponCode=${code}`;
+    return (
+      window.location.pathname + `?couponCode=${code}` ||
+      `${SHOP_BASE_URL}?couponCode=${code}`
+    );
   };
 
   const getPreviousWin = () => {
