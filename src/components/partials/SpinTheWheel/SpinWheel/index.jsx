@@ -38,12 +38,22 @@ const WIN_SOUND_URL =
 const offers = [
   { label: "15% OFF", color: "#E67E22", code: "SPIN15485VGC", weight: 5 },
   {
-    label: "BUY 2 GET 2",
+    label: "40% OFF",
+    code: "SPIN402MEVI",
+    // label: "BUY 1 GET 1",
+    // code: "SPINBG4WCVZS",
+    color: "#F39C12",
+    weight: 15,
+  },
+  {
+    // label: "BUY 2 GET 2",
+    // code: "SPINBG159QLF7E",
+    label: "25% OFF",
+    code: "SPIN25T4T1B",
     color: "#8B4513",
-    code: "SPINBG159QLF7E",
     weight: 20,
   },
-  { label: "BUY 1 GET 1", color: "#F39C12", code: "SPINBG4WCVZS", weight: 15 },
+
   { label: "20% OFF", color: "#A0522D", code: "SPIN20N43JRO", weight: 40 },
   { label: "FREE GIFT", color: "#FFA500", code: "SPINFGTILC2RV", weight: 0 },
   { label: "30% OFF", color: "#CD853F", code: "SPIN30ODRZ3W", weight: 20 },

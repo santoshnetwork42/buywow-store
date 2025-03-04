@@ -40,8 +40,10 @@ export default function SpinTheWheel() {
     if (lastWonCode) {
       const offers = [
         { label: "15% OFF", code: "SPIN15485VGC" },
-        { label: "BUY 2 GET 2", code: "SPINBG159QLF7E" },
-        { label: "BUY 1 GET 1", code: "SPINBG4WCVZS" },
+        { label: "40% OFF", code: "SPIN402MEVI" },
+        { label: "25% OFF", code: "SPIN25T4T1B" },
+        // { label: "BUY 2 GET 2", code: "SPINBG159QLF7E" },
+        // { label: "BUY 1 GET 1", code: "SPINBG4WCVZS" },
         { label: "20% OFF", code: "SPIN20N43JRO" },
         { label: "FREE GIFT", code: "SPINFGTILC2RV" },
         { label: "30% OFF", code: "SPIN30ODRZ3W" },
