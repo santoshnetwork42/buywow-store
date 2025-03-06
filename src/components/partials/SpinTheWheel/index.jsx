@@ -61,6 +61,21 @@ export default function SpinTheWheel() {
     };
   }, []);
 
+  useEffect(() => {
+    // Add this code: Handle Escape key press
+    const handleEscKey = (event) => {
+      if (event.key === "Escape" && showWheel) {
+        setShowWheel(false);
+        window.localStorage.setItem(WHEEL_HAS_VISITED_BEFORE_KEY, "true");
+      }
+    };
+    // Add the event listener
+    window.addEventListener("keydown", handleEscKey);
+    return () => {
+      window.removeEventListener("keydown", handleEscKey);
+    };
+  }, [showWheel]);
+
   return (
     <main className="relative bg-gradient-to-b from-orange-50 to-amber-50">
       <button
