@@ -165,7 +165,7 @@ export default function SpinTheWheel() {
         titleClassName={
           "mb-1 text-3xl font-bold text-orange-900 md:text-4xl text-orange-800"
         }
-        enableOutsideClick={false}
+        enableOutsideClick={true}
         bgOpacity={"darker"}
       >
         <SpinWheel />
