@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import SectionHeading from "@/components/common/SectionHeading";
 import Link from "next/link";
 import PlayIcon from "@/assets/svg/playIcon";
+import Slider from "@/components/features/Slider";
 
 const Thumb = React.memo(({ image, onClick, slug }) => (
   <>
@@ -890,34 +891,40 @@ const VideoSection = ({ className, ...props }) => {
         </div>
         <div className="relative w-full">
           <div className="no-scrollbar flex w-full items-center justify-start gap-4 overflow-x-auto scroll-smooth px-4 pb-4 md:justify-center">
-            {videoItems?.map((item, index) => (
-              <div
-                className="relative flex-shrink-0 cursor-pointer"
-                key={index}
-              >
+            <Slider
+              controlsContainerClassName="mb-2 md:mb-3"
+              sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
+              isContainShadow
+            >
+              {videoItems?.map((item, index) => (
                 <div
-                  className="bg-white/70 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform cursor-pointer rounded-full backdrop-blur-md"
-                  onClick={() => {
-                    setCurrentSelectedVideo(index);
-                  }}
+                  className="relative flex-shrink-0 cursor-pointer"
+                  key={index}
                 >
-                  <PlayIcon size={48} />
+                  <div
+                    className="bg-white/70 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform cursor-pointer rounded-full backdrop-blur-md"
+                    onClick={() => {
+                      setCurrentSelectedVideo(index);
+                    }}
+                  >
+                    <PlayIcon size={48} />
+                  </div>
+                  <VideoItem
+                    video={item?.video}
+                    thumbnail={item?.thumbnail?.data?.attributes}
+                    fetchedProduct={
+                      item?.product?.data?.attributes?.fetchedProduct
+                    }
+                    slug={item?.product?.data?.attributes?.slug}
+                    setCurrentSelectedVideo={(index) =>
+                      setCurrentSelectedVideo(index)
+                    }
+                    setMuted={setMuted}
+                    index={index}
+                  />
                 </div>
-                <VideoItem
-                  video={item?.video}
-                  thumbnail={item?.thumbnail?.data?.attributes}
-                  fetchedProduct={
-                    item?.product?.data?.attributes?.fetchedProduct
-                  }
-                  slug={item?.product?.data?.attributes?.slug}
-                  setCurrentSelectedVideo={(index) =>
-                    setCurrentSelectedVideo(index)
-                  }
-                  setMuted={setMuted}
-                  index={index}
-                />
-              </div>
-            ))}
+              ))}
+            </Slider>
           </div>
         </div>
         {!(isMobile || isTablet) && (

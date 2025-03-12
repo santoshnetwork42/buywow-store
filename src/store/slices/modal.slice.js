@@ -10,6 +10,12 @@ export const initialState = {
     },
     cart: { isCartOpen: false },
     spinTheWheel: { isSpinTheWheelNudgeThere: false },
+    imageZoom: {
+      isOpen: false,
+      imageKey: null,
+      imageIndex: 0,
+      imageList: [],
+    },
   },
 };
 
@@ -29,6 +35,9 @@ export const modalSlice = createSlice({
     setCartModal: (state, action) => {
       state.modal.cart = action.payload;
     },
+    setImageZoomModal: (state, action) => {
+      state.modal.imageZoom = action.payload;
+    },
   },
 });
 
@@ -37,6 +46,7 @@ export const {
   setPasswordLessModal,
   setCartModal,
   setSpinTheWheelVisible,
+  setImageZoomModal,
 } = modalSlice.actions;
 
 export default modalSlice.reducer;

@@ -3,6 +3,7 @@ import VolumeUp from "@/assets/svg/volumeUp";
 import { Button, Img, Text } from "@/components/elements";
 import { extractAttributes } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
+import { setImageZoomModal } from "@/store/slices/modal.slice";
 import useEmblaCarousel from "embla-carousel-react";
 import dynamic from "next/dynamic";
 import React, {
@@ -12,8 +13,12 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useDispatch } from "react-redux";
 
 const VideoDotIcon = dynamic(() => import("@/assets/svg/videoDotIcon"));
+const ImageZoomModal = dynamic(
+  () => import("@/components/features/Modal/ImageZoomModal"),
+);
 
 const Thumb = React.memo(({ isSelected, image, onClick }) => (
   <div
@@ -116,9 +121,11 @@ const ProductImage = React.memo(
     productBenefitTags,
     videoRef,
     layout,
+    imageList,
   }) => {
     const [muted, setMuted] = useState(true);
     const videoContainerRef = useRef(null);
+    const dispatch = useDispatch();
 
     // Add this useEffect for intersection observer
     useEffect(() => {
@@ -145,12 +152,36 @@ const ProductImage = React.memo(
       };
     }, [image.isVideo, isPlaying, index, layout, togglePlayPause]);
 
+    const handleImageClick = (e) => {
+      if (image.isVideo) {
+        togglePlayPause(index, layout);
+      } else {
+        // Validate image data before opening modal
+        const validImageList = imageList.map((img) => ({
+          ...img,
+          // Ensure imageKey is a string and not undefined
+          imageKey: img.imageKey || "",
+          isVideo: !!img.isVideo,
+        }));
+
+        // Open zoom modal for images
+        dispatch(
+          setImageZoomModal({
+            isOpen: true,
+            imageKey: image.imageKey || "",
+            imageIndex: index,
+            imageList: validImageList,
+          }),
+        );
+      }
+    };
+
     return (
       <div
         className={`main-image relative overflow-hidden ${
           layout === "grid" ? "w-full" : "flex-[0_0_100%]"
         }`}
-        onClick={() => image.isVideo && togglePlayPause(index, layout)}
+        onClick={handleImageClick}
       >
         {image?.isVideo ? (
           // Add ref to the video container
@@ -189,17 +220,30 @@ const ProductImage = React.memo(
             </div>
           </div>
         ) : (
-          // Rest of your existing code for images...
-          <div className="aspect-square overflow-hidden rounded-lg border shadow-sm">
+          // Image with zoom capability
+          <div className="group aspect-square overflow-hidden rounded-lg border shadow-sm">
             <Img
               src={image?.imageKey}
               width={400}
               height={400}
               alt={`Product image ${index + 1}`}
               priority
-              className="main-image m-auto aspect-square h-auto w-full object-contain"
+              className="main-image m-auto aspect-square h-auto w-full cursor-zoom-in object-contain transition-transform duration-300 ease-in-out"
               addPrefix
             />
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
+              <div className="rounded-full bg-black-900 bg-opacity-30 p-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                >
+                  <path d="M15 3l2.3 2.3-2.89 2.87 1.42 1.42L18.7 6.7 21 9V3h-6zM3 9l2.3-2.3 2.87 2.89 1.42-1.42L6.7 5.3 9 3H3v6zm6 12l-2.3-2.3 2.89-2.87-1.42-1.42L5.3 17.3 3 15v6h6zm12-6l-2.3 2.3-2.87-2.89-1.42 1.42 2.89 2.87L15 21h6v-6z" />
+                </svg>
+              </div>
+            </div>
           </div>
         )}
         {/* Rest of your existing code for tags... */}
@@ -408,6 +452,7 @@ const ProductImageSection = ({
           key={image?.imageKey || index}
           image={image}
           index={index}
+          imageList={imageList}
           isPlaying={playingStates[`${layout}-${index}`]}
           showPlayButton={showPlayButtons[`${layout}-${index}`]}
           togglePlayPause={togglePlayPause}
@@ -476,6 +521,9 @@ const ProductImageSection = ({
           </div>
         </div>
       </div>
+
+      {/* Image Zoom Modal */}
+      <ImageZoomModal />
     </div>
   );
 };
