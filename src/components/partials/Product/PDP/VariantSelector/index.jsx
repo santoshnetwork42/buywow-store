@@ -62,9 +62,10 @@ const VariantItem = React.memo(({ variant, onChange, isShoppable }) => {
 
   const productImage = thumbImage || images?.items[0]?.imageKey;
 
-  const containerClassName = `flex  cursor-pointer gap-2 rounded bg-orange-50_01 p-1.5  ${
+  // Modified container class to use consistent width and better flex behavior
+  const containerClassName = `flex cursor-pointer gap-2 rounded bg-orange-50_01 p-1.5 ${
     selected ? "outline outline-2 outline-black-900" : ""
-  } ${isShoppable ? "w-full" : "flex-col max-w-[112px] sm:max-w-[130px] md:p-2"}`;
+  } ${isShoppable ? "w-full" : "flex-col w-[112px] sm:w-[130px] md:p-2"}`;
 
   const discount = useMemo(
     () => (listingPrice > price ? listingPrice - price : null),
