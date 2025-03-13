@@ -94,7 +94,7 @@ export default function ShippingProgressBar({ cartValue = 0 }) {
       ((cartValue - (currentTier?.minOrderValue || 0)) /
         ((currentTier?.maxOrderValue || 0) -
           (currentTier?.minOrderValue || 0))) *
-      90;
+      tierSize;
 
     const progress = Math.min(
       tierSize * currentShippingTierIndex + tierProgress,
