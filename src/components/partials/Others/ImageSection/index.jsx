@@ -2,6 +2,7 @@
 
 import SectionHeading from "@/components/common/SectionHeading";
 import { Img } from "@/components/elements";
+import Slider from "@/components/features/Slider";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 
@@ -20,7 +21,7 @@ const ImageItem = ({ link, image, index }) => {
         width={image?.width || 200}
         height={image?.height || 200}
         alt={image?.alternativeText || "Image" + index}
-        className="h-full w-full rounded-[8px] object-cover"
+        className="h-full w-full rounded-[8px]"
       />
     </Link>
   );
@@ -52,18 +53,24 @@ const ImageSection = ({ className, ...props }) => {
         </div>
         <div className="relative w-full">
           <div className="no-scrollbar flex w-full items-center justify-start gap-4 overflow-x-auto scroll-smooth px-4 pb-4">
-            {imageItems?.map((item, index) => (
-              <div
-                className="relative flex-shrink-0 cursor-pointer"
-                key={index}
-              >
-                <ImageItem
-                  link={item?.link}
-                  image={item?.image?.data?.attributes}
-                  index={index}
-                />
-              </div>
-            ))}
+            <Slider
+              controlsContainerClassName="mb-2 md:mb-3"
+              sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
+              isContainShadow
+            >
+              {imageItems?.map((item, index) => (
+                <div
+                  className="relative flex-shrink-0 cursor-pointer overflow-hidden rounded-lg"
+                  key={index}
+                >
+                  <ImageItem
+                    link={item?.link}
+                    image={item?.image?.data?.attributes}
+                    index={index}
+                  />
+                </div>
+              ))}
+            </Slider>
           </div>
         </div>
       </div>

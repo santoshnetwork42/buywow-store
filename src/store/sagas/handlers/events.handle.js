@@ -835,7 +835,7 @@ export function* placeOrderEventHandler({ payload }) {
         attribute: {
           ...pixel,
           order_id: id,
-          value: totalAmount,
+          value: (totalAmount * 0.82).toFixed(2),
           fn: firstName,
           ln: lastName,
           em: email,
@@ -846,7 +846,7 @@ export function* placeOrderEventHandler({ payload }) {
         ecommerce: {
           transaction_id: id,
           order_code: code,
-          value: totalAmount,
+          value: (totalAmount * 0.82).toFixed(2),
           tax: 0,
           discount: totalDiscount,
           shipping: totalShippingCharges,
@@ -979,7 +979,7 @@ export function* checkoutStartedEventHandler({ payload }) {
         eventID: uuidv4(),
         attribute: pixel,
         ecommerce: {
-          value,
+          value: (value * 0.82).toFixed(2),
           currency: "INR",
           coupon: coupon?.code || "",
           items: ga,

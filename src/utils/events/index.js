@@ -285,6 +285,9 @@ export const orderMapper = (
   );
 
   mappings.pixel.content_category = mappings.pixel.content_category.join(", ");
+  mappings.pixel.value = (mappings.pixel.value * 0.82).toFixed(2);
+  // set here pixel total value as  (mappings.pixel.value * 0.82).toFixed(2);
+  // for GA it is done on event handler as value is being used in vercel and pinpoint
   mappings.pixel.content_subcategory =
     mappings.pixel.content_subcategory.join(", ");
 
