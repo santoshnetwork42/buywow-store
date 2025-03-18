@@ -339,36 +339,6 @@ const ImageZoomModal = () => {
     setInitialTouchDistance(null);
   }, []);
 
-  // Handle direct click/tap on image when zoomed in
-  const handleClick = useCallback(
-    (e) => {
-      if (scale > 1 && !isDragging) {
-        // Get click coordinates
-        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
-        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
-
-        // Get image container dimensions
-        const rect = e.currentTarget.getBoundingClientRect();
-
-        // Calculate the click position relative to container center
-        const offsetX = clientX - (rect.left + rect.width / 2);
-        const offsetY = clientY - (rect.top + rect.height / 2);
-
-        // Directly move to that position without smoothing
-        // Multiply by a factor to make movement more pronounced
-        const moveFactor = 1.5;
-        const newPosition = {
-          x: position.x - offsetX * moveFactor,
-          y: position.y - offsetY * moveFactor,
-        };
-
-        // Apply immediately without transition
-        setPosition(calculateBoundedPosition(newPosition.x, newPosition.y));
-      }
-    },
-    [scale, isDragging, calculateBoundedPosition, position],
-  );
-
   // Handle wheel for desktop zoom
   const handleWheel = useCallback(
     (e) => {
@@ -632,7 +602,6 @@ const ImageZoomModal = () => {
             className="relative h-full w-full sm:mt-10"
             onMouseDown={handleMouseDown}
             onTouchStart={handleTouchStart}
-            onClick={handleClick}
             style={{
               cursor:
                 scale > 1 ? (isDragging ? "grabbing" : "grab") : "default",
