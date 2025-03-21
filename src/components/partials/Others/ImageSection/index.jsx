@@ -10,6 +10,7 @@ const ImageItem = ({ link, image, index }) => {
   return (
     <Link
       href={link || "#"}
+      target="#"
       className="flex aspect-[4/5] h-80 items-center justify-center rounded-[8px] border-black-900 bg-gray-100 max-sm:h-60"
       onClick={() => {
         setCurrentSelectedVideo(index);
