@@ -10,7 +10,7 @@ const ImageItem = ({ link, image, index }) => {
   return (
     <Link
       href={link || "#"}
-      className="flex aspect-square h-80 items-center justify-center rounded-[8px] border-black-900 bg-gray-100 max-sm:h-60"
+      className="flex aspect-[4/5] h-80 items-center justify-center rounded-[8px] border-black-900 bg-gray-100 max-sm:h-60"
       onClick={() => {
         setCurrentSelectedVideo(index);
         setMuted(false);
@@ -55,7 +55,7 @@ const ImageSection = ({ className, ...props }) => {
           <div className="no-scrollbar flex w-full items-center justify-start gap-4 overflow-x-auto scroll-smooth px-4 pb-4">
             <Slider
               controlsContainerClassName="mb-2 md:mb-3"
-              sliderClassName="gap-[5px] sm:gap-2 lg:gap-3"
+              sliderClassName="gap-3 sm:gap-2 lg:gap-4"
               isContainShadow
             >
               {imageItems?.map((item, index) => (
