@@ -22,21 +22,39 @@ const AccordionFaQs = dynamic(
   () => import("@/components/blocks/Accordion/AccordionFaQs"),
 );
 
+const AccordionIngredientsSectionOpenAi = dynamic(
+  () =>
+    import("@/components/blocks/Accordion/AccordionIngredientsSectionOpenAi"),
+);
+
 const accordionTypes = [
   "ComponentAccordionDescriptionSection",
+  "ComponentAccordionIngredientsSectionOpenAi",
   "ComponentAccordionIngredientsSection",
   "ComponentAccordionUsageInstructionsSection",
   "ComponentAccordionFaQsSection",
 ];
 
-const AccordionComponent = ({ block, index }) => {
+const AccordionComponent = ({
+  block,
+  index,
+  isExistAccordionIngredientsSectionOpenAi,
+}) => {
   switch (block.__typename) {
     case "ComponentAccordionDescriptionSection":
       return (
         <AccordionDescription key={index} {...block} isInPDP isAccordionOpen />
       );
     case "ComponentAccordionIngredientsSection":
-      return <AccordionIngredients key={index} {...block} isInPDP />;
+      return isExistAccordionIngredientsSectionOpenAi ? (
+        <></>
+      ) : (
+        <AccordionIngredients key={index} {...block} isInPDP />
+      );
+    case "ComponentAccordionIngredientsSectionOpenAi":
+      return (
+        <AccordionIngredientsSectionOpenAi key={index} {...block} isInPDP />
+      );
     case "ComponentAccordionUsageInstructionsSection":
       return <AccordionUsageInstructions key={index} {...block} isInPDP />;
     case "ComponentAccordionFaQsSection":
@@ -64,6 +82,10 @@ const ProductDetailViewBlocks = ({ blocks }) => {
     );
   }, [blocks]);
 
+  const isExistAccordionIngredientsSectionOpenAi = accordionBlocks?.find(
+    (i) => i.__typename === "ComponentAccordionIngredientsSectionOpenAi",
+  );
+
   if (accordionBlocks.length === 0 && otherBlocks.length === 0) return null;
 
   return (
@@ -83,7 +105,14 @@ const ProductDetailViewBlocks = ({ blocks }) => {
       {accordionBlocks.length > 0 && (
         <div className="flex flex-col items-center gap-2">
           {accordionBlocks.map((block, index) => (
-            <AccordionComponent key={index} block={block} index={index} />
+            <AccordionComponent
+              key={index}
+              block={block}
+              index={index}
+              isExistAccordionIngredientsSectionOpenAi={
+                !!isExistAccordionIngredientsSectionOpenAi
+              }
+            />
           ))}
         </div>
       )}
