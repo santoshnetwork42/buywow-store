@@ -179,11 +179,11 @@ const AccordionIngredientsSectionOpenAi = ({
       {/* ISOPEN THEN SHOW CONTAIN BELOWED */}
       <div
         className={twMerge(
-          "overflow-hidden opacity-100 transition-all duration-300 ease-in-out sm:px-3 md:px-5 lg:px-7",
+          "overflow-scroll opacity-100 transition-all duration-300 ease-in-out sm:px-3 md:px-5 lg:px-7",
           isOpen ? "my-2.5 max-h-96 opacity-100" : "max-h-0 opacity-0",
         )}
       >
-        <div className="mb-2 flex items-start space-x-2">
+        <div className="sticky -top-[1px] flex items-start space-x-2 bg-white-a700 pb-2 sm:top-0">
           <IngredientIcon size={20} />
           <Text as="p" size="sm" className="text-gray-600">
             Full ingredients as listed on package:
