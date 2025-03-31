@@ -3,9 +3,11 @@
 import IngredientIcon from "@/assets/svg/ingredientIcon";
 import { Heading, Img, Text } from "@/components/elements";
 import ToggleArrow from "@/components/features/Accordion/AccordionToggle";
+import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { extractAttributes } from "@/utils/helpers";
 import { useMemo, useState } from "react";
 import { twMerge } from "tailwind-merge";
+import { usePathname } from "next/navigation";
 
 const AccordionIngredientsSectionOpenAi = ({
   accordionIngredientsOpenAITitle: title,
@@ -14,7 +16,11 @@ const AccordionIngredientsSectionOpenAi = ({
   accordionIngredientsOpenAIShowComponent: showComponent,
   mains,
 }) => {
+  const pathname = usePathname();
+  const slug = pathname.split("/").pop();
+
   const ingredientDetails = mains?.data?.map((ing) => ing?.attributes) || [];
+  const { customEvent } = useEventsDispatch();
 
   const { url: accordionImageUrl, alternativeText: accordionImageAlt } =
     useMemo(() => {
@@ -53,8 +59,26 @@ const AccordionIngredientsSectionOpenAi = ({
   const [isOpen, setIsOpen] = useState(false);
   const [activeIngredient, setActiveIngredient] = useState(null);
 
-  const toggleAccordion = () => setIsOpen((prev) => !prev);
-  const handleIngredientHover = (ingredient) => setActiveIngredient(ingredient);
+  const toggleAccordion = () =>
+    setIsOpen((prev) => {
+      if (!prev) {
+        customEvent({
+          event: "ingredient_section_full_list_viewed",
+          source: "key_ingredient_section",
+          slug: slug,
+        });
+      }
+      return !prev;
+    });
+  const handleIngredientHover = (ingredient) => {
+    setActiveIngredient(ingredient);
+    customEvent({
+      event: "key_ingredient_hovered",
+      source: "key_ingredient_section",
+      slug: slug,
+      ingredient: ingredient,
+    });
+  };
   const clearActiveIngredient = () => setActiveIngredient(null);
 
   if (!title || !showComponent) {
