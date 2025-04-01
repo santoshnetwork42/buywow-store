@@ -280,7 +280,7 @@ const Nudge = ({ isCart = false }) => {
   useEffect(() => {
     const collectionSlug = extractCollectionSlug(pathname);
 
-    if (storedCouponCode) {
+    if (storedCouponCode && collectionSlug !== "buy-5-999") {
       const fetchCoupon = async () => {
         try {
           const response = await fetchCouponRuleAPI(storedCouponCode);
@@ -327,7 +327,7 @@ const Nudge = ({ isCart = false }) => {
     const collectionSlug = extractCollectionSlug(pathname);
     let nextNudgeFeat = [];
 
-    if (storedCouponCode) {
+    if (storedCouponCode && collectionSlug !== "buy-5-999") {
       const storedCouponRule = coupons?.find(
         (coupon) =>
           coupon?.code?.toLowerCase() === storedCouponCode?.toLowerCase(),
@@ -372,7 +372,7 @@ const Nudge = ({ isCart = false }) => {
     let relevantCoupons;
     let isStoredCouponGlobal;
 
-    if (storedCouponCode) {
+    if (storedCouponCode && collectionSlug !== "buy-5-999") {
       const storedCouponRule = coupons?.find(
         (coupon) =>
           coupon?.code?.toLowerCase() === storedCouponCode?.toLowerCase(),
