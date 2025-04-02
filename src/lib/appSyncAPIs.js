@@ -36,6 +36,7 @@ import {
   getStoreConfigurations,
   getUserDetails,
   checkInventory,
+  livePurchaseFeed,
 } from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import fetchData from "@/utils/fetchData";
@@ -676,6 +677,14 @@ export const getRedirectsAPI = async (path) => {
     errorHandler(err, "Get Redirects API");
     return null;
   }
+};
+
+export const getLivePurchaseFeedProducts = async () => {
+  const data = await fetchData(livePurchaseFeed, {
+    storeId: STORE_ID,
+  });
+
+  return data?.livePurchaseFeed || [];
 };
 
 export const updateRedirectsAPI = async (path, hitCount) => {

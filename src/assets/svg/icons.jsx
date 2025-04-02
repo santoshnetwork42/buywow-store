@@ -289,13 +289,13 @@ export const UserIcon = ({ size = 20, className }) => (
   </svg>
 );
 
-export const BagIcon = ({ size = 20, className }) => {
+export const BagIcon = ({ size = 20, color = "none", className }) => {
   return (
     <svg
       width={size}
       height={size}
       viewBox="0 0 18 21"
-      fill="none"
+      fill={color}
       className={className}
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -361,3 +361,30 @@ export const SearchIcon = ({ size = 20, color = "#000000", className }) => {
     </svg>
   );
 };
+
+export const BagIconV2 = ({
+  size = 24,
+  className,
+  color = "none",
+  stroke = "",
+  strokeWidth = 2,
+  ...props
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill={"none"}
+    stroke={stroke}
+    strokeWidth={strokeWidth}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    {...props}
+  >
+    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+    <path d="M3 6h18" />
+    <path d="M16 10a4 4 0 0 1-8 0" />
+  </svg>
+);

@@ -63,6 +63,7 @@ export const SPIN_THE_WHEEL_EXCLUDE_COUPONS = [
   "B2G2",
   "BOGO",
 ];
+export const SOCIAL_PROOF_INCLUDE_PATHS = ["/"];
 
 export const LIMITED_TIME_DEAL_DURATION_IN_MINUTES = 2;
 export const PAGETYPE = {

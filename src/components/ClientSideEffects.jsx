@@ -5,7 +5,7 @@ import {
   KWIKPASS_SCRIPT,
   STORE_PREFIX,
 } from "@/config";
-import { getUserAPI } from "@/lib/appSyncAPIs";
+import { getLivePurchaseFeedProducts, getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";
@@ -21,7 +21,7 @@ import { getCurrentUser } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
 import Cookies from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import BirthdayCelebration from "./partials/BirthdayCelebration";
 import SpinTheWheel from "./partials/SpinTheWheel";
@@ -33,6 +33,7 @@ import {
   ATTEMPTS_KEY,
   MAX_START_PERCENTAGE,
 } from "@/utils/data/constants";
+import FomoToaster from "./partials/FomoToaster";
 
 const ClientSideEffects = () => {
   const searchParams = useSearchParams();
@@ -47,9 +48,14 @@ const ClientSideEffects = () => {
   );
 
   const pathname = usePathname();
-  const sessionId = sessionStorage?.getItem(
-    `${STORE_PREFIX}_coupon_session_id`,
+  const sessionId = sessionStorage?.getItem(`${STORE_PREFIX}_session_id`);
+
+  const LIVE_PURCHASE_FEED_KEY = `${STORE_PREFIX}_live_purchase_feed`;
+  const livePurchaseFeedProductsFromSession = sessionStorage?.getItem(
+    LIVE_PURCHASE_FEED_KEY,
   );
+
+  const [livePurchaseFeedProducts, setLivePurchaseFeedProducts] = useState([]);
 
   const isCartOpen = useSelector(
     (state) => state.modal?.modal?.cart?.isCartOpen,
@@ -269,6 +275,31 @@ const ClientSideEffects = () => {
   }, []);
 
   useEffect(() => {
+    const fetchLivePurchaseFeed = async () => {
+      try {
+        const expiryMinutes = 5;
+        const products = await getLivePurchaseFeedProducts();
+        sessionStorage.setItem(
+          LIVE_PURCHASE_FEED_KEY,
+          JSON.stringify({
+            data: products,
+            expiry: Date.now() + expiryMinutes * 60000, // 5 minutes to store
+          }),
+        );
+      } catch (error) {
+        console.error("Failed to fetch live purchase feed:", error);
+      }
+    };
+    const { data: products, expiry } =
+      JSON.parse(livePurchaseFeedProductsFromSession) || {};
+    if (products && Date.now() < expiry) {
+      setLivePurchaseFeedProducts(products);
+    } else {
+      fetchLivePurchaseFeed();
+    }
+  }, [pathname, livePurchaseFeedProductsFromSession]);
+
+  useEffect(() => {
     if (pathname === "/") {
       homeViewedEvent();
     }
@@ -304,6 +335,10 @@ const ClientSideEffects = () => {
       {!isCartOpen && isSpinTheWheelAllowed && !isSpinTheWheelNudgeThere && (
         <SpinTheWheel />
       )}
+      <FomoToaster
+        livePurchaseFeedProducts={livePurchaseFeedProducts}
+        isCartOpen={isCartOpen}
+      />
     </>
   );
 };

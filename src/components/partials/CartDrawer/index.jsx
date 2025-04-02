@@ -69,9 +69,7 @@ const CartDrawer = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const sessionId = sessionStorage?.getItem(
-    `${STORE_PREFIX}_coupon_session_id`,
-  );
+  const sessionId = sessionStorage?.getItem(`${STORE_PREFIX}_session_id`);
   const { ltoProducts } = useNavbar();
 
   const appliedCoupon = useSelector((state) => state.cart?.coupon);

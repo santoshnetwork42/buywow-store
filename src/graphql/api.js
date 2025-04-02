@@ -998,6 +998,20 @@ export const createShoppingCart = /* GraphQL */ `
   }
 `;
 
+export const livePurchaseFeed = /* GraphQL */ `
+  query LivePurchaseFeed($storeId: ID!) {
+    livePurchaseFeed(storeId: $storeId) {
+      productId
+      variantId
+      title
+      image
+      purchasedFrom
+      timeAgo
+      slug
+    }
+  }
+`;
+
 export const findUserAddresses = /* GraphQL */ `
   query SearchUserAddresses(
     $filter: SearchableUserAddressFilterInput
