@@ -98,7 +98,10 @@ const Toast = ({
               size="base"
               className="line-clamp-2 sm:text-lg"
               onClick={(e) => {
-                e.preventDefault();
+                if (!slug) {
+                  e.preventDefault(); // Prevents navigation if slug is not present
+                  return;
+                }
                 customEvent({
                   event: "social_proof_section_clicked",
                   source: "social_proof_section_toaster",
