@@ -56,6 +56,7 @@ const FeaturedItem = ({
     return (
       <Link
         href={extractUrl}
+        target="_blank"
         // className={`flex max-w-72 items-center justify-center gap-4 rounded-full bg-lime-50_01`}
         className="flex max-w-40 items-center justify-between gap-4 rounded-full bg-lime-50 px-4 py-1 md:max-w-[8rem] lg:max-w-[11rem]"
       >

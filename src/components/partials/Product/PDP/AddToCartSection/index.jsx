@@ -28,6 +28,7 @@ const MarketplaceLink = React.memo(({ marketItem }) => {
   return (
     <Link
       href={link}
+      target="_blank"
       className="flex items-center justify-between gap-4 rounded-full border border-yellow-600 bg-lime-50 px-4 py-1"
     >
       <div className="flex w-full justify-center">
