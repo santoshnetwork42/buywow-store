@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
 import { BagIconV2, CloseIcon } from "@/assets/svg/icons";
 import { Text } from "@/components/elements";
-import { SOCIAL_PROOF_INCLUDE_PATHS } from "@/utils/data/constants";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
+import { SOCIAL_PROOF_INCLUDE_PATHS } from "@/utils/data/constants";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import ProductThumbnail from "../Product/ProductThumbnail";
 
 const Toast = ({
+  image,
   timeAgo = 2,
   title = "",
   slug = "",
@@ -70,8 +72,23 @@ const Toast = ({
       } ${stickyBarExist ? "bottom-20 sm:bottom-16" : "bottom-4 sm:bottom-16"}`}
     >
       <div className="flex w-full items-center space-x-3 overflow-clip rounded-lg">
-        <div className="flex-shrink-0 rounded-full bg-white-a700 p-2">
-          <BagIconV2 size={24} stroke="#DD8434" />
+        <div
+          className={`flex-shrink-0 bg-white-a700 ${!!image ? "rounded-xl p-1" : "rounded-full p-2"}`}
+        >
+          {!!image ? (
+            <div
+              className={`flex aspect-[74/80] w-14 items-center overflow-hidden sm:w-20`}
+            >
+              <ProductThumbnail
+                height={80}
+                width={80}
+                imageKey={image}
+                className="scale-110"
+              />
+            </div>
+          ) : (
+            <BagIconV2 size={24} stroke="#DD8434" />
+          )}
         </div>
         <div className="flex max-h-28 grow flex-col gap-y-0.5 sm:gap-y-1">
           <div className="flex">
