@@ -113,7 +113,7 @@ const CheckoutClient = () => {
   });
 
   const freeProducts = useMemo(
-    () => freeProductsResponse.map((f) => f.product),
+    () => freeProductsResponse.map((f) => f.products),
     [freeProductsResponse],
   );
 

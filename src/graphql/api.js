@@ -106,22 +106,14 @@ export const getInitialData = /* GraphQL */ `
         getYAmount
         getYPercentage
         getYQuantity
-        getYProduct
+        getYProducts
         showAsNudge
-        getYStoreProduct {
+        getYStoreProducts {
           id
           title
           price
           listingPrice
           sku
-          subCategory {
-            name
-            slug
-          }
-          category {
-            name
-            slug
-          }
           images {
             items {
               id
@@ -417,24 +409,18 @@ export const applyCoupon = /* GraphQL */ `
       getYAmount
       getYPercentage
       getYQuantity
-      getYProduct
+      getYProducts
       couponTitle
       description
       ppcodCouponAmount
-      getYStoreProduct {
+      getYStoreProducts {
         id
         title
         collections
         vendor
-        subCategory {
-          name
-          slug
-        }
+
         isFeatured
-        category {
-          name
-          slug
-        }
+
         slug
         price
         sku
@@ -683,7 +669,7 @@ export const getShoppingCart = /* GraphQL */ `
         applyOnAllVariants
         isPDPFeatured
         showAsNudge
-        getYStoreProduct {
+        getYStoreProducts {
           id
           title
           brand
@@ -1381,7 +1367,7 @@ export const getCouponRule = /* GraphQL */ `
       deviceType
       expirationDate
       couponCodeCount
-      getYStoreProduct {
+      getYStoreProducts {
         id
         title
         brand
@@ -1442,7 +1428,7 @@ export const getCouponRule = /* GraphQL */ `
       getYAmount
       getYPercentage
       getYQuantity
-      getYProduct
+      getYProducts
       minOrderValue
       maxDiscount
       maxAllowedUsage

@@ -2,7 +2,11 @@ import { Heading, Img, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import ReadMore from "@/components/features/ReadMore";
 import { copyText, toDecimal } from "@/utils/helpers";
-import { useFeaturedCoupons, useFreebie } from "@wow-star/utils-cms";
+import {
+  getProductPrice,
+  useFeaturedCoupons,
+  useFreebie,
+} from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 
 const OfferTicket = dynamic(() => import("@/src/assets/svg/offerTicket"));
@@ -14,6 +18,17 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   const isProductCoupon = coupon?.couponType === "PRODUCT";
 
   if (!bestCoupon || !hasInventory) return null;
+
+  const titles = coupon?.getYStoreProducts?.map((item) => item?.title) || [];
+  const productTitleCombine = titles.length
+    ? titles.length > 1
+      ? `${titles.slice(0, -1).join(", ")} and ${titles.at(-1)}`
+      : titles[0]
+    : "";
+
+  const totalFreeProductsPrice = coupon?.getYStoreProducts
+    ?.filter(Boolean)
+    ?.reduce((acc, item) => acc + (getProductPrice(item)?.price || 0), 0);
 
   const finalPrice = price - discount >= 0 ? price - discount : price;
 
@@ -39,10 +54,10 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
                 className="font-light md:mt-1"
                 responsive
               >
-                {coupon?.getYStoreProduct?.title}
-                {coupon?.getYStoreProduct?.sku === "WOW_GIFT"
+                {productTitleCombine}
+                {coupon?.getYStoreProducts?.[0]?.sku === "WOW_GIFT"
                   ? ""
-                  : ` worth ₹ ${coupon?.getYStoreProduct?.price} on orders above ₹${coupon?.minOrderValue}`}
+                  : ` worth ₹ ${totalFreeProductsPrice} on orders above ₹${coupon?.minOrderValue}`}
               </Text>
             ) : (
               <></>
