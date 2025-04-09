@@ -16,6 +16,16 @@ export function generateRandomString(length) {
   return Array.from(array, (x) => characters[x % charactersLength]).join("");
 }
 
+export const sanitizeText = (text = "") => {
+  // Normalize and remove all fancy unicode characters
+  return text
+    .normalize("NFKD")
+    .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, "") // Remove emojis
+    .replace(/[\u0300-\u036f]/g, "") // Remove diacritical marks
+    .replace(/\s{2,}/g, " ") // Replace multiple spaces with a single space
+    .trimStart();
+};
+
 export function trimLowercaseJoinWithUnderscore(str = "") {
   return str
     .split(" ") // Split the string by spaces
@@ -228,10 +238,19 @@ export const validatePinCode = (pinCode) => {
 };
 
 export const validateString = (inputString) => {
-  if (!!inputString?.length) {
-    return { error: false };
+  try {
+    const cleanedString = sanitizeText(inputString || "") || "";
+
+    if (cleanedString.length > 0) {
+      return { error: false };
+    }
+
+    return { error: true, message: "Invalid Input" };
+  } catch (err) {
+    // Catch errors from sanitizeText or anything unexpected
+    console.error("sanitizeText failed:", err);
+    return { error: true, message: "Invalid Input" };
   }
-  return { error: true, message: "Invalid Input" };
 };
 
 export const validateEmail = (email) => {

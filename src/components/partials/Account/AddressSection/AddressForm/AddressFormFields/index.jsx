@@ -2,6 +2,7 @@ import { Input } from "@/components/elements";
 import { fetchCityAndState } from "@/lib/customAPIs";
 import States from "@/utils/data/states.json";
 import {
+  sanitizeText,
   validateEmail,
   validatePhoneNumber,
   validatePinCode,
@@ -46,12 +47,16 @@ const AddressFormFields = ({
   const handleInputChange = useCallback(
     (field) => (e) => {
       let value = e.target.value;
-
-      if (field === "pinCode" || field === "phone") {
-        value = value.replace(/[^0-9]+/g, "").trim();
+      try {
+        if (field === "pinCode" || field === "phone") {
+          value = value.replace(/[^0-9]+/g, "").trim();
+        } else {
+          value = sanitizeText(value);
+        }
+        setAddress((prevAddress) => ({ ...prevAddress, [field]: value }));
+      } catch (e) {
+        console.error(e);
       }
-
-      setAddress((prevAddress) => ({ ...prevAddress, [field]: value }));
     },
     [setAddress],
   );
