@@ -7,6 +7,7 @@ export const GOKWIK_ENABLED = "GOKWIK_ENABLED";
 export const SHOW_SHIPPING_BAR = "SHOW_SHIPPING_BAR";
 export const WEB_ANIMATED_BALLOON = "WEB_ANIMATED_BALLOON";
 export const WEB_SPIN_THE_WHEEL_ENABLED = "WEB_SPIN_THE_WHEEL_ENABLED";
+export const SPIN_THE_WHEEL_CONFIG = "SPIN_THE_WHEEL_CONFIG";
 export const IS_PREPAID_DISCOUNT_TO_SHOW = "IS_PREPAID_DISCOUNT_TO_SHOW";
 export const MAX_RECENTLY_VIEWED_PRODUCTS = 13;
 export const STICKY_VIEW_CART_TO_SHOW = ["/", "/search", "/collections"];
@@ -24,45 +25,6 @@ export const BALLOON_ALLOWED_PATHS = [
   "/search",
 ];
 
-export const SPIN_THE_WHEEL_EXCLUDE_PATHS = [
-  "/collections/buy-3-599",
-  "/collections/buy-4-699",
-  "/collections/buy-6-899",
-  "/collections/buy-8-1000",
-  "/collections/affiliate-buy-8",
-  "/collections/gpay",
-  "/collections/gpay-699",
-  "/collections/buy-8-1199",
-  "/collections/bundle-skin-hair-care",
-  "/collections/bundle-deal",
-  "/collections/all-products",
-  "/collections/bundle-face-care",
-  "/collections/cred-reward",
-  "/collections/bundle-body-wash",
-  "/collections/bundle-face-wash-Gpay",
-  "/collections/bundle-body",
-  "/collections/bundle-face-wash",
-  "/collections/tuff3",
-  "/checkout",
-  "/blog",
-  "/pages",
-  "/policies",
-];
-
-export const SPIN_THE_WHEEL_EXCLUDE_COUPONS = [
-  "BUY8",
-  "GET8LOOT",
-  "BUY6899",
-  "AFFBUY8",
-  "GPAY699",
-  "BUNDLE6",
-  "TRI599",
-  "BUY699",
-  "BUY6",
-  "WOW",
-  "B2G2",
-  "BOGO",
-];
 export const SOCIAL_PROOF_INCLUDE_PATHS = ["/"];
 
 export const LIMITED_TIME_DEAL_DURATION_IN_MINUTES = 2;
@@ -93,7 +55,6 @@ export const WHEEL_HAS_VISITED_BEFORE_KEY =
   STORE_PREFIX + "_" + "hasVisitedBefore";
 export const STORAGE_TIME_KEY = STORE_PREFIX + "_" + "wheel_first_visit";
 export const ATTEMPTS_KEY = STORE_PREFIX + "_" + "wheel_spin_attempts";
-export const MAX_ATTEMPTS = 1;
 export const MIN_START_PERCENTAGE = 65;
 export const MAX_START_PERCENTAGE = 75;
 export const MAX_PERCENTAGE = 95;

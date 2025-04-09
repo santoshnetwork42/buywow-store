@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { Button } from "@/components/elements";
 import {
   Gift,
@@ -18,7 +18,6 @@ import { STORE_PREFIX } from "@/config";
 import {
   STORAGE_KEY,
   STORAGE_TIME_KEY,
-  MAX_ATTEMPTS,
   ATTEMPTS_KEY,
   MIN_START_PERCENTAGE,
   MAX_START_PERCENTAGE,
@@ -35,77 +34,61 @@ const WHEEL_SOUND_URL =
 const WIN_SOUND_URL =
   "https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3";
 
-const offers = [
-  { label: "15% OFF", color: "#E67E22", code: "SPIN15485VGC", weight: 5 },
-  {
-    label: "40% OFF",
-    code: "SPIN402MEVI",
-    // label: "BUY 1 GET 1",
-    // code: "SPINBG4WCVZS",
-    color: "#F39C12",
-    weight: 15,
-  },
-  {
-    // label: "BUY 2 GET 2",
-    // code: "SPINBG159QLF7E",
-    label: "25% OFF",
-    code: "SPIN25T4T1B",
-    color: "#8B4513",
-    weight: 20,
-  },
+export default function SpinWheel({ spinTheWheelConfig }) {
+  const [offers, setOffers] = useState([]);
 
-  { label: "20% OFF", color: "#A0522D", code: "SPIN20N43JRO", weight: 40 },
-  { label: "FREE GIFT", color: "#FFA500", code: "SPINFGTILC2RV", weight: 0 },
-  { label: "30% OFF", color: "#CD853F", code: "SPIN30ODRZ3W", weight: 20 },
-];
+  const totalWeight = useMemo(() => {
+    return offers.reduce((sum, offer) => sum + offer.weight, 0);
+  }, [offers]);
 
-const totalWeight = offers.reduce((sum, offer) => sum + offer.weight, 0);
+  const getWeightedRandomIndex = useCallback(() => {
+    const random = Math.random() * totalWeight;
+    let weightSum = 0;
 
-function getWeightedRandomIndex() {
-  const random = Math.random() * totalWeight;
-  let weightSum = 0;
-
-  for (let i = 0; i < offers.length; i++) {
-    weightSum += offers[i].weight;
-    if (random <= weightSum) {
-      return i;
+    for (let i = 0; i < offers.length; i++) {
+      weightSum += offers[i].weight;
+      if (random <= weightSum) {
+        return i;
+      }
     }
-  }
+    return offers.length - 1;
+  }, [offers]);
 
-  return offers.length - 1;
-}
+  const calculateInitialPercentage = useCallback(() => {
+    if (typeof window === "undefined") return MIN_START_PERCENTAGE;
 
-function calculateInitialPercentage() {
-  if (typeof window === "undefined") return MIN_START_PERCENTAGE;
+    const storedPercentage = isNaN(
+      Number(window.localStorage.getItem(STORAGE_KEY)),
+    )
+      ? 0
+      : Number(rawValue);
 
-  const storedPercentage = window.localStorage.getItem(STORAGE_KEY);
-  const firstVisitTime = window.localStorage.getItem(STORAGE_TIME_KEY);
+    const firstVisitTime = window.localStorage.getItem(STORAGE_TIME_KEY);
 
-  if (storedPercentage && firstVisitTime) {
-    const hoursPassed =
-      (Date.now() - parseInt(firstVisitTime)) / (1000 * 60 * 60);
-    const basePercentage = parseFloat(storedPercentage);
-    const increase = Math.min(hoursPassed * 2, 20);
-    return Math.min(basePercentage + increase, MAX_PERCENTAGE);
-  }
+    if (storedPercentage && firstVisitTime) {
+      const hoursPassed =
+        (Date.now() - parseInt(firstVisitTime)) / (1000 * 60 * 60);
+      const basePercentage = parseFloat(storedPercentage);
+      const increase = Math.min(hoursPassed * 2, 20);
+      return Math.min(basePercentage + increase, MAX_PERCENTAGE);
+    }
 
-  const initialPercentage =
-    MIN_START_PERCENTAGE +
-    Math.random() * (MAX_START_PERCENTAGE - MIN_START_PERCENTAGE);
+    const initialPercentage =
+      MIN_START_PERCENTAGE +
+      Math.random() * (MAX_START_PERCENTAGE - MIN_START_PERCENTAGE);
 
-  window.localStorage.setItem(STORAGE_KEY, initialPercentage.toString());
-  window.localStorage.setItem(STORAGE_TIME_KEY, Date.now().toString());
+    window.localStorage.setItem(STORAGE_KEY, initialPercentage.toString());
+    window.localStorage.setItem(STORAGE_TIME_KEY, Date.now().toString());
 
-  return initialPercentage;
-}
+    return initialPercentage;
+  }, []);
 
-export default function SpinWheel() {
   const [isSpinning, setIsSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [claimedPercentage, setClaimedPercentage] = useState(70);
-  const [attemptsLeft, setAttemptsLeft] = useState(MAX_ATTEMPTS);
+  const [attemptsLeft, setAttemptsLeft] = useState(0);
   const [showMaxAttemptsDialog, setShowMaxAttemptsDialog] = useState(false);
   const wheelAudioRef = useRef(null);
   const winAudioRef = useRef(null);
@@ -118,11 +101,6 @@ export default function SpinWheel() {
 
     wheelAudioRef.current = new Audio(WHEEL_SOUND_URL);
     winAudioRef.current = new Audio(WIN_SOUND_URL);
-
-    const usedAttempts = parseInt(
-      window.localStorage.getItem(ATTEMPTS_KEY) || "0",
-    );
-    setAttemptsLeft(Math.max(0, MAX_ATTEMPTS - usedAttempts));
 
     try {
       const initialPercentage = calculateInitialPercentage();
@@ -165,6 +143,16 @@ export default function SpinWheel() {
       clearInterval(interval);
     };
   }, []);
+
+  useEffect(() => {
+    const usedAttempts = parseInt(
+      window.localStorage.getItem(ATTEMPTS_KEY) || "0",
+    );
+    setOffers(spinTheWheelConfig?.offers || []);
+    setAttemptsLeft(
+      Math.max(0, (spinTheWheelConfig?.maxAttempts || 1) - usedAttempts),
+    );
+  }, [spinTheWheelConfig]);
 
   const playSound = async (audio) => {
     if (isSoundEnabled && audio) {
@@ -216,12 +204,14 @@ export default function SpinWheel() {
     }
   };
 
-  const getShoppingUrl = (code) => {
-    return (
-      window.location.pathname + `?couponCode=${code}` ||
-      `${SHOP_BASE_URL}?couponCode=${code}`
-    );
-  };
+  const getShoppingUrl = useCallback(
+    (code) => {
+      const redirectUrl = spinTheWheelConfig?.redirectUrl?.trim();
+      if (!!redirectUrl) return `${redirectUrl}?couponCode=${code}`;
+      return window.location.pathname + `?couponCode=${code}`;
+    },
+    [spinTheWheelConfig],
+  );
 
   const getPreviousWin = () => {
     if (typeof window === "undefined") return null;

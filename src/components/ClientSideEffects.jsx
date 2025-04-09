@@ -11,8 +11,6 @@ import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import {
-  SPIN_THE_WHEEL_EXCLUDE_COUPONS,
-  SPIN_THE_WHEEL_EXCLUDE_PATHS,
   WEB_ANIMATED_BALLOON,
   WHEEL_HAS_VISITED_BEFORE_KEY,
 } from "@/utils/data/constants";
@@ -21,12 +19,15 @@ import { getCurrentUser } from "aws-amplify/auth";
 import { Hub } from "aws-amplify/utils";
 import Cookies from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import BirthdayCelebration from "./partials/BirthdayCelebration";
 import SpinTheWheel from "./partials/SpinTheWheel";
 import { useSelector } from "react-redux";
-import { WEB_SPIN_THE_WHEEL_ENABLED } from "@/utils/data/constants";
+import {
+  WEB_SPIN_THE_WHEEL_ENABLED,
+  SPIN_THE_WHEEL_CONFIG,
+} from "@/utils/data/constants";
 import {
   STORAGE_KEY,
   STORAGE_TIME_KEY,
@@ -41,6 +42,12 @@ const ClientSideEffects = () => {
     WEB_SPIN_THE_WHEEL_ENABLED,
     false,
   );
+
+  const unParsedSpinTheWheelConfig = useConfiguration(
+    SPIN_THE_WHEEL_CONFIG,
+    "{}",
+  );
+  const spinTheWheelConfig = JSON.parse(unParsedSpinTheWheelConfig);
   const storedCouponCode = useSelector((state) => state.cart?.storedCouponCode);
 
   const isSpinTheWheelNudgeThere = useSelector(
@@ -61,16 +68,19 @@ const ClientSideEffects = () => {
     (state) => state.modal?.modal?.cart?.isCartOpen,
   );
 
-  const isSpinTheWheelAllowed =
-    isSpinTheWheelEnabled &&
-    !SPIN_THE_WHEEL_EXCLUDE_COUPONS?.some(
-      (coupon) => coupon?.toLowerCase() === storedCouponCode?.toLowerCase(),
-    ) &&
-    !SPIN_THE_WHEEL_EXCLUDE_PATHS.some(
-      (allowedPath) =>
-        pathname === allowedPath ||
-        (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
+  const isSpinTheWheelAllowed = useMemo(() => {
+    return (
+      isSpinTheWheelEnabled &&
+      !spinTheWheelConfig?.excludeCoupons?.some(
+        (coupon) => coupon?.toLowerCase() === storedCouponCode?.toLowerCase(),
+      ) &&
+      !spinTheWheelConfig?.excludePaths?.some(
+        (allowedPath) =>
+          pathname === allowedPath ||
+          (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
+      )
     );
+  }, [isSpinTheWheelEnabled, spinTheWheelConfig, storedCouponCode, pathname]);
 
   const isBalloonAnimationAllowed = useConfiguration(
     WEB_ANIMATED_BALLOON,
@@ -333,7 +343,7 @@ const ClientSideEffects = () => {
     <>
       {isBalloonAnimationAllowed && <BirthdayCelebration />}
       {!isCartOpen && isSpinTheWheelAllowed && !isSpinTheWheelNudgeThere && (
-        <SpinTheWheel />
+        <SpinTheWheel spinTheWheelConfig={spinTheWheelConfig} />
       )}
       <FomoToaster
         livePurchaseFeedProducts={livePurchaseFeedProducts}

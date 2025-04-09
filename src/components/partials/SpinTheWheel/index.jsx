@@ -8,11 +8,11 @@ import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { WHEEL_HAS_VISITED_BEFORE_KEY } from "@/utils/data/constants";
 import { useEffect, useState } from "react";
 
-export default function SpinTheWheel() {
+export default function SpinTheWheel({ spinTheWheelConfig }) {
   const [isVisible, setIsVisible] = useState(false);
   const [showWheel, setShowWheel] = useState(false);
   const [previousWin, setPreviousWin] = useState(null);
-  const [showCouponBar, setShowCouponBar] = useState(false);
+  // const [showCouponBar, setShowCouponBar] = useState(false);
   const { spinTheWheelClickedEvent } = useEventsDispatch();
 
   useEffect(() => {
@@ -38,16 +38,7 @@ export default function SpinTheWheel() {
 
     // Check for previous win
     if (lastWonCode) {
-      const offers = [
-        { label: "15% OFF", code: "SPIN15485VGC" },
-        { label: "40% OFF", code: "SPIN402MEVI" },
-        { label: "25% OFF", code: "SPIN25T4T1B" },
-        // { label: "BUY 2 GET 2", code: "SPINBG159QLF7E" },
-        // { label: "BUY 1 GET 1", code: "SPINBG4WCVZS" },
-        { label: "20% OFF", code: "SPIN20N43JRO" },
-        { label: "FREE GIFT", code: "SPINFGTILC2RV" },
-        { label: "30% OFF", code: "SPIN30ODRZ3W" },
-      ];
+      const offers = spinTheWheelConfig?.offers || [];
       const win = offers.find((offer) => offer.code === lastWonCode);
       if (win) {
         setPreviousWin(win);
@@ -59,7 +50,7 @@ export default function SpinTheWheel() {
       clearTimeout(timer);
       clearTimeout(timerModal);
     };
-  }, []);
+  }, [spinTheWheelConfig]);
 
   useEffect(() => {
     // Add this code: Handle Escape key press
@@ -84,7 +75,7 @@ export default function SpinTheWheel() {
           spinTheWheelClickedEvent({ event: "spin_the_wheel_clicked" });
         }}
         className={`group fixed md:bottom-8 md:left-8 ${
-          isVisible && !showCouponBar
+          isVisible
             ? "translate-y-0 opacity-100 md:animate-[bounce_1s_ease-in-out_infinite]"
             : "translate-y-16 opacity-0"
         } bottom-36 left-0 transition-all duration-100 ease-out md:duration-700`}
@@ -168,7 +159,7 @@ export default function SpinTheWheel() {
         enableOutsideClick={true}
         bgOpacity={"darker"}
       >
-        <SpinWheel />
+        <SpinWheel spinTheWheelConfig={spinTheWheelConfig} />
       </Modal>
     </main>
   );
