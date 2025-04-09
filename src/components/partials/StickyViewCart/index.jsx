@@ -7,6 +7,7 @@ import { useIsInteractive } from "@/utils/context/navbar";
 import {
   STICKY_VIEW_CART_TO_SHOW,
   IS_PREPAID_DISCOUNT_TO_SHOW,
+  SPIN_THE_WHEEL_CONFIG,
 } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
 import {
@@ -42,6 +43,12 @@ const StickyViewCart = () => {
     IS_PREPAID_DISCOUNT_TO_SHOW,
     true,
   );
+
+  const unParsedSpinTheWheelConfig = useConfiguration(
+    SPIN_THE_WHEEL_CONFIG,
+    "{}",
+  );
+  const spinTheWheelConfig = JSON.parse(unParsedSpinTheWheelConfig);
 
   const pathname = usePathname();
 
@@ -121,7 +128,7 @@ const StickyViewCart = () => {
         id="add-to-cart-sticky-bar"
         className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg"
       >
-        <Nudge />
+        <Nudge spinTheWheelConfig={spinTheWheelConfig} />
         <div className="flex flex-grow items-center justify-between px-5 py-2">
           <CartSummary
             totalItems={totalItems}

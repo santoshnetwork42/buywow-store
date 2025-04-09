@@ -244,7 +244,7 @@ const IntegratedProgressStepper = ({
   );
 };
 
-const Nudge = ({ isCart = false }) => {
+const Nudge = ({ isCart = false, spinTheWheelConfig }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
@@ -311,11 +311,13 @@ const Nudge = ({ isCart = false }) => {
   }, [pathname, searchParams, coupons, storedCouponCode, dispatch]);
 
   useEffect(() => {
-    const toShowSpinTheWheelNudge = !SPIN_THE_WHEEL_EXCLUDE_PATHS.some(
-      (allowedPath) =>
-        pathname === allowedPath ||
-        (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
-    );
+    const toShowSpinTheWheelNudge = !!spinTheWheelConfig
+      ? !spinTheWheelConfig?.excludePaths?.some(
+          (allowedPath) =>
+            pathname === allowedPath ||
+            (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
+        )
+      : false;
     if (lastWonCodeAlreadyUsed !== "TRUE" && toShowSpinTheWheelNudge) {
       setShowCouponBarForSpinTheWheel(!!lastWonCode);
       handleSpinTheWheelVisibility(!!lastWonCode);

@@ -61,7 +61,7 @@ export default function SpinWheel({ spinTheWheelConfig }) {
       Number(window.localStorage.getItem(STORAGE_KEY)),
     )
       ? 0
-      : Number(rawValue);
+      : Number(window.localStorage.getItem(STORAGE_KEY));
 
     const firstVisitTime = window.localStorage.getItem(STORAGE_TIME_KEY);
 
