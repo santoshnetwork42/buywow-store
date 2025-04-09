@@ -22,6 +22,7 @@ export const sanitizeText = (text = "") => {
     .normalize("NFKD")
     .replace(/[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu, "") // Remove emojis
     .replace(/[\u0300-\u036f]/g, "") // Remove diacritical marks
+    .replace(/[^a-zA-Z0-9\s@+\-.,'#&!\/:;?()%]/g, "")
     .replace(/\s{2,}/g, " ") // Replace multiple spaces with a single space
     .trimStart();
 };
