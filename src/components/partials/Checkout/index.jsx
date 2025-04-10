@@ -28,6 +28,7 @@ import {
 import {
   checkAffiseValidity,
   checkFormValidity,
+  compareStringsIgnoreCase,
   isValidAddress,
   nameSplitter,
   toDecimal,
@@ -48,6 +49,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useInventory } from "@/utils/hooks/useInventory";
+import { COD_BLOCKED_UTM_SOURCES } from "@/utils/data/constants";
 
 const EmptyCart = dynamic(
   () => import("@/components/partials/CartDrawer/EmptyCart"),
@@ -91,9 +93,20 @@ const CheckoutClient = () => {
   const minCOD = useConfiguration(MIN_COD_AMOUNT, -1);
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
   const maxPrepaidDiscount = useConfiguration(MAX_PREPAID_DISCOUNT, 0);
+  const codBlockedUtmSource = useConfiguration(COD_BLOCKED_UTM_SOURCES, 0);
   const codEnabled = useConfiguration(COD_ENABLED, true);
   const ppcodEnabled = useConfiguration(PPCOD_ENABLED, false);
   const ppcodAmount = useConfiguration(PPCOD_AMOUNT, 0);
+
+  const isUtmSourceAllowedForCod = useMemo(() => {
+    if (!metaData?.utmSource || !codBlockedUtmSource?.length) {
+      return true;
+    }
+    const isBlockedUtm = codBlockedUtmSource?.find((utmSource) =>
+      compareStringsIgnoreCase(utmSource || "", metaData?.utmSource || ""),
+    );
+    return !!isBlockedUtm ? false : true;
+  }, [codBlockedUtmSource, metaData]);
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
     prepaidEnabled ? "PREPAID" : "COD",
@@ -487,6 +500,7 @@ const CheckoutClient = () => {
             <PaymentMethodsSection
               prepaidEnabled={prepaidEnabled}
               codEnabled={codEnabled}
+              isUtmSourceAllowedForCod={isUtmSourceAllowedForCod}
               ppcodEnabled={ppcodEnabled}
               ppcodCouponEnabled={ppcodCouponEnabled}
               prepaidDiscount={prepaidDiscount}

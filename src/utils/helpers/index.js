@@ -27,6 +27,11 @@ export const sanitizeText = (text = "") => {
     .trimStart();
 };
 
+export const compareStringsIgnoreCase = (str1, str2) => {
+  if (typeof str1 !== "string" || typeof str2 !== "string") return false;
+  return str1.toLowerCase() === str2.toLowerCase();
+};
+
 export function trimLowercaseJoinWithUnderscore(str = "") {
   return str
     .split(" ") // Split the string by spaces

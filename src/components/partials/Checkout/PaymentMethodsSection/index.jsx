@@ -7,6 +7,7 @@ const PaymentMethodsSection = React.memo(
   ({
     prepaidEnabled,
     codEnabled,
+    isUtmSourceAllowedForCod,
     ppcodEnabled,
     ppcodCouponEnabled,
     prepaidDiscount,
@@ -54,7 +55,7 @@ const PaymentMethodsSection = React.memo(
             disabled={onlineDisabled}
           />
         )}
-        {(ppcodEnabled || codEnabled) && (
+        {(ppcodEnabled || codEnabled) && isUtmSourceAllowedForCod && (
           <PaymentMethod
             label={`${(ppcodEnabled && ppcodAmount) || ppcodCouponEnabled ? "Partial Cash On Delivery" : "Cash On Delivery"}`}
             id="COD"
