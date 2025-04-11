@@ -43,7 +43,9 @@ const AddToCart = ({
       try {
         if (!product) return;
 
-        const shouldAddToCart = searchParams.get("add_to_cart") === "1";
+        const shouldAddToCart =
+          searchParams.get("add_to_cart") === "1" &&
+          `/products/${product?.slug}` === pathname;
 
         if (shouldAddToCart && !!product?.id && !hasHandledAddToCart.current) {
           addToCart({
