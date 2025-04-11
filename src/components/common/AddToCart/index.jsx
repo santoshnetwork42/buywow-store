@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
 import { twMerge } from "tailwind-merge";
 
@@ -9,6 +9,8 @@ import { Button } from "@/components/elements";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { getRecordKey, getUpdatedCart } from "@/utils/helpers";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const AddToCart = ({
   product,
@@ -23,6 +25,47 @@ const AddToCart = ({
   const { addToCart, updateCart, removeFromCart } = useCartDispatch();
   const { handleCartVisibility } = useModalDispatch();
   const cartItems = useSelector((state) => state.cart?.data || []);
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const hasHandledAddToCart = useRef(false);
+
+  useEffect(() => {
+    const addToCartViaLPPages = () => {
+      const removeQueryParam = (param = "add_to_cart") => {
+        const newParams = new URLSearchParams(searchParams.toString());
+        newParams.delete(param);
+        router.replace(`${pathname}?${newParams.toString()}`);
+      };
+
+      try {
+        if (!product) return;
+
+        const shouldAddToCart = searchParams.get("add_to_cart") === "1";
+
+        if (shouldAddToCart && !!product?.id && !hasHandledAddToCart.current) {
+          addToCart({
+            ...product,
+            qty: product.minimumOrderQuantity || 1,
+            variantId: selectedVariant?.id,
+            section: {
+              id: section?.name ?? "pdp_page",
+              name: section?.name ?? "pdp_page",
+              tabValue: section?.tabValue ?? "pdp_page",
+            },
+          });
+          hasHandledAddToCart.current = true;
+          removeQueryParam();
+        }
+      } catch (e) {
+        console.error(e);
+        removeQueryParam();
+      }
+    };
+    addToCartViaLPPages();
+  }, [searchParams, product, selectedVariant, pathname, router]);
 
   const addToCartHandler = useCallback(() => {
     if (!product) return;

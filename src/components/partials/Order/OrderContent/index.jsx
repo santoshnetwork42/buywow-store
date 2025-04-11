@@ -192,7 +192,7 @@ const SwopStoreBanner = () => {
   const bannerOnThankYouPage = {
     mWebImage: "/swopstore/swopstore-mweb.jpg",
     webImage: "/swopstore/swopstore-web.jpg",
-    link: SWOP_STORE_BANNER_URL,
+    link: "https://www.buywow.in/collections/yuzu",
   };
   return (
     <>
@@ -202,7 +202,9 @@ const SwopStoreBanner = () => {
         href={bannerOnThankYouPage.link ?? "#"}
       >
         <Img
-          src={bannerOnThankYouPage?.mWebImage}
+          src={
+            "https://media.buywow.in/public/wow-cms/576x328_5_931f7451be.jpg?w=810&q=75&f=webp"
+          }
           alt={'Thank you for your order!"'}
           width={500}
           height={200}
@@ -215,7 +217,9 @@ const SwopStoreBanner = () => {
         href={bannerOnThankYouPage.link ?? "#"}
       >
         <Img
-          src={bannerOnThankYouPage?.webImage}
+          src={
+            "https://media.buywow.in/public/wow-cms/1340x400_5_c48829eb4e.jpg?w=1400&q=75&f=webp"
+          }
           alt={"Thank you for your order!"}
           width={1400}
           height={400}
