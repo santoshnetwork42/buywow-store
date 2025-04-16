@@ -27,7 +27,12 @@ async function fetchInitialData() {
   return response.json();
 }
 
-function NavbarProvider({ children, headerData, storeConfig }) {
+function NavbarProvider({
+  children,
+  headerData,
+  storeConfig,
+  thankYouPageData,
+}) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const _source = searchParams.get("_source");
@@ -97,6 +102,7 @@ function NavbarProvider({ children, headerData, storeConfig }) {
     source,
     headerData,
     storeConfig: storeConfig?.storeConfiguration,
+    thankYouPageData,
   };
 
   return (
@@ -167,6 +173,11 @@ export const useIsInteractive = () => {
 export const useStoreConfig = () => {
   const { storeConfig } = useContext(NavbarContext) || {};
   return storeConfig;
+};
+
+export const useThankyouPageData = () => {
+  const { thankYouPageData } = useContext(NavbarContext) || {};
+  return thankYouPageData || {};
 };
 
 export const useGuestCheckout = () => {

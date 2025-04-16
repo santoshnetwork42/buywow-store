@@ -16,8 +16,13 @@ import { errorHandler } from "@/utils/errorHandler";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { useThankyouPageData } from "@/utils/context/navbar";
 
 const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
+  const { webBanner, mWebBanner, link = "#" } = useThankyouPageData();
+  const webBannerImg = webBanner?.data?.attributes?.url || "";
+  const mWebBannerImg = mWebBanner?.data?.attributes?.url || "";
+
   const [order, setOrder] = useState(initialOrderData);
   const [loading, setLoading] = useState(!initialOrderData);
   const user = useSelector((state) => state.user?.user);
@@ -136,7 +141,11 @@ const OrderContent = ({ initialOrderData, orderId, paymentId }) => {
   return (
     <>
       <ProgressSteps activeStep={3} className="mb-5 mt-4" />
-      <SwopStoreBanner />
+      <ThankYouPageBanner
+        link={link}
+        webBannerImg={webBannerImg}
+        mWebBannerImg={mWebBannerImg}
+      />
       <OrderDetails
         code={order.code || order.id}
         status={order.status}
@@ -188,38 +197,26 @@ const ActionButtons = ({ code }) => (
 
 ActionButtons.displayName = "ActionButtons";
 
-const SwopStoreBanner = () => {
-  const bannerOnThankYouPage = {
-    mWebImage: "/swopstore/swopstore-mweb.jpg",
-    webImage: "/swopstore/swopstore-web.jpg",
-    link: "https://www.buywow.in/collections/yuzu",
-  };
+const ThankYouPageBanner = ({ link, webBannerImg, mWebBannerImg }) => {
+  if (!webBannerImg && !mWebBannerImg) return null;
   return (
     <>
       <Link
         prefetch={false}
         className="flex w-full items-center justify-center"
-        href={bannerOnThankYouPage.link ?? "#"}
+        href={link ?? "#"}
       >
         <Img
-          src={
-            "https://media.buywow.in/public/wow-cms/576x328_5_931f7451be.jpg?w=810&q=75&f=webp"
-          }
+          src={mWebBannerImg}
           alt={'Thank you for your order!"'}
           width={500}
           height={200}
           className="rounded-md sm:hidden"
         />
       </Link>
-      <Link
-        prefetch={false}
-        className=""
-        href={bannerOnThankYouPage.link ?? "#"}
-      >
+      <Link prefetch={false} className="" href={link ?? "#"}>
         <Img
-          src={
-            "https://media.buywow.in/public/wow-cms/1340x400_5_c48829eb4e.jpg?w=1400&q=75&f=webp"
-          }
+          src={webBannerImg}
           alt={"Thank you for your order!"}
           width={1400}
           height={400}
@@ -230,6 +227,6 @@ const SwopStoreBanner = () => {
   );
 };
 
-SwopStoreBanner.displayName = "SwopStoreBanner";
+ThankYouPageBanner.displayName = "ThankYouPageBanner";
 
 export default OrderContent;

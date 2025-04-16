@@ -39,11 +39,16 @@ async function PageLayout({ children }) {
     footer: footerData = {},
     carousel: carouselData = {},
     trendingCategories: categories = {},
+    thankYouPage: thankYouPageData = {},
   } = data || {};
 
   return (
     <Provider data={{ headerData, carouselData, categories, announcementData }}>
-      <NavbarProvider headerData={headerData} storeConfig={storeConfig}>
+      <NavbarProvider
+        headerData={headerData}
+        storeConfig={storeConfig}
+        thankYouPageData={thankYouPageData?.data?.attributes}
+      >
         <GoKwikProvider>
           <AnnouncementProvider>
             <ClientSideEffects />
