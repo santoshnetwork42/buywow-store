@@ -216,10 +216,7 @@ const AddToCartSection = React.memo(
       if (typeof window === "undefined") return;
 
       if (window.innerWidth < 768 && borderRef.current) {
-        setIsFixed(
-          borderRef.current.getBoundingClientRect().top <
-            window.innerHeight - 60,
-        );
+        setIsFixed(true);
       } else if (sectionRef.current) {
         setIsFixed(sectionRef.current.getBoundingClientRect().bottom < 0);
       }

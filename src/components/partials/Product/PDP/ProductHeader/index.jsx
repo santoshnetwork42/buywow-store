@@ -9,7 +9,7 @@ const ProductHeader = React.memo(
     <div className={`flex flex-col gap-1 md:gap-1.5 ${className}`}>
       <div className="flex flex-col">
         {title && (
-          <Heading className="md:text-[28px]" as="p" size="2xl">
+          <Heading className="text-[22px] md:text-[28px]" as="p" size="2xl">
             {title}
           </Heading>
         )}

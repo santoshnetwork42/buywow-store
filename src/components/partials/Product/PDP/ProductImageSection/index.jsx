@@ -59,12 +59,13 @@ const DotButton = React.memo(({ isSelected, onClick, isVideo }) => {
   const baseClassName = `
     mr-1.5 
     inline-block 
-    size-3 
     cursor-pointer 
     rounded-full 
     transition-all 
     duration-300 
     ease-in-out
+    max-sm:size-2
+    size-3
     ${isSelected ? "bg-black-900" : "bg-gray-300_01 hover:bg-gray-400"}
   `;
 
@@ -179,7 +180,7 @@ const ProductImage = React.memo(
     return (
       <div
         className={`main-image relative overflow-hidden ${
-          layout === "grid" ? "w-full" : "flex-[0_0_100%]"
+          layout === "grid" ? "w-full" : "flex-[0_0_90%]"
         }`}
         onClick={handleImageClick}
       >
@@ -504,7 +505,9 @@ const ProductImageSection = ({
             <div ref={mainImageContainerRef} className="flex w-full gap-2">
               {renderMainImages("carousel")}
             </div>
-            <div className="mt-4 flex justify-center">{renderDotButtons}</div>
+            <div className="mt-2 flex justify-center sm:mt-4">
+              {renderDotButtons}
+            </div>
           </div>
         </div>
       </div>

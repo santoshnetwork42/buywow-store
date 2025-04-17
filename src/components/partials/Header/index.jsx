@@ -119,6 +119,9 @@ const Header = ({ data }) => {
       allowedPath === pathname ||
       (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
   );
+
+  const isProductPage = pathname.startsWith("/products/");
+
   const { handlePasswordLessModal, handleCartVisibility } = useModalDispatch();
   const { totalItems: totalCartItems } = useCartTotal({
     paymentType: "PREPAID",
@@ -234,7 +237,9 @@ const Header = ({ data }) => {
             )}
           </div>
 
-          {!isRestricted && <SearchBar className="flex w-full md:hidden" />}
+          {!isRestricted && !isProductPage && (
+            <SearchBar className="flex w-full md:hidden" />
+          )}
         </div>
       </div>
 
