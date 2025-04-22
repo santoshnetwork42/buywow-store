@@ -77,14 +77,14 @@ const VariantItem = React.memo(({ variant, onChange, isShoppable }) => {
   return (
     <div className={containerClassName} onClick={onChange}>
       {productImage && !isShoppable && (
-        <div className="aspect-[114/92] rounded bg-white-a700">
+        <div className="aspect-square rounded bg-white-a700">
           <Img
             src={productImage}
             width={300}
             height={300}
             alt={title || "Variant image"}
             addPrefix
-            className="aspect-[114/92] h-auto w-full object-contain p-1"
+            className="aspect-square h-auto w-full object-contain"
             loading="lazy"
           />
         </div>
