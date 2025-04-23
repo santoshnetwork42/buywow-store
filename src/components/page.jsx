@@ -42,6 +42,7 @@ const PAGETYPE = {
   LANDING: "landing",
   PAGES: "pages",
   POLICIES: "policies",
+  OFFERS: "offers",
   COLLECTION: "collections",
   PRODUCT: "products",
 };

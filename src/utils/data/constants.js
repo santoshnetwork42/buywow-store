@@ -36,6 +36,7 @@ export const PAGETYPE = {
   POLICIES: "policies",
   COLLECTION: "collections",
   PRODUCT: "products",
+  OFFERS: "offers",
 };
 
 export const PDP_BLOCK_PROMOTION_TAG_TO_IGNORE = [

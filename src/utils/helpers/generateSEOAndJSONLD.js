@@ -26,6 +26,8 @@ export function generateSEOAndJSONLD(params) {
   let productJsonLd = {};
   let organizationJsonLd = {};
   let websiteJsonLd = {};
+  let pdpImage = {};
+
   if (isProduct) {
     const { fetchedProduct, productDetailView } =
       pdpSection?.product?.pdpProduct?.data?.attributes || {};
@@ -67,6 +69,14 @@ export function generateSEOAndJSONLD(params) {
       fetchedProduct?.images?.items?.map((img) =>
         getPublicImageURL({ key: img.imageKey, resize: 100, addPrefix: true }),
       ) || [];
+
+    const thumbImageIndex =
+      fetchedProduct?.images?.items?.findIndex((img) => !!img?.isThumb) || 0;
+
+    pdpImage = {
+      imageUrl: productImgs[thumbImageIndex],
+      alt: fetchedProduct?.title || extractedSlug || "",
+    };
 
     productJsonLd = {
       "@context": "https://schema.org/",
@@ -260,6 +270,17 @@ export function generateSEOAndJSONLD(params) {
     openGraph: {
       title: seoComponent?.seoTitle,
       description: seoComponent?.seoDescription,
+      ...(isProduct &&
+        pdpImage?.imageUrl && {
+          images: [
+            {
+              url: pdpImage.imageUrl,
+              width: 1200,
+              height: 630,
+              alt: pdpImage.alt,
+            },
+          ],
+        }),
     },
     collectionPageJsonLd,
     organizationJsonLd,
