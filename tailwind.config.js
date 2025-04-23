@@ -102,11 +102,22 @@ module.exports = {
           "0%": { transform: "translateY(0)" },
           "100%": { transform: "translateY(-1000px)" },
         },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "25%": { transform: "translateX(-5px)" },
+          "75%": { transform: "translateX(5px)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-6px)" },
+        },
       },
       animation: {
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
         "border-complete": "borderLinear 0.5s linear forwards",
         flying: "flying 0s linear infinite",
+        shake: "shake 0.5s ease-in-out infinite",
+        float: "float 2s ease-in-out infinite",
       },
     },
   },

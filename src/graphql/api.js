@@ -936,6 +936,91 @@ export const getProductById = /* GraphQL */ `
   }
 `;
 
+export const byslugProduct = `query BySlugProduct(
+  $slug: String!
+  $createdAt: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelProductFilterInput
+  $limit: Int
+  $nextToken: String
+  ) {
+    byslugProduct(slug: $slug
+    createdAt: $createdAt
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken) {
+    items {
+      id
+      minimumOrderQuantity
+      maximumOrderQuantity
+      title
+      collections
+      isFeatured
+      slug
+      storeId
+      price
+      isAtcEnabled
+      benefits
+      sku
+      position
+      listingPrice
+      tags
+      inventory
+      blockedInventory
+      continueSellingOutOfStock
+      rating
+      totalRatings
+      thumbImages
+      isInventoryEnabled
+      totalOrders
+      variantGroups {
+        variantGroupId
+        variantGroupOptionIds
+      }
+      variants {
+        items {
+          id
+          minimumOrderQuantity
+          maximumOrderQuantity
+          title
+          price
+          position
+          listingPrice
+          productVariantOptionIds {
+            variantGroupId
+            variantGroupOptionId
+          }
+          images {
+            items {
+              id
+              position
+              alt
+              width
+              height
+              imageKey
+              isThumb
+            }
+          }
+          inventory
+          blockedInventory
+        }
+      }
+      images {
+        items {
+          id
+          position
+          alt
+          width
+          height
+          imageKey
+          isThumb
+        }
+      }
+    }
+    }
+  }`;
+
 export const createReview = /* GraphQL */ `
   mutation CreateReview($input: CreateReviewInput!) {
     createReview(input: $input) {

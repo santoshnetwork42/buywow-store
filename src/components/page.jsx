@@ -30,6 +30,7 @@ import FFReviews from "@/components/blocks/Product/ProductReviews";
 import FFProductCollectionSection from "@/components/blocks/ProductCollectionByTab";
 import FFProductDetailView from "@/components/blocks/ProductDetailView";
 import FFRecentlyViewed from "@/components/blocks/RecentlyViewed";
+import FFQuizPersonalizerQuiz from "@/components/blocks/QuizPersonalizer";
 import FFSingleBanner from "@/components/blocks/SingleBanner";
 import FFTestimonialSection from "@/components/blocks/TestimonialSection";
 import FFTrendingCategories from "@/components/blocks/TrendingCategories";
@@ -191,6 +192,10 @@ const componentMap = {
   ComponentBlocksRecentlyViewed: {
     FF: FFRecentlyViewed,
     Lazy: dynamic(() => import("@/components/blocks/RecentlyViewed")),
+  },
+  ComponentQuizPersonalizedQuiz: {
+    FF: FFQuizPersonalizerQuiz,
+    Lazy: dynamic(() => import("@/components/blocks/QuizPersonalizer")),
   },
 };
 

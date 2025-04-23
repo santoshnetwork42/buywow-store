@@ -29,6 +29,18 @@ export const useModalDispatch = () => {
     [dispatch],
   );
 
+  const handlePersonalizerModalVisibility = useCallback(
+    (isPersonalizerModalOpen = false) => {
+      dispatch({
+        type: modalSagaActions.SET_PERSONALIZER_MODAL,
+        payload: {
+          isPersonalizerModalOpen,
+        },
+      });
+    },
+    [dispatch],
+  );
+
   const handlePasswordLessModal = useCallback(
     (
       isPasswordLessOpen = false,
@@ -53,5 +65,6 @@ export const useModalDispatch = () => {
     handleCartVisibility,
     handlePasswordLessModal,
     handleSpinTheWheelVisibility,
+    handlePersonalizerModalVisibility,
   };
 };

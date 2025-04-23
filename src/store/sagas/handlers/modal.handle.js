@@ -2,6 +2,8 @@ import {
   setCartModal,
   setPasswordLessModal,
   setSpinTheWheelVisible,
+  setPersonalizerModalVisible,
+  setPersonalizerModal,
 } from "@/store/slices/modal.slice";
 import { put } from "redux-saga/effects";
 
@@ -35,6 +37,15 @@ export function* setSpinTheWheelHandler(action) {
   try {
     const { isSpinTheWheelNudgeThere } = action.payload;
     yield put(setSpinTheWheelVisible({ isSpinTheWheelNudgeThere }));
+  } catch (error) {
+    console.error("error", error);
+  }
+}
+
+export function* setPersonalizerModalHandler(action) {
+  try {
+    const { isPersonalizerModalOpen } = action.payload;
+    yield put(setPersonalizerModal({ isPersonalizerModalOpen }));
   } catch (error) {
     console.error("error", error);
   }

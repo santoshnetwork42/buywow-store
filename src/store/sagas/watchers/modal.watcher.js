@@ -1,6 +1,7 @@
 import {
   setCartModalHandler,
   setPasswordLessModalHandler,
+  setPersonalizerModalHandler,
   setSpinTheWheelHandler,
 } from "@/store/sagas/handlers/modal.handle";
 import { modalSagaActions } from "@/store/sagas/sagaActions/modal.actions";
@@ -23,10 +24,18 @@ function* setSpinTheWheel() {
   );
 }
 
+function* setPersonalizerModal() {
+  yield takeLatest(
+    modalSagaActions.SET_PERSONALIZER_MODAL,
+    setPersonalizerModalHandler,
+  );
+}
+
 export function* modalWatcher() {
   yield all([
     fork(setPasswordLessModal),
     fork(setCartModal),
     fork(setSpinTheWheel),
+    fork(setPersonalizerModal),
   ]);
 }

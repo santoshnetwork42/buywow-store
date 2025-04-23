@@ -53,6 +53,9 @@ const ClientSideEffects = () => {
   const isSpinTheWheelNudgeThere = useSelector(
     (state) => state.modal.modal.spinTheWheel.isSpinTheWheelNudgeThere,
   );
+  const isPersonalizerModalOpen = useSelector(
+    (state) => state.modal?.modal?.personalizer?.isPersonalizerModalOpen,
+  );
 
   const pathname = usePathname();
   const sessionId = sessionStorage?.getItem(`${STORE_PREFIX}_session_id`);
@@ -342,12 +345,17 @@ const ClientSideEffects = () => {
   return (
     <>
       {isBalloonAnimationAllowed && <BirthdayCelebration />}
-      {!isCartOpen && isSpinTheWheelAllowed && !isSpinTheWheelNudgeThere && (
-        <SpinTheWheel spinTheWheelConfig={spinTheWheelConfig} />
-      )}
+      {!isCartOpen &&
+        isSpinTheWheelAllowed &&
+        !isSpinTheWheelNudgeThere &&
+        !isPersonalizerModalOpen && (
+          <SpinTheWheel spinTheWheelConfig={spinTheWheelConfig} />
+        )}
       <FomoToaster
         livePurchaseFeedProducts={livePurchaseFeedProducts}
-        isCartOpen={isCartOpen}
+        isFomoDisabled={
+          isCartOpen || isPersonalizerModalOpen || isSpinTheWheelNudgeThere
+        }
       />
     </>
   );

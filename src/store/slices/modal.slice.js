@@ -1,3 +1,4 @@
+import Personalizer from "@/components/blocks/QuizPersonalizer";
 import { createSlice } from "@reduxjs/toolkit";
 
 export const initialState = {
@@ -10,6 +11,7 @@ export const initialState = {
     },
     cart: { isCartOpen: false },
     spinTheWheel: { isSpinTheWheelNudgeThere: false },
+    personalizer: { isPersonalizerModalOpen: false },
     imageZoom: {
       isOpen: false,
       imageKey: null,
@@ -32,6 +34,9 @@ export const modalSlice = createSlice({
     setSpinTheWheelVisible: (state, action) => {
       state.modal.spinTheWheel = action.payload;
     },
+    setPersonalizerModal: (state, action) => {
+      state.modal.personalizer = action.payload;
+    },
     setCartModal: (state, action) => {
       state.modal.cart = action.payload;
     },
@@ -46,6 +51,7 @@ export const {
   setPasswordLessModal,
   setCartModal,
   setSpinTheWheelVisible,
+  setPersonalizerModal,
   setImageZoomModal,
 } = modalSlice.actions;
 

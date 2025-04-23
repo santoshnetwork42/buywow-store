@@ -18,6 +18,7 @@ import {
   getWebPageBySlug,
   getPageMetadataBySlug,
   getProductById,
+  byslugProduct,
   getShoppingCart,
   getRedirects,
   getReviews,
@@ -318,6 +319,29 @@ export const fetchProductDetailsAPI = async (id) => {
 
     const data = "data" in response ? response.data : response;
     return data?.getProduct;
+  } catch (error) {
+    errorHandler(error, "Fetch Product Details API");
+    return null;
+  }
+};
+
+export const fetchProductDetailsBySlugAPI = async (slug) => {
+  try {
+    const response = await client.graphql({
+      query: byslugProduct,
+      variables: {
+        slug,
+      },
+      authMode: "apiKey",
+    });
+
+    const data = "data" in response ? response.data : response;
+
+    const storeProduct = (data?.byslugProduct?.items || []).find(
+      (i) => i.storeId === STORE_ID,
+    );
+
+    return storeProduct;
   } catch (error) {
     errorHandler(error, "Fetch Product Details API");
     return null;

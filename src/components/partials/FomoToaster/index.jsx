@@ -141,7 +141,7 @@ const Toast = ({
 const FomoToaster = ({
   livePurchaseFeedProducts: products,
   interval = 15000,
-  isCartOpen,
+  isFomoDisabled,
 }) => {
   const pathname = usePathname();
 
@@ -181,9 +181,10 @@ const FomoToaster = ({
     setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
   };
 
-  if (!isSocialProofToShow || !products?.length || isCartOpen) {
+  if (!isSocialProofToShow || !products?.length || isFomoDisabled) {
     return <></>;
   }
+
   return (
     <>
       {toasts.map((toast) => (
