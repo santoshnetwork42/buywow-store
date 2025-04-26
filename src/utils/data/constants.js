@@ -1,6 +1,6 @@
 import { STORE_PREFIX } from "@/config";
 
-export const RESTRICT_FOOTER_TO_SHOW = ["/checkout"];
+export const RESTRICT_FOOTER_TO_SHOW = ["/checkout", "/pages/app-exclusive"];
 export const RESTRICT_SEARCH_AND_CART_TO_SHOW = ["/checkout"];
 export const PREPAID_ENABLED = "PREPAID_ENABLED";
 export const GOKWIK_ENABLED = "GOKWIK_ENABLED";

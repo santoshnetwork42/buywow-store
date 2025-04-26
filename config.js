@@ -45,3 +45,4 @@ export const GOOGLE_VERIFICATION_TAG =
   process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION_TAG;
 export const STORE_ENV = process.env.NEXT_PUBLIC_STORE_ENV;
 export const KWIKPASS_SCRIPT = process.env.NEXT_PUBLIC_KWIKPASS_SCRIPT;
+export const ONE_LINK_URL = process.env.NEXT_PUBLIC_ONE_LINK_URL;

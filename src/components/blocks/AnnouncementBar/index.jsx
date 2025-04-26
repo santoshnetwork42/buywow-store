@@ -64,7 +64,9 @@ const AnnouncementContent = ({ announcement, announcementBarClickedEvent }) => {
 
 const AnnouncementBar = ({ data, announcementData }) => {
   const pathname = usePathname();
-  const showAnnouncementBar = pathname?.includes("blog");
+  const showAnnouncementBar = !(
+    pathname?.includes("blog") || pathname?.includes("app-exclusive")
+  );
   const {
     globalAnnouncement,
     pageAnnouncements,
@@ -101,7 +103,7 @@ const AnnouncementBar = ({ data, announcementData }) => {
     return null;
   }
 
-  return showAnnouncementBar ? (
+  return !showAnnouncementBar ? (
     <></>
   ) : (
     <Link

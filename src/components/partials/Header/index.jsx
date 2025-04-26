@@ -108,7 +108,9 @@ const MenuItem = React.memo(({ item, index, showInWeb }) => {
 const Header = ({ data }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const showHeader = !pathname?.includes("blog");
+  const showHeader = !(
+    pathname?.includes("blog") || pathname?.includes("app-exclusive")
+  );
   const isInteractive = useIsInteractive();
 
   const user = useSelector((state) => state.user?.user);

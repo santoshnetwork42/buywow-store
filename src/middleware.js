@@ -19,6 +19,18 @@ export const config = {
 const THRESHOLD = 0.5; // initial threshold for the new variant (100%)
 
 export function middleware(req) {
+  const { searchParams } = req.nextUrl;
+  const campaign = searchParams.get("campaign");
+
+  if (campaign === "app_exclusive") {
+    const fullOriginalUrl = req.nextUrl.toString();
+
+    const newUrl = new URL("/pages/app-exclusive", req.url);
+    newUrl.searchParams.set("originalUrl", fullOriginalUrl);
+
+    return NextResponse.redirect(newUrl);
+  }
+
   if (
     req.nextUrl.pathname.startsWith("/_next") ||
     req.nextUrl.pathname.startsWith("/static") ||
