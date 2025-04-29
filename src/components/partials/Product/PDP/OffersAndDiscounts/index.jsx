@@ -100,18 +100,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   );
 };
 
-const AllOffers = ({ product, bestCoupon }) => {
-  const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, product);
-
-  //exclude bestCoupon from pdpFeaturedCoupons
-  const filteredPdpFeaturedCoupons = pdpFeaturedCoupons?.filter(
-    (pdpFeaturedCoupon) =>
-      (bestCoupon?.coupon?.couponId || bestCoupon?.coupon?.id) !==
-      pdpFeaturedCoupon?.coupon?.id,
-  );
-
-  if (filteredPdpFeaturedCoupons?.length === 0) return null;
-
+const AllOffers = ({ filteredPdpFeaturedCoupons }) => {
   return (
     <Accordion
       className="my-auto flex h-fit w-full shrink-0 rounded bg-blue-50 px-3"
@@ -180,7 +169,17 @@ const AllOffers = ({ product, bestCoupon }) => {
 };
 
 const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, product }) => {
-  if (!hasInventory) return null;
+  const { pdpFeaturedCoupons = [] } = useFeaturedCoupons(false, product);
+
+  //exclude bestCoupon from pdpFeaturedCoupons
+  const filteredPdpFeaturedCoupons = pdpFeaturedCoupons?.filter(
+    (pdpFeaturedCoupon) =>
+      (bestCoupon?.coupon?.couponId || bestCoupon?.coupon?.id) !==
+      pdpFeaturedCoupon?.coupon?.id,
+  );
+
+  if (!bestCoupon || !hasInventory || filteredPdpFeaturedCoupons?.length === 0)
+    return null;
 
   return (
     <div className="mt-4 flex flex-col gap-2 sm:gap-2.5 lg:gap-3">
@@ -191,7 +190,7 @@ const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, product }) => {
           hasInventory={hasInventory}
         />
       )}
-      <AllOffers product={product} bestCoupon={bestCoupon} />
+      <AllOffers filteredPdpFeaturedCoupons={filteredPdpFeaturedCoupons} />
     </div>
   );
 };

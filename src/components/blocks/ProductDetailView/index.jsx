@@ -115,6 +115,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
     currentInventory,
     totalOrders,
     images,
+    minimumOrderQuantity,
   } = packageProduct || {};
 
   const imageList = images?.items
@@ -181,6 +182,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           totalOrders={totalOrders}
           hasInventory={hasInventory}
           currentInventory={currentInventory}
+          minimumOrderQuantity={minimumOrderQuantity}
         />
         {!marketPlaceLinks?.length && (
           <OffersAndDiscounts

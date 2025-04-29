@@ -10,6 +10,7 @@ const PriceSection = React.memo(
     totalOrders,
     hasInventory,
     currentInventory,
+    minimumOrderQuantity,
   }) => {
     const discountPercentage = getDiscountPercentage(price, listingPrice);
 
@@ -73,6 +74,13 @@ const PriceSection = React.memo(
               responsive
             >
               Last {currentInventory} units left
+            </Text>
+          )}
+        </div>
+        <div className="mt-1 flex items-center md:mt-2">
+          {!!(minimumOrderQuantity > 1) && (
+            <Text as="p" size="sm" className="font-medium">
+              {`Minimum Order Quantity : ${minimumOrderQuantity}`}
             </Text>
           )}
         </div>

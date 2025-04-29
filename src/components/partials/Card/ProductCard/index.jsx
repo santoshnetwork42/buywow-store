@@ -28,7 +28,7 @@ const BenefitTag = memo(({ bgColor, tag }) => {
     </Text>
   );
 });
- 
+
 const RatingDisplay = memo(({ rating, totalRatings }) => {
   if (!(totalRatings > 0)) return null;
   return (
@@ -48,6 +48,17 @@ const RatingDisplay = memo(({ rating, totalRatings }) => {
         ({formatTotalRatings(totalRatings)}) reviews
       </Text>
     </div>
+  );
+});
+
+const MoqDisplay = memo(({ minimumOrderQuantity }) => {
+  if (!(minimumOrderQuantity > 1)) {
+    return null;
+  }
+  return (
+    <Text as="span" size="sm" className="h-4 font-light capitalize" responsive>
+      {`Minimum Order Quantity : ${minimumOrderQuantity}`}
+    </Text>
   );
 });
 
@@ -98,6 +109,7 @@ const ProductCard = memo(
       totalRatings,
       benefits,
       thumbImage,
+      minimumOrderQuantity,
     } = packageProduct || {};
 
     useEffect(() => {
@@ -214,6 +226,7 @@ const ProductCard = memo(
             )}
           </div>
           <div className="flex flex-col gap-2">
+            <MoqDisplay minimumOrderQuantity={minimumOrderQuantity} />
             <RatingDisplay rating={rating} totalRatings={totalRatings} />
             <div className="flex items-center justify-between gap-1">
               <PriceDisplay price={price} listingPrice={listingPrice} />
@@ -235,6 +248,7 @@ const ProductCard = memo(
 );
 
 RatingDisplay.displayName = "RatingDisplay";
+MoqDisplay.displayName = "MoqDisplay";
 PriceDisplay.displayName = "PriceDisplay";
 BenefitTag.displayName = "BenefitTag";
 ProductCard.displayName = "ProductCard";
