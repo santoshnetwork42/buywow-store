@@ -39,5 +39,4 @@ const awsmobile = {
   aws_user_files_s3_bucket: "wow-prod-media-bucket",
   aws_user_files_s3_bucket_region: "ap-south-1",
 };
-
 export default awsmobile;
