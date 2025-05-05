@@ -101,8 +101,8 @@ const ProductCard = memo(
     section,
   }) => {
     const shouldNotToRedirect =
-      !!NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS.find((slug) =>
-        slug.includes(collectionSlug),
+      !!NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS.find(
+        (slug) => slug === collectionSlug,
       );
 
     const [selectedVariant] = useProductVariantGroups(fetchedProduct);
