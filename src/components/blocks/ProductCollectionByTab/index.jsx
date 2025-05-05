@@ -330,6 +330,7 @@ const ProductCollectionByTab = ({
       return [
         ...currentProductsOosLast.map((product, productIndex) => (
           <ProductCard
+            collectionSlug={slug}
             className="h-auto bg-white-a700_01"
             key={`product-${productIndex}`}
             parentPromotionTag={

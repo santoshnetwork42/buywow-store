@@ -51,7 +51,21 @@ export const PDP_BLOCK_PROMOTION_TAG_TO_IGNORE = [
   "rosemary-biotin-hair-growth-shampoo-lp-2",
   "onion-hair-fall-control-and-repair-trio",
 ];
-
+export const NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS = [
+  "buy-3-599",
+  "buy-4-699",
+  "buy-6-899",
+  "buy-8-1000",
+  "affiliate-buy-8",
+  "gpay",
+  "gpay-699",
+  "buy-8-1199",
+  "bundle-skin-hair-care",
+  "bundle-deal",
+  "gpay",
+  "cred-reward",
+  "affiliate-buy-8",
+];
 export const STORAGE_KEY = STORE_PREFIX + "_" + "wheel_claimed_percentage";
 export const WHEEL_HAS_VISITED_BEFORE_KEY =
   STORE_PREFIX + "_" + "hasVisitedBefore";

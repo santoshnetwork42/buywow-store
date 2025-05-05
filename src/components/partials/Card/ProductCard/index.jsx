@@ -3,6 +3,7 @@
 import AddToCart from "@/components/common/AddToCart";
 import { Heading, Img, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
+import { NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS } from "@/utils/data/constants";
 import {
   extractAttributes,
   formatTotalRatings,
@@ -84,6 +85,7 @@ const PriceDisplay = memo(({ price, listingPrice }) => {
 
 const ProductCard = memo(
   ({
+    collectionSlug,
     imageBgColor,
     productBenefitTags,
     promotionTag,
@@ -98,6 +100,11 @@ const ProductCard = memo(
     priority,
     section,
   }) => {
+    const shouldNotToRedirect =
+      !!NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS.find((slug) =>
+        slug.includes(collectionSlug),
+      );
+
     const [selectedVariant] = useProductVariantGroups(fetchedProduct);
     const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
 
@@ -128,6 +135,125 @@ const ProductCard = memo(
     const { url } = extractAttributes(image);
 
     if (!fetchedProduct?.id || !packageProduct) return null;
+
+    if (shouldNotToRedirect) {
+      return (
+        <div
+          className={twMerge(
+            `flex h-full flex-col justify-start gap-2 self-stretch rounded-lg p-[5px] shadow-xs md:gap-3 md:p-2`,
+            className,
+          )}
+        >
+          <div
+            className="relative overflow-hidden rounded-lg"
+            style={{ backgroundColor: imageBgColor || "#F7F7E7" }}
+          >
+            <ProductThumbnail
+              width={400}
+              height={550}
+              url={url}
+              imageKey={thumbImage?.imageKey}
+              className="aspect-[1/1] w-full object-contain"
+              alt={title || "Product image"}
+              priority={priority}
+            />
+
+            {!!parentPromotionTag?.data
+              ? (() => {
+                  const { tag, bgColor } =
+                    extractAttributes(parentPromotionTag);
+                  return (
+                    <Text
+                      as="span"
+                      size="sm"
+                      className={`absolute left-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize text-white-a700 md:left-2.5 md:top-2.5 md:px-3 ${!!offerTag?.showOfferTag && discountPercentage > 0 && "max-w-[50%]"}`}
+                      responsive
+                      style={{ backgroundColor: bgColor || "#DD8434" }}
+                    >
+                      {tag}
+                    </Text>
+                  );
+                })()
+              : !!promotionTag?.data &&
+                (() => {
+                  const { tag, bgColor } = extractAttributes(promotionTag);
+                  return (
+                    <Text
+                      as="span"
+                      size="sm"
+                      className={`absolute left-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize text-white-a700 md:left-2.5 md:top-2.5 md:px-3 ${!!offerTag?.showOfferTag && discountPercentage > 0 && "max-w-[50%]"}`}
+                      responsive
+                      style={{ backgroundColor: bgColor || "#DD8434" }}
+                    >
+                      {tag}
+                    </Text>
+                  );
+                })()}
+            {!!offerTag?.showOfferTag && discountPercentage > 0 && (
+              <Text
+                as="span"
+                size="sm"
+                className="absolute right-1.5 top-1.5 z-10 rounded px-2 py-1 capitalize md:right-2.5 md:top-2.5 md:px-3"
+                responsive
+                style={{ backgroundColor: "#ECCA31" }}
+              >
+                {discountPercentage}% OFF
+              </Text>
+            )}
+          </div>
+
+          {!!showBenefitTags && productBenefitTags?.data?.length > 0 && (
+            <div className="flex max-h-12 flex-wrap gap-[4px] overflow-hidden md:max-h-[52px]">
+              {productBenefitTags?.data
+                ?.slice(0, 2)
+                .map((benefitTag, index) => (
+                  <BenefitTag key={index} {...benefitTag.attributes} />
+                ))}
+            </div>
+          )}
+
+          <div className="flex flex-1 flex-col gap-2">
+            <div className="flex flex-1 flex-col gap-1">
+              <Text
+                className="line-clamp-3 w-full font-semibold capitalize !leading-tight"
+                size="xl"
+                as="p"
+                responsive
+                title={title}
+              >
+                {title}
+              </Text>
+              {!!benefits?.length && (
+                <Text
+                  as="p"
+                  size="sm"
+                  className="line-clamp-3 w-full font-light"
+                  responsive
+                >
+                  {benefits.join(" | ")}
+                </Text>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <MoqDisplay minimumOrderQuantity={minimumOrderQuantity} />
+              <RatingDisplay rating={rating} totalRatings={totalRatings} />
+              <div className="flex items-center justify-between gap-1">
+                <PriceDisplay price={price} listingPrice={listingPrice} />
+                <AddToCart
+                  product={packageProduct}
+                  selectedVariant={selectedVariant}
+                  buttonText="Add"
+                  buttonSize="medium"
+                  quantityClassName=" h-8 w-[4.5rem]"
+                  buttonClassName="text-base rounded-md min-w-[4.5rem] h-8 sm:h-auto"
+                  section={section}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <Link
