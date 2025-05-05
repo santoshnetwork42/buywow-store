@@ -201,12 +201,12 @@ const componentMap = {
 
 const renderBlock = ({ block, pageType, slug, index, marketPlaceLinks }) => {
   const {
-    showComponent,
-    showImageComponent = false,
+    showComponentInWeb,
+    showImageComponentInWeb = false,
     __typename,
     id,
   } = block || {};
-  if (!showComponent && !showImageComponent) return null;
+  if (!showComponentInWeb && !showImageComponentInWeb) return null;
 
   const ComponentInfo = componentMap[__typename];
   if (!ComponentInfo) return null;

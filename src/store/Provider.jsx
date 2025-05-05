@@ -22,7 +22,7 @@ const LoadingState = ({ data, pathname }) => {
         />
         {headerData?.data && <Header data={headerData} />}
         {pathname === "/" &&
-          categories?.showComponent &&
+          categories?.showComponentInWeb &&
           !!categories?.trendingCategoryItems?.length && (
             <div className="no-scrollbar w-full overflow-x-scroll lg:hidden">
               <div className="mx-auto flex w-max animate-pulse items-start justify-center p-3 py-4">
@@ -40,7 +40,7 @@ const LoadingState = ({ data, pathname }) => {
               </div>
             </div>
           )}
-        {carouselData?.showComponent && (
+        {carouselData?.showComponentInWeb && (
           <Carousel
             carousalItems={carouselData?.carousalItems}
             isPersistLoading

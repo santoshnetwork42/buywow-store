@@ -29,11 +29,11 @@ const ImageItem = ({ link, image, index }) => {
 };
 
 const ImageSection = ({ className, ...props }) => {
-  const { title, imageItems, showImageComponent, button } = props;
+  const { title, imageItems, showImageComponentInWeb, button } = props;
 
   const { link, text: buttonText } = button || {};
 
-  if (!showImageComponent) {
+  if (!showImageComponentInWeb) {
     return null;
   }
 

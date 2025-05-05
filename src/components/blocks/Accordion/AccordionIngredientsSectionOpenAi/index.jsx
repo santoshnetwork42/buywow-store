@@ -13,7 +13,7 @@ const AccordionIngredientsSectionOpenAi = ({
   accordionIngredientsOpenAITitle: title,
   accordionIngredientsOpenAIImage: image,
   ingredientList = "",
-  accordionIngredientsOpenAIShowComponent: showComponent,
+  accordionIngredientsOpenAIshowComponentInWeb: showComponentInWeb,
   mains,
 }) => {
   const pathname = usePathname();
@@ -81,7 +81,7 @@ const AccordionIngredientsSectionOpenAi = ({
   };
   const clearActiveIngredient = () => setActiveIngredient(null);
 
-  if (!title || !showComponent) {
+  if (!title || !showComponentInWeb) {
     return null;
   }
 

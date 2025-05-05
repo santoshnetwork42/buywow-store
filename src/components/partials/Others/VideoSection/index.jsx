@@ -863,7 +863,7 @@ const VideoCarousel = ({ videoItems, setCurrentSelectedVideo }) => {
 };
 
 const VideoSection = ({ className, ...props }) => {
-  const { title, videoItems, showComponent, videoSectionBgColor, button } =
+  const { title, videoItems, showComponentInWeb, videoSectionBgColor, button } =
     props;
   const { link, text: buttonText } = button || {};
 
@@ -871,7 +871,7 @@ const VideoSection = ({ className, ...props }) => {
   const [currentSelectedVideo, setCurrentSelectedVideo] = useState(null);
   const [muted, setMuted] = useState(true);
 
-  if (!showComponent) {
+  if (!showComponentInWeb) {
     return null;
   }
 

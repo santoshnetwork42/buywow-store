@@ -91,7 +91,7 @@ const ProductDetailViewBlocks = ({ blocks }) => {
   return (
     <div className="flex flex-col gap-5">
       {otherBlocks
-        ?.filter((block) => !!block?.showComponent)
+        ?.filter((block) => !!block?.showComponentInWeb)
         ?.map((block, index) => {
           switch (block.__typename) {
             case "ComponentBlocksUpsellProducts":
