@@ -214,7 +214,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       await action();
     }
 
-    if (redirectTo) {
+    if (redirectTo && !!user?.id) {
       router.push(redirectTo);
     }
   };

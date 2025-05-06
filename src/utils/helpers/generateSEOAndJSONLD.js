@@ -257,7 +257,6 @@ export function generateSEOAndJSONLD(params) {
     title: seoComponent?.seoTitle,
     description: removeHtmlTags(seoComponent?.seoDescription),
     metaTitle: seoComponent?.seoMetaTitle,
-    noIndex: seoComponent?.noIndex,
     content: collectionInfoSection?.information || "",
     faqsPageJsonLd,
     breadcrumbListJsonLd,
@@ -266,6 +265,14 @@ export function generateSEOAndJSONLD(params) {
       canonical:
         seoComponent?.seoCanonical ||
         `${webUrl}/${isProduct ? "products" : "collections"}/${extractedSlug}`,
+    },
+    robots: {
+      index: seoComponent?.noIndex,
+      follow: seoComponent?.noIndex,
+      googleBot: {
+        index: seoComponent?.noIndex,
+        follow: seoComponent?.noIndex,
+      },
     },
     openGraph: {
       title: seoComponent?.seoTitle,
