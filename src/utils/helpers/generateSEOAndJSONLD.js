@@ -267,11 +267,11 @@ export function generateSEOAndJSONLD(params) {
         `${webUrl}/${isProduct ? "products" : "collections"}/${extractedSlug}`,
     },
     robots: {
-      index: seoComponent?.noIndex,
-      follow: seoComponent?.noIndex,
+      index: !seoComponent?.noIndex,
+      follow: !seoComponent?.noIndex,
       googleBot: {
-        index: seoComponent?.noIndex,
-        follow: seoComponent?.noIndex,
+        index: !seoComponent?.noIndex,
+        follow: !seoComponent?.noIndex,
       },
     },
     openGraph: {
