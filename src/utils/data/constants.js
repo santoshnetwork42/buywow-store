@@ -65,6 +65,7 @@ export const NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS = [
   "gpay",
   "cred-reward",
   "affiliate-buy-8",
+  "face-wash-bundle",
 ];
 export const STORAGE_KEY = STORE_PREFIX + "_" + "wheel_claimed_percentage";
 export const WHEEL_HAS_VISITED_BEFORE_KEY =

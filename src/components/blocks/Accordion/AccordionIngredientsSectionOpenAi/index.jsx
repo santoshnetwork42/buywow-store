@@ -13,7 +13,7 @@ const AccordionIngredientsSectionOpenAi = ({
   accordionIngredientsOpenAITitle: title,
   accordionIngredientsOpenAIImage: image,
   ingredientList = "",
-  accordionIngredientsOpenAIshowComponentInWeb: showComponentInWeb,
+  accordionIngredientsOpenAIShowComponentInWeb: showComponentInWeb,
   mains,
 }) => {
   const pathname = usePathname();
