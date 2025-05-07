@@ -32,6 +32,7 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
   const confirmationStatus = useSelector(
     (state) => state.auth?.confirmationStatus,
   );
+  const [redirect, setRedirect] = useState(false);
   const loading = useSelector((state) => state.auth?.loading);
   const error = useSelector((state) => state.auth?.error);
   const user = useSelector((state) => state.user?.user);
@@ -90,6 +91,14 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       setTimeout(() => phoneInputRef.current?.focus(), 0);
     }
   }, [isPasswordLessOpen]);
+
+  useEffect(() => {
+    const { shouldRedirect, redirectTo } = redirect;
+    if (!!redirectTo && !!user?.id && shouldRedirect) {
+      setRedirect({ shouldRedirect: false, redirectTo: "" });
+      router.push(redirectTo);
+    }
+  }, [user?.id]);
 
   useEffect(() => {
     if (confirmationStatus && confirmationStatus !== "SIGNUP") {
@@ -214,9 +223,8 @@ const PasswordLess = ({ enableOutsideClick = true }) => {
       await action();
     }
 
-    if (redirectTo && !!user?.id) {
-      router.push(redirectTo);
-    }
+    if (!!redirectTo)
+      setRedirect({ shouldRedirect: true, redirectTo: redirectTo });
   };
 
   const handleOTPChange = useCallback((element, index) => {

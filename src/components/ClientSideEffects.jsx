@@ -351,12 +351,12 @@ const ClientSideEffects = () => {
         !isPersonalizerModalOpen && (
           <SpinTheWheel spinTheWheelConfig={spinTheWheelConfig} />
         )}
-      <FomoToaster
+      {/* <FomoToaster
         livePurchaseFeedProducts={livePurchaseFeedProducts}
         isFomoDisabled={
           isCartOpen || isPersonalizerModalOpen || isSpinTheWheelNudgeThere
         }
-      />
+      /> */}
     </>
   );
 };
