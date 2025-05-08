@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { VERCEL_CHECKOUT_AB_FLAG } from "@/config";
+import { getRedirectsAPI } from "./lib/appSyncAPIs";
 
 export const config = {
   matcher: [
@@ -18,7 +19,7 @@ export const config = {
 
 const THRESHOLD = 0.5; // initial threshold for the new variant (100%)
 
-export function middleware(req) {
+export async function middleware(req) {
   const { searchParams } = req.nextUrl;
   const campaign = searchParams.get("campaign");
 
@@ -40,6 +41,18 @@ export function middleware(req) {
     req.nextUrl.pathname === "/favicon.ico"
   ) {
     return NextResponse.next();
+  } else if (
+    req.nextUrl.pathname.startsWith("/products") ||
+    req.nextUrl.pathname.startsWith("/collections") ||
+    req.nextUrl.pathname.startsWith("/pages") ||
+    req.nextUrl.pathname.startsWith("/policies")
+  ) {
+    const currentUrl = req.nextUrl.pathname;
+    const { redirect: redirectTo } = (await getRedirectsAPI(currentUrl)) || {};
+    if (!!redirectTo)
+      return NextResponse.redirect(new URL(redirectTo, req.url), {
+        status: 301,
+      });
   }
 
   // get the variant from the cookie
