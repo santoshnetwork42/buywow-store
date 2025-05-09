@@ -107,7 +107,7 @@ const Personalizer = ({
         modalContainerClassName="!w-full sm:!w-3/5 "
         titleClassName="pb-5 w-full border-b-[1px]"
       >
-        <div className="max-h-[460px] overflow-y-scroll px-4 pt-6 sm:max-h-[600px] sm:px-2">
+        <div className="max-h-[500px] overflow-y-scroll px-4 pt-6 sm:max-h-[520px] sm:px-2">
           {activeIndex == 0 && (
             <UserProfileForm
               quizConcerns={quizConcerns}

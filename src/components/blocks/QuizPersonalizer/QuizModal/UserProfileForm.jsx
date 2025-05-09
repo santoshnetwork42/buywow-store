@@ -304,8 +304,8 @@ export const UserProfileForm = ({ quizConcerns, onSubmit }) => {
           type="submit"
           className="flex w-full transform items-center justify-center gap-2 rounded-xl bg-yellow-900 py-4 font-semibold text-white-a700 shadow-md transition-colors hover:scale-105 hover:bg-yellow-900/90 active:scale-95"
         >
-          <div className="ml-5">
-            <SparklesIcon className="h-5 w-5" size={24} color="#FFFFFF" />
+          <div className="sm:ml-5">
+            <SparklesIcon className="h-5 w-5" size={20} color="#FFFFFF" />
           </div>
           Get Personalized Recommendations
         </Button>
