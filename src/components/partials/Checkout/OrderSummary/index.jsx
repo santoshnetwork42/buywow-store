@@ -36,7 +36,8 @@ const OrderSummary = ({
       cartList?.map((product, index) => {
         const isFreeProduct =
           product?.cartItemType === "FREE_PRODUCT" ||
-          product?.cartItemType === "AUTO_FREE_PRODUCT";
+          product?.cartItemType === "AUTO_FREE_PRODUCT" ||
+          product?.cartItemSource === "COUPON";
         const isOutOfStock =
           inventoryMapping && product.qty > inventoryMapping[product.recordKey];
 

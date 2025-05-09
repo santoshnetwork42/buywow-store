@@ -46,6 +46,7 @@ export const getInitialData = /* GraphQL */ `
         WEB_SPIN_THE_WHEEL_ENABLED
         SPIN_THE_WHEEL_CONFIG
         COD_BLOCKED_UTM_SOURCES
+        IS_SOCIAL_PROOF_ENABLED
       }
     }
 

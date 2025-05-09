@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import {
   WEB_SPIN_THE_WHEEL_ENABLED,
   SPIN_THE_WHEEL_CONFIG,
+  IS_SOCIAL_PROOF_ENABLED,
 } from "@/utils/data/constants";
 import {
   STORAGE_KEY,
@@ -42,6 +43,8 @@ const ClientSideEffects = () => {
     WEB_SPIN_THE_WHEEL_ENABLED,
     false,
   );
+
+  const isSocialProofEnabled = useConfiguration(IS_SOCIAL_PROOF_ENABLED, false);
 
   const unParsedSpinTheWheelConfig = useConfiguration(
     SPIN_THE_WHEEL_CONFIG,
@@ -351,12 +354,12 @@ const ClientSideEffects = () => {
         !isPersonalizerModalOpen && (
           <SpinTheWheel spinTheWheelConfig={spinTheWheelConfig} />
         )}
-      {/* <FomoToaster
-        livePurchaseFeedProducts={livePurchaseFeedProducts}
-        isFomoDisabled={
-          isCartOpen || isPersonalizerModalOpen || isSpinTheWheelNudgeThere
-        }
-      /> */}
+      {isSocialProofEnabled && (
+        <FomoToaster
+          livePurchaseFeedProducts={livePurchaseFeedProducts}
+          isCartOpen={isCartOpen}
+        />
+      )}
     </>
   );
 };
