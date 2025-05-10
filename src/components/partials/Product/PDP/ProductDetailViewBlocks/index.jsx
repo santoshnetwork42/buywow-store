@@ -95,7 +95,8 @@ const ProductDetailViewBlocks = ({ blocks }) => {
         ?.map((block, index) => {
           switch (block.__typename) {
             case "ComponentBlocksUpsellProducts":
-              return <UpsellProducts key={index} {...block} isInPDP />;
+              return <></>;
+            // return <UpsellProducts key={index} {...block} isInPDP />;
             case "ComponentBlocksFeaturedList":
               return <FeaturedList key={index} {...block} isInPDP />;
             default:
