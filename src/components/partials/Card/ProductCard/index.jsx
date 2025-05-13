@@ -1,6 +1,7 @@
 "use client";
 
 import AddToCart from "@/components/common/AddToCart";
+import LazyVideo from "@/components/common/LazyVideo";
 import { Heading, Img, Text } from "@/components/elements";
 import ProductThumbnail from "@/components/partials/Product/ProductThumbnail";
 import { NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS } from "@/utils/data/constants";
@@ -116,8 +117,11 @@ const ProductCard = memo(
       totalRatings,
       benefits,
       thumbImage,
+      images,
       minimumOrderQuantity,
     } = packageProduct || {};
+
+    const video = (images?.items || []).find((i) => !!i.isVideo);
 
     useEffect(() => {
       if (packageProduct && sendProductDataToParent) {
@@ -136,6 +140,29 @@ const ProductCard = memo(
 
     if (!fetchedProduct?.id || !packageProduct) return null;
 
+    const renderMediaContent = () =>
+      !!video ? (
+        // && (!!collectionSlug ? collectionSlug === "all" : true)
+        <LazyVideo
+          videoKey={video.imageKey}
+          imageKey={thumbImage?.imageKey}
+          thumbnailUrl={url}
+          title={title}
+          height={550}
+          imageBgColor={imageBgColor}
+        />
+      ) : (
+        <ProductThumbnail
+          width={400}
+          height={550}
+          url={url}
+          imageKey={thumbImage?.imageKey}
+          className="aspect-[1/1] w-full object-contain"
+          alt={title || "Product image"}
+          priority={priority}
+        />
+      );
+
     if (shouldNotToRedirect) {
       return (
         <div
@@ -148,16 +175,7 @@ const ProductCard = memo(
             className="relative overflow-hidden rounded-lg"
             style={{ backgroundColor: imageBgColor || "#F7F7E7" }}
           >
-            <ProductThumbnail
-              width={400}
-              height={550}
-              url={url}
-              imageKey={thumbImage?.imageKey}
-              className="aspect-[1/1] w-full object-contain"
-              alt={title || "Product image"}
-              priority={priority}
-            />
-
+            {renderMediaContent()}
             {!!parentPromotionTag?.data
               ? (() => {
                   const { tag, bgColor } =
@@ -268,16 +286,7 @@ const ProductCard = memo(
           className="relative overflow-hidden rounded-lg"
           style={{ backgroundColor: imageBgColor || "#F7F7E7" }}
         >
-          <ProductThumbnail
-            width={400}
-            height={550}
-            url={url}
-            imageKey={thumbImage?.imageKey}
-            className="aspect-[1/1] w-full object-contain"
-            alt={title || "Product image"}
-            priority={priority}
-          />
-
+          {renderMediaContent()}
           {!!parentPromotionTag?.data
             ? (() => {
                 const { tag, bgColor } = extractAttributes(parentPromotionTag);
