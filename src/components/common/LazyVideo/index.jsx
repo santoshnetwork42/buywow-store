@@ -62,7 +62,7 @@ const LazyVideo = ({
       videoRef.current.addEventListener("canplaythrough", onCanPlayThrough);
 
       return () => {
-        videoRef.current.removeEventListener(
+        videoRef?.current?.removeEventListener(
           "canplaythrough",
           onCanPlayThrough,
         );

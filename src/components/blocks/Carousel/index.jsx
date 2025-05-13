@@ -147,10 +147,10 @@ const Carousel = ({
         <VideoHeroBanner
           videoSrc="banner.mp4"
           posterSrc="/images/videoBannerThumbnail.jpg"
-          title="Beauty"
+          title=""
           subtitle="Where Skincare begins"
           ctaText="Learn More"
-          ctaLink="/collections/skin-care"
+          ctaLink="/collections/all"
         />
       </div>
     );
