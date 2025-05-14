@@ -182,7 +182,7 @@ const LazyVideo = ({
         width={width}
         className={`aspect-square w-full ${!isVideoReady || hasError ? "hidden" : ""}`}
         muted
-        autoPlay={false}
+        autoPlay={true}
         loop
         playsInline
         alt={title}
