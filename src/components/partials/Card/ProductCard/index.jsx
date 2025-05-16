@@ -237,9 +237,9 @@ const ProductCard = memo(
                 size="xl"
                 as="p"
                 responsive
-                title={title}
+                title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
               >
-                {title}
+                {`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
               </Text>
               {!!benefits?.length && (
                 <Text
@@ -345,9 +345,9 @@ const ProductCard = memo(
               size="xl"
               as="p"
               responsive
-              title={title}
+              title={`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
             >
-              {title}
+              {`${title}${selectedVariant?.id ? ` - ${selectedVariant?.label}` : ""}`}
             </Text>
             {!!benefits?.length && (
               <Text
