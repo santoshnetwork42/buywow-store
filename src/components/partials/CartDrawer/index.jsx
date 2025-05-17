@@ -151,7 +151,7 @@ const CartDrawer = () => {
       : 0;
 
   const validateAndGoToCheckout = useCallback(async () => {
-    const checkoutABVariant = Cookies.get(VERCEL_CHECKOUT_AB_FLAG);
+    // const checkoutABVariant = Cookies.get(VERCEL_CHECKOUT_AB_FLAG);
 
     if (!isInventoryCheckSuccess) {
       if (!!outOfStockItems?.length) {
@@ -175,10 +175,8 @@ const CartDrawer = () => {
     const cartId =
       localStorage.getItem(`${STORE_PREFIX}-cartId`) || shoppingCartId;
     const isGKCXEnabled = !!(
-      GOKWIK_MID &&
-      cartId &&
-      gokwikEnabled &&
-      checkoutABVariant === "gk_checkout"
+      (GOKWIK_MID && cartId && gokwikEnabled)
+      // && checkoutABVariant === "gk_checkout"
     );
 
     if (isGKCXEnabled) {

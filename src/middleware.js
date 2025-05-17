@@ -57,16 +57,17 @@ export async function middleware(req) {
 
   // get the variant from the cookie
   // if not found, randomly set a variant based on threshold
-  const variant = req.cookies.get(VERCEL_CHECKOUT_AB_FLAG);
-  const url = req.nextUrl.clone();
-  const res = NextResponse.rewrite(url);
+  // const variant = req.cookies.get(VERCEL_CHECKOUT_AB_FLAG);
+  // const url = req.nextUrl.clone();
+  // const res = NextResponse.rewrite(url);
 
   // set the variant in the cookie if not already set
-  if (!variant) {
-    const nextVariant =
-      Math.random() < THRESHOLD ? "gk_checkout" : "bw_checkout";
-    res.cookies.set(VERCEL_CHECKOUT_AB_FLAG, nextVariant);
-  }
+  // if (!variant) {
+  //   const nextVariant =
+  //     Math.random() < THRESHOLD ? "gk_checkout" : "bw_checkout";
+  //   res.cookies.set(VERCEL_CHECKOUT_AB_FLAG, nextVariant);
+  // }
 
-  return res;
+  // return res;
+  return;
 }
