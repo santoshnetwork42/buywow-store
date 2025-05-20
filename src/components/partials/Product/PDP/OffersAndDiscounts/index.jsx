@@ -178,8 +178,7 @@ const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, product }) => {
       pdpFeaturedCoupon?.coupon?.id,
   );
 
-  if (!bestCoupon || !hasInventory || filteredPdpFeaturedCoupons?.length === 0)
-    return null;
+  if (!bestCoupon || !hasInventory) return null;
 
   return (
     <div className="mt-4 flex flex-col gap-2 sm:gap-2.5 lg:gap-3">
@@ -190,7 +189,9 @@ const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, product }) => {
           hasInventory={hasInventory}
         />
       )}
-      <AllOffers filteredPdpFeaturedCoupons={filteredPdpFeaturedCoupons} />
+      {!!filteredPdpFeaturedCoupons?.length && (
+        <AllOffers filteredPdpFeaturedCoupons={filteredPdpFeaturedCoupons} />
+      )}
     </div>
   );
 };
