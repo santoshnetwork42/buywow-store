@@ -80,6 +80,7 @@ const ProductCollectionByTab = ({
   promotion,
   showProductsOnVariantStockOut = true,
   id,
+  showVideoAsThumbnail = false,
 }) => {
   const [sortOption, setSortOption] = useState(
     SORT_OPTIONS.find((option) => option.value === defaultCollectionSorting) ||
@@ -338,6 +339,7 @@ const ProductCollectionByTab = ({
               (storeConfigData?.attributes?.promotion_tag?.data &&
                 storeConfigData?.attributes?.promotion_tag)
             }
+            showVideoAsThumbnail={showVideoAsThumbnail}
             {...product.attributes}
             section={{
               name: title,

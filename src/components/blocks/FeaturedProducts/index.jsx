@@ -16,6 +16,7 @@ const FeaturedProducts = ({
   products: { data: products },
   promotion,
   showProductsOnVariantStockOut = true,
+  showVideoAsThumbnail = false,
 }) => {
   const storeConfig = useStoreConfig();
   const { data: storeConfigData } = storeConfig;
@@ -45,6 +46,7 @@ const FeaturedProducts = ({
                 (storeConfigData?.attributes?.promotion_tag?.data &&
                   storeConfigData?.attributes?.promotion_tag)
               }
+              showVideoAsThumbnail={showVideoAsThumbnail}
               {...product.attributes}
               section={{ name: title, tabValue: title }}
             />

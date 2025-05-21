@@ -9,7 +9,6 @@ import useEmblaCarousel from "embla-carousel-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import VideoHeroBanner from "./VideoHeroBanner";
 
 const CarouselImage = React.memo(
   ({ webImage, mWebImage, link, index, moeText, isPersistLoading }) => {
@@ -83,7 +82,6 @@ const Carousel = ({
   stopOnInteraction = false,
   carousalItems: banners,
   isPersistLoading = false,
-  isVideoBanner = true,
 }) => {
   const pathname = usePathname();
   const isInteractive = useIsInteractive();
@@ -140,21 +138,6 @@ const Carousel = ({
   );
 
   if (!banners?.length || (isPersistLoading && pathname !== "/")) return null;
-
-  if (isVideoBanner) {
-    return (
-      <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">
-        <VideoHeroBanner
-          videoSrc="banner.mp4"
-          posterSrc="/images/videoBannerThumbnail.jpg"
-          title=""
-          subtitle="Where Skincare begins"
-          ctaText="Learn More"
-          ctaLink="/collections/all"
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="relative mb-5 w-full sm:mb-6 md:mb-7 lg:mb-8">

@@ -100,6 +100,7 @@ const ProductCard = memo(
     sendProductDataToParent,
     priority,
     section,
+    showVideoAsThumbnail,
   }) => {
     const shouldNotToRedirect =
       !!NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS.find(
@@ -141,7 +142,7 @@ const ProductCard = memo(
     if (!fetchedProduct?.id || !packageProduct) return null;
 
     const renderMediaContent = () =>
-      !!video ? (
+      !!video && !!showVideoAsThumbnail ? (
         // && (!!collectionSlug ? collectionSlug === "all" : true)
         <LazyVideo
           videoKey={video.imageKey}

@@ -37,6 +37,7 @@ import FFTrendingCategories from "@/components/blocks/TrendingCategories";
 import FFUpsellProducts from "@/components/blocks/UpsellProducts";
 import FFVideoSection from "@/components/partials/Others/VideoSection";
 import FFImageSection from "@/components/partials/Others/ImageSection";
+import FFVideoHeroBanner from "@/components/blocks/Carousel/VideoHeroBanner";
 
 const PAGETYPE = {
   HOME: "home",
@@ -58,6 +59,10 @@ const componentMap = {
   ComponentBannerCarousal: {
     FF: FFCarousal,
     Lazy: dynamic(() => import("@/components/blocks/Carousel")),
+  },
+  ComponentBannerVideoBanner: {
+    FF: FFVideoHeroBanner,
+    Lazy: dynamic(() => import("@/components/blocks/Carousel/VideoHeroBanner")),
   },
   ComponentBannerSingleBanner: {
     FF: FFSingleBanner,

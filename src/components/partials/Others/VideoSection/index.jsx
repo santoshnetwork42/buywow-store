@@ -876,7 +876,7 @@ const VideoSection = ({ className, ...props }) => {
   }
 
   return (
-    <div {...props} className={className}>
+    <div className={className}>
       <div className="mb-6 flex w-full flex-col gap-5 py-2 md:gap-6">
         <div className="flex flex-col items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4">
           <SectionHeading title={title} className="mb-3 lg:mb-2" />

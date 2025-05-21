@@ -38,7 +38,7 @@ const ImageSection = ({ className, ...props }) => {
   }
 
   return (
-    <div {...props} className={twMerge(className, "container-main")}>
+    <div className={twMerge(className, "container-main")}>
       <div className="mb-6 flex w-full flex-col gap-5 py-2 md:gap-6">
         <div className="flex flex-col items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4">
           <SectionHeading title={title} className="sm:mb-1 lg:mb-2" />

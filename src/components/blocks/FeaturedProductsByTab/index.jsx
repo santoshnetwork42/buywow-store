@@ -20,6 +20,7 @@ const FeaturedProductsByTab = ({
   promotion,
   lazyBlock,
   showProductsOnVariantStockOut = true,
+  showVideoAsThumbnail = false,
 }) => {
   const pathname = usePathname();
   const storeConfig = useStoreConfig();
@@ -61,6 +62,7 @@ const FeaturedProductsByTab = ({
                 storeConfigData?.attributes?.promotion_tag)
             }
             priority={!lazyBlock && !tabIndex && productIndex < 4}
+            showVideoAsThumbnail={showVideoAsThumbnail}
             {...product?.attributes}
             section={{
               name: title,
