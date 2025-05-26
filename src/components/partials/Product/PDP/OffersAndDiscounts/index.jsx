@@ -14,8 +14,16 @@ const CouponAndOffer = dynamic(() => import("@/src/assets/svg/couponAndOffer"));
 
 const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
   const freeProduct = useFreebie();
-  const { coupon, discount } = bestCoupon || {};
+  const { coupon, discount: couponDiscount } = bestCoupon || {};
   const isProductCoupon = coupon?.couponType === "PRODUCT";
+
+  const totalFreeProductsPrice = coupon?.getYStoreProducts
+    ?.filter(Boolean)
+    ?.reduce((acc, item) => acc + (getProductPrice(item)?.price || 0), 0);
+
+  const discount = isProductCoupon
+    ? couponDiscount
+    : Math.max(0, couponDiscount - totalFreeProductsPrice);
 
   if (!bestCoupon || !hasInventory) return null;
 
@@ -25,10 +33,6 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
       ? `${titles.slice(0, -1).join(", ")} and ${titles.at(-1)}`
       : titles[0]
     : "";
-
-  const totalFreeProductsPrice = coupon?.getYStoreProducts
-    ?.filter(Boolean)
-    ?.reduce((acc, item) => acc + (getProductPrice(item)?.price || 0), 0);
 
   const finalPrice = price - discount >= 0 ? price - discount : price;
 
@@ -70,6 +74,11 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
             <Text as="span" size="sm" responsive>
               {coupon?.code}
             </Text>
+            {/* {!!titles?.length && (
+              <Text as="span" size="sm" responsive>
+                {`& Get ${titles.length} Free Gifts!`}
+              </Text>
+            )} */}
             <Text
               as="span"
               size="sm"
