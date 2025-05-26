@@ -1,6 +1,7 @@
 import { Text } from "@/components/elements";
 import { getDiscountPercentage, toDecimal } from "@/utils/helpers";
 import React from "react";
+import { twMerge } from "tailwind-merge";
 
 const PriceSection = React.memo(
   ({
@@ -11,12 +12,18 @@ const PriceSection = React.memo(
     hasInventory,
     currentInventory,
     minimumOrderQuantity,
+    theme,
   }) => {
     const discountPercentage = getDiscountPercentage(price, listingPrice);
 
     return (
       <>
-        <div className="mt-2 flex items-center justify-between gap-2 sm:gap-3 md:justify-normal md:gap-4 lg:gap-5">
+        <div
+          className={twMerge(
+            `mt-2 flex items-center justify-between gap-2 sm:gap-3 md:justify-normal md:gap-4 lg:gap-5`,
+            theme === "WHATSAPP_ORDER" ? "sm:hidden" : "",
+          )}
+        >
           <div className="flex items-center gap-2">
             <Text as="p" size="xl" className="font-semibold md:text-[22px]">
               ₹{toDecimal(price)}
@@ -55,7 +62,12 @@ const PriceSection = React.memo(
             MRP incl. of all taxes
           </Text>
         </div>
-        <div className="mt-2 flex items-center gap-3 md:mt-3">
+        <div
+          className={twMerge(
+            "mt-2 flex items-center gap-3 md:mt-3",
+            theme === "WHATSAPP_ORDER" ? "sm:hidden" : "",
+          )}
+        >
           {!!(totalOrders > 0) && (
             <Text
               as="p"
@@ -77,7 +89,12 @@ const PriceSection = React.memo(
             </Text>
           )}
         </div>
-        <div className="mt-1 flex items-center md:mt-2">
+        <div
+          className={twMerge(
+            "mt-1 flex items-center md:mt-2",
+            theme === "WHATSAPP_ORDER" ? "sm:hidden" : "",
+          )}
+        >
           {!!(minimumOrderQuantity > 1) && (
             <Text as="p" size="sm" className="font-medium">
               {`Minimum Order Quantity : ${minimumOrderQuantity}`}

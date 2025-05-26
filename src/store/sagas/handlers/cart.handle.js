@@ -531,6 +531,7 @@ export function* manageCartHandler(action) {
 
     const authMode = userData?.id ? "userPool" : "apiKey";
 
+    localStorage.setItem(`${STORE_PREFIX}-cartId`, null);
     const response = yield call(methodToCall, cartInput, authMode);
 
     const cartId = response?.shoppingCartId || null;

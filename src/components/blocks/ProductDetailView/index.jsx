@@ -3,6 +3,7 @@
 import { Text } from "@/components/elements";
 import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
 import PriceSection from "@/components/partials/Product/PDP/PriceSection";
+import ProductBenefitsWithTickMarks from "@/components/partials/Product/PDP/ProductBenefitsWithTickMarks";
 import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -18,7 +19,7 @@ import {
   useProductVariantGroups,
 } from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 const VariantSelector = dynamic(
   () => import("@/components/partials/Product/PDP/VariantSelector"),
@@ -122,6 +123,11 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
     ? [...images.items].sort((a, b) => a.position - b.position)
     : [];
 
+  const theme =
+    slug === "hydroboost-electrolyte-effervescent-lemon-flavour"
+      ? "WHATSAPP_ORDER"
+      : "";
+
   return (
     <div className="container-main mb-main mt-2 grid w-full grid-cols-1 gap-y-1 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
       <div className="relative flex flex-col gap-2 md:row-span-3">
@@ -175,6 +181,13 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           totalRatings={totalRatings}
           className="hidden md:flex"
         />
+        {theme === "WHATSAPP_ORDER" && (
+          <ProductBenefitsWithTickMarks
+            className="hidden md:flex"
+            totalOrders={totalOrders}
+            hasInventory={hasInventory}
+          />
+        )}
         <PriceSection
           price={price}
           listingPrice={listingPrice}
@@ -183,7 +196,15 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           hasInventory={hasInventory}
           currentInventory={currentInventory}
           minimumOrderQuantity={minimumOrderQuantity}
+          theme={theme}
         />
+        {theme === "WHATSAPP_ORDER" && (
+          <ProductBenefitsWithTickMarks
+            className="flex md:hidden"
+            totalOrders={totalOrders}
+            hasInventory={hasInventory}
+          />
+        )}
         {!marketPlaceLinks?.length && (
           <OffersAndDiscounts
             bestCoupon={bestCoupon}
@@ -195,17 +216,25 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
             }}
           />
         )}
-        <div className="mt-5 flex flex-col">
+
+        <div
+          className={`flex flex-col ${theme === "WHATSAPP_ORDER" ? "mt-2" : "mt-5"}`}
+        >
           {!!variantGroup?.length && (
             <VariantSelector
               variantGroups={variantGroup}
               onVariantChange={onVariantChange}
+              totalOrders={totalOrders}
+              hasInventory={hasInventory}
+              currentInventory={currentInventory}
+              theme={theme}
             />
           )}
           <AddToCartSection
             product={packageProduct}
             selectedVariant={selectedVariant}
             marketPlaceLinks={marketPlaceLinks}
+            theme={theme}
           />
           {!!(productDetailView?.length > 0) && (
             <ProductDetailViewBlocks blocks={productDetailView} />

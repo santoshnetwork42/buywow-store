@@ -1,11 +1,14 @@
 import { ShareNow } from "@/assets/svg/shareNowIcon";
+import WhatsappIcon from "@/assets/svg/whatsappIcon";
 import AddToCart from "@/components/common/AddToCart";
 import { Button, Img, Text } from "@/components/elements";
+import { WA_LINK_URL } from "@/config";
 import {
   extractAttributes,
   getDiscountPercentage,
   toDecimal,
 } from "@/utils/helpers";
+import useWindowDimensions from "@/utils/helpers/getWindowDimension";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import React, {
@@ -16,6 +19,7 @@ import React, {
   useState,
 } from "react";
 import { twMerge } from "tailwind-merge";
+import BuyItNowButton from "@/components/partials/Product/PDP/BuyItNowButton";
 
 const IndiaMapIcon = dynamic(() => import("@/assets/svg/indiaMapIcon"));
 const VehicleIcon = dynamic(() => import("@/assets/svg/vehicleIcon"));
@@ -189,7 +193,7 @@ const DesktopStickyBar = ({
 };
 
 const AddToCartSection = React.memo(
-  ({ product, selectedVariant, marketPlaceLinks }) => {
+  ({ product, selectedVariant, marketPlaceLinks, theme }) => {
     const [isFixed, setIsFixed] = useState(false);
     const sectionRef = useRef(null);
     const borderRef = useRef(null);
@@ -211,6 +215,7 @@ const AddToCartSection = React.memo(
       () => extractAttributes(marketPlaceObject?.image),
       [marketPlaceObject],
     );
+    const { isSmallSize: isMobile } = useWindowDimensions();
 
     const checkVisibility = useCallback(() => {
       if (typeof window === "undefined") return;
@@ -230,19 +235,91 @@ const AddToCartSection = React.memo(
     }, [checkVisibility]);
 
     const renderAddToCartContent = useCallback(
-      () => (
-        <>
-          <AddToCart
-            product={product}
-            selectedVariant={selectedVariant}
-            buttonText="Add To Cart"
-            buttonClassName="w-full py-3 text-xl md:py-4"
-            quantityClassName="flex-1 min-h-full"
-            showGoToCart
-          />
-          <ShippingInfo />
-        </>
-      ),
+      (theme = "", isStickyBar = false) => {
+        if (!theme) {
+          return (
+            <>
+              <AddToCart
+                product={product}
+                selectedVariant={selectedVariant}
+                buttonText="Add To Cart"
+                buttonClassName="w-full py-3 text-xl md:py-4"
+                quantityClassName="flex-1 min-h-full"
+                showGoToCart
+              />
+              <ShippingInfo />
+            </>
+          );
+        } else if (theme === "WHATSAPP_ORDER") {
+          const handleClick = () => {
+            if (typeof window === "undefined") return;
+
+            const productTitle = product?.title || "Product";
+            const variantLabel = selectedVariant?.id
+              ? ` - ${selectedVariant.label}`
+              : "";
+            const title = `${productTitle}${variantLabel}`;
+            const message = `Hi, I'm interested in purchasing this product and would appreciate some assistance:\n${title}\n${window.location.href}`;
+            const encodedMessage = encodeURIComponent(message);
+            const waLink = `${WA_LINK_URL}?text=${encodedMessage}`;
+            window.location.href = waLink;
+          };
+
+          return (
+            <div
+              className={`mt-5 flex flex-col justify-center gap-y-4 ${isStickyBar ? "!mt-0" : ""}`}
+            >
+              <div className={!isStickyBar ? "grid grid-cols-2 gap-x-2" : ""}>
+                <AddToCart
+                  product={product}
+                  selectedVariant={selectedVariant}
+                  buttonText="Add To Cart"
+                  buttonClassName="w-full py-3 text-xl md:py-4"
+                  quantityClassName="flex-1 min-h-full"
+                  isWhatsappOrderButtonVisible={!isStickyBar}
+                  showGoToCart={isStickyBar}
+                />
+                {!isStickyBar && (
+                  <BuyItNowButton
+                    product={product}
+                    selectedVariant={selectedVariant}
+                    hasInventory={hasInventory}
+                  />
+                )}
+              </div>
+              {!isStickyBar && (
+                <>
+                  {/* <Link prefetch={false} href={WA_LINK_URL}> */}
+                  <Button
+                    className={`flex h-fit w-full gap-x-5 bg-[#008E40] !px-0 py-3 !text-xl font-medium !leading-tight`}
+                    variant="primary"
+                    size="large"
+                    disabled={!hasInventory}
+                    onClick={handleClick}
+                  >
+                    <WhatsappIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                    <Text as="p" size="xl" className="text-white-a700_01">
+                      {`Order on WhatsApp`}
+                    </Text>
+                  </Button>
+                  {/* </Link> */}
+                  <div className={`flex h-14 w-full`}>
+                    <Img
+                      src="payment_mode.png"
+                      width={256}
+                      height={100}
+                      alt="payment mode"
+                      className="aspect-auto w-full"
+                      isStatic
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        }
+        return <></>;
+      },
       [product, selectedVariant],
     );
 
@@ -260,7 +337,7 @@ const AddToCartSection = React.memo(
           <Text
             as="p"
             size="base"
-            className="hidden font-light text-red-600 md:block"
+            className="hidden font-light text-red-600 md:ml-2 md:block"
             responsive
           >
             We are working hard to be back in stock as soon as possible
@@ -274,17 +351,17 @@ const AddToCartSection = React.memo(
       <>
         <div ref={borderRef} />
         <div
-          ref={sectionRef}
+          ref={isMobile ? null : sectionRef}
           className={twMerge(
             `z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:static md:mb-7 md:gap-2.5 md:border-0 md:py-0`,
-            isFixed
+            isFixed & !theme
               ? "container-main fixed bottom-0 left-0 mb-0 border-t py-3"
               : "",
           )}
         >
           {!marketPlaceObject ? (
             hasInventory ? (
-              renderAddToCartContent()
+              renderAddToCartContent(theme)
             ) : (
               renderOutOfStockContent()
             )
@@ -294,6 +371,29 @@ const AddToCartSection = React.memo(
             </div>
           )}
         </div>
+        {theme === "WHATSAPP_ORDER" && (
+          <div
+            ref={isMobile ? sectionRef : null}
+            className={twMerge(
+              `z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:mb-7 md:hidden md:gap-2.5 md:border-0 md:py-0`,
+              isFixed
+                ? "container-main fixed bottom-0 left-0 mb-0 border-t py-3"
+                : "",
+            )}
+          >
+            {!marketPlaceObject ? (
+              hasInventory ? (
+                renderAddToCartContent(theme, true)
+              ) : (
+                renderOutOfStockContent()
+              )
+            ) : (
+              <div className="w-full md:hidden">
+                <MarketplaceLink marketItem={marketPlaceObject} />
+              </div>
+            )}
+          </div>
+        )}
 
         <MarketplaceGrid marketPlaceLinks={marketPlaceLinks} />
 

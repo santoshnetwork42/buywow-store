@@ -21,6 +21,7 @@ const AddToCart = ({
   quantityClassName,
   showGoToCart = false,
   section,
+  isWhatsappOrderButtonVisible = false,
 }) => {
   const { addToCart, updateCart, removeFromCart } = useCartDispatch();
   const { handleCartVisibility } = useModalDispatch();
@@ -82,6 +83,7 @@ const AddToCart = ({
         tabValue: section?.tabValue ?? "pdp_page",
       },
     });
+    if (isWhatsappOrderButtonVisible) handleCartVisibility(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product, selectedVariant]);
 
@@ -142,7 +144,9 @@ const AddToCart = ({
   if (cartItem) {
     return (
       <div className="flex h-full gap-2 sm:gap-3 md:gap-4 lg:gap-5">
-        <div className={`flex ${showGoToCart ? "w-1/3" : "w-auto"}`}>
+        <div
+          className={`flex ${showGoToCart ? "w-1/3" : "w-auto"} ${isWhatsappOrderButtonVisible ? "w-full" : ""}`}
+        >
           <Quantity
             product={product}
             max={product.currentInventory}
