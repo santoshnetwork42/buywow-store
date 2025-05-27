@@ -133,6 +133,9 @@ const CartDrawer = () => {
       isRewardApplied,
   });
 
+  const cartId =
+    localStorage.getItem(`${STORE_PREFIX}-cartId`) || shoppingCartId;
+
   const {
     ready: isInventoryCheckReady,
     success: isInventoryCheckSuccess,
@@ -218,6 +221,7 @@ const CartDrawer = () => {
     cartList,
     outOfStockItems,
     inventoryMapping,
+    cartId,
   ]);
 
   const checkoutButtonDisabled = GOKWIK_MID
