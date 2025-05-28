@@ -257,12 +257,12 @@ const AddToCartSection = React.memo(
                   buttonText="Add To Cart"
                   buttonClassName={`w-full py-3 text-xl md:py-4`}
                   quantityClassName="flex-1 min-h-full"
-                  showGoToCartClassName={`${cartItem ? "md:col-span-2" : ""}`}
-                  showGoToCart={isStickyBar || !isMobile}
+                  showGoToCartClassName={`${cartItem ? "col-span-2" : ""}`}
+                  showGoToCart={true}
                 />
                 {!isStickyBar && (
                   <BuyItNowButton
-                    className={`${cartItem ? "md:hidden" : ""}`}
+                    className={`${cartItem ? "hidden" : ""}`}
                     product={product}
                     selectedVariant={selectedVariant}
                     hasInventory={hasInventory}
