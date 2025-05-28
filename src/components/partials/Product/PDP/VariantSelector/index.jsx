@@ -185,6 +185,13 @@ const VariantItemWithOutImg = React.memo(
             </Heading>
           )}
           <div>
+            {price != null && (
+              <div className="flex items-center gap-1">
+                <Heading as="h6" size="2xl" className="font-semibold">
+                  ₹{price}
+                </Heading>
+              </div>
+            )}
             {listingPrice > price && (
               <Text
                 as="p"
@@ -193,13 +200,6 @@ const VariantItemWithOutImg = React.memo(
               >
                 ₹{listingPrice}
               </Text>
-            )}
-            {price != null && (
-              <div className="flex items-center gap-1">
-                <Heading as="h6" size="2xl" className="font-semibold">
-                  ₹{price}
-                </Heading>
-              </div>
             )}
             {price != null && (
               <div className="flex items-center gap-1">

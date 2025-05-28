@@ -6,6 +6,7 @@ import { WA_LINK_URL } from "@/config";
 import {
   extractAttributes,
   getDiscountPercentage,
+  getRecordKey,
   toDecimal,
 } from "@/utils/helpers";
 import useWindowDimensions from "@/utils/helpers/getWindowDimension";
@@ -20,6 +21,7 @@ import React, {
 } from "react";
 import { twMerge } from "tailwind-merge";
 import BuyItNowButton from "@/components/partials/Product/PDP/BuyItNowButton";
+import { useSelector } from "react-redux";
 
 const IndiaMapIcon = dynamic(() => import("@/assets/svg/indiaMapIcon"));
 const VehicleIcon = dynamic(() => import("@/assets/svg/vehicleIcon"));
@@ -90,7 +92,7 @@ MarketplaceGrid.displayName = "MarketplaceGrid";
 
 // Original Components (unchanged)
 const ShippingInfo = () => (
-  <div className="hidden justify-evenly gap-2 md:flex">
+  <div className="flex justify-evenly gap-2">
     <div className="flex items-center gap-1">
       <VehicleIcon size={24} />
       <Text as="p" size="sm" responsive>
@@ -198,6 +200,15 @@ const AddToCartSection = React.memo(
     const sectionRef = useRef(null);
     const borderRef = useRef(null);
 
+    const cartItems = useSelector((state) => state.cart?.data || []);
+
+    const cartItem = useMemo(() => {
+      if (!cartItems.length || !product) return null;
+
+      const recordKey = getRecordKey(product, selectedVariant?.id);
+      return cartItems.find((item) => item.recordKey === recordKey);
+    }, [cartItems, product, selectedVariant]);
+
     const { hasInventory, thumbImage, title, price, listingPrice } =
       product || {};
 
@@ -239,15 +250,40 @@ const AddToCartSection = React.memo(
         if (!theme) {
           return (
             <>
-              <AddToCart
-                product={product}
-                selectedVariant={selectedVariant}
-                buttonText="Add To Cart"
-                buttonClassName="w-full py-3 text-xl md:py-4"
-                quantityClassName="flex-1 min-h-full"
-                showGoToCart
-              />
-              <ShippingInfo />
+              <div className={!isStickyBar ? "grid grid-cols-2 gap-x-2" : ""}>
+                <AddToCart
+                  product={product}
+                  selectedVariant={selectedVariant}
+                  buttonText="Add To Cart"
+                  buttonClassName={`w-full py-3 text-xl md:py-4`}
+                  quantityClassName="flex-1 min-h-full"
+                  showGoToCartClassName={`${cartItem ? "md:col-span-2" : ""}`}
+                  showGoToCart={isStickyBar || !isMobile}
+                />
+                {!isStickyBar && (
+                  <BuyItNowButton
+                    className={`${cartItem ? "md:hidden" : ""}`}
+                    product={product}
+                    selectedVariant={selectedVariant}
+                    hasInventory={hasInventory}
+                  />
+                )}
+              </div>
+              {!isStickyBar && (
+                <>
+                  <ShippingInfo />
+                  <div className={`flex h-14 w-full`}>
+                    <Img
+                      src="payment_mode.png"
+                      width={828}
+                      height={100}
+                      alt="payment mode"
+                      className="aspect-square w-full object-cover"
+                      isStatic
+                    />
+                  </div>
+                </>
+              )}
             </>
           );
         } else if (theme === "WHATSAPP_ORDER") {
@@ -306,10 +342,10 @@ const AddToCartSection = React.memo(
                   <div className={`flex h-14 w-full`}>
                     <Img
                       src="payment_mode.png"
-                      width={256}
+                      width={828}
                       height={100}
                       alt="payment mode"
-                      className="aspect-auto w-full"
+                      className="aspect-square w-full object-cover"
                       isStatic
                     />
                   </div>
@@ -353,15 +389,12 @@ const AddToCartSection = React.memo(
         <div
           ref={isMobile ? null : sectionRef}
           className={twMerge(
-            `z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:static md:mb-7 md:gap-2.5 md:border-0 md:py-0`,
-            isFixed & !theme
-              ? "container-main fixed bottom-0 left-0 mb-0 border-t py-3"
-              : "",
+            `static z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:mb-7 md:gap-2.5 md:border-0 md:py-0`,
           )}
         >
           {!marketPlaceObject ? (
             hasInventory ? (
-              renderAddToCartContent(theme)
+              renderAddToCartContent(theme, false)
             ) : (
               renderOutOfStockContent()
             )
@@ -371,29 +404,27 @@ const AddToCartSection = React.memo(
             </div>
           )}
         </div>
-        {theme === "WHATSAPP_ORDER" && (
-          <div
-            ref={isMobile ? sectionRef : null}
-            className={twMerge(
-              `z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:mb-7 md:hidden md:gap-2.5 md:border-0 md:py-0`,
-              isFixed
-                ? "container-main fixed bottom-0 left-0 mb-0 border-t py-3"
-                : "",
-            )}
-          >
-            {!marketPlaceObject ? (
-              hasInventory ? (
-                renderAddToCartContent(theme, true)
-              ) : (
-                renderOutOfStockContent()
-              )
+        <div
+          ref={isMobile ? sectionRef : null}
+          className={twMerge(
+            `z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:mb-7 md:hidden md:gap-2.5 md:border-0 md:py-0`,
+            isFixed
+              ? "container-main fixed bottom-0 left-0 mb-0 border-t py-3"
+              : "",
+          )}
+        >
+          {!marketPlaceObject ? (
+            hasInventory ? (
+              renderAddToCartContent(theme, true)
             ) : (
-              <div className="w-full md:hidden">
-                <MarketplaceLink marketItem={marketPlaceObject} />
-              </div>
-            )}
-          </div>
-        )}
+              renderOutOfStockContent()
+            )
+          ) : (
+            <div className="w-full md:hidden">
+              <MarketplaceLink marketItem={marketPlaceObject} />
+            </div>
+          )}
+        </div>
 
         <MarketplaceGrid marketPlaceLinks={marketPlaceLinks} />
 

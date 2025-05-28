@@ -13,9 +13,10 @@ import { useRouter } from "next/navigation";
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { twMerge } from "tailwind-merge";
 
 const BuyItNowButton = React.memo(
-  ({ product, selectedVariant, hasInventory }) => {
+  ({ product, selectedVariant, hasInventory, className }) => {
     const router = useRouter();
     // const searchParams = useSearchParams();
 
@@ -152,7 +153,11 @@ const BuyItNowButton = React.memo(
 
     return (
       <Button
-        className={`h-fit w-full !px-0 py-3 !text-xl font-medium !leading-tight opacity-100 md:py-4 ${!hasInventory ? "bg-gray-400" : ""} transition-none`}
+        className={twMerge(
+          "h-fit w-full border-2 border-yellow-900 !bg-white-a700_01 !px-0 py-3 !text-xl font-medium !leading-tight text-yellow-900 opacity-100 transition-none md:py-4",
+          !hasInventory ? "border-none !bg-gray-400 !text-white-a700_01" : "",
+          className,
+        )}
         variant="primary"
         size="large"
         onClick={() => {

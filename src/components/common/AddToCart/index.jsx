@@ -22,6 +22,7 @@ const AddToCart = ({
   showGoToCart = false,
   section,
   isWhatsappOrderButtonVisible = false,
+  showGoToCartClassName,
 }) => {
   const { addToCart, updateCart, removeFromCart } = useCartDispatch();
   const { handleCartVisibility } = useModalDispatch();
@@ -143,10 +144,10 @@ const AddToCart = ({
 
   if (cartItem) {
     return (
-      <div className="flex h-full gap-2 sm:gap-3 md:gap-4 lg:gap-5">
-        <div
-          className={`flex ${showGoToCart ? "w-1/3" : "w-auto"} ${isWhatsappOrderButtonVisible ? "w-full" : ""}`}
-        >
+      <div
+        className={`flex h-full gap-2 sm:gap-3 md:gap-4 lg:gap-5 ${showGoToCartClassName}`}
+      >
+        <div className={`flex ${showGoToCart ? "w-1/3" : "w-full"} `}>
           <Quantity
             product={product}
             max={product.currentInventory}

@@ -1,3 +1,4 @@
+import CopyIcon from "@/assets/svg/copyIcon";
 import { Heading, Img, Text } from "@/components/elements";
 import Accordion from "@/components/features/Accordion";
 import ReadMore from "@/components/features/ReadMore";
@@ -79,7 +80,15 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
                 {`& Get ${titles.length} Free Gifts!`}
               </Text>
             )} */}
-            <Text
+            <div
+              className="ml-1 !cursor-pointer"
+              onClick={() =>
+                copyText(coupon?.code, `Coupon code copied: ${coupon?.code}`)
+              }
+            >
+              <CopyIcon size={14} />
+            </div>
+            {/* <Text
               as="span"
               size="sm"
               onClick={() =>
@@ -89,7 +98,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
               responsive
             >
               Copy
-            </Text>
+            </Text> */}
           </div>
         </div>
       </div>

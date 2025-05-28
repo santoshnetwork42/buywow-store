@@ -3,7 +3,7 @@
 import { Text } from "@/components/elements";
 import AddToCartSection from "@/components/partials/Product/PDP/AddToCartSection";
 import PriceSection from "@/components/partials/Product/PDP/PriceSection";
-import ProductBenefitsWithTickMarks from "@/components/partials/Product/PDP/ProductBenefitsWithTickMarks";
+import ProductClaims from "@/components/partials/Product/PDP/ProductClaims";
 import ProductHeader from "@/components/partials/Product/PDP/ProductHeader";
 import ProductImageSection from "@/components/partials/Product/PDP/ProductImageSection";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -182,7 +182,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           className="hidden md:flex"
         />
         {theme === "WHATSAPP_ORDER" && (
-          <ProductBenefitsWithTickMarks
+          <ProductClaims
             className="hidden md:flex"
             totalOrders={totalOrders}
             hasInventory={hasInventory}
@@ -199,7 +199,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           theme={theme}
         />
         {theme === "WHATSAPP_ORDER" && (
-          <ProductBenefitsWithTickMarks
+          <ProductClaims
             className="flex md:hidden"
             totalOrders={totalOrders}
             hasInventory={hasInventory}
