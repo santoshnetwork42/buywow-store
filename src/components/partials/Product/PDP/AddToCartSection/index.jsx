@@ -250,25 +250,25 @@ const AddToCartSection = React.memo(
         if (!theme) {
           return (
             <>
-              <div className={!isStickyBar ? "grid grid-cols-2 gap-x-2" : ""}>
-                <AddToCart
-                  product={product}
-                  selectedVariant={selectedVariant}
-                  buttonText="Add To Cart"
-                  buttonClassName={`w-full py-3 text-xl md:py-4`}
-                  quantityClassName="flex-1 min-h-full"
-                  showGoToCartClassName={`${cartItem ? "col-span-2" : ""}`}
-                  showGoToCart={true}
-                />
-                {!isStickyBar && (
+              {/* <div className={!isStickyBar ? "grid grid-cols-2 gap-x-2" : ""}> */}
+              <AddToCart
+                product={product}
+                selectedVariant={selectedVariant}
+                buttonText="Add To Cart"
+                buttonClassName={`w-full py-3 text-xl md:py-4`}
+                quantityClassName="flex-1 min-h-full"
+                showGoToCartClassName={`${cartItem ? "col-span-2" : ""}`}
+                showGoToCart={true}
+              />
+              {/* {!isStickyBar && (
                   <BuyItNowButton
                     className={`${cartItem ? "hidden" : ""}`}
                     product={product}
                     selectedVariant={selectedVariant}
                     hasInventory={hasInventory}
                   />
-                )}
-              </div>
+                )} */}
+              {/* </div> */}
               {!isStickyBar && (
                 <>
                   <ShippingInfo />
