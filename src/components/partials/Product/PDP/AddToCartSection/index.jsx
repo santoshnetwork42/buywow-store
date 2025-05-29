@@ -195,7 +195,13 @@ const DesktopStickyBar = ({
 };
 
 const AddToCartSection = React.memo(
-  ({ product, selectedVariant, marketPlaceLinks, theme }) => {
+  ({
+    product,
+    selectedVariant,
+    marketPlaceLinks,
+    showBuyItNowButton = false,
+    showOrderOnWhatsappButton = false,
+  }) => {
     const [isFixed, setIsFixed] = useState(false);
     const sectionRef = useRef(null);
     const borderRef = useRef(null);
@@ -234,7 +240,11 @@ const AddToCartSection = React.memo(
       if (window.innerWidth < 768 && borderRef.current) {
         setIsFixed(true);
       } else if (sectionRef.current) {
-        setIsFixed(sectionRef.current.getBoundingClientRect().bottom < 0);
+        const isFixed =
+          // window.innerHeight <
+          //   sectionRef.current.getBoundingClientRect().bottom ||
+          sectionRef.current.getBoundingClientRect().bottom < 0;
+        setIsFixed(isFixed);
       }
     }, []);
 
@@ -246,115 +256,86 @@ const AddToCartSection = React.memo(
     }, [checkVisibility]);
 
     const renderAddToCartContent = useCallback(
-      (theme = "", isStickyBar = false) => {
-        if (!theme) {
-          return (
-            <>
-              {/* <div className={!isStickyBar ? "grid grid-cols-2 gap-x-2" : ""}> */}
+      (isStickyBar = false) => {
+        const handleClick = () => {
+          if (typeof window === "undefined") return;
+
+          const productTitle = product?.title || "Product";
+          const variantLabel = selectedVariant?.id
+            ? ` - ${selectedVariant.label}`
+            : "";
+          const title = `${productTitle}${variantLabel}`;
+          const message = `Hi, I'm interested in purchasing this product and would appreciate some assistance:\n${title}\n${window.location.href}`;
+          const encodedMessage = encodeURIComponent(message);
+          const waLink = `${WA_LINK_URL}?text=${encodedMessage}`;
+          window.location.href = waLink;
+        };
+
+        return (
+          <div
+            className={`flex flex-col justify-center gap-y-4 ${isStickyBar ? "!mt-0" : ""} ${!selectedVariant ? "mt-5" : ""}`}
+          >
+            <div
+              className={`${
+                !isStickyBar && !!showBuyItNowButton
+                  ? "grid grid-cols-2 gap-x-2"
+                  : ""
+              }`}
+            >
               <AddToCart
                 product={product}
                 selectedVariant={selectedVariant}
                 buttonText="Add To Cart"
                 buttonClassName={`w-full py-3 text-xl md:py-4`}
                 quantityClassName="flex-1 min-h-full"
-                showGoToCartClassName={`${cartItem ? "col-span-2" : ""}`}
+                showGoToCartClassName={`${cartItem && !!showBuyItNowButton ? "col-span-2" : ""}`}
+                isWhatsappOrderButtonVisible={
+                  !isStickyBar && !!showOrderOnWhatsappButton
+                }
                 showGoToCart={true}
               />
-              {/* {!isStickyBar && (
-                  <BuyItNowButton
-                    className={`${cartItem ? "hidden" : ""}`}
-                    product={product}
-                    selectedVariant={selectedVariant}
-                    hasInventory={hasInventory}
-                  />
-                )} */}
-              {/* </div> */}
-              {!isStickyBar && (
-                <>
-                  <ShippingInfo />
-                  <div className={`flex h-14 w-full`}>
-                    <Img
-                      src="payment_mode.png"
-                      width={828}
-                      height={100}
-                      alt="payment mode"
-                      className="aspect-square w-full object-cover"
-                      isStatic
-                    />
-                  </div>
-                </>
-              )}
-            </>
-          );
-        } else if (theme === "WHATSAPP_ORDER") {
-          const handleClick = () => {
-            if (typeof window === "undefined") return;
-
-            const productTitle = product?.title || "Product";
-            const variantLabel = selectedVariant?.id
-              ? ` - ${selectedVariant.label}`
-              : "";
-            const title = `${productTitle}${variantLabel}`;
-            const message = `Hi, I'm interested in purchasing this product and would appreciate some assistance:\n${title}\n${window.location.href}`;
-            const encodedMessage = encodeURIComponent(message);
-            const waLink = `${WA_LINK_URL}?text=${encodedMessage}`;
-            window.location.href = waLink;
-          };
-
-          return (
-            <div
-              className={`mt-5 flex flex-col justify-center gap-y-4 ${isStickyBar ? "!mt-0" : ""}`}
-            >
-              <div className={!isStickyBar ? "grid grid-cols-2 gap-x-2" : ""}>
-                <AddToCart
+              {!isStickyBar && !!showBuyItNowButton && (
+                <BuyItNowButton
+                  className={`${cartItem ? "hidden" : ""}`}
                   product={product}
                   selectedVariant={selectedVariant}
-                  buttonText="Add To Cart"
-                  buttonClassName="w-full py-3 text-xl md:py-4"
-                  quantityClassName="flex-1 min-h-full"
-                  isWhatsappOrderButtonVisible={!isStickyBar}
-                  showGoToCart={isStickyBar}
+                  hasInventory={hasInventory}
                 />
-                {!isStickyBar && (
-                  <BuyItNowButton
-                    product={product}
-                    selectedVariant={selectedVariant}
-                    hasInventory={hasInventory}
-                  />
-                )}
-              </div>
-              {!isStickyBar && (
-                <>
-                  {/* <Link prefetch={false} href={WA_LINK_URL}> */}
-                  <Button
-                    className={`flex h-fit w-full gap-x-5 bg-[#008E40] !px-0 py-3 !text-xl font-medium !leading-tight`}
-                    variant="primary"
-                    size="large"
-                    disabled={!hasInventory}
-                    onClick={handleClick}
-                  >
-                    <WhatsappIcon className="h-6 w-6 sm:h-8 sm:w-8" />
-                    <Text as="p" size="xl" className="text-white-a700_01">
-                      {`Order on WhatsApp`}
-                    </Text>
-                  </Button>
-                  {/* </Link> */}
-                  <div className={`flex h-14 w-full`}>
-                    <Img
-                      src="payment_mode.png"
-                      width={828}
-                      height={100}
-                      alt="payment mode"
-                      className="aspect-square w-full object-cover"
-                      isStatic
-                    />
-                  </div>
-                </>
               )}
             </div>
-          );
-        }
-        return <></>;
+            {!isStickyBar && !!showOrderOnWhatsappButton && (
+              <>
+                <Button
+                  className={`flex h-fit w-full gap-x-5 bg-[#008E40] !px-0 py-3 !text-xl font-medium !leading-tight`}
+                  variant="primary"
+                  size="large"
+                  disabled={!hasInventory}
+                  onClick={handleClick}
+                >
+                  <WhatsappIcon className="h-6 w-6 sm:h-8 sm:w-8" />
+                  <Text as="p" size="xl" className="text-white-a700_01">
+                    {`Order on WhatsApp`}
+                  </Text>
+                </Button>
+              </>
+            )}
+            {!isStickyBar && (
+              <>
+                <ShippingInfo />
+                <div className={`flex h-14 w-full`}>
+                  <Img
+                    src="payment_mode.png"
+                    width={828}
+                    height={100}
+                    alt="payment mode"
+                    className="aspect-square w-full object-cover"
+                    isStatic
+                  />
+                </div>
+              </>
+            )}
+          </div>
+        );
       },
       [product, selectedVariant],
     );
@@ -394,7 +375,7 @@ const AddToCartSection = React.memo(
         >
           {!marketPlaceObject ? (
             hasInventory ? (
-              renderAddToCartContent(theme, false)
+              renderAddToCartContent(false)
             ) : (
               renderOutOfStockContent()
             )
@@ -415,7 +396,7 @@ const AddToCartSection = React.memo(
         >
           {!marketPlaceObject ? (
             hasInventory ? (
-              renderAddToCartContent(theme, true)
+              renderAddToCartContent(true)
             ) : (
               renderOutOfStockContent()
             )

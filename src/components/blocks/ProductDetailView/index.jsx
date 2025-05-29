@@ -44,6 +44,10 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
     productDetailView,
     fetchedProduct,
     slug,
+    showVariantThumbnails = true,
+    showBuyItNowButton = false,
+    showOrderOnWhatsappButton = false,
+    productClaims = [],
   } = extractAttributes(product?.pdpProduct);
 
   const { addRecentlyViewedProduct } = useRecentlyViewedDispatch();
@@ -123,11 +127,6 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
     ? [...images.items].sort((a, b) => a.position - b.position)
     : [];
 
-  const theme =
-    slug === "hydroboost-electrolyte-effervescent-lemon-flavour"
-      ? "WHATSAPP_ORDER"
-      : "";
-
   return (
     <div className="container-main mb-main mt-2 grid w-full grid-cols-1 gap-y-1 sm:gap-y-5 md:mt-4 md:grid-cols-[54%_calc(46%-2.5rem)] md:grid-rows-[auto_auto_1fr] md:gap-x-10 md:gap-y-0 lg:grid-cols-[54%_calc(46%-3rem)] lg:gap-x-12 xl:grid-cols-[54%_calc(46%-4rem)] xl:gap-x-16">
       <div className="relative flex flex-col gap-2 md:row-span-3">
@@ -181,13 +180,6 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           totalRatings={totalRatings}
           className="hidden md:flex"
         />
-        {theme === "WHATSAPP_ORDER" && (
-          <ProductClaims
-            className="hidden md:flex"
-            totalOrders={totalOrders}
-            hasInventory={hasInventory}
-          />
-        )}
         <PriceSection
           price={price}
           listingPrice={listingPrice}
@@ -196,11 +188,12 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           hasInventory={hasInventory}
           currentInventory={currentInventory}
           minimumOrderQuantity={minimumOrderQuantity}
-          theme={theme}
+          showVariantThumbnails={showVariantThumbnails ?? true}
         />
-        {theme === "WHATSAPP_ORDER" && (
+        {!!productClaims?.length && (
           <ProductClaims
-            className="flex md:hidden"
+            productClaims={productClaims}
+            className="flex"
             totalOrders={totalOrders}
             hasInventory={hasInventory}
           />
@@ -217,9 +210,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           />
         )}
 
-        <div
-          className={`flex flex-col ${theme === "WHATSAPP_ORDER" ? "mt-2" : "mt-5"}`}
-        >
+        <div className={`mt-3 flex flex-col`}>
           {!!variantGroup?.length && (
             <VariantSelector
               variantGroups={variantGroup}
@@ -227,14 +218,15 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
               totalOrders={totalOrders}
               hasInventory={hasInventory}
               currentInventory={currentInventory}
-              theme={theme}
+              showVariantThumbnails={showVariantThumbnails ?? true}
             />
           )}
           <AddToCartSection
             product={packageProduct}
             selectedVariant={selectedVariant}
             marketPlaceLinks={marketPlaceLinks}
-            theme={theme}
+            showBuyItNowButton={showBuyItNowButton}
+            showOrderOnWhatsappButton={showOrderOnWhatsappButton}
           />
           {!!(productDetailView?.length > 0) && (
             <ProductDetailViewBlocks blocks={productDetailView} />

@@ -12,7 +12,7 @@ const PriceSection = React.memo(
     hasInventory,
     currentInventory,
     minimumOrderQuantity,
-    theme,
+    showVariantThumbnails,
   }) => {
     const discountPercentage = getDiscountPercentage(price, listingPrice);
 
@@ -21,7 +21,7 @@ const PriceSection = React.memo(
         <div
           className={twMerge(
             `mt-2 flex items-center justify-between gap-2 sm:gap-3 md:justify-normal md:gap-4 lg:gap-5`,
-            theme === "WHATSAPP_ORDER" ? "sm:hidden" : "",
+            !showVariantThumbnails ? "sm:hidden" : "",
           )}
         >
           <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ const PriceSection = React.memo(
         <div
           className={twMerge(
             "mt-2 flex items-center gap-3 md:mt-3",
-            theme === "WHATSAPP_ORDER" ? "sm:hidden" : "",
+            !showVariantThumbnails ? "sm:hidden" : "",
           )}
         >
           {!!(totalOrders > 0) && (
@@ -92,7 +92,7 @@ const PriceSection = React.memo(
         <div
           className={twMerge(
             "mt-1 flex items-center md:mt-2",
-            theme === "WHATSAPP_ORDER" ? "sm:hidden" : "",
+            !showVariantThumbnails ? "sm:hidden" : "",
           )}
         >
           {!!(minimumOrderQuantity > 1) && (

@@ -9,7 +9,7 @@ const VariantSelector = React.memo(
     totalOrders,
     hasInventory,
     currentInventory,
-    theme,
+    showVariantThumbnails,
   }) => {
     const sortedVariantGroups = useMemo(
       () => [...variantGroups].sort((a, b) => a.position - b.position),
@@ -34,7 +34,7 @@ const VariantSelector = React.memo(
               totalOrders={totalOrders}
               hasInventory={hasInventory}
               currentInventory={currentInventory}
-              theme={theme}
+              showVariantThumbnails={showVariantThumbnails}
             />
           ))}
         </div>
@@ -51,7 +51,7 @@ const VariantGroup = React.memo(
     totalOrders,
     hasInventory,
     currentInventory,
-    theme,
+    showVariantThumbnails,
   }) => {
     const sortedVariantOptions = useMemo(
       () =>
@@ -66,8 +66,15 @@ const VariantGroup = React.memo(
     return (
       <div className="flex flex-wrap gap-2 md:gap-3">
         {sortedVariantOptions.map((option) =>
-          theme === "WHATSAPP_ORDER" ? (
-            <VariantItemWithOutImg
+          showVariantThumbnails ? (
+            <VariantItem
+              key={option.id}
+              variant={option}
+              onChange={() => onVariantChange(group.id, option.id)}
+              isShoppable={isShoppable}
+            />
+          ) : (
+            <VariantItemWithOutThumbnail
               key={option.id}
               variant={option}
               onChange={() => onVariantChange(group.id, option.id)}
@@ -75,13 +82,6 @@ const VariantGroup = React.memo(
               totalOrders={totalOrders}
               hasInventory={hasInventory}
               currentInventory={currentInventory}
-            />
-          ) : (
-            <VariantItem
-              key={option.id}
-              variant={option}
-              onChange={() => onVariantChange(group.id, option.id)}
-              isShoppable={isShoppable}
             />
           ),
         )}
@@ -153,7 +153,7 @@ const VariantItem = React.memo(({ variant, onChange, isShoppable }) => {
   );
 });
 
-const VariantItemWithOutImg = React.memo(
+const VariantItemWithOutThumbnail = React.memo(
   ({
     variant,
     onChange,
@@ -243,7 +243,7 @@ const VariantItemWithOutImg = React.memo(
   },
 );
 
-VariantItemWithOutImg.displayName = "VariantItemWithOutImg";
+VariantItemWithOutThumbnail.displayName = "VariantItemWithOutThumbnail";
 VariantSelector.displayName = "VariantSelector";
 VariantGroup.displayName = "VariantGroup";
 VariantItem.displayName = "VariantItem";
