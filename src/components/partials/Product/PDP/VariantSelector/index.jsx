@@ -211,7 +211,7 @@ const VariantItemWithOutThumbnail = React.memo(
           </div>
         </div>
 
-        {price != null && (
+        {/* {price != null && (
           <div className="px-1.5">
             {!!(totalOrders > 0) && (
               <Text
@@ -237,7 +237,7 @@ const VariantItemWithOutThumbnail = React.memo(
           >
             Save ₹{discount}
           </Text>
-        )}
+        )} */}
       </div>
     );
   },

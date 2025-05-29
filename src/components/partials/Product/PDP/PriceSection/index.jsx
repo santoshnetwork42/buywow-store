@@ -12,8 +12,9 @@ const PriceSection = React.memo(
     hasInventory,
     currentInventory,
     minimumOrderQuantity,
-    showVariantThumbnails,
+    showVariantThumbnails: showThumbImage,
   }) => {
+    const showVariantThumbnails = true;
     const discountPercentage = getDiscountPercentage(price, listingPrice);
 
     return (
