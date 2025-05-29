@@ -228,7 +228,7 @@ const VariantItemWithOutThumbnail = React.memo(
               </Text>
             )}
           </div>
-        )}
+        )} */}
         {discount != null && (
           <Text
             as="p"
@@ -237,7 +237,7 @@ const VariantItemWithOutThumbnail = React.memo(
           >
             Save ₹{discount}
           </Text>
-        )} */}
+        )}
       </div>
     );
   },
