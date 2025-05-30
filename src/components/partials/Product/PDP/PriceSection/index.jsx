@@ -12,9 +12,8 @@ const PriceSection = React.memo(
     hasInventory,
     currentInventory,
     minimumOrderQuantity,
-    showVariantThumbnails: showThumbImage,
+    showVariantThumbnails,
   }) => {
-    const showVariantThumbnails = true;
     const discountPercentage = getDiscountPercentage(price, listingPrice);
 
     return (
@@ -66,7 +65,7 @@ const PriceSection = React.memo(
         <div
           className={twMerge(
             "mt-2 flex items-center gap-3 md:mt-3",
-            !showVariantThumbnails ? "sm:hidden" : "",
+            // !showVariantThumbnails ? "sm:hidden" : "",
           )}
         >
           {!!(totalOrders > 0) && (
@@ -79,16 +78,18 @@ const PriceSection = React.memo(
               {Math.ceil((totalOrders || 0) / 1000) * 1000}+ units sold
             </Text>
           )}
-          {!!hasInventory && !!(currentInventory < 99) && (
-            <Text
-              as="p"
-              size="base"
-              className="text-sm text-red-500"
-              responsive
-            >
-              Last {currentInventory} units left
-            </Text>
-          )}
+          {!!hasInventory &&
+            !!(currentInventory < 99) &&
+            showVariantThumbnails && (
+              <Text
+                as="p"
+                size="base"
+                className="text-sm text-red-500"
+                responsive
+              >
+                Last {currentInventory} units left
+              </Text>
+            )}
         </div>
         <div
           className={twMerge(

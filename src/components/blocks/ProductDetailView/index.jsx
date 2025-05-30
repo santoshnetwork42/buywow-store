@@ -215,9 +215,6 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
             <VariantSelector
               variantGroups={variantGroup}
               onVariantChange={onVariantChange}
-              totalOrders={totalOrders}
-              hasInventory={hasInventory}
-              currentInventory={currentInventory}
               showVariantThumbnails={showVariantThumbnails ?? true}
             />
           )}

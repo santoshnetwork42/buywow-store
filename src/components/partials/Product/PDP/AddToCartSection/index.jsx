@@ -273,7 +273,7 @@ const AddToCartSection = React.memo(
 
         return (
           <div
-            className={`flex flex-col justify-center gap-y-4 ${isStickyBar ? "!mt-0" : ""} ${!selectedVariant ? "mt-5" : ""}`}
+            className={`flex flex-col justify-center gap-y-4 max-sm:gap-y-2 ${isStickyBar ? "!mt-0" : ""} ${!selectedVariant ? "mt-5" : ""}`}
           >
             <div
               className={`${

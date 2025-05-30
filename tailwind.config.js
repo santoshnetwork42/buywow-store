@@ -118,6 +118,7 @@ module.exports = {
         flying: "flying 0s linear infinite",
         shake: "shake 0.5s ease-in-out infinite",
         float: "float 2s ease-in-out infinite",
+        pulseCustom: "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },
