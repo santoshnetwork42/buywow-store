@@ -70,6 +70,8 @@ export const NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS = [
   "999-triple-deal",
   "cred-exclusive-1",
   "cred-exclusive-2",
+  "buy-5-799",
+  "buy-8-1199",
 ];
 export const STORAGE_KEY = STORE_PREFIX + "_" + "wheel_claimed_percentage";
 export const WHEEL_HAS_VISITED_BEFORE_KEY =
