@@ -162,6 +162,7 @@ const ClientSideEffects = () => {
       utm_source: source,
       utm_term: term,
       clickid,
+      cid = "",
     } = Object.fromEntries(searchParams);
     const landingPage = window?.location?.href;
     const referrer = document?.referrer;
@@ -174,7 +175,7 @@ const ClientSideEffects = () => {
       utmMedium: medium || meta?.utmMedium || null,
       utmSource: source || meta?.utmSource || null,
       utmTerm: term || meta?.utmTerm || null,
-      clickId: clickid || meta?.clickId || "",
+      clickId: clickid || cid || meta?.clickId || "",
     };
 
     if (JSON.stringify(metadata) !== cookieMeta) {
