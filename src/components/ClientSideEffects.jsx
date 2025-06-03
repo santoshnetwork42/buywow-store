@@ -162,7 +162,7 @@ const ClientSideEffects = () => {
       utm_source: source,
       utm_term: term,
       clickid,
-      cid = "",
+      s2: cid = "",
     } = Object.fromEntries(searchParams);
     const landingPage = window?.location?.href;
     const referrer = document?.referrer;
@@ -170,7 +170,7 @@ const ClientSideEffects = () => {
     const metadata = {
       landingPage: meta?.landingPage || landingPage || null,
       referrer: referrer || meta?.referrer || null,
-      utmCampaign: campaign || meta?.utmCampaign || null,
+      utmCampaign: !!cid ? "voluum" : campaign || meta?.utmCampaign || null,
       utmContent: content || meta?.utmContent || null,
       utmMedium: medium || meta?.utmMedium || null,
       utmSource: source || meta?.utmSource || null,
