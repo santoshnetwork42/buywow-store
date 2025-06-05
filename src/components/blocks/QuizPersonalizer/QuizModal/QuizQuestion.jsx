@@ -71,7 +71,7 @@ export const QuizQuestions = ({
         </div>
 
         {/* Trust Indicators */}
-        <div className="mb-8 grid grid-cols-3 gap-4">
+        {/* <div className="mb-8 grid grid-cols-3 gap-4">
           <div className="flex flex-col items-center gap-2 rounded-lg bg-yellow-900/10 p-4 text-center">
             <ShieldIcon className="text-wow-primary mx-auto mb-2 h-6 w-6" />
             <p className="text-sm text-gray-700">Expert Analysis</p>
@@ -84,7 +84,7 @@ export const QuizQuestions = ({
             <ClockIcon className="text-wow-primary mx-auto mb-2 h-6 w-6" />
             <p className="text-sm text-gray-700">2-Min Analysis</p>
           </div>
-        </div>
+        </div> */}
 
         <div className="space-y-6">
           <div className="flex justify-between text-sm text-gray-600">

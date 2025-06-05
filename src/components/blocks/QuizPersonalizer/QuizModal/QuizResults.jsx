@@ -128,7 +128,7 @@ export const QuizResults = ({
                   height={400}
                   alt={`Product image`}
                   // priority
-                  className="m-auto aspect-square h-full w-full cursor-zoom-in transition-transform duration-300 ease-in-out"
+                  className="m-auto aspect-square h-full w-full cursor-zoom-in object-contain transition-transform duration-300 ease-in-out"
                 />
                 {/* <img
                 src={product.imageUrl}
@@ -158,7 +158,7 @@ export const QuizResults = ({
               </p>*/}
                 <div className="my-6 flex items-center justify-between">
                   <span className="text-xl font-bold text-yellow-900">
-                    {`₹` + (fetchedProduct?.price || 0)}
+                    {`₹` + (packageProduct?.price || 0)}
                   </span>
                   <AddToCart
                     product={packageProduct}

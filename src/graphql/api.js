@@ -988,6 +988,7 @@ export const byslugProduct = `query BySlugProduct(
           price
           position
           listingPrice
+          status
           productVariantOptionIds {
             variantGroupId
             variantGroupOptionId
