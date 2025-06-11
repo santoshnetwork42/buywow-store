@@ -189,6 +189,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
           currentInventory={currentInventory}
           minimumOrderQuantity={minimumOrderQuantity}
           showVariantThumbnails={showVariantThumbnails ?? true}
+          isVariantsExist={!!variantGroup?.length}
         />
         {!!productClaims?.length && (
           <ProductClaims
