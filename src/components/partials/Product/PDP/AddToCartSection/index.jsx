@@ -237,8 +237,16 @@ const AddToCartSection = React.memo(
     const checkVisibility = useCallback(() => {
       if (typeof window === "undefined") return;
 
+      const top = sectionRef?.current?.getBoundingClientRect()?.top;
+      const bottom = sectionRef?.current?.getBoundingClientRect()?.bottom;
+
       if (window.innerWidth < 768 && borderRef.current) {
-        setIsFixed(true);
+        if (
+          (top <= window.innerHeight && top > 200) ||
+          (bottom <= window.innerHeight && bottom > 500)
+        ) {
+          setIsFixed(false);
+        } else setIsFixed(true);
       } else if (sectionRef.current) {
         const isFixed =
           // window.innerHeight <
@@ -256,7 +264,7 @@ const AddToCartSection = React.memo(
     }, [checkVisibility]);
 
     const renderAddToCartContent = useCallback(
-      (isStickyBar = false) => {
+      (isStickyBar = false, addToCartRef) => {
         const handleClick = () => {
           if (typeof window === "undefined") return;
 
@@ -281,6 +289,7 @@ const AddToCartSection = React.memo(
                   ? "grid grid-cols-2 gap-x-2"
                   : ""
               }`}
+              ref={addToCartRef}
             >
               <AddToCart
                 product={product}
@@ -368,14 +377,13 @@ const AddToCartSection = React.memo(
       <>
         <div ref={borderRef} />
         <div
-          ref={isMobile ? null : sectionRef}
           className={twMerge(
             `static z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:mb-7 md:gap-2.5 md:border-0 md:py-0`,
           )}
         >
           {!marketPlaceObject ? (
             hasInventory ? (
-              renderAddToCartContent(false)
+              renderAddToCartContent(false, sectionRef)
             ) : (
               renderOutOfStockContent()
             )
@@ -385,27 +393,26 @@ const AddToCartSection = React.memo(
             </div>
           )}
         </div>
-        <div
-          ref={isMobile ? sectionRef : null}
-          className={twMerge(
-            `z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:mb-7 md:hidden md:gap-2.5 md:border-0 md:py-0`,
-            isFixed
-              ? "container-main fixed bottom-0 left-0 mb-0 border-t py-3"
-              : "",
-          )}
-        >
-          {!marketPlaceObject ? (
-            hasInventory ? (
-              renderAddToCartContent(true)
+        {isFixed && (
+          <div
+            className={twMerge(
+              `z-50 mb-6 flex w-full flex-col gap-2 bg-white-a700_01 md:mb-7 md:hidden md:gap-2.5 md:border-0 md:py-0`,
+              "container-main fixed bottom-0 left-0 mb-0 border-t py-3", //for sticky atc
+            )}
+          >
+            {!marketPlaceObject ? (
+              hasInventory ? (
+                renderAddToCartContent(true)
+              ) : (
+                renderOutOfStockContent()
+              )
             ) : (
-              renderOutOfStockContent()
-            )
-          ) : (
-            <div className="w-full md:hidden">
-              <MarketplaceLink marketItem={marketPlaceObject} />
-            </div>
-          )}
-        </div>
+              <div className="w-full md:hidden">
+                <MarketplaceLink marketItem={marketPlaceObject} />
+              </div>
+            )}
+          </div>
+        )}
 
         <MarketplaceGrid marketPlaceLinks={marketPlaceLinks} />
 
