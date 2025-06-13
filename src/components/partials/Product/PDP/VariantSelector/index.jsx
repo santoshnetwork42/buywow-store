@@ -7,6 +7,7 @@ const VariantSelector = React.memo(
     onVariantChange,
     isShoppable = false,
     showVariantThumbnails,
+    setDefaultVariantId,
   }) => {
     const sortedVariantGroups = useMemo(
       () => [...variantGroups].sort((a, b) => a.position - b.position),
@@ -29,6 +30,7 @@ const VariantSelector = React.memo(
               onVariantChange={onVariantChange}
               isShoppable={isShoppable}
               showVariantThumbnails={showVariantThumbnails}
+              setDefaultVariantId={setDefaultVariantId}
             />
           ))}
         </div>
@@ -38,7 +40,13 @@ const VariantSelector = React.memo(
 );
 
 const VariantGroup = React.memo(
-  ({ group, onVariantChange, isShoppable, showVariantThumbnails }) => {
+  ({
+    group,
+    onVariantChange,
+    isShoppable,
+    showVariantThumbnails,
+    setDefaultVariantId,
+  }) => {
     const sortedVariantOptions = useMemo(
       () =>
         [...group.variantOptions].sort(
@@ -56,14 +64,18 @@ const VariantGroup = React.memo(
             <VariantItem
               key={option.id}
               variant={option}
-              onChange={() => onVariantChange(group.id, option.id)}
+              onChange={() => {
+                onVariantChange(group.id, option.id), setDefaultVariantId(null);
+              }}
               isShoppable={isShoppable}
             />
           ) : (
             <VariantItemWithOutThumbnail
               key={option.id}
               variant={option}
-              onChange={() => onVariantChange(group.id, option.id)}
+              onChange={() => {
+                onVariantChange(group.id, option.id), setDefaultVariantId(null);
+              }}
               isShoppable={isShoppable}
             />
           ),
@@ -151,7 +163,7 @@ const VariantItemWithOutThumbnail = React.memo(
     // Modified container class to use consistent width and better flex behavior
     const containerClassName = `relative p-2 overflow-hidden flex cursor-pointer gap-2 rounded  outline outline-2 outline-gray-300 ${
       selected ? "bg-yellow-900/15 !outline-black-900" : ""
-    } ${isShoppable ? "w-full" : "flex-col w-[150px]"}`;
+    } ${isShoppable ? "w-full" : "flex-col w-[156px]"}`;
 
     const discount = useMemo(
       () => (listingPrice > price ? listingPrice - price : null),
@@ -196,7 +208,7 @@ const VariantItemWithOutThumbnail = React.memo(
         </div>
 
         {!!hasInventory && !!(currentInventory < 99) && (
-          <div className="animate-pulseCustom flex items-center gap-x-2">
+          <div className="flex animate-pulseCustom items-center gap-x-2">
             <div className="mt-0.5 h-2.5 w-2.5 rounded-full bg-red-600" />
             <Text as="p" size="sm" className="text-sm text-red-500">
               Last {currentInventory} units left

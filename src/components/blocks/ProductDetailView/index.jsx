@@ -11,7 +11,7 @@ import { useRecentlyViewedDispatch } from "@/store/sagas/dispatch/recentlyViewed
 import { useStoreConfig } from "@/utils/context/navbar";
 import { PDP_BLOCK_PROMOTION_TAG_TO_IGNORE } from "@/utils/data/constants";
 import handleRedirect from "@/utils/handleRedirect";
-import { extractAttributes } from "@/utils/helpers";
+import { extractAttributes, isUUID } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
 import {
   useProduct,
@@ -19,7 +19,8 @@ import {
   useProductVariantGroups,
 } from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const VariantSelector = dynamic(
   () => import("@/components/partials/Product/PDP/VariantSelector"),
@@ -50,9 +51,31 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
     productClaims = [],
   } = extractAttributes(product?.pdpProduct);
 
+  const [defaultVariantId, setDefaultVariantId] = useState(null);
+  const searchParams = useSearchParams();
+
   const { addRecentlyViewedProduct } = useRecentlyViewedDispatch();
   const [selectedVariant, variantGroup, onVariantChange] =
-    useProductVariantGroups(fetchedProduct);
+    useProductVariantGroups(fetchedProduct, defaultVariantId);
+
+  useEffect(() => {
+    const variantIdParam = searchParams?.get("variantId");
+    if (!variantIdParam || !fetchedProduct?.variants?.items?.length) return;
+
+    let variantId = variantIdParam;
+    try {
+      variantId = atob(variantIdParam);
+    } catch (e) {
+      console.error(e);
+    }
+
+    const isVariantExist = fetchedProduct?.variants?.items?.find(
+      (i) => i?.id === variantId,
+    );
+
+    if (!!isVariantExist) setDefaultVariantId(variantId);
+  }, [searchParams]);
+
   const packageProduct = useProduct(fetchedProduct, selectedVariant?.id);
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
   const { viewItemEvent, productViewedKwikpassEvent } = useEventsDispatch();
@@ -217,6 +240,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
               variantGroups={variantGroup}
               onVariantChange={onVariantChange}
               showVariantThumbnails={showVariantThumbnails ?? true}
+              setDefaultVariantId={setDefaultVariantId}
             />
           )}
           <AddToCartSection

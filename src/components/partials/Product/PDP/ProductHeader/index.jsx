@@ -14,7 +14,7 @@ const ProductHeader = React.memo(
           </Heading>
         )}
         {benefits && (
-          <Text as="p" className="line-clamp-3" size="sm" responsive>
+          <Text as="h1" className="line-clamp-3" size="sm" responsive>
             {benefits.join(" | ")}
           </Text>
         )}
