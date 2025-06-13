@@ -23,7 +23,12 @@ const AccordionDescription = ({
       alternativeText={alternativeText}
       isAccordionOpen={isAccordionOpen}
     >
-      <ReadMore content={description} maxLength={200} isHtml />
+      <ReadMore
+        content={description}
+        maxLength={200}
+        isHtml
+        isProductDescription
+      />
     </Accordion>
   );
 };

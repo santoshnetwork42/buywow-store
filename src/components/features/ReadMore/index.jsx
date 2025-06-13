@@ -6,6 +6,7 @@ const ReadMore = ({
   maxLength = 150,
   isHtml = false,
   buttonClassName,
+  isProductDescription = false,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -14,7 +15,9 @@ const ReadMore = ({
   }, []);
 
   const processHtmlContent = useCallback((htmlContent) => {
-    return htmlContent.replace(/<p>/g, "<span>").replace(/<\/p>/g, "</span>");
+    return htmlContent
+      .replace(/<p>/g, isProductDescription ? "<h3 class='inline'>" : "<span>")
+      .replace(/<\/p>/g, isProductDescription ? "</h3>" : "</span>");
   }, []);
 
   const truncatedContent = useMemo(() => {
@@ -33,16 +36,23 @@ const ReadMore = ({
     if (displayContent.length <= maxLength) {
       return (
         <Text
-          as="span"
+          as={isProductDescription ? "div" : "span"}
           size="base"
           className="overflow-hidden text-sm"
           responsive
         >
           {isHtml ? (
-            <span
-              className="text-sm"
-              dangerouslySetInnerHTML={{ __html: displayContent }}
-            />
+            isProductDescription ? (
+              <h3
+                className="!inline text-sm"
+                dangerouslySetInnerHTML={{ __html: displayContent }}
+              />
+            ) : (
+              <span
+                className="text-sm"
+                dangerouslySetInnerHTML={{ __html: displayContent }}
+              />
+            )
           ) : (
             displayContent
           )}
@@ -51,13 +61,27 @@ const ReadMore = ({
     }
 
     return (
-      <Text as="p" size="base" className="text-sm" responsive>
+      <Text
+        as={isProductDescription ? "div" : "p"}
+        size="base"
+        responsive
+        className="max-sm:text-sm"
+      >
         {isHtml ? (
-          <span
-            dangerouslySetInnerHTML={{
-              __html: isExpanded ? displayContent : truncatedContent,
-            }}
-          />
+          isProductDescription ? (
+            <div
+              className="inline"
+              dangerouslySetInnerHTML={{
+                __html: isExpanded ? displayContent : truncatedContent,
+              }}
+            />
+          ) : (
+            <span
+              dangerouslySetInnerHTML={{
+                __html: isExpanded ? displayContent : truncatedContent,
+              }}
+            />
+          )
         ) : isExpanded ? (
           displayContent
         ) : (

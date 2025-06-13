@@ -53,7 +53,7 @@ const FaqItem = memo(({ question, answer, showDivider }) => {
         onClick={toggleOpen}
       >
         <Heading
-          as="h5"
+          as="h3"
           size="sm"
           dangerouslySetInnerHTML={{ __html: question }}
         />
@@ -64,7 +64,11 @@ const FaqItem = memo(({ question, answer, showDivider }) => {
         className="overflow-hidden transition-all duration-300 ease-in-out"
       >
         <div ref={contentRef}>
-          <Text as="p" size="sm" dangerouslySetInnerHTML={{ __html: answer }} />
+          <Text
+            as="h3"
+            size="sm"
+            dangerouslySetInnerHTML={{ __html: answer }}
+          />
         </div>
       </div>
     </div>

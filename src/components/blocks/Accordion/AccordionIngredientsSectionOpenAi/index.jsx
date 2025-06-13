@@ -134,7 +134,7 @@ const AccordionIngredientsSectionOpenAi = ({
               onMouseLeave={clearActiveIngredient}
             >
               <Text
-                as="p"
+                as="h3"
                 size="sm"
                 className="w-fit rounded-full bg-[#f7f2ed] px-2 py-1 font-medium text-yellow-900 md:px-2.5"
                 onClick={() => handleIngredientHover(name)}
@@ -143,7 +143,7 @@ const AccordionIngredientsSectionOpenAi = ({
               </Text>
               {activeIngredient === name && (
                 <div className="absolute z-[99] mt-2 max-w-72 rounded-xl border bg-white-a700 p-3 shadow-xl">
-                  <Text as="h4" className="mb-2 font-medium text-gray-900">
+                  <Text as="h3" className="mb-2 font-medium text-gray-900">
                     {name}
                   </Text>
                   <Text as="p" className="mb-2 text-sm text-gray-600">
@@ -214,17 +214,17 @@ const AccordionIngredientsSectionOpenAi = ({
           </Text>
         </div>
         {/* <ReadMore content={description} maxLength={200} isHtml /> */}
-        <Text
+        {/* <Text
           as="p"
           size="base"
-          className="overflow-hidden text-sm !leading-relaxed"
+         
           responsive
-        >
-          <span
-            className=""
-            dangerouslySetInnerHTML={{ __html: ingredientList }}
-          />
-        </Text>
+        > */}
+        <h3
+          className="overflow-hidden text-sm !leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: ingredientList }}
+        />
+        {/* </Text> */}
       </div>
       {isOpen && (
         <div

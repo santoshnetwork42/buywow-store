@@ -73,7 +73,7 @@ const Accordion = ({
             </div>
           )}
           {!!title && (
-            <Heading as="h4" size="lg" className="text-base" responsive>
+            <Heading as="h2" size="lg" className="text-base" responsive>
               {title}
             </Heading>
           )}
