@@ -110,7 +110,8 @@ function NavbarProvider({
       storeId={STORE_ID}
       resolve={apiResolve}
       isInteractive={
-        isInteractive || pathname === "/checkout" || pathname === "/cart"
+        true
+        // isInteractive || pathname === "/checkout" || pathname === "/cart"
       }
       cartItems={cartList}
       appliedCoupon={appliedCoupon}
