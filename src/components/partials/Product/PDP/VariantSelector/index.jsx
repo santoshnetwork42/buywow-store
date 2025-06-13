@@ -161,8 +161,8 @@ const VariantItemWithOutThumbnail = React.memo(
     } = variant;
 
     // Modified container class to use consistent width and better flex behavior
-    const containerClassName = `relative p-2 overflow-hidden flex cursor-pointer gap-2 rounded  outline outline-2 outline-gray-300 ${
-      selected ? "bg-yellow-900/15 !outline-black-900" : ""
+    const containerClassName = `relative p-2 overflow-hidden flex cursor-pointer gap-2 rounded  outline outline-2  ${
+      selected ? "bg-yellow-900/15 outline-yellow-900" : "outline-gray-300"
     } ${isShoppable ? "w-full" : "flex-col w-[156px]"}`;
 
     const discount = useMemo(
@@ -216,11 +216,11 @@ const VariantItemWithOutThumbnail = React.memo(
           </div>
         )}
         {discount != null && (
-          <div className="border- absolute -right-8 top-4 w-32 rotate-[40deg] border-y-2 border-orange-700 text-center max-sm:top-3">
+          <div className="absolute -right-8 top-4 w-32 rotate-[40deg] border border-y-2 text-center max-sm:top-3">
             <Text
               as="p"
               size="sm"
-              className={`bg-yellow-900 px-3 py-1 font-semibold text-white-a700_01 shadow-md`}
+              className={`bg-yellow-900 px-3 py-1 font-semibold text-white-a700_01 shadow shadow-yellow-900`}
             >
               Save ₹{discount}
             </Text>

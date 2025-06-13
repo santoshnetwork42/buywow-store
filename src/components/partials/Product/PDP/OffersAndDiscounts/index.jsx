@@ -72,7 +72,7 @@ const BestPriceDisplay = ({ bestCoupon, price, hasInventory }) => {
             <Text as="span" size="sm" className="font-light" responsive>
               Use code:
             </Text>
-            <Text as="span" size="sm" responsive>
+            <Text as="span" size="sm" className="font-semibold" responsive>
               {coupon?.code}
             </Text>
             {/* {!!titles?.length && (
