@@ -68,6 +68,7 @@ export const NOT_TO_REDIRECT_ON_PDP_FOR_THESE_COLLECTIONS = [
   "affiliate-buy-8",
   "face-wash-bundle",
   "999-triple-deal",
+  "cred-exclusive",
   "cred-exclusive-1",
   "cred-exclusive-2",
   "buy-5-799",
