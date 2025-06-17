@@ -94,6 +94,7 @@ export const itemMapper = (
     sku,
     variants,
     inventory,
+    productType,
   } = product;
 
   let contentType = "product_group";
@@ -122,7 +123,7 @@ export const itemMapper = (
       key: thumbImage?.imageKey,
       addPrefix: true,
     }),
-    "Product Category": category?.name || "All products",
+    "Product Category": productType || "All products",
     "Product URL": `${currentURL}/products/${product?.slug}`,
     "Vendor name": vendor,
     "Product Price": price,
@@ -139,7 +140,7 @@ export const itemMapper = (
     value: price * qty,
     mrpValue: listingPrice * qty,
     vercel: {
-      content_category: category?.name || "All products",
+      content_category: productType || "All products",
       content_subcategory: subCategory?.name,
       content_ids: sku,
       content_name: title,
@@ -173,7 +174,7 @@ export const itemMapper = (
       },
     },
     pixel: {
-      content_category: category?.name || "All products",
+      content_category: productType || "All products",
       content_subcategory: subCategory?.name,
       content_ids: [sku],
       content_name: title,
@@ -192,7 +193,7 @@ export const itemMapper = (
       coupon: coupon?.code || "",
       discount: (listingPrice - price)?.toString(),
       item_brand: vendor,
-      item_category: category?.name || "All products",
+      item_category: productType || "All products",
       item_category2: subCategory?.name || "",
       item_list_id: section?.id || "",
       item_list_name: section?.name || "",
@@ -210,7 +211,7 @@ export const itemMapper = (
         discount: listingPrice - price,
         index: 0,
         item_brand: vendor,
-        item_category: category?.name || "All products",
+        item_category: productType || "All products",
         item_category2: subCategory?.name || "",
         item_list_id: section?.id || "",
         item_list_name: section?.name || "",
