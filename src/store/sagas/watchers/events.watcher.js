@@ -75,7 +75,7 @@ function* productQtyChangesEvent() {
 
 //cart actions
 function* addToCartEvent() {
-  yield takeLatest(cartSagaActions.ADD_TO_CART, addToCartEventHandler);
+  yield takeLatest(eventsSagaActions.ADD_TO_CART_EVENT, addToCartEventHandler);
 }
 
 //cart actions

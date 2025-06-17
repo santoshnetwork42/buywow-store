@@ -266,6 +266,7 @@ const ProductCard = memo(
                   quantityClassName=" h-8 w-[4.5rem]"
                   buttonClassName="text-base rounded-md min-w-[4.5rem] h-8 sm:h-auto"
                   section={section}
+                  collectionSlug={collectionSlug}
                 />
               </div>
             </div>
@@ -374,6 +375,7 @@ const ProductCard = memo(
                 quantityClassName=" h-8 w-[4.5rem]"
                 buttonClassName="text-base rounded-md min-w-[4.5rem] h-8 sm:h-auto"
                 section={section}
+                collectionSlug={collectionSlug}
               />
             </div>
           </div>

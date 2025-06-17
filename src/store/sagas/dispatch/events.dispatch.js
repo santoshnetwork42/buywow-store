@@ -5,6 +5,16 @@ import { eventsSagaActions } from "@/store/sagas/sagaActions/events.actions";
 export const useEventsDispatch = () => {
   const dispatch = useDispatch();
 
+  const addToCartEvent = useCallback(
+    (product) => {
+      dispatch({
+        type: eventsSagaActions.ADD_TO_CART_EVENT,
+        payload: { product },
+      });
+    },
+    [dispatch],
+  );
+
   const handleOutOfStockEvent = useCallback(
     (products, inventory) => {
       dispatch({
@@ -423,6 +433,7 @@ export const useEventsDispatch = () => {
   );
 
   return {
+    addToCartEvent,
     viewItemEvent,
     handleOutOfStockEvent,
     handleProceedToCheckoutEvent,

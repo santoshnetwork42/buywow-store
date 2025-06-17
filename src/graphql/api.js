@@ -47,6 +47,7 @@ export const getInitialData = /* GraphQL */ `
         SPIN_THE_WHEEL_CONFIG
         COD_BLOCKED_UTM_SOURCES
         IS_SOCIAL_PROOF_ENABLED
+        BUNDLE_ADD_TO_CART_ENABLED
       }
     }
 
@@ -136,6 +137,7 @@ export const getInitialData = /* GraphQL */ `
         isRewardApplicable
         applyOnAllVariants
         isPDPFeatured
+        isBundleOffer
         isFeatured
       }
     }
@@ -487,6 +489,7 @@ export const applyCoupon = /* GraphQL */ `
       isAffiliated
       isFeatured
       isPDPFeatured
+      isBundleOffer
       isArchive
       priority
       createdAt
@@ -670,6 +673,7 @@ export const getShoppingCart = /* GraphQL */ `
         priority
         applyOnAllVariants
         isPDPFeatured
+        isBundleOffer
         showAsNudge
         getYStoreProducts {
           id
@@ -871,6 +875,7 @@ export const getProductById = /* GraphQL */ `
         name
         slug
       }
+      productType
       isFeatured
       category {
         name
@@ -1529,6 +1534,7 @@ export const getCouponRule = /* GraphQL */ `
       isArchive
       isFeatured
       isPDPFeatured
+      isBundleOffer
       isBulkCoupon
       autoApply
       isAffiliated

@@ -116,13 +116,14 @@ export const itemMapper = (
   const basicAttributes = {
     "Product ID": id,
     "Variant ID": variantId,
-    "Product Subcategory": subCategory?.name || null,
+    "Product Subcategory": productType || null,
     "Product Title": product?.title,
     SKU: product?.sku,
     "Image URL": getPublicImageURL({
       key: thumbImage?.imageKey,
       addPrefix: true,
     }),
+    "Product Category": productType || "All products",
     "Product Category": productType || "All products",
     "Product URL": `${currentURL}/products/${product?.slug}`,
     "Vendor name": vendor,
@@ -232,7 +233,10 @@ export const orderMapper = (
   checkoutSource = "BUYWOW",
 ) => {
   const defaultAttribute = {
-    content_ids: [],
+    ...(!!coupon?.isBundleOffer && {
+      content_ids: [],
+    }),
+    content_name: !!coupon?.isBundleOffer ? [`${coupon?.code}_Bundle`] : [],
     content_category: [],
     content_subcategory: [],
     content_type: "product_group",
@@ -264,7 +268,12 @@ export const orderMapper = (
             pixelNew.content_subcategory,
           ],
           content_type: "product_group",
-          content_ids: [...pixel.content_ids, ...pixelNew.content_ids],
+          ...(!!coupon?.isBundleOffer && {
+            content_ids: [...pixel.content_ids, ...pixelNew.content_ids],
+          }),
+          content_name: !!coupon?.isBundleOffer
+            ? pixel.content_name
+            : [...pixel.content_name, ...pixelNew.content_name],
           num_items: pixel.num_items + pixelNew.num_items,
           value: pixel.value + pixelNew.value,
           external_id: user?.id || uuidv4(),

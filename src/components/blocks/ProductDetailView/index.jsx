@@ -93,14 +93,40 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
   }, [product]);
 
   useEffect(() => {
-    if (fetchedProduct) {
-      viewItemEvent({
-        ...fetchedProduct,
-        section: { id: "product-detail", name: "Product Detail" },
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchedProduct]);
+    if (!fetchedProduct) return;
+
+    let hasFired = false;
+    const section = { id: "product-detail", name: "Product Detail" };
+
+    const fireEvent = () => {
+      if (hasFired) return;
+      hasFired = true;
+      viewItemEvent({ ...fetchedProduct, section });
+      cleanup();
+    };
+
+    const onScroll = () => {
+      const scrollTop = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      const scrollPercent = (scrollTop + windowHeight) / documentHeight;
+      if (scrollPercent >= 0.25) {
+        fireEvent();
+      }
+    };
+
+    const timeoutId = setTimeout(fireEvent, 7000); // Fire after 7 seconds
+
+    const cleanup = () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("scroll", onScroll);
+    };
+
+    window.addEventListener("scroll", onScroll);
+
+    return cleanup;
+  }, [fetchedProduct, viewItemEvent]);
 
   //  kwikpass event useEffect
   useEffect(() => {
