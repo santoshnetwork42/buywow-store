@@ -268,7 +268,7 @@ export const orderMapper = (
             pixelNew.content_subcategory,
           ],
           content_type: "product_group",
-          ...(!!coupon?.isBundleOffer && {
+          ...(!coupon?.isBundleOffer && {
             content_ids: [...pixel.content_ids, ...pixelNew.content_ids],
           }),
           content_name: !!coupon?.isBundleOffer
