@@ -233,7 +233,7 @@ export const orderMapper = (
   checkoutSource = "BUYWOW",
 ) => {
   const defaultAttribute = {
-    ...(!!coupon?.isBundleOffer && {
+    ...(!coupon?.isBundleOffer && {
       content_ids: [],
     }),
     content_name: !!coupon?.isBundleOffer ? [`${coupon?.code}_Bundle`] : [],
