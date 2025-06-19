@@ -54,7 +54,7 @@ const CarouselImage = React.memo(
             quality={55}
             width={300}
             height={300}
-            className="h-auto w-full object-cover"
+            className="h-auto w-full object-cover max-sm:aspect-[4/5]"
             isPersistLoading={isPersistLoading}
           />
         </picture>
