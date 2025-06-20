@@ -196,8 +196,6 @@ const OffersAndDiscounts = ({ bestCoupon, price, hasInventory, product }) => {
       pdpFeaturedCoupon?.coupon?.id,
   );
 
-  if (!bestCoupon || !hasInventory) return null;
-
   return (
     <div className="mt-4 flex flex-col gap-2 sm:gap-2.5 lg:gap-3">
       {!!bestCoupon && (
