@@ -22,10 +22,8 @@ const SingleBanner = ({ banner, pageType }) => {
   return (
     <LinkClickTracker
       href={link || "#"}
-      className={`block w-full ${
-        pageType === "collections"
-          ? "container-main mb-5 sm:mb-6 lg:mb-7"
-          : "mb-main"
+      className={`container-main block w-full ${
+        pageType === "COLLECTION" ? "mb-5 sm:mb-6 lg:mb-7" : "mb-main"
       }`}
       trackingType="BANNER_CLICKED"
       trackingEventPayload={{

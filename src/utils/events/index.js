@@ -282,7 +282,32 @@ export const orderMapper = (
         },
         pinpoint: [...pinpoint, pinpointNew],
         vercel: [...vercel, vercelNew],
-        ga: [...ga, { ...itemNew, index }],
+        ga: !coupon?.isBundleOffer
+          ? [...ga, { ...itemNew, index }]
+          : [
+              {
+                item_id: coupon?.id,
+                item_name: `${coupon?.code}_Bundle`,
+                affiliation: "",
+                coupon: coupon?.code || "",
+                discount: (ga?.discount || 0) + (itemNew?.discount || 0),
+                index: 0,
+                item_brand: !!itemNew?.item_brand
+                  ? (ga?.item_brand || "") + `, ${itemNew?.item_brand}`
+                  : ga?.item_brand || "",
+                item_category: "All products",
+                item_category2: "",
+                item_list_id: itemNew?.item_list_id || "",
+                item_list_name: itemNew?.item_list_name || "",
+                item_variant: "",
+                location_id: "",
+                price:
+                  (ga?.price || 0) +
+                  (itemNew?.price || 0) * (itemNew?.quantity || 1),
+                quantity: 1,
+                inventory: 999,
+              },
+            ],
       };
     },
     {
