@@ -1,13 +1,14 @@
 "use client";
 
-import { Heading } from "@/components/elements";
+import { Heading, Img, Text } from "@/components/elements";
 import InfiniteScroll from "@/components/features/InfiniteScroll";
 import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
 import { searchCMSCollectionProductsAPI } from "@/lib/appSyncAPIs";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useStoreConfig } from "@/utils/context/navbar";
-import { getSource } from "@/utils/helpers";
+import { extractAttributes, getSource } from "@/utils/helpers";
+import useWindowDimensions from "@/utils/helpers/getWindowDimension";
 import { setSoldOutLast } from "@/utils/helpers/products";
 import dynamic from "next/dynamic";
 import React, {
@@ -18,6 +19,7 @@ import React, {
   useState,
 } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
+import { twMerge } from "tailwind-merge";
 
 const SortDropdown = dynamic(() => import("@/components/common/SortDropdown"), {
   ssr: false,
@@ -81,6 +83,7 @@ const ProductCollectionByTab = ({
   showProductsOnVariantStockOut = true,
   id,
   showVideoAsThumbnail = false,
+  isSubCategoryWiseListing = false,
 }) => {
   const [sortOption, setSortOption] = useState(
     SORT_OPTIONS.find((option) => option.value === defaultCollectionSorting) ||
@@ -90,6 +93,12 @@ const ProductCollectionByTab = ({
   const [productCollectionTabItems, setProductCollectionTabItems] = useState(
     initialProductCollectionTabItems,
   );
+
+  const [
+    productCollectionTabItemsForCategoryWiseListing,
+    setProductCollectionTabItemsForCategoryWiseListing,
+  ] = useState([]);
+
   const [activeTabIndex, setActiveTabIndex] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -97,6 +106,13 @@ const ProductCollectionByTab = ({
   const containerRef = useRef(null);
   const { viewListEvent, collectionViewedKwikpassEvent } = useEventsDispatch();
   const source = getSource();
+
+  const { isSmallSize: isMobile } = useWindowDimensions();
+  const collectionTabsSectionRef = useRef(null);
+  const flexTabsSectionRef = useRef(null);
+  const [activeCategoryId, setActiveCategoryId] = useState(0);
+  const tabRefs = useRef({});
+  const [isStickyCategoryTab, setIsStickyCategoryTab] = useState(false);
 
   const storeConfig = useStoreConfig();
   const { data: storeConfigData } = storeConfig;
@@ -357,7 +373,257 @@ const ProductCollectionByTab = ({
     [isLoading],
   );
 
+  useEffect(() => {
+    if (!isSubCategoryWiseListing) return;
+    setProductCollectionTabItemsForCategoryWiseListing(
+      productCollectionTabItems.filter(
+        (i) => i.id !== "200" && !!i.pagination?.totalData,
+      ),
+    );
+  }, [productCollectionTabItems, isSubCategoryWiseListing]);
+
+  useEffect(() => {
+    if (!isSubCategoryWiseListing) return;
+    //Get active category Id -> when particular category come on page scroll
+    const handleScroll = () => {
+      let nearestCategoryId = null;
+      let nearestDistance = -Infinity;
+      if (!productCollectionTabItemsForCategoryWiseListing.length) return;
+
+      productCollectionTabItemsForCategoryWiseListing.forEach((cat) => {
+        const element = document.getElementById(`category-${cat.id}`);
+        if (!element) return;
+
+        const top = element?.getBoundingClientRect()?.top || 0;
+
+        if (top < window.innerHeight / 2 && top >= 0) {
+          nearestCategoryId = cat.id;
+          return;
+        } else if (top < 0) {
+          const _nearestDistance = Math.max(nearestDistance, top);
+          if (_nearestDistance !== nearestDistance) {
+            nearestCategoryId = cat?.id;
+            nearestDistance = _nearestDistance;
+          }
+        }
+      });
+
+      if (!!nearestCategoryId) {
+        setActiveCategoryId(nearestCategoryId);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [
+    productCollectionTabItemsForCategoryWiseListing,
+    isSubCategoryWiseListing,
+  ]);
+
+  useEffect(() => {
+    if (!isSubCategoryWiseListing) return;
+    // setActiveIndex for loading more products
+    const activeIndex = productCollectionTabItems?.findIndex(
+      (i) => i.id === activeCategoryId,
+    );
+    setActiveTabIndex(activeIndex);
+  }, [productCollectionTabItems, activeCategoryId, isSubCategoryWiseListing]);
+
+  useEffect(() => {
+    if (!isSubCategoryWiseListing) return;
+    //for sticky bar -> add box shadow -> flag -> isStickybar
+    const handleScroll = () => {
+      const top =
+        collectionTabsSectionRef?.current?.getBoundingClientRect().top;
+      setIsStickyCategoryTab(top <= 10);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isSubCategoryWiseListing]);
+
+  useEffect(() => {
+    if (!isSubCategoryWiseListing) return;
+    //In sticky header, scroll horizontally for active category -> when particular category come on page scroll
+    if (activeCategoryId && tabRefs.current[activeCategoryId]) {
+      tabRefs.current[activeCategoryId].scrollIntoView({
+        behavior: "smooth",
+        inline: "center", // horizontally center the active tab
+        block: "nearest",
+      });
+    }
+  }, [activeCategoryId, tabRefs.current, isSubCategoryWiseListing]);
+
+  const renderTabListByCategory = useMemo(() => {
+    if (!productCollectionTabItemsForCategoryWiseListing?.length) return null;
+
+    const handleScroll = (categoryId) => {
+      const element = document.getElementById(`category-${categoryId}`);
+      if (element) {
+        const headerHeight =
+          collectionTabsSectionRef?.current?.offsetHeight || 110;
+        const elementTop =
+          element.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({
+          top: Math.max(elementTop - headerHeight, 0),
+          behavior: "smooth",
+        });
+      }
+    };
+
+    const container = flexTabsSectionRef?.current;
+    const isOverflowing = container?.scrollWidth > container?.clientWidth;
+
+    return (
+      <div
+        className={twMerge(
+          "flex items-center gap-2 max-sm:w-max max-sm:justify-start sm:gap-3 md:gap-4 xl:gap-5",
+          isOverflowing ? "justify-start" : "justify-center",
+        )}
+        ref={flexTabsSectionRef}
+      >
+        {productCollectionTabItemsForCategoryWiseListing.map(
+          (category, index) => {
+            const tabTitle = category?.tab?.data?.attributes?.title;
+            const webIcon = category?.tab?.data?.attributes?.webIcon;
+            const mWebIcon = category?.tab?.data?.attributes?.mWebIcon;
+
+            const { url: webUrl, alternativeText: webImgAlt = "" } =
+              extractAttributes(webIcon) || {};
+            const { url: mWebUrl, alternativeText: mWebImgAlt = "" } =
+              extractAttributes(mWebIcon) || {};
+
+            const imgUrl = isMobile ? mWebUrl : webUrl;
+            const imgText =
+              (isMobile ? mWebImgAlt : webImgAlt) || `${tabTitle + "_img"}`;
+
+            // "https://media.buywow.in/public/wow-cms/face_serum_e9576c17c3.jpg"
+
+            if (!tabTitle) return null;
+            return (
+              <Tab
+                key={tabTitle + index}
+                className="flex w-20 max-w-28 flex-col items-center sm:flex-shrink-0"
+                onClick={(e) => {
+                  handleScroll(category?.id);
+                }}
+              >
+                <div
+                  className="w-14 overflow-hidden rounded-full sm:w-16"
+                  ref={(el) => (tabRefs.current[category.id] = el)}
+                >
+                  <Img
+                    src={imgUrl}
+                    alt={imgText}
+                    width={56}
+                    height={56}
+                    className="aspect-square w-14 object-contain sm:w-16"
+                    priority={"priority"}
+                  />
+                </div>
+                {!!tabTitle && (
+                  <Text
+                    size="sm"
+                    as="span"
+                    className={twMerge(
+                      "mt-2 line-clamp-2 text-wrap break-words text-center capitalize",
+                    )}
+                  >
+                    {tabTitle}
+                  </Text>
+                )}
+                <div
+                  className={twMerge(
+                    "mt-1 h-0.5 w-full rounded transition-colors duration-500",
+                    activeCategoryId === category?.id
+                      ? "bg-black-900"
+                      : "bg-transparent",
+                  )}
+                ></div>
+                {/* <div
+                  key={`tab-${index}`}
+                  className={twMerge(
+                    "w-max rounded-full border-[0.5px] border-lime-100 px-2.5 py-1 text-sm font-light capitalize !leading-[1.25] md:border md:px-3 md:py-1.5 md:text-base",
+                    activeCategoryId === category?.id
+                      ? "!border-blue-50 bg-blue-50 font-normal"
+                      : "",
+                  )}
+                >
+                  {tabTitle}
+                </div> */}
+              </Tab>
+            );
+          },
+        )}
+      </div>
+    );
+  }, [productCollectionTabItemsForCategoryWiseListing, activeCategoryId]);
+
   if (!productCollectionTabItems?.length) return null;
+
+  if (!!isSubCategoryWiseListing) {
+    if (!productCollectionTabItemsForCategoryWiseListing?.length) return null;
+
+    return (
+      <div className="container-main flex flex-col justify-center gap-8 sm:gap-10 lg:gap-12">
+        <Tabs className="mt-main flex flex-col" onSelect={handleTabSelect}>
+          <div
+            className={twMerge(
+              "grid grid-cols-[1fr_auto] items-center gap-4 sm:gap-5 lg:gap-8",
+              "sm:-mx-18 sticky top-0 z-50 -mx-3 bg-white-a700_01 p-3 max-sm:py-2 sm:-mx-16",
+              isStickyCategoryTab ? "shadow-[0_4px_4px_rgba(0,0,0,0.15)]" : "",
+            )}
+            ref={collectionTabsSectionRef}
+          >
+            <div className="no-scrollbar col-span-full mx-auto w-full overflow-x-auto sm:w-11/12">
+              {renderTabListByCategory}
+            </div>
+          </div>
+          {productCollectionTabItemsForCategoryWiseListing.map(
+            (category, index) => (
+              <InfiniteScroll
+                loadMore={loadMoreProducts}
+                hasMore={hasMore}
+                isLoading={isLoading}
+                rootMargin="800px"
+                key={"hc-key-" + index}
+              >
+                <Heading
+                  as="h2"
+                  size="4xl"
+                  id={`category-${category?.id}`}
+                  className="shrink-0 pb-4 pt-8 sm:pb-6 sm:pt-12"
+                  responsive
+                >
+                  {category?.tab?.data?.attributes?.title || ""}
+                </Heading>
+
+                <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(326px,calc(25vw-34px)))]">
+                  {renderProductsAndSkeletons(category, promotion)}
+                  {verticalBlogSection?.verticalBlogItem && (
+                    <BlogCard
+                      cardData={verticalBlogSection.verticalBlogItem}
+                      isVertical={true}
+                      className="col-start-[-2]"
+                      row={verticalBlogSection.row}
+                    />
+                  )}
+                  {horizontalBlogSection?.map((horizontalBlogs, index) => (
+                    <HorizontalBlogSection
+                      key={`horizontal-blog-${index}`}
+                      horizontalBlogs={horizontalBlogs}
+                      containerRef={containerRef}
+                      horizontalCardWidth={horizontalCardWidth}
+                    />
+                  ))}
+                </div>
+              </InfiniteScroll>
+            ),
+          )}
+        </Tabs>
+      </div>
+    );
+  }
 
   return (
     <div className="container-main mb-main flex flex-col justify-center gap-8 sm:gap-10 lg:gap-12">
