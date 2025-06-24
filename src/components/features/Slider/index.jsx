@@ -108,6 +108,9 @@ const Slider = ({
   dragFree = true,
   isContainShadow,
   size,
+  hasMore,
+  isLoading,
+  loadMore,
   ...props
 }) => {
   const isInteractive = useIsInteractive();
@@ -129,6 +132,18 @@ const Slider = ({
     isAllSlidesVisible: false,
     scrollbarWidth: 0,
   });
+
+  useEffect(() => {
+    // At end of slider if more products then load it
+    if (
+      !!sliderState?.currentSlideIndex &&
+      sliderState?.currentSlideIndex + 1 === sliderState?.totalSlides &&
+      hasMore &&
+      !isLoading
+    ) {
+      loadMore();
+    }
+  }, [sliderState?.currentSlideIndex, hasMore, isLoading, loadMore]);
 
   const updateSliderState = useCallback((updates) => {
     setSliderState((prev) => ({ ...prev, ...updates }));

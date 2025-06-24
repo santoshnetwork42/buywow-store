@@ -1,6 +1,6 @@
 "use client";
 
-import { Heading, Img, Text } from "@/components/elements";
+import { Button, Heading, Img, Text } from "@/components/elements";
 import InfiniteScroll from "@/components/features/InfiniteScroll";
 import Slider from "@/components/features/Slider";
 import ProductCard from "@/components/partials/Card/ProductCard";
@@ -44,6 +44,12 @@ const SORT_OPTIONS = [
   { value: "AVAILABILITY", label: "Availability" },
 ];
 
+const subCategoryWiseListingTypes = {
+  VERTICAL_INFINITE_SCROLL: "VERTICAL_INFINITE_SCROLL", // all products will be visible for a subcategory (vertical => normal infinte scroll)
+  VERTICAL_FINITE_SCROLL: "VERTICAL_FINITE_SCROLL", // view all button with less products for a subcategory
+  HORIZONTAL_INFINITE_SCROLL: "HORIZONTAL_INFINITE_SCROLL", // all products will be visible for a subcategory (horizontal => normal slider scroll)
+};
+
 const HorizontalBlogSection = React.memo(
   ({ horizontalBlogs, containerRef, horizontalCardWidth }) => (
     <div
@@ -84,7 +90,12 @@ const ProductCollectionByTab = ({
   id,
   showVideoAsThumbnail = false,
   isSubCategoryWiseListing = false,
+  subCategoryWiseListingType: listingType,
 }) => {
+  const subCategoryWiseListingType =
+    subCategoryWiseListingTypes[listingType] ||
+    subCategoryWiseListingTypes["VERTICAL_INFINITE_SCROLL"];
+
   const [sortOption, setSortOption] = useState(
     SORT_OPTIONS.find((option) => option.value === defaultCollectionSorting) ||
       SORT_OPTIONS[0],
@@ -107,12 +118,13 @@ const ProductCollectionByTab = ({
   const { viewListEvent, collectionViewedKwikpassEvent } = useEventsDispatch();
   const source = getSource();
 
-  const { isSmallSize: isMobile } = useWindowDimensions();
+  const { isSmallSize: isMobile, isMidSize: isTablet } = useWindowDimensions();
   const collectionTabsSectionRef = useRef(null);
   const flexTabsSectionRef = useRef(null);
   const [activeCategoryId, setActiveCategoryId] = useState(0);
   const tabRefs = useRef({});
   const [isStickyCategoryTab, setIsStickyCategoryTab] = useState(false);
+  const [viewAll, setViewAll] = useState({});
 
   const storeConfig = useStoreConfig();
   const { data: storeConfigData } = storeConfig;
@@ -328,7 +340,7 @@ const ProductCollectionByTab = ({
   }, [productCollectionTabItems]);
 
   const renderProductsAndSkeletons = useCallback(
-    (category, promotion) => {
+    (className, category, promotion, isViewAll = true) => {
       const currentProducts = category.products?.data || [];
       const totalProducts = category.pagination?.totalData || 0;
       const pageSize = 16;
@@ -343,26 +355,32 @@ const ProductCollectionByTab = ({
         showProductsOnVariantStockOut,
       );
 
+      const noOfProductsToDisplay = isViewAll
+        ? currentProductsOosLast?.length
+        : 24 / (isTablet ? 4 : isMobile ? 6 : 3);
+
       const tabValue = category?.tab?.data?.attributes?.title || "";
       return [
-        ...currentProductsOosLast.map((product, productIndex) => (
-          <ProductCard
-            collectionSlug={slug}
-            className="h-auto bg-white-a700_01"
-            key={`product-${productIndex}`}
-            parentPromotionTag={
-              (promotion?.data && promotion) ||
-              (storeConfigData?.attributes?.promotion_tag?.data &&
-                storeConfigData?.attributes?.promotion_tag)
-            }
-            showVideoAsThumbnail={showVideoAsThumbnail}
-            {...product.attributes}
-            section={{
-              name: title,
-              tabValue,
-            }}
-          />
-        )),
+        ...currentProductsOosLast
+          .slice(0, noOfProductsToDisplay)
+          .map((product, productIndex) => (
+            <ProductCard
+              collectionSlug={slug}
+              className={twMerge("h-auto bg-white-a700_01", className)}
+              key={`product-${productIndex}`}
+              parentPromotionTag={
+                (promotion?.data && promotion) ||
+                (storeConfigData?.attributes?.promotion_tag?.data &&
+                  storeConfigData?.attributes?.promotion_tag)
+              }
+              showVideoAsThumbnail={showVideoAsThumbnail}
+              {...product.attributes}
+              section={{
+                name: title,
+                tabValue,
+              }}
+            />
+          )),
         ...Array.from({ length: skeletonCount }).map((_, index) => (
           <ProductCardSkeleton
             key={`skeleton-${currentProducts.length + index}`}
@@ -426,7 +444,7 @@ const ProductCollectionByTab = ({
     const activeIndex = productCollectionTabItems?.findIndex(
       (i) => i.id === activeCategoryId,
     );
-    setActiveTabIndex(activeIndex);
+    handleTabSelect(activeIndex);
   }, [productCollectionTabItems, activeCategoryId, isSubCategoryWiseListing]);
 
   useEffect(() => {
@@ -496,8 +514,6 @@ const ProductCollectionByTab = ({
             const imgUrl = isMobile ? mWebUrl : webUrl;
             const imgText =
               (isMobile ? mWebImgAlt : webImgAlt) || `${tabTitle + "_img"}`;
-
-            // "https://media.buywow.in/public/wow-cms/face_serum_e9576c17c3.jpg"
 
             if (!tabTitle) return null;
             return (
@@ -579,46 +595,134 @@ const ProductCollectionByTab = ({
               {renderTabListByCategory}
             </div>
           </div>
-          {productCollectionTabItemsForCategoryWiseListing.map(
-            (category, index) => (
-              <InfiniteScroll
-                loadMore={loadMoreProducts}
-                hasMore={hasMore}
-                isLoading={isLoading}
-                rootMargin="800px"
-                key={"hc-key-" + index}
-              >
-                <Heading
-                  as="h2"
-                  size="4xl"
-                  id={`category-${category?.id}`}
-                  className="shrink-0 pb-4 pt-8 sm:pb-6 sm:pt-12"
-                  responsive
-                >
-                  {category?.tab?.data?.attributes?.title || ""}
-                </Heading>
 
-                <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(326px,calc(25vw-34px)))]">
-                  {renderProductsAndSkeletons(category, promotion)}
-                  {verticalBlogSection?.verticalBlogItem && (
-                    <BlogCard
-                      cardData={verticalBlogSection.verticalBlogItem}
-                      isVertical={true}
-                      className="col-start-[-2]"
-                      row={verticalBlogSection.row}
-                    />
-                  )}
-                  {horizontalBlogSection?.map((horizontalBlogs, index) => (
-                    <HorizontalBlogSection
-                      key={`horizontal-blog-${index}`}
-                      horizontalBlogs={horizontalBlogs}
-                      containerRef={containerRef}
-                      horizontalCardWidth={horizontalCardWidth}
-                    />
-                  ))}
-                </div>
-              </InfiniteScroll>
-            ),
+          {subCategoryWiseListingType === "HORIZONTAL_INFINITE_SCROLL" ? (
+            <>
+              {productCollectionTabItemsForCategoryWiseListing.map(
+                (category, index) => (
+                  <>
+                    <Heading
+                      as="h2"
+                      size="4xl"
+                      id={`category-${category?.id}`}
+                      className="shrink-0 pb-4 pt-8 sm:pb-6 sm:pt-12"
+                      responsive
+                    >
+                      {category?.tab?.data?.attributes?.title || ""}
+                    </Heading>
+                    <Slider
+                      controlsContainerClassName="mb-2 md:mb-3"
+                      sliderClassName="gap-[5px] sm:gap-2 lg:gap-3 !mx-0"
+                      isContainShadow
+                      category={category}
+                      hasMore={hasMore}
+                      isLoading={isLoading}
+                      loadMore={loadMoreProducts}
+                    >
+                      {renderProductsAndSkeletons(
+                        "w-[calc(50vw-16px)] max-w-[326px] h-full sm:w-[calc(50vw-24px)] md:w-[calc(33vw-24.5px)] lg:w-[calc(33vw-30px)] xl:w-[calc(25vw-34px)]",
+                        category,
+                        promotion,
+                        true,
+                      )}
+                    </Slider>
+                  </>
+                ),
+              )}
+            </>
+          ) : (
+            <>
+              {productCollectionTabItemsForCategoryWiseListing.map(
+                (category, index) => {
+                  const isViewAllButtonToBeDisplay =
+                    category.pagination?.totalData >
+                    24 / (isTablet ? 4 : isMobile ? 6 : 3);
+
+                  return (
+                    <InfiniteScroll
+                      loadMore={loadMoreProducts}
+                      hasMore={
+                        subCategoryWiseListingType ===
+                          "VERTICAL_FINITE_SCROLL" && !viewAll[category?.id]
+                          ? false
+                          : hasMore
+                      }
+                      isLoading={isLoading}
+                      rootMargin="800px"
+                      key={"hc-key-" + index}
+                    >
+                      <Heading
+                        as="h2"
+                        size="4xl"
+                        id={`category-${category?.id}`}
+                        className="shrink-0 pb-4 pt-8 sm:pb-6 sm:pt-12"
+                        responsive
+                      >
+                        {category?.tab?.data?.attributes?.title || ""}
+                      </Heading>
+                      <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(326px,calc(25vw-34px)))]">
+                        {renderProductsAndSkeletons(
+                          "",
+                          category,
+                          promotion,
+                          subCategoryWiseListingType ===
+                            "VERTICAL_FINITE_SCROLL"
+                            ? (viewAll[category?.id] ?? false)
+                            : true,
+                        )}
+                        {verticalBlogSection?.verticalBlogItem && (
+                          <BlogCard
+                            cardData={verticalBlogSection.verticalBlogItem}
+                            isVertical={true}
+                            className="col-start-[-2]"
+                            row={verticalBlogSection.row}
+                          />
+                        )}
+                        {horizontalBlogSection?.map(
+                          (horizontalBlogs, index) => (
+                            <HorizontalBlogSection
+                              key={`horizontal-blog-${index}`}
+                              horizontalBlogs={horizontalBlogs}
+                              containerRef={containerRef}
+                              horizontalCardWidth={horizontalCardWidth}
+                            />
+                          ),
+                        )}
+                      </div>
+                      {subCategoryWiseListingType ===
+                        "VERTICAL_FINITE_SCROLL" &&
+                        isViewAllButtonToBeDisplay && (
+                          <Button
+                            variant="primary"
+                            onClick={(e) => {
+                              const isViewAll = viewAll[category?.id];
+                              setViewAll((old) => ({
+                                ...old,
+                                [category?.id]: !old[category?.id],
+                              }));
+                              if (isViewAll) {
+                                const element = document.getElementById(
+                                  `category-${category?.id}`,
+                                );
+                                if (element) {
+                                  const top = element?.offsetTop;
+                                  window.scrollTo({
+                                    top: top,
+                                    behavior: "smooth",
+                                  });
+                                }
+                              }
+                            }}
+                            className="mx-auto mt-8 max-w-fit px-5 py-3 text-base"
+                          >
+                            {!!viewAll[category?.id] ? "View Less" : "View All"}
+                          </Button>
+                        )}
+                    </InfiniteScroll>
+                  );
+                },
+              )}
+            </>
           )}
         </Tabs>
       </div>
@@ -664,7 +768,7 @@ const ProductCollectionByTab = ({
               rootMargin="800px"
             >
               <div className="grid grid-cols-2 justify-center gap-x-1 gap-y-6 sm:grid-cols-2 sm:gap-x-2 md:grid-cols-3 md:gap-y-7 lg:gap-x-3 xl:grid-cols-[repeat(auto-fill,min(326px,calc(25vw-34px)))]">
-                {renderProductsAndSkeletons(category, promotion)}
+                {renderProductsAndSkeletons("", category, promotion, true)}
                 {verticalBlogSection?.verticalBlogItem && (
                   <BlogCard
                     cardData={verticalBlogSection.verticalBlogItem}
