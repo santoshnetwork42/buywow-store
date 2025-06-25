@@ -525,15 +525,16 @@ const ProductCollectionByTab = ({
                 }}
               >
                 <div
-                  className="w-14 overflow-hidden rounded-full sm:w-16"
+                  className="w-16 overflow-hidden rounded-full sm:w-20 md:w-24"
                   ref={(el) => (tabRefs.current[category.id] = el)}
                 >
                   <Img
                     src={imgUrl}
                     alt={imgText}
-                    width={56}
-                    height={56}
-                    className="aspect-square w-14 object-contain sm:w-16"
+                    width={80}
+                    height={80}
+                    quality={75}
+                    className="aspect-square w-16 object-contain sm:w-20 md:w-24"
                     priority={"priority"}
                   />
                 </div>
