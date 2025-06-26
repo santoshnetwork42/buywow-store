@@ -54,26 +54,35 @@ const MobileMenuItem = ({ item, closeMenu, linkPrefix }) => {
   if (item?.subMenu && item?.subMenu?.length > 0) {
     return (
       <div>
-        <div
-          className="flex cursor-pointer items-center justify-between pb-3 pr-3 pt-2"
-          onClick={() => {
-            topNavbarClickedEvent({
-              banner_name: item.title,
-              item_id: item.slug,
-              Source: "Mobile",
-              "Section Name": "Mobile Navbar",
-            });
-            toggleOpen();
-          }}
-        >
-          <Heading size="base" as="h4" className="font-semibold">
-            {item.title}
-          </Heading>
+        <div className="flex pb-3 pr-3 pt-2">
+          <Link
+            className="flex grow cursor-pointer items-center justify-between"
+            prefetch={false}
+            href={
+              item?.slug
+                ? `/${linkPrefix ? linkPrefix + "/" : ""}${item.slug}`
+                : item?.link || "#"
+            }
+          >
+            <Heading size="base" as="h4" className="font-semibold">
+              {item.title}
+            </Heading>
+          </Link>
           <DownArrowIconSVG
             className={`mt-0.5 h-3 w-3 transition-transform duration-300 ${
               isOpen ? "rotate-180" : ""
             }`}
             strokeWidth={1.4}
+            onClick={(e) => {
+              e.stopPropagation();
+              topNavbarClickedEvent({
+                banner_name: item.title,
+                item_id: item.slug,
+                Source: "Mobile",
+                "Section Name": "Mobile Navbar",
+              });
+              toggleOpen();
+            }}
           />
         </div>
         <div
