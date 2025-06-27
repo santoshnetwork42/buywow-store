@@ -464,11 +464,13 @@ const ProductCollectionByTab = ({
     if (!isSubCategoryWiseListing) return;
     //In sticky header, scroll horizontally for active category -> when particular category come on page scroll
     if (activeCategoryId && tabRefs.current[activeCategoryId]) {
-      tabRefs.current[activeCategoryId].scrollIntoView({
-        behavior: "smooth",
-        inline: "center", // horizontally center the active tab
-        block: "nearest",
-      });
+      setTimeout(() => {
+        tabRefs.current[activeCategoryId].scrollIntoView({
+          behavior: "smooth",
+          inline: "center", // horizontally center the active tab
+          block: "nearest",
+        });
+      }, 500);
     }
   }, [activeCategoryId, tabRefs.current, isSubCategoryWiseListing]);
 
