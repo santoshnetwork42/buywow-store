@@ -77,8 +77,6 @@ const FooterBarForMWeb = React.memo(
   }) => {
     const [activeIndex, setActiveIndex] = useState(0);
 
-    if (!isMobileFooterToShow) return null;
-
     const normalizeTitle = useCallback(
       (title) => title.toLowerCase().replace(/[\s\/\-]/g, ""),
       [],
@@ -164,6 +162,8 @@ const FooterBarForMWeb = React.memo(
         <div key={index}>{content}</div>
       );
     };
+
+    if (!isMobileFooterToShow) return null;
 
     return (
       <div className="flex w-full justify-around border-t border-gray-200 bg-white-a700 px-3 py-2">
