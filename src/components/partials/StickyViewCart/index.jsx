@@ -184,9 +184,11 @@ const StickyViewCart = ({
     mobileFooterBarData?.data?.attributes?.mobileFooterTabs || [];
 
   const { isSmallSize: isMobile } = useWindowDimensions();
+  const pathname = usePathname();
 
   const isMobileFooterToShow = isMobile
-    ? mobileFooterBarData?.data?.attributes?.showComponentInWeb
+    ? mobileFooterBarData?.data?.attributes?.showComponentInWeb &&
+      pathname === "/"
     : false;
 
   // const isInteractive = useIsInteractive();
@@ -200,8 +202,6 @@ const StickyViewCart = ({
     "{}",
   );
   const spinTheWheelConfig = JSON.parse(unParsedSpinTheWheelConfig);
-
-  const pathname = usePathname();
 
   const { handleCartVisibility } = useModalDispatch();
 
