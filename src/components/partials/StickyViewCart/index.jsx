@@ -129,17 +129,17 @@ const FooterBarForMWeb = React.memo(
           className="flex flex-col items-center justify-center"
           onClick={handleClick}
         >
-          <div className="w-8">
+          <div className="w-6">
             <Img
               src={imgUrl}
-              width={50}
+              width={32}
               style={{
                 filter:
                   index === activeIndex
                     ? "invert(66%) sepia(6%) saturate(6705%) hue-rotate(338deg) brightness(92%) contrast(87%)"
                     : "none",
               }}
-              height={50}
+              height={32}
               alt={alternativeText || `${slug} Image`}
               className="h-auto w-full object-contain"
             />
@@ -237,33 +237,6 @@ const StickyViewCart = ({
 
   if (!isAllowed) return null;
 
-  if (!cartItems.length) {
-    if (isMobileFooterToShow)
-      return (
-        <>
-          <div
-            id="add-to-cart-sticky-bar"
-            className={twMerge(
-              `bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg`,
-              isMobileFooterToShow
-                ? ""
-                : "bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm",
-            )}
-          >
-            <FooterBarForMWeb
-              footerTabs={footerTabs}
-              isMobileFooterToShow={isMobileFooterToShow}
-              openMobileMenu={openMobileMenu}
-              handleCartVisibility={handleCartVisibility}
-              handleUserLoginClick={handleUserLoginClick}
-            />
-          </div>
-        </>
-      );
-
-    return <></>;
-  }
-
   const getCollectionWiseNudgeMsg = () => {
     if (pathname === "/collections/all" || pathname === "/") {
       if (appliedCoupon?.code === "FREEDUO") {
@@ -311,42 +284,46 @@ const StickyViewCart = ({
             : "bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm",
         )}
       >
-        <Nudge spinTheWheelConfig={spinTheWheelConfig} />
-        <div
-          className={twMerge(
-            `flex flex-grow items-center justify-between`,
-            isMobileFooterToShow
-              ? "mx-3 my-1 rounded-md bg-yellow-900 px-4 py-1.5"
-              : "px-5 py-2",
-          )}
-        >
-          <CartSummary
-            totalItems={totalItems}
-            grandTotal={grandTotal}
-            prepaidDiscountPercent={
-              isPrepaidDiscountToShow
-                ? !!appliedCoupon
-                  ? appliedCoupon?.applyPrepaidDiscount
-                    ? prepaidDiscountPercent
+        {!!cartItems.length && (
+          <>
+            <Nudge spinTheWheelConfig={spinTheWheelConfig} />
+            <div
+              className={twMerge(
+                `flex flex-grow items-center justify-between`,
+                isMobileFooterToShow
+                  ? "mx-3 my-1 rounded-md bg-yellow-900 px-4 py-1.5"
+                  : "px-5 py-2",
+              )}
+            >
+              <CartSummary
+                totalItems={totalItems}
+                grandTotal={grandTotal}
+                prepaidDiscountPercent={
+                  isPrepaidDiscountToShow
+                    ? !!appliedCoupon
+                      ? appliedCoupon?.applyPrepaidDiscount
+                        ? prepaidDiscountPercent
+                        : 0
+                      : prepaidDiscountPercent
                     : 0
-                  : prepaidDiscountPercent
-                : 0
-            }
-            prepaidDiscount={isPrepaidDiscountToShow ? 0 : prepaidDiscount}
-            isMobileFooterToShow={isMobileFooterToShow}
-          />
-          <Button
-            variant={isMobileFooterToShow ? "none" : "primary"}
-            size="none"
-            className={twMerge(
-              "rounded-md py-3 text-white-a700 transition-colors duration-300",
-              isMobileFooterToShow ? "px-3 text-lg" : "px-6",
-            )}
-            onClick={openCart}
-          >
-            {isMobileFooterToShow ? "View Cart" : "GO TO CART"}
-          </Button>
-        </div>
+                }
+                prepaidDiscount={isPrepaidDiscountToShow ? 0 : prepaidDiscount}
+                isMobileFooterToShow={isMobileFooterToShow}
+              />
+              <Button
+                variant={isMobileFooterToShow ? "none" : "primary"}
+                size="none"
+                className={twMerge(
+                  "rounded-md py-3 text-white-a700 transition-colors duration-300",
+                  isMobileFooterToShow ? "px-3 text-lg" : "px-6",
+                )}
+                onClick={openCart}
+              >
+                {isMobileFooterToShow ? "View Cart" : "GO TO CART"}
+              </Button>
+            </div>
+          </>
+        )}
         <FooterBarForMWeb
           footerTabs={footerTabs}
           isMobileFooterToShow={isMobileFooterToShow}
