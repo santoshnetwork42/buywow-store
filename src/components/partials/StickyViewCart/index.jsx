@@ -1,7 +1,7 @@
 "use client";
 
 import Nudge from "@/components/common/Nudge";
-import { Button, Heading, Text } from "@/components/elements";
+import { Button, Heading, Img, Text } from "@/components/elements";
 import { useModalDispatch } from "@/store/sagas/dispatch/modal.dispatch";
 import { useIsInteractive } from "@/utils/context/navbar";
 import {
@@ -10,35 +10,186 @@ import {
   SPIN_THE_WHEEL_CONFIG,
 } from "@/utils/data/constants";
 import { toDecimal } from "@/utils/helpers";
+import useWindowDimensions from "@/utils/helpers/getWindowDimension";
 import {
   useCartItems,
   useCartTotal,
   useConfiguration,
 } from "@wow-star/utils-cms";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
+import { twMerge } from "tailwind-merge";
 
 const CartSummary = React.memo(
-  ({ totalItems, grandTotal, prepaidDiscountPercent, prepaidDiscount = 0 }) => (
-    <div className="flex flex-col gap-1">
-      <Heading size="lg" as="h3" className="text-base" responsive>
-        {totalItems > 1 ? `${totalItems} Items` : "1 Item"} | ₹{" "}
-        {toDecimal(grandTotal + prepaidDiscount)}
-      </Heading>
-      {prepaidDiscountPercent > 0 && (
-        <Text as="p" size="sm" className="text-black-900" responsive>
-          Including {prepaidDiscountPercent}% prepaid discount
-        </Text>
-      )}
-    </div>
-  ),
+  ({
+    totalItems,
+    grandTotal,
+    prepaidDiscountPercent,
+    prepaidDiscount = 0,
+    isMobileFooterToShow,
+  }) => {
+    if (!totalItems) {
+      return <></>;
+    }
+
+    return (
+      <div className="flex flex-col gap-1">
+        <Heading
+          size="lg"
+          as="h3"
+          className={twMerge(
+            "text-base",
+            isMobileFooterToShow ? "text-white-a700_01" : "",
+          )}
+          responsive
+        >
+          {totalItems > 1 ? `${totalItems} Items` : "1 Item"} | ₹{" "}
+          {toDecimal(grandTotal + prepaidDiscount)}
+        </Heading>
+        {prepaidDiscountPercent > 0 && (
+          <Text
+            as="p"
+            size="sm"
+            className={twMerge(
+              isMobileFooterToShow ? "text-white-a700_01" : "text-black-900",
+            )}
+            responsive
+          >
+            Including {prepaidDiscountPercent}% prepaid discount
+          </Text>
+        )}
+      </div>
+    );
+  },
 );
 
 CartSummary.displayName = "CartSummary";
 
-const StickyViewCart = () => {
-  const isInteractive = useIsInteractive();
+const FooterBarForMWeb = React.memo(
+  ({
+    footerTabs,
+    isMobileFooterToShow,
+    openMobileMenu,
+    handleCartVisibility,
+    handleUserLoginClick,
+  }) => {
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    if (!isMobileFooterToShow) return null;
+
+    const normalizeTitle = useCallback(
+      (title) => title.toLowerCase().replace(/[\s\/\-]/g, ""),
+      [],
+    );
+
+    const handleOnClick = useCallback(
+      (normalTitle) => {
+        switch (normalTitle) {
+          case "cart":
+          case "carts":
+            return (
+              typeof handleCartVisibility === "function" &&
+              handleCartVisibility(true)
+            );
+
+          case "category":
+          case "categories":
+            return typeof openMobileMenu === "function" && openMobileMenu(true);
+
+          case "login":
+          case "signin":
+          case "profile":
+            return (
+              typeof handleUserLoginClick === "function" &&
+              handleUserLoginClick()
+            );
+
+          default:
+            return;
+        }
+      },
+      [handleCartVisibility, openMobileMenu, handleUserLoginClick],
+    );
+
+    const renderTab = ({ slug, image, title }, index) => {
+      const trimmedSlug = slug?.trim();
+      const normalTitle = normalizeTitle(title);
+
+      const { alternativeText = "", url: imgUrl = "" } =
+        image?.data?.attributes;
+
+      const handleClick = (e) => {
+        e.stopPropagation();
+        setActiveIndex(index);
+        handleOnClick(normalTitle);
+      };
+
+      const content = (
+        <div
+          className="flex flex-col items-center justify-center"
+          onClick={handleClick}
+        >
+          <div className="w-8">
+            <Img
+              src={imgUrl}
+              width={50}
+              style={{
+                filter:
+                  index === activeIndex
+                    ? "invert(66%) sepia(6%) saturate(6705%) hue-rotate(338deg) brightness(92%) contrast(87%)"
+                    : "none",
+              }}
+              height={50}
+              alt={alternativeText || `${slug} Image`}
+              className="h-auto w-full object-contain"
+            />
+          </div>
+          <Text
+            as="p"
+            size="sm"
+            className={`${activeIndex === index ? "!text-yellow-900" : ""}`}
+          >
+            {title}
+          </Text>
+        </div>
+      );
+
+      return trimmedSlug ? (
+        <Link key={index} href={trimmedSlug}>
+          {content}
+        </Link>
+      ) : (
+        <div key={index}>{content}</div>
+      );
+    };
+
+    return (
+      <div className="flex w-full justify-around border-t border-gray-200 bg-white-a700 px-3 py-2">
+        {footerTabs?.map(renderTab)}
+      </div>
+    );
+  },
+);
+
+FooterBarForMWeb.displayName = "FooterBarForMWeb";
+
+const StickyViewCart = ({
+  mobileFooterBarData,
+  openMobileMenu,
+  handleUserLoginClick,
+}) => {
+  const footerTabs =
+    mobileFooterBarData?.data?.attributes?.mobileFooterTabs || [];
+
+  const { isSmallSize: isMobile } = useWindowDimensions();
+
+  const isMobileFooterToShow = isMobile
+    ? mobileFooterBarData?.data?.attributes?.showComponentInWeb
+    : false;
+
+  // const isInteractive = useIsInteractive();
   const isPrepaidDiscountToShow = useConfiguration(
     IS_PREPAID_DISCOUNT_TO_SHOW,
     true,
@@ -84,7 +235,34 @@ const StickyViewCart = () => {
     handleCartVisibility(true);
   }, [handleCartVisibility]);
 
-  if (!cartItems.length || !isAllowed || !isInteractive) return null;
+  if (!isAllowed) return null;
+
+  if (!cartItems.length) {
+    if (isMobileFooterToShow)
+      return (
+        <>
+          <div
+            id="add-to-cart-sticky-bar"
+            className={twMerge(
+              `bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg`,
+              isMobileFooterToShow
+                ? ""
+                : "bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm",
+            )}
+          >
+            <FooterBarForMWeb
+              footerTabs={footerTabs}
+              isMobileFooterToShow={isMobileFooterToShow}
+              openMobileMenu={openMobileMenu}
+              handleCartVisibility={handleCartVisibility}
+              handleUserLoginClick={handleUserLoginClick}
+            />
+          </div>
+        </>
+      );
+
+    return <></>;
+  }
 
   const getCollectionWiseNudgeMsg = () => {
     if (pathname === "/collections/all" || pathname === "/") {
@@ -126,10 +304,22 @@ const StickyViewCart = () => {
     <>
       <div
         id="add-to-cart-sticky-bar"
-        className="bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg"
+        className={twMerge(
+          `bg-white fixed bottom-0 left-1/2 z-20 flex w-full -translate-x-1/2 flex-col justify-between sm:bottom-[35px] sm:max-w-[500px] sm:rounded-lg`,
+          isMobileFooterToShow
+            ? ""
+            : "bg-white-a700 bg-opacity-95 shadow-[0_0_10px_0_rgba(0,0,0,0.12)] backdrop-blur-sm",
+        )}
       >
         <Nudge spinTheWheelConfig={spinTheWheelConfig} />
-        <div className="flex flex-grow items-center justify-between px-5 py-2">
+        <div
+          className={twMerge(
+            `flex flex-grow items-center justify-between`,
+            isMobileFooterToShow
+              ? "mx-3 my-1 rounded-md bg-yellow-900 px-4 py-1.5"
+              : "px-5 py-2",
+          )}
+        >
           <CartSummary
             totalItems={totalItems}
             grandTotal={grandTotal}
@@ -143,16 +333,27 @@ const StickyViewCart = () => {
                 : 0
             }
             prepaidDiscount={isPrepaidDiscountToShow ? 0 : prepaidDiscount}
+            isMobileFooterToShow={isMobileFooterToShow}
           />
           <Button
-            variant="primary"
+            variant={isMobileFooterToShow ? "none" : "primary"}
             size="none"
-            className="rounded-md px-6 py-3 text-white-a700 transition-colors duration-300"
+            className={twMerge(
+              "rounded-md py-3 text-white-a700 transition-colors duration-300",
+              isMobileFooterToShow ? "px-3 text-lg" : "px-6",
+            )}
             onClick={openCart}
           >
-            GO TO CART
+            {isMobileFooterToShow ? "View Cart" : "GO TO CART"}
           </Button>
         </div>
+        <FooterBarForMWeb
+          footerTabs={footerTabs}
+          isMobileFooterToShow={isMobileFooterToShow}
+          openMobileMenu={openMobileMenu}
+          handleCartVisibility={handleCartVisibility}
+          handleUserLoginClick={handleUserLoginClick}
+        />
       </div>
     </>
   );

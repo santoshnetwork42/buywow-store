@@ -22,7 +22,7 @@ import { useCartTotal } from "@wow-star/utils-cms";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 
 const MobileMenu = dynamic(
@@ -105,7 +105,7 @@ const MenuItem = React.memo(({ item, index, showInWeb }) => {
   );
 });
 
-const Header = ({ data }) => {
+const Header = ({ data, mobileFooterBarData }) => {
   const router = useRouter();
   const pathname = usePathname();
   const showHeader = !(
@@ -145,7 +145,7 @@ const Header = ({ data }) => {
   const openMobileMenu = () => setIsMobileMenuOpen(true);
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const handleUserClick = async () => {
+  const handleUserClick = useCallback(async () => {
     try {
       if (user?.id) {
         router.push("/pages/account");
@@ -156,7 +156,7 @@ const Header = ({ data }) => {
       handlePasswordLessModal(true, false, null);
       console.error("Something went wrong", error);
     }
-  };
+  }, [user, router, handlePasswordLessModal]);
 
   const renderMenuItems = () => (
     <>
@@ -256,7 +256,14 @@ const Header = ({ data }) => {
         />
       )}
 
-      {isInteractive && <StickyViewCart />}
+      {/* {isInteractive && ( */}
+      <StickyViewCart
+        mobileFooterBarData={mobileFooterBarData}
+        openMobileMenu={openMobileMenu}
+        handleUserLoginClick={handleUserClick}
+      />
+      {/* )} */}
+
       {isInteractive && <PasswordLess />}
     </header>
   );

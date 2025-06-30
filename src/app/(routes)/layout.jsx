@@ -40,6 +40,7 @@ async function PageLayout({ children }) {
     carousel: carouselData = {},
     trendingCategories: categories = {},
     thankYouPage: thankYouPageData = {},
+    mobileFooterBar: mobileFooterBarData = {},
   } = data || {};
 
   return (
@@ -54,7 +55,12 @@ async function PageLayout({ children }) {
             <ClientSideEffects />
             <div className="flex min-h-dvh w-full flex-col">
               <AnnouncementBar data={announcementData} />
-              {!!headerData?.data && <Header data={headerData} />}
+              {!!headerData?.data && (
+                <Header
+                  data={headerData}
+                  mobileFooterBarData={mobileFooterBarData}
+                />
+              )}
               <CartDrawer />
               <ToastComponent />
               <div className="mx-auto flex w-full flex-1 flex-col bg-white-a700">
