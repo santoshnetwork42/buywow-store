@@ -678,3 +678,45 @@ export const isDiffArray = (arr1 = [], arr2 = []) => {
   // Compare elements until first difference
   return sorted1.some((element, index) => element !== sorted2[index]);
 };
+
+export const isSchemaValid = (schema) => {
+  if (!schema || typeof schema !== "object") return false;
+
+  const type = schema["@type"];
+
+  // Filter out empty FAQPage
+  if (
+    type === "FAQPage" &&
+    Array.isArray(schema.mainEntity) &&
+    schema.mainEntity.length === 0
+  ) {
+    return false;
+  }
+
+  if (
+    type === "ItemList" &&
+    !schema.itemListOrder &&
+    (!Array.isArray(schema.itemListElement) ||
+      schema.itemListElement.length === 0)
+  ) {
+    return false;
+  }
+
+  // Filter out invalid Product
+  if (type === "Product") {
+    const required =
+      schema.name &&
+      Array.isArray(schema.image) &&
+      schema.image.length > 0 &&
+      schema.description &&
+      schema.offers;
+    if (!required) return false;
+  }
+
+  // Finally: generic empty object
+  if (Object.keys(schema).length === 0) {
+    return false;
+  }
+
+  return true;
+};

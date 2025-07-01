@@ -14,6 +14,7 @@ export function generateSEOAndJSONLD(params) {
     collectionInfoSection,
     pageFaqs,
     name,
+    collectionProducts = {},
   } = params;
 
   const faqsPageJsonLd = {
@@ -232,23 +233,26 @@ export function generateSEOAndJSONLD(params) {
   const collectionPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    // numberOfItems: searchProducts?.total,
+    numberOfItems: collectionProducts?.pagination?.totalData || 0,
     itemListOrder: "Unordered",
-    // itemListElement: [
-    //   ...searchProducts?.items?.map((product, index) => {
-    //     const { thumbImage } = getProductMeta(product);
-    //     return {
-    //       "@type": "ListItem",
-    //       position: index + 1,
-    //       name: product?.title,
-    //       url: `https://${MEDIA_BASE_URL}/products/${product?.slug}`,
-    //       image: {
-    //         "@type": "ImageObject",
-    //         contentUrl: getPublicImageURL(thumbImage?.imageKey),
-    //       },
-    //     };
-    //   }),
-    // ],
+    itemListElement: [
+      ...(collectionProducts?.products?.data || []).map(
+        ({ attributes }, index) => {
+          const { fetchedProduct: product } = attributes;
+          const thumbImage = (product?.images?.items || [])?.[0];
+          return {
+            "@type": "ListItem",
+            position: index + 1,
+            name: product?.title,
+            url: `https://${MEDIA_BASE_URL}/products/${product?.slug}`,
+            image: {
+              "@type": "ImageObject",
+              contentUrl: getPublicImageURL(thumbImage?.imageKey),
+            },
+          };
+        },
+      ),
+    ],
   };
 
   return {

@@ -39,6 +39,7 @@ import FFVideoSection from "@/components/partials/Others/VideoSection";
 import FFImageSection from "@/components/partials/Others/ImageSection";
 import FFVideoHeroBanner from "@/components/blocks/Carousel/VideoHeroBanner";
 import { generateSEOAndJSONLD } from "@/utils/helpers/generateSEOAndJSONLD";
+import { isSchemaValid } from "@/utils/helpers";
 
 const PAGETYPE = {
   HOME: "home",
@@ -266,6 +267,12 @@ export default async function PageBlock({ pageType, slug }) {
   const pdpSection = findBlock("ComponentBlocksPdp");
   const pageFaqs = findBlock("ComponentAccordionFaQsSection");
   const collectionInfoSection = findBlock("ComponentBlocksInfoSection");
+  const collectionProducts =
+    findBlock("ComponentBlocksProductCollectionByTab") || [];
+
+  const allCollectionProducts = (
+    collectionProducts?.productCollectionTabItems || []
+  ).find((i) => i?.tab?.data?.attributes?.title === "All");
 
   const {
     faqsPageJsonLd,
@@ -286,6 +293,7 @@ export default async function PageBlock({ pageType, slug }) {
       extractedSlug: "index",
       webUrl: "https://www.buywow.in",
       name: "Buy Wow",
+      collectionProducts: allCollectionProducts,
     }) || {};
 
   const schemas = [
@@ -297,13 +305,11 @@ export default async function PageBlock({ pageType, slug }) {
     websiteJsonLd,
   ];
 
-  const nonEmptySchemas = schemas.filter(
-    (schema) => schema && Object.keys(schema).length > 0,
-  );
+  const validSchemas = schemas.filter(isSchemaValid);
 
   return (
     <React.Fragment>
-      {nonEmptySchemas.map((schema, index) => (
+      {validSchemas.map((schema, index) => (
         <script
           key={index}
           type="application/ld+json"
