@@ -38,6 +38,7 @@ import FFUpsellProducts from "@/components/blocks/UpsellProducts";
 import FFVideoSection from "@/components/partials/Others/VideoSection";
 import FFImageSection from "@/components/partials/Others/ImageSection";
 import FFVideoHeroBanner from "@/components/blocks/Carousel/VideoHeroBanner";
+import { generateSEOAndJSONLD } from "@/utils/helpers/generateSEOAndJSONLD";
 
 const PAGETYPE = {
   HOME: "home",
@@ -258,8 +259,57 @@ export default async function PageBlock({ pageType, slug }) {
     await handleRedirect(`/${pageType}/${slug}`, pageData);
   }
 
+  const findBlock = (typeName) =>
+    pageData?.blocks?.find((block) => block?.__typename === typeName) || {};
+
+  const seoComponent = findBlock("ComponentCommonSeo");
+  const pdpSection = findBlock("ComponentBlocksPdp");
+  const pageFaqs = findBlock("ComponentAccordionFaQsSection");
+  const collectionInfoSection = findBlock("ComponentBlocksInfoSection");
+
+  const {
+    faqsPageJsonLd,
+    breadcrumbListJsonLd,
+    productJsonLd,
+    collectionPageJsonLd,
+    organizationJsonLd,
+    websiteJsonLd,
+  } =
+    generateSEOAndJSONLD({
+      isProduct: pageType === "products",
+      isCollection: pageType === "collections",
+      isMain: pageType === "home",
+      seoComponent,
+      pdpSection,
+      collectionInfoSection,
+      pageFaqs,
+      extractedSlug: "index",
+      webUrl: "https://www.buywow.in",
+      name: "Buy Wow",
+    }) || {};
+
+  const schemas = [
+    faqsPageJsonLd,
+    breadcrumbListJsonLd,
+    productJsonLd,
+    collectionPageJsonLd,
+    organizationJsonLd,
+    websiteJsonLd,
+  ];
+
+  const nonEmptySchemas = schemas.filter(
+    (schema) => schema && Object.keys(schema).length > 0,
+  );
+
   return (
     <React.Fragment>
+      {nonEmptySchemas.map((schema, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+      ))}
       {blocks.map((block, index) =>
         renderBlock({
           block,

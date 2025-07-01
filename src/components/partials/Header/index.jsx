@@ -260,6 +260,7 @@ const Header = ({ data, mobileFooterBarData }) => {
       <StickyViewCart
         mobileFooterBarData={mobileFooterBarData}
         openMobileMenu={openMobileMenu}
+        isMobileMenuOpen={isMobileMenuOpen}
         handleUserLoginClick={handleUserClick}
       />
       {/* )} */}

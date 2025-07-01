@@ -18,7 +18,7 @@ import {
 } from "@wow-star/utils-cms";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { twMerge } from "tailwind-merge";
 
@@ -69,18 +69,26 @@ CartSummary.displayName = "CartSummary";
 
 const FooterBarForMWeb = React.memo(
   ({
+    pathname,
     footerTabs,
     isMobileFooterToShow,
     openMobileMenu,
     handleCartVisibility,
     handleUserLoginClick,
+    isMobileMenuOpen,
   }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState(pathname === "/" ? 0 : -1);
 
     const normalizeTitle = useCallback(
       (title) => title.toLowerCase().replace(/[\s\/\-]/g, ""),
       [],
     );
+
+    useEffect(() => {
+      if (!isMobileMenuOpen) {
+        setActiveIndex(pathname === "/" ? 0 : -1);
+      }
+    }, [isMobileMenuOpen, pathname]);
 
     const handleOnClick = useCallback(
       (normalTitle) => {
@@ -179,6 +187,7 @@ const StickyViewCart = ({
   mobileFooterBarData,
   openMobileMenu,
   handleUserLoginClick,
+  isMobileMenuOpen,
 }) => {
   const footerTabs =
     mobileFooterBarData?.data?.attributes?.mobileFooterTabs || [];
@@ -325,11 +334,13 @@ const StickyViewCart = ({
           </>
         )}
         <FooterBarForMWeb
+          pathname={pathname}
           footerTabs={footerTabs}
           isMobileFooterToShow={isMobileFooterToShow}
           openMobileMenu={openMobileMenu}
           handleCartVisibility={handleCartVisibility}
           handleUserLoginClick={handleUserLoginClick}
+          isMobileMenuOpen={isMobileMenuOpen}
         />
       </div>
     </>
