@@ -309,13 +309,15 @@ export default async function PageBlock({ pageType, slug }) {
 
   return (
     <React.Fragment>
-      {validSchemas.map((schema, index) => (
-        <script
-          key={index}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-        />
-      ))}
+      <head>
+        {validSchemas.map((schema, index) => (
+          <script
+            key={index}
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        ))}
+      </head>
       {blocks.map((block, index) =>
         renderBlock({
           block,

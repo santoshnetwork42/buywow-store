@@ -695,8 +695,8 @@ export const isSchemaValid = (schema) => {
 
   if (
     type === "ItemList" &&
-    !schema.itemListOrder &&
-    (!Array.isArray(schema.itemListElement) ||
+    (!schema.itemListOrder ||
+      !Array.isArray(schema.itemListElement) ||
       schema.itemListElement.length === 0)
   ) {
     return false;
