@@ -120,6 +120,7 @@ const ProductCollectionByTab = ({
 
   const { isSmallSize: isMobile, isMidSize: isTablet } = useWindowDimensions();
   const collectionTabsSectionRef = useRef(null);
+  const overflowTabRef = useRef(null);
   const flexTabsSectionRef = useRef(null);
   const [activeCategoryId, setActiveCategoryId] = useState(0);
   const tabRefs = useRef({});
@@ -474,6 +475,57 @@ const ProductCollectionByTab = ({
     }
   }, [activeCategoryId, tabRefs.current, isSubCategoryWiseListing]);
 
+  useEffect(() => {
+    const slider = overflowTabRef?.current;
+    if (!slider) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    const onMouseDown = (e) => {
+      isDown = true;
+      slider.classList.add("scrolling");
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+      slider.style.cursor = "grabbing";
+    };
+
+    const onMouseLeave = () => {
+      isDown = false;
+      slider.classList.remove("scrolling");
+      slider.style.cursor = "grab";
+    };
+
+    const onMouseUp = () => {
+      isDown = false;
+      slider.classList.remove("scrolling");
+      slider.style.cursor = "grab";
+    };
+
+    const onMouseMove = (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 1.5; // Adjust scroll speed
+      slider.scrollLeft = scrollLeft - walk;
+    };
+
+    slider.addEventListener("mousedown", onMouseDown);
+    slider.addEventListener("mouseleave", onMouseLeave);
+    slider.addEventListener("mouseup", onMouseUp);
+    slider.addEventListener("mousemove", onMouseMove);
+
+    slider.style.cursor = "grab";
+
+    return () => {
+      slider.removeEventListener("mousedown", onMouseDown);
+      slider.removeEventListener("mouseleave", onMouseLeave);
+      slider.removeEventListener("mouseup", onMouseUp);
+      slider.removeEventListener("mousemove", onMouseMove);
+    };
+  }, [overflowTabRef?.current]);
+
   const renderTabListByCategory = useMemo(() => {
     if (!productCollectionTabItemsForCategoryWiseListing?.length) return null;
 
@@ -594,7 +646,10 @@ const ProductCollectionByTab = ({
             )}
             ref={collectionTabsSectionRef}
           >
-            <div className="no-scrollbar col-span-full mx-auto w-full overflow-x-auto sm:w-11/12">
+            <div
+              ref={overflowTabRef}
+              className="no-scrollbar col-span-full mx-auto w-full overflow-x-auto sm:w-11/12"
+            >
               {renderTabListByCategory}
             </div>
           </div>
