@@ -12,12 +12,22 @@ export const IS_PREPAID_DISCOUNT_TO_SHOW = "IS_PREPAID_DISCOUNT_TO_SHOW";
 export const COD_BLOCKED_UTM_SOURCES = "COD_BLOCKED_UTM_SOURCES";
 export const IS_SOCIAL_PROOF_ENABLED = "IS_SOCIAL_PROOF_ENABLED";
 export const MAX_RECENTLY_VIEWED_PRODUCTS = 13;
-export const STICKY_VIEW_CART_TO_SHOW = ["/", "/search", "/collections"];
+export const STICKY_VIEW_CART_TO_SHOW = [
+  "/",
+  "/search",
+  "/collections",
+  "/bodycupid",
+  "/wowskinscience",
+  "/nutrition-health",
+];
 export const AUTO_APPLY_COUPON_PATHNAMES = [
   "/",
   "/products",
   "/collections",
   "/search",
+  "/bodycupid",
+  "/wowskinscience",
+  "/nutrition-health",
 ];
 
 export const BALLOON_ALLOWED_PATHS = [
@@ -25,6 +35,9 @@ export const BALLOON_ALLOWED_PATHS = [
   "/products",
   "/collections",
   "/search",
+  // "/bodycupid",
+  // "/wowskinscience",
+  // "/nutrition-health",
 ];
 
 export const SOCIAL_PROOF_INCLUDE_PATHS = ["/"];
