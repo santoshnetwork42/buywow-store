@@ -6,7 +6,6 @@ import {
   MenuSVG,
   UserIcon,
 } from "@/assets/svg/icons";
-import { WOWLogo } from "@/assets/svg/logo";
 import { Button, Img, Text } from "@/components/elements";
 import NavMenu from "@/components/partials/Header/NavMenu";
 import SearchBar from "@/components/partials/Header/SearchBar";
@@ -198,14 +197,26 @@ const Header = ({ data, mobileFooterBarData }) => {
 
             <div className="flex hidden items-center gap-1 md:block">
               <Link href="/" aria-label="Go to WOW Home Page">
-                <WOWLogo size={86} keyName="web" />
+                <Img
+                  src="buy_WOW_logo_cropped.svg"
+                  width={120}
+                  height={48}
+                  alt={"wow-logo"}
+                  className="aspect-[2/1] object-fill"
+                />
               </Link>
             </div>
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
             <Link href="/" aria-label="Go to WOW Home Page">
-              <WOWLogo size={86} keyName="mobile" />
+              <Img
+                src="buy_WOW_logo_cropped.svg"
+                width={108}
+                height={48}
+                alt={"wow-logo"}
+                className="aspect-video object-fill"
+              />
             </Link>
           </div>
 
