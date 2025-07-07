@@ -641,7 +641,7 @@ const ProductCollectionByTab = ({
           <div
             className={twMerge(
               "grid grid-cols-[1fr_auto] items-center gap-4 sm:gap-5 lg:gap-8",
-              "sm:-mx-18 sticky top-0 z-50 -mx-3 bg-white-a700_01 p-3 max-sm:py-2 sm:-mx-16 sm:py-0",
+              "sm:-mx-18 sticky top-0 z-50 -mx-3 bg-white-a700_01 p-3 max-sm:py-2 sm:-mx-16 sm:pb-2",
               isStickyCategoryTab ? "shadow-[0_4px_4px_rgba(0,0,0,0.15)]" : "",
             )}
             ref={collectionTabsSectionRef}

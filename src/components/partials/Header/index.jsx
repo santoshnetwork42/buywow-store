@@ -196,16 +196,16 @@ const Header = ({ data, mobileFooterBarData }) => {
             </Button>
 
             <div className="flex hidden items-center gap-1 md:block">
-              {/* <Link href="/" aria-label="Go to WOW Home Page"> */}
-              <Img
-                src="./buy_WOW_logo_cropped.svg"
-                width={120}
-                height={48}
-                isStatic
-                alt={"wow-logo"}
-                className="aspect-[2/1] object-fill"
-              />
-              {/* </Link> */}
+              <Link href="/" aria-label="Go to WOW Home Page">
+                <Img
+                  src="./buy_WOW_logo_cropped.svg"
+                  width={120}
+                  height={48}
+                  isStatic
+                  alt={"wow-logo"}
+                  className="aspect-[2/1] object-fill"
+                />
+              </Link>
             </div>
           </div>
 
