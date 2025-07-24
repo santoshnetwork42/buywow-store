@@ -16,18 +16,24 @@ export const STICKY_VIEW_CART_TO_SHOW = [
   "/",
   "/search",
   "/collections",
-  "/bodycupid",
-  "/wowskinscience",
   "/nutrition-health",
+  "/wowskinscience",
+  "/wowlifescience",
+  "/bodycupid",
+  "/colorcupid",
+  "/naturederma",
 ];
 export const AUTO_APPLY_COUPON_PATHNAMES = [
   "/",
   "/products",
   "/collections",
   "/search",
-  "/bodycupid",
-  "/wowskinscience",
   "/nutrition-health",
+  "/wowskinscience",
+  "/wowlifescience",
+  "/bodycupid",
+  "/colorcupid",
+  "/naturederma",
 ];
 
 export const BALLOON_ALLOWED_PATHS = [
