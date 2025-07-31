@@ -10,7 +10,10 @@ const VariantSelector = React.memo(
     setDefaultVariantId,
   }) => {
     const sortedVariantGroups = useMemo(
-      () => [...variantGroups].sort((a, b) => a.position - b.position),
+      () =>
+        [...variantGroups].sort(
+          (a, b) => (a.position || 999) - (b.position || 999),
+        ),
       [variantGroups],
     );
 
@@ -23,10 +26,11 @@ const VariantSelector = React.memo(
           Select Pack
         </Heading>
         <div className="flex flex-col gap-4 md:gap-5">
-          {sortedVariantGroups.map((group) => (
+          {sortedVariantGroups.map((group, index, groups) => (
             <VariantGroup
               key={group.id}
               group={group}
+              isLastVariantGroupSelection={index === groups.length - 1} // filter out options without status or price which means not to have such variants to display it is just bcz of combinations // please note this is not for draft status filter
               onVariantChange={onVariantChange}
               isShoppable={isShoppable}
               showVariantThumbnails={showVariantThumbnails}
@@ -46,12 +50,17 @@ const VariantGroup = React.memo(
     isShoppable,
     showVariantThumbnails,
     setDefaultVariantId,
+    isLastVariantGroupSelection = false,
   }) => {
     const sortedVariantOptions = useMemo(
       () =>
-        [...group.variantOptions].sort(
-          (a, b) => (a?.price ?? 0) - (b?.price ?? 0),
-        ),
+        [...group.variantOptions]
+          .filter(
+            (i) =>
+              !isLastVariantGroupSelection ||
+              (!!isLastVariantGroupSelection && !!i?.status && !!i?.price),
+          )
+          .sort((a, b) => (a?.price ?? 0) - (b?.price ?? 0)),
       [group.variantOptions],
     );
 
