@@ -11,6 +11,7 @@ import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
 import { useSystemDispatch } from "@/store/sagas/dispatch/system.dispatch";
 import { useUserDispatch } from "@/store/sagas/dispatch/user.dispatch";
 import {
+  ANIMATED_BALLOON_CONFIG,
   WEB_ANIMATED_BALLOON,
   WHEEL_HAS_VISITED_BEFORE_KEY,
 } from "@/utils/data/constants";
@@ -21,7 +22,7 @@ import Cookies from "js-cookie";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import BirthdayCelebration from "./partials/BirthdayCelebration";
+import BalloonTheme from "./partials/BalloonTheme";
 import SpinTheWheel from "./partials/SpinTheWheel";
 import { useSelector } from "react-redux";
 import {
@@ -92,6 +93,26 @@ const ClientSideEffects = () => {
     WEB_ANIMATED_BALLOON,
     false,
   );
+
+  const unparsedAnimatedBalloonConfig = useConfiguration(
+    ANIMATED_BALLOON_CONFIG,
+    "{}",
+  );
+
+  const animatedBalloonConfig = JSON.parse(
+    unparsedAnimatedBalloonConfig || "{}",
+  );
+
+  const isBalloonThemeAllowedOnPage = useMemo(() => {
+    return (
+      isBalloonAnimationAllowed &&
+      !animatedBalloonConfig?.excludePaths?.some(
+        (allowedPath) =>
+          pathname === allowedPath ||
+          (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
+      )
+    );
+  }, [animatedBalloonConfig, isBalloonAnimationAllowed, pathname]);
 
   const { updateMeta, setStore, destroySession } = useSystemDispatch();
   const { setUser } = useUserDispatch();
@@ -348,7 +369,9 @@ const ClientSideEffects = () => {
 
   return (
     <>
-      {isBalloonAnimationAllowed && <BirthdayCelebration />}
+      {isBalloonThemeAllowedOnPage && (
+        <BalloonTheme theme={animatedBalloonConfig?.activeTheme} />
+      )}
       {!isCartOpen &&
         isSpinTheWheelAllowed &&
         !isSpinTheWheelNudgeThere &&

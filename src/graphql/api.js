@@ -48,6 +48,8 @@ export const getInitialData = /* GraphQL */ `
         COD_BLOCKED_UTM_SOURCES
         IS_SOCIAL_PROOF_ENABLED
         BUNDLE_ADD_TO_CART_ENABLED
+        ANIMATED_BALLOON_CONFIG
+        STORE_LEVEL_CONFIG
       }
     }
 

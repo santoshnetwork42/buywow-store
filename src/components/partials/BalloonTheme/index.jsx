@@ -1,11 +1,10 @@
 "use client";
 
-import { BALLOON_ALLOWED_PATHS } from "@/utils/data/constants";
+import { BALLOON_THEMES } from "@/utils/data/constants";
 import confetti from "canvas-confetti";
-import { usePathname } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-const BirthdayCelebration = React.memo(() => {
+const BalloonTheme = React.memo(({ theme }) => {
   const generateRandomValue = (min, max) =>
     Math.floor(Math.random() * (max - min) + min);
 
@@ -14,8 +13,21 @@ const BirthdayCelebration = React.memo(() => {
     return ceilMultiple - number;
   };
 
-  const balloonsCount = window.innerWidth <= 768 ? 7 : 15;
-  const balloonImages = [
+  const independenceThemeBalloons = [
+    "../images/b1.svg",
+    "../images/b2.svg",
+    "../images/b4.svg",
+    "../images/b3.svg",
+    "../images/b1.svg",
+    "../images/b2.svg",
+    "../images/b4.svg",
+    "../images/b3.svg",
+    "../images/b1.svg",
+    "../images/b4.svg",
+    "../images/b3.svg",
+  ];
+
+  const birthdayThemeBalloons = [
     "../images/balloon1.svg",
     "../images/balloon2.svg",
     "../images/balloon3.svg",
@@ -27,6 +39,22 @@ const BirthdayCelebration = React.memo(() => {
     "../images/balloon4.svg",
     "../images/balloon5.svg",
   ];
+
+  const [balloonImages, setBalloonImages] = useState([
+    ...independenceThemeBalloons,
+  ]);
+
+  const balloonsCount = window.innerWidth <= 768 ? 7 : 15;
+
+  useEffect(() => {
+    setBalloonImages(
+      theme === BALLOON_THEMES.INDEPENDENCE_DAY_SALE
+        ? independenceThemeBalloons
+        : theme === BALLOON_THEMES.BIRTHDAY_SALE
+          ? birthdayThemeBalloons
+          : [],
+    );
+  }, [theme]);
 
   useEffect(() => {
     const balloons = document.querySelectorAll(".balloons img");
@@ -100,17 +128,9 @@ const BirthdayCelebration = React.memo(() => {
         }
       });
     };
-  }, []);
+  }, [balloonImages]);
 
-  // same as coupon auto apply right now
-  const pathname = usePathname();
-  const shouldAllowedBalloonsToFloatOnPath = BALLOON_ALLOWED_PATHS.some(
-    (allowedPath) =>
-      pathname === allowedPath ||
-      (allowedPath !== "/" && pathname.startsWith(`${allowedPath}/`)),
-  );
-
-  if (!shouldAllowedBalloonsToFloatOnPath) {
+  if (!balloonImages?.length) {
     return <></>;
   }
 
@@ -128,7 +148,7 @@ const BirthdayCelebration = React.memo(() => {
             key={index}
             src={randomImage}
             alt="Balloon"
-            className={`balloon animate-flying absolute -bottom-[250px] h-auto w-8 select-none`}
+            className={`balloon absolute -bottom-[250px] h-auto w-8 animate-flying select-none`}
             data-animation-duration={`${randomDuration}s`} // Store duration in a custom data attribute
             data-start-time={new Date().getTime()}
             data-random-delay={randomDelay}
@@ -144,6 +164,6 @@ const BirthdayCelebration = React.memo(() => {
   );
 });
 
-BirthdayCelebration.displayName = "BirthdayCelebration";
+BalloonTheme.displayName = "BalloonTheme";
 
-export default BirthdayCelebration;
+export default BalloonTheme;
