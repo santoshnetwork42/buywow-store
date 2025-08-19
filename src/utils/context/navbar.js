@@ -1,6 +1,6 @@
 "use client";
 
-import { GUEST_CHECKOUT, STORE_ID, STORE_PREFIX } from "@/config";
+import { STORE_ID, STORE_PREFIX } from "@/config";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { setGlobalCoupons } from "@/store/slices/nudge.slice";
 import { extractGlobalCoupons } from "@/utils/helpers";
@@ -182,7 +182,7 @@ export const useThankyouPageData = () => {
 };
 
 export const useGuestCheckout = () => {
-  const guestCheck = useConfiguration(GUEST_CHECKOUT, false);
+  const guestCheck = useConfiguration("GUEST_CHECKOUT", false);
   const guestCookie = Cookie.get(`${STORE_PREFIX}_guest`);
   return !!guestCheck || !!guestCookie;
 };

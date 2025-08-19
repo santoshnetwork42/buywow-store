@@ -45,7 +45,7 @@ export default function Scripts() {
       <Affise />
       {VERCEL_ANALYTICS_ENABLED && <Analytics />}
       {LIMECHAT_ENABLED && <LimeChat />}
-      {WISEPOPS_KEY && <Wisepops />}
+      {/* {WISEPOPS_KEY && <Wisepops />} */}
       {!!GOKWIK_SCRIPT && (
         <Script strategy="afterInteractive" defer src={GOKWIK_SCRIPT} />
       )}
