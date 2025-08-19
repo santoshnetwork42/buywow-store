@@ -124,7 +124,6 @@ export const itemMapper = (
       addPrefix: true,
     }),
     "Product Category": productType || "All products",
-    "Product Category": productType || "All products",
     "Product URL": `${currentURL}/products/${product?.slug}`,
     "Vendor name": vendor,
     "Product Price": price,
