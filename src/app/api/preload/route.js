@@ -26,7 +26,7 @@ export async function GET() {
         ltoProductSort: [{ field: "priority", direction: "asc" }],
       },
       {
-        next: { revalidate: 0 },
+        next: { revalidate: 60 * 2 },
       },
     );
 
