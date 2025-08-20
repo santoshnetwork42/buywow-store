@@ -50,10 +50,38 @@
       "service": "wow-frontend-v3",
     },
   ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "NEXT_CACHE_DO_QUEUE",
+        "class_name": "DOQueueHandler",
+      },
+      // This is only required if you use On-demand revalidation
+      {
+        "name": "NEXT_TAG_CACHE_DO_SHARDED",
+        "class_name": "DOShardedTagCache",
+      },
+      {
+        "name": "NEXT_CACHE_DO_PURGE",
+        "class_name": "BucketCachePurge",
+      },
+    ],
+  },
   "r2_buckets": [
     {
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "wow-frontend-v3-cache",
+    },
+  ],
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "DOQueueHandler",
+        // This is only required if you use On-demand revalidation
+        "DOShardedTagCache",
+        "BucketCachePurge",
+      ],
     },
   ],
 }
