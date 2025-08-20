@@ -15,6 +15,13 @@ export default defineCloudflareConfig({
   tagCache: doShardedTagCache({
     regionalCache: true,
     regionalCacheTtlSec: 60 * 15, // 15 mins
+    shardReplication: {
+      numberOfSoftReplicas: 1,
+      numberOfHardReplicas: 1,
+      regionalReplication: {
+        defaultRegion: "apac",
+      },
+    },
   }),
-  cachePurge: purgeCache(),
+  cachePurge: purgeCache({ type: "direct" }),
 });
