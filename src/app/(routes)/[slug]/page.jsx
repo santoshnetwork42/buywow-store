@@ -2,7 +2,7 @@ import PageBlock from "@/components/page";
 import { getPageBySlugAPI, getStoreAPI } from "@/lib/appSyncAPIs";
 import { generateSEOAndJSONLD } from "@/utils/helpers/generateSEOAndJSONLD";
 
-export const revalidate = 3600;
+export const revalidate = 15 * 60; // 15 minutes
 
 export async function generateMetadata() {
   const pageData = await getPageBySlugAPI("index");
