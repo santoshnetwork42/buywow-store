@@ -13,7 +13,7 @@ export default defineCloudflareConfig({
     shouldLazilyUpdateOnCacheHit: false,
   }),
   queue: queueCache(doQueue, {
-    regionalCacheTtlSec: 60, // The TTL for the regional cache, defaults to 5 seconds
+    regionalCacheTtlSec: 5, // The TTL for the regional cache, defaults to 5 seconds
     // // Whether to wait for the queue to acknowledge the request before returning
     // // When set to false, the cache will be populated asap and the queue will be called after.
     // // When set to true, the cache will be populated only after the queue ack is received.
