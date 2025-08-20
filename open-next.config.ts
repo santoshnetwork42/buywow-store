@@ -9,7 +9,7 @@ import { purgeCache } from "@opennextjs/cloudflare/overrides/cache-purge/index";
 export default defineCloudflareConfig({
   incrementalCache: withRegionalCache(r2IncrementalCache, {
     mode: "long-lived",
-    shouldLazilyUpdateOnCacheHit: true,
+    shouldLazilyUpdateOnCacheHit: false,
   }),
   queue: doQueue,
   tagCache: doShardedTagCache({
