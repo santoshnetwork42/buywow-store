@@ -1309,11 +1309,23 @@ export const getZipCode = /* GraphQL */ `
   query GetZipCode($id: ID!) {
     getZipCode(id: $id) {
       id
+      city
+      state
       codMaxAmount
       cod
       prepaid
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const fetchCityAndStateByPincode = /* GraphQL */ `
+  query GetZipCode($id: ID!) {
+    getZipCode(id: $id) {
+      id
+      city
+      state
     }
   }
 `;

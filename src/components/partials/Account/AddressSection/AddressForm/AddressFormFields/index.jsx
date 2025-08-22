@@ -1,5 +1,5 @@
 import { Input } from "@/components/elements";
-import { fetchCityAndState } from "@/lib/customAPIs";
+import { fetchCityAndStateAPI } from "@/lib/appSyncAPIs";
 import States from "@/utils/data/states.json";
 import {
   sanitizeText,
@@ -27,13 +27,21 @@ const AddressFormFields = ({
 
   const fetchCityAndStateData = useCallback(
     async (pinCode) => {
-      const result = await fetchCityAndState(pinCode);
+      try {
+        const result = await fetchCityAndStateAPI(pinCode);
 
-      setAddress((prevAddress) => ({
-        ...prevAddress,
-        city: result?.city || prevAddress?.city,
-        state: result?.state || prevAddress?.state,
-      }));
+        const state =
+          stateOptions.find((state) => state.label === result?.state)?.value ||
+          "";
+
+        setAddress((prevAddress) => ({
+          ...prevAddress,
+          city: result?.city || prevAddress?.city,
+          state: state || prevAddress?.state,
+        }));
+      } catch (error) {
+        console.error("Error fetching city and state:", error);
+      }
     },
     [setAddress],
   );

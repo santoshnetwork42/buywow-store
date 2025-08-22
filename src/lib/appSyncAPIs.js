@@ -38,6 +38,7 @@ import {
   getUserDetails,
   checkInventory,
   livePurchaseFeed,
+  fetchCityAndStateByPincode,
 } from "@/graphql/api";
 import { errorHandler } from "@/utils/errorHandler";
 import fetchData from "@/utils/fetchData";
@@ -618,6 +619,21 @@ export const validateTransactionAPI = async (orderId, paymentId) => {
     return response?.data?.validateTransaction || null;
   } catch (error) {
     errorHandler(error, "Validate Transaction API");
+    return null;
+  }
+};
+
+export const fetchCityAndStateAPI = async (pincode) => {
+  try {
+    const response = await client.graphql({
+      query: fetchCityAndStateByPincode,
+      variables: { id: pincode },
+      authMode: "apiKey",
+    });
+
+    return response?.data?.getZipCode || null;
+  } catch (error) {
+    errorHandler(error, "Error while fetching city and state by pincode");
     return null;
   }
 };

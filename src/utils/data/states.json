@@ -1,7 +1,7 @@
 [
   {
     "value": "AN",
-    "name": "Andaman and Nicobar Islands"
+    "name": "Andaman & Nicobar"
   },
   {
     "value": "AP",
@@ -29,11 +29,11 @@
   },
   {
     "value": "DN",
-    "name": "Dadra and Nagar Haveli"
+    "name": "Dadra & Nagar Haveli"
   },
   {
     "value": "DD",
-    "name": "Daman and Diu"
+    "name": "Daman & Diu"
   },
   {
     "value": "DL",
@@ -57,7 +57,7 @@
   },
   {
     "value": "JK",
-    "name": "Jammu and Kashmir"
+    "name": "Jammu & Kashmir"
   },
   {
     "value": "JH",
@@ -109,7 +109,7 @@
   },
   {
     "value": "PY",
-    "name": "Puducherry"
+    "name": "Pondicherry"
   },
   {
     "value": "PB",
