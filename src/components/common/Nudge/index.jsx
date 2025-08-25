@@ -12,7 +12,7 @@ import {
   setCurrentQuantity,
   setMaximumQuantity,
 } from "@/store/slices/nudge.slice";
-import { SPIN_THE_WHEEL_EXCLUDE_PATHS } from "@/utils/data/constants";
+import { AUTO_APPLY_COUPON_PATHNAMES } from "@/utils/data/constants";
 import { errorHandler } from "@/utils/errorHandler";
 import {
   copyText,
@@ -326,6 +326,8 @@ const Nudge = ({ isCart = false, spinTheWheelConfig }) => {
   // Separate useEffect for updating nudgeFeat
   useEffect(() => {
     const isHomepage = pathname === "/";
+    const isGlobalOffer =
+      isHomepage || AUTO_APPLY_COUPON_PATHNAMES.includes(pathname);
     const collectionSlug = extractCollectionSlug(pathname);
     let nextNudgeFeat = [];
 
@@ -347,7 +349,7 @@ const Nudge = ({ isCart = false, spinTheWheelConfig }) => {
             ? []
             : [storedCouponRule];
       }
-    } else if (isHomepage) {
+    } else if (isGlobalOffer) {
       nextNudgeFeat = globalCoupons;
     } else if (collectionSlug) {
       nextNudgeFeat = collectionCoupons?.length
