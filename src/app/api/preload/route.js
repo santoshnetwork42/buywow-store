@@ -6,18 +6,21 @@ import { errorHandler } from "@/utils/errorHandler";
 import fetchData from "@/utils/fetchData";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
-export async function GET() {
+export async function GET(req, res) {
   try {
     const cache = caches.default;
 
     const { ctx } = getCloudflareContext();
 
-    const { origin, pathname } = new URL(request.url);
-    const cacheKey = new Request(origin + pathname, request);
+    const { origin, pathname } = new URL(req.url);
+    const cacheKey = new Request(origin + pathname, req);
 
     // Try cache
-    let response = await cache.match(cacheKey);
-    if (response) return response;
+    let response;
+    if (!!cache) {
+      response = await cache.match(cacheKey);
+      if (response) return response;
+    }
 
     const data = await fetchData(
       getInitialData,
@@ -48,39 +51,15 @@ export async function GET() {
       },
     });
 
-    ctx.waitUntil(cache.put(cacheKey, response.clone()));
+    if (!!ctx && !!cache) ctx.waitUntil(cache.put(cacheKey, response.clone()));
 
     return response;
   } catch (error) {
-    const data = await fetchData(
-      getInitialData,
-      {
-        storeId: STORE_ID,
-        deviceType: "WEB",
-        getStoreSettingInput: {
-          storeId: STORE_ID,
-          deviceType: "WEB",
-        },
-        shippingTierFilter: {
-          storeId: { eq: STORE_ID },
-        },
-        ltoProductFilter: {
-          storeId: { eq: STORE_ID },
-          isArchive: { eq: false },
-        },
-        ltoProductSort: [{ field: "priority", direction: "asc" }],
-      },
-      {
-        next: { revalidate: 0 },
-      },
-    );
-
-    return Response.json(data);
     console.error("Detailed error in getInitialData:", error);
-    // errorHandler("Error Fetching Initial Data", error);
-    // return Response.json(
-    //   { error: error.message || "Error fetching data" },
-    //   { status: 500 },
-    // );
+    errorHandler("Error Fetching Initial Data", error);
+    return Response.json(
+      { error: error.message || "Error fetching data" },
+      { status: 500 },
+    );
   }
 }
