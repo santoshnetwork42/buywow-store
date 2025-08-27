@@ -24,16 +24,9 @@ const nextConfig = {
   async redirects() {
     const allRedirects = [
       {
-        source: "/:path*\\.json",
+        source: "/((?!\\.well-known/assetlinks).*)\\.json",
         destination: "/404",
         permanent: true,
-        has: [
-          {
-            type: "query",
-            key: "path",
-            value: "(?!^\\.well-known/assetlinks$).*",
-          },
-        ],
       },
       {
         source:
