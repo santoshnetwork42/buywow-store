@@ -23,7 +23,7 @@ const FeaturedProductsByTab = ({
   showVideoAsThumbnail = false,
 }) => {
   const pathname = usePathname();
-  const storeConfig = useStoreConfig();
+  const storeConfig = useStoreConfig() || {};
   const { data: storeConfigData } = storeConfig;
 
   const bgColorClass = getBgColor(featuredProductsByTabBgColor);

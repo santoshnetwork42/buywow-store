@@ -127,7 +127,7 @@ const ProductCollectionByTab = ({
   const [isStickyCategoryTab, setIsStickyCategoryTab] = useState(false);
   const [viewAll, setViewAll] = useState({});
 
-  const storeConfig = useStoreConfig();
+  const storeConfig = useStoreConfig() || {};
   const { data: storeConfigData } = storeConfig;
 
   const reloadProducts = useCallback(

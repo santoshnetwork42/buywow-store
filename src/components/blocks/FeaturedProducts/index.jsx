@@ -18,7 +18,7 @@ const FeaturedProducts = ({
   showProductsOnVariantStockOut = true,
   showVideoAsThumbnail = false,
 }) => {
-  const storeConfig = useStoreConfig();
+  const storeConfig = useStoreConfig() || {};
   const { data: storeConfigData } = storeConfig;
 
   if (!Array.isArray(products) || products.length === 0) return null;

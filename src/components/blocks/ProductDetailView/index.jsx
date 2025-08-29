@@ -80,7 +80,7 @@ const ProductDetailView = ({ product, marketPlaceLinks }) => {
   const bestCoupon = useProductCoupons(packageProduct, selectedVariant?.id);
   const { viewItemEvent, productViewedKwikpassEvent } = useEventsDispatch();
 
-  const storeConfig = useStoreConfig();
+  const storeConfig = useStoreConfig() || {};
   const { data: storeConfigData } = storeConfig;
 
   const { tag, bgColor } = extractAttributes(

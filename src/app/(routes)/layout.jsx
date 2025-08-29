@@ -31,7 +31,7 @@ Amplify.configure({
 
 async function PageLayout({ children }) {
   const { data } = (await getNavbarAndFooterAPI()) || {};
-  const { data: storeConfig } = (await getStoreConfigurationsAPI()) || {};
+  const { data: storeConfig = {} } = (await getStoreConfigurationsAPI()) || {};
 
   const {
     announcementBar: announcementData = {},
