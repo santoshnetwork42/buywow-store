@@ -290,10 +290,11 @@ export default async function PageBlock({ pageType, slug }) {
       pdpSection,
       collectionInfoSection,
       pageFaqs,
-      extractedSlug: "index",
+      extractedSlug: slug,
       webUrl: "https://www.buywow.in",
       name: "Buy Wow",
       collectionProducts: allCollectionProducts,
+      variantId: "",
     }) || {};
 
   const schemas = [

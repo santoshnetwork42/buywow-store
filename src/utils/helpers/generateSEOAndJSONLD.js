@@ -1,6 +1,7 @@
 import { MEDIA_BASE_URL } from "@/config";
 import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
+import { getFirstVariantPriority } from "@/utils/helpers/products";
 
 export function generateSEOAndJSONLD(params) {
   const {
@@ -15,6 +16,7 @@ export function generateSEOAndJSONLD(params) {
     pageFaqs,
     name,
     collectionProducts = {},
+    variantId: variantIdParam = "",
   } = params;
 
   const faqsPageJsonLd = {
@@ -32,6 +34,19 @@ export function generateSEOAndJSONLD(params) {
   if (isProduct) {
     const { fetchedProduct, productDetailView } =
       pdpSection?.product?.pdpProduct?.data?.attributes || {};
+
+    let variantId = "";
+
+    try {
+      variantId = atob(variantIdParam || "");
+    } catch (e) {
+      console.error(e);
+    }
+
+    const { firstVariant: defaultVariant } = getFirstVariantPriority(
+      fetchedProduct,
+      variantId,
+    );
 
     const productFAQs = productDetailView?.find(
       (item) => item?.__typename === "ComponentAccordionFaQsSection",
@@ -61,18 +76,21 @@ export function generateSEOAndJSONLD(params) {
           "@type": "ListItem",
           position: 3,
           name: fetchedProduct?.title,
-          item: `${webUrl}/products/${extractedSlug}`,
+          item: `${webUrl}/products/${extractedSlug}${!!variantIdParam ? `?variantId=${variantIdParam}` : ""}`,
         },
       ],
     };
 
+    const productImgItems =
+      defaultVariant?.images?.items || fetchedProduct?.images?.items || [];
+
     const productImgs =
-      fetchedProduct?.images?.items?.map((img) =>
+      productImgItems?.map((img) =>
         getPublicImageURL({ key: img.imageKey, resize: 100, addPrefix: true }),
       ) || [];
 
     const thumbImageIndex =
-      fetchedProduct?.images?.items?.findIndex((img) => !!img?.isThumb) || 0;
+      productImgItems?.findIndex((img) => !!img?.isThumb) || 0;
 
     pdpImage = {
       imageUrl: productImgs[thumbImageIndex],
@@ -82,20 +100,20 @@ export function generateSEOAndJSONLD(params) {
     productJsonLd = {
       "@context": "https://schema.org/",
       "@type": "Product",
-      name: fetchedProduct?.title || "",
+      name: `${fetchedProduct?.title}${defaultVariant?.id ? ` - ${defaultVariant?.label}` : ""}`,
       image: productImgs,
       description:
         fetchedProduct?.longDescription?.replace(/(<([^>]+)>)/gi, "") || "",
-      sku: fetchedProduct?.sku || "",
-      mpn: fetchedProduct?.sku || "",
+      sku: defaultVariant?.sku || fetchedProduct?.sku || "",
+      mpn: defaultVariant?.sku || fetchedProduct?.sku || "",
       brand: fetchedProduct?.brand || "",
-      url: `${webUrl}/products/${extractedSlug}`,
+      url: `${webUrl}/products/${extractedSlug}${!!variantIdParam ? `?variantId=${variantIdParam}` : ""}`,
       offers: {
         "@type": "Offer",
         priceCurrency: "INR",
         availability: "https://schema.org/InStock",
-        url: `${webUrl}/products/${extractedSlug}`,
-        price: fetchedProduct?.price,
+        url: `${webUrl}/products/${extractedSlug}${!!variantIdParam ? `?variantId=${variantIdParam}` : ""}`,
+        price: defaultVariant?.price || fetchedProduct?.price,
         priceValidUntil: new Date().toISOString(),
         shippingDetails: {
           "@type": "OfferShippingDetails",
@@ -147,10 +165,10 @@ export function generateSEOAndJSONLD(params) {
           returnFees: "https://schema.org/FreeReturn",
         },
       },
-      gtin: fetchedProduct?.barcode || "",
-      gtin8: fetchedProduct?.barcode || "",
-      gtin13: fetchedProduct?.barcode || "",
-      gtin14: fetchedProduct?.barcode || "",
+      gtin: defaultVariant?.barcode || fetchedProduct?.barcode || "",
+      gtin8: defaultVariant?.barcode || fetchedProduct?.barcode || "",
+      gtin13: defaultVariant?.barcode || fetchedProduct?.barcode || "",
+      gtin14: defaultVariant?.barcode || fetchedProduct?.barcode || "",
     };
   } else if (isCollection) {
     faqsPageJsonLd.mainEntity =
