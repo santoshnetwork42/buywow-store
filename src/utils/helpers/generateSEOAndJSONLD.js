@@ -1,7 +1,6 @@
 import { MEDIA_BASE_URL } from "@/config";
 import { removeHtmlTags } from "@/utils/helpers";
 import { getPublicImageURL } from "@/utils/helpers/img-loader";
-import { getFirstVariantPriority } from "@/utils/helpers/products";
 
 export function generateSEOAndJSONLD(params) {
   const {
@@ -16,7 +15,6 @@ export function generateSEOAndJSONLD(params) {
     pageFaqs,
     name,
     collectionProducts = {},
-    variantId: variantIdParam = "",
   } = params;
 
   const faqsPageJsonLd = {
@@ -34,19 +32,6 @@ export function generateSEOAndJSONLD(params) {
   if (isProduct) {
     const { fetchedProduct, productDetailView } =
       pdpSection?.product?.pdpProduct?.data?.attributes || {};
-
-    let variantId = "";
-
-    try {
-      variantId = atob(variantIdParam || "");
-    } catch (e) {
-      console.error(e);
-    }
-
-    const { firstVariant: defaultVariant } = getFirstVariantPriority(
-      fetchedProduct,
-      variantId,
-    );
 
     const productFAQs = productDetailView?.find(
       (item) => item?.__typename === "ComponentAccordionFaQsSection",
@@ -76,13 +61,13 @@ export function generateSEOAndJSONLD(params) {
           "@type": "ListItem",
           position: 3,
           name: fetchedProduct?.title,
-          item: `${webUrl}/products/${extractedSlug}${!!variantIdParam ? `?variantId=${variantIdParam}` : ""}`,
+          item: `${webUrl}/products/${extractedSlug}`,
         },
       ],
     };
+    const hasVariant = !!fetchedProduct?.variants?.items?.length;
 
-    const productImgItems =
-      defaultVariant?.images?.items || fetchedProduct?.images?.items || [];
+    const productImgItems = fetchedProduct?.images?.items || [];
 
     const productImgs =
       productImgItems?.map((img) =>
@@ -99,76 +84,175 @@ export function generateSEOAndJSONLD(params) {
 
     productJsonLd = {
       "@context": "https://schema.org/",
-      "@type": "Product",
-      name: `${fetchedProduct?.title}${defaultVariant?.id ? ` - ${defaultVariant?.label}` : ""}`,
-      image: productImgs,
+      "@type": hasVariant ? "ProductGroup" : "Product",
+      name: `${fetchedProduct?.title}`,
+      brand: fetchedProduct?.brand || "",
+      url: `${webUrl}/products/${extractedSlug}`,
       description:
         fetchedProduct?.longDescription?.replace(/(<([^>]+)>)/gi, "") || "",
-      sku: defaultVariant?.sku || fetchedProduct?.sku || "",
-      mpn: defaultVariant?.sku || fetchedProduct?.sku || "",
-      brand: fetchedProduct?.brand || "",
-      url: `${webUrl}/products/${extractedSlug}${!!variantIdParam ? `?variantId=${variantIdParam}` : ""}`,
-      offers: {
-        "@type": "Offer",
-        priceCurrency: "INR",
-        availability: "https://schema.org/InStock",
-        url: `${webUrl}/products/${extractedSlug}${!!variantIdParam ? `?variantId=${variantIdParam}` : ""}`,
-        price: defaultVariant?.price || fetchedProduct?.price,
-        priceValidUntil: new Date().toISOString(),
-        shippingDetails: {
-          "@type": "OfferShippingDetails",
-          shippingRate: {
-            "@type": "MonetaryAmount",
-            value: 3.5,
-            currency: "INR",
-          },
-          shippingDestination: {
-            "@type": "DefinedRegion",
-            addressCountry: "IN",
-          },
-          deliveryTime: {
-            "@type": "ShippingDeliveryTime",
-            businessDays: {
-              "@type": "OpeningHoursSpecification",
-              dayOfWeek: [
-                "https://schema.org/Monday",
-                "https://schema.org/Tuesday",
-                "https://schema.org/Wednesday",
-                "https://schema.org/Thursday",
-                "https://schema.org/Friday",
-                "https://schema.org/Saturday",
-                "https://schema.org/Sunday",
-              ],
+      ...(hasVariant
+        ? {
+            variesBy: ["https://schema.org/size"],
+            productGroupID: fetchedProduct?.id,
+            hasVariant: [
+              ...(fetchedProduct?.variants?.items || []).map(
+                ({ id, label, sku, barcode, images = [], price }) => ({
+                  "@type": "Product",
+                  name: `${fetchedProduct?.title} - ${label}` || "",
+                  sku: sku || "",
+                  mpn: sku || "",
+                  image:
+                    images?.items?.length > 0
+                      ? images?.items
+                          ?.sort(
+                            (a, b) => (a.position || 0) - (b.position || 0),
+                          )
+                          .map((img) =>
+                            getPublicImageURL({
+                              key: img.imageKey,
+                              resize: 100,
+                              addPrefix: true,
+                            }),
+                          )
+                      : productImgs,
+                  description:
+                    fetchedProduct?.longDescription?.replace(
+                      /(<([^>]+)>)/gi,
+                      "",
+                    ) || "",
+                  gtin: barcode || fetchedProduct?.barcode || "",
+                  gtin8: barcode || fetchedProduct?.barcode || "",
+                  gtin13: barcode || fetchedProduct?.barcode || "",
+                  gtin14: barcode || fetchedProduct?.barcode || "",
+                  brand: fetchedProduct?.brand || "",
+                  url: `${webUrl}/products/${extractedSlug}?variantId=${btoa(id)}`,
+                  offers: {
+                    "@type": "Offer",
+                    priceCurrency: "INR",
+                    availability: "https://schema.org/InStock",
+                    url: `${webUrl}/products/${extractedSlug}?variantId=${btoa(id)}`,
+                    price: price || fetchedProduct?.price,
+                    priceValidUntil: new Date().toISOString(),
+                    shippingDetails: {
+                      "@type": "OfferShippingDetails",
+                      shippingRate: {
+                        "@type": "MonetaryAmount",
+                        value: 3.5,
+                        currency: "INR",
+                      },
+                      shippingDestination: {
+                        "@type": "DefinedRegion",
+                        addressCountry: "IN",
+                      },
+                      deliveryTime: {
+                        "@type": "ShippingDeliveryTime",
+                        businessDays: {
+                          "@type": "OpeningHoursSpecification",
+                          dayOfWeek: [
+                            "https://schema.org/Monday",
+                            "https://schema.org/Tuesday",
+                            "https://schema.org/Wednesday",
+                            "https://schema.org/Thursday",
+                            "https://schema.org/Friday",
+                            "https://schema.org/Saturday",
+                            "https://schema.org/Sunday",
+                          ],
+                        },
+                        cutoffTime: "19:00:00+05:30",
+                        handlingTime: {
+                          "@type": "QuantitativeValue",
+                          minValue: 0,
+                          maxValue: 0,
+                          unitCode: "DAY",
+                        },
+                        transitTime: {
+                          "@type": "QuantitativeValue",
+                          minValue: 1,
+                          maxValue: 5,
+                          unitCode: "DAY",
+                        },
+                      },
+                    },
+                    hasMerchantReturnPolicy: {
+                      "@type": "MerchantReturnPolicy",
+                      applicableCountry: "IN",
+                      returnPolicyCategory:
+                        "https://schema.org/MerchantReturnFiniteReturnWindow",
+                      merchantReturnDays: 7,
+                      returnMethod: "https://schema.org/ReturnByMail",
+                      returnFees: "https://schema.org/FreeReturn",
+                    },
+                  },
+                }),
+              ),
+            ],
+          }
+        : {
+            sku: fetchedProduct?.sku || "",
+            mpn: fetchedProduct?.sku || "",
+            image: productImgs,
+            offers: {
+              "@type": "Offer",
+              priceCurrency: "INR",
+              availability: "https://schema.org/InStock",
+              url: `${webUrl}/products/${extractedSlug}`,
+              price: fetchedProduct?.price,
+              priceValidUntil: new Date().toISOString(),
+              shippingDetails: {
+                "@type": "OfferShippingDetails",
+                shippingRate: {
+                  "@type": "MonetaryAmount",
+                  value: 3.5,
+                  currency: "INR",
+                },
+                shippingDestination: {
+                  "@type": "DefinedRegion",
+                  addressCountry: "IN",
+                },
+                deliveryTime: {
+                  "@type": "ShippingDeliveryTime",
+                  businessDays: {
+                    "@type": "OpeningHoursSpecification",
+                    dayOfWeek: [
+                      "https://schema.org/Monday",
+                      "https://schema.org/Tuesday",
+                      "https://schema.org/Wednesday",
+                      "https://schema.org/Thursday",
+                      "https://schema.org/Friday",
+                      "https://schema.org/Saturday",
+                      "https://schema.org/Sunday",
+                    ],
+                  },
+                  cutoffTime: "19:00:00+05:30",
+                  handlingTime: {
+                    "@type": "QuantitativeValue",
+                    minValue: 0,
+                    maxValue: 0,
+                    unitCode: "DAY",
+                  },
+                  transitTime: {
+                    "@type": "QuantitativeValue",
+                    minValue: 1,
+                    maxValue: 5,
+                    unitCode: "DAY",
+                  },
+                },
+              },
+              hasMerchantReturnPolicy: {
+                "@type": "MerchantReturnPolicy",
+                applicableCountry: "IN",
+                returnPolicyCategory:
+                  "https://schema.org/MerchantReturnFiniteReturnWindow",
+                merchantReturnDays: 7,
+                returnMethod: "https://schema.org/ReturnByMail",
+                returnFees: "https://schema.org/FreeReturn",
+              },
             },
-            cutoffTime: "19:00:00+05:30",
-            handlingTime: {
-              "@type": "QuantitativeValue",
-              minValue: 0,
-              maxValue: 0,
-              unitCode: "DAY",
-            },
-            transitTime: {
-              "@type": "QuantitativeValue",
-              minValue: 1,
-              maxValue: 5,
-              unitCode: "DAY",
-            },
-          },
-        },
-        hasMerchantReturnPolicy: {
-          "@type": "MerchantReturnPolicy",
-          applicableCountry: "IN",
-          returnPolicyCategory:
-            "https://schema.org/MerchantReturnFiniteReturnWindow",
-          merchantReturnDays: 7,
-          returnMethod: "https://schema.org/ReturnByMail",
-          returnFees: "https://schema.org/FreeReturn",
-        },
-      },
-      gtin: defaultVariant?.barcode || fetchedProduct?.barcode || "",
-      gtin8: defaultVariant?.barcode || fetchedProduct?.barcode || "",
-      gtin13: defaultVariant?.barcode || fetchedProduct?.barcode || "",
-      gtin14: defaultVariant?.barcode || fetchedProduct?.barcode || "",
+            gtin: fetchedProduct?.barcode || "",
+            gtin8: fetchedProduct?.barcode || "",
+            gtin13: fetchedProduct?.barcode || "",
+            gtin14: fetchedProduct?.barcode || "",
+          }),
     };
   } else if (isCollection) {
     faqsPageJsonLd.mainEntity =
