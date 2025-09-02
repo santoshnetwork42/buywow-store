@@ -8,19 +8,19 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export async function GET(req, res) {
   try {
-    const cache = caches.default;
+    // const cache = caches.default;
 
-    const { ctx } = getCloudflareContext();
+    // const { ctx } = getCloudflareContext();
 
-    const { origin, pathname } = new URL(req.url);
-    const cacheKey = new Request(origin + pathname, req);
+    // const { origin, pathname } = new URL(req.url);
+    // const cacheKey = new Request(origin + pathname, req);
 
     // Try cache
     let response;
-    if (!!cache) {
-      response = await cache.match(cacheKey);
-      if (response) return response;
-    }
+    // if (!!cache) {
+    //   response = await cache.match(cacheKey);
+    //   if (response) return response;
+    // }
 
     const data = await fetchData(
       getInitialData,
@@ -51,7 +51,7 @@ export async function GET(req, res) {
       },
     });
 
-    if (!!ctx && !!cache) ctx.waitUntil(cache.put(cacheKey, response.clone()));
+    // if (!!ctx && !!cache) ctx.waitUntil(cache.put(cacheKey, response.clone()));
 
     return response;
   } catch (error) {

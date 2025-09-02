@@ -115,14 +115,6 @@ const OrderSummary = React.memo(({ order }) => {
         activeItemsTotalPrice={activeItemsTotalPrice}
       />
 
-      {!!prepaidDiscount && (
-        <SummaryRow
-          label="Prepaid Discount:"
-          value={`₹${toDecimal(calculatePrepaidDiscount)}`}
-          valueClassName="text-green-600"
-        />
-      )}
-
       {!!totalDiscount && (
         <SummaryRow label="Discount:" value={`-₹${toDecimal(totalDiscount)}`} />
       )}
@@ -150,6 +142,13 @@ const OrderSummary = React.memo(({ order }) => {
         />
       )}
 
+      {!!prepaidDiscount && (
+        <SummaryRow
+          label="Prepaid Discount:"
+          value={`₹${toDecimal(calculatePrepaidDiscount)}`}
+          valueClassName="text-green-600"
+        />
+      )}
       <SummaryRow
         label="Total:"
         value={`₹${toDecimal(totalWithRewardsAndCashback)}`}

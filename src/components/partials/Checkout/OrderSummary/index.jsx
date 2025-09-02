@@ -135,10 +135,10 @@ const OrderSummary = ({
             color="text-green-600"
           />
         )}
-        {selectedPaymentMethod === "PREPAID" && prepaidDiscount > 0 && (
+        {!!usableRewards && isRewardApplied && (
           <SummaryItem
-            label={`${prepaidDiscountPercent}% Online Payment Discount`}
-            value={-prepaidDiscount}
+            label="WOW Cash"
+            value={-usableRewards}
             color="text-green-600"
           />
         )}
@@ -156,10 +156,11 @@ const OrderSummary = ({
           originalValue={shippingTotal < 50 ? 50 : null}
           color={shippingTotal ? "text-black-600" : "text-green-600"}
         />
-        {!!usableRewards && isRewardApplied && (
+
+        {selectedPaymentMethod === "PREPAID" && prepaidDiscount > 0 && (
           <SummaryItem
-            label="WOW Cash"
-            value={-usableRewards}
+            label={`${prepaidDiscountPercent}% Online Payment Discount`}
+            value={-prepaidDiscount}
             color="text-green-600"
           />
         )}

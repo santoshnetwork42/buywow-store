@@ -158,7 +158,7 @@ const CheckoutClient = () => {
     { isConfirmed, order: finalOrder, loading },
     placeOrderV1,
     orderHelper,
-  ] = useOrders({ orderVersion: "V4" });
+  ] = useOrders({ orderVersion: "V5" });
 
   useEffect(() => {
     setPageLoading(true);
