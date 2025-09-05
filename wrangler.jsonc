@@ -2,6 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
   "name": "wow-frontend-v3-stage",
+  "account_id": "113e6881230184d8bd4812624f81174a",
   "compatibility_date": "2024-12-30",
   "compatibility_flags": [
     // Enable Node.js API
