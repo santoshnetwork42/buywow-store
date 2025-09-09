@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  GOKWIK_SCRIPT,
   GTM_ID,
   LIMECHAT_ENABLED,
   VERCEL_ANALYTICS_ENABLED,
@@ -46,9 +45,6 @@ export default function Scripts() {
       {VERCEL_ANALYTICS_ENABLED && <Analytics />}
       {LIMECHAT_ENABLED && <LimeChat />}
       {/* {WISEPOPS_KEY && <Wisepops />} */}
-      {!!GOKWIK_SCRIPT && (
-        <Script strategy="afterInteractive" defer src={GOKWIK_SCRIPT} />
-      )}
     </>
   );
 }

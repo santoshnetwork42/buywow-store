@@ -8,7 +8,7 @@ import { showToast } from "@/components/common/ToastComponent";
 import { Text } from "@/components/elements";
 import Drawer from "@/components/features/Drawer";
 import CartHeader from "@/components/partials/CartDrawer/CartHeader";
-import { GOKWIK_MID, STORE_PREFIX, VERCEL_CHECKOUT_AB_FLAG } from "@/config";
+import { STORE_PREFIX, VERCEL_CHECKOUT_AB_FLAG } from "@/config";
 import { applyCouponAPI, getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -106,7 +106,7 @@ const CartDrawer = () => {
   const inventory = useInventory({ validateCart });
   const guestCheckout = useGuestCheckout();
   const prepaidEnabled = useConfiguration(PREPAID_ENABLED, true);
-  const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
+  // Removed Gokwik configuration - now using Cashfree
   const isPrepaidDiscountToShow = useConfiguration(
     IS_PREPAID_DISCOUNT_TO_SHOW,
     true,
@@ -175,31 +175,7 @@ const CartDrawer = () => {
       }
     }
 
-    const isGKCXEnabled = !!(
-      (GOKWIK_MID && cartId && gokwikEnabled)
-      // && checkoutABVariant === "gk_checkout"
-    );
-
-    if (isGKCXEnabled) {
-      try {
-        gokwikSdk.initCheckout({
-          environment: "sandbox",
-          type: "merchantInfo",
-          mid: GOKWIK_MID,
-          merchantParams: {
-            merchantCheckoutId: cartId,
-            customerToken: user?.id || "",
-          },
-        });
-
-        handleProceedToCheckoutEvent("GOKWIK");
-        return true;
-      } catch (e) {
-        await gokwikSdk.close();
-        router.push("/checkout");
-        return true;
-      }
-    }
+    // Direct checkout with Cashfree (removed Gokwik integration)
 
     handleProceedToCheckoutEvent("BUYWOW");
     if (user?.id || guestCheckout || customUser?.phone) {
@@ -222,9 +198,7 @@ const CartDrawer = () => {
     cartId,
   ]);
 
-  const checkoutButtonDisabled = GOKWIK_MID
-    ? !isInventoryCheckReady && isShoppingCartIdLoading
-    : !isInventoryCheckReady;
+  const checkoutButtonDisabled = !isInventoryCheckReady;
 
   const handleCartClose = useCallback(() => {
     handleCartVisibility(false);

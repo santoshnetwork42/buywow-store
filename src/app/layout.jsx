@@ -3,7 +3,6 @@ import {
   WORDPRESS_MEDIA_URL,
   GOOGLE_VERIFICATION_TAG,
   STORE_ENV,
-  GOKWIK_MID,
 } from "@/config";
 import "@/styles/index.css";
 import "@/styles/tailwind.css";
@@ -34,17 +33,6 @@ async function RootLayout({ children }) {
         <meta name="theme-color" content="#000000" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="icon" href="/favicon.ico" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-            window.merchantInfo = {
-              environment: '${environment}',
-              mid: '${GOKWIK_MID}',
-              type: "merchantInfo"
-            };
-          `,
-          }}
-        />
         {!!GOOGLE_VERIFICATION_TAG && (
           <meta
             name="google-site-verification"
