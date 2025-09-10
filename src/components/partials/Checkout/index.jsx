@@ -8,9 +8,8 @@ import PaymentLoader from "@/components/partials/Checkout/PaymentLoader";
 import PaymentMethodsSection from "@/components/partials/Checkout/PaymentMethodsSection";
 import ProgressSteps from "@/components/partials/Others/ProgressSteps";
 import {
-  CASHFREE_SCRIPT,
-  CASHFREE_CLIENT_ID,
-  CASHFREE_MODE,
+  RAZORPAY_KEY,
+  RAZORPAY_SCRIPT,
   STORE_ID,
   STORE_PREFIX,
 } from "@/config";
@@ -62,7 +61,7 @@ const OrderSummary = dynamic(
   { ssr: false },
 );
 
-let cashfreeCheckout;
+let razorpayMethod;
 
 const CheckoutClient = () => {
   const router = useRouter();
@@ -267,9 +266,9 @@ const CheckoutClient = () => {
       }
 
       setPaymentLoader(true);
-      const [orderResult, cfEnabled] = await Promise.all([
+      const [orderResult, rzpEnabled] = await Promise.all([
         placeOrderV1(variables),
-        loadScript(CASHFREE_SCRIPT),
+        loadScript(RAZORPAY_SCRIPT),
       ]);
 
       const { success, code, error, formError, order, payment, transaction } =
@@ -330,28 +329,44 @@ const CheckoutClient = () => {
         grandTotal,
       });
 
-      if (success && cfEnabled && transaction && order) {
-        const cashfree = new Cashfree({
-          mode: CASHFREE_MODE || "sandbox",
-        });
-
-        const checkoutOptions = {
-          paymentSessionId: transaction.sessionId || transaction.orderId,
-          redirectTarget: "_modal",
+      if (success && rzpEnabled && transaction && order) {
+        const options = {
+          key: RAZORPAY_KEY,
+          amount: transaction.amount,
+          currency: "INR",
+          name: storeData?.name,
+          image: getPublicImageURL({
+            key: storeData?.imageUrl,
+            addPrefix: true,
+          }),
+          order_id: transaction.orderId,
+          handler: async function ({ razorpay_payment_id }) {
+            orderHelper.fetchTransactionStatus(order.id, razorpay_payment_id);
+          },
+          prefill: {
+            name: shippingAddress.name,
+            email: shippingAddress.email,
+            contact: shippingAddress.phone,
+          },
+          notes: {
+            storeId: storeData?.id,
+            orderId: order.id,
+            paymentId: payment.id,
+          },
+          theme: {
+            color: "#3399cc",
+          },
+          modal: {
+            ondismiss: function () {
+              orderHelper.reset();
+              razorpayMethod = null;
+              setPaymentLoader(false);
+            },
+          },
         };
 
-        cashfreeCheckout = cashfree.checkout(checkoutOptions);
-        
-        cashfreeCheckout.addEventListener("verify", async function (e) {
-          orderHelper.fetchTransactionStatus(order.id, e.detail?.paymentDetails?.paymentMessage);
-        });
-
-        cashfreeCheckout.addEventListener("fail", function (e) {
-          orderHelper.reset();
-          cashfreeCheckout = null;
-          setPaymentLoader(false);
-          showToast.error("Payment failed. Please try again.");
-        });
+        razorpayMethod = new Razorpay(options);
+        razorpayMethod.open();
       }
 
       return Promise.resolve();
@@ -382,8 +397,8 @@ const CheckoutClient = () => {
           ),
         });
 
-      if (cashfreeCheckout) {
-        cashfreeCheckout.close();
+      if (razorpayMethod) {
+        razorpayMethod.close();
       }
       router.push(`/order/${finalOrder.id}`);
       setPaymentLoader(false);

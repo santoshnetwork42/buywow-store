@@ -1,6 +1,6 @@
 import { showToast } from "@/components/common/ToastComponent";
 import { Button } from "@/components/elements";
-import { STORE_PREFIX } from "@/config";
+import { GOKWIK_MID, STORE_PREFIX } from "@/config";
 import { getUserAPI } from "@/lib/appSyncAPIs";
 import { useCartDispatch } from "@/store/sagas/dispatch/cart.dispatch";
 import { useEventsDispatch } from "@/store/sagas/dispatch/events.dispatch";
@@ -38,7 +38,7 @@ const BuyItNowButton = React.memo(
 
     const { handleOutOfStockEvent, handleProceedToCheckoutEvent } =
       useEventsDispatch();
-    // Removed Gokwik configuration - now using Cashfree
+    const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
     const isShoppingCartIdLoading = useSelector(
       (state) => state.cart?.isShoppingCartIdLoading,
     );
@@ -51,7 +51,9 @@ const BuyItNowButton = React.memo(
       outOfStockItems,
     } = inventory;
 
-    const checkoutButtonDisabled = !isInventoryCheckReady;
+    const checkoutButtonDisabled = GOKWIK_MID
+      ? !isInventoryCheckReady && isShoppingCartIdLoading
+      : !isInventoryCheckReady;
     const guestCheckout = useGuestCheckout();
 
     const validateAndGoToCheckout = useCallback(async () => {
@@ -77,7 +79,31 @@ const BuyItNowButton = React.memo(
           }
         }
 
-        // Direct checkout with Cashfree (removed Gokwik integration)
+        const isGKCXEnabled = !!(
+          (GOKWIK_MID && cartId && gokwikEnabled)
+          // && checkoutABVariant === "gk_checkout"
+        );
+
+        if (isGKCXEnabled) {
+          try {
+            gokwikSdk.initCheckout({
+              environment: "sandbox",
+              type: "merchantInfo",
+              mid: GOKWIK_MID,
+              merchantParams: {
+                merchantCheckoutId: cartId,
+                customerToken: user?.id || "",
+              },
+            });
+
+            handleProceedToCheckoutEvent("GOKWIK");
+            return true;
+          } catch (e) {
+            await gokwikSdk.close();
+            router.push("/checkout");
+            return true;
+          }
+        }
         handleProceedToCheckoutEvent("BUYWOW");
         if (user?.id || guestCheckout || customUser?.phone) {
           router.push("/checkout");
