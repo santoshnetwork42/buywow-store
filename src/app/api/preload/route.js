@@ -8,20 +8,26 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export async function GET(req, res) {
   try {
-    // const cache = caches.default;
+    const cache = caches.default;
+    const { ctx } = getCloudflareContext();
 
-    // const { ctx } = getCloudflareContext();
+    const { origin, pathname, search } = new URL(req.url);
+    const cacheKey = new Request(origin + pathname + search, {
+      method: req.method,
+      headers: req.headers,
+    });
 
-    // const { origin, pathname } = new URL(req.url);
-    // const cacheKey = new Request(origin + pathname, req);
-
-    // Try cache
+    // Try cache first - Enable subrequest caching
     let response;
-    // if (!!cache) {
-    //   response = await cache.match(cacheKey);
-    //   if (response) return response;
-    // }
+    if (cache) {
+      response = await cache.match(cacheKey);
+      if (response) {
+        console.log("Cache HIT for preload API");
+        return response;
+      }
+    }
 
+    console.log("Cache MISS for preload API - fetching fresh data");
     const data = await fetchData(
       getInitialData,
       {
@@ -41,17 +47,23 @@ export async function GET(req, res) {
         ltoProductSort: [{ field: "priority", direction: "asc" }],
       },
       {
-        next: { revalidate: 0 },
+        next: { revalidate: 300 }, // 5 minutes revalidation
       },
     );
 
-    response = Response.json(data, {
+    response = new Response(JSON.stringify(data), {
       headers: {
-        "Cache-Control": "public, max-age=300", // 5 minutes TTL
+        "Content-Type": "application/json",
+        "Cache-Control": "public, max-age=300, s-maxage=600", // Browser: 5min, Cloudflare: 10min
+        "Vary": "Accept-Encoding",
       },
     });
 
-    // if (!!ctx && !!cache) ctx.waitUntil(cache.put(cacheKey, response.clone()));
+    // Cache the response for subrequests
+    if (ctx && cache) {
+      ctx.waitUntil(cache.put(cacheKey, response.clone()));
+      console.log("Cached preload API response");
+    }
 
     return response;
   } catch (error) {

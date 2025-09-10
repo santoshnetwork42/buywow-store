@@ -13,15 +13,15 @@ export default defineCloudflareConfig({
     shouldLazilyUpdateOnCacheHit: false,
   }),
   queue: queueCache(doQueue, {
-    regionalCacheTtlSec: 5, // The TTL for the regional cache, defaults to 5 seconds
-    // // Whether to wait for the queue to acknowledge the request before returning
-    // // When set to false, the cache will be populated asap and the queue will be called after.
-    // // When set to true, the cache will be populated only after the queue ack is received.
-    // waitForQueueAck: true,
+    regionalCacheTtlSec: 300, // Increased to 5 minutes for better subrequest caching
+    // Whether to wait for the queue to acknowledge the request before returning
+    // When set to false, the cache will be populated asap and the queue will be called after.
+    // When set to true, the cache will be populated only after the queue ack is received.
+    waitForQueueAck: false,
   }),
   tagCache: doShardedTagCache({
     regionalCache: true,
-    regionalCacheTtlSec: 60 * 15, // 15 mins
+    regionalCacheTtlSec: 60 * 30, // Increased to 30 mins for better performance
     // shardReplication: {
     //   numberOfSoftReplicas: 1,
     //   numberOfHardReplicas: 1,
@@ -31,4 +31,6 @@ export default defineCloudflareConfig({
     // },
   }),
   cachePurge: purgeCache({ type: "direct" }),
+  // Enable cache interception for better subrequest caching
+  enableCacheInterception: true,
 });
