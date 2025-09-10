@@ -10,6 +10,7 @@ This is a Next.js-based e-commerce application for Buy Wow, successfully importe
 - Installed dependencies with `--legacy-peer-deps` to resolve React version conflicts
 - Set up development workflow running on port 5000
 - Configured deployment settings for production (autoscale)
+- **Added Cashfree Payment Gateway Integration**: Added Cashfree as a third payment gateway option alongside Razorpay and Gokwik
 
 ## Project Architecture
 - **Frontend**: Next.js 14.2.8 with React 18.3.1
@@ -30,7 +31,10 @@ This is a Next.js-based e-commerce application for Buy Wow, successfully importe
 - E-commerce functionality (products, collections, cart, checkout)
 - Blog system with WordPress integration
 - User account management
-- Payment integration (Razorpay, Gokwik)
+- **Multi-Gateway Payment System**: Supports Razorpay (default), Gokwik, and Cashfree payment gateways
+  - Admin panel controlled via GOKWIK_ENABLED and CASHFREE_ENABLED flags
+  - Dynamic gateway selection based on configuration
+  - Fallback to Razorpay if other gateways are disabled
 - Analytics and tracking (GTM, Vercel Analytics)
 - Multiple third-party integrations (Limechat, Wisepops)
 
