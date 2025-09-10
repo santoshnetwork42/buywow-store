@@ -12,7 +12,7 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
  * @param {{ ttl?: number, cacheTtl?: number }} options
  */
 export async function cachedFetch(url, init = {}, options = {}) {
-  const ttl = options.ttl ?? options.cacheTtl ?? 60; // default 1 minutes
+  const ttl = options.ttl ?? options.cacheTtl ?? 300; // default 5 minutes for better subrequest caching
   // Ensure body is a string for stable cache keys on POST requests
   const initNormalized = { ...init };
   if (initNormalized?.body && typeof initNormalized.body !== "string") {
@@ -29,12 +29,16 @@ export async function cachedFetch(url, init = {}, options = {}) {
     return fetch(request);
   }
   let response = await cache.match(request);
-  if (response) return response;
+  if (response) {
+    console.log("CACHE HIT:", url);
+    return response;
+  }
+  console.log("CACHE MISS:", url);
   response = await fetch(request);
   // Only cache successful, cacheable responses (avoid Set-Cookie)
   if (response.ok && !response.headers.get("Set-Cookie")) {
     const cached = new Response(response.body, response);
-    cached.headers.set("Cache-Control", `public, max-age=${ttl}`);
+    cached.headers.set("Cache-Control", `public, max-age=${ttl}, s-maxage=${ttl * 2}`);
     try {
       const { ctx } = getCloudflareContext();
       if (ctx) {

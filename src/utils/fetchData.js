@@ -13,7 +13,7 @@ const fetchData = async (query = "", variables = {}, options = {}) => {
       },
       ...options,
     },
-    { ttl: options?.cacheTtl ?? 60 },
+    { ttl: options?.cacheTtl ?? 300 }, // Increased default cache to 5 minutes for better subrequest performance
   );
   const data = await response.json();
   return data.data;
