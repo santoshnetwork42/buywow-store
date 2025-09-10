@@ -8,7 +8,8 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export async function GET(req, res) {
   try {
-    const cache = caches.default;
+    // Cache API is only available in Cloudflare Workers, not in development
+    const cache = globalThis.caches?.default;
     const { ctx } = getCloudflareContext();
 
     const { origin, pathname, search } = new URL(req.url);
@@ -17,7 +18,7 @@ export async function GET(req, res) {
       headers: req.headers,
     });
 
-    // Try cache first - Enable subrequest caching
+    // Try cache first - Enable subrequest caching (only in production/Workers)
     let response;
     if (cache) {
       response = await cache.match(cacheKey);
@@ -25,9 +26,10 @@ export async function GET(req, res) {
         console.log("Cache HIT for preload API");
         return response;
       }
+      console.log("Cache MISS for preload API - fetching fresh data");
+    } else {
+      console.log("Cache API not available (development mode)");
     }
-
-    console.log("Cache MISS for preload API - fetching fresh data");
     const data = await fetchData(
       getInitialData,
       {
@@ -59,10 +61,14 @@ export async function GET(req, res) {
       },
     });
 
-    // Cache the response for subrequests
+    // Cache the response for subrequests (only in production/Workers)
     if (ctx && cache) {
       ctx.waitUntil(cache.put(cacheKey, response.clone()));
       console.log("Cached preload API response");
+    } else if (cache) {
+      // Fallback for environments without ctx.waitUntil
+      await cache.put(cacheKey, response.clone());
+      console.log("Cached preload API response (fallback)");
     }
 
     return response;
