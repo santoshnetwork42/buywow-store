@@ -45,3 +45,9 @@ export const STORE_ENV = process.env.NEXT_PUBLIC_STORE_ENV;
 export const KWIKPASS_SCRIPT = process.env.NEXT_PUBLIC_KWIKPASS_SCRIPT;
 export const ONE_LINK_URL = process.env.NEXT_PUBLIC_ONE_LINK_URL;
 export const WA_LINK_URL = process.env.NEXT_PUBLIC_WA_LINK;
+
+// Cashfree Payment Gateway Configuration
+export const CASHFREE_APP_ID = process.env.NEXT_PUBLIC_CASHFREE_APP_ID;
+export const CASHFREE_SECRET_KEY = process.env.NEXT_PUBLIC_CASHFREE_SECRET_KEY;
+export const CASHFREE_SCRIPT = process.env.NEXT_PUBLIC_CASHFREE_SCRIPT || "https://sdk.cashfree.com/js/v3/cashfree.js";
+export const CASHFREE_MODE = process.env.NEXT_PUBLIC_CASHFREE_MODE || "sandbox"; // sandbox or production

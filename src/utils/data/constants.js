@@ -4,6 +4,7 @@ export const RESTRICT_FOOTER_TO_SHOW = ["/checkout", "/pages/app-exclusive"];
 export const RESTRICT_SEARCH_AND_CART_TO_SHOW = ["/checkout"];
 export const PREPAID_ENABLED = "PREPAID_ENABLED";
 export const GOKWIK_ENABLED = "GOKWIK_ENABLED";
+export const CASHFREE_ENABLED = "CASHFREE_ENABLED";
 export const SHOW_SHIPPING_BAR = "SHOW_SHIPPING_BAR";
 export const WEB_ANIMATED_BALLOON = "WEB_ANIMATED_BALLOON";
 export const ANIMATED_BALLOON_CONFIG = "ANIMATED_BALLOON_CONFIG";
