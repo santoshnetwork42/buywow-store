@@ -10,6 +10,9 @@ import ProgressSteps from "@/components/partials/Others/ProgressSteps";
 import {
   RAZORPAY_KEY,
   RAZORPAY_SCRIPT,
+  CASHFREE_APP_ID,
+  CASHFREE_SCRIPT,
+  CASHFREE_MODE,
   STORE_ID,
   STORE_PREFIX,
 } from "@/config";
@@ -25,6 +28,7 @@ import {
   PPCOD_ENABLED,
   PREPAID_ENABLED,
 } from "@/utils/data/wowStarConstants";
+import { CASHFREE_ENABLED, GOKWIK_ENABLED } from "@/utils/data/constants";
 import {
   checkAffiseValidity,
   checkFormValidity,
@@ -62,6 +66,7 @@ const OrderSummary = dynamic(
 );
 
 let razorpayMethod;
+let cashfreeMethod;
 
 const CheckoutClient = () => {
   const router = useRouter();
@@ -97,6 +102,10 @@ const CheckoutClient = () => {
   const codEnabled = useConfiguration(COD_ENABLED, true);
   const ppcodEnabled = useConfiguration(PPCOD_ENABLED, false);
   const ppcodAmount = useConfiguration(PPCOD_AMOUNT, 0);
+  
+  // Payment Gateway Configuration
+  const gokwikEnabled = useConfiguration(GOKWIK_ENABLED, false);
+  const cashfreeEnabled = useConfiguration(CASHFREE_ENABLED, false);
 
   const isUtmSourceAllowedForCod = useMemo(() => {
     if (!metaData?.utmSource || !codBlockedUtmSource?.length) {
@@ -111,6 +120,7 @@ const CheckoutClient = () => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
     prepaidEnabled ? "PREPAID" : "COD",
   );
+  const [selectedPaymentGateway, setSelectedPaymentGateway] = useState("RAZORPAY"); // Default to Razorpay
   const [pageLoading, setPageLoading] = useState(true);
   const [paymentLoader, setPaymentLoader] = useState(false);
   const guestCheckout = useGuestCheckout();
@@ -199,6 +209,17 @@ const CheckoutClient = () => {
     setSelectedPaymentMethod(id);
   }, []);
 
+  // Determine which payment gateway to use based on admin configuration
+  const getPaymentGateway = useCallback(() => {
+    if (cashfreeEnabled) return "CASHFREE";
+    if (gokwikEnabled) return "GOKWIK";
+    return "RAZORPAY"; // Default fallback
+  }, [cashfreeEnabled, gokwikEnabled]);
+
+  useEffect(() => {
+    setSelectedPaymentGateway(getPaymentGateway());
+  }, [getPaymentGateway]);
+
   const placeOrderHandler = async () => {
     if (!checkFormValidity(currentAddress)) {
       showToast.error("Please Add Valid Address to Proceed");
@@ -266,9 +287,27 @@ const CheckoutClient = () => {
       }
 
       setPaymentLoader(true);
-      const [orderResult, rzpEnabled] = await Promise.all([
+      
+      // Load the appropriate payment gateway script based on configuration
+      const paymentGateway = getPaymentGateway();
+      let scriptLoadPromise;
+      
+      switch (paymentGateway) {
+        case "CASHFREE":
+          scriptLoadPromise = loadScript(CASHFREE_SCRIPT);
+          break;
+        case "GOKWIK":
+          scriptLoadPromise = loadScript(GOKWIK_SCRIPT);
+          break;
+        case "RAZORPAY":
+        default:
+          scriptLoadPromise = loadScript(RAZORPAY_SCRIPT);
+          break;
+      }
+      
+      const [orderResult, scriptEnabled] = await Promise.all([
         placeOrderV1(variables),
-        loadScript(RAZORPAY_SCRIPT),
+        scriptLoadPromise,
       ]);
 
       const { success, code, error, formError, order, payment, transaction } =
@@ -329,44 +368,89 @@ const CheckoutClient = () => {
         grandTotal,
       });
 
-      if (success && rzpEnabled && transaction && order) {
-        const options = {
-          key: RAZORPAY_KEY,
-          amount: transaction.amount,
-          currency: "INR",
-          name: storeData?.name,
-          image: getPublicImageURL({
-            key: storeData?.imageUrl,
-            addPrefix: true,
-          }),
-          order_id: transaction.orderId,
-          handler: async function ({ razorpay_payment_id }) {
-            orderHelper.fetchTransactionStatus(order.id, razorpay_payment_id);
-          },
-          prefill: {
-            name: shippingAddress.name,
-            email: shippingAddress.email,
-            contact: shippingAddress.phone,
-          },
-          notes: {
-            storeId: storeData?.id,
-            orderId: order.id,
-            paymentId: payment.id,
-          },
-          theme: {
-            color: "#3399cc",
-          },
-          modal: {
-            ondismiss: function () {
-              orderHelper.reset();
-              razorpayMethod = null;
-              setPaymentLoader(false);
+      if (success && scriptEnabled && transaction && order) {
+        const paymentGateway = getPaymentGateway();
+        
+        if (paymentGateway === "CASHFREE") {
+          // Cashfree Payment Processing
+          const cashfreeOptions = {
+            app_id: CASHFREE_APP_ID,
+            order_id: transaction.orderId,
+            order_amount: transaction.amount / 100, // Cashfree expects amount in rupees, not paisa
+            order_currency: "INR",
+            customer_details: {
+              customer_id: user?.id || customUser?.phone || "guest",
+              customer_name: shippingAddress.firstName + " " + shippingAddress.lastName,
+              customer_email: shippingAddress.email || "customer@example.com",
+              customer_phone: shippingAddress.phone,
             },
-          },
-        };
+            order_meta: {
+              return_url: `${window.location.origin}/order/${order.id}`,
+              notify_url: `${window.location.origin}/api/cashfree/webhook`,
+              payment_methods: "cc,dc,nb,upi,wallet"
+            }
+          };
 
-        razorpayMethod = new Razorpay(options);
-        razorpayMethod.open();
+          try {
+            cashfreeMethod = new Cashfree(CASHFREE_MODE);
+            cashfreeMethod.checkout(cashfreeOptions).then(function(result) {
+              if (result.error) {
+                console.error("Cashfree error:", result.error);
+                orderHelper.reset();
+                setPaymentLoader(false);
+              } else {
+                orderHelper.fetchTransactionStatus(order.id, result.transaction_id);
+              }
+            });
+          } catch (error) {
+            console.error("Cashfree initialization error:", error);
+            setPaymentLoader(false);
+          }
+        } else if (paymentGateway === "GOKWIK") {
+          // Gokwik Payment Processing (if needed in future)
+          // TODO: Implement Gokwik payment processing
+          console.log("Gokwik payment processing not implemented yet");
+          setPaymentLoader(false);
+        } else {
+          // Default Razorpay Payment Processing
+          const options = {
+            key: RAZORPAY_KEY,
+            amount: transaction.amount,
+            currency: "INR",
+            name: storeData?.name,
+            image: getPublicImageURL({
+              key: storeData?.imageUrl,
+              addPrefix: true,
+            }),
+            order_id: transaction.orderId,
+            handler: async function ({ razorpay_payment_id }) {
+              orderHelper.fetchTransactionStatus(order.id, razorpay_payment_id);
+            },
+            prefill: {
+              name: shippingAddress.firstName + " " + shippingAddress.lastName,
+              email: shippingAddress.email || "customer@example.com",
+              contact: shippingAddress.phone,
+            },
+            notes: {
+              storeId: storeData?.id,
+              orderId: order.id,
+              paymentId: payment.id,
+            },
+            theme: {
+              color: "#3399cc",
+            },
+            modal: {
+              ondismiss: function () {
+                orderHelper.reset();
+                razorpayMethod = null;
+                setPaymentLoader(false);
+              },
+            },
+          };
+
+          razorpayMethod = new Razorpay(options);
+          razorpayMethod.open();
+        }
       }
 
       return Promise.resolve();
@@ -385,7 +469,7 @@ const CheckoutClient = () => {
         appliedCoupon,
         currentAddress,
         selectedPaymentMethod,
-        "BUYWOW",
+        selectedPaymentGateway, // Pass the selected payment gateway instead of hardcoded "BUYWOW"
       );
 
       if (isRewardApplied)
@@ -397,8 +481,13 @@ const CheckoutClient = () => {
           ),
         });
 
+      // Clean up payment gateway instances
       if (razorpayMethod) {
         razorpayMethod.close();
+      }
+      if (cashfreeMethod) {
+        // Cashfree cleanup if needed
+        cashfreeMethod = null;
       }
       router.push(`/order/${finalOrder.id}`);
       setPaymentLoader(false);
