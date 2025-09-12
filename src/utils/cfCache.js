@@ -20,7 +20,9 @@ function createSyntheticCacheKey(url, method, body, headers = {}) {
     hash = hash & hash; // Convert to 32-bit integer
   }
   
-  return `/__cfcache/${Math.abs(hash).toString(36)}`;
+  // Create full URL for the cache key
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://cache.local';
+  return `${baseUrl}/__cfcache/${Math.abs(hash).toString(36)}`;
 }
 
 /**
