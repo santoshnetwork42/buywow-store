@@ -12,6 +12,7 @@ This is a Next.js-based e-commerce application for Buy Wow, successfully importe
 - Configured deployment settings for production (autoscale)
 - **Added Cashfree Payment Gateway Integration**: Added Cashfree as a third payment gateway option alongside Razorpay and Gokwik
 - **Enhanced Subrequest Caching**: Enabled cache interception in OpenNext config and optimized cache TTL settings for better Cloudflare Workers performance and reduced billing
+- **Fixed Cloudflare Workers Subrequest Caching**: Updated cachedFetch to use `cf: { cacheEverything: true }` for GET requests and synthetic GET keys for POST/GraphQL requests to properly show cached subrequests in Cloudflare metrics
 
 ## Project Architecture
 - **Frontend**: Next.js 14.2.8 with React 18.3.1
